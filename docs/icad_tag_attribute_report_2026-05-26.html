@@ -660,6 +660,85 @@
     <section class="section">
       <div class="section-header">
         <div>
+          <h2>一括取得後の自動抽出・自動付与フロー</h2>
+        </div>
+        <p>一括取得 API を呼んだあとに、どの順で属性とタグを確定させるかを明示した。</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="phase">Step 1</div>
+          <div>
+            <strong>一括取得</strong>
+            <p>3D は `getInfPartTree()`、2D は `getGeomList()` を起点に、生データをまとめて取得する。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 2</div>
+          <div>
+            <strong>生抽出保存</strong>
+            <p>取得結果はまず `raw_extract` に保存し、この段階ではまだ意味付けしない。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 3</div>
+          <div>
+            <strong>自動抽出</strong>
+            <p>文字列、寸法、部品名、コメント、任意情報から、案件候補、客先候補、装置カテゴリ候補などを切り出す。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 4</div>
+          <div>
+            <strong>正規化</strong>
+            <p>別名、略語、表記ゆれを辞書で吸収し、`canonical_attributes` に揃える。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 5</div>
+          <div>
+            <strong>自動付与</strong>
+            <p>`canonical_attributes` と辞書から `derived_tags` を生成し、信頼度も付ける。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 6</div>
+          <div>
+            <strong>プレビューと補正</strong>
+            <p>`図面管理` の登録時プレビューで確認し、人が直したものは `manual_overrides` に保存する。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="phase">Step 7</div>
+          <div>
+            <strong>確定保存</strong>
+            <p>確定後の属性とタグを `図面管理` の正本として保存し、viewer と RAG はその結果を参照する。</p>
+          </div>
+        </div>
+      </div>
+      <div style="height: 16px;"></div>
+      <div class="columns">
+        <article class="panel">
+          <h3>自動抽出</h3>
+          <ul class="bullet-list">
+            <li>元データから候補値を取り出す工程</li>
+            <li>例: 文字列、寸法値、部品名、任意情報</li>
+            <li>精度改善は抽出ロジック側の課題として切り出せる</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>自動付与</h3>
+          <ul class="bullet-list">
+            <li>抽出結果を属性・タグとして意味付けして保存する工程</li>
+            <li>例: `SMC` をメーカー属性へ、`ガントリー` を装置カテゴリ/タグへ反映</li>
+            <li>改善は辞書・ルール側だけでも回せる</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
           <h2>利用先ごとの反映方針</h2>
         </div>
         <p>同じ属性でも、保存・表示・検索で使い方を変える。</p>
