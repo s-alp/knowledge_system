@@ -1,0 +1,108 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createChamfer2D メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createChamfer2D&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 2次元の2要素間の面取りを行ないます。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;createChamfer2D( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>seg1</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos1</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>seg2</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos2</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>length</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angle</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>trim_mode</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>draftline</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;createChamfer2D(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;<i>seg1</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos1</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;<i>seg2</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>length</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angle</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>trim_mode</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>draftline</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>seg1</i>
+        </dt>
+        <dd>指定対象要素1</dd>
+        <dt>
+          <i>pos1</i>
+        </dt>
+        <dd>対象要素1の指示点</dd>
+        <dt>
+          <i>seg2</i>
+        </dt>
+        <dd>指定対象要素2</dd>
+        <dt>
+          <i>pos2</i>
+        </dt>
+        <dd>対象要素2の指示点</dd>
+        <dt>
+          <i>length</i>
+        </dt>
+        <dd>面取り長</dd>
+        <dt>
+          <i>angle</i>
+        </dt>
+        <dd>指定角度(度:0.0～90.0)</dd>
+        <dt>
+          <i>trim_mode</i>
+        </dt>
+        <dd>トリム処理モード SxEntSeg.TRIM_ALL : 全トリム<br /> SxEntSeg.TRIM_1 : 要素1をトリム<br /> SxEntSeg.TRIM_2 : 要素2をトリム<br /> SxEntSeg.TRIM_NONE : トリム無し<br /> SxEntSeg.TRIM_THIN : 細線残し<br />
+            </dd>
+        <dt>
+          <i>draftline</i>
+        </dt>
+        <dd>トリム要素の下書線化 true:下書線有<br /> false:下書線無</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した面取り要素とトリム要素</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 2要素間に指定した長さと角度で面取りします。<br /> アクティブウィンドウが3次元の場合、表示WF中のアクティブな組立平面に対して作成します。<br /> pos1,pos2は2次元座標です。<br /> seg1,seg2には、2次元直線要素が指定可能です。<br /> 指定角度angle = 0の場合、角度は自動的に計算します。<br /> draftlineは、trim_modeが、<a href="sxnet.SxEntSeg.TRIM_ALL.html">TRIM_ALL</a>, <a href="sxnet.SxEntSeg.TRIM_1.html">TRIM_1</a>, <a href="sxnet.SxEntSeg.TRIM_2.html">TRIM_2</a>の場合のみ有効です。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

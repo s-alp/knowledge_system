@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createSurfmark メソッド (Object, SxPos, SxPos, SxOptSurfmark2)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createSurfmark&nbsp;メソッド&nbsp;(Object, SxPos, SxPos, SxOptSurfmark2)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 2003JIS規格表面粗さ記号を作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createSurfmark( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>obj</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>Object</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt1</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt2</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>opt</i>&nbsp;As&nbsp;<a href="sxnet.SxOptSurfmark2.html">SxOptSurfmark2</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createSurfmark(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>object</a>&nbsp;<i>obj</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt1</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt2</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOptSurfmark2.html">SxOptSurfmark2</a>&nbsp;<i>opt</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>obj</i>
+        </dt>
+        <dd>配置要素</dd>
+        <dt>
+          <i>pnt1</i>
+        </dt>
+        <dd>引出点座標</dd>
+        <dt>
+          <i>pnt2</i>
+        </dt>
+        <dd>配置点座標</dd>
+        <dt>
+          <i>opt</i>
+        </dt>
+        <dd>2003JIS規格表面粗さ記号作成オプション</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した表面粗さ記号セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 2003JIS規格表面粗さ記号を作成します。 本メソッドを使用するには、CAD側の環境設定で、表面粗さの規格が新規格(JIS B0031:JIS2003)に 設定されている必要があります。<br /> objには、アクティブウィンドウに表示されたアクティブVS/WF上の要素を指定して下さい。<br /> アクティブウィンドウが3次元で、かつ操作次元が2次元の場合は、アクティブな組立平面上の要素を 指定して下さい。<br /> objには、以下のインスタンスが指定可能です。<br />
+            <a href="sxnet.SxPos.html">SxPos</a>(座標)<br />
+            <a href="sxnet.SxEdge.html">SxEdge</a>(直線エッジ、円エッジ、円弧エッジ)<br />
+            <a href="sxnet.SxEntSeg.html">SxEntSeg</a>(要素:線、円、楕円、円弧、楕円弧、スプライン)<br /> objがSxPos場合、点配置の表面粗さ記号を作成します。pnt1（引出点座標）とpnt2（配置点座標）は無視されます。<br /> objがSxEdgeあるいはSxEntSeg場合、要素配置の表面粗さ記号を作成します。<br /> また、opt.lead_line = true かつ、opt.additionalline = falseの場合、pnt1（引出点座標）は無視されます。<br /> 2次元要素作成の場合、各座標のZ値は無視されます。<br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br /> 2003JIS規格表面粗さ記号作成オプションについては、<a href="sxnet.SxOptSurfmark2.html">SxOptSurfmark2</a>クラスを参照して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createSurfmark@overloads.html">SxEntSeg.createSurfmark オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

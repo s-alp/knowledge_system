@@ -1,0 +1,80 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.takeOut メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.takeOut&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 内部パーツの切り出し(外部パーツ化)を行います。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;takeOut( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>all</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;takeOut(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>all</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>all</i>
+        </dt>
+        <dd> 同名内部パーツの一括切り出し<br /> true:一括して切り出します。<br /> false:自パーツのみ切り出します。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自内部パーツを外部パーツに変換します。<br /> 自パーツが内部パーツである必要があります。<br /> 自パーツの属するモデルが保存済みである必要があります。<br /> 切り出した外部パーツのファイル名は、パーツ名と同じになります。<br />
+            <br /> 自パーツが属するWFをアクティブに設定します。<br /> 入力パーツは、WFの最上位に変更されます。<br /> 自パーツを表示するウィンドウが存在しない場合、新規にウィンドウを開設します。<br />
+            <seealso cref="M:sxnet.SxEntPart.takeIn(System.Boolean,System.Boolean)"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.takeIn-1.html">takeIn</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createFinishMark メソッド (SxPos, Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createFinishMark&nbsp;メソッド&nbsp;(SxPos, Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 仕上記号を作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createFinishMark( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>type</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createFinishMark(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>type</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>配置点</dd>
+        <dt>
+          <i>type</i>
+        </dt>
+        <dd>仕上記号タイプ<br /> SxGeomFinishMark.FINISH_MARK1:▽<br /> SxGeomFinishMark.FINISH_MARK2:▽▽<br /> SxGeomFinishMark.FINISH_MARK3:▽▽▽<br /> SxGeomFinishMark.FINISH_MARK4:▽▽▽▽<br /> SxGeomFinishMark.FINISH_MARK5:～<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した仕上記号セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示された、アクティブVS/WFに、仕上記号を作成します。<br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br /> 2次元要素作成の場合、posのZ値は無視されます。<br /> 仕上記号タイプの定数値については、<a href="sxnet.SxGeomFinishMark.html">SxGeomFinishMark</a>クラスの、 定数(FINISH_MARKxxx)を参照して下さい。<br />
+            <seealso cref="T:sxnet.SxGeomFinishMark"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createFinishMark@overloads.html">SxEntSeg.createFinishMark オーバーロードの一覧</a> | <a href="sxnet.SxGeomFinishMark.html">SxGeomFinishMark</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

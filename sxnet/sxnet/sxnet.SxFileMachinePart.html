@@ -1,0 +1,209 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxFileMachinePart クラス</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxFileMachinePart クラス</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 機械部品(JIS部品/3Dパラメトリック部品)ファイルクラス<br /> iCAD SX ビューア／iCAD SX 組立支援の場合、このクラスは利用できません。<br />
+             </p>
+      <p>この型のすべてのメンバの一覧については、 <a href="sxnet.SxFileMachinePart@members.html">SxFileMachinePart メンバ</a>を参照してください。</p>
+      <p>
+        <a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>System.Object</a>
+        <br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxFile.html">sxnet.SxFile</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>sxnet.SxFileMachinePart</b></p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Class&nbsp;SxFileMachinePart<div>&nbsp;&nbsp;&nbsp;&nbsp;Inherits&nbsp;<a href="sxnet.SxFile.html">SxFile</a></div></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <div>public&nbsp;class&nbsp;SxFileMachinePart<b> : <a href="sxnet.SxFile.html">SxFile</a></b></div>
+      </div>
+      <H4 class="dtH4">スレッドセーフ</H4>
+      <P>この型の public static (Visual Basicでは <B>Shared</B>) のすべてのメンバは、
+				マルチスレッド操作で安全に使用できます。インスタンスのメンバの場合は、スレッドセーフであるとは限りません。</P>
+      <h4 class="dtH4">解説</h4>
+      <p> 機械部品ファイル(JIS部品、3Dパラメトリック部品）にアクセスするためのクラスです。<br /> 機械部品ファイルの情報取得、CAD上への部品配置処理を行います。<br /> 3DJIS部品の場合、同一フォルダ内に、～@3DPARAM.icdファイルが存在する場合は、 3DJIS部品ファイルである、～@3DPARAM.icdを指定して下さい。<br /> ～@3DPARAM.icdが存在しない場合は、2D部品と共通の部品ファイル～@正面.icd又は～@平面.icd等を指定して下さい。<br /> 2DJIS部品の場合は、～@正面.icd又は～@平面.icdを指定して下さい。<br />
+             <seealso cref="T:sxnet.SxFile"></seealso>
+             <seealso cref="T:sxnet.SxFilePart"></seealso>
+             <seealso cref="T:sxnet.SxFileSymbol"></seealso>
+             <seealso cref="T:sxnet.SxFileModel"></seealso>
+             </p>
+      <h4 class="dtH4">使用例</h4>
+      <p> ユーザ定義部品Test@3DPARAM.icdを指定位置に配置する。[C#] <pre class="code"> using System;
+ using sxnet;
+
+ class Test
+ {
+        static void Main(string[] args)
+        {
+            try
+            {
+                // アクティブモデルの表示を3次元に切り替える。
+                SxModel act_model = SxModel.getActive();
+                act_model.setDim(true);
+                
+                // 機械部品ファイルオブジェクトの生成
+                SxFileMachinePart part = 
+                    new SxFileMachinePart("C:\\ICADSXPRO\\JISPARTS\\USER\\TEST\\TEST@3DPARAM.icd");
+
+                // 配置座標と、配置方向の設定
+                SxPos pos = new SxPos(10.0e0, 0.0e0, 0.0e0);
+                SxVec zvec = new SxVec( 0.0e0, 1.0e0, 0.0e0 );
+                SxVec xvec = new SxVec( 1.0e0, 0.0e0, 0.0e0);
+
+                // レイヤ引継ぎ(ON)
+                bool layer = true;
+
+                // 呼び名のリストを問い合わせる
+                string[] pattern = part.getPatternNames();
+
+                // 指定呼び名のパラメタ値リストを問い合わせる
+                double[] values = part.getVarValues(pattern[0]);
+
+                // 第一パラメタの値を100.0に変更する。
+                values[0] = 100.0e0;
+                part.setVarValues(pattern[0], values);
+
+                // パーツ化して部品を配置する。
+                SxEntPart ent = (SxEntPart)part.open( SxFileMachinePart.MODE_PART, 
+                                            pattern[0], pos, zvec, xvec, layer );
+            }
+            catch( SxException e )
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch( Exception e )
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+    </pre>
+            	<br /> 3DJIS部品(3D専用部品)の配置サンプル。[C#] <pre class="code"> using System;
+ using sxnet;
+
+ class Test
+ {
+        static void Main(string[] args)
+        {
+            try
+            {
+                // アクティブモデルの表示を3次元に切り替える。
+                SxModel act_model = SxModel.getActive();
+                act_model.setDim(true);
+                
+                // 機械部品ファイルオブジェクトの生成
+                //    四角ボルト・上は、3D専用部品ファイル"四角ボルト・上@3DPARAM.icd"を持つので、
+                //    3D専用部品ファイルを指定する。
+                SxFileMachinePart part = 
+                    new SxFileMachinePart(SxFileMachinePart.getDir() + "\\3D\\02_ボルト\\四角ボルト\\四角ボルト・上",
+                        "四角ボルト・上@3DPARAM.icd");
+
+                // 配置座標と、配置方向の設定
+                SxPos pos = new SxPos(10.0e0, 0.0e0, 0.0e0);
+                SxVec zvec = new SxVec( 0.0e0, 1.0e0, 0.0e0 );
+                SxVec xvec = new SxVec( 1.0e0, 0.0e0, 0.0e0);
+
+                // レイヤ引継ぎ(ON)
+                bool layer = true;
+
+                // パーツ化して呼び名="M10"で部品を配置する。
+                SxEntPart ent = (SxEntPart)part.open( SxFileMachinePart.MODE_PART, 
+                                            "M10", pos, zvec, xvec, layer );
+            }
+            catch( SxException e )
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch( Exception e )
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+    </pre>
+            	
+            	<br /> 3DJIS部品(2Dと共用部品の場合)の配置サンプル。[C#] <pre class="code"> using System;
+ using sxnet;
+
+ class Test
+ {
+        static void Main(string[] args)
+        {
+            try
+            {
+                // アクティブモデルの表示を3次元に切り替える。
+                SxModel act_model = SxModel.getActive();
+                act_model.setDim(true);
+                
+                // 機械部品ファイルオブジェクトの生成
+                //    六角ボルト・上は、2D部品と共通部品の為(～@3DPARAM.icdを持たない)、
+                //  ファイル"六角ボルト・上@正面.icd"を指定する。
+                SxFileMachinePart part = 
+                    new SxFileMachinePart(SxFileMachinePart.getDir() + "\\3D\\02_ボルト\\六角ボルト\\六角ボルト・上",
+                        "六角ボルト・上@正面.icd");
+
+                // 配置座標と、配置方向の設定
+                SxPos pos = new SxPos(10.0e0, 0.0e0, 0.0e0);
+                SxVec zvec = new SxVec( 0.0e0, 1.0e0, 0.0e0 );
+                SxVec xvec = new SxVec( 1.0e0, 0.0e0, 0.0e0);
+
+                // レイヤ引継ぎ(ON)
+                bool layer = true;
+
+                // パーツ化して呼び名="M10"で部品を配置する。
+                SxEntPart ent = (SxEntPart)part.open( SxFileMachinePart.MODE_PART, 
+                                            "M10", pos, zvec, xvec, layer );
+            }
+            catch( SxException e )
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch( Exception e )
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+    </pre>
+             </p>
+      <h4 class="dtH4">必要条件</h4>
+      <p>
+        <b>名前空間: </b>
+        <a href="sxnet.html">sxnet</a>
+      </p>
+      <p>
+        <b>アセンブリ: </b>sxnet (sxnet.dll 内)
+					</p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxFileMachinePart@members.html">SxFileMachinePart メンバ</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxFile.html">SxFile</a> | <a href="sxnet.SxFilePart.html">SxFilePart</a> | <a href="sxnet.SxFileSymbol.html">SxFileSymbol</a> | <a href="sxnet.SxFileModel.html">SxFileModel</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

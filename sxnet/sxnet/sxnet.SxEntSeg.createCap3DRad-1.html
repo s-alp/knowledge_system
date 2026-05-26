@@ -1,0 +1,103 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createCap3DRad メソッド (SxPos, Double, Double, Double, Double, Double, Double)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createCap3DRad&nbsp;メソッド&nbsp;(SxPos, Double, Double, Double, Double, Double, Double)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> キャップ(楕円弧回転体)を作成します。回転角度(ラジアン)指定、断面位置指定。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createCap3DRad( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>axis1</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>axis2</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>position</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angx</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angy</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angz</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createCap3DRad(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>axis1</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>axis2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>position</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angx</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angy</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angz</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pnt</i>
+        </dt>
+        <dd>キャップ断面中心の配置座標</dd>
+        <dt>
+          <i>axis1</i>
+        </dt>
+        <dd>縦軸直径</dd>
+        <dt>
+          <i>axis2</i>
+        </dt>
+        <dd>横軸直径</dd>
+        <dt>
+          <i>position</i>
+        </dt>
+        <dd>縦軸上の断面相対位置(-axis1/2～axis1/2)</dd>
+        <dt>
+          <i>angx</i>
+        </dt>
+        <dd>X軸周り回転角度(ラジアン)</dd>
+        <dt>
+          <i>angy</i>
+        </dt>
+        <dd>Y軸周り回転角度(ラジアン)</dd>
+        <dt>
+          <i>angz</i>
+        </dt>
+        <dd>Z軸周り回転角度(ラジアン)</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成したキャップセグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示されたWF上に、 キャップを作成します。<br /> -aixis1/2 &lt;= position &lt;= axis1/2 である必要があります。<br /> 縦軸はZ軸方向です。<br /> 横軸はX軸方向です。<br /> 断面法線は、-Z軸方向です。<br /> position=0.0で、楕円中心位置に断面を作成します。<br /> 回転は、オイラー回転で、X軸,Y軸,Z軸の順で回転します。<br /> オイラー回転：絶対座標系の軸周りの回転ではなく、回転後の各軸に対して順番に回転を行います。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createCap3DRad@overloads.html">SxEntSeg.createCap3DRad オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

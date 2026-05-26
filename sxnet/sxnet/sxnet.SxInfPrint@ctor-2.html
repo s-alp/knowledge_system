@@ -1,0 +1,66 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxInfPrint コンストラクタ (String, Boolean, Double[])</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxInfPrint&nbsp;コンストラクタ&nbsp;(String, Boolean, Double[])</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 出図範囲情報インスタンスの作成 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;New( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>size</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>vertical</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>dinfo</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double().aspx>Double()</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;SxInfPrint(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>size</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>vertical</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double[].aspx>double[]</a>&nbsp;<i>dinfo</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>size</i>
+        </dt>
+        <dd> 用紙サイズ<br /> "A0"～"A6, "B1"～"B7":規格用紙<br /> "XY":任意サイズ<br />
+            </dd>
+        <dt>
+          <i>vertical</i>
+        </dt>
+        <dd> 用紙方向<br /> true:縦<br /> false:横<br />
+            </dd>
+        <dt>
+          <i>dinfo</i>
+        </dt>
+        <dd> 用紙情報 double[20]<br /> [0]:用紙サイズ幅<br /> [1]:用紙サイズ高さ<br /> [2]:作画スケール(-1.0で自動スケール)<br /> [3]:作画範囲左下X座標<br /> [4]:作画範囲左下Y座標<br /> [5]:作画範囲右上X座標<br /> [6]:作画範囲右上Y座標<br /> [7]～[19]:未使用(システム予約領域。0.0を指定して下さい)<br /> ※座標は、2次元グローバルビュー上の座標値を指定して下さい。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定パラメタに従って、出図範囲情報インスタンスを作成します。<br /> 出図範囲枠番号(no)は、0で作成されます。<br /> sizeが"XY"(任意サイズ)以外の場合、用紙サイズ(dinfo[0],dinfo[1])は自動計算されます。<br />
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxInfPrint.html">SxInfPrint クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxInfPrint@ctors.html">SxInfPrint コンストラクタのオーバーロードの一覧</a></p>
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

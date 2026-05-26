@@ -1,0 +1,83 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.setAdditionalLineVisible メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.setAdditionalLineVisible&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 寸法補助線の表示／非表示を行います。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;setAdditionalLineVisible( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>which_line</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>disp</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setAdditionalLineVisible(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>which_line</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>disp</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>which_line</i>
+        </dt>
+        <dd> 変更する補助線の指定<br /> ADDLINE_LEFT : 左側の補助線<br /> ADDLINE_RIGHT : 右側の補助線<br /> ADDLINE_BOTH : 両方の補助線<br /> ※補助線が一つしかない場合、本指定は無視されます。<br />
+            </dd>
+        <dt>
+          <i>disp</i>
+        </dt>
+        <dd>表示属性<br /> true : 表示<br /> false : 非表示<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 寸法補助線の表示／非表示を行います。<br /> 自要素は、アクティブウィンドウに表示された、アクティブVS/WF上の要素である必要があります。<br /> 自要素が、以下のセグメントタイプの場合、処理対象です。<br /> 長さ寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>)<br /> 角度寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a><br /> 径寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a><br /> 面取寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a><br /> 円弧長寸法(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>)<br /> 
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

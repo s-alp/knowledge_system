@@ -1,0 +1,87 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxModel.savePart メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxModel.savePart&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自モデル内の外部パーツファイルを上書き保存します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;savePart( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>partlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>modified</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>child</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;savePart(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart[]</a>&nbsp;<i>partlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>modified</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>child</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>partlist</i>
+        </dt>
+        <dd>上書き保存を行う外部パーツの配列(nullの場合、最上位パーツ)</dd>
+        <dt>
+          <i>modified</i>
+        </dt>
+        <dd>保存対象選択モード。<br /> true:指定パーツ配下の編集された外部パーツファイルを保存する。<br /> false:指定された外部パーツファイルを保存する。<br />
+            </dd>
+        <dt>
+          <i>child</i>
+        </dt>
+        <dd>子外部パーツの処理。<br /> true:指定パーツ配下の子外部パーツも保存する。<br /> false:指定された外部パーツファイルのみを保存する。<br /> ※modified = trueの場合、本パラメタは無視される。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自モデル内の指定外部パーツファイルを上書き保存します。 <br /> 読取専用の外部パーツファイルは保存対象外です。アクセス権を取得してから実行して下さい。<br /> 最上位パーツを指定する場合は、partlist=null(VBの場合、Nothing)を指定して下さい。<br /> partlist[]には、自モデル内の外部パーツを指定して下さい。<br /> modified = trueの場合、partlist[]で指定された外部パーツと、その子外部パーツの中で、<br /> CAD上で更新され、かつ、アクセス権を持つパーツが保存されます。<br /> modified=trueの場合、childパラメタの値は無視されます。<br /> アクティブウィンドウに、自モデルの3DグローバルWFが表示されている必要があります。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxModel.html">SxModel クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

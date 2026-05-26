@@ -1,0 +1,63 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.editText メソッド (String[])</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.editText&nbsp;メソッド&nbsp;(String[])</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 文字列の編集を行います。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;editText( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>text</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string().aspx>String()</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;editText(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string[].aspx>string[]</a>&nbsp;<i>text</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>text</i>
+        </dt>
+        <dd> 編集後の文字列の配列<br />
+            <br /> 文字列要素、注記要素の場合、最大20行まで。<br /> 1行は、最大80文字まで。<br /> OSの言語と異なる文字（日本語・中国語・韓国語）の入力可。<br />
+            <br /> 風船の場合(最大2行) [0]:上段文字<br /> [1]:下段文字(省略可)<br /> 寸法線の場合(最大1行、最大32文字まで)<br /> [0]:寸法値文字<br /> デルタの場合(最大1行、半角文字で最大3文字まで)<br /> [0]:デルタ文字<br /> データム/形体指示の場合(最大1行、半角文字で最大2文字まで)<br /> [0]:文字<br /> 矢視/切断線の場合(最大1行、半角文字で最大8文字まで)<br /> [0]:矢視名/切断線名<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自要素の文字列の編集を行います。<br />
+            <br /> 自要素が、以下のセグメントタイプの場合が処理対象になります。<br /> 文字列(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>)<br /> 注記(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a>)<br /> 風船(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_BALL.html">SEGTYPE_BALL</a>)<br /> 長さ寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>)<br /> 角度寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a><br /> 径寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a><br /> 面取寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a><br /> 円弧長寸法(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>)<br /> 角寸/長円/角穴/座標寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_APL.html">SEGTYPE_APL</a>)<br /> デルタ(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DELTA.html">SEGTYPE_DELTA</a><br /> データム/形体指示(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_GTOL.html">SEGTYPE_GTOL</a>)<br /> ※タイプ=SxEntSeg.SEGTYPE_GTOLでも、公差枠要素の場合は編集できません。<br /> 矢視/切断線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_SYM.html">SEGTYPE_SYM</a>)<br />
+            <br /> 文字列要素、注記要素でOSの言語と異なる文字を入力する場合は、<br /> 「iCAD SXで使用できる他言語文字のフォント」が使用されている必要があります。<br />
+            <br /> 非表示要素は処理対象外です。<br /> 自要素は、アクティブウィンドウのアクティブVS/WFの要素である必要があります。<br />
+            <seealso cref="M:sxnet.SxEntSeg.editDimText(sxnet.SxDimValueAtr,sxnet.SxOptDimEdit)"></seealso>
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.editText@overloads.html">SxEntSeg.editText オーバーロードの一覧</a> | <a href="sxnet.SxEntSeg.editDimText-1.html">editDimText</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

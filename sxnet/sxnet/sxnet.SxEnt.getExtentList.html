@@ -1,0 +1,87 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.getExtentList メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.getExtentList&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定要素群のエクステント情報を一括取得します。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;getExtentList( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>merge</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxBox.html">SxBox()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxBox.html">SxBox[]</a>&nbsp;getExtentList(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>merge</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>問合せを行う要素の配列</dd>
+        <dt>
+          <i>merge</i>
+        </dt>
+        <dd> エクステントの統合。<br /> true:各エクステントを統合して、1つのエクステントを返します。<br /> false:エクステントの統合を行わずに、要素毎のエクステントを返します。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>エクステントの配列</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定要素群のエクステントボックスを問い合わせます。<br /> エクステントは、要素を包含する正確な最小限のボックスである事は保証しません。<br /> 要素を包含するボックスの目安と考えて下さい。<br /> 非表示の要素、又は、エクステントを持たない要素の場合、該当する配列の要素に null(VBの場合Nothing)を設定して返答します。<br /> 3Dパーツの場合、子パーツも含むエクステントを返答します。<br /> 要素が、非表示レイヤ、非検索レイヤに属していても、エクステントを返します。<br />
+            <br /> merge=trueの場合、entlistで指定された要素群全体のエクステントを1つ返します。<br /> entlistには、同一VS又は同一WF内の要素を指定して下さい。<br />
+            <seealso cref="T:sxnet.SxBox"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxBox.html">SxBox</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.setName メソッド (SxParmPartName[], Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.setName&nbsp;メソッド&nbsp;(SxParmPartName[], Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定パーツ群のパーツ名、コメントの設定を行います。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Sub&nbsp;setName( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>parmlist</i>&nbsp;As&nbsp;<a href="sxnet.SxParmPartName.html">SxParmPartName()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>change_all</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setName(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxParmPartName.html">SxParmPartName[]</a>&nbsp;<i>parmlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>change_all</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>parmlist</i>
+        </dt>
+        <dd>設定情報パラメタの配列</dd>
+        <dt>
+          <i>change_all</i>
+        </dt>
+        <dd>同名パーツの一括処理。<br /> true:同じ名前のパーツに対して、一括変更を行います。<br /> false:自パーツのみ変更します。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定パーツ群のパーツ名、コメント、参照ファイル名の設定を行います。<br /> change_all=trueの場合、同一WF内の同じ名前を持つパーツに対して、一括変更を行います。<br /> また、change_all = true、かつ、2次元に同一名の実像部品が存在する場合、実像部品名も一括変更します。 コメントは実像部品には反映されません。<br />
+            <br /> parmlistには、アクティブウィンドウ上の同一WF内のパーツを指定して下さい。<br />
+            <seealso cref="T:sxnet.SxParmPartName"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.setName@overloads.html">SxEntPart.setName オーバーロードの一覧</a> | <a href="sxnet.SxParmPartName.html">SxParmPartName</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

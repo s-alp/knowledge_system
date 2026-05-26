@@ -1,0 +1,81 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxSys.getInfNumParts メソッド (Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxSys.getInfNumParts&nbsp;メソッド&nbsp;(Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> アクティブウィンドウに表示されているモデル(図面)の部品数を問い合わせます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;getInfNumParts( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>allview</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxInfNumParts.html">SxInfNumParts()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxInfNumParts.html">SxInfNumParts[]</a>&nbsp;getInfNumParts(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>allview</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>allview</i>
+        </dt>
+        <dd> 処理モード:<br /> true:全ビューを対象にする.<br /> false:アクティブビューを対象にする.<br /> ※アクティブウィンドウが2Dの場合のみ有効です。 </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>部品数情報インスタンスの配列</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウが2Dの場合、実像部品、写像部品の集計を行います。<br /> アクティブウンンドウが3Dの場合、パーツの集計を行います。<br /> 部品が存在しない場合、null(VBの場合、Nothing)を返します。<br />
+            <seealso cref="T:sxnet.SxInfNumParts"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD操作でのエラー情報</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxSys.html">SxSys クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxSys.getInfNumParts@overloads.html">SxSys.getInfNumParts オーバーロードの一覧</a> | <a href="sxnet.SxInfNumParts.html">SxInfNumParts</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

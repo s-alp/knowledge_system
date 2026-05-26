@@ -1,0 +1,74 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.getLineAttribute メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.getLineAttribute&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 要素の属性(線幅、線種、線色)を問い合わせます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Function&nbsp;getLineAttribute()&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.integer().aspx>Integer()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int[].aspx>int[]</a>&nbsp;getLineAttribute();</div>
+      <h4 class="dtH4">戻り値</h4>
+      <p> 要素の属性<br /> [0]:線幅番号<br /> [1]:線種番号<br /> [2]:線色番号<br />
+            </p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自要素の、線幅、線種、線色の情報を問い合わせます。<br /> 線幅、線種、線色の定数は、<a href="sxnet.SxSys.html">SxSys</a>を参照して下さい。<br /> 線種属性を持たない要素を指定した場合、全て0を返します。<br /> 製図要素の属性取得については、<a href="sxnet.SxEntSeg.getGeom.html">getGeom</a>メソッドを参照して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxModel.createVSView メソッド (Int32, SxPos)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxModel.createVSView&nbsp;メソッド&nbsp;(Int32, SxPos)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 基本ビューを開設します。(任意位置に配置) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;createVSView( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>viewtype</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxVS.html">SxVS</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxVS.html">SxVS</a>&nbsp;createVSView(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>viewtype</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>viewtype</i>
+        </dt>
+        <dd> 基本ビュータイプ。<br /> SxVS.VIEW_FRONT : 正面図<br /> SxVS.VIEW_BACK : 背面図<br /> SxVS.VIEW_TOP : 平面図<br /> SxVS.VIEW_BOTTOM : 下面図<br /> SxVS.VIEW_LEFT : 左側面図<br /> SxVS.VIEW_RIGHT : 右側面図<br />
+            </dd>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd> ビュー配置位置<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>開設したVS(基本ビュ－)インスタンス</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自モデル内に基本ビューを開設します。<br /> 自モデルがアクティブモデルとなります。<br /> 開設したVSがアクティブVSとなります。<br /> 自モデルの基本ウィンドウが3次元を表示している場合、2次元に次元変更されます。<br /> 指定ビューが既に開設されている場合、指定ビューをアクティブVSに設定します。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxModel.html">SxModel クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxModel.createVSView@overloads.html">SxModel.createVSView オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

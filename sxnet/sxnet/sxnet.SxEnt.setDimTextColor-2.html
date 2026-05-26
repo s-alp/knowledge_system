@@ -1,0 +1,82 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.setDimTextColor メソッド (SxEnt[], Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.setDimTextColor&nbsp;メソッド&nbsp;(SxEnt[], Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定製図要素群の文字色を一括変更します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Sub&nbsp;setDimTextColor( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>color</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setDimTextColor(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>color</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>要素の配列</dd>
+        <dt>
+          <i>color</i>
+        </dt>
+        <dd>色番号</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定製図要素群の文字色の一括変更を行います。<br /> 色番号の定数値については、<a href="sxnet.SxSys.html">SxSys</a>クラスの、色定数(COLOR_xxx)を参照して下さい。<br /> COLOR_BLACK、COLOR_EXT1～COLOR_EXT15は指定不可。<br /> entlistには、アクティブVS/WF内の要素を指定して下さい。<br /> entlist[]内のオブジェクトがグループ、パーツ、実像部品の場合、要素内の製図要素に対して処理を行います。<br /> 非表示要素は処理対象外になります。<br /> CAD上で製図要素が再作成される為、本メソッド実行後、entlist[]内の製図要素のオブジェクトは無効になります。<br />
+            <seealso cref="T:sxnet.SxSys"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEnt.setDimTextColor@overloads.html">SxEnt.setDimTextColor オーバーロードの一覧</a> | <a href="sxnet.SxSys.html">SxSys</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

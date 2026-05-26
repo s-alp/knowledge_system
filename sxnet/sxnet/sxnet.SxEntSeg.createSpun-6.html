@@ -1,0 +1,92 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createSpun メソッド (SxEntSeg[], SxPos, SxEntSeg, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createSpun&nbsp;メソッド&nbsp;(SxEntSeg[], SxPos, SxEntSeg, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 回転投影セグメントを作成します。回転軸要素指定。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createSpun( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>seglist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>org</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>seg1</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>rpart</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;createSpun(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;<i>seglist</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>org</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;<i>seg1</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>rpart</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>seglist</i>
+        </dt>
+        <dd>2次元閉領域要素の配列</dd>
+        <dt>
+          <i>org</i>
+        </dt>
+        <dd>作成した回転体の配置位置(3次元座標)</dd>
+        <dt>
+          <i>seg1</i>
+        </dt>
+        <dd>回転軸要素(2次元要素)</dd>
+        <dt>
+          <i>rpart</i>
+        </dt>
+        <dd>実像部品引継ぎ。<br /> true:要素の実像部品を引き継ぎます。<br /> false:要素の実像部品を引き継ぎません。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した回転投影体セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定された2D閉領域の回転体を作成します。<br /> seglist[]には、アクティブウィンドウに表示されている同一ビューの要素を指定して下さい。<br /> seglist[]には、直線、円、円弧、スプライン、楕円、楕円弧セグメントが指定可能です。<br /> seglist[]に、複数の閉領域の要素を指定する事はできません。<br /> 回転軸segは一つ連続して直線のみです。<br /> 3次元要素が作成されるWFのウィンドウが開設されている必要があります。<br /> orgがnull(VBの場合Nothing)の場合、3次元でのビュー平面上に配置します。 閉領域要素に円弧、自由曲線、楕円または楕円弧を含む場合、ソリッドとして作成されます。<br /> 閉領域要素と回転軸方向に増減が存在する場合、ソリッドとして作成されます。<br /> rpart = trueの場合、閉領域要素が実像部品の場合に、実像部品名を引継いだパーツを作成することができます。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createSpun@overloads.html">SxEntSeg.createSpun オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

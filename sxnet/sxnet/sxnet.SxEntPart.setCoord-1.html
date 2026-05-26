@@ -1,0 +1,68 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.setCoord メソッド (SxPos, SxVec, SxVec)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.setCoord&nbsp;メソッド&nbsp;(SxPos, SxVec, SxVec)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自パーツの基準座標、配置ベクトルを設定します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;setCoord( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>zvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>xvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setCoord(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>zvec</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>xvec</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd> パーツ基準座標<br /> null(VBの場合Nothing)の場合、配置ベクトルのみ設定します。<br />
+            </dd>
+        <dt>
+          <i>zvec</i>
+        </dt>
+        <dd> パーツ配置ベクトル(Z軸単位ベクトル)<br /> nullの場合、基準座標のみ設定します。<br />
+            </dd>
+        <dt>
+          <i>xvec</i>
+        </dt>
+        <dd> パーツ配置ベクトル(X軸単位ベクトル)<br /> nullの場合、基準座標のみ設定します。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自パーツの基準座標と配置ベクトル（配置方向）の設定を行います。<br /> zvec,xvecは、WF空間のZ軸,X軸に対して、自パーツがどれだけ回転して配置されているかを 示す単位ベクトルです。<br /> 例：WF空間のZ軸周りに、90度回転して配置されているとした場合、 zvec=(0.0, 0.0, 1.0), xvec=(0.0, 1.0, 0.0)を指定します。<br /> zvec, xvecは、直交関係にある必要があります。<br />
+            <seealso cref="M:sxnet.SxEntPart.getInfDetail"></seealso>
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.setCoord@overloads.html">SxEntPart.setCoord オーバーロードの一覧</a> | <a href="sxnet.SxEntPart.getInfDetail.html">getInfDetail</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

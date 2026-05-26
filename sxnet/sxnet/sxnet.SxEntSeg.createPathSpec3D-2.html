@@ -1,0 +1,96 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createPathSpec3D メソッド (SxEntSeg[][], SxPos[], SxPos[], SxEntSeg[], Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createPathSpec3D&nbsp;メソッド&nbsp;(SxEntSeg[][], SxPos[], SxPos[], SxEntSeg[], Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 2D図面から断面の閉領域と経路を指定して立体要素を作成します。(複数断面) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createPathSpec3D( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>seglist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg[].html">SxEntSeg()[)</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>rpos_list</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>org_list</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>path_seglist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>rpart</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createPathSpec3D(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg[].html">SxEntSeg[][]</a>&nbsp;<i>seglist</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos[]</a>&nbsp;<i>rpos_list</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos[]</a>&nbsp;<i>org_list</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;<i>path_seglist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>rpart</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>seglist</i>
+        </dt>
+        <dd>閉領域要素の2次元配列</dd>
+        <dt>
+          <i>rpos_list</i>
+        </dt>
+        <dd>複数断面の基準点配列(2次元座標)</dd>
+        <dt>
+          <i>org_list</i>
+        </dt>
+        <dd>複数断面の配置位置配列(3次元座標)</dd>
+        <dt>
+          <i>path_seglist</i>
+        </dt>
+        <dd>経路要素の配列</dd>
+        <dt>
+          <i>rpart</i>
+        </dt>
+        <dd>実像部品引継<br /> true:要素の実像部品を引き継ぎます。<br /> false:要素の実像部品を引き継ぎません。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した3D要素セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 3次元要素を作成するWFのウィンドウが開設されている必要があります。<br /> 閉領域要素の配列seglist[][]には、アクティブウィンドウに表示されている同一ビューの要素を指定して下さい。<br /> 基本ビューまたは配置情報付きローカルビュー（XY、YZ、またはZX平面に平行なビューを含む）の要素を指定可能です。<br /> 各断面の頂点数は、すべて同一である必要があります。<br /> 断面は2個から128個まで指定できます。<br /> 閉領域要素数は、最大128要素までです。<br /> 一つの断面に、複数の閉領域を指定する事はできません。<br /> 基準点は閉領域要素上の点を指定することは必要です。<br /> 断面の配置位置座標がnull(VBの場合Nothing)の場合、ビューの原点に配置します。<br /> 経路要素path_seglist[]は閉領域要素seglist[][]と同一モデルの要素です。<br /> 経路は1個要素から256個要素まで指定できます。<br /> なめらかにつながっている基本ビューの線と円弧、または３次元の線と円弧は必要です。<br /> 必ずつながっている順に指定してください。<br /> 実像部品引継の場合（rpart = true)、閉領域要素が実像部品の場合に、実像部品名を引き継いだパーツを作成します。<br /> 作成された立体要素は、ソリッドになります。<br /> 
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createPathSpec3D@overloads.html">SxEntSeg.createPathSpec3D オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

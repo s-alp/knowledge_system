@@ -1,0 +1,143 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.getInfMaterialList メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.getInfMaterialList&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定要素群の材質情報を問い合わせます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+             </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;getInfMaterialList( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxInfMaterial[].html">SxInfMaterial()[)</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxInfMaterial[].html">SxInfMaterial[][]</a>&nbsp;getInfMaterialList(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>問合せを行う要素(パーツ／セグメント)の配列</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>材質情報の多段階配列(ジャグ配列)</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定要素群に付加された材質情報を問い合わせます。<br /> entlist[]には、同一WF内のパーツ／セグメントを指定して下さい。<br /> パーツを指定した場合、パーツ内の要素に付加されている材質情報を全て取得 しますが、子パーツ内の要素に付加されている情報は取得しません。<br /> 指定セグメント、パーツ内の要素に材質が付加されていない場合、 該当する配列の要素にはnull(VBの場合、Nothing)を返答します。<br />
+             <br />
+             <example> [C#] <pre class="code">// パーツの取得
+SxWF wf = SxWF.getActive();
+SxEntPart[] partlist = wf.getPartList();
+
+// パーツの材質情報を一括取得。
+SxInfMaterial[][] matlist = SxEnt.getMaterialList(partlist);
+
+// パーツ毎に、材質名称を表示する。
+for ( int i = 0; i &lt; partlist.Length; i++ )
+{
+    // パーツ名の表示
+    SxInfPart inf = partlist[i].getInf();
+    Console.WriteLine("No " + i+1 + ":" + inf.name);
+
+    // 材質情報の表示
+    if ( matlist[i] == null )
+    {
+        // パーツには材質が付加されてない。
+        Console.WriteLine("  None.");
+    }
+    else
+    {
+        // パーツ内要素に付加された、全ての材質名称を表示
+        for ( j = 0; j &lt; matlist[i].Length; j++ )
+        {
+            Console.WriteLine("  " + matlist[i][j].name);
+        }
+    }
+}
+</pre> [VB] <pre class="code"> ' パーツの取得
+    Dim wf As SxWF = SxWF.getActive()
+    Dim plist As SxEntPart() = wf.getPartList()
+ 
+ ' パーツの材質情報を一括取得
+ Dim matlist As SxInfMaterial()() = SxEnt.getInfMaterialList(plist)
+
+ ' パーツ毎に、材質名称を表示する。
+    For i As Integer = 0 To plist.Length - 1
+     ' パーツ名の表示
+        Dim inf As SxInfPart = plist(i).getInfDetail()
+        Console.WriteLine("No " &amp; (i + 1) &amp; ":" &amp; inf.name)
+ 
+     ' 材質情報の表示
+        If matlist(i) Is Nothing Then
+         ' パーツには材質が付加されていない。
+            Console.WriteLine("  None.")
+        Else
+         ' パーツ内要素に付加された、全ての材質名称を表示
+            For j As Integer = 0 To matlist(i).Length - 1
+                Console.WriteLine("  " &amp; matlist(i)(j).name)
+            Next j
+        End If
+    Next i
+ </pre>
+             </example>
+             <seealso cref="T:sxnet.SxInfMaterial"></seealso>
+             <seealso cref="M:sxnet.SxSys.getInfMaterials"></seealso>
+             <seealso cref="M:sxnet.SxEntSeg.getInfMaterial"></seealso>
+             <seealso cref="M:sxnet.SxEntPart.getInfMaterialList"></seealso>
+             <seealso cref="M:sxnet.SxEntSeg.setInfMaterial(sxnet.SxInfMaterial)"></seealso>
+             <seealso cref="M:sxnet.SxEntPart.setInfMaterial(sxnet.SxInfMaterial)"></seealso>
+             <seealso cref="M:sxnet.SxEnt.setInfMaterial(sxnet.SxEnt[],sxnet.SxInfMaterial)"></seealso>
+             </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxInfMaterial.html">SxInfMaterial</a> | <a href="sxnet.SxSys.getInfMaterials.html">getInfMaterials</a> | <a href="sxnet.SxEntSeg.getInfMaterial.html">getInfMaterial</a> | <a href="sxnet.SxEntPart.getInfMaterialList.html">getInfMaterialList</a> | <a href="sxnet.SxEntSeg.setInfMaterial.html">setInfMaterial</a> | <a href="sxnet.SxEntPart.setInfMaterial.html">setInfMaterial</a> | <a href="sxnet.SxEnt.setInfMaterial.html">setInfMaterial</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

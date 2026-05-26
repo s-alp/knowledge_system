@@ -1,0 +1,128 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createSpun メソッド (SxPos, SxVec, SxVec, SxCoord[], Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createSpun&nbsp;メソッド&nbsp;(SxPos, SxVec, SxVec, SxCoord[], Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 回転体セグメントを作成します。360度回転、座標数指定。<br /> 指定した閉ループを、回転軸周りに360度回転した回転形状を生成します。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createSpun( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>org</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>zvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>xvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt_array</i>&nbsp;As&nbsp;<a href="sxnet.SxCoord.html">SxCoord()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>n_pnt</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createSpun(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>org</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>zvec</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>xvec</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxCoord.html">SxCoord[]</a>&nbsp;<i>pnt_array</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>n_pnt</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>org</i>
+        </dt>
+        <dd> 回転体の定義座標系の原点座標<br /> (回転軸原点位置)<br />
+            </dd>
+        <dt>
+          <i>zvec</i>
+        </dt>
+        <dd> 回転体の定義座標系Z軸ベクトル<br /> (回転軸ベクトル。回転体基準平面のY軸ベクトル)<br />
+            </dd>
+        <dt>
+          <i>xvec</i>
+        </dt>
+        <dd> 回転体の定義座標系X軸ベクトル<br /> (回転体基準平面のX軸ベクトル)<br />
+            </dd>
+        <dt>
+          <i>pnt_array</i>
+        </dt>
+        <dd> 閉ループ座標情報の配列<br /> 定義座標系のXZ平面での2D座標を(x,z,0)の2D座標系で指定して下さい。<br /> 1点目は閉ループの開始座標であり、必ず、pnt_array[0].is_arc=falseを設定して下さい。<br /> 閉ループの座標は、XZ平面の第1、第4象限の座標(x&gt;=0.0)である必要があります。<br /> (閉ループが軸と交差してはいけません)<br />
+            </dd>
+        <dt>
+          <i>n_pnt</i>
+        </dt>
+        <dd> pnt_array[]内の有効座標情報数<br /> 1 &lt; n_pnt &lt;= pnt_array.Length<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した回転体セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示されたWF上に、 pnt_array[]で指定されたXZ平面の面(閉ループ)を回転軸周りに360度回転した立体形状を作成します。<br /> zvec,xvecは必ず直交している必要があります。<br /> pnt_array[]は、定義座標系のXZ平面座標系(2D座標)で表された、閉ループを指定して下さい。<br /> 閉ループの自己交差は認められません。<br /> 又、始終点間以外の隣り合う座標間の距離は、0.0001以上離れている必要があります。<br /> 閉ループが回転軸から離れている場合は、外形の回転体から内形の回転体の差をとったFCソリッド を作成します。<br /> 閉ループの座標は、XZ平面の第1、第4象限の座標を指定して下さい。<br /> (X座標に負の値を指定する事はできません)<br /> 回転体セグメントで表現できない場合(端点数が32を超える場合、Y座標が単調増加でない場合等)は、 ソリッドを作成します。<br />
+            <br />
+            
+            <example> パイプ形状を作成する。[C#]<br />
+            <pre class="code">// 回転体作成サンプル：パイプ形状を作成する。
+
+SxCoord[] loop1 = new SxCoord[5]; // 基準面ループ情報
+int n_pnt = loop1.Length;          // 構成座標数
+
+// 回転面のループを定義する。
+loop1[0] = new SxCoord( 5.0,  0.0);
+loop1[1] = new SxCoord(10.0,  0.0);
+loop1[2] = new SxCoord(10.0, 10.0);
+loop1[3] = new SxCoord( 5.0, 10.0);
+loop1[4] = new SxCoord(loop1[0]);
+
+// 配置座標の指定(原点に配置)
+SxPos org = new SxPos( 0.0, 0.0, 0.0 );
+
+// 配置方向の指定(Y軸方向が高さ方向となるよう回転)
+SxVec zvec = new SxVec( 0.0, 1.0, 0.0 );
+SxVec xvec = new SxVec( 1.0, 0.0, 0.0 );
+
+// 回転体(F.C.ソリッド)作成
+SxEntSeg seg = SxEntSeg.createSpun( org, zvec, xvec, loop1, n_pnt );
+</pre>
+            </example>
+            <seealso cref="T:sxnet.SxCoord"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createSpun@overloads.html">SxEntSeg.createSpun オーバーロードの一覧</a> | <a href="sxnet.SxCoord.html">SxCoord</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

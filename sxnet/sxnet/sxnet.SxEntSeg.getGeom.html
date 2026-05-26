@@ -1,0 +1,96 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.getGeom メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.getGeom&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> セグメントのジオメトリを問い合わせます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Function&nbsp;getGeom()&nbsp;As&nbsp;<a href="sxnet.SxGeom.html">SxGeom</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxGeom.html">SxGeom</a>&nbsp;getGeom();</div>
+      <h4 class="dtH4">戻り値</h4>
+      <p>セグメントのジオメトリ</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自要素のジオメトリを問い合わせます。<br /> セグメントのタイプにより、以下のオブジェクトを返します。<br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_POINT.html">SEGTYPE_POINT</a>の場合、<a href="sxnet.SxGeomPoint3D.html">SxGeomPoint3D</a>又は<a href="sxnet.SxGeomPoint2D.html">SxGeomPoint2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_LINE.html">SEGTYPE_LINE</a>の場合、<a href="sxnet.SxGeomLine3D.html">SxGeomLine3D</a>又は<a href="sxnet.SxGeomLine2D.html">SxGeomLine2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_CIR.html">SEGTYPE_CIR</a>の場合、<a href="sxnet.SxGeomCircle3D.html">SxGeomCircle3D</a>又は<a href="sxnet.SxGeomCircle2D.html">SxGeomCircle2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_ARC.html">SEGTYPE_ARC</a>の場合、<a href="sxnet.SxGeomArc3D.html">SxGeomArc3D</a>又は<a href="sxnet.SxGeomArc2D.html">SxGeomArc2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_SPL.html">SEGTYPE_SPL</a>の場合、<a href="sxnet.SxGeomSpline2D.html">SxGeomSpline2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_ELP.html">SEGTYPE_ELP</a>の場合、<a href="sxnet.SxGeomEllipse2D.html">SxGeomEllipse2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_ELPA.html">SEGTYPE_ELPA</a>の場合、<a href="sxnet.SxGeomElparc2D.html">SxGeomElparc2D</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>の場合、<a href="sxnet.SxGeomLengthDim.html">SxGeomLengthDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a>の場合、<a href="sxnet.SxGeomAngDim.html">SxGeomAngDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a>の場合、<a href="sxnet.SxGeomDiaDim.html">SxGeomDiaDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>の場合、<a href="sxnet.SxGeomText.html">SxGeomText</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a>の場合、<a href="sxnet.SxGeomLabel.html">SxGeomLabel</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a>の場合、<a href="sxnet.SxGeomChamDim.html">SxGeomChamDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_SMRK.html">SEGTYPE_SMRK</a>の場合、<a href="sxnet.SxGeomSmark.html">SxGeomSmark</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_DELTA.html">SEGTYPE_DELTA</a>の場合、<a href="sxnet.SxGeomDelta.html">SxGeomDelta</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_BALL.html">SEGTYPE_BALL</a>の場合、<a href="sxnet.SxGeomBalloon.html">SxGeomBalloon</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_HATCH.html">SEGTYPE_HATCH</a>の場合、<a href="sxnet.SxGeomHatch.html">SxGeomHatch</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_HATCH_EX.html">SEGTYPE_HATCH_EX</a>の場合、<b>SxGeomHatch</b><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_WELD.html">SEGTYPE_WELD</a>の場合、<a href="sxnet.SxGeomWeld.html">SxGeomWeld</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_GTOL.html">SEGTYPE_GTOL</a>の場合、<a href="sxnet.SxGeomTol.html">SxGeomTol</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_APL.html">SEGTYPE_APL</a>の場合、<a href="sxnet.SxGeomAplDim.html">SxGeomAplDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_SYM.html">SEGTYPE_SYM</a>の場合、<a href="sxnet.SxGeomCutLine.html">SxGeomCutLine</a> 又は<a href="sxnet.SxGeomArrowView.html">SxGeomArrowView</a>又は<a href="sxnet.SxGeomSymbol.html">SxGeomSymbol</a>又は<a href="sxnet.SxGeomSymbolMetal.html">SxGeomSymbolMetal</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_LEAD.html">SEGTYPE_LEAD</a>の場合、<a href="sxnet.SxGeomArrow.html">SxGeomArrow</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>の場合、<a href="sxnet.SxGeomArcLengDim.html">SxGeomArcLengDim</a><br /> type=<a href="sxnet.SxEntSeg.SEGTYPE_FMRK.html">SEGTYPE_FMRK</a>の場合、<a href="sxnet.SxGeomFinishMark.html">SxGeomFinishMark</a><br />
+              
+            <br /> 文字列(type=<b>SEGTYPE_TEXT</b>) および 注記(type=<b>SEGTYPE_LBL</b>)にて 「iCAD SXで使用できる他言語文字のフォント」を使用している場合、 OSの言語と異なる文字(日本語・中国語・韓国語）を正しく返答します。<br /> 上記以外のタイプのセグメントの場合、null(VBの場合、Nothing)を返答します。<br /> 立体、ソリッド、FCソリッドは処理対象外です。<br /> この場合は、 各フェイス、エッジ単位で、 <a href="sxnet.SxFace.html">SxFace</a>オブジェクトの<a href="sxnet.SxFace.getGeom.html">getGeom</a>メソッド、又は、 <a href="sxnet.SxEdge.html">SxEdge</a>オブジェクトの<a href="sxnet.SxEdge.getGeom.html">getGeom</a>メソッドで、フェイス、 エッジのジオメトリを問い合わせる事ができます。<br />
+            <br />
+            <example> 2次元線分のジオメトリを取得する。[C#] <pre class="code">/* 自要素が2次元線要素の場合、線分の方向ベクトルを返します。*/
+SxVec GetLineVec(SxEntSeg seg)
+{
+    SxGeom geom = null;
+    SxGeomLine2D geom_line2d = null;
+    SxVec vec = null;
+
+    // 要素のジオメトリを取得します。
+    geom = seg.getGeom();
+    // ジオメトリが2次元線分の場合、方向ベクトルを取り出します。
+    if ( geom.type == SxGeom.TYPE_LINE2D ){
+        geom_line2d = (SxGeomLine2D)geom;
+        vec = new SxVec(geom_line2d.vec);
+    }
+
+    return vec; // 方向ベクトル、又は、nullを返します。
+}
+</pre>
+            </example>
+            <seealso cref="T:sxnet.SxGeom"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxGeom.html">SxGeom</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

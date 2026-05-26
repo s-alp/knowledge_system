@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.create メソッド (SxEnt[], String, String, Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.create&nbsp;メソッド&nbsp;(SxEnt[], String, String, Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 3次元パーツを創成します。(メンバ要素指定) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;create( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>name</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>comment</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>layer</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart</a>&nbsp;create(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>name</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>comment</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>layer</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>パーツメンバとする、要素の配列</dd>
+        <dt>
+          <i>name</i>
+        </dt>
+        <dd> パーツ名 </dd>
+        <dt>
+          <i>comment</i>
+        </dt>
+        <dd> コメント<br /> コメントなしの場合、空文字列""を指定して下さい。<br />
+            </dd>
+        <dt>
+          <i>layer</i>
+        </dt>
+        <dd> 作成レイヤ番号(1～255)<br /> 0を指定した場合、メンバ要素のレイヤを引継ぎます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>創成した3次元パーツ</p>
+      <h4 class="dtH4">解説</h4>
+      <p> entlistで指定した要素をメンバ要素とする、3次元パーツを作成します。<br /> entlistには、同一3DグローバルWF内の要素を指定して下さい。<br />
+            <br /> パーツ名、ファイル名は、半角英数字で最大40文字までです。(全角文字の場合、最大20文字)<br /> コメントは、半角英数字で最大48文字までです。(全角文字の場合、最大24文字)<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.create@overloads.html">SxEntPart.create オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

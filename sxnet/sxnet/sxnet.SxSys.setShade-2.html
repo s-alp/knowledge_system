@@ -1,0 +1,83 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxSys.setShade メソッド (Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxSys.setShade&nbsp;メソッド&nbsp;(Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> アクティブウィンドウのCG表示状態を変更します。(CG表示/WIRE表示)<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Sub&nbsp;setShade( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>shade</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setShade(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>shade</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>shade</i>
+        </dt>
+        <dd> 表示方法。<br /> true : CG表示<br /> false : WIRE表示<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウの表示状態(CG表示/WIRE表示)の変更を行います。<br /> アクティブウィンドウが3次元の場合に使用して下さい。<br /> shade=trueの場合、現在のシステムのCG表示モードに従って、CG表示されます。<br />
+            <br /> 指定した要素のみを、CG表示/WIRE表示に切り替えたい場合は、 <a href="sxnet.SxEnt.html">SxEnt</a>クラスの<a href="sxnet.SxEnt.setShade-2.html">setShade</a>を使用して下さい。<br /> システムのCG表示モードのみを変更したい場合は、<a href="sxnet.SxSys.setShadeMode.html">setShadeMode</a>で可能です。<br />
+            
+            <seealso cref="M:sxnet.SxEnt.setShade(sxnet.SxEnt[],System.Boolean)"></seealso>
+            <seealso cref="M:sxnet.SxSys.setShadeMode(System.Int32)"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxSys.html">SxSys クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxSys.setShade@overloads.html">SxSys.setShade オーバーロードの一覧</a> | <a href="sxnet.SxEnt.setShade-2.html">setShade</a> | <a href="sxnet.SxSys.setShadeMode.html">setShadeMode</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

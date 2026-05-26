@@ -1,0 +1,90 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createArc2DRad メソッド (SxPos, Double, Double, Double)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createArc2DRad&nbsp;メソッド&nbsp;(SxPos, Double, Double, Double)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 2次元円弧セグメントを作成します：角度(ラジアン)指定 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createArc2DRad( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>center</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>diameter</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>start_angle</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>end_angle</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createArc2DRad(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>center</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>diameter</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>start_angle</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>end_angle</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>center</i>
+        </dt>
+        <dd>中心座標</dd>
+        <dt>
+          <i>diameter</i>
+        </dt>
+        <dd>直径</dd>
+        <dt>
+          <i>start_angle</i>
+        </dt>
+        <dd>円弧開始角度(ラジアン)</dd>
+        <dt>
+          <i>end_angle</i>
+        </dt>
+        <dd>円弧終了角度(ラジアン)(円弧開始角度からの相対角度)</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>2次元円弧セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウのアクティブVSに2次元円弧セグメントを作成します。<br /> アクティブウィンドウが3次元の場合、表示WF中のアクティブな組立平面に対して作成します。<br /> 円弧終了角度(相対角度)は(-2π,2π)の角度を入力してください。<br /> centerのz値は無視されます。 </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createArc2DRad@overloads.html">SxEntSeg.createArc2DRad オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

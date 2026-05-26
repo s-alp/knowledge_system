@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.checkCollisions メソッド (SxEnt[], Double, Boolean, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.checkCollisions&nbsp;メソッド&nbsp;(SxEnt[], Double, Boolean, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 3次元要素の干渉チェックを行う。(総当りでの干渉チェック) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;checkCollisions( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>attr</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>cg</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;checkCollisions(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>tol</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>attr</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>cg</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>干渉チェックを行う要素配列</dd>
+        <dt>
+          <i>tol</i>
+        </dt>
+        <dd> クリアランス値<br /> マイナス値の場合、指定クリアランス値以下の薄皮での干渉を無視します。（近似計算）<br />
+            </dd>
+        <dt>
+          <i>attr</i>
+        </dt>
+        <dd> 干渉結果表示要素の属性<br /> true:干渉部分の形状を環境セットアップで定義された色で作成します。<br /> false:干渉部分の形状を、現在のシステム情報メニューの線種/線色/線幅で作成します。<br /> ※ダミーパラメタ。現在は指定に関わらず、常にtrueで動作します。 </dd>
+        <dt>
+          <i>cg</i>
+        </dt>
+        <dd> 干渉部分の形状の表示方法<br /> true:CG表示<br /> false:線画表示<br /> ※将来の予約パラメタ。現在は指定に関わらず必ずCG表示されます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p> 干渉部分の形状の要素配列<br /> 干渉が存在しない場合、null(VBの場合、Nothing)を返答します。<br />
+            </p>
+      <h4 class="dtH4">解説</h4>
+      <p> 総当りでの3次元要素の干渉チェックを行います。<br /> entlistには、アクティブウィンドウに表示されている、同一WF内の要素を指定して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEnt.checkCollisions@overloads.html">SxEnt.checkCollisions オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

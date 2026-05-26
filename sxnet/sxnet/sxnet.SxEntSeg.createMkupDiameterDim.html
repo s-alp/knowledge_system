@@ -1,0 +1,86 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createMkupDiameterDim メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createMkupDiameterDim&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> マークアップ(直径寸法)を作成します。(iCAD SX ビューア／iCAD SX 組立支援専用) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;createMkupDiameterDim( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>obj</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>Object</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createMkupDiameterDim(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>object</a>&nbsp;<i>obj</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>obj</i>
+        </dt>
+        <dd>対象要素</dd>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>配置点座標</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成したマークアップ(直径寸法)セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> objで指定された要素に、マークアップ(直径寸法)を作成します。<br /> objには、アクティブウィンドウに表示されたアクティブVS/WF上の要素を指定して下さい。<br /> アクティブウィンドウが3次元で、かつ操作次元が2次元の場合は、アクティブな組立平面上の要素を 指定して下さい。<br /> objには、以下のインスタンスが指定可能です。<br />
+            <a href="sxnet.SxEdge.html">SxEdge</a>(円／円弧エッジ)<br />
+            <a href="sxnet.SxEntSeg.html">SxEntSeg</a>(円／円弧要素)<br />
+            <br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> posは、2次元要素作成の場合、Z値は無視されます。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

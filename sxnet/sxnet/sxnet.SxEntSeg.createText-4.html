@@ -1,0 +1,125 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createText メソッド (SxPos, SxPos, String[], Boolean, Int32, Int32, Double[], Double, String, Boolean, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createText&nbsp;メソッド&nbsp;(SxPos, SxPos, String[], Boolean, Int32, Int32, Double[], Double, String, Boolean, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 文字列要素を作成します。(TrueTypeFont) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createText( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt1</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt2</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>text</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string().aspx>String()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>direc</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>ttype</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>position</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>margin</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double().aspx>Double()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angle</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>font_name</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>bold</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>italic</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createText(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt1</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string[].aspx>string[]</a>&nbsp;<i>text</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>direc</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>ttype</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>position</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double[].aspx>double[]</a>&nbsp;<i>margin</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angle</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>font_name</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>bold</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>italic</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pnt1</i>
+        </dt>
+        <dd>文字列配置枠座標1</dd>
+        <dt>
+          <i>pnt2</i>
+        </dt>
+        <dd>文字列配置枠座標2</dd>
+        <dt>
+          <i>text</i>
+        </dt>
+        <dd>文字列の配列（最大20行まで)<br /> text[ 0]:1行目の文字列情報<br /> (最大80文字まで）<br /> text[19]:20行目の文字列情報<br /> 空行を作成する場合は、空白文字列" "を指定して下さい。<br /> OSの言語と異なる文字（日本語・中国語・韓国語）の入力可。<br />
+            </dd>
+        <dt>
+          <i>direc</i>
+        </dt>
+        <dd>文字列の方向<br /> true:横書き false:縦書き<br /> TrueTypeFontの場合、縦書きはできません。trueを指定して下さい。 </dd>
+        <dt>
+          <i>ttype</i>
+        </dt>
+        <dd>文字種別 <br /> SxEntSeg.DIM_WORD:寸法文字<br /> SxEntSeg.DIM_WORD1:文字１<br /> SxEntSeg.DIM_WORD2:文字２<br /> SxEntSeg.DIM_WORD3:文字３<br />
+            </dd>
+        <dt>
+          <i>position</i>
+        </dt>
+        <dd>配置方法<br /> SxEntSeg.TEXT_ARRANGE_AUTO:均等<br /> SxEntSeg.TEXT_ARRANGE_LEFT:左詰<br /> SxEntSeg.TEXT_ARRANGE_CENT:中央<br /> SxEntSeg.TEXT_ARRANGE_RIGHT:右詰<br />  
+            </dd>
+        <dt>
+          <i>margin</i>
+        </dt>
+        <dd>マージン<br /> margin[0]:上マージン<br /> margin[1]:下マージン<br /> margin[2]:左マージン<br /> margin[3]:右マージン<br />
+            </dd>
+        <dt>
+          <i>angle</i>
+        </dt>
+        <dd>文字列の配置角度(度)</dd>
+        <dt>
+          <i>font_name</i>
+        </dt>
+        <dd>フォント名</dd>
+        <dt>
+          <i>bold</i>
+        </dt>
+        <dd> BOLD(太字)属性<br /> true:太字で作成します。<br /> false:太字で作成しません。<br />
+            </dd>
+        <dt>
+          <i>italic</i>
+        </dt>
+        <dd> 斜体文字属性<br /> true:斜体文字で作成します。<br /> false:斜体文字で作成しません。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した文字列セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示された、アクティブVS/WFの指定枠内に、指定フォントで文字列要素を作成します。<br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br /> direcには、true(横書き)を指定して下さい。<br /> 2次元要素作成の場合、pntのZ値は無視されます。<br /> 3次元要素作成の場合、CAD上での表示はストローク文字と変わりません。<br /> OSの言語と異なる文字を入力する場合は、「iCAD SXで使用できる他言語文字のフォント」を使用して下さい。<br /> 中国語・韓国語の文字は3次元上に正しく表示されません。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createText@overloads.html">SxEntSeg.createText オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

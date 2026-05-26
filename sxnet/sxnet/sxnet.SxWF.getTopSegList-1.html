@@ -1,0 +1,90 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxWF.getTopSegList メソッド (Int32, Int32, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxWF.getTopSegList&nbsp;メソッド&nbsp;(Int32, Int32, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自WF内の最上位のセグメントを取得します。<br /> (パーツに属していないセグメントの取得)<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;getTopSegList( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>offset</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>num</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>visi</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;getTopSegList(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>offset</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>num</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>visi</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>offset</i>
+        </dt>
+        <dd>読み込み開始オフセット(先頭=0)</dd>
+        <dt>
+          <i>num</i>
+        </dt>
+        <dd> 最大読み込み個数。<br /> 0指定で、offset番目から全ての要素を返答します。 </dd>
+        <dt>
+          <i>visi</i>
+        </dt>
+        <dd> 非表示セグメントの処理。<br /> true:返答する。<br /> false:返答しない。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p> セグメントの配列。<br /> 返答する要素が存在しない場合、null(VBの場合、Nothing)を返答します。<br /> 自WFが3Dグローバルでない場合も、nullを返答します。 </p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自WF内の最上位のセグメントを取得します。<br /> (パーツに属していないセグメントの取得)<br /> 非検索レイヤ、非検索タイプのセグメントは返答しません。 返答する要素が存在しない場合、null(VBの場合、Nothing)を返答します。<br /> 自WFが3Dグローバルでない場合も、nullを返答します。<br />
+            <seealso cref="T:sxnet.SxEntSeg"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxWF.html">SxWF クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxWF.getTopSegList@overloads.html">SxWF.getTopSegList オーバーロードの一覧</a> | <a href="sxnet.SxEntSeg.html">SxEntSeg</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

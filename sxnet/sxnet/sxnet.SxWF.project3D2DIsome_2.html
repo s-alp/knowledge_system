@@ -1,0 +1,87 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxWF.project3D2DIsome_2 メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxWF.project3D2DIsome_2&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 3D→2D/アイソメ図を作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;project3D2DIsome_2( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>opt</i>&nbsp;As&nbsp;<a href="sxnet.SxOpt3D2D_2.html">SxOpt3D2D_2</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>base_pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt_2d</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;project3D2DIsome_2(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOpt3D2D_2.html">SxOpt3D2D_2</a>&nbsp;<i>opt</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>base_pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt_2d</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>opt</i>
+        </dt>
+        <dd>3D→2D実行オプション</dd>
+        <dt>
+          <i>base_pnt</i>
+        </dt>
+        <dd> 3次元基準座標。<br /> null(VBの場合、Nothing)を指定した場合、原点になります。<br />
+            </dd>
+        <dt>
+          <i>pnt_2d</i>
+        </dt>
+        <dd>2Dアクティブビュー上の配置座標</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 3D→2D/アイソメ図を作成します。<br /> 自WF内の表示要素を同一モデルのアクティブビューに対して、アイソメ焼き付けを実行します。<br /> 自WFを表示するウィンドウがアクティブウィンドウに設定されます。<br /> 自WFを表示するウィンドウが存在しない場合、新規に開設します。<br />
+            <seealso cref="T:sxnet.SxOpt3D2D_2"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD操作でのエラー情報</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxWF.html">SxWF クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxOpt3D2D_2.html">SxOpt3D2D_2</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.getInfPartTree メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.getInfPartTree&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自パーツからのパーツの階層情報を取得します。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Function&nbsp;getInfPartTree()&nbsp;As&nbsp;<a href="sxnet.SxInfPartTree.html">SxInfPartTree</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxInfPartTree.html">SxInfPartTree</a>&nbsp;getInfPartTree();</div>
+      <h4 class="dtH4">戻り値</h4>
+      <p>パーツ階層情報</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自パーツから始まる、パーツの階層情報を取得します。<br /> 自パーツ配下の階層構造、パーツ詳細情報、パーツ任意情報を一括して取得する事ができます。<br /> 最上位パーツからの階層構造を取得する場合は、 <a href="sxnet.SxWF.html">SxWF</a>クラスの<a href="sxnet.SxWF.getInfPartTree.html">getInfPartTree</a>メソッドを使用して下さい。<br /> パーツの階層情報取得後に、パーツの取込み、切出し、親パーツの変更、削除等の 階層構造の更新を伴う処理を行った場合、CAD側との整合がなくなる為、再度、階層情報を 取得して下さい。<br />
+            <seealso cref="M:sxnet.SxWF.getInfPartTree"></seealso>
+            <seealso cref="T:sxnet.SxInfPartTree"></seealso>
+            <seealso cref="M:sxnet.SxEntPart.getInfDetail"></seealso>
+            <seealso cref="M:sxnet.SxEntPart.getInfEx"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxWF.getInfPartTree.html">getInfPartTree</a> | <a href="sxnet.SxInfPartTree.html">SxInfPartTree</a> | <a href="sxnet.SxEntPart.getInfDetail.html">getInfDetail</a> | <a href="sxnet.SxEntPart.getInfEx.html">getInfEx</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

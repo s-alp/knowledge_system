@@ -1,0 +1,76 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxWindow.delete メソッド ()</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxWindow.delete&nbsp;メソッド&nbsp;()</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> ウィンドウを閉じます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;delete()</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;delete();</div>
+      <h4 class="dtH4">解説</h4>
+      <p> ウィンドウを閉じます。<br /> ウィンドウを閉じた場合、CAD上のウィンドウ序列が変わる為、現在有効な全ての <a href="sxnet.SxWindow.html">SxWindow</a>インスタンスの内容はCAD上のウィンドウと一致しなくなります。<br /> 本メソッド使用後に、CAD上の図形表示ウィンドウにアクセスする場合は、 現在の<b>SxWindow</b>インスタンスを全て破棄し、 <a href="sxnet.SxSys.html">SxSys</a>クラスの<a href="sxnet.SxSys.getInf.html">getInf</a>メソッドや、 本クラスの<a href="sxnet.SxWindow.getActive.html">getActive</a>メソッドで、インスタンスを再生成して下さい。<br /><br /> ウィンドウが、基本ウィンドウの場合、表示しているモデル自体が閉じられ、 同一モデルを表示する他の全てのウィンドウも閉じられます。<br /> モデルが修正されている場合、保存確認のメッセージボックスがCAD上に表示されます。<br /> ウィンドウが基本ウィンドウかどうかは、<a href="sxnet.SxWindow.getInf.html">getInf</a>で取得可能です。<br />
+            <a href="sxnet.SxInfWindow.html">SxInfWindow</a>インスタンスの<a href="sxnet.SxInfWindow.is_base.html">is_base</a>=trueの場合、 基本ウィンドウです。<br /> アクティブウィンドウを閉じた場合、CAD上でアクティブウィンドウが変更されます。<br />
+            <seealso cref="T:sxnet.SxSys"></seealso>
+            <seealso cref="T:sxnet.SxInfWindow"></seealso>
+            <seealso cref="M:sxnet.SxWindow.getActive"></seealso>
+            <seealso cref="M:sxnet.SxWindow.getInf"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxWindow.html">SxWindow クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxWindow.delete@overloads.html">SxWindow.delete オーバーロードの一覧</a> | <a href="sxnet.SxSys.html">SxSys</a> | <a href="sxnet.SxInfWindow.html">SxInfWindow</a> | <a href="sxnet.SxWindow.getActive.html">getActive</a> | <a href="sxnet.SxWindow.getInf.html">getInf</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

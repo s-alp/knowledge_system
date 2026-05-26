@@ -1,0 +1,74 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEdge クラス</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEdge クラス</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 立体、ソリッド、FCソリッドのエッジ。 </p>
+      <p>この型のすべてのメンバの一覧については、 <a href="sxnet.SxEdge@members.html">SxEdge メンバ</a>を参照してください。</p>
+      <p>
+        <a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>System.Object</a>
+        <br />&nbsp;&nbsp;&nbsp;<b>sxnet.SxEdge</b></p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Class&nbsp;SxEdge</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <div>public&nbsp;class&nbsp;SxEdge</div>
+      </div>
+      <H4 class="dtH4">スレッドセーフ</H4>
+      <P>この型の public static (Visual Basicでは <B>Shared</B>) のすべてのメンバは、
+				マルチスレッド操作で安全に使用できます。インスタンスのメンバの場合は、スレッドセーフであるとは限りません。</P>
+      <h4 class="dtH4">解説</h4>
+      <p> 立体、ソリッド、FCソリッドのエッジ(稜線)にアクセスするためのクラスです。<br />
+            <br />
+            <a href="sxnet.SxSys.html">SxSys</a>クラスの<a href="sxnet.SxSys.getEdge.html">getEdge</a>メソッド、 <a href="sxnet.SxEntSeg.html">SxEntSeg</a>クラスの<a href="sxnet.SxEntSeg.getEdgeList-1.html">getEdgeList</a>メソッド、 <a href="sxnet.SxFace.html">SxFace</a>クラスの<a href="sxnet.SxFace.getEdgeList-1.html">getEdgeList</a>メソッド等で取得します。<br /> CAD上でエッジインスタンスの属するセグメントの形状編集が行われた場合、 CAD上で形状自体が再構成される為、既存の該当セグメントのエッジインスタンスは無効になります。<br /> 例)自エッジインスタンスがFCソリッドのエッジである時に、CAD上で集合演算や、立体伸縮で 自フェイスの属するFCソリッドを編集した場合、等。<br />
+            
+            <seealso cref="M:sxnet.SxSys.getEdge"></seealso>
+            <seealso cref="M:sxnet.SxSys.getEdgeList"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getEdgeList"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getEdgeList(sxnet.SxEntSeg[])"></seealso>
+            <seealso cref="M:sxnet.SxFace.getEdgeList"></seealso>
+            <seealso cref="M:sxnet.SxFace.getEdgeList(sxnet.SxFace[])"></seealso>
+            </p>
+      <h4 class="dtH4">必要条件</h4>
+      <p>
+        <b>名前空間: </b>
+        <a href="sxnet.html">sxnet</a>
+      </p>
+      <p>
+        <b>アセンブリ: </b>sxnet (sxnet.dll 内)
+					</p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEdge@members.html">SxEdge メンバ</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxSys.getEdge.html">getEdge</a> | <a href="sxnet.SxSys.getEdgeList.html">getEdgeList</a> | <a href="sxnet.SxEntSeg.getEdgeList-1.html">getEdgeList</a> | <a href="sxnet.SxEntSeg.getEdgeList-2.html">getEdgeList</a> | <a href="sxnet.SxFace.getEdgeList-1.html">getEdgeList</a> | <a href="sxnet.SxFace.getEdgeList-2.html">getEdgeList</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.editDimText メソッド (SxDimValueAtr, SxOptDimEdit)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.editDimText&nbsp;メソッド&nbsp;(SxDimValueAtr, SxOptDimEdit)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 寸法線文字の編集 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;editDimText( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>dimtext</i>&nbsp;As&nbsp;<a href="sxnet.SxDimValueAtr.html">SxDimValueAtr</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>opt</i>&nbsp;As&nbsp;<a href="sxnet.SxOptDimEdit.html">SxOptDimEdit</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;editDimText(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxDimValueAtr.html">SxDimValueAtr</a>&nbsp;<i>dimtext</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOptDimEdit.html">SxOptDimEdit</a>&nbsp;<i>opt</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>dimtext</i>
+        </dt>
+        <dd>寸法文字属性情報<br /> 
+            <a href="sxnet.SxDimValueAtr.html">SxDimValueAtr</a></dd>
+        <dt>
+          <i>opt</i>
+        </dt>
+        <dd>寸法文字オプション<br /> dimtext.dimval_type=trueの場合のみ有効。<br /> null(VBの場合、Nothing)の場合、元の属性を引き継ぎます。<br />
+            <a href="sxnet.SxOptDimEdit.html">SxOptDimEdit</a></dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 寸法線の文字編集を行います。<br /> 自要素が、以下のセグメントタイプの場合、処理対象です。<br /> 長さ寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>)<br /> 角度寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a><br /> 径寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a><br /> 面取寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a><br /> 円弧長寸法(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>)<br /> 角寸/長円/角穴/座標寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_APL.html">SEGTYPE_APL</a>)<br />
+            <br /> 自要素は、アクティブウィンドウのアクティブVS/WFの要素である必要があります。<br /> dimtextのmark3に⌒記号やCR記号を設定する際、dimtextのmark1はfalseを、dimtextのmark2は無しを設定してください。<br />
+            <seealso cref="T:sxnet.SxDimValueAtr"></seealso>
+            <seealso cref="T:sxnet.SxOptDimEdit"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getGeom"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.editText(System.String[])"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.editDimText@overloads.html">SxEntSeg.editDimText オーバーロードの一覧</a> | <a href="sxnet.SxDimValueAtr.html">SxDimValueAtr</a> | <a href="sxnet.SxOptDimEdit.html">SxOptDimEdit</a> | <a href="sxnet.SxEntSeg.getGeom.html">getGeom</a> | <a href="sxnet.SxEntSeg.editText-1.html">editText</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

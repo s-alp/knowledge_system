@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.checkCollisions メソッド (SxOptCollision[], SxOptMove[], Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.checkCollisions&nbsp;メソッド&nbsp;(SxOptCollision[], SxOptMove[], Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 3次元要素群を移動して干渉チェックを行う </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;checkCollisions( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>collisionlist</i>&nbsp;As&nbsp;<a href="sxnet.SxOptCollision.html">SxOptCollision()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>movelist</i>&nbsp;As&nbsp;<a href="sxnet.SxOptMove.html">SxOptMove()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>update</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxInfCollision2.html">SxInfCollision2</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxInfCollision2.html">SxInfCollision2</a>&nbsp;checkCollisions(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOptCollision.html">SxOptCollision[]</a>&nbsp;<i>collisionlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOptMove.html">SxOptMove[]</a>&nbsp;<i>movelist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>update</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>collisionlist</i>
+        </dt>
+        <dd>干渉チェックオプション配列</dd>
+        <dt>
+          <i>movelist</i>
+        </dt>
+        <dd>移動オプション配列</dd>
+        <dt>
+          <i>update</i>
+        </dt>
+        <dd>CAD側でのモデル更新状態の変更(false:抑止する true:更新する)</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>
+             <a href="sxnet.SxOptCollision.html">SxOptCollision</a>クラスで指定された3次元パーツ群の干渉チェック結果を返答します。<br /> 指定された3次元パーツ群で総当たりの干渉チェックを行い、それぞれの3次元パーツ群で最初に見つかったパーツを干渉として返答します。<br /> 干渉が検出されなかったかつ 干渉チェックに失敗したパーツが存在しない場合null(VBの場合、Nothing)を返答します。<br />
+             <seealso cref="T:sxnet.SxInfCollision2"></seealso>
+             </p>
+      <h4 class="dtH4">解説</h4>
+      <p>
+             <a href="sxnet.SxOptCollision.html">SxOptCollision</a>クラスで指定された単位での3次元パーツ群の干渉チェックを 総当たりで実行します。<br />
+             <seealso cref="T:sxnet.SxOptCollision"></seealso>
+             <a href="sxnet.SxOptMove.html">SxOptMove</a>クラスで指定された単位で、3次元要素群の回転＋平行移動を実行します。<br /> 複数のパーツに対して個々に干渉チェックの対象の指定を行うことができます。 複数の要素に対し、個々に回転量、平行移動量の指定を行う事ができます。<br /> update=falseを指定した場合、移動対象のモデル、外部パーツの更新状態を変更しません。<br /> また、CAD側でのUNDO操作対象からも除外されます。<br />
+             <seealso cref="T:sxnet.SxOptMove"></seealso>
+             </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.checkCollisions@overloads.html">SxEntPart.checkCollisions オーバーロードの一覧</a> | <a href="sxnet.SxOptCollision.html">SxOptCollision</a> | <a href="sxnet.SxOptMove.html">SxOptMove</a> | <a href="sxnet.SxInfCollision2.html">SxInfCollision2</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

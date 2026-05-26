@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.move メソッド (SxEnt[], SxPos, SxVec, SxVec, SxVec)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.move&nbsp;メソッド&nbsp;(SxEnt[], SxPos, SxVec, SxVec, SxVec)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定3次元要素群の回転＋平行移動を行う(回転ベクトル指定) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Sub&nbsp;move( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>vec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>zvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>xvec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;move(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEnt.html">SxEnt[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>vec</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>zvec</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>xvec</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>移動を行う3次元要素の配列</dd>
+        <dt>
+          <i>pnt</i>
+        </dt>
+        <dd>回転中心座標</dd>
+        <dt>
+          <i>vec</i>
+        </dt>
+        <dd>平行移動量</dd>
+        <dt>
+          <i>zvec</i>
+        </dt>
+        <dd>回転後のZ軸単位ベクトル</dd>
+        <dt>
+          <i>xvec</i>
+        </dt>
+        <dd>回転後のX軸単位ベクトル</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定3次元要素群の回転＋平行移動を行います。<br /> zvec, xvecは直交関係にある必要があります。<br /> zvec,xvecはそれぞれの座標軸の傾きを表すベクトルです。<br /> 例えば、Z軸はそのままで、X軸がY軸と一致するように回転させる場合(つまり、Z軸周りに90度回転する場合)、 zvec=(0.0, 0.0, 1.0), xvec=(0.0, 1.0, 0.0)を指定します。<br />
+            <br /> 座標寸法線は、移動によりCAD内部で要素が再作成されるため、処理後のインスタンスは無効になります。<br /> entlistには、アクティブウィンドウに表示されている、同一WF内の要素を指定して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEnt.move@overloads.html">SxEnt.move オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

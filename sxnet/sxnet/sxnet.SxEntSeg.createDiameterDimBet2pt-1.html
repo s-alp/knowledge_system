@@ -1,0 +1,110 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createDiameterDimBet2pt メソッド (SxPos, SxPos, SxPos, String, String, Int32, Int32, String)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createDiameterDimBet2pt&nbsp;メソッド&nbsp;(SxPos, SxPos, SxPos, String, String, Int32, Int32, String)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 直径寸法線を作成します。(2点間) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createDiameterDimBet2pt( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt1</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt2</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt3</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol1</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol2</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>mark1</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>mark2</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>mark_str</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createDiameterDimBet2pt(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt1</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt2</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt3</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>tol1</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>tol2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>mark1</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>mark2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>mark_str</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pnt1</i>
+        </dt>
+        <dd>座標1</dd>
+        <dt>
+          <i>pnt2</i>
+        </dt>
+        <dd>座標2</dd>
+        <dt>
+          <i>pnt3</i>
+        </dt>
+        <dd>配置点座標</dd>
+        <dt>
+          <i>tol1</i>
+        </dt>
+        <dd>上段公差値文字。<br />省略時は空文字列""を指定して下さい。</dd>
+        <dt>
+          <i>tol2</i>
+        </dt>
+        <dd>下段公差値文字。<br />省略時は空文字列""を指定して下さい。</dd>
+        <dt>
+          <i>mark1</i>
+        </dt>
+        <dd>記号タイプ。<br /> SxDimValueAtr.ATRDIM_MARK_NONE:無<br /> SxDimValueAtr.ATRDIM_MARK3_FAIMK:φ<br /> SxDimValueAtr.ATRDIM_MARK3_MMK:Ｍ<br /> SxDimValueAtr.ATRDIM_MARK3_OPT:任意記号<br />
+            </dd>
+        <dt>
+          <i>mark2</i>
+        </dt>
+        <dd>Ｓ・球記号付加。<br /> SxDimValueAtr.ATRDIM_MARK_NONE:無<br /> SxDimValueAtr.ATRDIM_MARK2_SMK:Ｓ<br /> SxDimValueAtr.ATRDIM_MARK2_QMK:球<br /> mark1=SxDimValueAtr.ATRDIM_MARK3_FAIMKの場合のみ有効です。<br />
+            </dd>
+        <dt>
+          <i>mark_str</i>
+        </dt>
+        <dd> 任意記号文字列。<br /> mark1 = SxDimValueAtr.ATRDIM_MARK3_OPTの場合のみ有効です。 </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した直径寸法線セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示されたアクティブVS/WFに、 2点間の傾きに平行な直径寸法線を作成します。<br />
+            <br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br /> pnt1,pnt2,pnt3は、2次元要素作成の場合、Z値は無視されます。<br /> 記号タイプの定数値については、<a href="sxnet.SxDimValueAtr.html">SxDimValueAtr</a>クラスを参照して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createDiameterDimBet2pt@overloads.html">SxEntSeg.createDiameterDimBet2pt オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

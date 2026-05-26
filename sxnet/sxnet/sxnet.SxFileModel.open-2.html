@@ -1,0 +1,82 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxFileModel.open メソッド (Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxFileModel.open&nbsp;メソッド&nbsp;(Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 図面(モデル)ファイルをCAD上に開きます。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;open( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>read_only</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxModel.html">SxModel</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxModel.html">SxModel</a>&nbsp;open(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>read_only</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>read_only</i>
+        </dt>
+        <dd> 読み取り専用フラグ<br /> true:読み取り専用で開きます。<br /> false:上書き可能で開きます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>読み込んだモデル</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 図面(モデル)ファイルをCADで開きます。<br />
+            <br /> 他形式の対応フォーマット(iCAD SXの場合のみ、処理します)<br /> SXpc図面ファイル<br /> Parasolidファイル<br /> IGESファイル(2次元変換の場合、トランスレータ要)<br /> DXFファイル(トランスレータ要)<br /> DWGファイル(トランスレータ要)<br /> STEPファイル(トランスレータ要)<br /> 他形式のファイルの場合、read_onlyの指定は無視されます。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxFileModel.html">SxFileModel クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxFileModel.open@overloads.html">SxFileModel.open オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

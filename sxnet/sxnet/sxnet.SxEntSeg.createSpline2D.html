@@ -1,0 +1,108 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createSpline2D メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createSpline2D&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 2次元スプラインセグメントを作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;createSpline2D( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>poslist</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>kind</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>set_angle_s</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>set_angle_e</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angle_s</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angle_e</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;createSpline2D(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos[]</a>&nbsp;<i>poslist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>kind</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>set_angle_s</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>set_angle_e</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angle_s</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angle_e</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>poslist</i>
+        </dt>
+        <dd> 通過点座標列(最小3点～最大800点) </dd>
+        <dt>
+          <i>kind</i>
+        </dt>
+        <dd> 作成するスプランの種別<br /> SxEntSeg.SPLINE_KIND_NORMAL : 自然曲線<br /> SxEntSeg.SPLINE_KIND_PEREIODIC : 周期曲線<br /> SxEntSeg.SPLINE_KIND_FIXED : 固定曲線<br />
+            </dd>
+        <dt>
+          <i>set_angle_s</i>
+        </dt>
+        <dd> 始角設定の有無<br /> True:始角設定あり。<br /> False:始角設定なし。<br /> ※kind = SxEntSeg.SPLINE_KIND_FIXEDの場合のみ有効です。 </dd>
+        <dt>
+          <i>set_angle_e</i>
+        </dt>
+        <dd> 終角設定の有無<br /> True:終角設定あり。<br /> False:終角設定なし。<br /> ※kind = SxEntSeg.SPLINE_KIND_FIXEDの場合のみ有効です。 </dd>
+        <dt>
+          <i>angle_s</i>
+        </dt>
+        <dd> 始点接線角度(度)<br /> set_angle_s=Trueの場合のみ有効です。<br />
+            </dd>
+        <dt>
+          <i>angle_e</i>
+        </dt>
+        <dd> 終点接線角度(度)<br /> set_angle_e=Trueの場合のみ有効です。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した2次元スプラインセグメントの配列</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウのアクティブVSに2次元スプラインセグメントを作成します。<br /> アクティブウィンドウが3次元の場合、表示WF中のアクティブな組立平面に対して作成します。<br /> poslist[]のz値は無視されます。<br />
+            <br /> スプラインの種別について<br /> ・自然スプライン：始角、終角の設定はシステム内部で自動計算されます。<br /> ・周期スプライン：始点、終点で滑らかに接続するよう、始角、終角をシステム内部で計算します。<br /> ・固定スプライン：始角、終角を指定された角度で設定します。<br />
+            <br /> 通過点数は最小3点から最大800点までです。<br /> 通過点数に応じて、複数のスプラインセグメントに分割作成されます。<br />
+            
+            <seealso cref="F:sxnet.SxEntSeg.SPLINE_KIND_NORMAL"></seealso>
+            <seealso cref="F:sxnet.SxEntSeg.SPLINE_KIND_PERIODIC"></seealso>
+            <seealso cref="F:sxnet.SxEntSeg.SPLINE_KIND_FIXED"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.SPLINE_KIND_NORMAL.html">SPLINE_KIND_NORMAL</a> | <a href="sxnet.SxEntSeg.SPLINE_KIND_PERIODIC.html">SPLINE_KIND_PERIODIC</a> | <a href="sxnet.SxEntSeg.SPLINE_KIND_FIXED.html">SPLINE_KIND_FIXED</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

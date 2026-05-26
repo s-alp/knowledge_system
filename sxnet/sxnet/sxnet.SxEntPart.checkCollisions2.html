@@ -1,0 +1,90 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.checkCollisions2 メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.checkCollisions2&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 3次元要素の高速干渉チェックを行う。(パーツ対パーツの高速干渉チェック) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;checkCollisions2( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>partlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>cg</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxInfCollision.html">SxInfCollision()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxInfCollision.html">SxInfCollision[]</a>&nbsp;checkCollisions2(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntPart.html">SxEntPart[]</a>&nbsp;<i>partlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>tol</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>cg</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>partlist</i>
+        </dt>
+        <dd>干渉チェックを行うパーツ配列</dd>
+        <dt>
+          <i>tol</i>
+        </dt>
+        <dd> クリアランス値<br /> tol ＜＝ 0.0の場合、干渉チェックとします。<br /> tol ＞ 0.0の場合、クリアランスチェックとします。<br />
+            </dd>
+        <dt>
+          <i>cg</i>
+        </dt>
+        <dd> 干渉部分の形状の表示方法<br /> true:CG表示<br /> false:線画表示<br /> ※将来の予約パラメタ。現在は指定に関わらず必ずCG表示されます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p> 干渉チェック情報配列<br /> 干渉が存在しない場合、null(VBの場合、Nothing)を返答します。<br />
+            </p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定パーツ群のパーツ対パーツの高速干渉チェックを行います。<br /> tol値はクリアランスチェックの場合のみ有効です。<br /> partlistには、アクティブウィンドウに表示されている、同一WF内の要素を指定して下さい。<br /> 干渉部分の形状を環境セットアップで定義された色で作成します。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

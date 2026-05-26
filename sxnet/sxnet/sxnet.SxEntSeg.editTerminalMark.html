@@ -1,0 +1,90 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.editTerminalMark メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.editTerminalMark&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 端末記号の形状を変更します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;editTerminalMark( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>arrow_type</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>which_arrow</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>lead_line_no</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;editTerminalMark(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>arrow_type</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>which_arrow</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>lead_line_no</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>arrow_type</i>
+        </dt>
+        <dd>端末記号のタイプ<br /> SxDimLineAtr.ATRDIM_ARROW_NONE: 無し<br /> SxDimLineAtr.ATRDIM_ARROW_ONE:片側矢印<br /> SxDimLineAtr.ATRDIM_ARROW_BOTH:両側矢印<br /> SxDimLineAtr.ATRDIM_ARROW_DOT:黒丸<br />
+            </dd>
+        <dt>
+          <i>which_arrow</i>
+        </dt>
+        <dd> 変更する端末記号の指定<br /> ARROW_LEFT : 左側の端末記号<br /> ARROW_RIGHT : 右側の端末記号<br /> ARROW_BOTH : 両方の端末記号<br /> ※端末記号が一つしかない場合、本パラメタは無視されます。<br />
+            </dd>
+        <dt>
+          <i>lead_line_no</i>
+        </dt>
+        <dd> 変更する引出し線番号(1～)<br /> ※引出し線がない場合、本パラメタは無視されます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 端末記号の形状を変更します。<br /> 自要素は、アクティブウィンドウに表示された、アクティブVS/WF上の要素である必要があります。<br /> 自要素が、以下のセグメントタイプの場合、処理対象です。<br /> 長さ寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>)<br /> 角度寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a><br /> 径寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a><br /> 面取寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a><br /> 円弧長寸法(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>)<br /> 角寸/長円/角穴寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_APL.html">SEGTYPE_APL</a>)<br /> 矢印(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LEAD.html">SEGTYPE_LEAD</a>)<br /> 注記(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a>)<br /> 風船(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_BALL.html">SEGTYPE_BALL</a>)<br /> 溶接記号(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_WELD.html">SEGTYPE_WELD</a>)<br /> 
+            <br /> 端末記号のタイプの定数値については、<a href="sxnet.SxDimLineAtr.html">SxDimLineAtr</a>クラスの、 端末記号の種類定数(ATRDIM_ARROW_xxx)を参照して下さい。<br />
+            <seealso cref="T:sxnet.SxDimLineAtr"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxDimLineAtr.html">SxDimLineAtr</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

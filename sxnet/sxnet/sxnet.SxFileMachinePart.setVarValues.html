@@ -1,0 +1,96 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxFileMachinePart.setVarValues メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxFileMachinePart.setVarValues&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定呼び名のパラメタ値を設定します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;setVarValues( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pattern</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>values</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double().aspx>Double()</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setVarValues(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>pattern</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double[].aspx>double[]</a>&nbsp;<i>values</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pattern</i>
+        </dt>
+        <dd>呼び名</dd>
+        <dt>
+          <i>values</i>
+        </dt>
+        <dd>パラメタ値リスト</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定呼び名のパラメタ値を設定します。 一度設定したパラメタ値は、インスタンスが消滅するまで有効です。<br /> 方程式が定義されたパラメタには、パラメタ値は登録されません。（何もしません）<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">指定した呼び名は存在しない、又は、パラメタの個数が異なります。</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">使用例</h4>
+      <p> [C#] <pre class="code">void sample(){
+    SxPos pos = new SxPos(0.0e0, 0.0e0, 0.0e0);
+    SxFileMachinePart file_part = 
+        new SxFileMachinePart(SxFileMachinePart.getDirJis() + "\\3D\\01_ナット\\Ｔ溝ナット\\Ｔ溝ナット@正面.icd");
+
+    // 呼び"M5"の変数値を取り出す
+    double[] values = file_part.getVarValues("M5");
+    
+    // 変数d1の値を変更（※変数名一覧は、getVarNamesメソッドで取り出し可)
+    values[1] = 10.0;
+    
+    // 変更した変数値を有効に設定する。
+    file_part.setVarValues("M5",values);
+    
+    // 設定したパラメタ値で部品を原点に配置(回転なし)
+    SxPart ent_part = (SxEntPart)file_part.open(SxFileMachinePart.MODE_PART, 
+                                                pos, 0.0e0, 0.0e0, 0.0e0, true);
+}
+</pre>
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxFileMachinePart.html">SxFileMachinePart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

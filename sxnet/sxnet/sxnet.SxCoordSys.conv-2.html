@@ -1,0 +1,64 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxCoordSys.conv メソッド (SxVec, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxCoordSys.conv&nbsp;メソッド&nbsp;(SxVec, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 座標系変換を行います。（ベクトル）<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;conv( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>vec</i>&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>global</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxVec.html">SxVec</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;conv(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxVec.html">SxVec</a>&nbsp;<i>vec</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>global</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>vec</i>
+        </dt>
+        <dd>変換元のベクトル</dd>
+        <dt>
+          <i>global</i>
+        </dt>
+        <dd> 変換モード。<br /> true :ローカル座標系(定義座標系)→グローバル座標系(絶対座標系)への変換。<br /> false:グローバル座標系→ローカル座標系への変換。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>変換されたベクトル</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 定義座標系→グローバル座標系、又は、グローバル座標系→定義座標系への ベクトルの変換を行います。<br />
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxCoordSys.html">SxCoordSys クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxCoordSys.conv@overloads.html">SxCoordSys.conv オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.addDimLeaderLine メソッド (Object, SxPos, SxPos[], SxOptLeaderLine)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.addDimLeaderLine&nbsp;メソッド&nbsp;(Object, SxPos, SxPos[], SxOptLeaderLine)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 製図要素の引出線を追加します。（注記、風船、溶接記号、表面粗さ、幾何公差） </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;addDimLeaderLine( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>obj</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>Object</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>lead_pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>bend_pntlist</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>opt</i>&nbsp;As&nbsp;<a href="sxnet.SxOptLeaderLine.html">SxOptLeaderLine</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;addDimLeaderLine(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>object</a>&nbsp;<i>obj</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>lead_pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos[]</a>&nbsp;<i>bend_pntlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxOptLeaderLine.html">SxOptLeaderLine</a>&nbsp;<i>opt</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>obj</i>
+        </dt>
+        <dd>引出要素</dd>
+        <dt>
+          <i>lead_pnt</i>
+        </dt>
+        <dd>引出点<br /> obj != NULL(VBの場合Nothing)の場合、lead_pntは引出要素上の点です。<br /> obj = NULL(VBの場合Nothing)の場合、lead_pntから引出します。<br />
+            </dd>
+        <dt>
+          <i>bend_pntlist</i>
+        </dt>
+        <dd>折曲点配列<br /> 自要素は注記、風船、溶接記号場合、折曲点は１点しかない、bend_pntlist[0]のみ有効です。<br /> bend_pntlist = null(VBの場合Nothing)の場合、折曲点はありません。<br /> 自要素は幾何公差場合、折曲点は２９個までしか指定できません。<br /> bend_pntlist = null(VBの場合Nothing)の場合、折曲点はありません。<br /> 自要素は表面粗さ場合、折曲点は基準引き出し線上の位置参照点です。<br />
+            </dd>
+        <dt>
+          <i>opt</i>
+        </dt>
+        <dd>引出線追加オプション</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 製図要素の引出線を追加します。（注記、風船、溶接記号、表面粗さ、幾何公差）<br /> 自要素は、アクティブウィンドウに表示された、アクティブVS/WF上の要素である必要があります。<br /> 自要素が、以下のセグメントタイプの場合、処理対象です。<br /> 注記(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a>)<br /> 風船(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_BALL.html">SEGTYPE_BALL</a>)<br /> 溶接記号(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_WELD.html">SEGTYPE_WELD</a>)<br /> 表面粗さ(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_SMRK.html">SEGTYPE_SMRK</a>)（引出線付き表面粗さ）<br /> 幾何公差(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_GTOL.html">SEGTYPE_GTOL</a><br /> objには、アクティブウィンドウに表示されたアクティブVS/WF上の要素を指定して下さい。<br /> 自要素が３次元の場合に、objに円／円弧、円／円弧エッジを指定する場合、<br /> 自要素の作成平面と、同一平面上である必要があります。<br /> 引出線追加オプションについては、<a href="sxnet.SxOptLeaderLine.html">SxOptLeaderLine</a>クラスを参照して下さい。<br />
+            <seealso cref="T:sxnet.SxOptLeaderLine"></seealso> objには、以下のインスタンスが指定可能です。<br />
+            				<a href="sxnet.SxEdge.html">SxEdge</a>(直線エッジ、円エッジ、円弧エッジ)<br />
+            				<a href="sxnet.SxEntSeg.html">SxEntSeg</a>(要素:線、円、楕円、円弧、楕円弧、スプライン)<br /> データムの場合の引出要素(obj)は、 直線、円、円弧、直線エッジ、円エッジ、円弧エッジのみ指定可能。<br /> 注意：寸法指定(opt.mode_standard = false)の場合は、寸法線のみ指定可。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.addDimLeaderLine@overloads.html">SxEntSeg.addDimLeaderLine オーバーロードの一覧</a> | <a href="sxnet.SxOptLeaderLine.html">SxOptLeaderLine</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

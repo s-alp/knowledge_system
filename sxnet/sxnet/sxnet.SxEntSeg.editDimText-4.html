@@ -1,0 +1,79 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.editDimText メソッド (SxGeomSmark)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.editDimText&nbsp;メソッド&nbsp;(SxGeomSmark)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 表面粗さ記号を編集します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;editDimText( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>smark</i>&nbsp;As&nbsp;<a href="sxnet.SxGeomSmark.html">SxGeomSmark</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;editDimText(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxGeomSmark.html">SxGeomSmark</a>&nbsp;<i>smark</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>smark</i>
+        </dt>
+        <dd>表面粗さ属性情報</dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 表面粗さ記号の編集を行います。<br /> 自要素が、表面粗さセグメント(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_SMRK.html">SEGTYPE_SMRK</a>)である必要があります。<br /> 新規格(JIS B0031:JIS2003)を指定する場合、CAD側の環境設定で、表面粗さの規格が<br /> 新規格(JIS B0031:JIS2003)に設定されている必要があります。<br /> 新規格(JIS B0031:JIS2003)の表面粗さに対して、旧規格(JIS B0031:JIS1994)を指定する事はできません。<br /> 表面粗さ属性情報については、<a href="sxnet.SxGeomSmark.html">SxGeomSmark</a>クラスを参照して下さい。<br /> 自要素は、アクティブウィンドウのアクティブVS/WFの要素である必要があります。<br />
+            <seealso cref="T:sxnet.SxGeomSmark"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getGeom"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.editDimText@overloads.html">SxEntSeg.editDimText オーバーロードの一覧</a> | <a href="sxnet.SxGeomSmark.html">SxGeomSmark</a> | <a href="sxnet.SxEntSeg.getGeom.html">getGeom</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

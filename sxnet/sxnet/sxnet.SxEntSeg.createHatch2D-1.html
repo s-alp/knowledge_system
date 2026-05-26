@@ -1,0 +1,105 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createHatch2D メソッド (SxPos, Int32, Double, Double, Double)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createHatch2D&nbsp;メソッド&nbsp;(SxPos, Int32, Double, Double, Double)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> ハッチングを作成します。(領域指定) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createHatch2D( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pattern</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>slant</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>space</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pitch</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createHatch2D(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>pattern</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>slant</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>space</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>pitch</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>閉領域内の任意点</dd>
+        <dt>
+          <i>pattern</i>
+        </dt>
+        <dd>ハッチングパターン<br /> SxGeomHatch.PATTERN_01 : パターン1(直線)<br /> SxGeomHatch.PATTERN_02 : パターン2(破線)<br /> SxGeomHatch.PATTERN_03 : パターン3(直線+破線 等間隔)<br /> SxGeomHatch.PATTERN_04 : パターン4(2重線)<br /> SxGeomHatch.PATTERN_05 : パターン5(3重線)<br /> SxGeomHatch.PATTERN_06 : パターン6(3重線 中心が破線)<br /> SxGeomHatch.PATTERN_07 : パターン7(4重線)<br /> SxGeomHatch.PATTERN_08 : パターン8(格子)<br />
+            
+            <a href="sxnet.SxGeomHatch.PATTERN_01.html">PATTERN_01</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_02.html">PATTERN_02</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_03.html">PATTERN_03</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_04.html">PATTERN_04</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_05.html">PATTERN_05</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_06.html">PATTERN_06</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_07.html">PATTERN_07</a>
+            <a href="sxnet.SxGeomHatch.PATTERN_08.html">PATTERN_08</a>
+            </dd>
+        <dt>
+          <i>slant</i>
+        </dt>
+        <dd>傾き</dd>
+        <dt>
+          <i>space</i>
+        </dt>
+        <dd>間隔</dd>
+        <dt>
+          <i>pitch</i>
+        </dt>
+        <dd>幅ピッチ</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成したハッチングセグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示された、アクティブVS上の領域内の任意座標指定でハッチングを作成します。<br /> ハッチングを作成する閉領域の全体がアクティブウィンドウに表示されている必要があります。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createHatch2D@overloads.html">SxEntSeg.createHatch2D オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

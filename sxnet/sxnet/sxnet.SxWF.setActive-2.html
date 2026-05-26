@@ -1,0 +1,81 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxWF.setActive メソッド (Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxWF.setActive&nbsp;メソッド&nbsp;(Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> アクティブWFに設定します。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;setActive( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>new_window</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxWindow.html">SxWindow</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxWindow.html">SxWindow</a>&nbsp;setActive(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>new_window</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>new_window</i>
+        </dt>
+        <dd> 新規ウィンドウ開設。<br /> true:自WFを表示するウィンドウが存在しない場合、新規ウィンドウを開設します。<br /> false:自WFを表示するウィンドウが存在しない場合、自モデルを表示するウィンドウの 表示を自WFに切り替えます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>アクティブウィンドウ</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自WFをアクティブWFに設定します。<br /> 自WFを表示するウィンドウをアクティブウィンドウに設定します。<br /> 自WFを表示するウィンドウが存在しない場合、new_windowの指定に従って、 新規にウィンドウを開設するか、自モデルを表示するウィンドウの表示を自WFに 切り替えます。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxWF.html">SxWF クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxWF.setActive@overloads.html">SxWF.setActive オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

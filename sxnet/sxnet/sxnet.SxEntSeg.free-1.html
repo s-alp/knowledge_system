@@ -1,0 +1,80 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.free メソッド (SxEntSeg[])</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.free&nbsp;メソッド&nbsp;(SxEntSeg[])</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定要素群を最小単位の要素に分解します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;free( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>seglist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;free(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;<i>seglist</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>seglist</i>
+        </dt>
+        <dd>指定要素の配列</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p> 分解した要素の配列<br /> 拡張ハッチングの場合は、null(VBの場合、Nothing)を返します。<br />
+            </p>
+      <h4 class="dtH4">解説</h4>
+      <p> seglistには、同じビューで以下の2次元要素が指定可能です。<br /> 注記(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a>)<br /> 記号(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_MARK.html">SEGTYPE_MARK</a>)<br /> 溶接記号(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_WELD.html">SEGTYPE_WELD</a>)<br /> 仕上記号(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_FMRK.html">SEGTYPE_FMRK</a>)<br /> 風船(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_BALL.html">SEGTYPE_BALL</a>)<br /> 矢印(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_LEAD.html">SEGTYPE_LEAD</a>)<br /> デルタ(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DELTA.html">SEGTYPE_DELTA</a>)<br /> 幾何公差(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_GTOL.html">SEGTYPE_GTOL</a>)<br /> 表面粗さ(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_SMRK.html">SEGTYPE_SMRK</a>)<br /> 楕円(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ELP.html">SEGTYPE_ELP</a>)<br /> 楕円弧(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ELPA.html">SEGTYPE_ELPA</a>)<br /> 文字列(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>)<br /> 円弧長寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_ARL.html">SEGTYPE_ARL</a>)<br /> 長さ寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DLIN.html">SEGTYPE_DLIN</a>)<br /> 角度寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DANG.html">SEGTYPE_DANG</a>)<br /> 径寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DARC.html">SEGTYPE_DARC</a>)<br /> 面取寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_DCHA.html">SEGTYPE_DCHA</a>)<br /> 角／長円／角穴／座標寸法線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_APL.html">SEGTYPE_APL</a>) ハッチング(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_HATCH.html">SEGTYPE_HATCH</a>)<br /> 拡張ハッチング(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_HATCH_EX.html">SEGTYPE_HATCH_EX</a>)<br /> シンボル／矢視／切断線(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_SYM.html">SEGTYPE_SYM</a>)<br /> その他製図要素(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_OTHER_DIM.html">SEGTYPE_OTHER_DIM</a>)<br /> その他作図要素(タイプ=<a href="sxnet.SxEntSeg.SEGTYPE_OTHER_DRAW.html">SEGTYPE_OTHER_DRAW</a>)<br /> アクティブウィンドウが3次元の場合、表示WF中のアクティブな組立平面上の2D要素を指定して下さい。<br /> 要素分解後CAD上で新しく要素が作成されるため、seglist[]内のインスタンスは無効になります。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.free@overloads.html">SxEntSeg.free オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

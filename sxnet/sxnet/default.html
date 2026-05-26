@@ -1,0 +1,408 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=Shift_JIS" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>はじめに</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="SXNET.css" />
+      <style type="text/css">
+          .style1
+          {
+              width: 69px;
+          }
+          .style2
+          {
+              width: 524px;
+          }
+          </style>
+  </head>
+  <BODY class=dtBODY id=bodyID>
+<DIV id=nsbanner>
+<DIV id=bannerrow1>
+<TABLE class=bannerparthead cellSpacing=0>
+  
+  <TR id=hdr>
+    <TD class=runninghead>SX.Net Class Library</TD>
+    <TD class=product></TD></TR></TABLE></DIV>
+<DIV id=TitleRow><B>はじめに</B></DIV></DIV>
+<H1>■目次</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P><A href="#SECT-1">SXクラスライブラリとは？<BR></A><A href="#SECT-2">動作に必要な環境<BR></A><A 
+  href="#SECT-3">プログラム実行の為のセットアップ</A><BR><A href="#SECT-4">クラス構造概要</A><BR><A 
+  href="#SECT-5">プログラム作成例</A><BR><A href="#SECT-6">アプリケーション実行時の制限事項</A><BR>
+  <A 
+  href="#SECT-7">V7L6からの変更点</A><BR>
+  </P></BLOCKQUOTE>
+<H1><A name=SECT-1>■SXクラスライブラリとは？</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P dir=ltr style="MARGIN-RIGHT: 0px">SXクラスライブラリは、Microsoft .NET 
+  Framework上に構築された、外部プログラムからiCAD SXを操作する為のクラスライブラリです。<BR>本クラスライブラリを、C#やVisual 
+  Basic等の.NET対応言語から利用する事により、自動設計などのCADを操作するアプリケーションを作成する事ができます。<BR><IMG 
+  alt="SXNET_CAD.JPG - 45,863BYTES" src="sxnet_cad.jpg"><BR></P></BLOCKQUOTE>
+<H1 dir=ltr style="MARGIN-RIGHT: 0px"><A name=SECT-2></A>■動作に必要な環境</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P dir=ltr style="MARGIN-RIGHT: 0px">・ハードウェア<BR>iCAD SXの動作環境に準じます。</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">&nbsp;</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">・ソフトウェア</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">Microsoft .NET 
+  Framework2.0以上に対応した、.NET対応言語(C#, VisualBasic等)を搭載した開発環境(Microsoft Visual 
+  Studio等)がインストールされている必要があります。</P>
+  <P dir=ltr 
+  style="MARGIN-RIGHT: 0px"><BR>また、本クラスライブラリを使用して開発したアプリケーションを実行させるPCには、 
+  <STRONG>iCAD SDK+ランタイムライセンス</STRONG>と、Microsoft .NET Framework 
+  2.0及び、日本語LanguagePackが必要です。<BR><A 
+  href="http://www.microsoft.com/downloads/details.aspx?familyid=79BC3B77-E02C-4AD3-AACF-A7633F706BA5&amp;displaylang=ja" 
+  target=_blank>Microsoft .NET Framework 2.0 Service Pack1 (x86)</A><BR><A 
+  href="http://www.microsoft.com/downloads/details.aspx?FamilyId=5F7F4632-C9C0-4E79-B269-C2AEE9D1962E&amp;displaylang=ja" 
+  target=_new>Microsoft .NET Framework 2.0 Service Pack1 日本語 Language Pack 
+  (x86)</A><BR><BR>※日本語Language Packをインストールしない場合は、.NET 
+  Frameworkから出力されるメッセージ文字列が英語になります。</P>
+  Visual Studio 2010等の.NET 
+  4.0対応環境で開発を行う場合は、アプリケーションを実行させるPCに、 .NET Framework 4.0のインストールが必要です。<BR>
+  <A 
+  href="http://www.microsoft.com/downloads/details.aspx?FamilyID=0a391abd-25c1-4fc0-919f-b21f31ab88b7&displayLang=ja" 
+  target=_blank>Microsoft .NET Framework 4 (スタンドアロンのインストーラー)</A><BR>
+  <A 
+  href="http://www.microsoft.com/downloads/details.aspx?FamilyID=6fd7e428-0aa8-40e3-a48d-0df2d76e24a8&displayLang=ja" 
+  target=_new>Microsoft .NET Framework 4 Full 日本語 Language Pack 
+  (x86)</A><BR>
+  <BR>
+※.NET Framework 4.0には、.NET Framework 2.0 
+  も含まれています。<BR>
+  <P></P></BLOCKQUOTE>
+<H1 dir=ltr style="MARGIN-RIGHT: 0px"><A name=SECT-3></A>■プログラム実行の為のセットアップ</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P dir=ltr style="MARGIN-RIGHT: 0px">クラスライブラリを使用して作成したアプリケーションを実行するPCでは、 
+  <STRONG>[スタート][全てのプログラム][iCAD SX][iCAD SX環境設定ツール][.NET連携セットアップ]</STRONG>を実行して、CADとの通信ポートを事前に設定して下さい。(事前にiCAD SDK+ランタイムライセンスのパスワードが登録済である必要があります)</P>
+  <P dir=ltr 
+  style="MARGIN-RIGHT: 0px">ポート番号は、全てのPCで同一の番号を指定するようにして下さい。特に理由がない限りポート番号はデフォルト値の3999を指定して下さい。</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">この時、.NET 
+  Framework2.0がインストールされていない場合、WebブラウザにMicrosoftのダウンロードサイトを表示して終了しますので、インストール後、再度セットアップを実行して下さい。</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px"><IMG height=206 
+  alt="ISETPORT.JPG - 20,082BYTES" src="isetport.jpg" width=333></P>
+  <P dir=ltr 
+  style="MARGIN-RIGHT: 0px">セットアップに失敗する場合、Windowsインストールフォルダ配下のファイルの書き込み権限がない場合が考えられます。</P>
+  <P dir=ltr 
+style="MARGIN-RIGHT: 0px">その場合は、管理者でログイン後、再度セットアップを実行して下さい。</P></BLOCKQUOTE>
+<H1 dir=ltr style="MARGIN-RIGHT: 0px"><A name=SECT-4></A>■クラス構造概要</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P dir=ltr style="MARGIN-RIGHT: 0px">SXクラスライブラリのクラスは、大別すると、以下の種類に分けられます。</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">・CADシステムや、CAD上の要素等のCADデータにアクセスする為のクラス</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">・要素情報やジオメトリ情報等の各種情報を格納する情報系クラス</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">・座標クラスや例外クラスなどのその他のクラス</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">&nbsp;</P>
+  <P dir=ltr 
+  style="MARGIN-RIGHT: 0px">CADを操作する為のメソッドは、ほとんど、CADデータにアクセスする為のクラスが持っています。</P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px">CADを操作する為のクラスは以下のような種類があります。</P>
+  <P></P>
+  <P dir=ltr style="MARGIN-RIGHT: 0px"></P>
+  <DIV class=tablediv>
+  <TABLE class=dtTABLE cellSpacing=0 cellPadding=0 border=0>
+    
+    <TR>
+      <TH colSpan=2><STRONG>クラス名</STRONG></TH>
+      <TH><STRONG>説明</STRONG></TH></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxSys.html" target=_self>SxSys</A></TD>
+      <TD>CADシステムにアクセスする為のクラスです。<BR>CADとの通信初期化や、システムの情報取得、CAD上での要素選択、座標選択、入力レイヤの設定等、システム全体に関連するメソッドを持ちます。<BR>本クラスはstaticメソッドのみを持ちます。 
+        インスタンスの作成は不要です。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxModel.html" target=_self>SxModel</A></TD>
+      <TD>CAD上に開設されたモデル(図面)にアクセスする為のクラスです。<BR>新規図面の開設や、保存、情報取得、モデル内の2D図面(VS)/3D図面(WF)の取得など、モデルに関連するメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxWF.html" target=_self>SxWF</A></TD>
+      <TD>CAD上のモデル内の3D図面空間(WF)にアクセスする為のクラスです。<BR>3D図面内の要素の取得や、3D→2D等、3D図面空間に関連するメソッドを持ちます。<BR>※WF:3次元要素を格納する3次元図面空間。以下の種類があります。<BR>3DグローバルWF,ワークWF。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxVS.html" target=_self>SxVS</A></TD>
+      <TD>CAD上のモデル内の2D図面空間(VS)にアクセスする為のクラスです。<BR>
+        2D図面内の要素の取得や、ビュー、子図の開設など、2D図面に関連するメソッドを持ちます。<BR>
+        ※VS:2次元要素を格納する2次元図面空間。以下の種類があります。<BR>
+        ビュー(グローバルビュー、基本ビュー、ローカルビュー)、子図 
+        。</TD>
+    </TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxAsmPlane.html" target=_self>SxAsmPlane</A></TD>
+      <TD>3D図面空間(WF)内の組立平面にアクセスする為のクラスです。<BR>
+        組立平面内の要素の取得や、組立平面の開設、オフセット、表示設定等、組立平面に関連するメソッドを持ちます。<br>
+        ※組立平面：3D図面空間に作成できる作業用の平面です。</TD>
+    </TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxWindow.html" target=_self>SxWindow</A></TD>
+      <TD>CAD上の図形表示ウィンドウにアクセスする為のクラスです。<BR>ウィンドウの移動や開設など、図形表示ウィンドウに関連するメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD colSpan=2></FONT><A href="sxnet.SxEnt.html" 
+target=_self>SxEnt</A></TD>
+      <TD>CAD上の要素(エンティティ)にアクセスする為の抽象クラスです。<BR>要素の移動、コピー、削除、等の要素共通のメソッドを持ちます。<BR>本クラスのインスタンスを直接生成する事はできません。 
+        インスタンスの生成は以下の派生クラスで行います。</TD></TR>
+    <TR>
+      <TD>&nbsp;</TD>
+      <TD><A href="sxnet.SxEntSeg.html" target=_self>SxEntSeg</A></TD>
+      <TD>CAD上のセグメントにアクセスする為のクラスです。SxEntの派生クラスです。<BR>作図要素、製図要素、立体要素等が本クラスに属します。<BR>セグメントの生成、編集、情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD>&nbsp;</TD>
+      <TD><A href="sxnet.SxEntGrp.html" target=_self>SxEntGrp</A></TD>
+      <TD>CAD上のグループにアクセスする為のクラスです。SxEntの派生クラスです。<BR>グループの生成、編集、情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD>&nbsp;</TD>
+      <TD><A href="sxnet.SxEntPart.html" target=_self>SxEntPart</A></TD>
+      <TD>CAD上の3Dパーツにアクセスする為のクラスです。SxEntの派生クラスです。<BR>パーツの生成、編集、情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD>&nbsp;</TD>
+      <TD><A href="sxnet.SxEntRPart.html" target=_self>SxEntRPart</A></TD>
+      <TD>CAD上の2D実像部品にアクセスする為のクラスです。SxEntの派生クラスです。<BR>実像部品の生成、編集、情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD>&nbsp;</TD>
+      <TD><A href="sxnet.SxEntRefer.html" target=_self>SxEntRefer</A></TD>
+      <TD>CAD上の2次元写像部品、配置子図にアクセスする為のクラスです。SxEntの派生クラスです。<BR>配置子図の生成、写像部品/配置子図の編集、情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxFace.html" target=_self>SxFace</A></TD>
+      <TD>３次元立体要素(立体セグメント、FCソリッド、ソリッド)のフェイスにアクセスするためのクラスです。<BR>フェイスの情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxEdge.html" target=_self>SxEdge</A></TD>
+      <TD>３次元立体要素(立体セグメント、FCソリッド、ソリッド)のエッジにアクセスするためのクラスです。<BR>エッジの情報取得などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD colSpan=2><A href="sxnet.SxFile.html" target=_self>SxFile</A></TD>
+      <TD>モデルファイル/部品ファイル/記号ファイルにアクセスする為の抽象クラスです。<BR>本クラスのインスタンスを直接生成する事はできません。インスタンスの生成は以下の派生クラスで行います。</TD></TR>
+    <TR>
+      <TD></TD>
+      <TD><A href="sxnet.SxFileModel.html" target=_self>SxFileModel</A></TD>
+      <TD>モデル(図面)ファイルにアクセスする為のクラスです。SxFileの派生クラスです。<BR>Parasolid、IGES、等の各データ形式のファイルも含みます。<BR>モデルをCADで開いたり、保存済み図面の出図などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD></TD>
+      <TD><A href="sxnet.SxFilePart.html" target=_self>SxFilePart</A></TD>
+      <TD>標準部品ファイルにアクセスする為のクラスです。SxFileの派生クラスです。<BR>標準部品の配置などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD></TD>
+      <TD><A href="sxnet.SxFileMachinePart.html" 
+        target=_self>SxFileMachinePart</A></TD>
+      <TD>機械部品(JIS部品/3Dパラメトリック部品)ファイルにアクセスする為のクラスです。SxFileの派生クラスです。<BR>機械部品の配置などのメソッドを持ちます。</TD></TR>
+    <TR>
+      <TD></TD>
+      <TD><A href="sxnet.SxFileSymbol.html" target=_self>SxFileSymbol</A></TD>
+      <TD>2D記号ファイルにアクセスする為のクラスです。SxFileの派生クラスです。<BR>記号の配置などのメソッドを持ちます。</TD></TR></TABLE>
+  <P></P></DIV>
+  <DIV><BR>CADとクラスの関係は以下のようになります。</DIV>
+  <DIV>&nbsp;</DIV>
+  <DIV><IMG 
+  src="cad_class.jpg" alt="" width="681" height="669"><BR>
+  <BR>
+  概念的には、CAD上でのオブジェクト構造は、以下のようになります。(クラスの階層構造ではありません。)<BR>
+    <BR>
+    <img src="object_struct.jpg" 
+  alt="OBJECT_STRUCT.JPG - 43,482BYTES" width="634" height="339" 
+  border=0><BR>
+  </DIV></BLOCKQUOTE>
+<H1 dir=ltr><A name=SECT-5></A>■プログラム作成例</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <DIV dir=ltr>CAD上で2点を指定し、線分を作成するコンソールプログラムの作成例</DIV>
+  <DIV dir=ltr><BR>1. Visual Studio 
+  等の開発ツールを起動し、新規プロジェクト(コンソールプアプリケーション)を作成します。</DIV>
+  <DIV dir=ltr>2. 参照の追加で、CADインストールフォルダ\bin\sxnet.dllを追加します。</DIV>
+  <DIV dir=ltr>3. 以下の例のように、ソースを作成します。</DIV>
+  <DIV dir=ltr>4. プロジェクトをビルドして、実行します。</DIV>
+  <DIV dir=ltr>&nbsp;</DIV>
+  <DIV dir=ltr>開発方法の詳細については、付属のSXクラスライブラリ利用ガイド(PDF)を参照して下さい。</DIV>
+  <DIV dir=ltr>また、<STRONG>システムインストールフォルダ\ETC\SXNET\SAMPLE 
+  </STRONG>フォルダ配下に、クラス別のサンプルソースを格納していますので、必要に応じて参照して下さい。</DIV>
+  <DIV dir=ltr>&nbsp;</DIV>
+  <P>[C#の場合のソースコード例] </P><CODE><PRE>using System;
+using System.Collections.Generic;
+using System.Text;
+using sxnet;
+
+namespace ConsoleApplication
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                SxEntSeg seg = null;    // 作成した2D LINEセグメント
+                SxPos pos1 = null;      // 始点座標
+                SxPos pos2 = null;      // 終点座標
+
+                // CADとの通信を初期化します。
+                // (プログラム起動時に呼び出します。)
+                int portno = 3999;
+                SxSys.init(portno);
+
+                // アクティブウィンドウの表示を2次元に変更します。
+                SxWindow act_win = SxWindow.getActive();
+                act_win.setDim(false);
+
+                // CAD上で、始点、終点座標を入力します。
+                pos1 = SxSys.getPos();
+                pos2 = SxSys.getPos();
+
+                // 入力座標を結ぶ2次元の線セグメントを作成します。
+                if (pos1 != null &amp;&amp; pos2 != null)
+                {
+                    seg = SxEntSeg.createLine2D(pos1, pos2);
+                }
+            }
+            catch (SxException e)
+            {
+                // CAD処理中の例外処理
+                // コンソールにエラーメッセージを表示します。
+                Console.WriteLine(e.Message);
+            }
+            catch (Exception e)
+            {
+                // その他の例外処理
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+}
+  </PRE></CODE>[VBの場合のソースコード例] <CODE><PRE>Imports Microsoft.VisualBasic
+Imports System
+Imports System.Collections.Generic
+Imports System.Text
+Imports sxnet
+
+Namespace ConsoleApplication
+	Friend Class Program
+		Shared Sub Main(ByVal args As String())
+			Try
+				Dim seg As SxEntSeg = Nothing ' 作成した2D LINEセグメント
+				Dim pos1 As SxPos = Nothing ' 始点座標
+				Dim pos2 As SxPos = Nothing ' 終点座標
+
+				' CADとの通信を初期化します。
+				' (プログラム起動時に呼び出します。)
+				Dim portno As Integer = 3999
+				SxSys.init(portno)
+
+				' アクティブウィンドウの表示を2次元に変更します。
+				Dim act_win As SxWindow = SxWindow.getActive()
+				act_win.setDim(False)
+
+				' CAD上で、始点、終点座標を入力します。
+				pos1 = SxSys.getPos()
+				pos2 = SxSys.getPos()
+
+				' 入力座標を結ぶ2次元の線セグメントを作成します。
+				If Not pos1 Is Nothing AndAlso Not pos2 Is Nothing Then
+					seg = SxEntSeg.createLine2D(pos1, pos2)
+				End If
+			Catch e As SxException
+				' CAD処理中の例外処理
+				' コンソールにエラーメッセージを表示します。
+				Console.WriteLine(e.Message)
+			Catch e As Exception
+				' その他の例外処理
+				Console.WriteLine(e.Message)
+			End Try
+		End Sub
+	End Class
+End Namespace
+  </PRE></CODE></BLOCKQUOTE>
+<H1 dir=ltr style="MARGIN-RIGHT: 0px"><A name=SECT-6></A>■アプリケーション実行時の制限事項</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <P>SXクラスライブラリを使用して作成したプログラムを実行するにあたって、以下の制限があります。<BR>
+  ・CADが起動している状態でのみ実行可能です。<BR>
+  ・ローカルディスク上に配置されたプログラムのみ実行可能です。<BR>
+  ・文字列要素および注記要素にOSの言語と異なる文字(日本語・中国語・韓国語)を使用する場合、「iCAD SXで使用できる他言語文字のフォント」を使用してください。<BR>
+  　「iCAD SXで使用できる他言語文字のフォント」はiCAD SX の操作ヘルプをご参照ください。<BR>
+  ・文字列および注記以外の要素で扱える文字はOSの言語に含まれる文字のみです。<BR>
+  　日本語OSでは、外字およびシフトJISコードにない文字コードは使用できません。<BR>
+  ・CAD上で2次元リンク編集中の状態での動作はサポートされません。<BR>
+  ・クラスライブラリを使用したアプリケーションを実行した時のCADのコマンドログからのマクロ作成/実行はサポートされません。<BR></P>
+      </BLOCKQUOTE>
+      <H1 dir=ltr style="MARGIN-RIGHT: 0px"><A name=SECT-7></A>■V7L6からの変更点</H1>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+
+  <P><STRONG>・<U>追加されたクラス</U></STRONG><BR></P>
+  <DIV class=tablediv>
+  <P>&nbsp;ありません。<BR>&nbsp; </P>
+  </DIV>
+
+  <P><STRONG>・<U>追加されたフィールド</U></STRONG></P>
+  <DIV class=tablediv>
+  <P>&nbsp;ありません。<BR>&nbsp; </P>
+  </DIV>
+  
+  <P><STRONG>・<U>拡張されたフィールド</U></STRONG></P>
+  <DIV class=tablediv>
+  <P>&nbsp;ありません。<BR>&nbsp;</P>
+  </DIV>
+
+  <P><STRONG>・<U>追加されたメソッド</U></STRONG></P>
+  <DIV class=tablediv>
+  <P>&nbsp;ありません。<BR>&nbsp;</P>
+  </DIV>
+  <P><STRONG>・<U>拡張されたメソッド</U></STRONG><BR></P>
+  <DIV class=tablediv>
+  <P>&nbsp;OSの言語と異なる文字(日本語・中国語・韓国語）の作成・編集・問い合わせができるようになりました。<BR>
+  &nbsp;なお、OSの言語と異なる文字を使用する場合、「iCAD SXで使用できる他言語文字のフォント」を使用してください。<BR></P>
+    <TABLE class=dtTABLE cellSpacing=0 cellPadding=0 border=0>
+      <TR>
+        <TH class="style1">クラス</TH>
+        <TH class="style2">メソッド</TH>
+        <TH>説明</TH>
+       </TR>
+      <TR>
+        <TD class="style1"><A href="sxnet.SxEntSeg.html">SxEntSeg</A></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createNote-3.html">SxEntSeg.createNote(SxPos,SxPos,SxPos,string[],int,bool,bool,int,string,bool,bool)</A></TD>
+        <TD>注記文字を作成します。(TrueTypeFont)</TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createNote-4.html">SxEntSeg.createNote(SxPos,SxPos,SxPos,string[],int,bool,bool,int,double,string,bool,bool)</A></TD>
+        <TD>注記文字を作成します。(TrueTypeFont)</TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createText-3.html">SxEntSeg.createText(SxPos,string[],bool,int,int,double,string,bool,bool)</A></TD>
+        <TD>文字列要素を作成します。(TrueTypeFont)</TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createText-4.html">SxEntSeg.createText(SxPos,SxPos,string[],bool,int,int,double[],double,string,bool,bool)</A></TD>
+        <TD>文字列要素を作成します。(TrueTypeFont)</TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createText-5.html">SxEntSeg.createText(SxPos,SxPos,SxOptCreateText)</A></TD>
+        <TD>文字列要素を作成します。(枠内配置)</TD>
+      </TR>
+      <TR>
+        <TD class="style1">&nbsp;</TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.createText-6.html">SxEntSeg.createText(SxPos,SxOptCreateText)</A></TD>
+        <TD>文字列要素を作成します。(点配置)</TD>
+      </TR>
+      <TR>
+        <TD class="style1">&nbsp;</TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.editText-1.html">SxEntSeg.editText(string[])</TD>
+        <TD>文字列の編集を行います。要素タイプ<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>および<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a></TD>
+      </TR>
+      <TR>
+        <TD class="style1">&nbsp;</TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.editText-2.html">SxEntSeg.editText(string)</TD>
+        <TD>文字列の編集(単一行)。要素タイプ<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>および<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a></TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.getGeom.html">SxEntSeg.getGeom()</A></TD>
+        <TD>セグメントのジオメトリを問い合わせます。要素タイプ<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>および<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a></TD>
+      </TR>
+      <TR>
+        <TD class="style1"></TD>
+        <TD class="style2"><A href="sxnet.SxEntSeg.getGeomList.html">SxEntSeg.getGeomList(SxEntSeg[])</A></TD>
+        <TD>指定セグメント群のジオメトリを一括取得します。要素タイプ<a href="sxnet.SxEntSeg.SEGTYPE_TEXT.html">SEGTYPE_TEXT</a>および<a href="sxnet.SxEntSeg.SEGTYPE_LBL.html">SEGTYPE_LBL</a></TD>
+      </TR>
+    </TABLE>
+  </DIV>
+  <P>・<STRONG><U>削除された、クラス、フィールド、メソッド</U></STRONG></P>
+  <P>&nbsp;ありません。<BR>&nbsp; </P>
+      </BLOCKQUOTE>
+<DIV>
+<HR>
+</DIV>
+<DIV id=footer>
+<P><A>(c) 2010 iCAD LIMITED</A> </P>
+<P>作成元アセンブリ: sxnet [1.1.0.0]</P></DIV></FONT>
+  </BODY>
+</html>

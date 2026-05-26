@@ -1,0 +1,88 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxVS.convPos メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxVS.convPos&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 座標変換(ビュー/ローカルビュー ←→ グローバルビュー)を行います。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Function&nbsp;convPos( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>mode</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;convPos(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>mode</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>mode</i>
+        </dt>
+        <dd> 変換モード。<br /> true:自VS座標系→グローバルビュー座標系変換<br /> false:グローバルビュー座標系→自VS座標系変換<br />
+            </dd>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>自VS又はグローバルビュー上の座標</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>変換された座標</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定座標の座標系の変換を行います。<br /> 自VSがビュー、ローカルビューでない場合、何も変換しません。<br />
+            <seealso cref="T:sxnet.SxPos"></seealso>
+            <seealso cref="M:sxnet.SxVS.convExtent(sxnet.SxBox)"></seealso>
+            <seealso cref="M:sxnet.SxVS.getExtent"></seealso>
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxVS.html">SxVS クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxPos.html">SxPos</a> | <a href="sxnet.SxVS.convExtent.html">convExtent</a> | <a href="sxnet.SxVS.getExtent.html">getExtent</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

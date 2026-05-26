@@ -1,0 +1,102 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createAplDimArcleng メソッド (Object, SxPos, String, String, Boolean, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createAplDimArcleng&nbsp;メソッド&nbsp;(Object, SxPos, String, String, Boolean, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 円弧長寸法線を作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createAplDimArcleng( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>obj</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>Object</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol1</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>tol2</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>arcdisp</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>type</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createAplDimArcleng(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>object</a>&nbsp;<i>obj</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>tol1</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>tol2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>arcdisp</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>type</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>obj</i>
+        </dt>
+        <dd> 基準円弧<br /> 円弧セグメント又は円弧エッジを指定して下さい。<br />
+            </dd>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>寸法配置点座標</dd>
+        <dt>
+          <i>tol1</i>
+        </dt>
+        <dd>上段公差値文字<br />省略時は空文字列""を指定して下さい。</dd>
+        <dt>
+          <i>tol2</i>
+        </dt>
+        <dd>下段公差値文字<br />省略時は空文字列""を指定して下さい。</dd>
+        <dt>
+          <i>arcdisp</i>
+        </dt>
+        <dd>円弧記号の表示<br /> true:円弧記号を表示<br /> false:円弧記号を非表示</dd>
+        <dt>
+          <i>type</i>
+        </dt>
+        <dd>円弧長タイプ true:平行補助線の円弧長寸法<br /> false:放射状補助線円弧長寸法</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した円弧長寸法線セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> objで指定された要素に、円弧長寸法線を作成します。<br /> objには、アクティブウィンドウに表示されたアクティブVS/WF上の要素を指定して下さい。<br /> アクティブウィンドウが3次元で、かつ操作次元が2次元の場合は、アクティブな組立平面上の要素を 指定して下さい。<br /> objには、以下のインスタンスが指定可能です。<br />
+            <a href="sxnet.SxEdge.html">SxEdge</a>(円弧エッジ)<br />
+            <a href="sxnet.SxEntSeg.html">SxEntSeg</a>(円弧要素)<br />
+            <br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br /> 2次元要素作成の場合、posのZ値は無視されます。 </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createAplDimArcleng@overloads.html">SxEntSeg.createAplDimArcleng オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

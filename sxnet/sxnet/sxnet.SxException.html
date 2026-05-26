@@ -1,0 +1,83 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxException クラス</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxException クラス</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> CAD例外クラス。 </p>
+      <p>この型のすべてのメンバの一覧については、 <a href="sxnet.SxException@members.html">SxException メンバ</a>を参照してください。</p>
+      <p>
+        <a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>System.Object</a>
+        <br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>System.Exception</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.applicationexception.aspx>System.ApplicationException</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>sxnet.SxException</b></p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Class&nbsp;SxException<div>&nbsp;&nbsp;&nbsp;&nbsp;Inherits&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.applicationexception.aspx>ApplicationException</a></div></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <div>public&nbsp;class&nbsp;SxException<b> : <a href=http://msdn.microsoft.com/ja-jp/library/system.applicationexception.aspx>ApplicationException</a></b></div>
+      </div>
+      <H4 class="dtH4">スレッドセーフ</H4>
+      <P>この型の public static (Visual Basicでは <B>Shared</B>) のすべてのメンバは、
+				マルチスレッド操作で安全に使用できます。インスタンスのメンバの場合は、スレッドセーフであるとは限りません。</P>
+      <h4 class="dtH4">解説</h4>
+      <p> CAD操作中に発生したエラー情報の例外クラスです。<br /> Messageプロパティにエラーメッセージを格納します。<br />
+            </p>
+      <h4 class="dtH4">使用例</h4>
+      <p>エラーメッセージをコンソールに出力する。 <pre class="code">[C#]
+using System;
+using sxnet;
+class drawLine()
+{
+    static void Main(string[] args){
+        try{
+            // 同一座標を指定して、線分セグメントを作成.
+            SxPos p1 = new SxPos(0.0e0, 0.0e0, 0.0e0);
+            SxEntSeg.createLine3D( p1, p1 );
+        }catch(SxException e){
+            // エラーメッセージをコンソールに出力する.
+            Console.WriteLine(e.Message);
+        }
+    }
+}
+</pre> 実行結果:<br /> MSG00115 座標，要素が同一，または近すぎます。( 1101) </p>
+      <h4 class="dtH4">必要条件</h4>
+      <p>
+        <b>名前空間: </b>
+        <a href="sxnet.html">sxnet</a>
+      </p>
+      <p>
+        <b>アセンブリ: </b>sxnet (sxnet.dll 内)
+					</p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxException@members.html">SxException メンバ</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

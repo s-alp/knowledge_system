@@ -1,0 +1,98 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxModel.save メソッド (String, String, String, Int32, Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxModel.save&nbsp;メソッド&nbsp;(String, String, String, Int32, Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> モデルをファイルに保存します。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;save( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>path</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>fname</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>comment</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>version</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>level</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;save(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>path</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>fname</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>comment</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>version</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>level</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>path</i>
+        </dt>
+        <dd> 保存フォルダパス。<br /> 空文字列""を指定した場合、元々ファイルが存在したフォルダに保存します。<br />
+            </dd>
+        <dt>
+          <i>fname</i>
+        </dt>
+        <dd> ファイル名(拡張子なし)。<br /> 空文字列""を指定した場合、ファイル名=モデル名として保存します。<br /> ファイル名の最大長は半角英数字の場合40文字までです。(全角文字で20文字)<br />
+            </dd>
+        <dt>
+          <i>comment</i>
+        </dt>
+        <dd> コメント文字列。<br /> 空文字列""が指定された場合、コメント無しで保存します。<br /> コメント文字列の最大長は半角英数字の場合80文字までです。(全角文字で40文字)<br />
+            </dd>
+        <dt>
+          <i>version</i>
+        </dt>
+        <dd> 保存バージョン番号。<br /> 0を指定した場合、最新のバージョン/レベル形式で保存します。 </dd>
+        <dt>
+          <i>level</i>
+        </dt>
+        <dd> 保存レベル番号。<br /> version=0の場合は、無視されます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> モデルの保存を行います。<br /> モデル内の読み取り専用の外部パーツが編集された場合、読み取り専用外部パーツは保存されません。<br /> pathとfnameの長さの合計が、半角英数字で255文字以内である必要があります。<br /> CAD上で開設した新規図面の場合、path,fnameは省略不可です。<br /> version,levelは、例えばV5L4形式で保存する場合は、version=5, level=4を指定します。<br /> 最新V/Lから過去4世代のV/Lまでが指定可能です。<br /> 最新のV/Lで保存する場合は、version=0を指定して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxModel.html">SxModel クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxModel.save@overloads.html">SxModel.save オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

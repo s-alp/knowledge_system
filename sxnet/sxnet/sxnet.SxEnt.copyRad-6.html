@@ -1,0 +1,112 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEnt.copyRad メソッド (SxWF, SxPos, SxPos, Double, Double, Double, Boolean, Boolean, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEnt.copyRad&nbsp;メソッド&nbsp;(SxWF, SxPos, SxPos, Double, Double, Double, Boolean, Boolean, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 指定WFに自3次元要素のコピー（回転＋平行移動）を行います：回転角度(ラジアン)指定、配置座標指定 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Function&nbsp;copyRad( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>wf</i>&nbsp;As&nbsp;<a href="sxnet.SxWF.html">SxWF</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt2</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angx</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angy</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>angz</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>Double</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>attr</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>layer</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>group</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEnt.html">SxEnt</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxEnt.html">SxEnt</a>&nbsp;copyRad(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxWF.html">SxWF</a>&nbsp;<i>wf</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt2</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angx</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angy</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double.aspx>double</a>&nbsp;<i>angz</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>attr</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>layer</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>group</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>wf</i>
+        </dt>
+        <dd>コピー先のWF</dd>
+        <dt>
+          <i>pnt</i>
+        </dt>
+        <dd>回転基準座標</dd>
+        <dt>
+          <i>pnt2</i>
+        </dt>
+        <dd>配置座標</dd>
+        <dt>
+          <i>angx</i>
+        </dt>
+        <dd>X軸周り回転角度(ラジアン)</dd>
+        <dt>
+          <i>angy</i>
+        </dt>
+        <dd>Y軸周り回転角度(ラジアン)</dd>
+        <dt>
+          <i>angz</i>
+        </dt>
+        <dd>Z軸周り回転角度(ラジアン)</dd>
+        <dt>
+          <i>attr</i>
+        </dt>
+        <dd> 属性引継ぎ<br /> true:元要素の線種、線幅、線色を引き継ぎます。<br /> false:現在の線種、線幅、線色でコピーします。 </dd>
+        <dt>
+          <i>layer</i>
+        </dt>
+        <dd> レイヤ引継ぎ<br /> true:元要素のレイヤを引き継ぎます。<br /> false:現在の入力レイヤにコピーします。 </dd>
+        <dt>
+          <i>group</i>
+        </dt>
+        <dd> グループ引継ぎ<br /> true:元要素のグループを引き継ぎます。<br /> false:グループを引き継ぎません。 </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>コピーした要素</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 指定WFに自3次元要素をコピーします。<br /> 自要素を表示するウィンドウ、又は、指定WFを表示するウィンドウが存在しない場合、例外を返します。<br /> 回転角度は、オイラー回転の角度です。<br /> X,Y,Z軸の順にオイラー回転します。<br /> ※オイラー回転：各軸周りの回転を、絶対座標系の軸周りではなく、回転後の各軸周りに対して回転します。<br /> 自インスタンスがグループの場合、null(VBの場合Nothing)を返答します。 (グループメンバ要素のコピー処理は実行されます)<br />
+            <br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEnt.html">SxEnt クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEnt.copyRad@overloads.html">SxEnt.copyRad オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

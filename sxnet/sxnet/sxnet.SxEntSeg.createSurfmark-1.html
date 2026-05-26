@@ -1,0 +1,101 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createSurfmark メソッド (SxPos, String[], Int32, Int32)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createSurfmark&nbsp;メソッド&nbsp;(SxPos, String[], Int32, Int32)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 表面粗さ記号を作成します。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Function&nbsp;createSurfmark( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pnt</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>cinf</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string().aspx>String()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>jktype</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>shtype</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createSurfmark(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pnt</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string[].aspx>string[]</a>&nbsp;<i>cinf</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>jktype</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>shtype</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pnt</i>
+        </dt>
+        <dd>配置点座標</dd>
+        <dt>
+          <i>cinf</i>
+        </dt>
+        <dd>指示値、加工方法の文字列の配列<br /> cinf[0]:指示値１<br /> cinf[1]:指示値２<br /> cinf[2]:指示値３<br /> cinf[3]:指示値４<br /> cinf[4]:加工方法<br /> 省略時は、空文字列""を指定して下さい。 <br />
+            <pre class="code">                 加工方法
+                /￣￣￣￣￣
+     指示値１　/ 指示値３
+     指示値２ /　指示値４
+            ∨
+</pre>
+            </dd>
+        <dt>
+          <i>jktype</i>
+        </dt>
+        <dd> 除去加工タイプ<br /> SxGeomSmark.REMOVTYP_NODEL : 除去禁止<br /> SxGeomSmark.REMOVTYP_NOREMOVE : 除去不問<br /> SxGeomSmark.REMOVTYP_REMOVE : 除去要<br />
+            </dd>
+        <dt>
+          <i>shtype</i>
+        </dt>
+        <dd> 筋目方向記号<br /> SxGeomSmark.STREAK_NONE : 無し<br /> SxGeomSmark.STREAK_C : Ｃ<br /> SxGeomSmark.STREAK_M : Ｍ<br /> SxGeomSmark.STREAK_N : Ｎ<br /> SxGeomSmark.STREAK_R : Ｒ<br /> SxGeomSmark.STREAK_X : Ｘ<br /> SxGeomSmark.STREAK_PAR : ＝<br /> SxGeomSmark.STREAK_VER : ⊥<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した表面粗さセグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示されたアクティブVS/WFに、表面粗さ記号を作成します。<br /> 3次元上で組立平面が開設されていて、操作次元が2次元の場合、組立平面上に2次元要素を作成します。<br /> 操作次元が3次元の場合、メニューバー／３Ｄ設定／３Ｄ寸法線で設定した面上に3次元要素を作成します。<br />
+            <br /> 2次元要素作成の場合、pntのZ値は無視されます。<br /> 除去加工タイプ定数値については、<a href="sxnet.SxGeomSmark.html">SxGeomSmark</a>クラスの、 除去加工タイプ定数( REMOVTYP_xxx)を参照して下さい。<br /> 筋目方向記号定数値については、<b>SxGeomSmark</b>クラスの、 筋目方向記号定数( STREAK_xxx)を参照して下さい。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.createSurfmark@overloads.html">SxEntSeg.createSurfmark オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

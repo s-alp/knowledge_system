@@ -1,0 +1,89 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.execBoolean メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.execBoolean&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 立体要素の集合演算を行います。 </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Function&nbsp;execBoolean( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>entlist</i>&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>mode</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>erase</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;execBoolean(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg[]</a>&nbsp;<i>entlist</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>mode</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>erase</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>entlist</i>
+        </dt>
+        <dd>ツール要素の配列 </dd>
+        <dt>
+          <i>mode</i>
+        </dt>
+        <dd> 集合演算の種別<br /> SxEntSeg.BOOL_UNITE : 和の演算処理を行う<br /> SxEntSeg.BOOL_SUBTRACT : 差の演算処理を行う<br /> SxEntSeg.BOOL_INTERSECT : 積の演算処理を行う<br />
+            </dd>
+        <dt>
+          <i>erase</i>
+        </dt>
+        <dd> ツール要素の削除<br /> true:削除します。<br /> false:削除しません。<br /> ※mode = SxEntSeg.BOOL_UNITEの時は、本パラメタの指定に関係なく、無条件に削除されます。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>演算後のFCソリッド</p>
+      <h4 class="dtH4">解説</h4>
+      <p> 自要素をターゲット要素として、指定ツール要素との集合演算を行います。<br /> 自要素、ツール要素は、立体、ソリッド、FCソリッドである必要があります。<br /> mode=SxEntSeg.BOOL_INTERSECTかつ、erase=falseの場合、 自要素はそのまま残り、新しく作成されたFCソリッドを返答します。<br /> 上記の条件以外の場合：<br /> 自要素がFCソリッドの場合、自要素に対して直接演算を実行する為、自要素を返答します。<br /> 自要素がソリッド、立体セグメントの場合、新規に作成されたFCソリッドを返答します。 この場合、自要素も新しく作成されたFCソリッドに変わります。<br /> 非表示要素は処理対象外です。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

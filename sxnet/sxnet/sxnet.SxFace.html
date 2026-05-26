@@ -1,0 +1,73 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxFace クラス</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxFace クラス</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 立体、ソリッド、FCソリッドのフェイス(面)。 </p>
+      <p>この型のすべてのメンバの一覧については、 <a href="sxnet.SxFace@members.html">SxFace メンバ</a>を参照してください。</p>
+      <p>
+        <a href=http://msdn.microsoft.com/ja-jp/library/system.object.aspx>System.Object</a>
+        <br />&nbsp;&nbsp;&nbsp;<b>sxnet.SxFace</b></p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Class&nbsp;SxFace</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <div>public&nbsp;class&nbsp;SxFace</div>
+      </div>
+      <H4 class="dtH4">スレッドセーフ</H4>
+      <P>この型の public static (Visual Basicでは <B>Shared</B>) のすべてのメンバは、
+				マルチスレッド操作で安全に使用できます。インスタンスのメンバの場合は、スレッドセーフであるとは限りません。</P>
+      <h4 class="dtH4">解説</h4>
+      <p> CAD上の立体、ソリッド、FCソリッドのフェイスにアクセスするためのクラスです。<br /> フェイスの情報取得処理等を行います。<br />
+            <br />
+            <a href="sxnet.SxSys.html">SxSys</a>クラスの<a href="sxnet.SxSys.getFace.html">getFace</a>メソッド、 <a href="sxnet.SxEntSeg.html">SxEntSeg</a>クラスの<a href="sxnet.SxEntSeg.getFaceList-1.html">getFaceList</a>メソッド、 <a href="sxnet.SxEdge.html">SxEdge</a>クラスの<a href="sxnet.SxEdge.getFaceList-1.html">getFaceList</a>メソッド等で取得します。<br /> CAD上でフェイスインスタンスの属するセグメントの形状編集が行われた場合、 CAD上で形状自体が再構成される為、既存の該当セグメントのフェイスインスタンスは無効になります。<br /> 例)自フェイスインスタンスがFCソリッドのフェイスである時に、CAD上で集合演算や、立体伸縮で 自フェイスの属するFCソリッドを編集した場合、等。<br />
+            <seealso cref="M:sxnet.SxSys.getFace"></seealso>
+            <seealso cref="M:sxnet.SxSys.getFaceList"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getFaceList"></seealso>
+            <seealso cref="M:sxnet.SxEntSeg.getFaceList(sxnet.SxEntSeg[])"></seealso>
+            <seealso cref="M:sxnet.SxEdge.getFaceList"></seealso>
+            <seealso cref="M:sxnet.SxEdge.getFaceList(sxnet.SxEdge[])"></seealso>
+            </p>
+      <h4 class="dtH4">必要条件</h4>
+      <p>
+        <b>名前空間: </b>
+        <a href="sxnet.html">sxnet</a>
+      </p>
+      <p>
+        <b>アセンブリ: </b>sxnet (sxnet.dll 内)
+					</p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxFace@members.html">SxFace メンバ</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxSys.getFace.html">getFace</a> | <a href="sxnet.SxSys.getFaceList.html">getFaceList</a> | <a href="sxnet.SxEntSeg.getFaceList-1.html">getFaceList</a> | <a href="sxnet.SxEntSeg.getFaceList-2.html">getFaceList</a> | <a href="sxnet.SxEdge.getFaceList-1.html">getFaceList</a> | <a href="sxnet.SxEdge.getFaceList-2.html">getFaceList</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

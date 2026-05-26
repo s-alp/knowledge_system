@@ -1,0 +1,88 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntSeg.createDiameterDimStd3D メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntSeg.createDiameterDimStd3D&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 直径寸法線を作成します。(3次元) </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Shared&nbsp;Function&nbsp;createDiameterDimStd3D( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>pos</i>&nbsp;As&nbsp;<a href="sxnet.SxPos.html">SxPos</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>arcinf</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double().aspx>Double()</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>plane</i>&nbsp;As&nbsp;<a href="sxnet.SxGeomPlane.html">SxGeomPlane</a>&nbsp;_<br />)&nbsp;As&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href="sxnet.SxEntSeg.html">SxEntSeg</a>&nbsp;createDiameterDimStd3D(<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxPos.html">SxPos</a>&nbsp;<i>pos</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.double[].aspx>double[]</a>&nbsp;<i>arcinf</i>,<br />&nbsp;&nbsp;&nbsp;<a href="sxnet.SxGeomPlane.html">SxGeomPlane</a>&nbsp;<i>plane</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>pos</i>
+        </dt>
+        <dd>寸法配置点座標</dd>
+        <dt>
+          <i>arcinf</i>
+        </dt>
+        <dd> 寸法線の基準円／円弧情報<br /> arcinf[0] :基準円/円弧の中心点のＸ座標<br /> arcinf[1] :基準円/円弧の中心点のＹ座標<br /> arcinf[2] :基準円/円弧の中心点のＺ座標<br /> arcinf[3] :基準円/円弧の半径<br /> arcinf[4] :基準円/円弧の始角（単位:ラジアン。円の場合0.0を指定して下さい）<br /> arcinf[5] :基準円/円弧の相対角（単位:ラジアン。円の場合は2πを指定して下さい）<br />
+            </dd>
+        <dt>
+          <i>plane</i>
+        </dt>
+        <dd>寸法線作成平面情報</dd>
+      </dl>
+      <h4 class="dtH4">戻り値</h4>
+      <p>作成した直径寸法線セグメント</p>
+      <h4 class="dtH4">解説</h4>
+      <p> アクティブウィンドウに表示されたWFに、3次元直径寸法線を作成します。<br /> planeで指定した平面上に寸法線が作成されます。<br /> posは、3次元の座標です。これらをplaneで定義された平面上に投影して寸法線を作成します。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntSeg.html">SxEntSeg クラス</a> | <a href="sxnet.html">sxnet 名前空間</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

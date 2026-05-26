@@ -1,0 +1,77 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxSys.init メソッド (Int32, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxSys.init&nbsp;メソッド&nbsp;(Int32, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> ローカルマシン上のCADとの通信初期化を行います。<br /> (エラー時のメッセージボックスの表示/非表示制御可能)<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Shared&nbsp;Sub&nbsp;init( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>portno</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>disp_msg</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;static&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;init(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>portno</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>disp_msg</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>portno</i>
+        </dt>
+        <dd>CADと接続するポート番号</dd>
+        <dt>
+          <i>disp_msg</i>
+        </dt>
+        <dd> エラー時のメッセージボックスの表示処理。<br /> true:表示します。<br /> false:表示しません。<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> ポート番号には、.NET連携セットアップで定義した、 sxnetのポート番号を指定して下さい。<br /> 本メソッドは、プログラムの先頭で必ず１回呼び出して下さい。<br /> 以下の状態で本メソッドを実行した場合、例外が発生します。<br /> ・CADが起動中でない場合。<br /> ・ローカルマシン上の%WINDIR%\SYSTEM32\DRIVERS\ETC\SERVICES内に、 sxnetのポート番号が定義されていない。あるいは、ポート番号が本メソッドで指定した ポート番号と異なる場合。<br /> ・ファイアウォール等によって、指定したポート番号の通信がブロックされている場合。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">CADとの接続に失敗</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxSys.html">SxSys クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxSys.init@overloads.html">SxSys.init オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

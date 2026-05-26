@@ -1,0 +1,64 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxInfSearchEntType.setStatus メソッド</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxInfSearchEntType.setStatus&nbsp;メソッド&nbsp;</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自インスタンス内の指定要素タイプの検索属性の設定を行います。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Public&nbsp;Sub&nbsp;setStatus( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>enttyp</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>Integer</a>,&nbsp;_<br />&nbsp;&nbsp;&nbsp;ByVal <i>onoff</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>Boolean</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setStatus(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.int32.aspx>int</a>&nbsp;<i>enttyp</i>,<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.boolean.aspx>bool</a>&nbsp;<i>onoff</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>enttyp</i>
+        </dt>
+        <dd>要素タイプ番号</dd>
+        <dt>
+          <i>onoff</i>
+        </dt>
+        <dd> 検索属性<br /> true:検索<br /> false:非検索<br />
+            </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自インスタンス内の指定要素タイプ番号に応じたフィールドの検索属性の設定を行います。<br /> CAD上の要素検索属性の状態は変わりません。<br /> enttypに対象外の番号を指定した場合、何もしません。<br /> 要素タイプ番号については、<a href="sxnet.SxEntSeg.html">SxEntSeg</a>クラスの、SEGTYPE_xxx定数を参照して下さい。<br /> CAD上の検索要素タイプの設定を行うには、<a href="sxnet.SxSys.html">SxSys</a>クラスの、 <a href="sxnet.SxSys.setSearchEntType-1.html">setSearchEntType</a>メソッドを使用します。<br />
+            <seealso cref="T:sxnet.SxEntSeg"></seealso>
+            <seealso cref="M:sxnet.SxSys.setSearchEntType(sxnet.SxInfSearchEntType)"></seealso>
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxInfSearchEntType.html">SxInfSearchEntType クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntSeg.html">SxEntSeg</a> | <a href="sxnet.SxSys.setSearchEntType-1.html">setSearchEntType</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>

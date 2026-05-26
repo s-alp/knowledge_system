@@ -1,0 +1,97 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>SxEntPart.setInfEx メソッド (String)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">SX.Net Class Library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">SxEntPart.setInfEx&nbsp;メソッド&nbsp;(String)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> 自パーツに任意情報を設定します。<br /> このメソッドはiCAD SX ビューア／iCAD SX 組立支援の場合でも実行可能です。<br />
+            </p>
+      <div class="syntax">
+        <span class="lang">[Visual&nbsp;Basic]</span>
+        <br />Overloads&nbsp;Public&nbsp;Sub&nbsp;setInfEx( _<br />&nbsp;&nbsp;&nbsp;ByVal <i>info</i>&nbsp;As&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>String</a>&nbsp;_<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.void.aspx>void</a>&nbsp;setInfEx(<br />&nbsp;&nbsp;&nbsp;<a href=http://msdn.microsoft.com/ja-jp/library/system.string.aspx>string</a>&nbsp;<i>info</i><br />);</div>
+      <h4 class="dtH4">パラメータ</h4>
+      <dl>
+        <dt>
+          <i>info</i>
+        </dt>
+        <dd> 任意情報文字列(CSV形式) </dd>
+      </dl>
+      <h4 class="dtH4">解説</h4>
+      <p> 自パーツにのみCSV形式の任意情報文字列を設定します。<br /> ※全ての同名パーツに同じ任意情報文字列を設定してください。<br /> infoは、半角英数字で最大4000文字までです。(全角文字で最大2000文字まで) 自パーツが既に任意情報を持つ場合、上書きされます。<br />
+            <br /> 文字列は、以下の形式で指定して下さい。<br /> 項目ID1,"内容1",項目ID2,"内容2", ... <br /> 例）User_type,"A",User_weight,"200.0"<br />
+            <br /> 本メソッドで付加した情報は、CAD本体の３次元ツール/部品表コマンドで参照されます。<br /> CAD本体の部品表コマンドで利用する情報を付加する場合は、定義したテンプレート の内容に従って、文字列をCSV形式で指定して下さい。<br /> 部品表コマンドの詳細については、CAD本体のヘルプを参照して下さい。<br />
+            <br /> [注意]<br /> 同名パーツに異なった任意情報文字列を設定した場合は、<br /> ３次元ツール/部品表コマンドや保存などが正しく動作しないことがあります。<br />
+            </p>
+      <h4 class="dtH4">例外</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+          <tr valign="top">
+            <th width="50%">例外の種類</th>
+            <th width="50%">条件</th>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="sxnet.SxException.html">SxException</a>
+            </td>
+            <td width="50%">CAD処理中の例外</td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href=http://msdn.microsoft.com/ja-jp/library/system.exception.aspx>Exception</a>
+            </td>
+            <td width="50%">その他の例外</td>
+          </tr>
+        </table>
+      </div>
+      <h4 class="dtH4">使用例</h4>
+      <p> [C#] <pre class="code">void SetInf(SxEntPart part)
+{
+    // 付加する任意情報文字列の定義
+    string info = "User_Volume,\"100.0\",User_Weight,\"200.0\"";
+    // 任意情報を付加する。
+    part.setInfEx(info);
+}
+</pre> [VB] <pre class="code">Private Sub SetInf(ByVal part As SxEntPart)
+    ' 付加する任意情報文字列の定義
+    Dim info As String = "User_Volume,""100.0"",User_Weight,""200.0"""
+    ' 任意情報を付加する。
+    part.setInfEx(info)
+End Sub
+</pre>
+            </p>
+      <h4 class="dtH4">参照</h4>
+      <p>
+        <a href="sxnet.SxEntPart.html">SxEntPart クラス</a> | <a href="sxnet.html">sxnet 名前空間</a> | <a href="sxnet.SxEntPart.setInfEx@overloads.html">SxEntPart.setInfEx オーバーロードの一覧</a></p>
+      
+      <hr />
+      <div id="footer">
+        <p>
+          <a>Copyright iCAD LTD. All rights reserved.</a>
+        </p>
+        <p>作成元アセンブリ: sxnet [1.1.0.0]</p>
+      </div>
+    </div>
+  </body>
+</html>
