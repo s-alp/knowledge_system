@@ -549,6 +549,87 @@
     <section class="section">
       <div class="section-header">
         <div>
+          <h2>抽出速度の見立て</h2>
+        </div>
+        <p>現時点では実測ではなく、`sxnet` の一括取得 API と既存 viewer の重処理整理から見た設計判断用の見立てである。</p>
+      </div>
+      <div class="callout">
+        <h3>根拠として確認できたこと</h3>
+        <ul class="bullet-list">
+          <li>`SxEntSeg.getGeomList()` はセグメント群のジオメトリ一括取得を提供している。</li>
+          <li>`SxEnt.getInfList()` は要素群の情報を配列で取得できる。</li>
+          <li>`SxWF.getInfPartTree()` は階層、部品詳細、任意情報を一括取得できる。</li>
+          <li>viewer 既存資料では、`STEP -> STL` 変換は重い処理として分離されている。</li>
+          <li>TIFF はクライアント側で重くなりやすいため、バックエンド PNG 化へ寄せている。</li>
+        </ul>
+      </div>
+      <div style="height: 16px;"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>処理</th>
+            <th>速度見立て</th>
+            <th>条件付き推定レンジ</th>
+            <th>設計判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>3D ICAD の部品階層・任意情報抽出</td>
+            <td>速い寄り</td>
+            <td>サブ秒〜数秒</td>
+            <td>登録時同期処理の有力候補。まず最優先で PoC する。</td>
+          </tr>
+          <tr>
+            <td>2D ICAD の文字・寸法・注記抽出</td>
+            <td>速い寄り〜中程度</td>
+            <td>サブ秒〜数秒</td>
+            <td>OCR より先にネイティブ抽出を採用する。</td>
+          </tr>
+          <tr>
+            <td>サーチャブル PDF のテキスト抽出</td>
+            <td>中程度</td>
+            <td>数秒前後〜十秒未満</td>
+            <td>小規模資料は同期可。表やページ数が多い資料は非同期寄り。</td>
+          </tr>
+          <tr>
+            <td>STEP の重解析/変換</td>
+            <td>遅い寄り</td>
+            <td>数秒〜数十秒</td>
+            <td>同期登録処理に入れず、ジョブ化前提で扱う。</td>
+          </tr>
+          <tr>
+            <td>TIFF/JPEG/PNG の OCR 抽出</td>
+            <td>最も遅く、ばらつき大</td>
+            <td>数秒〜数十秒以上</td>
+            <td>必ずバックグラウンド処理に寄せる。進捗表示が必要。</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="height: 16px;"></div>
+      <div class="columns">
+        <article class="panel">
+          <h3>高速に回せそうなもの</h3>
+          <ul class="bullet-list">
+            <li>ICAD 3D の部品階層・任意情報抽出</li>
+            <li>ICAD 2D の文字・寸法・注記抽出</li>
+            <li>客先名、案件名、装置カテゴリの canonical attribute 化</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>重いので後段ジョブ化したいもの</h3>
+          <ul class="bullet-list">
+            <li>STEP の重解析または表示向け変換</li>
+            <li>TIFF/JPEG/PNG の OCR</li>
+            <li>大量ページ PDF の表構造復元</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
           <h2>設計の骨子</h2>
         </div>
         <p>タグを直接正本にせず、抽出から保存までを 4 層に分ける。</p>
