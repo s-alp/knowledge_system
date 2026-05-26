@@ -1,0 +1,5 @@
+.env
+node_modules/
+browsers/
+screenshots/
+package-lock.json

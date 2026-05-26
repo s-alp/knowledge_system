@@ -1,0 +1,15 @@
+{
+  "name": "knowledge-system-screenshot",
+  "version": "1.0.0",
+  "description": "社内ナレッジシステム（PDM＋ナレッジ検索）の主要画面を、Cowork の bash 上で Playwright を使って自動キャプチャするスキルです。",
+  "main": "grab_screenshots.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}

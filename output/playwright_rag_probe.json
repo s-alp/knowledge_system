@@ -1,0 +1,37 @@
+{
+  "title": "ナレッジ",
+  "url": "http://210.165.3.139/web/login",
+  "bodyText": "You need to enable JavaScript to run this app. PDM＋ナレッジ検索メールアドレス *メールアドレス *パスワード *パスワード *ログイン",
+  "inputs": [
+    {
+      "tag": "INPUT",
+      "type": "text",
+      "placeholder": "",
+      "ariaLabel": null,
+      "text": "",
+      "disabled": false
+    },
+    {
+      "tag": "INPUT",
+      "type": "password",
+      "placeholder": "",
+      "ariaLabel": null,
+      "text": "",
+      "disabled": false
+    }
+  ],
+  "buttons": [
+    {
+      "text": "",
+      "ariaLabel": "toggle password visibility",
+      "title": null,
+      "disabled": false
+    },
+    {
+      "text": "ログイン",
+      "ariaLabel": null,
+      "title": null,
+      "disabled": false
+    }
+  ]
+}
