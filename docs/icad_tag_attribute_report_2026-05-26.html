@@ -447,6 +447,7 @@
           <h3>現状のギャップ</h3>
           <div class="tag">図面管理の保存モデル未確認</div>
           <div class="tag">viewer 詳細は mock</div>
+          <div class="tag">Python 側は Django 前提で設計必要</div>
           <div class="tag warn">RAG は案件/客先/カテゴリ混線</div>
           <div class="tag warn">BOM から案件名へ上がれない</div>
           <div class="tag">ICAD 抽出コードは未着手</div>
@@ -652,6 +653,34 @@
             <li>3D: top part、part tree、外部参照</li>
             <li>2D: text token、label、dimension、公差、溶接注記</li>
             <li>品質: 抽出ステータス、OCR 使用有無、信頼度、抽出バージョン</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>Django 前提の実装像</h2>
+        </div>
+        <p>ナレッジシステム本体が Django である前提なら、Python 側は単独スクリプトではなく Django の service / task 層として置く。</p>
+      </div>
+      <div class="columns">
+        <article class="panel">
+          <h3>C# 側</h3>
+          <ul class="bullet-list">
+            <li>`sxnet` を呼ぶ抽出コア</li>
+            <li>ICAD 2D/3D の一括取得</li>
+            <li>1図面単位の生抽出 JSON 返却</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Django 側</h3>
+          <ul class="bullet-list">
+            <li>抽出ジョブ起動</li>
+            <li>JSON 受け取りと正規化</li>
+            <li>タグ生成、図面管理保存、RAG 連携</li>
+            <li>重い処理は request thread ではなく非同期 task で実行</li>
           </ul>
         </article>
       </div>
