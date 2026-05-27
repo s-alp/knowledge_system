@@ -88,6 +88,32 @@
 - 生成スクリプト:
   - `C:\Users\s-iwata\Desktop\knowledge_system\scripts\generate_rag_test_report.py`
 
+## 実装準備ドキュメント
+- 調査結果:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_investigation_2026-05-26.md`
+- 設計計画:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_design_plan_2026-05-26.md`
+- 実装引継ぎ:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_implementation_backlog_2026-05-26.md`
+- C# / Django 分担案:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_csharp_python_architecture_2026-05-27.md`
+- Django 統合計画:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`
+- 抽出結果スキーマ:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\extraction_result_schema_2026-05-28.md`
+- タグ・属性管理 UI 計画:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_attribute_management_ui_plan_2026-05-28.md`
+- HTML 要約報告:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_report_2026-05-26.html`
+
+## 現時点の実装前提
+- ナレッジシステム本体のソースコードは未共有である。
+- したがって、実装は「後で本体へ移植しやすい独立モジュール」を前提に組み立てる。
+- ICAD ネイティブ抽出コアは `C#` を第一候補とする。
+- 正規化、タグ生成、保存、RAG 連携は `Django(Python)` の service / task 層で扱う。
+- `Python -> C#` は細粒度呼び出しではなく、`1図面 = 1回呼び出し` の一括実行を原則とする。
+- 重い処理は Django の request thread に残さず、非同期ジョブへ逃がす。
+
 ## やり取り項目リスト運用
 - 開発先とのやり取り項目は、`C:\Users\s-iwata\Desktop\knowledge_system\ナレッジシステム_やり取り項目リスト.xlsx` の `検索関連やり取り項目リスト` シートに追記する。
 - 新規追記前に、既存の `No.1` から最新番号までを確認し、完全重複だけでなく、論点の親子関係・未解消確認・再発確認も見て、既存項目へ統合すべきかを判断する。
@@ -156,6 +182,9 @@
 ## 次会話で優先して進めること
 - 2Dビューワーの滑らか表示改善を反映した外部共有用資料として、`ナレッジシステム_第一段階_進捗報告_2Dviewer反映_2026-05-19.pptx` と `ナレッジシステム_第一段階_進捗報告_2Dviewer反映_2026-05-19.pdf` を作成済み。元の `ナレッジシステム_第一段階_進捗報告.pptx` はロックファイルが存在したため未上書き。
 - 2Dビューワー改善済み版の組み込み範囲を、開発先確認事項として整理する。
+- ICAD 3D 抽出 PoC を `C# 抽出コア + Django 連携前提` で具体化する。
+- ICAD 2D 抽出 PoC を同じ境界で具体化する。
+- `図面管理` のタグ・属性正本モデルを、Django app として後移植できる形で設計する。
 - `SMC案件` の 4 段階比較:
   1. 初回曖昧質問
   2. 追撃で用語定義
@@ -166,4 +195,4 @@
 - 結果は `rag_test_summary_2026-04-23.xlsx` に追記する
 
 ## 更新日
-- 2026-05-19 15:42:45 確認時点
+- 2026-05-28 08:45:20 確認時点
