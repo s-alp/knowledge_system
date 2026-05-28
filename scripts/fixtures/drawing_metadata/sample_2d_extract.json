@@ -1,0 +1,58 @@
+{
+  "input_path": "C:\\fixtures\\sample_2d.icd",
+  "source_format": "icad",
+  "source_kind": "2d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 35,
+  "warnings": [
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomFoo"
+    }
+  ],
+  "raw_extract": {
+    "texts": [
+      {
+        "text_lines": ["澁谷工業", "SES"],
+        "line_count": 2,
+        "source_type": "text",
+        "joined_text": "澁谷工業 SES"
+      },
+      {
+        "text_lines": ["ロボット"],
+        "line_count": 1,
+        "source_type": "label",
+        "joined_text": "ロボット"
+      }
+    ],
+    "dimensions": [
+      {
+        "value_1": "100",
+        "value_2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark_2": "M5",
+        "mark_3": null,
+        "summary": "value_1=100; mark_2=M5"
+      }
+    ],
+    "weld_notes": [
+      {
+        "text": "atr_weld=WELD-A"
+      }
+    ],
+    "balloons": [
+      {
+        "text": "txt=B1"
+      }
+    ],
+    "tolerances": [
+      {
+        "text": "atr_geotol=±0.1"
+      }
+    ]
+  }
+}

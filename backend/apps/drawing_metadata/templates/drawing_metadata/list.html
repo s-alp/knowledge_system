@@ -1,0 +1,44 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <table>
+    <thead>
+      <tr>
+        <th>図面ID</th>
+        <th>図面名</th>
+        <th>形式</th>
+        <th>snapshot modes</th>
+        <th>ジョブ状態</th>
+        <th>更新日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for drawing in drawings %}
+        <tr>
+          <td><a href="/drawing-metadata/{{ drawing.id }}/">{{ drawing.id }}</a></td>
+          <td>{{ drawing.filename }}</td>
+          <td>{{ drawing.source_format }}</td>
+          <td>
+            {% for snapshot in drawing.snapshots.all %}
+              <div>{{ snapshot.extraction_mode }}</div>
+            {% empty %}
+              -
+            {% endfor %}
+          </td>
+          <td>
+            {% for job in drawing.jobs.all %}
+              <div><strong>{{ job.extraction_mode }}</strong>: <span class="status-pill">{{ job.status }}</span></div>
+            {% empty %}
+              -
+            {% endfor %}
+          </td>
+          <td>{{ drawing.updated_at }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">登録済み図面はありません。</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

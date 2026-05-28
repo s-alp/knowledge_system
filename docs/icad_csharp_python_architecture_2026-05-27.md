@@ -24,6 +24,8 @@
 - `Python` は抽出後の正規化、タグ生成、保存、RAG 連携、ジョブ制御を担当する。
 - ただし今回の `Python` は単独スクリプトではなく、基本的に `Django の service / task 層` として考える。
 - `Python -> C#` は「細かい API 呼び出し」ではなく、「1図面単位の一括呼び出し」にする。
+- 実装では、`sxnet.dll` 未提供でも先に進められるよう、`C#` 側は **reflection ベース**で組み、`sxnet` への静的参照を避ける。
+- Django / worker は Linux や Docker に載せやすい形にし、`net48` 抽出器は Windows 側へ閉じ込める。
 - 境界の基本方針は以下。
   - C#:
     - ICAD ファイルを開く
@@ -160,6 +162,18 @@
 - 最初の PoC
 - バッチ登録
 - 図面管理の非同期抽出ジョブ
+
+### 2026-05-28 実装反映
+
+- `src/IcadExtraction.Runner`
+  - `extract`
+  - `self-check`
+  を実装済み
+- `src/IcadExtraction.SxNet`
+  - `SxFileModel.open(true)` でモデルを開く経路を採用
+  - 3D は `SxModel.getGlobalWF()` -> `getInfPartTree()` / `getInfExTopPart()`
+  - 2D は `SxModel.getGlobalVS()` -> `getSegList(...)` -> `SxEntSeg.getGeomList(...)`
+- `sxnet.dll` が無い状態でも build/test できるよう、実装は reflection 呼び出しで統一した
 
 ## 7.2 第二候補: Python から C# DLL を呼ぶ
 

@@ -1,0 +1,3948 @@
+{
+  "input_path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452WX90-00-LINER-A3-3D-01.icd",
+  "source_format": "icad",
+  "source_kind": "2d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 1669,
+  "warnings": [
+    {
+      "code": "icad_autostarted",
+      "message": "ICAD was started automatically via C:\\ICADSX\\bin\\icad.exe."
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    },
+    {
+      "code": "unsupported_geometry",
+      "message": "Unhandled geometry type: SxGeomSpline2D"
+    }
+  ],
+  "raw_extract": {
+    "texts": [
+      {
+        "text_lines": [
+          "３"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "３"
+      },
+      {
+        "text_lines": [
+          "ＰＡＲＴ　ＮＯ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＡＲＴ　ＮＯ．"
+      },
+      {
+        "text_lines": [
+          "ＳＩＺＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＩＺＥ"
+      },
+      {
+        "text_lines": [
+          "ＳＣＡＬＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＣＡＬＥ"
+      },
+      {
+        "text_lines": [
+          "ＰＡＲＴ　ＮＡＭＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＡＲＴ　ＮＡＭＥ"
+      },
+      {
+        "text_lines": [
+          "ＤＡＴＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＤＡＴＥ"
+      },
+      {
+        "text_lines": [
+          "ＰＡＩＮＴ　ＯＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＡＩＮＴ　ＯＲ"
+      },
+      {
+        "text_lines": [
+          "ＭＡＴＥＲＩＡＬ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＭＡＴＥＲＩＡＬ"
+      },
+      {
+        "text_lines": [
+          "ＣＡＳＥ　ＤＥＰＴＨ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＡＳＥ　ＤＥＰＴＨ"
+      },
+      {
+        "text_lines": [
+          "ＨＥＡＴ　ＴＲＥＡＴＭＥＮＴ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＨＥＡＴ　ＴＲＥＡＴＭＥＮＴ"
+      },
+      {
+        "text_lines": [
+          "ＰＯＲＴＩＯＮ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＯＲＴＩＯＮ"
+      },
+      {
+        "text_lines": [
+          "ＭＡＳＳ（ｋｇ）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＭＡＳＳ（ｋｇ）"
+      },
+      {
+        "text_lines": [
+          "ＲＥＶＩＳＩＯＮ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＲＥＶＩＳＩＯＮ"
+      },
+      {
+        "text_lines": [
+          "ＡＰＰＬＩＣＡＴＩＯＮ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＡＰＰＬＩＣＡＴＩＯＮ"
+      },
+      {
+        "text_lines": [
+          "ＫＥＳ　Ａ３－２"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＫＥＳ　Ａ３－２"
+      },
+      {
+        "text_lines": [
+          "９１０７"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "９１０７"
+      },
+      {
+        "text_lines": [
+          "ＳＵＲＦＡＣＥ　ＴＲＥＡＴ．　ＣＯＤＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＵＲＦＡＣＥ　ＴＲＥＡＴ．　ＣＯＤＥ"
+      },
+      {
+        "text_lines": [
+          "３ＲＤ　ＡＮＧＬＥ　Ｐ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "３ＲＤ　ＡＮＧＬＥ　Ｐ．"
+      },
+      {
+        "text_lines": [
+          "ＣＯＤＥ　ＮＯ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＯＤＥ　ＮＯ．"
+      },
+      {
+        "text_lines": [
+          "ＤＵＰＬＩ－"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＤＵＰＬＩ－"
+      },
+      {
+        "text_lines": [
+          "ＣＡＴＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＡＴＥ"
+      },
+      {
+        "text_lines": [
+          "ＣＨＩＥＦ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＨＩＥＦ"
+      },
+      {
+        "text_lines": [
+          "ＤＥＳＩＧＮＥＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＤＥＳＩＧＮＥＲ"
+      },
+      {
+        "text_lines": [
+          "ＰＲＯＪＥＣＴ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＲＯＪＥＣＴ"
+      },
+      {
+        "text_lines": [
+          "ＭＡＮＡＧＥＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＭＡＮＡＧＥＲ"
+      },
+      {
+        "text_lines": [
+          "ＤＥＳＩＧＮＥＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＤＥＳＩＧＮＥＲ"
+      },
+      {
+        "text_lines": [
+          "ＣＨＥＣＫＥＤ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＨＥＣＫＥＤ"
+      },
+      {
+        "text_lines": [
+          "ＢＹ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＢＹ"
+      },
+      {
+        "text_lines": [
+          "ＣＯＰＩＥＤ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＯＰＩＥＤ"
+      },
+      {
+        "text_lines": [
+          "ＢＹ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＢＹ"
+      },
+      {
+        "text_lines": [
+          "ＤＲＡＷＮ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＤＲＡＷＮ"
+      },
+      {
+        "text_lines": [
+          "ＢＹ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＢＹ"
+      },
+      {
+        "text_lines": [
+          "Ｑ’ＴＹ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｑ’ＴＹ"
+      },
+      {
+        "text_lines": [
+          "ＡＰＰＲＯＶＡＬ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＡＰＰＲＯＶＡＬ"
+      },
+      {
+        "text_lines": [
+          "ＳＩＭＩＬＡＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＩＭＩＬＡＲ"
+      },
+      {
+        "text_lines": [
+          "ＰＡＲＴＳ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＡＲＴＳ"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１"
+      },
+      {
+        "text_lines": [
+          "１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１"
+      },
+      {
+        "text_lines": [
+          "１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "４"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "４"
+      },
+      {
+        "text_lines": [
+          "２"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "２"
+      },
+      {
+        "text_lines": [
+          "３"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "３"
+      },
+      {
+        "text_lines": [
+          "１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１"
+      },
+      {
+        "text_lines": [
+          "ＩＣＡＤ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＩＣＡＤ"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｐ１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｐ１"
+      },
+      {
+        "text_lines": [
+          "１：１"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "１：１"
+      },
+      {
+        "text_lines": [
+          "－－－"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "－－－"
+      },
+      {
+        "text_lines": [
+          "－－－"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "－－－"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｄｓｎｒ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｄｓｎｒ"
+      },
+      {
+        "text_lines": [
+          "Ｍｇｒ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｍｇｒ．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｄｓｎｒ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｄｓｎｒ"
+      },
+      {
+        "text_lines": [
+          "Ｍｇｒ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｍｇｒ．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｄｓｎｒ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｄｓｎｒ"
+      },
+      {
+        "text_lines": [
+          "Ｍｇｒ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｍｇｒ．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｄｓｎｒ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｄｓｎｒ"
+      },
+      {
+        "text_lines": [
+          "Ｍｇｒ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｍｇｒ．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "Ｄｓｎｒ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｄｓｎｒ"
+      },
+      {
+        "text_lines": [
+          "Ｍｇｒ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｍｇｒ．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "．"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　２０００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　２０００"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　４０００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　４０００"
+      },
+      {
+        "text_lines": [
+          "ＦＯＲ　ＭＡＣＨＩＮＩＮＧ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＦＯＲ　ＭＡＣＨＩＮＩＮＧ"
+      },
+      {
+        "text_lines": [
+          "ＧＥＮＥＲＡＬ　ＴＯＬＥＲＡＮＣＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＧＥＮＥＲＡＬ　ＴＯＬＥＲＡＮＣＥ"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　１２０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　１２０"
+      },
+      {
+        "text_lines": [
+          "±０．５"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±０．５"
+      },
+      {
+        "text_lines": [
+          "±２"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±２"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　４００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　４００"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　１０００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　１０００"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　２０００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　２０００"
+      },
+      {
+        "text_lines": [
+          "±１．２"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±１．２"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　１０００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　１０００"
+      },
+      {
+        "text_lines": [
+          "±０．８"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±０．８"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　　４００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　　４００"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　　３０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　　３０"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　１２０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　１２０"
+      },
+      {
+        "text_lines": [
+          "±０．３"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±０．３"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　　６"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　　６"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　３０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　３０"
+      },
+      {
+        "text_lines": [
+          "±０．２"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±０．２"
+      },
+      {
+        "text_lines": [
+          "ＴＯ　　６"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯ　　６"
+      },
+      {
+        "text_lines": [
+          "±０．1"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "±０．1"
+      },
+      {
+        "text_lines": [
+          "ＯＶＥＲ　０．５"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＯＶＥＲ　０．５"
+      },
+      {
+        "text_lines": [
+          "ＲＡＮＧＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＲＡＮＧＥ"
+      },
+      {
+        "text_lines": [
+          "ＴＯＬＥＲＡＮＣＥ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＴＯＬＥＲＡＮＣＥ"
+      },
+      {
+        "text_lines": [
+          "ＧＥＮＥＲＡＬ　ＴＯＬＥＲＡＮＣＥ　ＳＨＡＬＬ　ＣＯＮＦＯＲＭ　ＴＯ　ＮＴＳ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＧＥＮＥＲＡＬ　ＴＯＬＥＲＡＮＣＥ　ＳＨＡＬＬ　ＣＯＮＦＯＲＭ　ＴＯ　ＮＴＳ"
+      },
+      {
+        "text_lines": [
+          "ＳＳ４００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＳ４００"
+      },
+      {
+        "text_lines": [
+          "ＣＡＤ図面手書き変更不可"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＣＡＤ図面手書き変更不可"
+      },
+      {
+        "text_lines": [
+          "ＲＥＶＩＳＥ　ＯＮＬＹ　ＯＮ　ＣＡＤ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＲＥＶＩＳＥ　ＯＮＬＹ　ＯＮ　ＣＡＤ"
+      },
+      {
+        "text_lines": [
+          "コマツＮＴＣ株式会社はこの図面および図面に開示された技術情報に関する権利を所有し、"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "コマツＮＴＣ株式会社はこの図面および図面に開示された技術情報に関する権利を所有し、"
+      },
+      {
+        "text_lines": [
+          "当社の事前の許可なく、その全部又は一部を問わず第三者に開示してはならない。"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "当社の事前の許可なく、その全部又は一部を問わず第三者に開示してはならない。"
+      },
+      {
+        "text_lines": [
+          "Komatsu NTC Ltd. has the property of this drawing and the design shown in it."
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Komatsu NTC Ltd. has the property of this drawing and the design shown in it."
+      },
+      {
+        "text_lines": [
+          "Any part of this drawing and design shall not be disclosed to any third party"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Any part of this drawing and design shall not be disclosed to any third party"
+      },
+      {
+        "text_lines": [
+          "without prior permission of Komatsu NTC Ltd."
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "without prior permission of Komatsu NTC Ltd."
+      },
+      {
+        "text_lines": [
+          "ＳＣＡＮ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＳＣＡＮ"
+      },
+      {
+        "text_lines": [
+          "×"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "×"
+      },
+      {
+        "text_lines": [
+          "ＧＲＯＵＰ＝Ｊ：￥ＮＴＣ￥コマツＮＴＣ新システム＿ＧＤＭＳ￥ＮＴＣ新図枠（ＫＥＳ準拠）　ＤＷＧ＝統一図枠Ａ３　ＤＡＴＥ＝１７／１０／２０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＧＲＯＵＰ＝Ｊ：￥ＮＴＣ￥コマツＮＴＣ新システム＿ＧＤＭＳ￥ＮＴＣ新図枠（ＫＥＳ準拠）　ＤＷＧ＝統一図枠Ａ３　ＤＡＴＥ＝１７／１０／２０"
+      },
+      {
+        "text_lines": [
+          "指定外各稜Ｃ０．５"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "指定外各稜Ｃ０．５"
+      },
+      {
+        "text_lines": [
+          "Ｒａ２５"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｒａ２５"
+      },
+      {
+        "text_lines": [
+          "（"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "（"
+      },
+      {
+        "text_lines": [
+          "）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "）"
+      },
+      {
+        "text_lines": [
+          "ＦＴＬ－２０３３ＣＨ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＦＴＬ－２０３３ＣＨ"
+      },
+      {
+        "text_lines": [
+          "往蔵"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "往蔵"
+      },
+      {
+        "text_lines": [
+          "高井"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "高井"
+      },
+      {
+        "text_lines": [
+          "吉澤"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "吉澤"
+      },
+      {
+        "text_lines": [
+          "神田"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "神田"
+      },
+      {
+        "text_lines": [
+          "（ＡＰ）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "（ＡＰ）"
+      },
+      {
+        "text_lines": [
+          "－"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "－"
+      },
+      {
+        "text_lines": [
+          "ＬＩＮＥＲ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＬＩＮＥＲ"
+      },
+      {
+        "text_lines": [
+          "ＰＲＥＰＡＲＥＤ　ＦＯＲ　ＦＴＬ－２０３３ＣＨ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＰＲＥＰＡＲＥＤ　ＦＯＲ　ＦＴＬ－２０３３ＣＨ"
+      },
+      {
+        "text_lines": [
+          "ＦＴＬ－２０３３ＣＨ用として作製　　　　　　　　元図品番；"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "ＦＴＬ－２０３３ＣＨ用として作製　　　　　　　　元図品番；"
+      },
+      {
+        "text_lines": [
+          "岩田"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "岩田"
+      },
+      {
+        "text_lines": [
+          "９ＮＫ－４５２－ＷＸ９０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "９ＮＫ－４５２－ＷＸ９０"
+      },
+      {
+        "text_lines": [
+          "９ＮＫ－４５２－ＷＸ９０"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "９ＮＫ－４５２－ＷＸ９０"
+      },
+      {
+        "text_lines": [
+          "０．１８"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "０．１８"
+      },
+      {
+        "text_lines": [
+          "Ｘ５７－ＡＫ４５ＧＣ０－０Ｊ：０６３０：ＦＩＸＴＵＲＥ　Ａ．"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "Ｘ５７－ＡＫ４５ＧＣ０－０Ｊ：０６３０：ＦＩＸＴＵＲＥ　Ａ．"
+      },
+      {
+        "text_lines": [
+          "’２１．０８．０４"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "joined_text": "’２１．０８．０４"
+      }
+    ],
+    "dimensions": [],
+    "geometry_primitives": [
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=188; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=188; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=178; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=178; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=18; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=18; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=18; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=18; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=18; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=49; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=49; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=49; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=49; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=10; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=10; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=61; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=13; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=25; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=25; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=13; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=13; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=13; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=13; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=10; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82835641; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82835641; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82835641; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82835641; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=25; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=35; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=188; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.06225775; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.06225775; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=17.024; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=6.1796; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=60; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=5.00006; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82845541; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82845541; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=5.00002; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82835641; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82834934; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82772011; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=7; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.82842712; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=178; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=10; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=4.9411; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.006; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1; type=2"
+      },
+      {
+        "geometry_type": "SxGeomCircle2D",
+        "summary": "radius=2; type=4"
+      },
+      {
+        "geometry_type": "SxGeomCircle2D",
+        "summary": "radius=1; type=4"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=153; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=398; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=283; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=398; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=283; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=14; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=14; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=14; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=14; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=138; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=14; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=177.9999; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=178; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=142; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=8.5; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.16665166; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2478549; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.20382804; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.8; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=168.890904610873; eang=11.109095389127; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.83637338; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.01507687; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=167.575547922491; eang=12.4244520775092; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05870248; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=180.000000000002; eang=8.54693877331466; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=252.991359191598; eang=17.0086408084014; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.67123632; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.14251676; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=260.708804743162; eang=9.29119525683815; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.39406754; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=270; eang=6.29886345814905; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.08153122; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=180; eang=9.99508112447025; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.01500631; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19159836; sang=180; eang=13.6307665761227; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44593646; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.60433091; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.74492554; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19159836; sang=346.637818670464; eang=13.3621813295357; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.78755154; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.29149406; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.72; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.60035596; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.72; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.40873662; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.59299288; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.96; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.77190388; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.96; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.72; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.72022423; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.44657476; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=270.000000000039; eang=7.28365837961054; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=260.927734832535; eang=9.07226516746385; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=260.243115665506; eang=9.75688433449417; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=270; eang=15.7528246403338; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.09270153; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.7049203; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.88; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.0950797; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.38790367; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.54909309; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.39406754; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.67452449; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.69609727; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.44038481; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.80172362; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.46201022; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.35230958; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.17875539; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.81531215; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.09722417; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.29535332; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.54; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.84; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.84; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=83.0978628229028; eang=6.90213717709805; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36931911; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=70.6038457495141; eang=19.3961542504842; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.14408046; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.68525304; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.0700471; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.71243011; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.09722417; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.10517904; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.73730599; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.82910474; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.80232148; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2413324; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.69370077; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.60238581; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.1311086; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.48242069; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62335545; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.06522497; sang=90.0000000000007; eang=11.5344846461913; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.06522497; sang=79.668543434912; eang=10.3314565650873; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=147.11418737356; eang=32.88581262644; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.35897568; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.22162541; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.94342519; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=90.0000000000004; eang=63.4622443415683; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=19.742310385219; eang=70.257689614781; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.80154191; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.75301012; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=0; eang=9.9886129817248; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18231887; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=90.0000000000004; eang=63.4622443415683; type=5"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.19567492; sang=19.742310385219; eang=70.257689614781; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.8354822; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.75301012; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.1914001; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.10478204; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.44157742; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.74195558; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2997241; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.44111211; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2997241; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.21741657; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.00162341; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18334903; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.20382804; sang=349.959341238914; eang=10.0406587610856; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2602866; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05435414; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36293095; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.33054004; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.06519589; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.19655276; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05011192; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.07290148; sang=169.20681040426; eang=10.7931895957404; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.16822478; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.31378094; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.58056102; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.40271663; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.5882905; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.15237807; sang=180; eang=13.5592374444007; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.12445602; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.1150806; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.15626816; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.13569296; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18487023; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.09932859; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.54; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.1400942; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.16498239; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2556509; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62528681; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.23043672; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.34392224; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.88; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.88; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18296423; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.73232005; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.28579944; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.52396564; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.76213184; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.00029804; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.23846424; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.2585222; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.31144056; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.87149561; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.46968158; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.06972508; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36543936; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.66115365; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.95686793; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.25258222; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.5482965; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.63092112; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36397714; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.25429021; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.59845809; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.39049484; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.34436036; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.24297046; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.4; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.39049484; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.34436036; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.24297046; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36397714; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.25099723; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.32311461; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.25099723; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.32311461; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18231887; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.81819519; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.15997592; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.34390902; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44954487; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.48564389; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42367239; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.53339242; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.43864853; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.56677355; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.43027504; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42292052; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.49796174; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.33638966; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.26827258; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.14494754; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.75772639; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.93070632; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.05175606; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.58952528; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.46303483; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.65939698; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.51593114; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.7258808; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.19092167; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.01222795; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.75453907; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.60009203; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.48177881; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.66246851; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.60208108; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.48991593; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.4313015; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.43908301; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.39927313; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.30861878; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44593646; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44593646; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44593646; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.52794908; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.73756544; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.92264571; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.04879136; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.58555166; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.40765608; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.39399048; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42128102; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.54905291; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62023758; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.65515796; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36787266; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36834552; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.47196923; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.34324497; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.08008547; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42557371; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.38871691; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.38047901; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.42103242; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.35824774; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.32883154; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.56859505; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.24939817; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.40941473; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44593646; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18633913; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.27144537; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36448546; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05435414; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05435414; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.1184542; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.18334903; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.2602866; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.05435414; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.3048989; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.77731944; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.02649614; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.19211803; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.56329562; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.55014849; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.56329562; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.35761867; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36251201; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.35877389; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.36246093; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62044705; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.64627505; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.64599369; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.54229682; type=2"
+      },
+      {
+        "geometry_type": "SxGeomArc2D",
+        "summary": "radius=0.06; sang=270; eang=90; type=5"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.44047901; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.09460014; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.68911257; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.31484759; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.34576371; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.28801419; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.87964404; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.07126338; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.28594965; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.44762848; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.66147133; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.63153081; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.60159028; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.57164976; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.54170924; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.3; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.3; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.73952042; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.95407687; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.07232654; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.14477492; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.22967327; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.71472242; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.61818155; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.60000548; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62677031; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.34093983; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.83994454; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.11031567; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.28132253; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.17321156; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6972355; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.61412899; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.62436085; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.9223956; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.14457108; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.0823704; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.97433697; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.77616117; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.82881475; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.96956404; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.25581517; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.32107795; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.40363384; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=1.95985894; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.284941; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=2.44275472; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.97834976; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.44503356; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.38598477; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.32255551; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.72736972; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.69734058; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=3.48; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=0.6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=71; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=177.9999; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=27; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=6; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=9.23760431; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=12.60113001; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=4.04145188; type=2"
+      },
+      {
+        "geometry_type": "SxGeomLine2D",
+        "summary": "leng=4.04145188; type=2"
+      }
+    ],
+    "weld_notes": [],
+    "balloons": [],
+    "tolerances": []
+  }
+}

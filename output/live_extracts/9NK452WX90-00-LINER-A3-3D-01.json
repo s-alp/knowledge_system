@@ -1,0 +1,31 @@
+{
+  "input_path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452WX90-00-LINER-A3-3D-01.icd",
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 1433,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "9NK452WX90-00-LINER-A3-3D-01",
+      "comment": null,
+      "ex_info": null
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "9NK452WX90-00-LINER-A3-3D-01"
+        ],
+        "name": "9NK452WX90-00-LINER-A3-3D-01",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      }
+    ]
+  }
+}

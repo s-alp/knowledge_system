@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+      gunicorn knowledge_system_backend.wsgi:application --bind 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    working_dir: /app/backend
+    volumes:
+      - drawing-metadata-data:/app/backend/var
+    env_file:
+      - backend/.env
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py process_drawing_metadata_jobs --loop --sleep-seconds 5"
+    working_dir: /app/backend
+    volumes:
+      - drawing-metadata-data:/app/backend/var
+    env_file:
+      - backend/.env
+
+volumes:
+  drawing-metadata-data:

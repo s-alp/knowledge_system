@@ -1,0 +1,2122 @@
+{
+  "input_path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452RS60-03-CASSETTE-A0-3D-01.icd",
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 1787,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "9NK452RS60-03-CASSETTE-A0-3D-01",
+      "comment": null,
+      "ex_info": null
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01"
+        ],
+        "name": "9NK452RS60-03-CASSETTE-A0-3D-01",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート"
+        ],
+        "name": "@ポート",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "COOLANT"
+        ],
+        "name": "COOLANT",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Bポート_アンクランプ+リフタUP"
+        ],
+        "name": "Fr_Bポート_アンクランプ+リフタUP",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Bポート_アンクランプ+リフタUP",
+          "リフター上昇"
+        ],
+        "name": "リフター上昇",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_C_アンクランプ検知+リフタUP検知"
+        ],
+        "name": "Fr_C_アンクランプ検知+リフタUP検知",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Dポート_横押し（短手）"
+        ],
+        "name": "Fr_Dポート_横押し（短手）",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Eポート_クランプ検知"
+        ],
+        "name": "Fr_Eポート_クランプ検知",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Fポート_FC4(長手+短手）"
+        ],
+        "name": "Fr_Fポート_FC4(長手+短手）",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Hポート_FC2"
+        ],
+        "name": "Fr_Hポート_FC2",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Jポート_SUB_NATURAL"
+        ],
+        "name": "Fr_Jポート_SUB_NATURAL",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Kポート_ナチュラル"
+        ],
+        "name": "Fr_Kポート_ナチュラル",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Lポート_ワーク検知"
+        ],
+        "name": "Fr_Lポート_ワーク検知",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Mポート_クランプ"
+        ],
+        "name": "Fr_Mポート_クランプ",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Fr_Nポート_FC3_OP10-1"
+        ],
+        "name": "Fr_Nポート_FC3_OP10-1",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Re_Aポート_横押し（長手）"
+        ],
+        "name": "Re_Aポート_横押し（長手）",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Re_Bポート_パレットエアブロー→TS"
+        ],
+        "name": "Re_Bポート_パレットエアブロー→TS",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Re_Cポート_リフター下降"
+        ],
+        "name": "Re_Cポート_リフター下降",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "Re_Mポート_FC1"
+        ],
+        "name": "Re_Mポート_FC1",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "@ポート",
+          "排気"
+        ],
+        "name": "排気",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH01ZZZ"
+        ],
+        "name": "9UXPH01ZZZ",
+        "comment": "1/8_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH02ZZZ"
+        ],
+        "name": "9UXPH02ZZZ",
+        "comment": "PLUG_1/4_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      },
+      {
+        "tree_path": [
+          "9NK452RS60-03-CASSETTE-A0-3D-01",
+          "9UXPH02ZZZ"
+        ],
+        "name": "9UXPH02ZZZ",
+        "comment": "PLUG_1/4_SEALED",
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      }
+    ]
+  }
+}

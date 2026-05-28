@@ -216,6 +216,20 @@ viewer の `DrawingOverviewPanel` を参考に、以下を表示する。
 - 再抽出 API
 - ジョブ状態 API
 
+### 2026-05-28 実装反映
+
+- 今回は first step として Django template で以下を実装済み
+  - `/drawing-metadata/`
+  - `/drawing-metadata/{drawing_id}/`
+  - `/drawing-metadata/jobs/{job_id}/`
+- 役割:
+  - 一覧
+  - 詳細確認
+  - 手動補正 JSON 保存
+  - 再抽出起票
+  - ジョブエラー確認
+- 本体へ移植する段階で React / 既存画面へ載せ替えてもよいが、まずは backend 契約の確認を優先する
+
 ### 最小構成
 
 - 一覧

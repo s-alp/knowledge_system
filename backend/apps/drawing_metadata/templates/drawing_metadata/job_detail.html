@@ -1,0 +1,25 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <div class="panel">
+    <h2>ジョブ詳細</h2>
+    <div class="grid">
+      <div><strong>ジョブID</strong><div>{{ job.id }}</div></div>
+      <div><strong>図面</strong><div><a href="/drawing-metadata/{{ job.drawing.id }}/">{{ job.drawing.filename }}</a></div></div>
+      <div><strong>mode</strong><div>{{ job.extraction_mode }}</div></div>
+      <div><strong>状態</strong><div>{{ job.status }}</div></div>
+      <div><strong>Worker</strong><div>{{ job.worker_name }}</div></div>
+      <div><strong>Retry</strong><div>{{ job.retry_count }}</div></div>
+      <div><strong>Lease</strong><div>{{ job.lease_expires_at }}</div></div>
+      <div><strong>Extractor</strong><div>{{ job.extractor_name }} {{ job.extractor_version }}</div></div>
+      <div><strong>開始</strong><div>{{ job.started_at }}</div></div>
+      <div><strong>終了</strong><div>{{ job.finished_at }}</div></div>
+      <div><strong>Elapsed</strong><div>{{ job.elapsed_ms }}</div></div>
+      <div><strong>Schema</strong><div>{{ job.schema_version }}</div></div>
+    </div>
+    <h3>Warnings</h3>
+    <pre>{{ job.warnings_json|pprint }}</pre>
+    <h3>Error</h3>
+    <pre>{{ job.error_message }}</pre>
+  </div>
+{% endblock %}

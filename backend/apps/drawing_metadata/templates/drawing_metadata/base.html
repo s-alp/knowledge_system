@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Drawing Metadata</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 24px; color: #222; }
+      table { border-collapse: collapse; width: 100%; margin-bottom: 24px; }
+      th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+      th { background: #f5f5f5; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 24px; }
+      .panel { border: 1px solid #ddd; padding: 16px; border-radius: 6px; background: #fff; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+      textarea { width: 100%; min-height: 220px; font-family: Consolas, monospace; }
+      pre { white-space: pre-wrap; word-break: break-word; background: #f8f8f8; border: 1px solid #ddd; padding: 12px; border-radius: 6px; }
+      .status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #ececec; }
+      .messages { list-style: none; padding: 0; }
+      .messages li { margin-bottom: 8px; padding: 10px 12px; background: #eef7ff; border: 1px solid #cfe5ff; border-radius: 6px; }
+      a { color: #0a58ca; text-decoration: none; }
+      button { padding: 8px 14px; }
+      input[type="text"] { width: 100%; padding: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1><a href="/drawing-metadata/">Drawing Metadata</a></h1>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </body>
+</html>

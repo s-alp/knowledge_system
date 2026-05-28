@@ -28,6 +28,22 @@
 }
 ```
 
+### 2026-05-28 実装反映
+
+- 実装では `extractor_name=icad-csharp-extractor`
+- `extractor_version=1.0.0`
+- JSON 出力は `SnakeCaseNamingStrategy` で統一
+- `warnings` は以下の形を基本にする
+
+```json
+[
+  {
+    "code": "unsupported_geometry",
+    "message": "Unhandled geometry type: SxGeomFoo"
+  }
+]
+```
+
 ### 必須項目
 
 - `input_path`
@@ -86,6 +102,11 @@
       "lower_tol": "string|null",
       "mark_2": "string|null",
       "mark_3": "string|null"
+    }
+  ],
+  "tolerances": [
+    {
+      "text": "string"
     }
   ],
   "weld_notes": [
@@ -244,3 +265,4 @@
 - スキーマは `生抽出` と `意味付け済みデータ` を必ず分ける。
 - C# は `raw_extract` まで、Django は `canonical_attributes` 以降を主担当にする。
 - この形にすると、抽出ロジック改善とタグ付与ルール改善を独立して回せる。
+- 2D の未検証 geometry は warning で明示し、黙って捨てない。

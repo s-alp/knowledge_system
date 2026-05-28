@@ -1,0 +1,29 @@
+{
+  "input_path": "C:\\fixtures\\sample_3d.icd",
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 42,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "KO小山ガントリー",
+      "comment": "top comment",
+      "ex_info": "コマツ小山 ガントリー SMC"
+    },
+    "parts": [
+      {
+        "tree_path": ["KO小山ガントリー", "UnitA"],
+        "name": "SMC CYLINDER",
+        "comment": "ガントリー用アクチュエータ",
+        "ref_model_name": "unit_a_ref",
+        "ref_model_path": "C:\\ref\\unit_a_ref.icd",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false
+      }
+    ]
+  }
+}

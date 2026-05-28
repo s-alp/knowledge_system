@@ -1,0 +1,134 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <div class="grid">
+    <div class="panel">
+      <strong>図面ID</strong>
+      <div>{{ drawing.id }}</div>
+    </div>
+    <div class="panel">
+      <strong>図面名</strong>
+      <div>{{ drawing.filename }}</div>
+    </div>
+    <div class="panel">
+      <strong>保存元</strong>
+      <div>{{ drawing.source_path }}</div>
+    </div>
+    <div class="panel">
+      <strong>形式</strong>
+      <div>{{ drawing.source_format }}</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>統合結果</h2>
+    <pre>{{ composed_metadata|pprint }}</pre>
+  </div>
+
+  <div class="actions">
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="extract" />
+      <input type="hidden" name="extraction_mode" value="2d" />
+      <button type="submit">2D 再抽出</button>
+    </form>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="extract" />
+      <input type="hidden" name="extraction_mode" value="3d" />
+      <button type="submit">3D 再抽出</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>2D 抽出</h2>
+    {% if snapshot_2d %}
+      {% if snapshot_2d.latest_job %}
+        <p><a href="/drawing-metadata/jobs/{{ snapshot_2d.latest_job.id }}/">最新 2D ジョブを見る</a></p>
+      {% endif %}
+      <h3>正規化属性</h3>
+      <pre>{{ snapshot_2d.canonical_attributes_json|pprint }}</pre>
+      <h3>派生タグ</h3>
+      <pre>{{ snapshot_2d.derived_tags_json|pprint }}</pre>
+      <h3>生抽出</h3>
+      <pre>{{ snapshot_2d.raw_extract_json|pprint }}</pre>
+      <h3>手動補正</h3>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="override" />
+        <input type="hidden" name="extraction_mode" value="2d" />
+        <label for="reason_2d">補正理由</label>
+        <input id="reason_2d" type="text" name="reason" value="" />
+        <label for="manual_overrides_json_2d">manual_overrides JSON</label>
+        <textarea id="manual_overrides_json_2d" name="manual_overrides_json">{{ manual_overrides_pretty_2d }}</textarea>
+        <div style="margin-top: 12px;">
+          <button type="submit">2D 補正保存</button>
+        </div>
+      </form>
+    {% else %}
+      <p>2D snapshot は未生成です。</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>3D 抽出</h2>
+    {% if snapshot_3d %}
+      {% if snapshot_3d.latest_job %}
+        <p><a href="/drawing-metadata/jobs/{{ snapshot_3d.latest_job.id }}/">最新 3D ジョブを見る</a></p>
+      {% endif %}
+      <h3>正規化属性</h3>
+      <pre>{{ snapshot_3d.canonical_attributes_json|pprint }}</pre>
+      <h3>派生タグ</h3>
+      <pre>{{ snapshot_3d.derived_tags_json|pprint }}</pre>
+      <h3>生抽出</h3>
+      <pre>{{ snapshot_3d.raw_extract_json|pprint }}</pre>
+      <h3>手動補正</h3>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="override" />
+        <input type="hidden" name="extraction_mode" value="3d" />
+        <label for="reason_3d">補正理由</label>
+        <input id="reason_3d" type="text" name="reason" value="" />
+        <label for="manual_overrides_json_3d">manual_overrides JSON</label>
+        <textarea id="manual_overrides_json_3d" name="manual_overrides_json">{{ manual_overrides_pretty_3d }}</textarea>
+        <div style="margin-top: 12px;">
+          <button type="submit">3D 補正保存</button>
+        </div>
+      </form>
+    {% else %}
+      <p>3D snapshot は未生成です。</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>ジョブ履歴</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ジョブID</th>
+          <th>mode</th>
+          <th>状態</th>
+          <th>worker</th>
+          <th>開始</th>
+          <th>終了</th>
+          <th>エラー</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in jobs %}
+          <tr>
+            <td><a href="/drawing-metadata/jobs/{{ job.id }}/">{{ job.id }}</a></td>
+            <td>{{ job.extraction_mode }}</td>
+            <td>{{ job.status }}</td>
+            <td>{{ job.worker_name }}</td>
+            <td>{{ job.started_at }}</td>
+            <td>{{ job.finished_at }}</td>
+            <td>{{ job.error_message|default:"" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7">ジョブ履歴はありません。</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
