@@ -10,6 +10,7 @@ from django.views import View
 
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.display import build_3d_snapshot_display, build_composed_display_payload
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 
 
@@ -39,6 +40,7 @@ class RegistrationDetailPageView(View):
         snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in drawing.snapshots.all()}
         snapshot_2d = snapshots_by_mode.get("2d")
         snapshot_3d = snapshots_by_mode.get("3d")
+        composed_metadata = compose_drawing_metadata(drawing)
 
         return render(
             request,
@@ -49,7 +51,16 @@ class RegistrationDetailPageView(View):
                 "snapshots_by_mode": snapshots_by_mode,
                 "snapshot_2d": snapshot_2d,
                 "snapshot_3d": snapshot_3d,
-                "composed_metadata": compose_drawing_metadata(drawing),
+                "composed_metadata": composed_metadata,
+                "composed_display": build_composed_display_payload(composed_metadata),
+                "snapshot_3d_display": (
+                    build_3d_snapshot_display(
+                        raw_extract=snapshot_3d.raw_extract_json,
+                        canonical_attributes=snapshot_3d.canonical_attributes_json,
+                    )
+                    if snapshot_3d
+                    else None
+                ),
                 "manual_overrides_pretty_2d": json.dumps(
                     snapshot_2d.manual_overrides_json if snapshot_2d else {},
                     ensure_ascii=False,

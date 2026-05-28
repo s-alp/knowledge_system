@@ -21,8 +21,65 @@
   </div>
 
   <div class="panel">
-    <h2>統合結果</h2>
-    <pre>{{ composed_metadata|pprint }}</pre>
+    <h2>{{ composed_display.title }}</h2>
+    <p class="muted">viewer 詳細と RAG が参照する統合属性の確認用サマリです。詳細な根拠は 2D / 3D 抽出欄で確認します。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in composed_display.summaryRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>派生タグ</h3>
+    {% if composed_display.tags %}
+      <ul class="compact-list">
+        {% for tag in composed_display.tags %}
+          <li>{{ tag }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>派生タグはありません。</p>
+    {% endif %}
+
+    <h3>競合した属性</h3>
+    {% if composed_display.conflicts %}
+      <table>
+        <thead>
+          <tr>
+            <th>属性</th>
+            <th>2D 値</th>
+            <th>3D 値</th>
+            <th>採用</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for conflict in composed_display.conflicts %}
+            <tr>
+              <td>{{ conflict.attribute }}</td>
+              <td>{{ conflict.mode2dValue }}</td>
+              <td>{{ conflict.mode3dValue }}</td>
+              <td>{{ conflict.chosenMode }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>競合はありません。</p>
+    {% endif %}
+
+    {% if composed_display.hiddenKeys %}
+      <p class="muted">統合サマリでは巨大配列を省略しています: {{ composed_display.hiddenKeys|join:", " }}</p>
+    {% endif %}
   </div>
 
   <div class="actions">
@@ -73,6 +130,49 @@
   <div class="panel">
     <h2>3D 抽出</h2>
     {% if snapshot_3d %}
+      <p class="muted">raw / canonical から確認用に組み立てたサマリです。図面によっては疎い抽出結果になるため、件数とサンプルを先に確認します。</p>
+      <h3>確認サマリ</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_3d_display.summaryRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>部品ツリーパスの先頭サンプル</h3>
+      {% if snapshot_3d_display.partTreePaths %}
+        <ul class="compact-list">
+          {% for part_tree_path in snapshot_3d_display.partTreePaths %}
+            <li>{{ part_tree_path }}</li>
+          {% endfor %}
+        </ul>
+        <p class="muted">{{ snapshot_3d_display.partTreePathTotal }} 件中 {{ snapshot_3d_display.partTreePaths|length }} 件を表示しています。</p>
+      {% else %}
+        <p>部品ツリーパスはありません。</p>
+      {% endif %}
+
+      <h3>参照モデル名の先頭サンプル</h3>
+      {% if snapshot_3d_display.refModelNames %}
+        <ul class="compact-list">
+          {% for ref_model_name in snapshot_3d_display.refModelNames %}
+            <li>{{ ref_model_name }}</li>
+          {% endfor %}
+        </ul>
+        <p class="muted">{{ snapshot_3d_display.refModelNameTotal }} 件中 {{ snapshot_3d_display.refModelNames|length }} 件を表示しています。</p>
+      {% else %}
+        <p>参照モデル名はありません。</p>
+      {% endif %}
+
       {% if snapshot_3d.latest_job %}
         <p><a href="/drawing-metadata/jobs/{{ snapshot_3d.latest_job.id }}/">最新 3D ジョブを見る</a></p>
       {% endif %}
