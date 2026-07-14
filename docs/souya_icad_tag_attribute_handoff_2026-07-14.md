@@ -144,6 +144,21 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
   - `viewerBootstrap.availability.has3d=true`
   - `ragPayload.schemaVersion=drawing_metadata_rag_payload.v1`
 
+抽出済みJSONをローカルDBへ再投入するため、`import_drawing_metadata_extracts` 管理コマンドを追加した。既存の保存serviceを通すため、`RegisteredDrawing`、2D/3D snapshot、latest job、audit log が揃う。ICADを再起動せず、共有済み抽出JSONから詳細画面/API/fixtureを再検証できる。
+
+```powershell
+python backend\manage.py import_drawing_metadata_extracts path\to\sample_2d.json path\to\sample_3d.json
+```
+
+同日に代表3図面の2D/3D抽出JSONを取り込み直し、fixtureを再生成した。
+
+- 再生成後の出力件数: 14図面
+- `knowledgeSystemPayloadPreview` 候補あり: 4図面
+- 代表候補数:
+  - `CAA5012-02430002P1R1.icd`: 図面 attrs=1/tags=3、製品 attrs=1、部品 attrs=2、プロジェクト attrs=1
+  - `DFR-CM1-AA0305300011.icd`: 図面 attrs=2/tags=2、製品 attrs=1、部品 attrs=3/tags=1、プロジェクト attrs=1
+  - `TR1D9K99027.icd`: 図面 attrs=2/tags=4、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1
+
 同日にローカルDjangoを `http://127.0.0.1:8001` で起動し、実HTTPでも確認した。
 
 - `GET /drawing-metadata/`: HTTP 200

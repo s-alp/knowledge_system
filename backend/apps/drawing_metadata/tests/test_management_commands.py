@@ -4,7 +4,7 @@ import json
 import pytest
 from django.core.management import call_command
 
-from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 
 
 @pytest.mark.django_db
@@ -92,3 +92,68 @@ def test_export_drawing_metadata_fixtures_writes_handoff_payload(tmp_path):
     assert item["ragPayload"]["preFilters"]["customerName"] == "澁谷工業"
     assert item["ragPayload"]["rankingSignals"]["partNames"] == ["PART-A"]
     assert "exported 1 drawing fixture" in stdout.getvalue()
+
+
+@pytest.mark.django_db
+def test_import_drawing_metadata_extracts_imports_2d_and_3d_snapshots(tmp_path):
+    source_path = r"J:\SAMPLE\BRACKET.icd"
+    payload_2d = {
+        "input_path": source_path,
+        "source_format": "icad",
+        "source_kind": "2d",
+        "extractor_name": "test-extractor",
+        "extractor_version": "1.0.0",
+        "elapsed_ms": 12,
+        "warnings": [{"code": "sample_warning"}],
+        "raw_extract": {
+            "texts": [
+                {
+                    "joined_text": "材質 SUS304",
+                    "text_lines": ["材質 SUS304"],
+                    "source_type": "label",
+                    "position_x": 10,
+                    "position_y": 20,
+                    "inside_print_area": True,
+                }
+            ],
+            "dimensions": [],
+            "geometry_primitives": [],
+        },
+    }
+    payload_3d = {
+        "input_path": source_path,
+        "source_format": "icad",
+        "source_kind": "3d",
+        "extractor_name": "test-extractor",
+        "extractor_version": "1.0.0",
+        "raw_extract": {
+            "top_part": {"name": "BRACKET"},
+            "parts": [{"tree_path": ["BRACKET"], "name": "BRACKET"}],
+            "materials": [{"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93}],
+            "material_probe_status": "available",
+        },
+    }
+    path_2d = tmp_path / "BRACKET_2d.json"
+    path_3d = tmp_path / "BRACKET_3d.json"
+    path_2d.write_text(json.dumps(payload_2d, ensure_ascii=False), encoding="utf-8")
+    path_3d.write_text(json.dumps(payload_3d, ensure_ascii=False), encoding="utf-8")
+    stdout = StringIO()
+
+    call_command(
+        "import_drawing_metadata_extracts",
+        str(path_2d),
+        str(path_3d),
+        stdout=stdout,
+    )
+
+    drawing = RegisteredDrawing.objects.get(source_path=source_path)
+    snapshots = {snapshot.extraction_mode: snapshot for snapshot in DrawingMetadataSnapshot.objects.filter(drawing=drawing)}
+    assert drawing.filename == "BRACKET.icd"
+    assert set(snapshots) == {"2d", "3d"}
+    assert snapshots["2d"].raw_extract_json["_source_file"]["full_path"] == source_path
+    assert snapshots["2d"].latest_job.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert snapshots["2d"].latest_job.warnings_json == [{"code": "sample_warning"}]
+    assert snapshots["3d"].canonical_attributes_json["top_part_name"] == "BRACKET"
+    assert any(tag["tag"] == "材質:SUS304" for tag in snapshots["3d"].derived_tags_json)
+    assert "imported=2" in stdout.getvalue()
+    assert "created_drawings=1" in stdout.getvalue()

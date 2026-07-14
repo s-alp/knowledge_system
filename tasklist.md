@@ -30,6 +30,7 @@
   - 図面詳細系には `tags` / `attributes` の受け口があり、実画面でも基本情報に `タグ` と `属性情報` が見えるため、創屋への初期連携は図面詳細を優先候補にする。
   - 製品・装置・ユニット詳細と部品詳細には `属性情報` が見えるがタグ欄は未確認。プロジェクト詳細にはタグ/属性の表示口が見えない。
   - `knowledgeSystemPayloadPreview` を登録済み11図面のfixtureへ同梱確認済み。ただしローカルDB内の古い11件は正規化属性が薄く、10件は対象別属性候補0件。実抽出入り代表では部品向け候補2件を確認。
+  - 抽出済みJSONをDBへ再投入する `import_drawing_metadata_extracts` を追加。代表3図面の2D/3Dを取り込み直してfixtureを14図面へ更新し、payload候補あり4図面を確認。
   - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
@@ -153,11 +154,12 @@
 - [x] Gemini APIキー設定後に2D図枠分類を再プローブし、2026-07-15時点でも `API_KEY_INVALID` で採用率未測定であることを記録
 - [x] 本番フロント資産から個別レコードpayload候補を静的解析し、図面/製品・装置・ユニット/部品/プロジェクト向けの読み取り専用 `knowledgeSystemPayloadPreview` を detail API / fixture / 詳細画面に追加
 - [x] `knowledgeSystemPayloadPreview` を通常DBの登録済み11図面から再fixture生成し、全件に同梱されることと対象別payload候補件数を横断確認
+- [x] 抽出済みJSONを2D/3D snapshotとしてDBへ再投入する管理コマンドを追加し、代表3図面でfixture候補数が増えることを確認
 
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
-- [ ] 共有済み抽出JSONから正規化属性が十分入った登録データを増やし、`knowledgeSystemPayloadPreview` の対象別候補数を再評価する
+- [ ] 共有済み抽出JSONの中から各客先代表を選び、重複/旧形式を避けた取込manifestを作る
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 
