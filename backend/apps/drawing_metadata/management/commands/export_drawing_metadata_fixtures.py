@@ -18,6 +18,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser) -> None:
         parser.add_argument("--drawing-id", action="append", default=[], help="出力対象の drawing UUID。複数指定できます。")
         parser.add_argument("--output", help="出力先 JSON。未指定の場合は標準出力へ出します。")
+        parser.add_argument(
+            "--include-empty-snapshots",
+            action="store_true",
+            help="抽出snapshotが未作成の図面もfixtureに含めます。通常の創屋連携確認では指定しません。",
+        )
 
     def handle(self, *args, **options) -> None:
         queryset = RegisteredDrawing.objects.prefetch_related(
@@ -36,8 +41,13 @@ class Command(BaseCommand):
             raise CommandError(f"指定された drawing-id が見つかりません: {', '.join(missing_ids)}")
 
         items = []
+        skipped_empty_snapshot_count = 0
+        include_empty_snapshots = bool(options["include_empty_snapshots"])
         for drawing in drawings:
             detail_payload = RegisteredDrawingDetailSerializer(drawing).data
+            if not detail_payload.get("snapshotsByMode") and not include_empty_snapshots:
+                skipped_empty_snapshot_count += 1
+                continue
             items.append(
                 {
                     "drawingId": str(drawing.id),
@@ -54,6 +64,12 @@ class Command(BaseCommand):
             "schemaVersion": "drawing_metadata_handoff_fixture.v1",
             "generatedAt": timezone.now().isoformat(),
             "itemCount": len(items),
+            "sourceDrawingCount": len(drawings),
+            "skippedEmptySnapshotCount": skipped_empty_snapshot_count,
+            "exportPolicy": {
+                "includeEmptySnapshots": include_empty_snapshots,
+                "emptySnapshotHandling": "included" if include_empty_snapshots else "skipped",
+            },
             "items": items,
         }
         text = json.dumps(payload, ensure_ascii=False, indent=2)

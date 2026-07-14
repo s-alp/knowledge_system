@@ -31,7 +31,7 @@
   - 製品・装置・ユニット詳細と部品詳細には `属性情報` が見えるがタグ欄は未確認。プロジェクト詳細にはタグ/属性の表示口が見えない。
   - `knowledgeSystemPayloadPreview` を登録済み11図面のfixtureへ同梱確認済み。ただしローカルDB内の古い11件は正規化属性が薄く、10件は対象別属性候補0件。実抽出入り代表では部品向け候補2件を確認。
   - 抽出済みJSONをDBへ再投入する `import_drawing_metadata_extracts` を追加。代表3図面の2D/3Dを取り込み直してfixtureを14図面へ更新し、payload候補あり4図面を確認。
-  - `build_icad_extract_import_manifest.py` で共有済み112 JSONから24図面/43ファイルを選定。manifest取込後のfixtureは35図面、payload候補あり25図面、2D/3D両方あり20図面。
+  - `build_icad_extract_import_manifest.py` で共有済み112 JSONから24図面/43ファイルを選定。manifest取込後の登録は35図面。創屋引き渡しfixtureはsnapshotなし10図面を除外し、抽出済み25図面、2D/3D両方あり20図面。
   - manifest取込後の代表図面 `CAA5012-02434000K1R1.icd` をローカルDjango詳細画面でChrome確認。図面/製品・装置・ユニット/部品/プロジェクト別の `本番タグ・属性 payload プレビュー` が見た目上も表示され、payload表の横長文字列向け折り返しと横スクロールを追加。
   - 2D詳細画面に `ビュー別取得状況` と `レイヤー別取得状況` を追加。文字/寸法/図形primitiveをビュー別・レイヤー別に集計し、印刷枠内/外/判定不明の件数を確認できるようにした。
   - `summarize_2d_extraction_coverage.py` で共有済み2D抽出JSONを集計。代表manifestでは2D対象19ファイル中、ビュー情報なし17、印刷枠情報なし17、レイヤー情報なし17、印刷枠判定不明1,388要素を確認。全量側は途中抽出JSONを含むため再抽出対象の洗い出しに使う。
@@ -166,13 +166,14 @@
 - [x] `knowledgeSystemPayloadPreview` を通常DBの登録済み11図面から再fixture生成し、全件に同梱されることと対象別payload候補件数を横断確認
 - [x] 抽出済みJSONを2D/3D snapshotとしてDBへ再投入する管理コマンドを追加し、代表3図面でfixture候補数が増えることを確認
 - [x] 共有済み抽出JSONの中から各客先代表を選び、重複/旧形式を避けた取込manifestを作成
-- [x] manifest経由で代表24図面を取り込み、fixture 35図面 / payload候補あり25図面 / 2D3D両方あり20図面まで拡張
-- [x] 再抽出manifestをDBへ取り込み、創屋連携fixture 35図面を `drawing_metadata_fixture_reextract_2026-07-15.json` として再生成
+- [x] manifest経由で代表24図面を取り込み、登録35図面 / 抽出済み25図面 / 2D3D両方あり20図面まで拡張
+- [x] 再抽出manifestをDBへ取り込み、snapshotなし10図面を除外した創屋連携fixture 25図面を `drawing_metadata_fixture_reextract_2026-07-15.json` として再生成
 - [x] `SxGeomLine2D` の座標取得を scalar `x1/y1/x2/y2` だけでなく `pnt1/pnt2` 系へ拡張し、代表2D 19件で印刷枠判定不明を `488` まで低減
 - [x] `analyze_2d_print_area_unknowns.py` を追加し、印刷枠判定不明の理由を座標欠落/座標あり判定失敗/primitive型別に分解して確認
 - [x] SXNETの `SxGeomHatch` は直接座標/外接矩形を確認できないため座標を捏造せず、raw証跡として残す方針を資料化
 - [x] 印刷枠がある図面では `inside_print_area=true` の要素だけを自動タグ・検索候補へ使い、枠不明要素はraw証跡に残すよう正規化層を強化
 - [x] 旧fixtureとの差分を `drawing_metadata_fixture_tag_diff_unknown_filter_2026-07-15.json` に保存し、自動タグ9件、`part_keywords` 1,031件、`spec_tokens` 1,014件、ハッチング/断面カウント169件のノイズ削減を確認
+- [x] 創屋引き渡しfixtureの契約検証スクリプト `validate_drawing_handoff_fixture.py` を追加し、25図面、2D snapshot 20件、3D snapshot 25件、図面/製品・装置・ユニット/部品/プロジェクト各25件の読み取り専用payloadを検証
 - [x] 本番ナレッジシステムのプロジェクト、製品・装置・ユニット、部品、図面、AI検索、類似検索をChrome実画面で再確認し、読み取り専用スクリーンショットを `output\knowledge_ui_screenshots_2026-07-15` に保存
 - [x] 本番ナレッジシステム図面詳細の2D/3D切替をChromeで目視確認し、3D GLTF読み込みエラーを記録
 - [x] ローカルDjango詳細画面とタグレビュー画面をChromeで目視確認し、2D/3Dあり、viewerタグ、保存フォルダ、パーツ付加情報数、統合タグ、2D/3D競合が画面に出ることを確認

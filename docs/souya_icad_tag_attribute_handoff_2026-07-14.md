@@ -35,6 +35,24 @@
 - 製品・装置・ユニット詳細と部品詳細には `属性情報` 欄がある。ただしサンプルでは `属性情報がありません。` と表示され、一覧側にタグ/属性列は見えない。
 - 図面詳細には `タグ` と `属性情報` 欄があり、2D/3D切替もある。初期連携先は引き続き図面詳細を最優先にする。
 
+同日に、Chrome実画面を再度読み取り専用で確認し、現在表示される主要画面を追加保存した。登録、変更、削除は行っていない。
+
+- プロジェクト一覧: `output\knowledge_ui_screenshots_2026-07-15\41-production-project-list-current.png`
+- 製品・装置・ユニット一覧: `output\knowledge_ui_screenshots_2026-07-15\42-production-product-unit-list-current.png`
+- 部品詳細: `output\knowledge_ui_screenshots_2026-07-15\40-production-part-detail-current.png`
+- 部品一覧: `output\knowledge_ui_screenshots_2026-07-15\47-production-part-list-current-retry-wait.png`
+- 図面一覧: `output\knowledge_ui_screenshots_2026-07-15\49-production-drawing-list-current-retry-wait.png`
+- AI検索: `output\knowledge_ui_screenshots_2026-07-15\45-production-ai-search-current.png`
+- 類似検索: `output\knowledge_ui_screenshots_2026-07-15\50-production-similar-search-current.png`
+
+追加確認結果:
+
+- プロジェクト一覧、製品・装置・ユニット一覧、部品一覧、図面一覧の検索結果テーブルには、タグ列や属性列は見えない。
+- 部品詳細には `属性情報` 欄があり、サンプルでは属性情報なし表示だった。部品へはタグそのものより、材質・PRFX・メーカー・規格などを属性候補として渡すのが現実的。
+- 図面一覧には `紐づき概要` が見える。図面タグ・属性は一覧列ではなく、詳細画面、検索条件、または裏側のRAG/類似検索用信号として使う想定にする。
+- AI検索画面はチャット入力と履歴が中心で、タグ編集口は見えない。タグはRAG投入payload、検索前フィルタ、ランキング信号に使う。
+- 類似検索画面は2D/3Dチェック、検索ファイル、類似度、図面名、用途、規格、重要度フィルタが見える。ICAD抽出タグは類似検索のフィルタや重みづけ補助に展開しやすい。
+
 同日に本番フロント資産 `index-B8bCj6lB.js` を読み取り専用で確認した。解析結果は `output\knowledge_ui_screenshots_2026-07-15\frontend_tag_attribute_contract_probe.json` に保存した。
 
 | 対象 | フロント資産上の受け口所見 | 判断 |
@@ -172,11 +190,15 @@ python scripts\build_icad_extract_import_manifest.py `
 
 manifestは112 JSONを確認し、24図面/43ファイルを選定した。選定後の分布は、2D/3Dペア19図面、3Dのみ5図面。客先ヒントは、ライズ5、ラップマスターウォルターズジャパン5、シブヤパッケージングシステム2、その他は SBY / NKS / ZCSET / DNPE / 宮本工業所 / 不二越などを1件ずつ含む。
 
-manifest経由でローカルDBへ取り込み、fixtureを再生成した。
+manifest経由でローカルDBへ取り込み、fixtureを再生成した。ローカルDB上は35図面が登録済みだが、創屋へ渡すfixtureは実際に抽出snapshotがある図面だけを標準対象とする。抽出snapshotが無い10図面は、登録済みファイルの管理記録としては残すが、detail/viewer/RAG連携の実データ確認には使えないため除外した。
 
-- 再生成後の出力件数: 35図面
+- 登録図面数: 35図面
+- 創屋引き渡しfixture出力件数: 25図面
+- 抽出snapshotなし除外: 10図面
 - `knowledgeSystemPayloadPreview` 候補あり: 25図面
 - 2D/3D両方あり: 20図面
+- 契約検証: `output\souya_handoff\drawing_metadata_fixture_contract_validation_2026-07-15.json` で `valid=true`、issue 0件
+- 検証内訳: 2D snapshot 20件、3D snapshot 25件、図面/製品・装置・ユニット/部品/プロジェクト各25件の読み取り専用payload
 - 代表候補数:
   - `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd`: 図面 attrs=5/tags=2、製品 attrs=1、部品 attrs=5/tags=1、プロジェクト attrs=1
   - `217008-41J-3004.icd`: 図面 attrs=4/tags=2、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1

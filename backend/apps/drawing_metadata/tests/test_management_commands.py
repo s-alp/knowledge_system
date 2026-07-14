@@ -95,6 +95,56 @@ def test_export_drawing_metadata_fixtures_writes_handoff_payload(tmp_path):
 
 
 @pytest.mark.django_db
+def test_export_drawing_metadata_fixtures_skips_empty_snapshots_by_default(tmp_path):
+    RegisteredDrawing.objects.create(
+        host_drawing_id="host-empty",
+        filename="empty.icd",
+        source_path=r"C:\cad\empty.icd",
+        source_format="icad",
+    )
+    output_path = tmp_path / "souya_fixture.json"
+
+    call_command("export_drawing_metadata_fixtures", output=str(output_path))
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["itemCount"] == 0
+    assert payload["sourceDrawingCount"] == 1
+    assert payload["skippedEmptySnapshotCount"] == 1
+    assert payload["exportPolicy"] == {
+        "includeEmptySnapshots": False,
+        "emptySnapshotHandling": "skipped",
+    }
+
+
+@pytest.mark.django_db
+def test_export_drawing_metadata_fixtures_can_include_empty_snapshots_for_debug(tmp_path):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="host-empty",
+        filename="empty.icd",
+        source_path=r"C:\cad\empty.icd",
+        source_format="icad",
+    )
+    output_path = tmp_path / "souya_fixture.json"
+
+    call_command(
+        "export_drawing_metadata_fixtures",
+        drawing_id=[str(drawing.id)],
+        include_empty_snapshots=True,
+        output=str(output_path),
+    )
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["itemCount"] == 1
+    assert payload["sourceDrawingCount"] == 1
+    assert payload["skippedEmptySnapshotCount"] == 0
+    assert payload["exportPolicy"] == {
+        "includeEmptySnapshots": True,
+        "emptySnapshotHandling": "included",
+    }
+    assert payload["items"][0]["detailApiPayload"]["snapshotsByMode"] == {}
+
+
+@pytest.mark.django_db
 def test_import_drawing_metadata_extracts_imports_2d_and_3d_snapshots(tmp_path):
     source_path = r"J:\SAMPLE\BRACKET.icd"
     payload_2d = {
