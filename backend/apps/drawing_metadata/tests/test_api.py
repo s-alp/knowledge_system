@@ -214,3 +214,25 @@ def test_rag_payload_returns_filters_and_ranking_signals(sample_registration_pay
     assert "材質要確認:ZZZ" in payload["rankingSignals"]["tags"]
     assert payload["reconciliation"]["requiresReview"] is True
     assert payload["reconciliation"]["reviewFlags"][0]["code"] == "unresolved_material"
+
+
+@pytest.mark.django_db
+def test_api_accepts_trailing_slashes(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={"customer_name": "澁谷工業"},
+        derived_tags_json=[],
+    )
+
+    client = APIClient()
+
+    assert client.get("/api/v1/drawing-metadata/registrations/").status_code == 200
+    assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/").status_code == 200
+    assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/").status_code == 200

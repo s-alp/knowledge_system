@@ -104,6 +104,14 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
   - `viewerBootstrap.availability.has3d=true`
   - `ragPayload.schemaVersion=drawing_metadata_rag_payload.v1`
 
+同日にローカルDjangoを `http://127.0.0.1:8001` で起動し、実HTTPでも確認した。
+
+- `GET /drawing-metadata/`: HTTP 200
+- `GET /api/v1/drawing-metadata/registrations/`: 11件取得
+- `GET /api/v1/drawing-metadata/registrations/{drawingId}/`: `viewerBootstrap` あり
+- `GET /api/v1/drawing-metadata/registrations/{drawingId}/rag-payload/`: `schemaVersion=drawing_metadata_rag_payload.v1`
+- 末尾スラッシュあり/なしの両方をAPIルーティングで受ける。フロント実装差で404にならないようにするため。
+
 ```json
 {
   "drawingId": "host drawing id",

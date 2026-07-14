@@ -143,6 +143,8 @@
 - [x] 2D図枠候補で `製図者` や `１．使用材料` のラベル片を値として誤採用しないよう強化
 - [x] 創屋連携確認用に detail/viewer/RAG payload を同梱した fixture 出力コマンドを追加
 - [x] 通常DBの登録済み11図面から創屋連携fixtureを実生成し、全件に detail/viewer/RAG payload が入ることを確認
+- [x] APIの末尾スラッシュあり/なしを両方受け、フロント実装差で404にならないようにする
+- [x] ローカルDjangoを実HTTP確認し、一覧画面、登録一覧API、詳細API、RAG payload API が返ることを確認
 
 ## 次に着手する
 
