@@ -36,6 +36,14 @@ def _merge_unique(items: Iterable) -> list:
     return merged
 
 
+def _as_list(value) -> list:
+    if isinstance(value, list):
+        return value
+    if _has_value(value):
+        return [value]
+    return []
+
+
 def _manual_override_value(snapshot: DrawingMetadataSnapshot | None, key: str):
     if not snapshot:
         return None
@@ -50,6 +58,200 @@ def _snapshot_by_mode(drawing: RegisteredDrawing) -> dict[str, DrawingMetadataSn
     return {snapshot.extraction_mode: snapshot for snapshot in drawing.snapshots.all()}
 
 
+def _reconciliation_record(
+    *,
+    key: str,
+    value_2d,
+    value_3d,
+    manual_2d,
+    manual_3d,
+    chosen_value,
+    chosen_mode: str,
+    status: str,
+    reason: str,
+) -> dict:
+    return {
+        "attribute": key,
+        "value2d": value_2d,
+        "value3d": value_3d,
+        "manual2d": manual_2d if _has_value(manual_2d) else None,
+        "manual3d": manual_3d if _has_value(manual_3d) else None,
+        "chosenValue": chosen_value,
+        "chosenMode": chosen_mode,
+        "status": status,
+        "reason": reason,
+    }
+
+
+def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> tuple[object, dict]:
+    candidate_2d = manual_2d if _has_value(manual_2d) else value_2d
+    candidate_3d = manual_3d if _has_value(manual_3d) else value_3d
+
+    if _has_value(manual_3d):
+        return manual_3d, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=manual_3d,
+            chosen_mode="manual_3d",
+            status="manual_override",
+            reason="3D側の手動上書きを最優先で採用しました。",
+        )
+
+    if _has_value(manual_2d):
+        return manual_2d, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=manual_2d,
+            chosen_mode="manual_2d",
+            status="manual_override",
+            reason="2D側の手動上書きを採用しました。",
+        )
+
+    if _is_scalar(candidate_2d) and _is_scalar(candidate_3d):
+        if _has_value(candidate_2d) and _has_value(candidate_3d):
+            if candidate_2d == candidate_3d:
+                return candidate_3d, _reconciliation_record(
+                    key=key,
+                    value_2d=value_2d,
+                    value_3d=value_3d,
+                    manual_2d=manual_2d,
+                    manual_3d=manual_3d,
+                    chosen_value=candidate_3d,
+                    chosen_mode="3d",
+                    status="matched",
+                    reason="2Dと3Dの抽出値が一致したため採用しました。",
+                )
+            return candidate_3d, _reconciliation_record(
+                key=key,
+                value_2d=value_2d,
+                value_3d=value_3d,
+                manual_2d=manual_2d,
+                manual_3d=manual_3d,
+                chosen_value=candidate_3d,
+                chosen_mode="3d",
+                status="conflict",
+                reason="2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。",
+            )
+        if _has_value(candidate_3d):
+            return candidate_3d, _reconciliation_record(
+                key=key,
+                value_2d=value_2d,
+                value_3d=value_3d,
+                manual_2d=manual_2d,
+                manual_3d=manual_3d,
+                chosen_value=candidate_3d,
+                chosen_mode="3d",
+                status="only_3d",
+                reason="3D抽出にのみ値があるため採用しました。",
+            )
+        if _has_value(candidate_2d):
+            return candidate_2d, _reconciliation_record(
+                key=key,
+                value_2d=value_2d,
+                value_3d=value_3d,
+                manual_2d=manual_2d,
+                manual_3d=manual_3d,
+                chosen_value=candidate_2d,
+                chosen_mode="2d",
+                status="only_2d",
+                reason="2D抽出にのみ値があるため採用しました。",
+            )
+        return None, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=None,
+            chosen_mode="none",
+            status="empty",
+            reason="2D/3Dとも有効な値がありません。",
+        )
+
+    if isinstance(candidate_2d, list) or isinstance(candidate_3d, list):
+        merged = _merge_unique(_as_list(candidate_2d) + _as_list(candidate_3d))
+        if _has_value(candidate_2d) and _has_value(candidate_3d):
+            status = "merged"
+            chosen_mode = "merged"
+            reason = "2Dと3Dの配列値を重複排除して統合しました。"
+        elif _has_value(candidate_3d):
+            status = "only_3d"
+            chosen_mode = "3d"
+            reason = "3D抽出にのみ配列値があるため採用しました。"
+        elif _has_value(candidate_2d):
+            status = "only_2d"
+            chosen_mode = "2d"
+            reason = "2D抽出にのみ配列値があるため採用しました。"
+        else:
+            status = "empty"
+            chosen_mode = "none"
+            reason = "2D/3Dとも有効な配列値がありません。"
+        return merged, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=merged,
+            chosen_mode=chosen_mode,
+            status=status,
+            reason=reason,
+        )
+
+    if isinstance(candidate_2d, dict) or isinstance(candidate_3d, dict):
+        merged_dict = {}
+        merged_dict.update(candidate_2d or {})
+        merged_dict.update(candidate_3d or {})
+        if _has_value(candidate_2d) and _has_value(candidate_3d):
+            status = "merged"
+            chosen_mode = "merged"
+            reason = "2Dと3Dの辞書値を統合しました。同一キーは3D値を優先しています。"
+        elif _has_value(candidate_3d):
+            status = "only_3d"
+            chosen_mode = "3d"
+            reason = "3D抽出にのみ辞書値があるため採用しました。"
+        elif _has_value(candidate_2d):
+            status = "only_2d"
+            chosen_mode = "2d"
+            reason = "2D抽出にのみ辞書値があるため採用しました。"
+        else:
+            status = "empty"
+            chosen_mode = "none"
+            reason = "2D/3Dとも有効な辞書値がありません。"
+        return merged_dict, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=merged_dict,
+            chosen_mode=chosen_mode,
+            status=status,
+            reason=reason,
+        )
+
+    chosen_value = candidate_3d if _has_value(candidate_3d) else candidate_2d
+    chosen_mode = "3d" if _has_value(candidate_3d) else "2d"
+    status = "only_3d" if _has_value(candidate_3d) else "only_2d"
+    return chosen_value, _reconciliation_record(
+        key=key,
+        value_2d=value_2d,
+        value_3d=value_3d,
+        manual_2d=manual_2d,
+        manual_3d=manual_3d,
+        chosen_value=chosen_value,
+        chosen_mode=chosen_mode,
+        status=status,
+        reason="片側の抽出値を採用しました。",
+    )
+
+
 def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     snapshots = _snapshot_by_mode(drawing)
     snapshot_2d = snapshots.get("2d")
@@ -62,6 +264,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     conflicts: list[dict] = []
     composed_canonical: dict = {}
     conflicted_keys: set[str] = set()
+    reconciled_attributes: list[dict] = []
 
     for key in sorted(canonical_keys):
         value_2d = deepcopy((snapshot_2d.canonical_attributes_json or {}).get(key)) if snapshot_2d else None
@@ -69,44 +272,21 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         manual_2d = deepcopy(_manual_override_value(snapshot_2d, key))
         manual_3d = deepcopy(_manual_override_value(snapshot_3d, key))
 
-        candidate_2d = manual_2d if _has_value(manual_2d) else value_2d
-        candidate_3d = manual_3d if _has_value(manual_3d) else value_3d
-
-        if _is_scalar(candidate_2d) and _is_scalar(candidate_3d):
-            if _has_value(candidate_2d) and _has_value(candidate_3d) and candidate_2d != candidate_3d:
-                conflicts.append(
-                    {
-                        "attribute": key,
-                        "mode2dValue": candidate_2d,
-                        "mode3dValue": candidate_3d,
-                        "chosenMode": "3d",
-                    }
-                )
-                conflicted_keys.add(key)
-
-            if _has_value(manual_3d):
-                composed_canonical[key] = manual_3d
-            elif _has_value(manual_2d):
-                composed_canonical[key] = manual_2d
-            elif _has_value(value_3d):
-                composed_canonical[key] = value_3d
-            else:
-                composed_canonical[key] = value_2d
-            continue
-
-        if isinstance(candidate_2d, list) or isinstance(candidate_3d, list):
-            merged = _merge_unique((candidate_2d or []) + (candidate_3d or []))
-            composed_canonical[key] = merged
-            continue
-
-        if isinstance(candidate_2d, dict) or isinstance(candidate_3d, dict):
-            merged_dict = {}
-            merged_dict.update(candidate_2d or {})
-            merged_dict.update(candidate_3d or {})
-            composed_canonical[key] = merged_dict
-            continue
-
-        composed_canonical[key] = candidate_3d if _has_value(candidate_3d) else candidate_2d
+        chosen_value, reconciled = _reconcile_attribute(key, value_2d, value_3d, manual_2d, manual_3d)
+        composed_canonical[key] = chosen_value
+        reconciled_attributes.append(reconciled)
+        if reconciled["status"] == "conflict":
+            conflicts.append(
+                {
+                    "attribute": key,
+                    "mode2dValue": reconciled["value2d"],
+                    "mode3dValue": reconciled["value3d"],
+                    "chosenMode": reconciled["chosenMode"],
+                    "chosenValue": reconciled["chosenValue"],
+                    "reason": reconciled["reason"],
+                }
+            )
+            conflicted_keys.add(key)
 
     manual_tags = []
     for snapshot in snapshots.values():
@@ -119,6 +299,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         "canonicalAttributes": composed_canonical,
         "derivedTags": composed_tags,
         "conflicts": conflicts,
+        "reconciledAttributes": reconciled_attributes,
         "attributeGroups": [
             {
                 "group": "composed",
@@ -134,6 +315,11 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
                 "group": "3d",
                 "label": "3D抽出",
                 "attributes": snapshot_3d.canonical_attributes_json if snapshot_3d else {},
+            },
+            {
+                "group": "reconciledAttributes",
+                "label": "2D/3D照合結果",
+                "attributes": reconciled_attributes,
             },
             {
                 "group": "conflicts",

@@ -8,6 +8,16 @@ NOISY_COMPOSED_KEYS = (
     "source_path_tokens",
 )
 
+RECONCILIATION_STATUS_LABELS = {
+    "matched": "一致",
+    "conflict": "競合",
+    "only_2d": "2Dのみ",
+    "only_3d": "3Dのみ",
+    "merged": "統合",
+    "manual_override": "手動上書き",
+    "empty": "未抽出",
+}
+
 COMPOSED_SUMMARY_FIELDS = (
     ("source_file_name", "ファイル名"),
     ("source_directory_path", "保存フォルダ"),
@@ -76,6 +86,23 @@ def _make_row(key: str, label: str, value) -> dict:
         "value": value,
         "displayValue": _display_value(value),
         "hasValue": _has_value(value),
+    }
+
+
+def _reconciliation_row(item: dict) -> dict:
+    status = item.get("status") or "empty"
+    return {
+        "attribute": item.get("attribute"),
+        "status": status,
+        "statusLabel": RECONCILIATION_STATUS_LABELS.get(status, status),
+        "value2d": item.get("value2d"),
+        "value2dDisplay": _display_value(item.get("value2d")),
+        "value3d": item.get("value3d"),
+        "value3dDisplay": _display_value(item.get("value3d")),
+        "chosenValue": item.get("chosenValue"),
+        "chosenValueDisplay": _display_value(item.get("chosenValue")),
+        "chosenMode": item.get("chosenMode"),
+        "reason": item.get("reason"),
     }
 
 
@@ -369,6 +396,7 @@ def _inside_print_area_label(value) -> str | None:
 def build_composed_display_payload(composed_metadata: dict) -> dict:
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
     part_names = canonical_attributes.get("part_names", []) or []
+    reconciled_rows = [_reconciliation_row(item) for item in composed_metadata.get("reconciledAttributes", []) or []]
     derived_tags = [
         item.get("tag")
         for item in composed_metadata.get("derivedTags", []) or []
@@ -383,6 +411,12 @@ def build_composed_display_payload(composed_metadata: dict) -> dict:
         "summaryRows": summary_rows,
         "tags": derived_tags,
         "conflicts": composed_metadata.get("conflicts", []) or [],
+        "reconciliationRows": reconciled_rows,
+        "reconciliationReviewRows": [
+            row
+            for row in reconciled_rows
+            if row["status"] in {"conflict", "manual_override", "merged", "only_2d", "only_3d"}
+        ],
         "hiddenKeys": [key for key in NOISY_COMPOSED_KEYS if key in canonical_attributes],
     }
 

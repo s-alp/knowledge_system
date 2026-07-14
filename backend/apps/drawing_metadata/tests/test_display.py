@@ -44,6 +44,26 @@ def test_build_composed_display_payload_hides_noisy_keys():
                     "chosenMode": "3d",
                 }
             ],
+            "reconciledAttributes": [
+                {
+                    "attribute": "customer_name",
+                    "value2d": "澁谷工業",
+                    "value3d": "コマツ小山",
+                    "chosenValue": "コマツ小山",
+                    "chosenMode": "3d",
+                    "status": "conflict",
+                    "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。",
+                },
+                {
+                    "attribute": "part_names",
+                    "value2d": [],
+                    "value3d": ["A", "B"],
+                    "chosenValue": ["A", "B"],
+                    "chosenMode": "3d",
+                    "status": "only_3d",
+                    "reason": "3D抽出にのみ配列値があるため採用しました。",
+                },
+            ],
         }
     )
 
@@ -54,6 +74,9 @@ def test_build_composed_display_payload_hides_noisy_keys():
     assert row_by_key["part_count"] == "2"
     assert payload["tags"] == ["客先:コマツ小山"]
     assert payload["conflicts"][0]["chosenMode"] == "3d"
+    assert payload["reconciliationReviewRows"][0]["statusLabel"] == "競合"
+    assert payload["reconciliationReviewRows"][0]["chosenValueDisplay"] == "コマツ小山"
+    assert payload["reconciliationReviewRows"][1]["value3dDisplay"] == "2"
 
 
 def test_build_3d_snapshot_display_shows_multiple_paths_for_cassette_sample():
@@ -342,6 +365,7 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert response.context["snapshot_3d_display"]["partCount"] == 2
     assert response.context["snapshot_3d_display"]["partExInfoTotal"] == 1
     assert "統合結果（viewer/RAG 用の統合属性）" in response.content.decode("utf-8")
+    assert "2D/3D 照合結果" in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

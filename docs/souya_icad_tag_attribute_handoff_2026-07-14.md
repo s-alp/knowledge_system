@@ -26,7 +26,8 @@
 | `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
 | `derived_tags` | `tag`, `source`, `confidence`, `manual_flag`, `tag_rule_version` | 自動タグ候補 | 採用前にレビュー可能 |
-| `conflicts` | `key`, `value2d`, `value3d`, `reason` | 2D/3D差異 | どちらかを正本に固定しない |
+| `reconciledAttributes` | `attribute`, `value2d`, `value3d`, `chosenValue`, `chosenMode`, `status`, `reason` | 2D/3D照合結果 | 一致、片側のみ、統合、手動上書き、競合を全属性単位で保持 |
+| `conflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 2D/3D差異の抜粋 | 既存画面向けのレビュー対象。どちらかを正本に固定しない |
 
 ## 3. 図面へ連携する項目
 
@@ -116,7 +117,36 @@
       "manual_flag": false
     }
   ],
-  "conflicts": []
+  "reconciledAttributes": [
+    {
+      "attribute": "material",
+      "value2d": "SUS304",
+      "value3d": "SUS304",
+      "chosenValue": "SUS304",
+      "chosenMode": "3d",
+      "status": "matched",
+      "reason": "2Dと3Dの抽出値が一致したため採用しました。"
+    },
+    {
+      "attribute": "weight_value",
+      "value2d": "2.1kg",
+      "value3d": 2.08,
+      "chosenValue": 2.08,
+      "chosenMode": "3d",
+      "status": "conflict",
+      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。"
+    }
+  ],
+  "conflicts": [
+    {
+      "attribute": "weight_value",
+      "mode2dValue": "2.1kg",
+      "mode3dValue": 2.08,
+      "chosenValue": 2.08,
+      "chosenMode": "3d",
+      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。"
+    }
+  ]
 }
 ```
 
@@ -137,4 +167,4 @@
 - 2D図枠欄名辞書の客先横断拡充
 - Gemini API低温度JSON分類のジョブ組み込み。分類サービスの入口は実装済みだが、曖昧欄名の分類補助に限定し、CADに存在しない値を生成しない
 - 長穴、穴数、断面、表面粗さ値を候補ではなく確定属性にする追加ロジック
-- 2D/3D照合結果の採用値、差異、要確認理由の画面表示
+- 2D/3D照合結果の採用値、差異、要確認理由は PoC 画面表示まで実装済み。次は本番API/fixture名確定後の項目名合わせ

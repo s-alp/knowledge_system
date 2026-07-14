@@ -51,6 +51,37 @@
       <p>派生タグはありません。</p>
     {% endif %}
 
+    <h3>2D/3D 照合結果</h3>
+    {% if composed_display.reconciliationReviewRows %}
+      <table>
+        <thead>
+          <tr>
+            <th>属性</th>
+            <th>状態</th>
+            <th>2D 値</th>
+            <th>3D 値</th>
+            <th>採用値</th>
+            <th>理由</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in composed_display.reconciliationReviewRows %}
+            <tr>
+              <td>{{ row.attribute }}</td>
+              <td>{{ row.statusLabel }}</td>
+              <td>{{ row.value2dDisplay }}</td>
+              <td>{{ row.value3dDisplay }}</td>
+              <td>{{ row.chosenValueDisplay }} / {{ row.chosenMode }}</td>
+              <td>{{ row.reason }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="muted">一致した属性も JSON の reconciledAttributes に保持しています。</p>
+    {% else %}
+      <p>レビューが必要な照合結果はありません。</p>
+    {% endif %}
+
     <h3>競合した属性</h3>
     {% if composed_display.conflicts %}
       <table>
