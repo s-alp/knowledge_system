@@ -31,6 +31,9 @@ def test_normalize_3d_raw_extract():
             "materials": [
                 {"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93, "element_count": 2},
                 {"matid": "A5052", "name": "AL", "specific_gravity": 2.68, "element_count": 1},
+                {"matid": "75", "name": "75", "specific_gravity": 0.0, "element_count": 1},
+                {"matid": "S45C_MISUMIFA", "name": "S45C相当", "specific_gravity": 7.85, "element_count": 1},
+                {"matid": "03\ufffdX\ufffde", "name": "03\ufffdX\ufffde", "specific_gravity": 0.0, "element_count": 1},
             ],
             "top_part": {
                 "name": "KO小山ガントリー",
@@ -51,6 +54,7 @@ def test_normalize_3d_raw_extract():
                     "materials": [
                         {"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93, "element_count": 2},
                         {"matid": "ZZZ", "name": "ZZZ", "specific_gravity": 0.0, "element_count": 1},
+                        {"matid": "RM", "name": "RM", "specific_gravity": 0.0, "element_count": 1},
                     ],
                     "ex_info_fields": {
                         "User_WBZAI1": "ＲＭ",
@@ -76,20 +80,26 @@ def test_normalize_3d_raw_extract():
     assert canonical["area_value"] == 1858.76904715
     assert canonical["center_of_gravity"] == "10.0, 20.0, 30.0"
     assert canonical["material_probe_status"] == "available"
-    assert canonical["material_ids"] == ["SUS304", "A5052"]
-    assert canonical["material_names"] == ["SUS304", "AL"]
-    assert canonical["material_specific_gravities"] == [7.93, 2.68]
+    assert canonical["material_ids"] == ["SUS304", "A5052", "75", "S45C_MISUMIFA", "03\ufffdX\ufffde"]
+    assert canonical["material_names"] == ["SUS304", "AL", "75", "S45C相当", "03\ufffdX\ufffde"]
+    assert canonical["material_specific_gravities"] == [7.93, 2.68, 0.0, 7.85, 0.0]
     assert canonical["part_material_candidate_count"] == 3
     assert canonical["part_material_candidates"][0]["part_path"] == "Top.UnitA"
     assert canonical["part_material_candidates"][0]["material_id"] == "SUS304"
     assert canonical["part_material_candidates"][0]["source"] == "3d_part_material"
     assert canonical["part_material_candidates"][0]["confidence"] == "high"
     assert canonical["part_material_candidates"][1]["material_id"] == "ZZZ"
-    assert canonical["part_material_candidates"][1]["confidence"] == "high"
+    assert canonical["part_material_candidates"][1]["canonical_material"] == "ZZZ"
+    assert canonical["part_material_candidates"][1]["material_status"] == "unresolved"
+    assert canonical["part_material_candidates"][1]["confidence"] == "low"
     assert canonical["part_material_candidates"][2]["material_id"] == "SUS"
+    assert canonical["part_material_candidates"][2]["canonical_material"] == "SUS"
+    assert canonical["part_material_candidates"][2]["material_status"] == "formal"
     assert canonical["part_material_candidates"][2]["confidence"] == "medium"
+    assert all(candidate["material_id"] != "RM" for candidate in canonical["part_material_candidates"])
     assert "ZZZ" not in canonical["material_keywords"]
-    assert canonical["unresolved_material_keywords"] == ["ZZZ"]
+    assert "S45C" in canonical["material_keywords"]
+    assert canonical["unresolved_material_keywords"] == ["75", "ZZZ"]
     assert "SMC" in canonical["maker_keywords"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)

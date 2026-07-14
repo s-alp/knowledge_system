@@ -213,6 +213,8 @@
       "part_name": "PartA",
       "material_id": "SUS304",
       "material_name": "SUS304",
+      "canonical_material": "SUS304",
+      "material_status": "formal",
       "specific_gravity": 7.93,
       "source": "3d_part_material",
       "confidence": "high",
@@ -229,7 +231,7 @@
 }
 ```
 
-`material_keywords` は通常の材質タグに使う値、`unresolved_material_keywords` は `ZZZ`, `75`, `CDQ` など客先固有または意味未解決の材質コードを保持する。未解決材質は捨てず、`材質要確認:<値>` の低信頼タグとしてレビュー対象にする。
+`material_keywords` は正式材質辞書で `formal` に分類できた値だけを通常の材質タグに使う。`unresolved_material_keywords` は `ZZZ`, `75`, `CDQ` など客先固有または意味未解決の材質コードを保持する。`RM` のように材質欄ではなく区分値として扱う値、重量文字列、U+FFFDを含む文字化け済み文字列は `excluded` として材質タグから除外する。未解決材質は捨てず、`材質要確認:<値>` の低信頼タグとしてレビュー対象にする。
 
 ## 7. `derived_tags` の形
 
