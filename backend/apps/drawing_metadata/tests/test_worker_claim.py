@@ -56,6 +56,47 @@ def test_claim_next_job_reclaims_stale_processing_job(settings):
 
 
 @pytest.mark.django_db
+def test_process_job_refreshes_lease_for_extractor_timeout(monkeypatch, settings, tmp_path):
+    settings.DRAWING_METADATA_JOB_LEASE_SECONDS = 120
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 300
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-lease-refresh",
+        filename="sample-lease-refresh.icd",
+        source_path=r"C:\temp\sample-lease-refresh.icd",
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_PROCESSING,
+        worker_name="test-worker",
+        lease_expires_at=timezone.now() + timedelta(seconds=5),
+    )
+
+    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+        live_job = DrawingMetadataExtractionJob.objects.get(pk=job_id)
+        assert live_job.lease_expires_at is not None
+        assert live_job.lease_expires_at > timezone.now() + timedelta(seconds=300)
+        return ExtractionRunResult(
+            payload={
+                "source_format": "icad",
+                "source_kind": "3d",
+                "source_file": {"file_name": "sample-lease-refresh.icd"},
+                "raw_extract": {"parts": []},
+                "warnings": [],
+            },
+            output_path=tmp_path / "raw.json",
+        )
+
+    monkeypatch.setattr(extraction_tasks, "run_extractor", fake_run_extractor)
+
+    processed = extraction_tasks.process_job(job.id)
+
+    assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert processed.lease_expires_at is None
+
+
+@pytest.mark.django_db
 def test_process_job_applies_gemini_title_block_classification(monkeypatch, settings, tmp_path):
     settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
     settings.GEMINI_API_KEY = "test-key"

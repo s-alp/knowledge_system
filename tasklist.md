@@ -135,6 +135,8 @@
 - [x] 2D/3D有無判定を強化し、2Dセグメント数を `detect` 出力と共有16件サマリに追加
 - [x] VS一覧と印刷枠を raw_extract に取り込み、Django詳細画面の2Dサマリへ表示
 - [x] symbol / hatch / cutline 系の2D geometryを primitive として保持し、特徴候補タグへ展開
+- [x] Windows 抽出 worker と Linux/Docker backend の接続方式をDB-backed workerとして確定
+- [x] 抽出開始前にjob leaseを抽出timeoutより長く延長し、長時間ICAD処理中の二重claimを防止
 
 ## 次に着手する
 
@@ -147,24 +149,6 @@
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
-- [ ] Windows 抽出 worker と Linux/Docker backend の接続方式を確定
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\README.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_csharp_python_architecture_2026-05-27.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_extraction_poc_setup_2026-05-28.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\management\commands\process_drawing_metadata_jobs.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\tasks\extraction_tasks.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docker-compose.backend.yml`
-- [ ] worker lease / heartbeat の強化
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\README.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\models.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\tasks\extraction_tasks.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\tests\test_worker_claim.py`
 - [ ] viewer detail API 契約へ接続
   - 参照資料:
     - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_attribute_management_ui_plan_2026-05-28.md`

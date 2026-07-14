@@ -164,6 +164,9 @@ drawing_metadata/
   - 先に request thread から重処理を外すことを優先
   - 後で Celery / Windows worker / 外部サービスへ差し替えやすいため
 - さらに、ICAD を自動起動する場合は **その worker が起こした ICAD だけを終了対象にする** 方針を取る
+- Windows 抽出 worker は `process_drawing_metadata_jobs --loop --mode all` でDB上の `DrawingMetadataExtractionJob` を claim し、Django backend は Linux/Docker 側に置ける
+- worker は C# runner を `1ジョブ=1プロセス呼び出し` で実行し、`raw_extract -> canonical_attributes -> derived_tags` はDjango service層で処理する
+- 抽出処理に入る直前に lease を `max(DRAWING_METADATA_JOB_LEASE_SECONDS, DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS + 60)` 秒へ延長する。これにより、長いICAD抽出中に別workerが同じjobを再claimする事故を避ける
 
 ### 避けるべきこと
 

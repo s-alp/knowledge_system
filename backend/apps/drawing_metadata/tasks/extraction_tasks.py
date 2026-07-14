@@ -33,6 +33,18 @@ def _resolve_mode_filter(mode: str) -> list[str]:
     return [mode]
 
 
+def _processing_lease_seconds() -> int:
+    return max(
+        settings.DRAWING_METADATA_JOB_LEASE_SECONDS,
+        settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS + 60,
+    )
+
+
+def _refresh_processing_lease(job: DrawingMetadataExtractionJob) -> None:
+    job.lease_expires_at = timezone.now() + timedelta(seconds=_processing_lease_seconds())
+    job.save(update_fields=["lease_expires_at", "updated_at"])
+
+
 def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob | None:
     mode_values = _resolve_mode_filter(mode)
     now = timezone.now()
@@ -125,6 +137,7 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
     job = DrawingMetadataExtractionJob.objects.select_related("drawing").get(pk=job_id)
     executed_by = f"worker:{job.worker_name or 'unknown'}"
     try:
+        _refresh_processing_lease(job)
         result = run_extractor(
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,

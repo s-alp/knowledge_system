@@ -84,6 +84,8 @@
   - Docker 化しやすい Python/Django 側
   - 外出し可能な Windows 抽出 CLI
   に境界を分けている
+- 実行時の接続方式は、Django側で `DrawingMetadataExtractionJob` をDBに積み、Windows worker が `process_drawing_metadata_jobs` でclaimして C# runner を呼ぶ方式にする
+- Windows worker は抽出開始前に job lease を抽出timeoutより長く延長し、長時間のICAD処理中に別workerが同じjobを拾わないようにする
 - また、live 抽出では `sxnet.dll` の存在だけでなく **ICAD 本体の起動**も必要だった
 - `C:\ICADSX\bin\icadsx.exe` は存在せず、少なくとも今回の環境では起動対象は `C:\ICADSX\bin\icad.exe` だった
 - 最適構成としては、**人が触る ICAD と抽出 worker が使う ICAD を同居させない**。Windows worker 専用セッション、または専用マシンで運用するのが安全
