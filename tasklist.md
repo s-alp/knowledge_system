@@ -39,6 +39,7 @@
   - Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。
   - 実サンプル2D図枠候補の洗い出し用に `scripts\probe_title_block_llm.py` を追加。共有抽出JSON 69件中、図枠候補ありは11ファイル/5サンプル。
   - Gemini実API分類は `API_KEY_INVALID` で採用率確認未完了。HTTP 400本文は warning/調査ログに残せるよう修正済み。
+  - `製図者` など欄名単体から `者` を値として採用する誤判定を抑止。候補行には残すが、`title_block_fields` へは採用しない。
   - 3D材質APIを追加。`6800DDU.icd` で `material_probe_status=available`、`SUS440C`、比重7.7、17要素を確認。
 - 次に着手する場合:
   - v2 raw schema を確定する。
@@ -118,6 +119,7 @@
 - [x] 3D全体材質とパーツ付加情報から部品材質候補を生成し、詳細画面に表示
 - [x] Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み、候補行へAI分類理由を表示
 - [x] 実サンプル図枠候補の調査スクリプトを追加し、Gemini APIキー無効時の原因記録を強化
+- [x] 図枠欄名単体の末尾文字を値として誤採用しないよう正規化を強化
 
 ## 次に着手する
 

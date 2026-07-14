@@ -44,6 +44,21 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
 
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
 MATERIAL_VALUE_PATTERN = re.compile(r"\b(SUS[0-9A-Z]*|SS[0-9A-Z]*|S[0-9]{2}C|A[0-9]{4}|AL|SKD[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*)\b", re.IGNORECASE)
+TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
+    "者",
+    "人",
+    "名",
+    "番",
+    "番号",
+    "号",
+    "図",
+    "図名",
+    "年月日",
+    "年",
+    "月",
+    "日",
+    "欄",
+}
 
 
 def _flatten_strings(values: Iterable[str | None]) -> list[str]:
@@ -106,6 +121,11 @@ def _contains_replacement_character(value: str | None) -> bool:
     return bool(value and "\ufffd" in value)
 
 
+def _looks_like_title_block_label_fragment(value: str) -> bool:
+    normalized = _normalize_for_match(value)
+    return normalized in {_normalize_for_match(item) for item in TITLE_BLOCK_LABEL_FRAGMENT_VALUES}
+
+
 def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> bool:
     if not value:
         return False
@@ -115,6 +135,7 @@ def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> 
         and len(stripped) <= max_length
         and not _contains_replacement_character(stripped)
         and not _looks_like_title_block_label(stripped)
+        and not _looks_like_title_block_label_fragment(stripped)
     )
 
 

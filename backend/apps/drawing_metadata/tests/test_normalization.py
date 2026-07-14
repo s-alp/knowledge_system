@@ -105,6 +105,7 @@ def test_normalize_2d_raw_extract():
                 {"text_lines": ["ユニット U01"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 50.0},
                 {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": False, "position_x": 999.0, "position_y": 999.0},
                 {"text_lines": ["材質 \ufffd\ufffd"], "source_type": "text", "inside_print_area": True, "position_x": 11.0, "position_y": 20.0},
+                {"text_lines": ["製図者"], "source_type": "text", "inside_print_area": True, "position_x": 12.0, "position_y": 20.0},
             ],
             "dimensions": [{"value_1": "100", "value_2": None, "mark_2": "M5", "mark_3": None, "front_word": None, "back_word": None}],
             "geometry_primitives": [
@@ -141,6 +142,7 @@ def test_normalize_2d_raw_extract():
     assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
     assert canonical["title_block_fields"]["prfx"] == "RAA4844"
     assert canonical["title_block_fields"]["unit_number"] == "U01"
+    assert "designer" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
     assert all("\ufffd" not in str(candidate.get("evidence_text")) for candidate in canonical["title_block_candidates"])
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)
