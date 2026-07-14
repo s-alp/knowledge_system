@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
@@ -105,7 +105,12 @@ DRAWING_METADATA_WORKER_POLL_SECONDS = int(os.getenv("DRAWING_METADATA_WORKER_PO
 DRAWING_METADATA_JOB_LEASE_SECONDS = int(os.getenv("DRAWING_METADATA_JOB_LEASE_SECONDS", "180"))
 DRAWING_METADATA_LLM_PROVIDER = os.getenv("DRAWING_METADATA_LLM_PROVIDER", "gemini").strip()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest").strip()
+GEMINI_FALLBACK_MODELS = [
+    model.strip()
+    for model in os.getenv("GEMINI_FALLBACK_MODELS", "gemini-3.1-flash-lite,gemini-3.5-flash").split(",")
+    if model.strip()
+]
 GEMINI_TEMPERATURE = float(os.getenv("GEMINI_TEMPERATURE", "0.0"))
 DRAWING_METADATA_SCHEMA_VERSION = "1.0.0"
 DRAWING_METADATA_NORMALIZER_VERSION = "1.0.0"

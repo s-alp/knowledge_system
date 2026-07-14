@@ -45,7 +45,7 @@
   - Gemini API 低温度JSON分類サービスを追加。`title_block_candidates` の欄名分類補助に限定し、許可field外や範囲外indexは破棄する。
   - Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。
   - 実サンプル2D図枠候補の洗い出し用に `scripts\probe_title_block_llm.py` を追加。共有抽出JSON 69件中、図枠候補ありは11ファイル/5サンプル。
-  - Gemini実API分類は `API_KEY_INVALID` で採用率確認未完了。HTTP 400本文は warning/調査ログに残せるよう修正済み。
+  - Gemini実API分類は、OS環境変数の古いキー優先と旧モデル指定が原因で失敗していた。`backend\.env` 優先、`gemini-flash-latest` 主モデル、フォールバックモデルありへ修正し、代表manifest上位5サンプルで実API分類応答を確認済み。
   - `製図者` など欄名単体から `者` を値として採用する誤判定を抑止。候補行には残すが、`title_block_fields` へは採用しない。
   - 2D訂正内容候補を `revision_note_candidates` として追加。訂正/改訂/変更/修正/REV系の根拠文字、座標、印刷枠内外を保持し、詳細画面に表示。
   - 訂正内容候補がある場合は、本文ではなく存在だけを `改訂情報あり` タグとして生成。
@@ -159,7 +159,9 @@
 - [x] ローカル詳細画面に創屋連携・viewer/RAG受け渡し確認欄を追加し、Chromeで見た目を確認
 - [x] 本番ナレッジシステムのAI検索、プロジェクト、製品・装置・ユニット、部品、図面管理の一覧/詳細をChromeで読み取り確認
 - [x] 本番フロント資産を読み取り解析し、`drawing_attributes` / `product_attributes` / `part_attributes` と図面 `tags` の受け口候補を確認
-- [x] Gemini APIキー設定後に2D図枠分類を再プローブし、2026-07-15時点でも `API_KEY_INVALID` で採用率未測定であることを記録
+- [x] Gemini APIキー設定後の `API_KEY_INVALID` 原因を特定し、`backend\.env` 優先読み込みと利用可能モデルへの切替で解消
+- [x] `gemini-flash-latest` 主モデル、`gemini-3.1-flash-lite` / `gemini-3.5-flash` フォールバックを追加し、503/タイムアウト/不正JSON時の継続性を強化
+- [x] 代表manifest上位5サンプルでGemini実API分類応答を確認し、CADに無い値を生成せずラベルのみ候補を低信頼で落とすことを記録
 - [x] 本番フロント資産から個別レコードpayload候補を静的解析し、図面/製品・装置・ユニット/部品/プロジェクト向けの読み取り専用 `knowledgeSystemPayloadPreview` を detail API / fixture / 詳細画面に追加
 - [x] `knowledgeSystemPayloadPreview` を通常DBの登録済み11図面から再fixture生成し、全件に同梱されることと対象別payload候補件数を横断確認
 - [x] 抽出済みJSONを2D/3D snapshotとしてDBへ再投入する管理コマンドを追加し、代表3図面でfixture候補数が増えることを確認
@@ -177,7 +179,6 @@
 
 ## 次に着手する
 
-- [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

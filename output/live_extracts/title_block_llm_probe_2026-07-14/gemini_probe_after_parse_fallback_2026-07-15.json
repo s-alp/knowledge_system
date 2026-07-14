@@ -1,0 +1,843 @@
+{
+  "root": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15",
+  "json_file_count": 20,
+  "candidate_file_count": 6,
+  "candidate_sample_count": 6,
+  "selected_file_count": 5,
+  "classified": true,
+  "files": [
+    {
+      "file": "TR1D9K99027.latest_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15\\TR1D9K99027.latest_2d.json",
+      "candidate_count": 10,
+      "llm_candidate_count": 10,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {},
+      "candidate_preview": [
+        {
+          "field": "scale",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "尺度",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年月日",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "designer",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "製図者",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "drawing_number",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "品 番",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂正",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "表 面 処 理",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "熱  処  理",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂       正       理       由",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for scale, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for date, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 2,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for designer, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 3,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for drawing_number, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 4,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for revision, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 5,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 6,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 7,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for revision, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": [
+          {
+            "field": "scale",
+            "label": "尺度",
+            "value": null,
+            "evidence_text": "尺度",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 468.5,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for scale, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "date",
+            "label": "日付",
+            "value": null,
+            "evidence_text": "年月日",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 448.0,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for date, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "designer",
+            "label": "設計者",
+            "value": null,
+            "evidence_text": "製図者",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 432.0,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for designer, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "drawing_number",
+            "label": "図番",
+            "value": null,
+            "evidence_text": "品 番",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 536.5,
+            "position_y": 12.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for drawing_number, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "revision",
+            "label": "改訂",
+            "value": null,
+            "evidence_text": "訂正",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 569.5,
+            "position_y": 12.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for revision, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "surface_treatment",
+            "label": "表面処理",
+            "value": null,
+            "evidence_text": "表 面 処 理",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 557.5,
+            "position_y": 36.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "surface_treatment",
+            "label": "表面処理",
+            "value": null,
+            "evidence_text": "熱  処  理",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 512.5,
+            "position_y": 36.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "revision",
+            "label": "改訂",
+            "value": null,
+            "evidence_text": "訂       正       理       由",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 538.50001221,
+            "position_y": 386.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for revision, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    },
+    {
+      "file": "U8105111315.latest_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15\\U8105111315.latest_2d.json",
+      "candidate_count": 9,
+      "llm_candidate_count": 9,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {},
+      "candidate_preview": [
+        {
+          "field": "scale",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "尺度",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年月日",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "designer",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "製図者",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "drawing_number",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "品 番",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂正",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "表 面 処 理",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "熱  処  理",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂       正       理       由",
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "inside_print_area": true
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for scale, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for date, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 2,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for designer, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 3,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for drawing_number, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 4,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for revision, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 5,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 6,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 7,
+            "field": null,
+            "confidence": "low",
+            "reason": "Candidate is a label for revision, not the value itself.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": [
+          {
+            "field": "scale",
+            "label": "尺度",
+            "value": null,
+            "evidence_text": "尺度",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 468.5,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for scale, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "date",
+            "label": "日付",
+            "value": null,
+            "evidence_text": "年月日",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 448.0,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for date, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "designer",
+            "label": "設計者",
+            "value": null,
+            "evidence_text": "製図者",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 432.0,
+            "position_y": 32.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for designer, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "drawing_number",
+            "label": "図番",
+            "value": null,
+            "evidence_text": "品 番",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 536.5,
+            "position_y": 12.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for drawing_number, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "revision",
+            "label": "改訂",
+            "value": null,
+            "evidence_text": "訂正",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 569.5,
+            "position_y": 12.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for revision, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "surface_treatment",
+            "label": "表面処理",
+            "value": null,
+            "evidence_text": "表 面 処 理",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 557.5,
+            "position_y": 36.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "surface_treatment",
+            "label": "表面処理",
+            "value": null,
+            "evidence_text": "熱  処  理",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 512.5,
+            "position_y": 36.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for surface_treatment, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "revision",
+            "label": "改訂",
+            "value": null,
+            "evidence_text": "訂       正       理       由",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": null,
+            "position_x": 538.50001221,
+            "position_y": 386.5,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "Candidate is a label for revision, not the value itself.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    },
+    {
+      "file": "CAA5012-02434000K1R1.latest_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15\\CAA5012-02434000K1R1.latest_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 2,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "weight": "ワークより１２．４倍の吸引力がある"
+      },
+      "candidate_preview": [
+        {
+          "field": "weight",
+          "value": "ワークより１２．４倍の吸引力がある",
+          "confidence": "medium",
+          "evidence_text": "ワーク重量より１２．４倍の吸引力がある",
+          "view_name": "移載H",
+          "layer_no": 1,
+          "inside_print_area": true
+        },
+        {
+          "field": "weight",
+          "value": "１．０８（Ｎ）÷０．０８７（Ｎ）＝１２．４ ワークより１２．４倍の吸引力がある",
+          "confidence": "medium",
+          "evidence_text": "１．０８（Ｎ）÷０．０８７（Ｎ）＝１２．４ ワーク重量より１２．４倍の吸引力がある",
+          "view_name": "移載H",
+          "layer_no": 1,
+          "inside_print_area": true
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": null,
+            "confidence": "low",
+            "reason": "The text describes suction force relative to work weight, which is a note rather than the weight of the part itself.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": null,
+            "confidence": "low",
+            "reason": "The text is a calculation formula for suction force, not the weight of the part.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {
+          "weight": "ワークより１２．４倍の吸引力がある"
+        },
+        "candidates_after_llm": [
+          {
+            "field": "weight",
+            "label": "重量",
+            "value": "ワークより１２．４倍の吸引力がある",
+            "evidence_text": "ワーク重量より１２．４倍の吸引力がある",
+            "confidence": "medium",
+            "view_name": "移載H",
+            "layer_no": 1,
+            "position_x": 280.0,
+            "position_y": 15.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "The text describes suction force relative to work weight, which is a note rather than the weight of the part itself.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "weight",
+            "label": "重量",
+            "value": "１．０８（Ｎ）÷０．０８７（Ｎ）＝１２．４ ワークより１２．４倍の吸引力がある",
+            "evidence_text": "１．０８（Ｎ）÷０．０８７（Ｎ）＝１２．４ ワーク重量より１２．４倍の吸引力がある",
+            "confidence": "medium",
+            "view_name": "移載H",
+            "layer_no": 1,
+            "position_x": 280.0,
+            "position_y": 15.0,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "The text is a calculation formula for suction force, not the weight of the part.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    },
+    {
+      "file": "DFR-CM1-AA0305300011.latest_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15\\DFR-CM1-AA0305300011.latest_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 2,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "material": "丸棒　φ９０"
+      },
+      "candidate_preview": [
+        {
+          "field": "material",
+          "value": "丸棒　φ９０",
+          "confidence": "medium",
+          "evidence_text": "１．使用材料",
+          "view_name": "!!GLOBAL",
+          "layer_no": 2,
+          "inside_print_area": true
+        },
+        {
+          "field": "material",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "１．使用材料 丸棒　φ９０ 平角鋼材　２８×１２ ９０×１２　使用 ２．指示なき接合部はすべて溶接のこと ３．溶接後、歪修正のこと",
+          "view_name": "!!GLOBAL",
+          "layer_no": 2,
+          "inside_print_area": true
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": "material",
+            "confidence": "high",
+            "reason": "The value explicitly identifies the material type and dimensions.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": null,
+            "confidence": "low",
+            "reason": "The candidate contains multiple materials and general instructions, making it ambiguous for a single field assignment.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {
+          "material": "丸棒　φ９０"
+        },
+        "candidates_after_llm": [
+          {
+            "field": "material",
+            "label": "材質",
+            "value": "丸棒　φ９０",
+            "evidence_text": "１．使用材料",
+            "confidence": "medium",
+            "view_name": "!!GLOBAL",
+            "layer_no": 2,
+            "position_x": -129.00000153,
+            "position_y": 257.45950317,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": "material",
+            "llm_confidence": "high",
+            "llm_reason": "The value explicitly identifies the material type and dimensions.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "material",
+            "label": "材質",
+            "value": null,
+            "evidence_text": "１．使用材料 丸棒　φ９０ 平角鋼材　２８×１２ ９０×１２　使用 ２．指示なき接合部はすべて溶接のこと ３．溶接後、歪修正のこと",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": 2,
+            "position_x": -129.00000153,
+            "position_y": 257.45950317,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "The candidate contains multiple materials and general instructions, making it ambiguous for a single field assignment.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    },
+    {
+      "file": "M26A07720.latest_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\manifest_2d_reextract_2026-07-15\\M26A07720.latest_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 2,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "drawing_number": "参考：Ｍ２４Ａ８８８１０"
+      },
+      "candidate_preview": [
+        {
+          "field": "coating_instruction",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "塗装",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "inside_print_area": true
+        },
+        {
+          "field": "drawing_number",
+          "value": "参考：Ｍ２４Ａ８８８１０",
+          "confidence": "medium",
+          "evidence_text": "参考図番：Ｍ２４Ａ８８８１０",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "inside_print_area": true
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": null,
+            "confidence": "low",
+            "reason": "The text '塗装' is only a label for coating/painting.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": "drawing_number",
+            "confidence": "high",
+            "reason": "The text contains a reference drawing number 'Ｍ２４Ａ８８８１０'.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {
+          "drawing_number": "参考：Ｍ２４Ａ８８８１０"
+        },
+        "candidates_after_llm": [
+          {
+            "field": "coating_instruction",
+            "label": "塗装指示",
+            "value": null,
+            "evidence_text": "塗装",
+            "confidence": "low",
+            "view_name": "!!GLOBAL",
+            "layer_no": 1,
+            "position_x": 179.43250476,
+            "position_y": 183.54621139,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": null,
+            "llm_confidence": "low",
+            "llm_reason": "The text '塗装' is only a label for coating/painting.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "drawing_number",
+            "label": "図番",
+            "value": "参考：Ｍ２４Ａ８８８１０",
+            "evidence_text": "参考図番：Ｍ２４Ａ８８８１０",
+            "confidence": "medium",
+            "view_name": "!!GLOBAL",
+            "layer_no": 1,
+            "position_x": 165.57040366,
+            "position_y": 7.47083768,
+            "inside_print_area": true,
+            "source": "2d_text",
+            "llm_field": "drawing_number",
+            "llm_confidence": "high",
+            "llm_reason": "The text contains a reference drawing number 'Ｍ２４Ａ８８８１０'.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    }
+  ]
+}

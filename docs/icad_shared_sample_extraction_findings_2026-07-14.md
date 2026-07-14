@@ -431,7 +431,9 @@ Django正規化層で、2D文字から図枠欄候補を作る初期辞書を追
 - U+FFFD を含む文字化け候補はGeminiへ送らず、抽出証跡として候補側には残す
 - 文字化け候補を除外しても、Geminiの返却 index は元の `title_block_candidates` の index へ戻してから適用する
 
-実API呼び出しは2D抽出ジョブへ組み込み済みで、APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。2026-07-14 の再確認では `.env` に `GEMINI_API_KEY` と `DRAWING_METADATA_LLM_PROVIDER=gemini` が設定されていることは確認できたが、Gemini API は `API_KEY_INVALID` を返したため、採用率の実測は未完了。再確認結果は `output/live_extracts/title_block_llm_probe_2026-07-14/gemini_reprobe_2026-07-14.json` に保存した。
+実API呼び出しは2D抽出ジョブへ組み込み済みで、APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。2026-07-15 に `backend\.env` よりOS環境変数の古い `GEMINI_API_KEY` が優先されていた問題を確認し、`load_dotenv(..., override=True)` へ変更した。さらに `gemini-2.5-flash` が新規ユーザー向けに利用不可だったため、`gemini-flash-latest` を主モデル、`gemini-3.1-flash-lite` / `gemini-3.5-flash` をフォールバックにした。
+
+修正後、代表manifestの2D抽出20 JSONで図枠候補あり6ファイル/6サンプルを確認し、上位5サンプルへ実API分類を実行した。5件すべてで `gemini` 応答を取得し、採用件数は0件だった。これは既存ルールで採用済み、またはラベルのみ候補をGeminiが低信頼で落としたためであり、CADに無い値を生成していないことを確認できた。結果は `output/live_extracts/title_block_llm_probe_2026-07-14/gemini_probe_after_parse_fallback_2026-07-15.json` に保存した。
 
 文字化け候補の事前除外を追加後、Geminiを呼ばずに共有抽出JSONを再集計した。共有抽出JSON 69件中、図枠候補ありは11ファイル/5サンプルで、上位5サンプルの `skipped_replacement_character_count` は0件だった。再集計結果は `output/live_extracts/title_block_llm_probe_2026-07-14/filtered_reprobe_2026-07-14.json` に保存した。
 

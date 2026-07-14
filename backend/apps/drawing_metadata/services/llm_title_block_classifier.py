@@ -83,26 +83,48 @@ def classify_title_block_candidates(
     urlopen = urlopen or request.urlopen
 
     payload = _build_request_payload(candidates, temperature)
-    endpoint = (
-        "https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{quote(model, safe='')}:generateContent?key={quote(api_key, safe='')}"
-    )
-    req = request.Request(
-        endpoint,
-        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers={"Content-Type": "application/json; charset=utf-8"},
-        method="POST",
-    )
+    errors: list[str] = []
+    for candidate_model in _gemini_models_to_try(model):
+        endpoint = (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{quote(candidate_model, safe='')}:generateContent?key={quote(api_key, safe='')}"
+        )
+        req = request.Request(
+            endpoint,
+            data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            headers={"Content-Type": "application/json; charset=utf-8"},
+            method="POST",
+        )
 
-    try:
-        response = urlopen(req, timeout=30)
-        body = response.read().decode("utf-8")
-    except HTTPError as exc:
-        raise GeminiResponseError(f"Gemini API returned HTTP {exc.code}: {_read_error_body(exc)}") from exc
-    except URLError as exc:
-        raise GeminiResponseError(f"Gemini API request failed: {exc.reason}") from exc
+        try:
+            response = urlopen(req, timeout=30)
+            body = response.read().decode("utf-8")
+            return _parse_response(body, len(candidates))
+        except GeminiResponseError as exc:
+            errors.append(f"{candidate_model}: invalid response: {exc}")
+        except HTTPError as exc:
+            message = f"{candidate_model}: HTTP {exc.code}: {_read_error_body(exc)}"
+            errors.append(message)
+            if not _is_retryable_gemini_http_error(exc.code):
+                raise GeminiResponseError(message) from exc
+        except (TimeoutError, URLError, OSError) as exc:
+            errors.append(f"{candidate_model}: request failed: {exc}")
 
-    return _parse_response(body, len(candidates))
+    raise GeminiResponseError("Gemini API request failed for all configured models: " + " | ".join(errors))
+
+
+def _gemini_models_to_try(primary_model: str) -> list[str]:
+    fallback_models = getattr(settings, "GEMINI_FALLBACK_MODELS", [])
+    models = [primary_model, *fallback_models]
+    ordered: list[str] = []
+    for model in models:
+        if model and model not in ordered:
+            ordered.append(model)
+    return ordered
+
+
+def _is_retryable_gemini_http_error(status_code: int) -> bool:
+    return status_code in {404, 429, 503, 504}
 
 
 def _read_error_body(exc: HTTPError) -> str:

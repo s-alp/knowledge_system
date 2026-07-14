@@ -72,6 +72,7 @@ def test_classify_title_block_candidates_posts_json_and_filters_response(setting
 
 def test_classify_title_block_candidates_reports_http_error_body(settings):
     settings.GEMINI_API_KEY = "test-key"
+    settings.GEMINI_FALLBACK_MODELS = []
 
     def fake_urlopen(req, timeout):
         raise HTTPError(
@@ -87,6 +88,70 @@ def test_classify_title_block_candidates_reports_http_error_body(settings):
             [{"field": None, "value": "SUS304", "evidence_text": "材質 SUS304"}],
             urlopen=fake_urlopen,
         )
+
+
+def test_classify_title_block_candidates_uses_fallback_model_for_transient_error(settings):
+    settings.GEMINI_API_KEY = "test-key"
+    settings.GEMINI_MODEL = "busy-model"
+    settings.GEMINI_FALLBACK_MODELS = ["fallback-model"]
+    urls = []
+
+    def fake_urlopen(req, timeout):
+        urls.append(req.full_url)
+        if len(urls) == 1:
+            raise HTTPError(
+                req.full_url,
+                503,
+                "Unavailable",
+                hdrs=None,
+                fp=BytesIO(b'{"error":{"message":"model busy"}}'),
+            )
+        response_text = json.dumps(
+            {
+                "classifications": [
+                    {"index": 0, "field": "material", "confidence": "high", "reason": "材質欄"},
+                ]
+            }
+        )
+        return FakeGeminiResponse({"candidates": [{"content": {"parts": [{"text": response_text}]}}]})
+
+    result = classify_title_block_candidates(
+        [{"field": None, "value": "SUS304", "evidence_text": "材質 SUS304"}],
+        urlopen=fake_urlopen,
+    )
+
+    assert "busy-model:generateContent" in urls[0]
+    assert "fallback-model:generateContent" in urls[1]
+    assert result[0]["field"] == "material"
+
+
+def test_classify_title_block_candidates_uses_fallback_model_for_invalid_json(settings):
+    settings.GEMINI_API_KEY = "test-key"
+    settings.GEMINI_MODEL = "invalid-json-model"
+    settings.GEMINI_FALLBACK_MODELS = ["fallback-model"]
+    urls = []
+
+    def fake_urlopen(req, timeout):
+        urls.append(req.full_url)
+        if len(urls) == 1:
+            return FakeGeminiResponse({"candidates": [{"content": {"parts": [{"text": "{}"}]}}]})
+        response_text = json.dumps(
+            {
+                "classifications": [
+                    {"index": 0, "field": "material", "confidence": "high", "reason": "材質欄"},
+                ]
+            }
+        )
+        return FakeGeminiResponse({"candidates": [{"content": {"parts": [{"text": response_text}]}}]})
+
+    result = classify_title_block_candidates(
+        [{"field": None, "value": "SUS304", "evidence_text": "材質 SUS304"}],
+        urlopen=fake_urlopen,
+    )
+
+    assert "invalid-json-model:generateContent" in urls[0]
+    assert "fallback-model:generateContent" in urls[1]
+    assert result[0]["field"] == "material"
 
 
 def test_filter_classifiable_candidates_keeps_original_index_map():
