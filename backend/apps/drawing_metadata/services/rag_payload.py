@@ -154,6 +154,7 @@ def build_rag_payload(drawing: RegisteredDrawing) -> dict:
         "searchTextChunks": _search_text_chunks(canonical, tags),
         "reconciliation": {
             "conflicts": composed.get("conflicts", []) or [],
+            "diagnosticConflicts": composed.get("diagnosticConflicts", []) or [],
             "reviewFlags": review_flags,
             "requiresReview": bool(review_flags),
         },

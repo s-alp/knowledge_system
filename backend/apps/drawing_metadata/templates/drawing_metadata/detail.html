@@ -233,6 +233,9 @@
     {% else %}
       <p>競合はありません。</p>
     {% endif %}
+    {% if composed_display.diagnosticConflicts %}
+      <p class="muted">内部品質・件数・抽出元差分などの診断差分 {{ composed_display.diagnosticConflicts|length }} 件は JSON の diagnosticConflicts に保持しています。</p>
+    {% endif %}
 
     {% if composed_display.hiddenKeys %}
       <p class="muted">統合サマリでは巨大配列を省略しています: {{ composed_display.hiddenKeys|join:", " }}</p>

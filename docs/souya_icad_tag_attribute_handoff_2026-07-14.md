@@ -84,7 +84,8 @@
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
 | `derived_tags` | `tag`, `source`, `confidence`, `manual_flag`, `tag_rule_version` | 自動タグ候補 | 採用前にレビュー可能 |
 | `reconciledAttributes` | `attribute`, `value2d`, `value3d`, `chosenValue`, `chosenMode`, `status`, `reason` | 2D/3D照合結果 | 一致、片側のみ、統合、手動上書き、競合を全属性単位で保持 |
-| `conflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 2D/3D差異の抜粋 | 既存画面向けのレビュー対象。どちらかを正本に固定しない |
+| `conflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 2D/3D差異のうち設計レビュー対象だけ | 材質、重量、図番、図面名など、採用値を人が見るべき差異に限定する |
+| `diagnosticConflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 内部品質・件数・抽出元などの診断差分 | `source_kind`、`confidence_summary`、`*_count`、`*_exists` など。JSON証跡には残すがRAG投入前レビュー対象からは外す |
 | `knowledgeSystemPayloadPreview` | `targets[].payloadPreview`, `targets[].attributes`, `targets[].tags` | 本番タグ・属性連携の候補payload | 本番登録は行わない。図面/製品・装置・ユニット/部品/プロジェクト別に、既存受け口・未確定点・属性マスタID未解決を明示 |
 
 ## 3. 図面へ連携する項目
@@ -201,6 +202,7 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
 - 契約検証: `output\souya_handoff\drawing_metadata_fixture_contract_validation_2026-07-15.json` で `valid=true`、issue 0件
 - 検証内訳: 2D snapshot 20件、3D snapshot 25件、図面/製品・装置・ユニット/部品/プロジェクト各25件の読み取り専用payload
 - 2D構造化セクション: 2D snapshot 20件すべてに `raw_2d_sections.v1` の6区画が揃う。契約検証スクリプトでも2D snapshotでは同セクションを必須チェックする
+- 2D/3D照合: `reconciledAttributes` は全差分を保持する。`conflicts` は設計レビュー対象だけに絞り、内部品質・件数・抽出元差分は `diagnosticConflicts` へ分離する。2026-07-15 再生成fixtureではレビュー競合0件、診断差分93件。契約検証スクリプトでも診断専用キーが `conflicts` へ混入しないことをチェックする
 - 代表候補数:
   - `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd`: 図面 attrs=5/tags=2、製品 attrs=1、部品 attrs=5/tags=1、プロジェクト attrs=1
   - `217008-41J-3004.icd`: 図面 attrs=4/tags=2、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1
@@ -330,6 +332,17 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 - ローカルタグレビュー画面では、図面/製品・装置・ユニット/部品/プロジェクトの適用先候補、統合タグ、2Dタグ、3Dタグ、競合が確認できる。
 - ローカル詳細画面の `2D構造化セクション` では、図枠、中央図面、寸法、注記、バルーン、製造記号の6行が表示される。`schema=raw_2d_sections.v1`、印刷枠内/外/判定不明、自動利用件数、短いサンプルを確認できる。証跡は `output\knowledge_ui_screenshots_2026-07-15\68-local-drawing-detail-2d-structured-sections.png`
 
+2026-07-15 にさらに本番実画面をChromeで読み取り専用確認した。登録、変更、削除は行っていない。メニュー遷移で、統合検索の実URLは `/web/integrated_search`、類似検索の実URLは `/web/drawing/similar_search` と確認した。プロジェクト詳細はタグ/属性欄なし、製品・装置・ユニット詳細と部品詳細は `属性情報` 欄あり、図面詳細は `タグ` と `属性情報` 欄あり。
+
+- 本番トップ: `output\knowledge_ui_screenshots_2026-07-15\70-production-home-screen.png`
+- 本番統合検索: `output\knowledge_ui_screenshots_2026-07-15\78-production-integrated-search-menu-screen.png`
+- 本番類似検索: `output\knowledge_ui_screenshots_2026-07-15\79-production-similar-search-menu-screen.png`
+- 本番プロジェクト詳細: `output\knowledge_ui_screenshots_2026-07-15\84-production-project-detail-screen.png`
+- 本番製品・装置・ユニット詳細: `output\knowledge_ui_screenshots_2026-07-15\85-production-product-detail-screen.png`
+- 本番部品詳細: `output\knowledge_ui_screenshots_2026-07-15\86-production-part-detail-screen.png`
+- 本番図面詳細: `output\knowledge_ui_screenshots_2026-07-15\87-production-drawing-detail-screen.png`
+- ローカル診断差分表示: `output\knowledge_ui_screenshots_2026-07-15\88-local-diagnostic-conflicts-detail.jpg`
+
 ```json
 {
   "drawingId": "host drawing id",
@@ -394,6 +407,16 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
       "chosenValue": 2.08,
       "chosenMode": "3d",
       "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。"
+    }
+  ],
+  "diagnosticConflicts": [
+    {
+      "attribute": "confidence_summary",
+      "mode2dValue": "medium",
+      "mode3dValue": "high",
+      "chosenValue": "high",
+      "chosenMode": "3d",
+      "reason": "内部品質・件数・抽出元差分のため、自動タグ/RAG投入前レビュー対象からは除外しました。"
     }
   ]
 }

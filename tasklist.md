@@ -33,6 +33,7 @@
   - 抽出済みJSONをDBへ再投入する `import_drawing_metadata_extracts` を追加。代表3図面の2D/3Dを取り込み直してfixtureを14図面へ更新し、payload候補あり4図面を確認。
   - `build_icad_extract_import_manifest.py` で共有済み112 JSONから24図面/43ファイルを選定。manifest取込後の登録は35図面。創屋引き渡しfixtureはsnapshotなし10図面を除外し、抽出済み25図面、2D/3D両方あり20図面。
   - 創屋引き渡しfixture契約検証で、2D snapshot 20件すべてに `raw_2d_sections.v1` の6区画が揃うことを確認。検証スクリプト側でも2D構造化セクション必須をチェックする。
+  - 2D/3D照合の `conflicts` は設計レビュー対象に限定し、`source_kind`、`confidence_summary`、件数系、存在フラグ系の差分は `diagnosticConflicts` としてJSON証跡に残す。再生成fixture 25図面ではレビュー競合0件、診断差分93件。
   - manifest取込後の代表図面 `CAA5012-02434000K1R1.icd` をローカルDjango詳細画面でChrome確認。図面/製品・装置・ユニット/部品/プロジェクト別の `本番タグ・属性 payload プレビュー` が見た目上も表示され、payload表の横長文字列向け折り返しと横スクロールを追加。
   - 2D詳細画面に `ビュー別取得状況` と `レイヤー別取得状況` を追加。文字/寸法/図形primitiveをビュー別・レイヤー別に集計し、印刷枠内/外/判定不明の件数を確認できるようにした。
   - `summarize_2d_extraction_coverage.py` で共有済み2D抽出JSONを集計。代表manifestでは2D対象19ファイル中、ビュー情報なし17、印刷枠情報なし17、レイヤー情報なし17、印刷枠判定不明1,388要素を確認。全量側は途中抽出JSONを含むため再抽出対象の洗い出しに使う。
@@ -179,6 +180,8 @@
 - [x] ローカルDjango詳細画面とタグレビュー画面をChromeで目視確認し、2D/3Dあり、viewerタグ、保存フォルダ、パーツ付加情報数、統合タグ、2D/3D競合が画面に出ることを確認
 - [x] 2D構造化セクションを詳細画面へ追加し、`CAA5012-02434000K1R1.icd` で図枠/中央図面/寸法/注記/バルーン/製造記号の6行、印刷枠内外/判定不明件数、サンプルが見えることをChromeで確認
 - [x] 本番ナレッジシステム実画面をChromeで再確認し、プロジェクト/製品・装置・ユニット/部品/図面/AI検索/類似検索のスクリーンショットを `output\knowledge_ui_screenshots_2026-07-15\60-*.png` 以降へ保存。製品・装置・ユニットの実URLは `/web/product`
+- [x] 2D/3D照合の診断差分を `diagnosticConflicts` へ分離し、RAG投入前レビュー対象の `conflicts` に内部品質・件数・抽出元差分が混ざらないようにした。fixture契約検証で valid=true、issue 0件。ローカル詳細画面で `2D/3Dレビュー競合数` と `2D/3D診断差分数` の表示をChrome確認
+- [x] 本番ナレッジシステムをChrome実画面で追加確認し、メニュー経由の正しいURLとして統合検索 `/web/integrated_search`、類似検索 `/web/drawing/similar_search` を確認。プロジェクト詳細はタグ/属性欄なし、製品・装置・ユニット詳細と部品詳細は属性情報欄あり、図面詳細はタグ/属性情報欄あり
 
 ## 次に着手する
 

@@ -8,6 +8,37 @@ from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
 MODE_PRIORITY = ("3d", "2d")
+REVIEWABLE_CONFLICT_ATTRIBUTES = {
+    "customer_name",
+    "project_name",
+    "equipment_name",
+    "equipment_category",
+    "module_name",
+    "document_kind",
+    "drawing_number",
+    "drawing_name",
+    "part_number",
+    "paper_size",
+    "drawing_size",
+    "scale",
+    "material",
+    "material_keywords",
+    "formal_material_keywords",
+    "unresolved_material_keywords",
+    "surface_treatment_tokens",
+    "paint_instruction_tokens",
+    "heat_treatment_keywords",
+    "maker_keywords",
+    "process_keywords",
+    "weight_value",
+    "mass_value",
+    "volume_value",
+    "area_value",
+    "density_value",
+    "center_of_gravity",
+    "prfx_candidates",
+    "unit_number_candidates",
+}
 
 
 def _is_scalar(value) -> bool:
@@ -42,6 +73,16 @@ def _as_list(value) -> list:
     if _has_value(value):
         return [value]
     return []
+
+
+def _is_reviewable_conflict_attribute(key: str) -> bool:
+    if key in REVIEWABLE_CONFLICT_ATTRIBUTES:
+        return True
+    if key.endswith("_count") or key.endswith("_exists"):
+        return False
+    if key.startswith(("confidence_", "source_", "raw_", "title_block_llm_")):
+        return False
+    return False
 
 
 def _manual_override_value(snapshot: DrawingMetadataSnapshot | None, key: str):
@@ -262,6 +303,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         canonical_keys.update((snapshot.canonical_attributes_json or {}).keys())
 
     conflicts: list[dict] = []
+    diagnostic_conflicts: list[dict] = []
     composed_canonical: dict = {}
     conflicted_keys: set[str] = set()
     reconciled_attributes: list[dict] = []
@@ -276,17 +318,24 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         composed_canonical[key] = chosen_value
         reconciled_attributes.append(reconciled)
         if reconciled["status"] == "conflict":
-            conflicts.append(
-                {
-                    "attribute": key,
-                    "mode2dValue": reconciled["value2d"],
-                    "mode3dValue": reconciled["value3d"],
-                    "chosenMode": reconciled["chosenMode"],
-                    "chosenValue": reconciled["chosenValue"],
-                    "reason": reconciled["reason"],
-                }
-            )
-            conflicted_keys.add(key)
+            conflict_record = {
+                "attribute": key,
+                "mode2dValue": reconciled["value2d"],
+                "mode3dValue": reconciled["value3d"],
+                "chosenMode": reconciled["chosenMode"],
+                "chosenValue": reconciled["chosenValue"],
+                "reason": reconciled["reason"],
+            }
+            if _is_reviewable_conflict_attribute(key):
+                conflicts.append(conflict_record)
+                conflicted_keys.add(key)
+            else:
+                diagnostic_conflicts.append(
+                    {
+                        **conflict_record,
+                        "reason": "内部品質・件数・抽出元差分のため、自動タグ/RAG投入前レビュー対象からは除外しました。",
+                    }
+                )
 
     manual_tags = []
     for snapshot in snapshots.values():
@@ -299,6 +348,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         "canonicalAttributes": composed_canonical,
         "derivedTags": composed_tags,
         "conflicts": conflicts,
+        "diagnosticConflicts": diagnostic_conflicts,
         "reconciledAttributes": reconciled_attributes,
         "attributeGroups": [
             {
@@ -325,6 +375,11 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
                 "group": "conflicts",
                 "label": "conflicts",
                 "attributes": conflicts,
+            },
+            {
+                "group": "diagnosticConflicts",
+                "label": "diagnosticConflicts",
+                "attributes": diagnostic_conflicts,
             },
         ],
     }

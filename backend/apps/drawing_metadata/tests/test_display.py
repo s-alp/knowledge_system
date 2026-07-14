@@ -250,6 +250,7 @@ def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_con
             "reconciliation": {
                 "requiresReview": True,
                 "conflicts": [{"attribute": "material"}],
+                "diagnosticConflicts": [{"attribute": "confidence_summary"}],
                 "reviewFlags": [{"code": "cross_source_conflict", "severity": "medium", "attribute": "material"}],
             },
         },
@@ -300,6 +301,7 @@ def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_con
     assert signal_row_by_key["materialKeywords"]["displayValue"] == "SUS304"
     assert review_row_by_key["requiresReview"] == "あり"
     assert review_row_by_key["conflictCount"] == "1"
+    assert review_row_by_key["diagnosticConflictCount"] == "1"
     assert payload["knowledgePayloadSchemaVersion"] == "knowledge_system_payload_preview.v1"
     assert payload["knowledgePayloadTargetRows"][0]["label"] == "図面"
     assert payload["knowledgePayloadTargetRows"][0]["attributeCount"] == 1

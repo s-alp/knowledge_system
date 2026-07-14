@@ -26,6 +26,7 @@ EXPECTED_2D_SECTION_KEYS = {
     "balloons",
     "manufacturing_symbols",
 }
+NON_REVIEW_CONFLICT_KEYS = {"source_kind", "confidence_summary"}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -146,6 +147,52 @@ def _validate_target(target: dict[str, Any], *, path: str, issues: list[dict[str
             _add_issue(issues, f"{path}.payloadPreview.tags", "must be a list when present")
 
 
+def _is_diagnostic_conflict_key(attribute: str) -> bool:
+    return attribute in NON_REVIEW_CONFLICT_KEYS or attribute.endswith("_count") or attribute.endswith("_exists")
+
+
+def _validate_composed_metadata(composed: dict[str, Any], *, path: str, issues: list[dict[str, Any]]) -> None:
+    if not isinstance(composed.get("canonicalAttributes"), dict):
+        _add_issue(issues, f"{path}.canonicalAttributes", "must be an object")
+    if not isinstance(composed.get("derivedTags"), list):
+        _add_issue(issues, f"{path}.derivedTags", "must be a list")
+    reconciled = composed.get("reconciledAttributes")
+    if not isinstance(reconciled, list):
+        _add_issue(issues, f"{path}.reconciledAttributes", "must be a list")
+        reconciled = []
+    for index, item in enumerate(reconciled):
+        if not isinstance(item, dict):
+            _add_issue(issues, f"{path}.reconciledAttributes[{index}]", "must be an object")
+            continue
+        for key in ("attribute", "chosenMode", "status", "reason"):
+            if not _is_non_empty_string(item.get(key)):
+                _add_issue(issues, f"{path}.reconciledAttributes[{index}].{key}", "must be a non-empty string")
+        if "chosenValue" not in item:
+            _add_issue(issues, f"{path}.reconciledAttributes[{index}].chosenValue", "is required")
+
+    conflicts = composed.get("conflicts")
+    if not isinstance(conflicts, list):
+        _add_issue(issues, f"{path}.conflicts", "must be a list")
+        conflicts = []
+    for index, conflict in enumerate(conflicts):
+        conflict_path = f"{path}.conflicts[{index}]"
+        if not isinstance(conflict, dict):
+            _add_issue(issues, conflict_path, "must be an object")
+            continue
+        attribute = conflict.get("attribute")
+        if not _is_non_empty_string(attribute):
+            _add_issue(issues, f"{conflict_path}.attribute", "must be a non-empty string")
+        elif _is_diagnostic_conflict_key(str(attribute)):
+            _add_issue(issues, f"{conflict_path}.attribute", "diagnostic-only conflict leaked into review conflicts")
+        for key in ("mode2dValue", "mode3dValue", "chosenMode", "chosenValue", "reason"):
+            if key not in conflict:
+                _add_issue(issues, f"{conflict_path}.{key}", "is required")
+
+    diagnostic_conflicts = composed.get("diagnosticConflicts")
+    if not isinstance(diagnostic_conflicts, list):
+        _add_issue(issues, f"{path}.diagnosticConflicts", "must be a list")
+
+
 def validate_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
     issues: list[dict[str, Any]] = []
     target_counts: Counter[str] = Counter()
@@ -198,6 +245,16 @@ def validate_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
                     expected_mode=str(mode),
                     issues=issues,
                 )
+
+        composed = detail.get("composedMetadata")
+        if not isinstance(composed, dict):
+            _add_issue(issues, f"{item_path}.detailApiPayload.composedMetadata", "must be an object")
+        else:
+            _validate_composed_metadata(
+                composed,
+                path=f"{item_path}.detailApiPayload.composedMetadata",
+                issues=issues,
+            )
 
         viewer = item.get("viewerBootstrap")
         if not isinstance(viewer, dict):

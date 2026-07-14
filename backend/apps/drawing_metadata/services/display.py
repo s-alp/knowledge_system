@@ -630,6 +630,11 @@ def _inside_print_area_label(value) -> str | None:
 def build_composed_display_payload(composed_metadata: dict) -> dict:
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
     part_names = canonical_attributes.get("part_names", []) or []
+    review_conflict_keys = {
+        conflict.get("attribute")
+        for conflict in composed_metadata.get("conflicts", []) or []
+        if conflict.get("attribute")
+    }
     reconciled_rows = [_reconciliation_row(item) for item in composed_metadata.get("reconciledAttributes", []) or []]
     derived_tags = [
         item.get("tag")
@@ -645,11 +650,13 @@ def build_composed_display_payload(composed_metadata: dict) -> dict:
         "summaryRows": summary_rows,
         "tags": derived_tags,
         "conflicts": composed_metadata.get("conflicts", []) or [],
+        "diagnosticConflicts": composed_metadata.get("diagnosticConflicts", []) or [],
         "reconciliationRows": reconciled_rows,
         "reconciliationReviewRows": [
             row
             for row in reconciled_rows
-            if row["status"] in {"conflict", "manual_override", "merged", "only_2d", "only_3d"}
+            if row["status"] in {"manual_override", "merged", "only_2d", "only_3d"}
+            or (row["status"] == "conflict" and row["attribute"] in review_conflict_keys)
         ],
         "hiddenKeys": [key for key in NOISY_COMPOSED_KEYS if key in canonical_attributes],
     }
@@ -690,6 +697,7 @@ def build_integration_handoff_display_payload(
     reconciliation = rag_payload.get("reconciliation", {}) or {}
     review_flags = reconciliation.get("reviewFlags", []) or []
     conflicts = reconciliation.get("conflicts", []) or []
+    diagnostic_conflicts = reconciliation.get("diagnosticConflicts", []) or []
     search_text_chunks = rag_payload.get("searchTextChunks", []) or []
     part_material_candidates = rag_payload.get("partMaterialCandidates", []) or []
 
@@ -730,7 +738,8 @@ def build_integration_handoff_display_payload(
             _make_row("schemaVersion", "payloadスキーマ", rag_payload.get("schemaVersion")),
             _make_row("requiresReview", "投入前レビュー要否", reconciliation.get("requiresReview")),
             _make_row("reviewFlagCount", "レビュー警告数", len(review_flags)),
-            _make_row("conflictCount", "2D/3D競合数", len(conflicts)),
+            _make_row("conflictCount", "2D/3Dレビュー競合数", len(conflicts)),
+            _make_row("diagnosticConflictCount", "2D/3D診断差分数", len(diagnostic_conflicts)),
             _make_row("partMaterialCandidateCount", "部品材質候補数", len(part_material_candidates)),
             _make_row("searchTextChunkCount", "検索テキスト断片数", len(search_text_chunks)),
         ],
