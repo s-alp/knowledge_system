@@ -125,7 +125,7 @@ def _tag_target_candidates(tag: str, source: str) -> list[str]:
         return ["部品", "図面", "製品・装置・ユニット"]
     if tag.startswith("規格:"):
         return ["図面", "部品", "製品・装置・ユニット"]
-    if source in {"material_keywords", "part_ex_info_fields", "part_ex_info_tokens"}:
+    if source in {"material_keywords", "unresolved_material_keywords", "part_ex_info_fields", "part_ex_info_tokens"}:
         return ["部品", "図面"]
     return ["図面"]
 
@@ -609,6 +609,7 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("volume_value", "3D体積", canonical_attributes.get("volume_value")),
         _make_row("material_probe_status", "3D材質取得状態", canonical_attributes.get("material_probe_status") or raw_extract.get("material_probe_status")),
         _make_row("part_material_candidate_count", "部品材質候補数", canonical_attributes.get("part_material_candidate_count")),
+        _make_row("unresolved_material_keyword_count", "要確認材質数", len(canonical_attributes.get("unresolved_material_keywords", []) or [])),
         _make_row("external_part_exists", "外部参照パーツあり", canonical_attributes.get("external_part_exists", False)),
         _make_row("mirror_part_exists", "ミラーパーツあり", canonical_attributes.get("mirror_part_exists", False)),
         _make_row("unresolved_part_exists", "未解決パーツあり", canonical_attributes.get("unresolved_part_exists", False)),

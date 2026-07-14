@@ -44,6 +44,7 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
 
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
 MATERIAL_VALUE_PATTERN = re.compile(r"\b(SUS[0-9A-Z]*|SS[0-9A-Z]*|S[0-9]{2}C|A[0-9]{4}|AL|SKD[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*)\b", re.IGNORECASE)
+UNRESOLVED_MATERIAL_VALUES = {"ZZZ", "75", "CDQ"}
 REVISION_NOTE_KEYWORDS = ["訂正内容", "改訂内容", "訂正", "改訂", "変更", "修正", "rev", "revision"]
 TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
     "者",
@@ -407,6 +408,13 @@ def _normalize_material_text(value: str | None) -> str | None:
     return match.group(1) if match else None
 
 
+def _is_unresolved_material_keyword(value: str | None) -> bool:
+    if not value:
+        return False
+    normalized = unicodedata.normalize("NFKC", value).strip().upper()
+    return normalized in UNRESOLVED_MATERIAL_VALUES
+
+
 def _build_part_material_candidates(parts: list[dict], materials: list[dict]) -> list[dict]:
     candidates: list[dict] = []
     seen: set[tuple[str, str | None, str]] = set()
@@ -570,6 +578,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "spec_tokens": [],
         "part_keywords": [],
         "material_keywords": [],
+        "unresolved_material_keywords": [],
         "maker_keywords": [],
         "process_keywords": [],
         "heat_treatment_keywords": [],
@@ -630,6 +639,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             + _flatten_strings(candidate.get("material_id") for candidate in canonical["part_material_candidates"])
             + _flatten_strings(candidate.get("material_name") for candidate in canonical["part_material_candidates"])
         )
+        canonical["unresolved_material_keywords"] = [
+            value for value in canonical["material_keywords"] if _is_unresolved_material_keyword(value)
+        ]
+        canonical["material_keywords"] = [
+            value for value in canonical["material_keywords"] if not _is_unresolved_material_keyword(value)
+        ]
         canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
         canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)
         canonical["external_part_exists"] = any(part.get("is_external") for part in parts)
@@ -643,6 +658,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 top_part.get("comment"),
                 top_part.get("ex_info"),
                 *canonical["material_keywords"],
+                *canonical["unresolved_material_keywords"],
                 *canonical["part_names"],
                 *canonical["part_comments"],
                 *canonical["part_ex_info_tokens"],

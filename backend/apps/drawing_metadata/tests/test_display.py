@@ -200,6 +200,7 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
                 {"tag": "客先:澁谷工業", "source": "customer_name", "confidence": "high", "manual_flag": False, "tag_rule_version": "1.0.0"},
                 {"tag": "装置:ロボット", "source": "equipment_category", "confidence": "high", "manual_flag": False, "tag_rule_version": "1.0.0"},
                 {"tag": "メーカー:SMC", "source": "maker_keywords", "confidence": "medium", "manual_flag": False, "tag_rule_version": "1.0.0"},
+                {"tag": "材質要確認:ZZZ", "source": "unresolved_material_keywords", "confidence": "low", "manual_flag": False, "tag_rule_version": "1.0.0"},
             ],
             "conflicts": [],
         },
@@ -209,6 +210,7 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
     assert payload["title"] == "タグ候補レビュー"
     assert payload["groups"][0]["tags"][0]["targetCandidates"] == ["プロジェクト", "製品・装置・ユニット", "図面"]
     assert payload["groups"][0]["tags"][2]["targetCandidates"] == ["部品", "図面", "製品・装置・ユニット"]
+    assert payload["groups"][0]["tags"][3]["targetCandidates"] == ["部品", "図面"]
     assert payload["evidenceRows"][5]["displayValue"] == "1"
 
 

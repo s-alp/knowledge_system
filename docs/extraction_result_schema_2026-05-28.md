@@ -206,6 +206,7 @@
   "spec_tokens": [],
   "part_keywords": [],
   "material_keywords": [],
+  "unresolved_material_keywords": [],
   "part_material_candidates": [
     {
       "part_path": "Top.Sub1.PartA",
@@ -227,6 +228,8 @@
   "issue_keywords": []
 }
 ```
+
+`material_keywords` は通常の材質タグに使う値、`unresolved_material_keywords` は `ZZZ`, `75`, `CDQ` など客先固有または意味未解決の材質コードを保持する。未解決材質は捨てず、`材質要確認:<値>` の低信頼タグとしてレビュー対象にする。
 
 ## 7. `derived_tags` の形
 

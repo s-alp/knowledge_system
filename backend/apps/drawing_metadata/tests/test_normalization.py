@@ -50,6 +50,7 @@ def test_normalize_3d_raw_extract():
                     "is_unloaded": False,
                     "materials": [
                         {"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93, "element_count": 2},
+                        {"matid": "ZZZ", "name": "ZZZ", "specific_gravity": 0.0, "element_count": 1},
                     ],
                     "ex_info_fields": {
                         "User_WBZAI1": "ＲＭ",
@@ -78,16 +79,22 @@ def test_normalize_3d_raw_extract():
     assert canonical["material_ids"] == ["SUS304", "A5052"]
     assert canonical["material_names"] == ["SUS304", "AL"]
     assert canonical["material_specific_gravities"] == [7.93, 2.68]
-    assert canonical["part_material_candidate_count"] == 2
+    assert canonical["part_material_candidate_count"] == 3
     assert canonical["part_material_candidates"][0]["part_path"] == "Top.UnitA"
     assert canonical["part_material_candidates"][0]["material_id"] == "SUS304"
     assert canonical["part_material_candidates"][0]["source"] == "3d_part_material"
     assert canonical["part_material_candidates"][0]["confidence"] == "high"
-    assert canonical["part_material_candidates"][1]["material_id"] == "SUS"
-    assert canonical["part_material_candidates"][1]["confidence"] == "medium"
+    assert canonical["part_material_candidates"][1]["material_id"] == "ZZZ"
+    assert canonical["part_material_candidates"][1]["confidence"] == "high"
+    assert canonical["part_material_candidates"][2]["material_id"] == "SUS"
+    assert canonical["part_material_candidates"][2]["confidence"] == "medium"
+    assert "ZZZ" not in canonical["material_keywords"]
+    assert canonical["unresolved_material_keywords"] == ["ZZZ"]
     assert "SMC" in canonical["maker_keywords"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)
+    assert not any(tag["tag"] == "材質:ZZZ" for tag in tags)
+    assert any(tag["tag"] == "材質要確認:ZZZ" for tag in tags)
 
 
 def test_normalize_2d_raw_extract():
