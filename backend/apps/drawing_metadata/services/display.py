@@ -234,6 +234,68 @@ def _tag_items(tags: list[dict]) -> list[dict]:
     return items
 
 
+def _payload_target_review_rows(knowledge_payload_preview: dict | None) -> list[dict]:
+    rows: list[dict] = []
+    for target in (knowledge_payload_preview or {}).get("targets", []) or []:
+        if not isinstance(target, dict):
+            continue
+        rows.append(
+            {
+                "targetKey": target.get("targetKey"),
+                "label": target.get("label") or target.get("targetKey"),
+                "existingReception": _display_value(target.get("existingReception")),
+                "tagApiStatus": _display_value(target.get("tagApiStatus")),
+                "tagCount": len(target.get("tags") or []),
+                "attributeCount": len(target.get("attributes") or []),
+                "candidateEndpoint": _display_value(target.get("candidateEndpoint")),
+                "reviewRequired": _display_value(target.get("reviewRequired")),
+                "notes": target.get("notes") or [],
+            }
+        )
+    return rows
+
+
+def _payload_attribute_review_rows(knowledge_payload_preview: dict | None) -> list[dict]:
+    rows: list[dict] = []
+    for target in (knowledge_payload_preview or {}).get("targets", []) or []:
+        if not isinstance(target, dict):
+            continue
+        target_label = target.get("label") or target.get("targetKey")
+        for attribute in target.get("attributes") or []:
+            if not isinstance(attribute, dict):
+                continue
+            rows.append(
+                {
+                    "targetLabel": target_label,
+                    "attributeName": _display_value(attribute.get("attributeName")),
+                    "attributeValue": _display_value(attribute.get("attributeValue")),
+                    "sourcePath": _display_value(attribute.get("sourcePath")),
+                    "entityHint": _display_value(attribute.get("entityHint")),
+                    "bindingStatus": _display_value(attribute.get("bindingStatus")),
+                }
+            )
+    return rows
+
+
+def _payload_tag_review_rows(knowledge_payload_preview: dict | None) -> list[dict]:
+    rows: list[dict] = []
+    for target in (knowledge_payload_preview or {}).get("targets", []) or []:
+        if not isinstance(target, dict):
+            continue
+        target_label = target.get("label") or target.get("targetKey")
+        for tag in target.get("tags") or []:
+            if not _has_value(tag):
+                continue
+            rows.append(
+                {
+                    "targetLabel": target_label,
+                    "tag": str(tag),
+                    "tagApiStatus": _display_value(target.get("tagApiStatus")),
+                }
+            )
+    return rows
+
+
 def _source_file_rows(canonical_attributes: dict | None) -> list[dict]:
     canonical_attributes = canonical_attributes or {}
     return [_make_row(key, label, canonical_attributes.get(key)) for key, label in SOURCE_FILE_FIELDS]
@@ -749,7 +811,12 @@ def build_integration_handoff_display_payload(
     }
 
 
-def build_tag_review_display_payload(*, composed_metadata: dict, snapshots_by_mode: dict) -> dict:
+def build_tag_review_display_payload(
+    *,
+    composed_metadata: dict,
+    snapshots_by_mode: dict,
+    knowledge_payload_preview: dict | None = None,
+) -> dict:
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
     groups = [
         {
@@ -788,6 +855,9 @@ def build_tag_review_display_payload(*, composed_metadata: dict, snapshots_by_mo
         ],
         "groups": groups,
         "conflicts": composed_metadata.get("conflicts", []) or [],
+        "payloadTargetRows": _payload_target_review_rows(knowledge_payload_preview),
+        "payloadAttributeRows": _payload_attribute_review_rows(knowledge_payload_preview),
+        "payloadTagRows": _payload_tag_review_rows(knowledge_payload_preview),
     }
 
 

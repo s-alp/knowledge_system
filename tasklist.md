@@ -182,6 +182,7 @@
 - [x] 本番ナレッジシステム実画面をChromeで再確認し、プロジェクト/製品・装置・ユニット/部品/図面/AI検索/類似検索のスクリーンショットを `output\knowledge_ui_screenshots_2026-07-15\60-*.png` 以降へ保存。製品・装置・ユニットの実URLは `/web/product`
 - [x] 2D/3D照合の診断差分を `diagnosticConflicts` へ分離し、RAG投入前レビュー対象の `conflicts` に内部品質・件数・抽出元差分が混ざらないようにした。fixture契約検証で valid=true、issue 0件。ローカル詳細画面で `2D/3Dレビュー競合数` と `2D/3D診断差分数` の表示をChrome確認
 - [x] 本番ナレッジシステムをChrome実画面で追加確認し、メニュー経由の正しいURLとして統合検索 `/web/integrated_search`、類似検索 `/web/drawing/similar_search` を確認。プロジェクト詳細はタグ/属性欄なし、製品・装置・ユニット詳細と部品詳細は属性情報欄あり、図面詳細はタグ/属性情報欄あり
+- [x] タグレビュー画面に本番受け渡しpayload候補、対象別属性候補、対象別タグ候補を追加。図面/製品・装置・ユニット/部品/プロジェクトへ何を渡すかを1画面で確認できるようにし、`output\knowledge_ui_screenshots_2026-07-15\89-local-tag-review-payload-targets.jpg` でChrome確認
 
 ## 次に着手する
 

@@ -49,6 +49,107 @@
     </table>
   </div>
 
+  <div class="panel">
+    <h2>本番受け渡し payload 候補</h2>
+    <p class="muted">創屋へ渡す JSON を対象別に見た確認表です。本番ナレッジシステムへ登録・変更・削除は行いません。</p>
+    {% if tag_review_display.payloadTargetRows %}
+      <div class="table-scroll">
+        <table class="payload-table">
+          <thead>
+            <tr>
+              <th>対象</th>
+              <th>既存受け口</th>
+              <th>タグAPI状態</th>
+              <th>タグ数</th>
+              <th>属性数</th>
+              <th>候補endpoint</th>
+              <th>レビュー</th>
+              <th>メモ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in tag_review_display.payloadTargetRows %}
+              <tr>
+                <th>{{ row.label }}</th>
+                <td>{{ row.existingReception }}</td>
+                <td>{{ row.tagApiStatus }}</td>
+                <td>{{ row.tagCount }}</td>
+                <td>{{ row.attributeCount }}</td>
+                <td>{{ row.candidateEndpoint }}</td>
+                <td>{{ row.reviewRequired }}</td>
+                <td>{{ row.notes|join:" / " }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>payload 候補はありません。</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>対象別属性候補</h2>
+    <p class="muted">本番属性マスタIDが未確定のため、ここでは属性名と値、根拠、紐づけ待ち状態を確認します。</p>
+    {% if tag_review_display.payloadAttributeRows %}
+      <div class="table-scroll">
+        <table class="payload-table">
+          <thead>
+            <tr>
+              <th>対象</th>
+              <th>属性名</th>
+              <th>属性値</th>
+              <th>根拠</th>
+              <th>部品ヒント</th>
+              <th>紐づけ状態</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in tag_review_display.payloadAttributeRows %}
+              <tr>
+                <td>{{ row.targetLabel }}</td>
+                <td>{{ row.attributeName }}</td>
+                <td>{{ row.attributeValue }}</td>
+                <td>{{ row.sourcePath }}</td>
+                <td>{{ row.entityHint }}</td>
+                <td>{{ row.bindingStatus }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>属性候補はありません。</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>対象別タグ候補</h2>
+    <p class="muted">タグ専用APIが未確認の対象では、属性 `自動タグ候補` として代替する前提も併記しています。</p>
+    {% if tag_review_display.payloadTagRows %}
+      <table>
+        <thead>
+          <tr>
+            <th>対象</th>
+            <th>タグ</th>
+            <th>タグAPI状態</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in tag_review_display.payloadTagRows %}
+            <tr>
+              <td>{{ row.targetLabel }}</td>
+              <td>{{ row.tag }}</td>
+              <td>{{ row.tagApiStatus }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>タグ候補はありません。</p>
+    {% endif %}
+  </div>
+
   {% for group in tag_review_display.groups %}
     <div class="panel">
       <h2>{{ group.label }}</h2>

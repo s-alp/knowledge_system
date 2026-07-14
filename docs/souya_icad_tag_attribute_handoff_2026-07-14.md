@@ -343,6 +343,10 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 - 本番図面詳細: `output\knowledge_ui_screenshots_2026-07-15\87-production-drawing-detail-screen.png`
 - ローカル診断差分表示: `output\knowledge_ui_screenshots_2026-07-15\88-local-diagnostic-conflicts-detail.jpg`
 
+同じタグレビュー画面へ、`knowledgeSystemPayloadPreview` の対象別サマリを追加した。これにより、図面、製品・装置・ユニット、部品、プロジェクトごとに、既存受け口、タグAPI状態、タグ数、属性数、候補endpoint、属性候補、タグ候補を1画面で確認できる。創屋へ渡すJSONの見せる側の確認画面であり、本番保存操作は行わない。
+
+- ローカルタグレビューpayload確認: `output\knowledge_ui_screenshots_2026-07-15\89-local-tag-review-payload-targets.jpg`
+
 ```json
 {
   "drawingId": "host drawing id",

@@ -207,6 +207,47 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
             "conflicts": [],
         },
         snapshots_by_mode={},
+        knowledge_payload_preview={
+            "targets": [
+                {
+                    "targetKey": "drawing",
+                    "label": "図面",
+                    "existingReception": "図面詳細に tags / attributes あり",
+                    "candidateEndpoint": "/drawings/{id}/",
+                    "tagApiStatus": "candidate_existing",
+                    "tags": ["客先:澁谷工業", "装置:ロボット"],
+                    "attributes": [
+                        {
+                            "sourcePath": "canonicalAttributes.customer_name",
+                            "attributeName": "客先",
+                            "attributeValue": "澁谷工業",
+                            "bindingStatus": "needs_attribute_master_binding",
+                        }
+                    ],
+                    "reviewRequired": True,
+                    "notes": ["図面が第一優先"],
+                },
+                {
+                    "targetKey": "part",
+                    "label": "部品",
+                    "existingReception": "部品詳細に属性情報あり",
+                    "candidateEndpoint": "/parts/{id}/",
+                    "tagApiStatus": "not_found_use_attribute_fallback",
+                    "tags": ["材質要確認:ZZZ"],
+                    "attributes": [
+                        {
+                            "sourcePath": "canonicalAttributes.part_material_candidates",
+                            "entityHint": "TOP/PART-A",
+                            "attributeName": "材質",
+                            "attributeValue": "ZZZ",
+                            "bindingStatus": "needs_part_record_and_attribute_master_binding",
+                        }
+                    ],
+                    "reviewRequired": True,
+                    "notes": ["部品レコード突合が必要"],
+                },
+            ]
+        },
     )
 
     assert payload["title"] == "タグ候補レビュー"
@@ -214,6 +255,10 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
     assert payload["groups"][0]["tags"][2]["targetCandidates"] == ["部品", "図面", "製品・装置・ユニット"]
     assert payload["groups"][0]["tags"][3]["targetCandidates"] == ["部品", "図面"]
     assert payload["evidenceRows"][5]["displayValue"] == "1"
+    assert payload["payloadTargetRows"][0]["label"] == "図面"
+    assert payload["payloadTargetRows"][0]["attributeCount"] == 1
+    assert payload["payloadAttributeRows"][1]["entityHint"] == "TOP/PART-A"
+    assert payload["payloadTagRows"][2]["targetLabel"] == "部品"
 
 
 def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_contracts():
@@ -687,3 +732,6 @@ def test_tag_review_page_renders_composed_tag_candidates(client, sample_registra
     assert "タグ候補レビュー" in content
     assert "客先:澁谷工業" in content
     assert "プロジェクト, 製品・装置・ユニット, 図面" in content
+    assert "本番受け渡し payload 候補" in content
+    assert "対象別属性候補" in content
+    assert "図面詳細にタグと属性情報が表示" in content

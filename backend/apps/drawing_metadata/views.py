@@ -18,6 +18,7 @@ from apps.drawing_metadata.services.display import (
     build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
+from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 
@@ -152,6 +153,10 @@ class TagReviewPageView(View):
         )
         snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in drawing.snapshots.all()}
         composed_metadata = compose_drawing_metadata(drawing)
+        knowledge_payload_preview = build_knowledge_system_payload_preview(
+            drawing=drawing,
+            composed_metadata=composed_metadata,
+        )
         return render(
             request,
             self.template_name,
@@ -160,6 +165,7 @@ class TagReviewPageView(View):
                 "tag_review_display": build_tag_review_display_payload(
                     composed_metadata=composed_metadata,
                     snapshots_by_mode=snapshots_by_mode,
+                    knowledge_payload_preview=knowledge_payload_preview,
                 ),
             },
         )
