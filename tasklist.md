@@ -36,6 +36,7 @@
   - 2D図枠欄名候補を `title_block_candidates` と `title_block_fields` として追加。`TR1D9K99027_allviews_2d.json` は候補10件、`DFR-CM1-AA0305300011_2d.json` は材質候補を確認。
   - 2D primitive 由来の `geometry_feature_candidates` を追加。`CAA5012-02430002P1R1_primitives_2d.json` でハッチング8件、表面粗さ2件、長穴候補17件を確認。
   - Gemini API 低温度JSON分類サービスを追加。`title_block_candidates` の欄名分類補助に限定し、許可field外や範囲外indexは破棄する。
+  - Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。
   - 3D材質APIを追加。`6800DDU.icd` で `material_probe_status=available`、`SUS440C`、比重7.7、17要素を確認。
 - 次に着手する場合:
   - v2 raw schema を確定する。
@@ -113,10 +114,11 @@
 - [x] 2D/3D照合結果を `reconciledAttributes` として保持し、詳細画面に採用値・差異・理由を表示
 - [x] 表面粗さ値、断面/切断表現、長穴/楕円候補、穴/円候補を 2D 形状・記号属性として保持し、詳細画面に表示
 - [x] 3D全体材質とパーツ付加情報から部品材質候補を生成し、詳細画面に表示
+- [x] Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み、候補行へAI分類理由を表示
 
 ## 次に着手する
 
-- [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini API 低温度 JSON 分類をジョブへ組み込む
+- [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini分類結果の実データ採用率を確認する
 - [ ] 複数部品/複数材質の厳密紐づけ可否をSXNET資料と追加サンプルで確認する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`

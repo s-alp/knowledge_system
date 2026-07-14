@@ -3,7 +3,10 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
-from apps.drawing_metadata.models import DrawingMetadataExtractionJob, RegisteredDrawing
+from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.services.extraction_runner import ExtractionRunResult
+from apps.drawing_metadata.services.llm_title_block_classifier import GeminiResponseError
+from apps.drawing_metadata.tasks import extraction_tasks
 from apps.drawing_metadata.tasks.extraction_tasks import claim_next_job
 
 
@@ -50,3 +53,119 @@ def test_claim_next_job_reclaims_stale_processing_job(settings):
     assert claimed.id == stale_job.id
     assert claimed.worker_name == "windows-icad-02"
     assert claimed.retry_count == 1
+
+
+@pytest.mark.django_db
+def test_process_job_applies_gemini_title_block_classification(monkeypatch, settings, tmp_path):
+    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
+    settings.GEMINI_API_KEY = "test-key"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-process",
+        filename="sample-process.icd",
+        source_path=r"C:\temp\sample-process.icd",
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_PROCESSING,
+        worker_name="test-worker",
+    )
+
+    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+        return ExtractionRunResult(
+            payload={
+                "source_format": "icad",
+                "source_kind": "2d",
+                "source_file": {"file_name": "sample-process.icd"},
+                "raw_extract": {
+                    "texts": [
+                        {
+                            "text_lines": ["品名 SUS304"],
+                            "source_type": "text",
+                            "inside_print_area": True,
+                        }
+                    ]
+                },
+                "warnings": [],
+            },
+            output_path=tmp_path / "raw.json",
+        )
+
+    def fake_classify_title_block_candidates(candidates):
+        assert candidates[0]["value"] == "SUS304"
+        return [{"index": 0, "field": "material", "confidence": "high", "reason": "材質値に見える"}]
+
+    monkeypatch.setattr(extraction_tasks, "run_extractor", fake_run_extractor)
+    monkeypatch.setattr(
+        extraction_tasks,
+        "classify_title_block_candidates",
+        fake_classify_title_block_candidates,
+    )
+
+    processed = extraction_tasks.process_job(job.id)
+    snapshot = DrawingMetadataSnapshot.objects.get(drawing=drawing, extraction_mode="2d")
+
+    assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert snapshot.canonical_attributes_json["title_block_fields"]["material"] == "SUS304"
+    assert snapshot.canonical_attributes_json["title_block_candidates"][0]["llm_field"] == "material"
+    assert any(tag["tag"] == "材質:SUS304" for tag in snapshot.derived_tags_json)
+
+
+@pytest.mark.django_db
+def test_process_job_records_gemini_failure_as_warning(monkeypatch, settings, tmp_path):
+    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
+    settings.GEMINI_API_KEY = "test-key"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-warning",
+        filename="sample-warning.icd",
+        source_path=r"C:\temp\sample-warning.icd",
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_PROCESSING,
+        worker_name="test-worker",
+    )
+
+    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+        return ExtractionRunResult(
+            payload={
+                "source_format": "icad",
+                "source_kind": "2d",
+                "source_file": {"file_name": "sample-warning.icd"},
+                "raw_extract": {
+                    "texts": [
+                        {
+                            "text_lines": ["品名 SUS304"],
+                            "source_type": "text",
+                            "inside_print_area": True,
+                        }
+                    ]
+                },
+                "warnings": [],
+            },
+            output_path=tmp_path / "raw.json",
+        )
+
+    def fake_classify_title_block_candidates(candidates):
+        raise GeminiResponseError("Gemini API returned HTTP 500.")
+
+    monkeypatch.setattr(extraction_tasks, "run_extractor", fake_run_extractor)
+    monkeypatch.setattr(
+        extraction_tasks,
+        "classify_title_block_candidates",
+        fake_classify_title_block_candidates,
+    )
+
+    processed = extraction_tasks.process_job(job.id)
+
+    assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert processed.warnings_json == [
+        {
+            "code": "title_block_llm_classification_failed",
+            "message": "Gemini API returned HTTP 500.",
+            "source": "gemini_title_block_classifier",
+        }
+    ]

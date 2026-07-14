@@ -4,6 +4,7 @@ import pytest
 
 from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiConfigurationError,
+    apply_title_block_classifications,
     classify_title_block_candidates,
 )
 
@@ -62,3 +63,53 @@ def test_classify_title_block_candidates_posts_json_and_filters_response(setting
     body = json.loads(req.data.decode("utf-8"))
     assert body["generationConfig"]["temperature"] == 0.0
     assert body["generationConfig"]["responseMimeType"] == "application/json"
+
+
+def test_apply_title_block_classifications_adds_missing_field_without_overwrite():
+    canonical = {
+        "title_block_fields": {"drawing_name": "SUS304"},
+        "title_block_candidates": [
+            {
+                "field": "drawing_name",
+                "label": "図面名",
+                "value": "SUS304",
+                "confidence": "medium",
+                "evidence_text": "品名 SUS304",
+            }
+        ],
+    }
+
+    result = apply_title_block_classifications(
+        canonical,
+        [{"index": 0, "field": "material", "confidence": "high", "reason": "材質値に見える"}],
+    )
+
+    assert result["title_block_fields"]["drawing_name"] == "SUS304"
+    assert result["title_block_fields"]["material"] == "SUS304"
+    assert result["title_block_candidates"][0]["llm_field"] == "material"
+    assert result["title_block_candidates"][0]["llm_confidence"] == "high"
+    assert result["title_block_llm_classifications"][0]["accepted_as_field"] is True
+
+
+def test_apply_title_block_classifications_does_not_accept_label_only_value():
+    canonical = {
+        "title_block_fields": {},
+        "title_block_candidates": [
+            {
+                "field": "drawing_name",
+                "label": "図面名",
+                "value": "材質",
+                "confidence": "low",
+                "evidence_text": "材質",
+            }
+        ],
+    }
+
+    result = apply_title_block_classifications(
+        canonical,
+        [{"index": 0, "field": "material", "confidence": "high", "reason": "ラベルのみ"}],
+    )
+
+    assert "material" not in result["title_block_fields"]
+    assert result["title_block_candidates"][0]["llm_field"] == "material"
+    assert result["title_block_llm_classifications"][0]["accepted_as_field"] is False

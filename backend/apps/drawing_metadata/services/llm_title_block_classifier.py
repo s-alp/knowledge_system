@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 from django.conf import settings
 
-from apps.drawing_metadata.services.normalization import TITLE_BLOCK_FIELD_RULES
+from apps.drawing_metadata.services.normalization import TITLE_BLOCK_FIELD_RULES, _is_title_block_value_usable
 
 
 class GeminiConfigurationError(RuntimeError):
@@ -63,6 +63,70 @@ def classify_title_block_candidates(
         raise GeminiResponseError(f"Gemini API request failed: {exc.reason}") from exc
 
     return _parse_response(body, len(candidates))
+
+
+def apply_title_block_classifications(canonical_attributes: dict, classifications: list[dict]) -> dict:
+    """Apply Gemini labels to existing candidates without overwriting rule-based fields."""
+    if not classifications:
+        return canonical_attributes
+
+    candidates = canonical_attributes.get("title_block_candidates") or []
+    if not isinstance(candidates, list):
+        return canonical_attributes
+
+    fields = dict(canonical_attributes.get("title_block_fields") or {})
+    applied: list[dict] = []
+    allowed_confidences = {"high", "medium", "low"}
+
+    for classification in classifications:
+        if not isinstance(classification, dict):
+            continue
+        index = classification.get("index")
+        if not isinstance(index, int) or index < 0 or index >= len(candidates):
+            continue
+
+        candidate = candidates[index]
+        if not isinstance(candidate, dict):
+            continue
+
+        field = classification.get("field")
+        if field is not None and field not in TITLE_BLOCK_FIELD_RULES:
+            continue
+        confidence = classification.get("confidence")
+        if confidence not in allowed_confidences:
+            confidence = "low"
+        source = classification.get("source") or "gemini_title_block_classifier"
+        reason = str(classification.get("reason") or "")
+
+        candidate["llm_field"] = field
+        candidate["llm_confidence"] = confidence
+        candidate["llm_reason"] = reason
+        candidate["llm_source"] = source
+
+        value = candidate.get("value")
+        accepted_as_field = False
+        if field and confidence in {"high", "medium"} and field not in fields:
+            rule = TITLE_BLOCK_FIELD_RULES.get(field, {})
+            max_value_length = int(rule.get("max_value_length", 80))
+            if _is_title_block_value_usable(value, max_length=max_value_length):
+                fields[field] = value
+                accepted_as_field = True
+
+        applied.append(
+            {
+                "index": index,
+                "field": field,
+                "confidence": confidence,
+                "reason": reason,
+                "source": source,
+                "value": value,
+                "accepted_as_field": accepted_as_field,
+            }
+        )
+
+    canonical_attributes["title_block_fields"] = fields
+    canonical_attributes["title_block_llm_classifications"] = applied
+    return canonical_attributes
 
 
 def _build_request_payload(candidates: list[dict], temperature: float) -> dict:

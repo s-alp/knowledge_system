@@ -14,6 +14,12 @@ from apps.drawing_metadata.models import (
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor
+from apps.drawing_metadata.services.llm_title_block_classifier import (
+    GeminiConfigurationError,
+    GeminiResponseError,
+    apply_title_block_classifications,
+    classify_title_block_candidates,
+)
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
@@ -74,6 +80,30 @@ def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob 
         return job
 
 
+def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: list[dict]) -> None:
+    provider = settings.DRAWING_METADATA_LLM_PROVIDER.lower()
+    if provider != "gemini" or not settings.GEMINI_API_KEY:
+        return
+
+    candidates = canonical_attributes.get("title_block_candidates") or []
+    if not candidates:
+        return
+
+    try:
+        classifications = classify_title_block_candidates(candidates)
+    except (GeminiConfigurationError, GeminiResponseError) as exc:
+        warnings.append(
+            {
+                "code": "title_block_llm_classification_failed",
+                "message": str(exc),
+                "source": "gemini_title_block_classifier",
+            }
+        )
+        return
+
+    apply_title_block_classifications(canonical_attributes, classifications)
+
+
 def process_job(job_id) -> DrawingMetadataExtractionJob:
     job = DrawingMetadataExtractionJob.objects.select_related("drawing").get(pk=job_id)
     executed_by = f"worker:{job.worker_name or 'unknown'}"
@@ -83,7 +113,10 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
             extraction_mode=job.extraction_mode,
             job_id=job.id,
         )
+        warnings = list(result.payload.get("warnings", []))
         canonical_attributes = normalize_raw_extract(result.payload)
+        if job.extraction_mode == EXTRACTION_MODE_2D:
+            _classify_2d_title_block_candidates(canonical_attributes, warnings)
         derived_tags = build_derived_tags(canonical_attributes)
         raw_extract = dict(result.payload.get("raw_extract", {}))
         if result.payload.get("source_file"):
@@ -102,7 +135,7 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
         job.finished_at = timezone.now()
         job.elapsed_ms = int(result.payload.get("elapsed_ms") or 0)
         job.error_message = ""
-        job.warnings_json = result.payload.get("warnings", [])
+        job.warnings_json = warnings
         job.extractor_name = result.payload.get("extractor_name", "")
         job.extractor_version = result.payload.get("extractor_version", "")
         job.schema_version = settings.DRAWING_METADATA_SCHEMA_VERSION

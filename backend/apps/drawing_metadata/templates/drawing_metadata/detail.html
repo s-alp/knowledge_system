@@ -292,6 +292,9 @@
               <th>項目</th>
               <th>候補値</th>
               <th>信頼度</th>
+              <th>AI分類</th>
+              <th>AI信頼度</th>
+              <th>AI理由</th>
               <th>ビュー名</th>
               <th>レイヤー</th>
               <th>座標</th>
@@ -305,6 +308,9 @@
                 <td>{{ candidate.field }}</td>
                 <td>{{ candidate.value }}</td>
                 <td>{{ candidate.confidence }}</td>
+                <td>{{ candidate.llmField }}</td>
+                <td>{{ candidate.llmConfidence }}</td>
+                <td>{{ candidate.llmReason }}</td>
                 <td>{{ candidate.viewName }}</td>
                 <td>{{ candidate.layerNo }}</td>
                 <td>{{ candidate.position }}</td>
