@@ -426,7 +426,7 @@ Django正規化層で、2D文字から図枠欄候補を作る初期辞書を追
 - Geminiは値を生成しない。返せるのは候補 index と許可済み field 名だけ
 - 許可されていない field、範囲外 index、不正 confidence は破棄する
 
-現時点では実API呼び出しをジョブに組み込まず、サービスとモックテストまでに止めている。次に組み込む場合は、図枠辞書で低信頼または未分類になった候補だけを対象にする。
+実API呼び出しは2D抽出ジョブへ組み込み済みで、APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として保持する。2026-07-14 の再確認では `.env` に `GEMINI_API_KEY` と `DRAWING_METADATA_LLM_PROVIDER=gemini` が設定されていることは確認できたが、Gemini API は `API_KEY_INVALID` を返したため、採用率の実測は未完了。再確認結果は `output/live_extracts/title_block_llm_probe_2026-07-14/gemini_reprobe_2026-07-14.json` に保存した。
 
 ### 12.10 3D材質APIの初期実装
 
