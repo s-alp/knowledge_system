@@ -114,7 +114,7 @@
 - [x] manifest取込後の代表図面で本番タグ・属性payloadプレビューのローカル実画面確認を実施
 - [x] 2Dビュー別/レイヤー別/印刷枠内外カバレッジを詳細画面と集計スクリプトで確認
 - [x] 代表manifestの2D対象19件を最新runnerで再抽出し、ビュー121、印刷枠22、レイヤー4845、寸法1492、図形primitive20477まで取得できることを確認
-- [x] 再抽出後の2Dカバレッジで `itemsWithoutView=0` を確認。残課題として `unknownPrintArea=13569` と `itemsWithoutLayer=741` を記録
+- [x] 再抽出後の2Dカバレッジで `itemsWithoutView=0` を確認。`SxGeomLine2D` の `pnt1/pnt2` 座標取得を追加し、印刷枠判定不明は `unknownPrintArea=13569` から `488` まで減少。残りは主にハッチングと座標なし文字として記録
 - [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
 - [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み
@@ -166,13 +166,16 @@
 - [x] 共有済み抽出JSONの中から各客先代表を選び、重複/旧形式を避けた取込manifestを作成
 - [x] manifest経由で代表24図面を取り込み、fixture 35図面 / payload候補あり25図面 / 2D3D両方あり20図面まで拡張
 - [x] 再抽出manifestをDBへ取り込み、創屋連携fixture 35図面を `drawing_metadata_fixture_reextract_2026-07-15.json` として再生成
+- [x] `SxGeomLine2D` の座標取得を scalar `x1/y1/x2/y2` だけでなく `pnt1/pnt2` 系へ拡張し、代表2D 19件で印刷枠判定不明を `488` まで低減
+- [x] `analyze_2d_print_area_unknowns.py` を追加し、印刷枠判定不明の理由を座標欠落/座標あり判定失敗/primitive型別に分解して確認
+- [x] 本番ナレッジシステムのプロジェクト、製品・装置・ユニット、部品、図面、AI検索、類似検索をChrome実画面で再確認し、読み取り専用スクリーンショットを `output\knowledge_ui_screenshots_2026-07-15` に保存
 - [x] 本番ナレッジシステム図面詳細の2D/3D切替をChromeで目視確認し、3D GLTF読み込みエラーを記録
 - [x] ローカルDjango詳細画面とタグレビュー画面をChromeで目視確認し、2D/3Dあり、viewerタグ、保存フォルダ、パーツ付加情報数、統合タグ、2D/3D競合が画面に出ることを確認
 
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
-- [ ] 再抽出後も印刷枠判定不明が残る図面を、図面別に見て除外ルールへ進めるか記録止まりにするか決める
+- [ ] 残りの印刷枠判定不明488件を、ハッチングと座標なし文字に分けて、タグ生成除外にするか証跡保存に留めるか決める
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

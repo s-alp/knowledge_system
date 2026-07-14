@@ -1,0 +1,1257 @@
+{
+  "inputRoot": "output\\live_extracts\\manifest_2d_reextract_2026-07-15",
+  "fileCount": 19,
+  "totals": {
+    "total": 23279,
+    "unknown": 481,
+    "missingXY": 481,
+    "unknownWithXY": 0
+  },
+  "primitiveUnknownByType": {
+    "SxGeomHatch": 169
+  },
+  "primitiveMissingXYByType": {
+    "SxGeomHatch": 169
+  },
+  "topFiles": [
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\PSG011-PA13001.latest_2d.json",
+      "fileName": "PSG011-PA13001.icd",
+      "viewSheetCount": 24,
+      "printFrameCount": 2,
+      "total": 11473,
+      "unknown": 162,
+      "missingXY": 162,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 252,
+          "missing_xy": 23,
+          "unknown": 23
+        },
+        "dimension": {
+          "total": 619
+        },
+        "primitive": {
+          "total": 10602,
+          "missing_xy": 139,
+          "unknown": 139
+        }
+      },
+      "primitiveUnknownByType": {
+        "SxGeomHatch": 139
+      },
+      "primitiveMissingXYByType": {
+        "SxGeomHatch": 139
+      },
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｙ"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\XH30-A08001-R03-JP_ロードカップ部改造.latest_2d.json",
+      "fileName": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "viewSheetCount": 4,
+      "printFrameCount": 1,
+      "total": 6986,
+      "unknown": 140,
+      "missingXY": 140,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 318,
+          "missing_xy": 140,
+          "unknown": 140
+        },
+        "dimension": {
+          "total": 76
+        },
+        "primitive": {
+          "total": 6592
+        }
+      },
+      "primitiveUnknownByType": {},
+      "primitiveMissingXYByType": {},
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "フォトマイクロセンサ：オムロン ＥＥ－ＳＸ６７１Ａ コネクタケーブル：オムロン ＥＥ－１０１０ ２Ｍ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ケーブルベヤ：椿本 本体　　　　：ＴＫＰ３５Ｈ２２－３０Ｗ５０Ｒ５０ 固定端金具　：ＴＫＰ３５Ｈ２２Ｗ５０－ＦＯ 移動端金具　：ＴＫＰ３５Ｈ２２Ｗ５０－ＭＯ 編成　　　　：（２１Ｌ＋ＦＯ＋ＭＯ）Ｘ１組"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０２４ ２－Ｍ４×６，Ｗ ２ーＭ３×１０"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０２４ ２－Ｍ４×６，Ｗ ２ーＭ３×１０"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０２８ ２－Ｍ４×６ ２ーＭ３×１０"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "３×位置決めピン：ミスミ ＡＰＳＴＴＰ－Ｄ８－Ｌ１８－Ｇ６"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０１９ ８－Ｍ８×２０"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０２１ ８－Ｍ１０×２５"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "サーボモータ：三菱電機 ＨＧ－ＫＲ２３(電磁ブレーキ無) サーボアンプ：三菱電機 ＭＲ－Ｊ４－２０Ｂ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "８０３１ ４－Ｍ５×１６"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\CAA5012-02434000K1R1.latest_2d.json",
+      "fileName": "CAA5012-02434000K1R1.icd",
+      "viewSheetCount": 12,
+      "printFrameCount": 4,
+      "total": 615,
+      "unknown": 63,
+      "missingXY": 63,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "missing_xy": 55,
+          "unknown": 55,
+          "total": 94
+        },
+        "dimension": {
+          "total": 156
+        },
+        "primitive": {
+          "total": 365,
+          "missing_xy": 8,
+          "unknown": 8
+        }
+      },
+      "primitiveUnknownByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveMissingXYByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｍ．Ｅ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｍ．Ｅ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "原点"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "受渡し位置"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "位置決め部"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "仮圧着部"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "仮圧着部"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "位置決め部"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "受渡し位置"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "C-C",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "移載部　重心 質量：９ｋｇ"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\PSG011-PA0500_コラム.latest_2d.json",
+      "fileName": "PSG011-PA0500_コラム.icd",
+      "viewSheetCount": 7,
+      "printFrameCount": 1,
+      "total": 184,
+      "unknown": 43,
+      "missingXY": 43,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "missing_xy": 43,
+          "unknown": 43,
+          "total": 54
+        },
+        "dimension": {
+          "total": 33
+        },
+        "primitive": {
+          "total": 97
+        }
+      },
+      "primitiveUnknownByType": {},
+      "primitiveMissingXYByType": {},
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "トイシスピンドル　"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ベッド"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ケーブルベア（椿本チエイン） ＴＫＰ３５Ｈ２２－３０Ｗ６３Ｒ５０＋１０Ｌ－ＦＯ－ＭＩ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ベッド"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "トイシスピンドル　"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ０５０１０ ケーブルダクト"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ０５０１２ フタ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ０５０１３ フタ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ０５０２４ フタ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "カラー（ミスミ） ＷＳＳＢ２５－１２－５"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\PSG011-PA1100_クリーニング駆動.latest_2d.json",
+      "fileName": "PSG011-PA1100_クリーニング駆動.icd",
+      "viewSheetCount": 8,
+      "printFrameCount": 1,
+      "total": 126,
+      "unknown": 28,
+      "missingXY": 28,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "missing_xy": 28,
+          "unknown": 28,
+          "total": 39
+        },
+        "dimension": {
+          "total": 50
+        },
+        "primitive": {
+          "total": 37
+        }
+      },
+      "primitiveUnknownByType": {},
+      "primitiveMissingXYByType": {},
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "アイソメ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "クリーニングブラシユニット"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "アイソメ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャッククリーニングユニット"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ウェハークリーニング"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャッククリーニング"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャッククリーニングユニット"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "クリーニングブラシユニット （ウェハー）"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャックテーブル"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ１１００９ ケーブルブラケット"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ１１０１３ ブロック"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－Ｐ１１０１０ ケーブルブラケット"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\CAA5012-02430002P1R1.latest_2d.json",
+      "fileName": "CAA5012-02430002P1R1.icd",
+      "viewSheetCount": 7,
+      "printFrameCount": 1,
+      "total": 290,
+      "unknown": 10,
+      "missingXY": 10,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 4,
+          "missing_xy": 2,
+          "unknown": 2
+        },
+        "dimension": {
+          "total": 42
+        },
+        "primitive": {
+          "total": 244,
+          "missing_xy": 8,
+          "unknown": 8
+        }
+      },
+      "primitiveUnknownByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveMissingXYByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "１個－位置決メピン［ミスミ］ ＣＪＰＢＰＡ５－７．９８"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "精度は公差穴に適用"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "sectA",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=135; dist=4.5; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "sectB",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=135; dist=4.5; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "sectB",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=135; dist=4.5; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "sectB",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=135; dist=4.5; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!XY",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\PSG011-PA1300_ベース.latest_2d.json",
+      "fileName": "PSG011-PA1300_ベース.icd",
+      "viewSheetCount": 8,
+      "printFrameCount": 1,
+      "total": 103,
+      "unknown": 10,
+      "missingXY": 10,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 21,
+          "missing_xy": 10,
+          "unknown": 10
+        },
+        "dimension": {
+          "total": 26
+        },
+        "primitive": {
+          "total": 56
+        }
+      },
+      "primitiveUnknownByType": {},
+      "primitiveMissingXYByType": {},
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャックテーブル　センター 加工位置"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "トイシスピンドル　センター"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－ＰＡ１３００２ 制御盤ＢＯＸ架台"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－ＰＡ１３００１ ベッド"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－ＰＡ１３００４ パン"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "チャックテーブル　センター 原位置"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－ＰＡ１３００３ パン"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome1",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "シール座金（ミスミ） ＧＳＷ６"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome2",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ハイマウント（倉敷化工） ＭＹ-１４Ｂ"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "isome4",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "ＰＳＧ０１１－ＰＡ１３００５ 吊具"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\23022-013_231218.latest_2d.json",
+      "fileName": "23022-013_231218.icd",
+      "viewSheetCount": 8,
+      "printFrameCount": 1,
+      "total": 144,
+      "unknown": 8,
+      "missingXY": 8,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 4
+        },
+        "dimension": {
+          "total": 121
+        },
+        "primitive": {
+          "total": 19,
+          "missing_xy": 8,
+          "unknown": 8
+        }
+      },
+      "primitiveUnknownByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveMissingXYByType": {
+        "SxGeomHatch": 8
+      },
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!!GLOBAL",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.2; pitch=0.5; ex_scale=0; type=604"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\CAA5012-02434006P1R1.latest_2d.json",
+      "fileName": "CAA5012-02434006P1R1.icd",
+      "viewSheetCount": 4,
+      "printFrameCount": 1,
+      "total": 98,
+      "unknown": 4,
+      "missingXY": 4,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {},
+        "dimension": {
+          "total": 47
+        },
+        "primitive": {
+          "missing_xy": 4,
+          "unknown": 4,
+          "total": 51
+        }
+      },
+      "primitiveUnknownByType": {
+        "SxGeomHatch": 4
+      },
+      "primitiveMissingXYByType": {
+        "SxGeomHatch": 4
+      },
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        },
+        {
+          "group": "primitive",
+          "geometry_type": "SxGeomHatch",
+          "view_name": "!-XZ",
+          "layer_no": 1,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "pattern=1; ang=45; dist=0.1; pitch=0.5; ex_scale=0; type=604"
+        }
+      ]
+    },
+    {
+      "path": "output\\live_extracts\\manifest_2d_reextract_2026-07-15\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).latest_2d.json",
+      "fileName": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "viewSheetCount": 4,
+      "printFrameCount": 1,
+      "total": 95,
+      "unknown": 3,
+      "missingXY": 3,
+      "unknownWithXY": 0,
+      "groupCounts": {
+        "text": {
+          "total": 32,
+          "missing_xy": 3,
+          "unknown": 3
+        },
+        "dimension": {
+          "total": 59
+        },
+        "primitive": {
+          "total": 4
+        }
+      },
+      "primitiveUnknownByType": {},
+      "primitiveMissingXYByType": {},
+      "primitiveUnknownWithXYByType": {},
+      "sampleUnknowns": [
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｈ２００×２００×８×１２ Ｈ形鋼"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "Ｌ＊＊×＊＊×ｔ＊ 等辺山形鋼"
+        },
+        {
+          "group": "text",
+          "geometry_type": null,
+          "view_name": "!!GLOBAL",
+          "layer_no": null,
+          "position_x": null,
+          "position_y": null,
+          "center_x": null,
+          "center_y": null,
+          "summary": "[＊＊×＊＊×＊×＊ 溝形鋼"
+        }
+      ]
+    }
+  ]
+}

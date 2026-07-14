@@ -11,19 +11,10 @@
   "source_kind": "2d",
   "extractor_name": "icad-csharp-extractor",
   "extractor_version": "1.0.0",
-  "elapsed_ms": 54275,
+  "elapsed_ms": 52943,
   "warnings": [],
   "raw_extract": {
     "view_sheets": [
-      {
-        "name": "!XY",
-        "comment": null,
-        "scale": 1.0,
-        "angle": 0.0,
-        "type": 2,
-        "view_type": 2,
-        "geometry_count": 0
-      },
       {
         "name": "!!GLOBAL",
         "comment": null,
@@ -31,6 +22,15 @@
         "angle": 0.0,
         "type": 1,
         "view_type": 0,
+        "geometry_count": 0
+      },
+      {
+        "name": "!XY",
+        "comment": null,
+        "scale": 1.0,
+        "angle": 0.0,
+        "type": 2,
+        "view_type": 2,
         "geometry_count": 0
       }
     ],

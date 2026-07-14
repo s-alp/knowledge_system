@@ -255,19 +255,35 @@ python scripts\summarize_2d_extraction_coverage.py `
 - 文字: 1,310件
 - 寸法: 1,492件
 - 図形primitive: 20,477件
-- 印刷枠内: 1,844件
-- 印刷枠外: 7,887件
-- 印刷枠判定不明: 13,569件
+- 印刷枠内: 3,212件
+- 印刷枠外: 19,600件
+- 印刷枠判定不明: 488件
 - ビュー情報なし: 0件
 - レイヤー未設定要素: 741件
 - 印刷枠なし: 1ファイル
 
-旧manifestでは `ビュー情報なし17ファイル`、`印刷枠情報なし17ファイル`、`レイヤー情報なし17ファイル` だったため、最新抽出器で全ビュー・印刷枠・レイヤー取得は大きく改善した。ただし、印刷枠判定不明はまだ多い。ここは安易に削除フィルタを入れず、図面別に `inside_print_area=unknown` の理由を確認してから、検索・タグ生成対象から外すかどうかを決める。
+旧manifestでは `ビュー情報なし17ファイル`、`印刷枠情報なし17ファイル`、`レイヤー情報なし17ファイル` だったため、最新抽出器で全ビュー・印刷枠・レイヤー取得は大きく改善した。
+
+同日さらに `SxGeomLine2D` の座標取得を見直し、scalar の `x1/y1/x2/y2` が無い線分でも `pnt1/pnt2`、`pos1/pos2`、`sp/ep`、`start/end` から開始点・終点を拾うようにした。改善前は `SxGeomLine2D` が印刷枠判定不明の大半を占めていたが、再抽出後は `unknownPrintArea=488` まで低下した。内訳分析は `output\souya_handoff\icad_2d_print_area_unknown_analysis_2026-07-15.json` に保存した。
+
+- 分析対象要素: 23,279件
+- 判定不明: 481件
+- 座標欠落による不明: 481件
+- 座標ありだが判定失敗: 0件
+- 不明primitive型: `SxGeomHatch` 169件
+- 残りは主に `SxGeomHatch` と、`Ｙ` など座標なし文字である
+
+したがって、次の残課題は線分座標ではなく、ハッチングを印刷枠判定対象に含めるか、座標なし文字をタグ生成から除外するかの整理である。安易に削除フィルタを入れず、証跡として保持しつつ検索・タグ生成対象から外す制御を検討する。
 
 同日に本番ナレッジシステムの実画面もChromeで再確認した。登録、変更、削除は行っていない。
 
-- 部品詳細: `output\knowledge_ui_screenshots_2026-07-15\01-part-detail-current.png`
-- 図面一覧: `output\knowledge_ui_screenshots_2026-07-15\02-drawing-list.png`
+- プロジェクト一覧: `output\knowledge_ui_screenshots_2026-07-15\30-project-list-settled.png`
+- 製品・装置・ユニット一覧: `output\knowledge_ui_screenshots_2026-07-15\31-product-unit-list-settled.png`
+- 部品一覧: `output\knowledge_ui_screenshots_2026-07-15\32-part-list-settled.png`
+- 部品詳細: `output\knowledge_ui_screenshots_2026-07-15\01-part-detail-start-viewport.png`
+- 図面一覧: `output\knowledge_ui_screenshots_2026-07-15\33-drawing-list-settled.png`
+- AI検索: `output\knowledge_ui_screenshots_2026-07-15\34-ai-search-settled.png`
+- 類似検索: `output\knowledge_ui_screenshots_2026-07-15\35-similar-search-settled.png`
 - 図面詳細2D: `output\knowledge_ui_screenshots_2026-07-15\03-drawing-detail-2d.png`
 - 図面詳細3Dエラー: `output\knowledge_ui_screenshots_2026-07-15\04-drawing-detail-3d-error.png`
 - ローカル詳細: `output\knowledge_ui_screenshots_2026-07-15\05-local-detail.png`
@@ -277,6 +293,9 @@ python scripts\summarize_2d_extraction_coverage.py `
 
 - 本番部品詳細には `属性情報` 欄があり、サンプルでは空表示だった。部品タグ・属性の受け口として重要。
 - 本番図面一覧には、検索条件、図面タイプ、ステータス、紐づき概要が見える。タグ列は未表示。
+- 本番プロジェクト一覧、製品・装置・ユニット一覧、部品一覧にもタグ列は見えない。タグを活用するなら、一覧条件・詳細属性・関連情報のどこへ反映するかを創屋と確認する。
+- 本番AI検索はチャット履歴と質問欄が中心で、タグを直接編集する場所ではない。タグは検索前フィルタ、RAG投入payload、ランキング信号として裏側で使うのが自然。
+- 本番類似検索は2D/3Dチェック、検索ファイル、類似度、図面名、用途、規格、重要度フィルタが見える。ICAD抽出タグは類似検索フィルタや重みづけ補助にも使える。
 - 本番図面詳細には `タグ` と `属性情報` 欄、2D/3D切替、2Dプレビューが見える。初期連携先は引き続き図面詳細を最優先にする。
 - 本番図面詳細の3D切替では `/web/public/models/test_000445.gltf` がHTMLを返し、GLTFとして読めずアプリ全体がエラー画面になった。抽出器の問題ではないが、創屋への2D/3Dプレビュー連携確認事項に含める。
 - ローカル詳細画面では `CAA5012-02434000K1R1.icd` について `2Dあり`、`3Dあり`、viewerタグ、保存フォルダ、パーツ付加情報数が表示される。

@@ -17,6 +17,7 @@ namespace IcadExtraction.SxNet.Tests
                 new SxGeomLabel { txt = new[] { "ロボット" }, text_line_num = 1 },
                 new SxGeomLengthDim { diminfo = new DimInfo { value_1 = "100", mark_2 = "M5" }, pnt1 = new SxPos { x = -1.0, y = 2.0, z = 0.0 } },
                 new SxGeomLine2D { x1 = 0.0, y1 = 1.0, x2 = 2.0, y2 = 3.0 },
+                new SxGeomLine2D { pnt1 = new SxPos { x = 30.0, y = 31.0, z = 0.0 }, pnt2 = new SxPos { x = 32.0, y = 33.0, z = 0.0 } },
                 new SxGeomSpline2D { pos = new SxPos { x = 5.0, y = 6.0, z = 0.0 }, vec_list = new[] { new SxVec(), new SxVec() } },
                 new SxGeomElparc2D { cp = new SxPos { x = 7.0, y = 8.0, z = 0.0 }, radius1 = 11.0, radius2 = 4.0, sang = 10.0, eang = 90.0 },
                 new SxGeomSmark { pnt = new SxPos { x = 9.0, y = 10.0, z = 0.0 }, val1 = "Ra 6.3" },
@@ -30,7 +31,7 @@ namespace IcadExtraction.SxNet.Tests
             var payload = new GeometryMapper().Map(geometries, warnings);
             Assert.Equal(2, payload.Texts.Count);
             Assert.Single(payload.Dimensions);
-            Assert.Equal(5, payload.GeometryPrimitives.Count);
+            Assert.Equal(6, payload.GeometryPrimitives.Count);
             Assert.Single(payload.WeldNotes);
             Assert.Single(payload.Balloons);
             Assert.Single(payload.Tolerances);
@@ -40,12 +41,14 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(-1.0, payload.Dimensions[0].PositionX);
             Assert.Equal(2.0, payload.Dimensions[0].PositionY);
             Assert.Equal(2.0, payload.GeometryPrimitives[0].EndX);
-            Assert.Equal(5.0, payload.GeometryPrimitives[1].PositionX);
-            Assert.Equal(3, payload.GeometryPrimitives[1].PointCount);
-            Assert.Equal(7.0, payload.GeometryPrimitives[2].CenterX);
-            Assert.Equal(11.0, payload.GeometryPrimitives[2].Radius1);
-            Assert.Equal(9.0, payload.GeometryPrimitives[3].PositionX);
-            Assert.Equal(3.0, payload.GeometryPrimitives[4].EndX);
+            Assert.Equal(30.0, payload.GeometryPrimitives[1].PositionX);
+            Assert.Equal(33.0, payload.GeometryPrimitives[1].EndY);
+            Assert.Equal(5.0, payload.GeometryPrimitives[2].PositionX);
+            Assert.Equal(3, payload.GeometryPrimitives[2].PointCount);
+            Assert.Equal(7.0, payload.GeometryPrimitives[3].CenterX);
+            Assert.Equal(11.0, payload.GeometryPrimitives[3].Radius1);
+            Assert.Equal(9.0, payload.GeometryPrimitives[4].PositionX);
+            Assert.Equal(3.0, payload.GeometryPrimitives[5].EndX);
         }
 
         public sealed class SxPos
@@ -94,10 +97,12 @@ namespace IcadExtraction.SxNet.Tests
 
         public sealed class SxGeomLine2D
         {
-            public double x1;
-            public double y1;
-            public double x2;
-            public double y2;
+            public double? x1;
+            public double? y1;
+            public double? x2;
+            public double? y2;
+            public SxPos? pnt1;
+            public SxPos? pnt2;
         }
 
         public sealed class SxGeomSpline2D

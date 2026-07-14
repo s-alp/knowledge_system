@@ -180,7 +180,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "x1");
+                return ReflectionHelpers.GetDouble(geometry, "x1") ?? GetPositionXFromAny(geometry, "pnt1", "pos1", "sp", "start");
             }
 
             return GetPositionX(geometry, ResolvePrimaryPositionMember(geometryType));
@@ -190,7 +190,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "y1");
+                return ReflectionHelpers.GetDouble(geometry, "y1") ?? GetPositionYFromAny(geometry, "pnt1", "pos1", "sp", "start");
             }
 
             return GetPositionY(geometry, ResolvePrimaryPositionMember(geometryType));
@@ -200,7 +200,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "z1");
+                return ReflectionHelpers.GetDouble(geometry, "z1") ?? GetPositionZFromAny(geometry, "pnt1", "pos1", "sp", "start");
             }
 
             return GetPositionZ(geometry, ResolvePrimaryPositionMember(geometryType));
@@ -210,7 +210,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "x2");
+                return ReflectionHelpers.GetDouble(geometry, "x2") ?? GetPositionXFromAny(geometry, "pnt2", "pos2", "ep", "end");
             }
 
             if (geometryType == "SxGeomCutLine")
@@ -225,7 +225,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "y2");
+                return ReflectionHelpers.GetDouble(geometry, "y2") ?? GetPositionYFromAny(geometry, "pnt2", "pos2", "ep", "end");
             }
 
             if (geometryType == "SxGeomCutLine")
@@ -240,7 +240,7 @@ namespace IcadExtraction.SxNet
         {
             if (geometryType == "SxGeomLine2D")
             {
-                return ReflectionHelpers.GetDouble(geometry, "z2");
+                return ReflectionHelpers.GetDouble(geometry, "z2") ?? GetPositionZFromAny(geometry, "pnt2", "pos2", "ep", "end");
             }
 
             if (geometryType == "SxGeomCutLine")
@@ -314,6 +314,35 @@ namespace IcadExtraction.SxNet
         private static double? GetPositionZ(object geometry, string memberName)
         {
             return ReflectionHelpers.GetPositionComponent(geometry, memberName, "z");
+        }
+
+        private static double? GetPositionXFromAny(object geometry, params string[] memberNames)
+        {
+            return GetPositionComponentFromAny(geometry, "x", memberNames);
+        }
+
+        private static double? GetPositionYFromAny(object geometry, params string[] memberNames)
+        {
+            return GetPositionComponentFromAny(geometry, "y", memberNames);
+        }
+
+        private static double? GetPositionZFromAny(object geometry, params string[] memberNames)
+        {
+            return GetPositionComponentFromAny(geometry, "z", memberNames);
+        }
+
+        private static double? GetPositionComponentFromAny(object geometry, string componentName, params string[] memberNames)
+        {
+            foreach (var memberName in memberNames)
+            {
+                var value = ReflectionHelpers.GetPositionComponent(geometry, memberName, componentName);
+                if (value.HasValue)
+                {
+                    return value;
+                }
+            }
+
+            return null;
         }
     }
 }

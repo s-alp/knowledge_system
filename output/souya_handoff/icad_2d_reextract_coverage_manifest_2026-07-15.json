@@ -15,15 +15,15 @@
       "textCount": 1310,
       "dimensionCount": 1492,
       "geometryPrimitiveCount": 20477,
-      "insidePrintAreaCount": 1844,
-      "outsidePrintAreaCount": 7887,
-      "unknownPrintAreaCount": 13569,
+      "insidePrintAreaCount": 3212,
+      "outsidePrintAreaCount": 19600,
+      "unknownPrintAreaCount": 488,
       "itemsWithoutView": 0,
       "itemsWithoutLayer": 741
     },
     "issueFileCounts": {
       "itemsWithoutLayer": 4,
-      "unknownPrintArea": 18,
+      "unknownPrintArea": 17,
       "noPrintFrames": 1
     },
     "issueFileSamples": {
@@ -322,9 +322,9 @@
         "99"
       ],
       "itemsWithoutLayer": 40,
-      "insidePrintAreaCount": 25,
+      "insidePrintAreaCount": 29,
       "outsidePrintAreaCount": 63,
-      "unknownPrintAreaCount": 12,
+      "unknownPrintAreaCount": 8,
       "warnings": [
         {
           "code": "geometry_layer_count_mismatch",
@@ -606,9 +606,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 29,
-      "outsidePrintAreaCount": 77,
-      "unknownPrintAreaCount": 146,
+      "insidePrintAreaCount": 58,
+      "outsidePrintAreaCount": 193,
+      "unknownPrintAreaCount": 1,
       "warnings": []
     },
     {
@@ -885,8 +885,8 @@
       ],
       "itemsWithoutLayer": 0,
       "insidePrintAreaCount": 7,
-      "outsidePrintAreaCount": 123,
-      "unknownPrintAreaCount": 16,
+      "outsidePrintAreaCount": 131,
+      "unknownPrintAreaCount": 8,
       "warnings": []
     },
     {
@@ -1162,9 +1162,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 27,
-      "outsidePrintAreaCount": 104,
-      "unknownPrintAreaCount": 160,
+      "insidePrintAreaCount": 76,
+      "outsidePrintAreaCount": 205,
+      "unknownPrintAreaCount": 10,
       "warnings": []
     },
     {
@@ -1440,9 +1440,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 9,
-      "outsidePrintAreaCount": 20,
-      "unknownPrintAreaCount": 29,
+      "insidePrintAreaCount": 16,
+      "outsidePrintAreaCount": 40,
+      "unknownPrintAreaCount": 2,
       "warnings": []
     },
     {
@@ -1718,9 +1718,9 @@
         "99"
       ],
       "itemsWithoutLayer": 66,
-      "insidePrintAreaCount": 58,
-      "outsidePrintAreaCount": 230,
-      "unknownPrintAreaCount": 328,
+      "insidePrintAreaCount": 121,
+      "outsidePrintAreaCount": 432,
+      "unknownPrintAreaCount": 63,
       "warnings": [
         {
           "code": "geometry_layer_count_mismatch",
@@ -2017,9 +2017,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 2,
-      "outsidePrintAreaCount": 61,
-      "unknownPrintAreaCount": 36,
+      "insidePrintAreaCount": 7,
+      "outsidePrintAreaCount": 88,
+      "unknownPrintAreaCount": 4,
       "warnings": []
     },
     {
@@ -2295,9 +2295,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 12,
-      "outsidePrintAreaCount": 18,
-      "unknownPrintAreaCount": 45,
+      "insidePrintAreaCount": 46,
+      "outsidePrintAreaCount": 26,
+      "unknownPrintAreaCount": 3,
       "warnings": []
     },
     {
@@ -2570,9 +2570,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 37,
-      "outsidePrintAreaCount": 42,
-      "unknownPrintAreaCount": 75,
+      "insidePrintAreaCount": 42,
+      "outsidePrintAreaCount": 110,
+      "unknownPrintAreaCount": 2,
       "warnings": [
         {
           "code": "unsupported_geometry",
@@ -2899,9 +2899,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 28,
-      "outsidePrintAreaCount": 15,
-      "unknownPrintAreaCount": 29,
+      "insidePrintAreaCount": 36,
+      "outsidePrintAreaCount": 35,
+      "unknownPrintAreaCount": 1,
       "warnings": [
         {
           "code": "unsupported_geometry",
@@ -3179,9 +3179,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 51,
-      "outsidePrintAreaCount": 450,
-      "unknownPrintAreaCount": 633,
+      "insidePrintAreaCount": 92,
+      "outsidePrintAreaCount": 1040,
+      "unknownPrintAreaCount": 2,
       "warnings": []
     },
     {
@@ -3459,9 +3459,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 10,
-      "outsidePrintAreaCount": 35,
-      "unknownPrintAreaCount": 139,
+      "insidePrintAreaCount": 35,
+      "outsidePrintAreaCount": 106,
+      "unknownPrintAreaCount": 43,
       "warnings": []
     },
     {
@@ -3737,9 +3737,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 22,
-      "outsidePrintAreaCount": 40,
-      "unknownPrintAreaCount": 64,
+      "insidePrintAreaCount": 28,
+      "outsidePrintAreaCount": 70,
+      "unknownPrintAreaCount": 28,
       "warnings": []
     },
     {
@@ -4018,9 +4018,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 1134,
-      "outsidePrintAreaCount": 5627,
-      "unknownPrintAreaCount": 4714,
+      "insidePrintAreaCount": 1872,
+      "outsidePrintAreaCount": 9441,
+      "unknownPrintAreaCount": 162,
       "warnings": []
     },
     {
@@ -4295,9 +4295,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 17,
-      "outsidePrintAreaCount": 34,
-      "unknownPrintAreaCount": 52,
+      "insidePrintAreaCount": 27,
+      "outsidePrintAreaCount": 66,
+      "unknownPrintAreaCount": 10,
       "warnings": []
     },
     {
@@ -4571,9 +4571,9 @@
         "99"
       ],
       "itemsWithoutLayer": 342,
-      "insidePrintAreaCount": 208,
-      "outsidePrintAreaCount": 240,
-      "unknownPrintAreaCount": 630,
+      "insidePrintAreaCount": 400,
+      "outsidePrintAreaCount": 678,
+      "unknownPrintAreaCount": 0,
       "warnings": [
         {
           "code": "geometry_layer_count_mismatch",
@@ -5132,9 +5132,9 @@
         "99"
       ],
       "itemsWithoutLayer": 293,
-      "insidePrintAreaCount": 158,
-      "outsidePrintAreaCount": 34,
-      "unknownPrintAreaCount": 159,
+      "insidePrintAreaCount": 299,
+      "outsidePrintAreaCount": 51,
+      "unknownPrintAreaCount": 1,
       "warnings": [
         {
           "code": "geometry_layer_count_mismatch",
@@ -5405,9 +5405,9 @@
         "99"
       ],
       "itemsWithoutLayer": 0,
-      "insidePrintAreaCount": 10,
-      "outsidePrintAreaCount": 674,
-      "unknownPrintAreaCount": 6302,
+      "insidePrintAreaCount": 21,
+      "outsidePrintAreaCount": 6825,
+      "unknownPrintAreaCount": 140,
       "warnings": []
     }
   ]

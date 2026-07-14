@@ -11,7 +11,7 @@
   "source_kind": "2d",
   "extractor_name": "icad-csharp-extractor",
   "extractor_version": "1.0.0",
-  "elapsed_ms": 7330,
+  "elapsed_ms": 15075,
   "warnings": [
     {
       "code": "geometry_layer_count_mismatch",
@@ -25,13 +25,13 @@
   "raw_extract": {
     "view_sheets": [
       {
-        "name": "!!GLOBAL",
+        "name": "!XZ",
         "comment": null,
-        "scale": 1.0,
+        "scale": 0.1,
         "angle": 0.0,
-        "type": 1,
-        "view_type": 0,
-        "geometry_count": 40
+        "type": 2,
+        "view_type": 6,
+        "geometry_count": 28
       },
       {
         "name": "!XY",
@@ -43,13 +43,13 @@
         "geometry_count": 2
       },
       {
-        "name": "!XZ",
+        "name": "!!GLOBAL",
         "comment": null,
-        "scale": 0.1,
+        "scale": 1.0,
         "angle": 0.0,
-        "type": 2,
-        "view_type": 6,
-        "geometry_count": 28
+        "type": 1,
+        "view_type": 0,
+        "geometry_count": 40
       },
       {
         "name": "!-XZ",
@@ -1630,6 +1630,20 @@
     "texts": [
       {
         "text_lines": [
+          "{UＺ矢視U}"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!XZ",
+        "layer_no": 1,
+        "position_x": 980.0,
+        "position_y": -1640.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "joined_text": "{UＺ矢視U}"
+      },
+      {
+        "text_lines": [
           "2026/07/02"
         ],
         "line_count": 1,
@@ -2066,40 +2080,9 @@
         "position_z": 0.0,
         "inside_print_area": true,
         "joined_text": "20K03379P00"
-      },
-      {
-        "text_lines": [
-          "{UＺ矢視U}"
-        ],
-        "line_count": 1,
-        "source_type": "text",
-        "view_name": "!XZ",
-        "layer_no": 1,
-        "position_x": 980.0,
-        "position_y": -1640.0,
-        "position_z": 0.0,
-        "inside_print_area": false,
-        "joined_text": "{UＺ矢視U}"
       }
     ],
     "dimensions": [
-      {
-        "view_name": "!XY",
-        "layer_no": 1,
-        "position_x": -150.0,
-        "position_y": 0.0,
-        "position_z": 0.0,
-        "inside_print_area": false,
-        "value1": null,
-        "value2": null,
-        "front_word": null,
-        "back_word": null,
-        "upper_tol": null,
-        "lower_tol": null,
-        "mark2": null,
-        "mark3": null,
-        "summary": "line_color=7; line_width=3; text_color=7; text_width=3; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-15; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=True; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=3; arrow_ang=10; dot_diam=1; dimval_scale=1; dimval_space=1; underline1_len=1; underline2_len=1"
-      },
       {
         "view_name": "!XZ",
         "layer_no": 1,
@@ -2558,6 +2541,23 @@
         "mark2": null,
         "mark3": null,
         "summary": "line_color=7; line_width=3; text_color=7; text_width=3; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=3; tiltang=-15; arrow1_type=2; arrow2_type=2; aidline1=2; aidline2=0; term1_mark=2; term2_mark=2; dot=True; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=3; arrow_ang=10; dot_diam=1; dimval_scale=1; dimval_space=1; underline1_len=1; underline2_len=1"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": -150.0,
+        "position_y": 0.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=7; line_width=3; text_color=7; text_width=3; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-15; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=True; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=3; arrow_ang=10; dot_diam=1; dimval_scale=1; dimval_space=1; underline1_len=1; underline2_len=1"
       },
       {
         "view_name": "!-XZ",
@@ -3092,9 +3092,9 @@
         "view_name": "!!GLOBAL",
         "layer_no": null,
         "geometry_type": "SxGeomLine2D",
-        "position_x": null,
-        "position_y": null,
-        "position_z": null,
+        "position_x": 594.0,
+        "position_y": 0.0,
+        "position_z": 0.0,
         "end_x": null,
         "end_y": null,
         "end_z": null,
@@ -3107,16 +3107,16 @@
         "start_angle": null,
         "end_angle": null,
         "point_count": null,
-        "inside_print_area": null,
+        "inside_print_area": true,
         "summary": "leng=420; type=2"
       },
       {
         "view_name": "!!GLOBAL",
         "layer_no": null,
         "geometry_type": "SxGeomLine2D",
-        "position_x": null,
-        "position_y": null,
-        "position_z": null,
+        "position_x": 0.0,
+        "position_y": 0.0,
+        "position_z": 0.0,
         "end_x": null,
         "end_y": null,
         "end_z": null,
@@ -3129,16 +3129,16 @@
         "start_angle": null,
         "end_angle": null,
         "point_count": null,
-        "inside_print_area": null,
+        "inside_print_area": true,
         "summary": "leng=420; type=2"
       },
       {
         "view_name": "!!GLOBAL",
         "layer_no": null,
         "geometry_type": "SxGeomLine2D",
-        "position_x": null,
-        "position_y": null,
-        "position_z": null,
+        "position_x": 594.0,
+        "position_y": 420.0,
+        "position_z": 0.0,
         "end_x": null,
         "end_y": null,
         "end_z": null,
@@ -3151,16 +3151,16 @@
         "start_angle": null,
         "end_angle": null,
         "point_count": null,
-        "inside_print_area": null,
+        "inside_print_area": true,
         "summary": "leng=594; type=2"
       },
       {
         "view_name": "!!GLOBAL",
         "layer_no": null,
         "geometry_type": "SxGeomLine2D",
-        "position_x": null,
-        "position_y": null,
-        "position_z": null,
+        "position_x": 594.0,
+        "position_y": 0.0,
+        "position_z": 0.0,
         "end_x": null,
         "end_y": null,
         "end_z": null,
@@ -3173,7 +3173,7 @@
         "start_angle": null,
         "end_angle": null,
         "point_count": null,
-        "inside_print_area": null,
+        "inside_print_area": true,
         "summary": "leng=594; type=2"
       }
     ],
