@@ -8,6 +8,8 @@
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_2d_3d_extraction_capability_matrix_2026-07-14.md`
 - 共有サンプル実抽出メモ:
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
+- 創屋向け連携項目表:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\souya_icad_tag_attribute_handoff_2026-07-14.md`
 - 位置づけ:
   - 既存 PoC の延長ではなく、ICAD 2D/3D から何を取得し、何にタグ・属性を付与するかを再定義した設計メモ。
   - 取得可能性調査では、SXNET根拠、現行PoC実装状況、実サンプル確認状況、未確認事項を分けている。
@@ -103,12 +105,13 @@
 - [x] ナレッジシステム実画面を視覚確認し、図面/プロジェクト/製品・装置・ユニット/部品の受け口差分を整理
 - [x] 2D図枠欄名の初期辞書、候補レビュー表示、図枠由来タグ生成を追加
 - [x] 2D primitive から形状・記号特徴候補タグを生成
+- [x] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
 
 ## 次に着手する
 
 - [ ] 長穴、穴数、断面、表面粗さ値などを候補ではなく確定属性にする追加ロジックを実装
 - [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini API 低温度 JSON 分類は曖昧欄名の補助として追加
-- [ ] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
+- [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
