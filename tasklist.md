@@ -126,12 +126,13 @@
 - [x] 訂正内容候補から低ノイズの `改訂情報あり` タグを生成
 - [x] `SxInfPartTree.entpart` 経由で3D部品単位の材質一覧を取得し、`parts[].materials` と高信頼の部品材質候補へ反映
 - [x] ナレッジシステム実画面をChromeで再確認し、図面/プロジェクト/製品・装置・ユニット/部品詳細のタグ/属性表示差分をスクリーンショット保存
+- [x] 共有済みICAD 39件で `parts[].materials` の取得率、部品パス、warning を横断集計
 
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
 - [ ] 2D図枠欄名辞書を実サンプルで拡充する
-- [ ] 共有済みICAD実サンプルで `parts[].materials` の取得率、部品パス、warning を横断集計する
+- [ ] 材質ID `ZZZ`, `75`, `CDQ` など客先固有値の辞書化方針を決める
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:

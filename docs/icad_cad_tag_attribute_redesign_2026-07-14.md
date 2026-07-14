@@ -139,7 +139,7 @@ ICAD からのタグ・属性付与は、最初から「タグを作る処理」
 
 Gemini API 連携は `title_block_candidates` の欄名分類補助として入口を追加した。`responseMimeType=application/json`、温度 `0.0` を前提に、候補 index と許可 field 名だけを返させる。CAD内に存在しない値の生成採用は禁止する。
 
-3D材質は `SxEnt.getInfMaterialList(SxEnt[])` による全体要素の材質一覧取得を追加した。`6800DDU.icd` では `SUS440C`, 比重 `7.7`, 対象17要素を取得できた。さらに `SxInfPartTree.entpart` から `SxEntPart.getInfMaterialList()` を呼び、部品ツリー各ノードの材質を `parts[].materials` と高信頼の部品材質候補へ保持する実装を追加した。次段階では共有済みICAD全件で、部品別材質の取得率と warning を横断集計する。
+3D材質は `SxEnt.getInfMaterialList(SxEnt[])` による全体要素の材質一覧取得を追加した。`6800DDU.icd` では `SUS440C`, 比重 `7.7`, 対象17要素を取得できた。さらに `SxInfPartTree.entpart` から `SxEntPart.getInfMaterialList()` を呼び、部品ツリー各ノードの材質を `parts[].materials` と高信頼の部品材質候補へ保持する実装を追加した。共有済みICAD 39件の横断抽出では39件成功、全体材質33件、部品別材質13件、部品材質API warning 0件だった。
 
 ### 5.2 中央の図面本体
 
