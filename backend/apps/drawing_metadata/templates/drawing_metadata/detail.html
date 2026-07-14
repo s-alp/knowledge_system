@@ -21,6 +21,101 @@
   </div>
 
   <div class="panel">
+    <h2>{{ handoff_display.title }}</h2>
+    <p class="muted">{{ handoff_display.description }}</p>
+
+    <h3>連携入口</h3>
+    <div class="actions">
+      {% for link in handoff_display.apiLinks %}
+        {% if link.url %}
+          <a href="{{ link.url }}"><button type="button">{{ link.label }}</button></a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <h3>viewer 初期化情報</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in handoff_display.viewerRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>RAG 事前フィルタ</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in handoff_display.ragFilterRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>RAG ランキング信号</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>件数</th>
+          <th>先頭サンプル</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in handoff_display.ragSignalRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.count }}</td>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>投入前レビュー</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in handoff_display.ragReviewRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if handoff_display.reviewFlags %}
+      <ul class="compact-list">
+        {% for flag in handoff_display.reviewFlags %}
+          <li>{{ flag.code }} / {{ flag.severity }} / {{ flag.attribute }}: {{ flag.message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <div class="panel">
     <h2>{{ composed_display.title }}</h2>
     <p class="muted">viewer 詳細と RAG が参照する統合属性の確認用サマリです。詳細な根拠は 2D / 3D 抽出欄で確認します。</p>
     <table>

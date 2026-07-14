@@ -8,6 +8,7 @@ from apps.drawing_metadata.services.display import (
     build_2d_snapshot_display,
     build_3d_snapshot_display,
     build_composed_display_payload,
+    build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
@@ -212,6 +213,67 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
     assert payload["groups"][0]["tags"][2]["targetCandidates"] == ["部品", "図面", "製品・装置・ユニット"]
     assert payload["groups"][0]["tags"][3]["targetCandidates"] == ["部品", "図面"]
     assert payload["evidenceRows"][5]["displayValue"] == "1"
+
+
+def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_contracts():
+    payload = build_integration_handoff_display_payload(
+        viewer_bootstrap={
+            "title": "BRACKET",
+            "defaultMode": "2d",
+            "availability": {"has2d": True, "has3d": True},
+            "metadata": {
+                "drawingNumber": "9NK-001",
+                "drawingName": "BRACKET",
+                "paperSize": "A3",
+                "owner": "設計者A",
+                "tags": ["客先:澁谷工業", "材質:SUS304"],
+            },
+        },
+        rag_payload={
+            "schemaVersion": "drawing_metadata_rag_payload.v1",
+            "preFilters": {
+                "customerName": "澁谷工業",
+                "equipmentCategory": "ロボット",
+                "sourceFormat": "icad",
+                "drawingNumber": "9NK-001",
+                "drawingName": "BRACKET",
+                "paperSize": "A3",
+            },
+            "rankingSignals": {
+                "partNames": ["BRACKET", "PLATE"],
+                "materialKeywords": ["SUS304"],
+                "tags": ["客先:澁谷工業", "材質:SUS304"],
+            },
+            "partMaterialCandidates": [{"part_name": "BRACKET"}],
+            "searchTextChunks": ["BRACKET", "SUS304"],
+            "reconciliation": {
+                "requiresReview": True,
+                "conflicts": [{"attribute": "material"}],
+                "reviewFlags": [{"code": "cross_source_conflict", "severity": "medium", "attribute": "material"}],
+            },
+        },
+        api_links={
+            "detail_api": "http://testserver/api/v1/drawing-metadata/registrations/1/",
+            "rag_payload_api": "http://testserver/api/v1/drawing-metadata/registrations/1/rag-payload/",
+            "tag_review_page": "http://testserver/drawing-metadata/1/tags/",
+        },
+    )
+
+    viewer_row_by_key = {row["key"]: row["displayValue"] for row in payload["viewerRows"]}
+    filter_row_by_key = {row["key"]: row["displayValue"] for row in payload["ragFilterRows"]}
+    review_row_by_key = {row["key"]: row["displayValue"] for row in payload["ragReviewRows"]}
+    signal_row_by_key = {row["key"]: row for row in payload["ragSignalRows"]}
+
+    assert payload["title"] == "創屋連携・viewer/RAG 受け渡し確認"
+    assert payload["apiLinks"][0]["label"] == "詳細API"
+    assert viewer_row_by_key["has2d"] == "あり"
+    assert viewer_row_by_key["has3d"] == "あり"
+    assert viewer_row_by_key["tags"] == "客先:澁谷工業, 材質:SUS304"
+    assert filter_row_by_key["customerName"] == "澁谷工業"
+    assert signal_row_by_key["partNames"]["count"] == 2
+    assert signal_row_by_key["materialKeywords"]["displayValue"] == "SUS304"
+    assert review_row_by_key["requiresReview"] == "あり"
+    assert review_row_by_key["conflictCount"] == "1"
 
 
 def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
@@ -426,7 +488,11 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert response.context["snapshot_2d_display"]["summaryRows"][4]["displayValue"] == "1"
     assert response.context["snapshot_3d_display"]["partCount"] == 2
     assert response.context["snapshot_3d_display"]["partExInfoTotal"] == 1
+    assert response.context["handoff_display"]["apiLinks"][0]["label"] == "詳細API"
+    assert response.context["handoff_display"]["ragReviewRows"][0]["displayValue"] == "drawing_metadata_rag_payload.v1"
     assert "統合結果（viewer/RAG 用の統合属性）" in response.content.decode("utf-8")
+    assert "創屋連携・viewer/RAG 受け渡し確認" in response.content.decode("utf-8")
+    assert "RAG ランキング信号" in response.content.decode("utf-8")
     assert "2D/3D 照合結果" in response.content.decode("utf-8")
 
 

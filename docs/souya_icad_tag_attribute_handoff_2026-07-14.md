@@ -17,6 +17,24 @@
 
 図面詳細の3D表示へ切り替えた際、`/web/public/models/test_000445.gltf` の読み込みで `Unexpected token '<'` エラーを確認した。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の確認事項として創屋へ共有する。
 
+2026-07-15 に Chrome で本番実画面を再確認した。登録、変更、削除は行っていない。
+
+- AI検索: `output\knowledge_ui_screenshots_2026-07-15\production-knowledge-ai-search-viewport.png`
+- プロジェクト一覧: `output\knowledge_ui_screenshots_2026-07-15\production-project-list-viewport.png`
+- プロジェクト詳細: `output\knowledge_ui_screenshots_2026-07-15\production-project-detail-viewport.png`
+- 製品・装置・ユニット一覧: `output\knowledge_ui_screenshots_2026-07-15\production-product-unit-list-viewport.png`
+- 製品・装置・ユニット詳細: `output\knowledge_ui_screenshots_2026-07-15\production-product-unit-detail-viewport.png`
+- 部品一覧: `output\knowledge_ui_screenshots_2026-07-15\production-part-list-viewport.png`
+- 部品詳細: `output\knowledge_ui_screenshots_2026-07-15\production-part-detail-viewport.png`
+- 図面一覧: `output\knowledge_ui_screenshots_2026-07-15\production-drawing-list-viewport.png`
+- 図面詳細: `output\knowledge_ui_screenshots_2026-07-15\production-drawing-detail-viewport.png`
+
+追加所見:
+
+- プロジェクト詳細は `基本情報` と `関連情報` が中心で、このサンプルではタグ/属性欄は見えない。プロジェクトへタグを反映するには、既存APIまたは補助タブの有無を創屋へ確認する必要がある。
+- 製品・装置・ユニット詳細と部品詳細には `属性情報` 欄がある。ただしサンプルでは `属性情報がありません。` と表示され、一覧側にタグ/属性列は見えない。
+- 図面詳細には `タグ` と `属性情報` 欄があり、2D/3D切替もある。初期連携先は引き続き図面詳細を最優先にする。
+
 ## 2. こちらが提供するデータ単位
 
 | 提供単位 | 主なキー | 内容 | 備考 |
@@ -111,6 +129,12 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
 - `GET /api/v1/drawing-metadata/registrations/{drawingId}/`: `viewerBootstrap` あり
 - `GET /api/v1/drawing-metadata/registrations/{drawingId}/rag-payload/`: `schemaVersion=drawing_metadata_rag_payload.v1`
 - 末尾スラッシュあり/なしの両方をAPIルーティングで受ける。フロント実装差で404にならないようにするため。
+
+2026-07-15 にローカル詳細画面へ `創屋連携・viewer/RAG 受け渡し確認` 欄を追加した。初心者でも確認できるよう、詳細API、RAG投入payload API、タグレビュー画面へのリンク、viewer初期化情報、RAG事前フィルタ、RAGランキング信号、投入前レビューを表形式で表示する。
+
+- ローカル確認URL: `http://127.0.0.1:8001/drawing-metadata/7d47aa93-de58-467d-a145-4a584cd6c52b/`
+- 画面確認画像: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-metadata-handoff-viewport.png`
+- DOM確認: `創屋連携・viewer/RAG 受け渡し確認`, `詳細API`, `RAG投入payload API`, `viewer 初期化情報`, `RAG 事前フィルタ`, `RAG ランキング信号`, `投入前レビュー` が表示されることを確認
 
 ```json
 {

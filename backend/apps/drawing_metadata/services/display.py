@@ -53,6 +53,34 @@ SOURCE_FILE_FIELDS = (
     ("source_full_path", "フルパス"),
 )
 
+RAG_PRE_FILTER_FIELDS = (
+    ("customerName", "客先"),
+    ("projectName", "案件"),
+    ("equipmentCategory", "装置カテゴリ"),
+    ("documentKind", "文書種別"),
+    ("sourceFormat", "形式"),
+    ("drawingNumber", "図番"),
+    ("drawingName", "図面名"),
+    ("paperSize", "図面サイズ"),
+)
+
+RAG_RANKING_SIGNAL_FIELDS = (
+    ("partNames", "部品名"),
+    ("makerKeywords", "メーカー"),
+    ("dimensionValues", "寸法値"),
+    ("specTokens", "規格・仕様語"),
+    ("processKeywords", "加工・工程語"),
+    ("weldNoteTexts", "溶接指示"),
+    ("materialKeywords", "材質"),
+    ("unresolvedMaterialKeywords", "要確認材質"),
+    ("surfaceTreatmentTokens", "表面処理"),
+    ("heatTreatmentKeywords", "熱処理"),
+    ("inspectionKeywords", "検査"),
+    ("changeKeywords", "変更・訂正"),
+    ("issueKeywords", "課題・不具合"),
+    ("tags", "タグ"),
+)
+
 
 def _has_value(value) -> bool:
     if value is None:
@@ -77,6 +105,16 @@ def _display_value(value) -> str:
     if isinstance(value, dict):
         return str(len(value))
     return str(value)
+
+
+def _display_list(values, *, limit: int = 6) -> str:
+    normalized = _string_values(values)
+    if not normalized:
+        return "未抽出"
+    preview = ", ".join(normalized[:limit])
+    if len(normalized) > limit:
+        return f"{preview} ほか{len(normalized) - limit}件"
+    return preview
 
 
 def _make_row(key: str, label: str, value) -> dict:
@@ -463,6 +501,62 @@ def build_composed_display_payload(composed_metadata: dict) -> dict:
             if row["status"] in {"conflict", "manual_override", "merged", "only_2d", "only_3d"}
         ],
         "hiddenKeys": [key for key in NOISY_COMPOSED_KEYS if key in canonical_attributes],
+    }
+
+
+def build_integration_handoff_display_payload(*, viewer_bootstrap: dict, rag_payload: dict, api_links: dict) -> dict:
+    availability = viewer_bootstrap.get("availability", {}) or {}
+    metadata = viewer_bootstrap.get("metadata", {}) or {}
+    pre_filters = rag_payload.get("preFilters", {}) or {}
+    ranking_signals = rag_payload.get("rankingSignals", {}) or {}
+    reconciliation = rag_payload.get("reconciliation", {}) or {}
+    review_flags = reconciliation.get("reviewFlags", []) or []
+    conflicts = reconciliation.get("conflicts", []) or []
+    search_text_chunks = rag_payload.get("searchTextChunks", []) or []
+    part_material_candidates = rag_payload.get("partMaterialCandidates", []) or []
+
+    rag_signal_rows = []
+    for key, label in RAG_RANKING_SIGNAL_FIELDS:
+        values = ranking_signals.get(key, []) or []
+        rag_signal_rows.append(
+            {
+                "key": key,
+                "label": label,
+                "count": len(values),
+                "displayValue": _display_list(values),
+            }
+        )
+
+    return {
+        "title": "創屋連携・viewer/RAG 受け渡し確認",
+        "description": "本番ナレッジシステムへ埋め込む前に、詳細 API、viewer 初期化情報、RAG 投入情報が画面上で追えるかを確認します。",
+        "apiLinks": [
+            {"label": "詳細API", "url": api_links.get("detail_api")},
+            {"label": "RAG投入payload API", "url": api_links.get("rag_payload_api")},
+            {"label": "タグレビュー画面", "url": api_links.get("tag_review_page")},
+        ],
+        "viewerRows": [
+            _make_row("title", "viewerタイトル", viewer_bootstrap.get("title")),
+            _make_row("defaultMode", "初期表示モード", viewer_bootstrap.get("defaultMode")),
+            _make_row("has2d", "2Dあり", availability.get("has2d")),
+            _make_row("has3d", "3Dあり", availability.get("has3d")),
+            _make_row("drawingNumber", "図番", metadata.get("drawingNumber")),
+            _make_row("drawingName", "図面名", metadata.get("drawingName")),
+            _make_row("paperSize", "図面サイズ", metadata.get("paperSize")),
+            _make_row("owner", "担当者", metadata.get("owner")),
+            _make_display_row("tags", "viewerタグ", metadata.get("tags", []), _display_list(metadata.get("tags", []))),
+        ],
+        "ragFilterRows": [_make_row(key, label, pre_filters.get(key)) for key, label in RAG_PRE_FILTER_FIELDS],
+        "ragSignalRows": rag_signal_rows,
+        "ragReviewRows": [
+            _make_row("schemaVersion", "payloadスキーマ", rag_payload.get("schemaVersion")),
+            _make_row("requiresReview", "投入前レビュー要否", reconciliation.get("requiresReview")),
+            _make_row("reviewFlagCount", "レビュー警告数", len(review_flags)),
+            _make_row("conflictCount", "2D/3D競合数", len(conflicts)),
+            _make_row("partMaterialCandidateCount", "部品材質候補数", len(part_material_candidates)),
+            _make_row("searchTextChunkCount", "検索テキスト断片数", len(search_text_chunks)),
+        ],
+        "reviewFlags": review_flags,
     }
 
 

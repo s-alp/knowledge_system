@@ -8,15 +8,18 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
+from apps.drawing_metadata.api.serializers import RegisteredDrawingDetailSerializer
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.display import (
     build_2d_snapshot_display,
     build_3d_snapshot_display,
     build_composed_display_payload,
+    build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
+from apps.drawing_metadata.services.rag_payload import build_rag_payload
 
 
 class RegistrationListPageView(View):
@@ -46,6 +49,16 @@ class RegistrationDetailPageView(View):
         snapshot_2d = snapshots_by_mode.get("2d")
         snapshot_3d = snapshots_by_mode.get("3d")
         composed_metadata = compose_drawing_metadata(drawing)
+        detail_api_payload = RegisteredDrawingDetailSerializer(drawing).data
+        viewer_bootstrap = detail_api_payload.get("viewerBootstrap", {})
+        rag_payload = build_rag_payload(drawing)
+        api_links = {
+            "detail_api": request.build_absolute_uri(f"/api/v1/drawing-metadata/registrations/{drawing.id}/"),
+            "rag_payload_api": request.build_absolute_uri(
+                f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/"
+            ),
+            "tag_review_page": request.build_absolute_uri(f"/drawing-metadata/{drawing.id}/tags/"),
+        }
 
         return render(
             request,
@@ -58,6 +71,11 @@ class RegistrationDetailPageView(View):
                 "snapshot_3d": snapshot_3d,
                 "composed_metadata": composed_metadata,
                 "composed_display": build_composed_display_payload(composed_metadata),
+                "handoff_display": build_integration_handoff_display_payload(
+                    viewer_bootstrap=viewer_bootstrap,
+                    rag_payload=rag_payload,
+                    api_links=api_links,
+                ),
                 "snapshot_2d_display": (
                     build_2d_snapshot_display(
                         raw_extract=snapshot_2d.raw_extract_json,
