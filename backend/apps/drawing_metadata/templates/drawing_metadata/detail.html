@@ -317,6 +317,37 @@
         <p>寸法情報はありません。</p>
       {% endif %}
 
+      <h3>形状・記号特徴候補</h3>
+      {% if snapshot_2d_display.geometryFeatureCandidates %}
+        <table>
+          <thead>
+            <tr>
+              <th>特徴</th>
+              <th>タグ候補</th>
+              <th>信頼度</th>
+              <th>元ジオメトリ</th>
+              <th>件数</th>
+              <th>概要サンプル数</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for candidate in snapshot_2d_display.geometryFeatureCandidates %}
+              <tr>
+                <td>{{ candidate.label }}</td>
+                <td>{{ candidate.tag }}</td>
+                <td>{{ candidate.confidence }}</td>
+                <td>{{ candidate.geometryType }}</td>
+                <td>{{ candidate.count }}</td>
+                <td>{{ candidate.sampleSummaries }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.geometryFeatureCandidateTotal }} 件中 {{ snapshot_2d_display.geometryFeatureCandidates|length }} 件を表示しています。</p>
+      {% else %}
+        <p>形状・記号特徴候補はありません。</p>
+      {% endif %}
+
       <h3>図形サンプル</h3>
       {% if snapshot_2d_display.geometryPrimitiveSamples %}
         <table>

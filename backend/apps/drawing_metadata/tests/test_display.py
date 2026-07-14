@@ -227,6 +227,17 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                     "evidence_text": "材質 SUS304",
                 }
             ],
+            "geometry_feature_candidates": [
+                {
+                    "feature": "surface_roughness",
+                    "label": "表面粗さ",
+                    "tag": "加工指示:表面粗さ",
+                    "confidence": "medium",
+                    "geometry_type": "SxGeomSmark",
+                    "count": 2,
+                    "sample_summaries": ["roughness-a", "roughness-b"],
+                }
+            ],
         },
     )
 
@@ -249,6 +260,9 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["geometryPrimitiveSamples"][0]["geometryType"] == "SxGeomSpline2D"
     assert payload["geometryPrimitiveSamples"][0]["position"] == "1.0, 2.0"
     assert payload["geometryPrimitiveSamples"][0]["insidePrintArea"] == "inside"
+    assert payload["geometryFeatureCandidates"][0]["label"] == "表面粗さ"
+    assert payload["geometryFeatureCandidates"][0]["tag"] == "加工指示:表面粗さ"
+    assert payload["geometryFeatureCandidates"][0]["count"] == "2"
 
 
 @pytest.mark.django_db

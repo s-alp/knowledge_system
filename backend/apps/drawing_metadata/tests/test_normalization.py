@@ -88,6 +88,12 @@ def test_normalize_2d_raw_extract():
                 {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": False, "position_x": 999.0, "position_y": 999.0},
             ],
             "dimensions": [{"value_1": "100", "value_2": None, "mark_2": "M5", "mark_3": None, "front_word": None, "back_word": None}],
+            "geometry_primitives": [
+                {"geometry_type": "SxGeomSmark", "summary": "surface roughness", "inside_print_area": True},
+                {"geometry_type": "SxGeomCutLine", "summary": "cut line", "inside_print_area": True},
+                {"geometry_type": "SxGeomElparc2D", "summary": "ellipse arc", "inside_print_area": True},
+                {"geometry_type": "SxGeomCircle2D", "summary": "outside circle", "inside_print_area": False},
+            ],
             "weld_notes": [{"text": "WELD A"}],
             "balloons": [{"text": "B1"}],
             "tolerances": [{"text": "±0.1"}],
@@ -109,3 +115,9 @@ def test_normalize_2d_raw_extract():
     assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
     assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
     assert any(tag["tag"] == "ユニット:U01" for tag in tags)
+    feature_tags = {candidate["tag"] for candidate in canonical["geometry_feature_candidates"]}
+    assert "加工指示:表面粗さ" in feature_tags
+    assert "図面特徴:切断線" in feature_tags
+    assert "形状候補:長穴" in feature_tags
+    assert "形状候補:穴" not in feature_tags
+    assert any(tag["tag"] == "加工指示:表面粗さ" for tag in tags)

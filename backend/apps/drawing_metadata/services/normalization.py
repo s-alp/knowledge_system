@@ -29,6 +29,17 @@ TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "unit_number": {"label": "ユニット番号", "keywords": ["ユニット", "unit", "unit no"], "max_value_length": 40},
 }
 
+GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
+    "SxGeomHatch": {"feature": "hatch_or_section", "label": "ハッチング/断面候補", "tag": "図面特徴:ハッチング", "confidence": "medium"},
+    "SxGeomSmark": {"feature": "surface_roughness", "label": "表面粗さ", "tag": "加工指示:表面粗さ", "confidence": "medium"},
+    "SxGeomCutLine": {"feature": "cut_line", "label": "切断線", "tag": "図面特徴:切断線", "confidence": "medium"},
+    "SxGeomTolDatum": {"feature": "datum", "label": "データム", "tag": "幾何公差:データム", "confidence": "medium"},
+    "SxGeomTol": {"feature": "geometric_tolerance", "label": "幾何公差", "tag": "幾何公差", "confidence": "medium"},
+    "SxGeomFinishMark": {"feature": "finish_mark", "label": "仕上げ記号", "tag": "加工指示:仕上げ記号", "confidence": "medium"},
+    "SxGeomElparc2D": {"feature": "slot_candidate", "label": "長穴/楕円弧候補", "tag": "形状候補:長穴", "confidence": "low"},
+    "SxGeomCircle2D": {"feature": "hole_candidate", "label": "穴/円候補", "tag": "形状候補:穴", "confidence": "low"},
+}
+
 
 def _flatten_strings(values: Iterable[str | None]) -> list[str]:
     normalized: list[str] = []
@@ -161,6 +172,38 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
     return selected
 
 
+def _build_geometry_feature_candidates(primitives: list[dict]) -> list[dict]:
+    grouped: dict[str, dict] = {}
+    for primitive in primitives:
+        if primitive.get("inside_print_area") is False:
+            continue
+        geometry_type = primitive.get("geometry_type")
+        rule = GEOMETRY_FEATURE_RULES.get(geometry_type)
+        if not rule:
+            continue
+
+        feature = rule["feature"]
+        item = grouped.setdefault(
+            feature,
+            {
+                "feature": feature,
+                "label": rule["label"],
+                "tag": rule["tag"],
+                "confidence": rule["confidence"],
+                "geometry_type": geometry_type,
+                "count": 0,
+                "sample_summaries": [],
+                "source": "2d_geometry_primitive",
+            },
+        )
+        item["count"] += 1
+        summary = primitive.get("summary")
+        if summary and len(item["sample_summaries"]) < 3:
+            item["sample_summaries"].append(summary)
+
+    return list(grouped.values())
+
+
 def normalize_raw_extract(raw_payload: dict) -> dict:
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
@@ -231,6 +274,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "weld_note_texts": [],
         "balloon_keys": [],
         "surface_treatment_tokens": [],
+        "geometry_feature_candidates": [],
         "spec_tokens": [],
         "part_keywords": [],
         "material_keywords": [],
@@ -299,6 +343,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
     else:
         texts = raw_extract.get("texts", [])
         dimensions = raw_extract.get("dimensions", [])
+        primitives = raw_extract.get("geometry_primitives", [])
         weld_notes = raw_extract.get("weld_notes", [])
         balloons = raw_extract.get("balloons", [])
         tolerances = raw_extract.get("tolerances", [])
@@ -325,6 +370,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
         canonical["title_block_candidates"] = _build_title_block_candidates(texts)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
+        canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives)
 
         search_tokens = (
             source_path_tokens

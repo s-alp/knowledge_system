@@ -217,6 +217,22 @@ def _primitive_preview_items(primitives: list[dict], limit: int = 8) -> list[dic
     return previews
 
 
+def _geometry_feature_candidate_items(candidates: list[dict], limit: int = 10) -> list[dict]:
+    previews: list[dict] = []
+    for candidate in candidates[:limit]:
+        previews.append(
+            {
+                "label": _display_value(candidate.get("label")),
+                "tag": _display_value(candidate.get("tag")),
+                "confidence": _display_value(candidate.get("confidence")),
+                "geometryType": _display_value(candidate.get("geometry_type")),
+                "count": _display_value(candidate.get("count")),
+                "sampleSummaries": _display_value(candidate.get("sample_summaries")),
+            }
+        )
+    return previews
+
+
 def _view_sheet_preview_items(view_sheets: list[dict], limit: int = 10) -> list[dict]:
     return [
         {
@@ -406,6 +422,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     print_frames = raw_extract.get("print_frames", []) or []
     layers = raw_extract.get("layers", []) or []
     title_block_candidates = canonical_attributes.get("title_block_candidates", []) or []
+    geometry_feature_candidates = canonical_attributes.get("geometry_feature_candidates", []) or []
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
     displayed_layer_count = len([layer for layer in layers if layer.get("is_displayed")])
@@ -440,6 +457,8 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "dimensionTotal": len(dimensions),
         "geometryPrimitiveSamples": _primitive_preview_items(primitives),
         "geometryPrimitiveTotal": len(primitives),
+        "geometryFeatureCandidates": _geometry_feature_candidate_items(geometry_feature_candidates),
+        "geometryFeatureCandidateTotal": len(geometry_feature_candidates),
     }
 
 

@@ -43,5 +43,10 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
             add_tag(f"PRFX:{title_block_fields['prfx']}", "title_block_fields.prfx", confidence="medium")
         if title_block_fields.get("unit_number"):
             add_tag(f"ユニット:{title_block_fields['unit_number']}", "title_block_fields.unit_number", confidence="medium")
+    if "geometry_feature_candidates" not in excluded_sources:
+        for candidate in canonical_attributes.get("geometry_feature_candidates", []) or []:
+            tag = candidate.get("tag")
+            if tag:
+                add_tag(tag, "geometry_feature_candidates", confidence=candidate.get("confidence", "low"))
 
     return tags

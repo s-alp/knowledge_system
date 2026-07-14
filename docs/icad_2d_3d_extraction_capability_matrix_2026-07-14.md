@@ -100,11 +100,11 @@
 | 円弧長寸法 | A | `SxGeomArcLengDim` | 実装入口あり | 曲げ/円弧特徴 |
 | 寸法値詳細 | A | `SxDimValueAtr` | 実装入口あり | 実寸/擬寸、前置/後置/上下文字、公差、φ/R/M/□ |
 | 幾何公差 | A | `SxGeomTol` | summaryのみ | 構造化未実装 |
-| 表面粗さ | A | `SxGeomSmark` | primitive実装済み | 位置と summary を保持。除去加工、筋目方向、JIS種別、指示値の正規化は未実装 |
+| 表面粗さ | A | `SxGeomSmark` | 特徴候補実装済み | `geometry_feature_candidates` で `加工指示:表面粗さ` を保持。指示値の正規化は未実装 |
 | 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | summaryのみ | 溶接種別、開先、仕上げ等は構造化未実装 |
 | 仕上げ記号 | A | `SxGeomFinishMark` | 未実装 | 仕上げ工程タグ |
 | バルーン | A | `SxGeomBalloon` | summaryのみ | `txt1`, `txt2`, `num_use`, `lead_line` 等は構造化未実装 |
-| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線はprimitive実装済み | 断面図/詳細図/矢視判定は未実装 |
+| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線特徴候補実装済み | 断面図/詳細図/矢視判定は未実装 |
 | 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 未実装 | `name`, `part3d_name`, `ref_model_name`, `ref_vs_name` |
 | レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 未実装 | 参照先図面名、参照VS名、配置スケール |
 | 図面名 | A/B | `SxInfModel.name`、図枠文字 | 候補実装済み | `title_block_candidates` / `title_block_fields`。2D/3D両方で照合対象 |
@@ -112,7 +112,7 @@
 | 日付 / 作成日 / 改訂日 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠/改訂表解析 | 候補実装済み | 作成日/改訂日/承認日の分類は未実装 |
 | 材質 | B | 2D文字、注記、部品表、引出し注記 | 候補実装済み | 2D固定材質APIではなく文字解析対象。3D材質と照合 |
 | 重量 | B | 図枠文字、注記、表 | 候補実装済み | 3Dマスプロパティと照合 |
-| 表面処理 | B/D | 文字、注記、表面粗さ記号 | 候補実装済み | 専用語はSXNET固定フィールドとしてヒットなし |
+| 表面処理 | B/D | 文字、注記、表面粗さ記号 | 候補実装済み | 専用語はSXNET固定フィールドとしてヒットなし。表面粗さ記号は特徴候補として別保持 |
 | 塗装指示 | B/D | 文字、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし |
 | PRFX | B/D | 文字、図枠、部品表、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。客先固有辞書の拡充が必要 |
 | ユニット番号 | B/D | 文字、図枠、部品表、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。客先固有辞書の拡充が必要 |
@@ -161,7 +161,7 @@
 2. `SxVS.getInf()` を追加し、VS名、尺度、ビュー種別を出す。
 3. `SxEnt.getInfList()` と `SxEnt.getInfMaterialList()` を2D/3Dそれぞれで出す。
 4. 3Dマスプロパティは実装済み。今後は部品単位/グループ単位の粒度と、例外条件のサンプル数を増やす。
-5. `SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomElparc2D`, `SxGeomHatch`, `SxGeomSmark`, `SxGeomFinishMark`, `SxGeomSymbol`, `SxGeomCutLine`, `SxGeomArrowView` を構造化する。
+5. `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomElparc2D`, `SxGeomCircle2D` は特徴候補化済み。`SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomFinishMark`, `SxGeomSymbol`, `SxGeomArrowView` は追加構造化を続ける。
 6. 2D文字を座標付きで保持し、図枠領域と中央図面領域に分類する。初期実装済みで、今後は中央図面/図枠の領域分類を精密化する。
 7. 図枠欄名辞書は初期実装済み。担当者、承認者、日付、材質、重量、表面処理、塗装指示、PRFX、ユニット番号の候補を実サンプルで拡充する。
 8. 2D/3D照合表を作り、同一属性の一致・不一致・片側欠落を記録する。
@@ -199,4 +199,4 @@
 
 最新の共有16件では、全件 `has_3d=true`、9件 `has_2d=true` だった。7件は `has_2d_container=true` だが `has_2d=false` であり、2DグローバルVSまたはVSコンテナの存在だけでは「図面情報あり」と判定できないことが確認できた。
 
-3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。2D図枠欄名解析は初期辞書と候補表示まで進んだ。まだ完全把握できていない領域は、部品単位マスプロパティ、3D材質API、2D図枠欄名辞書の客先横断拡充、2D primitive からの形状特徴タグ化、2D/3D属性照合ルールである。
+3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。2D図枠欄名解析は初期辞書と候補表示まで進んだ。2D primitive は一部を特徴候補タグ化した。まだ完全把握できていない領域は、部品単位マスプロパティ、3D材質API、2D図枠欄名辞書の客先横断拡充、長穴/穴数の確定判定、2D/3D属性照合ルールである。
