@@ -31,6 +31,7 @@
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
   - 3Dマスプロパティは `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` で実装済み。`6800DDU.icd` / `474300AC219.icd` / `TR1D9Q00027.icd` で `mass_probe_status=available` を確認。
+  - 2D図枠欄名候補を `title_block_candidates` と `title_block_fields` として追加。`TR1D9K99027_allviews_2d.json` は候補10件、`DFR-CM1-AA0305300011_2d.json` は材質候補を確認。
 - 次に着手する場合:
   - v2 raw schema を確定する。
   - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
@@ -99,11 +100,12 @@
 - [x] 3Dマスプロパティを raw extract / canonical / detail display に追加
 - [x] 実サンプル3件で重量・質量・体積・面積・重心取得を確認
 - [x] ナレッジシステム実画面を視覚確認し、図面/プロジェクト/製品・装置・ユニット/部品の受け口差分を整理
+- [x] 2D図枠欄名の初期辞書、候補レビュー表示、図枠由来タグ生成を追加
 
 ## 次に着手する
 
 - [ ] 2D primitive から長穴、穴数、断面、ハッチング、表面粗さなどの形状特徴タグを生成
-- [ ] 2D図枠欄名辞書と Gemini API 低温度 JSON 分類を実装
+- [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini API 低温度 JSON 分類は曖昧欄名の補助として追加
 - [ ] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:

@@ -213,6 +213,20 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
             "source_extension": ".icd",
             "source_directory_path": r"J:\SAMPLE",
             "source_full_path": r"J:\SAMPLE\sample.icd",
+            "title_block_candidates": [
+                {
+                    "field": "material",
+                    "label": "材質",
+                    "value": "SUS304",
+                    "confidence": "medium",
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "position_x": 12.5,
+                    "position_y": 34.0,
+                    "inside_print_area": True,
+                    "evidence_text": "材質 SUS304",
+                }
+            ],
         },
     )
 
@@ -227,6 +241,9 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["textSamples"][0]["text"] == "材質 SUS304"
     assert payload["textSamples"][0]["position"] == "12.5, 34.0"
     assert payload["textSamples"][0]["insidePrintArea"] == "inside"
+    assert payload["titleBlockCandidates"][0]["field"] == "材質"
+    assert payload["titleBlockCandidates"][0]["value"] == "SUS304"
+    assert payload["titleBlockCandidates"][0]["evidenceText"] == "材質 SUS304"
     assert payload["dimensionSamples"][0]["value"] == "100"
     assert payload["dimensionSamples"][0]["insidePrintArea"] == "outside"
     assert payload["geometryPrimitiveSamples"][0]["geometryType"] == "SxGeomSpline2D"

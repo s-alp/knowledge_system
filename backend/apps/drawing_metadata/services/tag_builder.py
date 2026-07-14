@@ -31,5 +31,17 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
         for spec in canonical_attributes.get("spec_tokens", []):
             if spec in {"SES"}:
                 add_tag(f"規格:{spec}", "spec_tokens", confidence="medium")
+    if "title_block_fields" not in excluded_sources:
+        title_block_fields = canonical_attributes.get("title_block_fields", {}) or {}
+        if title_block_fields.get("material"):
+            add_tag(f"材質:{title_block_fields['material']}", "title_block_fields.material", confidence="medium")
+        if title_block_fields.get("surface_treatment"):
+            add_tag(f"表面処理:{title_block_fields['surface_treatment']}", "title_block_fields.surface_treatment", confidence="medium")
+        if title_block_fields.get("coating_instruction"):
+            add_tag(f"塗装:{title_block_fields['coating_instruction']}", "title_block_fields.coating_instruction", confidence="medium")
+        if title_block_fields.get("prfx"):
+            add_tag(f"PRFX:{title_block_fields['prfx']}", "title_block_fields.prfx", confidence="medium")
+        if title_block_fields.get("unit_number"):
+            add_tag(f"ユニット:{title_block_fields['unit_number']}", "title_block_fields.unit_number", confidence="medium")
 
     return tags

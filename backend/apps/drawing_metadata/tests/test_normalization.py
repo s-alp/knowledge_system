@@ -81,6 +81,11 @@ def test_normalize_2d_raw_extract():
             "texts": [
                 {"text_lines": ["澁谷工業", "SES"], "source_type": "text"},
                 {"text_lines": ["ロボット"], "source_type": "label", "joined_text": "ロボット"},
+                {"text_lines": ["材質 SUS304"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 20.0},
+                {"text_lines": ["塗装", "マンセル 5Y7/1"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 30.0},
+                {"text_lines": ["PRFX RAA4844"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 40.0},
+                {"text_lines": ["ユニット U01"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 50.0},
+                {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": False, "position_x": 999.0, "position_y": 999.0},
             ],
             "dimensions": [{"value_1": "100", "value_2": None, "mark_2": "M5", "mark_3": None, "front_word": None, "back_word": None}],
             "weld_notes": [{"text": "WELD A"}],
@@ -90,7 +95,17 @@ def test_normalize_2d_raw_extract():
     }
 
     canonical = normalize_raw_extract(payload)
+    tags = build_derived_tags(canonical)
     assert canonical["source_full_path"] == r"J:\澁谷工業\sample.icd"
     assert canonical["customer_name"] == "澁谷工業"
     assert canonical["equipment_category"] == "ロボット"
     assert "SES" in canonical["spec_tokens"]
+    assert canonical["title_block_fields"]["material"] == "SUS304"
+    assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
+    assert canonical["title_block_fields"]["prfx"] == "RAA4844"
+    assert canonical["title_block_fields"]["unit_number"] == "U01"
+    assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
+    assert any(tag["tag"] == "材質:SUS304" for tag in tags)
+    assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
+    assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
+    assert any(tag["tag"] == "ユニット:U01" for tag in tags)

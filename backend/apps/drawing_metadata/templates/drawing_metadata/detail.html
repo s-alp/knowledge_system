@@ -253,6 +253,41 @@
         <p>文字情報はありません。</p>
       {% endif %}
 
+      <h3>図枠項目候補</h3>
+      {% if snapshot_2d_display.titleBlockCandidates %}
+        <table>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>候補値</th>
+              <th>信頼度</th>
+              <th>ビュー名</th>
+              <th>レイヤー</th>
+              <th>座標</th>
+              <th>印刷枠</th>
+              <th>根拠文字</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for candidate in snapshot_2d_display.titleBlockCandidates %}
+              <tr>
+                <td>{{ candidate.field }}</td>
+                <td>{{ candidate.value }}</td>
+                <td>{{ candidate.confidence }}</td>
+                <td>{{ candidate.viewName }}</td>
+                <td>{{ candidate.layerNo }}</td>
+                <td>{{ candidate.position }}</td>
+                <td>{{ candidate.insidePrintArea }}</td>
+                <td>{{ candidate.evidenceText }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.titleBlockCandidateTotal }} 件中 {{ snapshot_2d_display.titleBlockCandidates|length }} 件を表示しています。</p>
+      {% else %}
+        <p>図枠項目候補はありません。</p>
+      {% endif %}
+
       <h3>寸法サンプル</h3>
       {% if snapshot_2d_display.dimensionSamples %}
         <table>

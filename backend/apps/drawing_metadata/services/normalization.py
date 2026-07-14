@@ -12,6 +12,24 @@ from apps.drawing_metadata.services.seed_dictionaries import (
 )
 
 
+TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
+    "drawing_number": {"label": "図番", "keywords": ["図番", "図面番号", "品番", "部品番号", "drawing no", "dwg no", "part no"], "max_value_length": 80},
+    "drawing_name": {"label": "図面名", "keywords": ["図名", "図面名", "品名", "名称", "title", "name"], "max_value_length": 80},
+    "material": {"label": "材質", "keywords": ["材質", "材料", "material", "matl"], "max_value_length": 40},
+    "weight": {"label": "重量", "keywords": ["重量", "質量", "weight", "mass", "wt"], "max_value_length": 40},
+    "surface_treatment": {"label": "表面処理", "keywords": ["表面処理", "表処", "処理", "surface treatment", "finish"], "max_value_length": 40},
+    "coating_instruction": {"label": "塗装指示", "keywords": ["塗装", "塗装色", "paint", "coating"], "max_value_length": 40},
+    "scale": {"label": "尺度", "keywords": ["尺度", "縮尺", "scale"], "max_value_length": 24},
+    "designer": {"label": "設計者", "keywords": ["設計", "作成", "製図", "drawn", "designed"], "max_value_length": 40},
+    "checker": {"label": "検図者", "keywords": ["検図", "照査", "check", "checked"], "max_value_length": 40},
+    "approver": {"label": "承認者", "keywords": ["承認", "認可", "approved"], "max_value_length": 40},
+    "date": {"label": "日付", "keywords": ["日付", "年月日", "date"], "max_value_length": 40},
+    "revision": {"label": "改訂", "keywords": ["改訂", "訂正", "rev", "revision"], "max_value_length": 40},
+    "prfx": {"label": "PRFX", "keywords": ["prfx", "p/rfx", "prefix"], "max_value_length": 40},
+    "unit_number": {"label": "ユニット番号", "keywords": ["ユニット", "unit", "unit no"], "max_value_length": 40},
+}
+
+
 def _flatten_strings(values: Iterable[str | None]) -> list[str]:
     normalized: list[str] = []
     for value in values:
@@ -29,6 +47,118 @@ def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> s
         if any(candidate.lower() in lowered for candidate in candidates):
             return canonical
     return None
+
+
+def _normalize_for_match(value: str) -> str:
+    return "".join(value.lower().replace("　", " ").split())
+
+
+def _strip_label_value(text: str, keyword: str) -> str | None:
+    lower_text = text.lower()
+    lower_keyword = keyword.lower()
+    index = lower_text.find(lower_keyword)
+    if index < 0:
+        normalized_text = _normalize_for_match(text)
+        normalized_keyword = _normalize_for_match(keyword)
+        if normalized_keyword not in normalized_text:
+            return None
+        return None
+
+    value = text[:index] + text[index + len(keyword) :]
+    value = value.strip(" 　:：=＝-－_/／[]【】()（）")
+    return value or None
+
+
+def _text_lines_from_payload(text: dict) -> list[str]:
+    lines = _flatten_strings(text.get("text_lines", []) or [])
+    joined_text = text.get("joined_text")
+    if joined_text and joined_text not in lines:
+        lines.append(joined_text)
+    return lines
+
+
+def _looks_like_title_block_label(value: str) -> bool:
+    normalized = _normalize_for_match(value)
+    return any(
+        normalized == _normalize_for_match(str(keyword))
+        for rule in TITLE_BLOCK_FIELD_RULES.values()
+        for keyword in rule["keywords"]
+    )
+
+
+def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> bool:
+    if not value:
+        return False
+    stripped = value.strip()
+    return bool(stripped) and len(stripped) <= max_length and not _looks_like_title_block_label(stripped)
+
+
+def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, str, str | None, float | None, float | None]] = set()
+
+    for text in texts:
+        if text.get("inside_print_area") is False:
+            continue
+        lines = _text_lines_from_payload(text)
+        if not lines:
+            continue
+
+        for line_index, line in enumerate(lines):
+            normalized_line = _normalize_for_match(line)
+            for field, rule in TITLE_BLOCK_FIELD_RULES.items():
+                max_value_length = int(rule.get("max_value_length", 80))
+                for keyword in rule["keywords"]:
+                    normalized_keyword = _normalize_for_match(str(keyword))
+                    if normalized_keyword not in normalized_line:
+                        continue
+
+                    value = _strip_label_value(line, str(keyword))
+                    confidence = "medium" if _is_title_block_value_usable(value, max_length=max_value_length) else "low"
+                    if not value and line_index + 1 < len(lines):
+                        next_value = lines[line_index + 1].strip()
+                        if _is_title_block_value_usable(next_value, max_length=max_value_length):
+                            value = next_value
+                            confidence = "medium"
+
+                    key = (field, line, value, text.get("position_x"), text.get("position_y"))
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    candidates.append(
+                        {
+                            "field": field,
+                            "label": rule["label"],
+                            "value": value,
+                            "evidence_text": line,
+                            "confidence": confidence,
+                            "view_name": text.get("view_name"),
+                            "layer_no": text.get("layer_no"),
+                            "position_x": text.get("position_x"),
+                            "position_y": text.get("position_y"),
+                            "inside_print_area": text.get("inside_print_area"),
+                            "source": "2d_text",
+                        }
+                    )
+                    break
+
+    return candidates
+
+
+def _select_title_block_fields(candidates: list[dict]) -> dict:
+    selected: dict = {}
+    for candidate in candidates:
+        if candidate.get("confidence") != "medium":
+            continue
+        value = candidate.get("value")
+        field = candidate.get("field")
+        rule = TITLE_BLOCK_FIELD_RULES.get(field, {})
+        max_value_length = int(rule.get("max_value_length", 80))
+        if not _is_title_block_value_usable(value, max_length=max_value_length):
+            continue
+        if field and field not in selected:
+            selected[field] = value
+    return selected
 
 
 def normalize_raw_extract(raw_payload: dict) -> dict:
@@ -94,6 +224,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "text_tokens": [],
         "label_texts": [],
         "title_block_fields": {},
+        "title_block_candidates": [],
         "dimension_values": [],
         "dimension_symbols": [],
         "tolerance_texts": [],
@@ -192,10 +323,13 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
         canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
+        canonical["title_block_candidates"] = _build_title_block_candidates(texts)
+        canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
 
         search_tokens = (
             source_path_tokens
             + canonical["text_tokens"]
+            + _flatten_strings(str(value) for value in canonical["title_block_fields"].values())
             + canonical["dimension_symbols"]
             + canonical["weld_note_texts"]
             + canonical["balloon_keys"]

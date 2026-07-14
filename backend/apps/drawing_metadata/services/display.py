@@ -155,6 +155,24 @@ def _text_preview_items(texts: list[dict], limit: int = 8) -> list[dict]:
     return previews
 
 
+def _title_block_candidate_items(candidates: list[dict], limit: int = 12) -> list[dict]:
+    previews: list[dict] = []
+    for candidate in candidates[:limit]:
+        previews.append(
+            {
+                "field": _display_value(candidate.get("label") or candidate.get("field")),
+                "value": _display_value(candidate.get("value")),
+                "confidence": _display_value(candidate.get("confidence")),
+                "viewName": _display_value(candidate.get("view_name")),
+                "layerNo": _display_value(candidate.get("layer_no")),
+                "position": _display_value(_position_label(candidate)),
+                "insidePrintArea": _display_value(_inside_print_area_label(candidate.get("inside_print_area"))),
+                "evidenceText": _display_value(candidate.get("evidence_text")),
+            }
+        )
+    return previews
+
+
 def _dimension_preview_items(dimensions: list[dict], limit: int = 8) -> list[dict]:
     previews: list[dict] = []
     for dimension in dimensions[:limit]:
@@ -387,6 +405,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     view_sheets = raw_extract.get("view_sheets", []) or []
     print_frames = raw_extract.get("print_frames", []) or []
     layers = raw_extract.get("layers", []) or []
+    title_block_candidates = canonical_attributes.get("title_block_candidates", []) or []
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
     displayed_layer_count = len([layer for layer in layers if layer.get("is_displayed")])
@@ -415,6 +434,8 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "layersTruncated": len(layers) > 10,
         "textSamples": _text_preview_items(texts),
         "textTotal": len(texts),
+        "titleBlockCandidates": _title_block_candidate_items(title_block_candidates),
+        "titleBlockCandidateTotal": len(title_block_candidates),
         "dimensionSamples": _dimension_preview_items(dimensions),
         "dimensionTotal": len(dimensions),
         "geometryPrimitiveSamples": _primitive_preview_items(primitives),
