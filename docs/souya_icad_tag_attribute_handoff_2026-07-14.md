@@ -35,6 +35,16 @@
 - 製品・装置・ユニット詳細と部品詳細には `属性情報` 欄がある。ただしサンプルでは `属性情報がありません。` と表示され、一覧側にタグ/属性列は見えない。
 - 図面詳細には `タグ` と `属性情報` 欄があり、2D/3D切替もある。初期連携先は引き続き図面詳細を最優先にする。
 
+同日に本番フロント資産 `index-B8bCj6lB.js` を読み取り専用で確認した。解析結果は `output\knowledge_ui_screenshots_2026-07-15\frontend_tag_attribute_contract_probe.json` に保存した。
+
+| 対象 | フロント資産上の受け口所見 | 判断 |
+| --- | --- | --- |
+| 図面 | `getDrawingAttributes`, `/drawing_attributes/`, `/drawing_attributes/{id}/`, `/drawing_attributes/reorder/` がある。図面詳細は response の `tags` と `attributes` を表示している | タグ・属性とも既存受け口候補あり |
+| 製品・装置・ユニット | `getProductAttributes`, `/product_attributes/`, `/product_attributes/{id}/`, `/product_attributes/reorder/` がある。詳細は response の `attributes` を表示している | 属性の既存受け口候補あり。タグは未確認 |
+| 部品 | `getPartAttributes`, `/part_attributes/`, `/part_attributes/{id}/`, `/part_attributes/reorder/` がある。詳細は response の `attributes` を表示している | 属性の既存受け口候補あり。タグは未確認 |
+| プロジェクト | `project_attributes` はフロント資産内で見当たらない。詳細取得のマッピングにも `attributes` / `tags` は見えない | 既存受け口は弱い。創屋確認が必要 |
+| 文書 | 文書登録/詳細には `tags` があり、注記上も自動抽出・手動追加/削除が想定されている | 参考。今回のICAD図面連携の主対象ではない |
+
 ## 2. こちらが提供するデータ単位
 
 | 提供単位 | 主なキー | 内容 | 備考 |
@@ -211,6 +221,8 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
 - `drawing_attributes`, `product_attributes`, `part_attributes` の登録/更新APIの有無
 - プロジェクトに属性/タグを保存するAPIまたは詳細表示口の有無
 - タグは図面単位だけか、製品・ユニット・部品にも保存できるか
+- `drawing_attributes`, `product_attributes`, `part_attributes` はマスタ定義APIに見えるため、個別図面/製品/部品へ属性値を保存する際の payload 形式と更新API名
+- 図面と文書には `tags` がある一方、製品・部品・プロジェクトのタグ保存口はフロント資産上では未確認のため、タグを属性として代替するか、タグ保存APIを追加するか
 - 手動補正履歴をどのテーブルに保持するか
 - RAG検索インデックスへ投入できるフィールド名、型、更新タイミング
 - 2D/3Dプレビュー詳細APIへ追加項目を渡せるか
@@ -221,6 +233,6 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
 
 - 3D材質APIの部品単位紐づけは候補生成まで実装済み。材質ID辞書も初期実装済みで、共有39件では要確認材質を `ZZZ`, `CDQ`, `75` まで絞り込めている。次は正式材質マスタとの突合
 - 2D図枠欄名辞書の客先横断拡充
-- Gemini API低温度JSON分類は2D抽出ジョブへ組み込み済み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として記録する。既存候補値の分類補助に限定し、ルール抽出済みの属性は上書きしない。現時点の実API確認は `API_KEY_INVALID` で未完了
+- Gemini API低温度JSON分類は2D抽出ジョブへ組み込み済み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として記録する。既存候補値の分類補助に限定し、ルール抽出済みの属性は上書きしない。2026-07-15 に再プローブしたが、実API確認は引き続き `API_KEY_INVALID` で未完了。結果は `output\live_extracts\title_block_llm_probe_2026-07-15\gemini_reprobe_2026-07-15.json` に保存した
 - 長穴、穴数、断面、表面粗さ値は PoC で属性化済み。次は実サンプル横断で、円/楕円を穴・長穴として断定できる条件を詰める
 - 2D/3D照合結果の採用値、差異、要確認理由は PoC 画面表示まで実装済み。次は本番API/fixture名確定後の項目名合わせ

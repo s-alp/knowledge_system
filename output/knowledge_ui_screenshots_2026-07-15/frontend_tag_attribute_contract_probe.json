@@ -1,0 +1,78 @@
+{
+  "inspectedAt": "2026-07-15",
+  "pageUrl": "http://210.165.3.139/web/drawing",
+  "jsAsset": "http://210.165.3.139/web/assets/index-B8bCj6lB.js",
+  "jsLength": 3963944,
+  "attributeApiCandidates": {
+    "drawing": [
+      "/drawing_attributes/",
+      "/drawing_attributes/${e}/",
+      "/drawing_attributes/${n.id}/",
+      "/drawing_attributes/reorder/"
+    ],
+    "product": [
+      "/product_attributes/",
+      "/product_attributes/${e}/",
+      "/product_attributes/${n.id}/",
+      "/product_attributes/reorder/"
+    ],
+    "part": [
+      "/part_attributes/",
+      "/part_attributes/${e}/",
+      "/part_attributes/${n.id}/",
+      "/part_attributes/reorder/"
+    ],
+    "project": []
+  },
+  "tagApiCandidates": [
+    "/vnd.openxmlformats-officedocument.presentationml.tags"
+  ],
+  "detailPayloadUsage": {
+    "project": {
+      "hasAttributes": false,
+      "hasTags": false
+    },
+    "product": {
+      "hasAttributes": true,
+      "hasTags": false
+    },
+    "part": {
+      "hasAttributes": true,
+      "hasTags": false
+    },
+    "drawing": {
+      "hasAttributes": true,
+      "hasTags": true
+    },
+    "document": {
+      "hasTags": true
+    }
+  },
+  "keyFindings": [
+    "drawing_attributes/product_attributes/part_attributes master APIs exist in the frontend bundle.",
+    "project_attributes was not found in the frontend bundle.",
+    "drawing detail maps response tags and attributes to visible sections.",
+    "product and part detail map response attributes to visible sections.",
+    "document and drawing registration/detail include tags; no generic tag API path was found in the bundle."
+  ],
+  "evidenceSnippets": {
+    "drawingAttributes": [
+      "り解除に失敗しました。\"}),bA=\"getDrawingAttributes\",Ose=({deps:t,params:e,options:n})=>Dr({queryKey:bA,deps:t,options:{...n,select(r){return r.map(a=>({id:a.id,attributeName:a.attribute_name,inputType:a.input_type,displayNo:a.display_no,isActive:a.is_active,options:a.drawing_attribute_options.map(i=>({optionId:i.id,optionName:i.option_name,displayNo:i.display_no,isActive:i.is_active}))}))}},req:()=>Ft.get(\"/drawing_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),EWe=({options:t})=>Cn({options:t,invalidateQueries:[bA],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,drawing_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/drawing_attributes/\",n).then(r=>r.data)},errorMessage:\"図面属性の新規作成に失敗しました。\"}),CWe=({options:t})=>Cn({options:t,invalidateQu",
+      ")}},req:()=>Ft.get(\"/drawing_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),EWe=({options:t})=>Cn({options:t,invalidateQueries:[bA],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,drawing_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/drawing_attributes/\",n).then(r=>r.data)},errorMessage:\"図面属性の新規作成に失敗しました。\"}),CWe=({options:t})=>Cn({options:t,invalidateQueries:[bA],req:e=>{const n={id:e.id,attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,drawing_attribute_options:e.options.map(r=>({id:r.optionId,option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.put(`/drawing_attributes/${n.id}/`,n).then(r=>r.data)},errorMessage:\"図面属性の更新に失敗しました。\"}),_We=({options:t"
+    ],
+    "productAttributes": [
+      "ng:a,error:i}},H_=\"getProductAttributes\",Gae=({deps:t,params:e,options:n})=>Dr({queryKey:H_,deps:t,options:{...n,select(r){return r.map(a=>({id:a.id,attributeName:a.attribute_name,inputType:a.input_type,displayNo:a.display_no,isActive:a.is_active,options:a.product_attribute_options.map(i=>({optionId:i.id,optionName:i.option_name,displayNo:i.display_no,isActive:i.is_active}))}))}},req:()=>Ft.get(\"/product_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),Zje=({options:t})=>Cn({options:t,invalidateQueries:[H_],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,product_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/product_attributes/\",n).then(r=>r.data)},errorMessage:\"製品・装置・ユニット属性の新規作成に失敗しました。\"}),Jje=({options:t})=>Cn({options:t,inva",
+      ")}},req:()=>Ft.get(\"/product_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),Zje=({options:t})=>Cn({options:t,invalidateQueries:[H_],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,product_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/product_attributes/\",n).then(r=>r.data)},errorMessage:\"製品・装置・ユニット属性の新規作成に失敗しました。\"}),Jje=({options:t})=>Cn({options:t,invalidateQueries:[H_],req:e=>{const n={id:e.id,attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,product_attribute_options:e.options.map(r=>({id:r.optionId,option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.put(`/product_attributes/${n.id}/`,n).then(r=>r.data)},errorMessage:\"製品・装置・ユニット属性の更新に失敗しました。\"})"
+    ],
+    "partAttributes": [
+      "Fetching:r,error:a}},B_=\"getPartAttributes\",Lae=({deps:t,params:e,options:n})=>Dr({queryKey:B_,deps:t,options:{...n,select(r){return r.map(a=>({id:a.id,attributeName:a.attribute_name,inputType:a.input_type,displayNo:a.display_no,isActive:a.is_active,options:a.part_attribute_options.map(i=>({optionId:i.id,optionName:i.option_name,displayNo:i.display_no,isActive:i.is_active}))}))}},req:()=>Ft.get(\"/part_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),wje=({options:t})=>Cn({options:t,invalidateQueries:[B_],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,part_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/part_attributes/\",n).then(r=>r.data)},errorMessage:\"部品属性の新規作成に失敗しました。\"}),Eje=({options:t})=>Cn({options:t,invalidateQueries:[B_",
+      "e}))}))}},req:()=>Ft.get(\"/part_attributes/\",{params:{is_active:e?.isActive}}).then(r=>r.data)}),wje=({options:t})=>Cn({options:t,invalidateQueries:[B_],req:e=>{const n={attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,part_attribute_options:e.options.map(r=>({option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.post(\"/part_attributes/\",n).then(r=>r.data)},errorMessage:\"部品属性の新規作成に失敗しました。\"}),Eje=({options:t})=>Cn({options:t,invalidateQueries:[B_],req:e=>{const n={id:e.id,attribute_name:e.attributeName,input_type:e.inputType,display_no:e.displayNo,is_active:e.isActive,part_attribute_options:e.options.map(r=>({id:r.optionId,option_name:r.optionName,display_no:r.displayNo,is_active:r.isActive}))};return Ft.put(`/part_attributes/${n.id}/`,n).then(r=>r.data)},errorMessage:\"部品属性の更新に失敗しました。\"}),Cje=({options:t})=>Cn({o"
+    ],
+    "drawingTags": [
+      "ren:b.jsx(tr,{label:\"図面番号\",value:e.drawingNo})}),b.jsxs(pt,{direction:\"row\",children:[b.jsx(tr,{label:\"図面名\",value:e.drawingName}),b.jsx(tr,{label:\"図面タイプ\",value:e.drawingType?.drawingTypeName??\"\",defaultValue:\"-\"})]}),b.jsxs(pt,{direction:\"row\",children:[b.jsx(tr,{label:\"用紙サイズ\",value:e.paperSize,defaultValue:\"-\"}),b.jsx(tr,{label:\"所有者\",value:Wi(e.owner)})]}),b.jsx(tr,{label:\"設計意図・目的\",value:e.intention,defaultValue:\"-\",sx:{width:\"100%\"}}),b.jsx(qd,{label:\"タグ\",sx:{width:\"100%\"},children:b.jsx(Ese,{tags:e.tags})}),b.jsx(qd,{label:\"属性情報 \",sx:{width:\"100%\"},children:b.jsx(w4,{attributes:e.attributes})}),b.jsx(tr,{label:\"備考\",value:e.remark,defaultValue:\"-\",sx:{width:\"100%\"}})]})}),b.jsx(i8,{drawingId:e.drawingId,drawingInternalId:e.drawingInternalId,isOpen:o(\"edit\"),onClose:()=>i(\"edit\")}),b.jsx(gu,{isOpen:o(\"delete\"),onClose:()=>i(\"delete\"),onDelete:()=>s({})}),b.jsx(qu,{target:\"最新バージョンに移動\",isOpen:o(\"moveLatestConfirm\"),onClose:()=>i(\"moveLatestConfirm\"),onConfirm:()=>{r(kr(Uo.DETAIL.path,{drawingInternalId:e.drawingInternalId}))}})]})},iqe=t=>{const{drawingInternalId:e,version:n}=t,{data:r}=Dje({detail:e,options:{enabled:!!e},params:n!==void 0?{version:Number(n)}:void 0}),a=r||[],i=za();return b.jsx(b.Fragment,{children:b.jsx(yr,{label:\"変更履歴\",children:b.jsx(dA,{changeLogs:a,height:\"200px\",onLatestClick:o=>i(kr(Uo.DETAIL.path,{documentInternalId:o})),onHistoryClick:(o,s)=>i(kr(Uo.DET"
+    ],
+    "projectDetail": [
+      "ark??\"\",isFavorite:a.is_favorite,version:a.version}))}},req:()=>Ft.get(\"/projects/\",{params:{name:e?.name,status:e?.status,manager:e?.manager,client_user_name:e?.clientUserName,is_favorite:e?.isFavorite,page:e?.page,page_size:e?.pageSize,exclude_product_internal_id:e?.excludeProductInternalId,exclude_part_internal_id:e?.excludePartInternalId,exclude_drawing_internal_id:e?.excludeDrawingInternalId,exclude_document_internal_id:e?.excludeDocumentInternalId}}).then(r=>r.data)}),LUe=\"getProject\",PD=\"getProjectByInternalId\",rie=({detail:t,deps:e,params:n,options:r})=>Dr({queryKey:PD,deps:e,options:{...r,select(a){return{projectId:a.id,projectInternalId:a.project_internal_id,projectName:a.project_name,projectStatus:{projectStatusId:a.project_status.id,status:a.project_status.status},client:{clientId:a.client.id,clientName:a.client.client_name},clientUser:{clientUserId:a.client_user.id,lastName:a.client_user.last_name,firstName:a.client_user.first_name},manager:a.manager?{managerId:a.manager.id,lastName:a.manager.last_name,firstName:a.manager.first_name}:void 0,startDate:a.start_date?new Date(a.start_date):void 0,endDate:a.end_date?new Date(a.end_date):void 0,planEndDate:a.plan_end_date?new Date(a.plan_end_date):void 0,remark:a.remark,isFavorite:a.is_favorite,version:a.version}}},req:()=>{const a=n?.version?`?version=${n.version}`:\"\";return Ft.get(`/projects/internals/${t}/${a}`).then("
+    ]
+  }
+}

@@ -147,6 +147,8 @@
 - [x] ローカルDjangoを実HTTP確認し、一覧画面、登録一覧API、詳細API、RAG payload API が返ることを確認
 - [x] ローカル詳細画面に創屋連携・viewer/RAG受け渡し確認欄を追加し、Chromeで見た目を確認
 - [x] 本番ナレッジシステムのAI検索、プロジェクト、製品・装置・ユニット、部品、図面管理の一覧/詳細をChromeで読み取り確認
+- [x] 本番フロント資産を読み取り解析し、`drawing_attributes` / `product_attributes` / `part_attributes` と図面 `tags` の受け口候補を確認
+- [x] Gemini APIキー設定後に2D図枠分類を再プローブし、2026-07-15時点でも `API_KEY_INVALID` で採用率未測定であることを記録
 
 ## 次に着手する
 

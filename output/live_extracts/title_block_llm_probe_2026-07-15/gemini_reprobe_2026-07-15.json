@@ -1,0 +1,305 @@
+{
+  "root": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14",
+  "json_file_count": 69,
+  "candidate_file_count": 11,
+  "candidate_sample_count": 5,
+  "selected_file_count": 5,
+  "classified": true,
+  "files": [
+    {
+      "file": "TR1D9K99027_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\TR1D9K99027_2d.json",
+      "candidate_count": 10,
+      "llm_candidate_count": 10,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {},
+      "candidate_preview": [
+        {
+          "field": "scale",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "尺度",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年月日",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "designer",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "製図者",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "drawing_number",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "品 番",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂正",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "表 面 処 理",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "熱  処  理",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂       正       理       由",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年 月 日",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "drawing_name",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "名称",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini_error": "Gemini API returned HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"API key not valid. Please pass a valid API key.\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"API_KEY_INVALID\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"service\": \"generativelanguage.googleapis.com\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        "
+    },
+    {
+      "file": "U8105111315_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\U8105111315_2d.json",
+      "candidate_count": 9,
+      "llm_candidate_count": 9,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {},
+      "candidate_preview": [
+        {
+          "field": "scale",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "尺度",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年月日",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "designer",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "製図者",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "drawing_number",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "品 番",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂正",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "表 面 処 理",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "surface_treatment",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "熱  処  理",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "revision",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "訂       正       理       由",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "date",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "年 月 日",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini_error": "Gemini API returned HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"API key not valid. Please pass a valid API key.\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"API_KEY_INVALID\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"service\": \"generativelanguage.googleapis.com\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        "
+    },
+    {
+      "file": "03_20K03379P00_shoot_base_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\03_20K03379P00_shoot_base_2d.json",
+      "candidate_count": 3,
+      "llm_candidate_count": 3,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "coating_instruction": "ﾊ仕様書ﾆﾖﾙ"
+      },
+      "candidate_preview": [
+        {
+          "field": "coating_instruction",
+          "value": "ﾊ仕様書ﾆﾖﾙ",
+          "confidence": "medium",
+          "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "coating_instruction",
+          "value": "色ﾊ仕様書ﾆﾖﾙ",
+          "confidence": "medium",
+          "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "coating_instruction",
+          "value": "手摺部:Y22-80X(黄",
+          "confidence": "medium",
+          "evidence_text": "塗装色 手摺部:Y22-80X(黄)",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini_error": "Gemini API returned HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"API key not valid. Please pass a valid API key.\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"API_KEY_INVALID\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"service\": \"generativelanguage.googleapis.com\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        "
+    },
+    {
+      "file": "DFR-CM1-AA0305300011_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\DFR-CM1-AA0305300011_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 2,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "material": "丸棒　φ９０"
+      },
+      "candidate_preview": [
+        {
+          "field": "material",
+          "value": "丸棒　φ９０",
+          "confidence": "medium",
+          "evidence_text": "１．使用材料",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "material",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "１．使用材料 丸棒　φ９０ 平角鋼材　２８×１２ ９０×１２　使用 ２．指示なき接合部はすべて溶接のこと ３．溶接後、歪修正のこと",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini_error": "Gemini API returned HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"API key not valid. Please pass a valid API key.\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"API_KEY_INVALID\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"service\": \"generativelanguage.googleapis.com\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        "
+    },
+    {
+      "file": "M26A07720_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\M26A07720_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 2,
+      "skipped_replacement_character_count": 0,
+      "selected_fields": {
+        "drawing_number": "参考：Ｍ２４Ａ８８８１０"
+      },
+      "candidate_preview": [
+        {
+          "field": "coating_instruction",
+          "value": null,
+          "confidence": "low",
+          "evidence_text": "塗装",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "drawing_number",
+          "value": "参考：Ｍ２４Ａ８８８１０",
+          "confidence": "medium",
+          "evidence_text": "参考図番：Ｍ２４Ａ８８８１０",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini_error": "Gemini API returned HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"API key not valid. Please pass a valid API key.\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"API_KEY_INVALID\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"service\": \"generativelanguage.googleapis.com\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        "
+    }
+  ]
+}
