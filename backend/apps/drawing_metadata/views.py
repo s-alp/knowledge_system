@@ -18,9 +18,29 @@ from apps.drawing_metadata.services.display import (
     build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
+from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+
+
+class HandoffDashboardPageView(View):
+    template_name = "drawing_metadata/handoff.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        drawings = list(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+                "jobs",
+            ).all()
+        )
+        return render(
+            request,
+            self.template_name,
+            {
+                "dashboard": build_handoff_dashboard_payload(drawings),
+            },
+        )
 
 
 class RegistrationListPageView(View):

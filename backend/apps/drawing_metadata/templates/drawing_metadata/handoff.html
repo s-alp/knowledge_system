@@ -1,0 +1,102 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <h2>創屋連携確認</h2>
+
+  <div class="grid">
+    {% for card in dashboard.summaryCards %}
+      <div class="panel">
+        <div class="muted">{{ card.label }}</div>
+        <div style="font-size: 28px; font-weight: 700;">{{ card.value }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h2>対象別payload集計</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>対象</th>
+        <th>図面数</th>
+        <th>属性候補</th>
+        <th>タグ候補</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for target in dashboard.targetTotals %}
+        <tr>
+          <td>{{ target.targetLabel }}</td>
+          <td>{{ target.drawingCount }}</td>
+          <td>{{ target.attributeCount }}</td>
+          <td>{{ target.tagCount }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">payload候補はありません。</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>図面別確認</h2>
+  <div class="table-scroll">
+    <table class="payload-table">
+      <thead>
+        <tr>
+          <th>図面</th>
+          <th>2D/3D</th>
+          <th>属性/タグ</th>
+          <th>2D/3D照合</th>
+          <th>payload対象</th>
+          <th>確認リンク</th>
+          <th>API</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in dashboard.rows %}
+          <tr>
+            <td>
+              <strong>{{ row.filename }}</strong>
+              <div class="muted">{{ row.sourcePath }}</div>
+            </td>
+            <td>
+              <div>2D: {{ row.has2d }}</div>
+              <div>3D: {{ row.has3d }}</div>
+              <div>初期: {{ row.defaultMode|default:"-" }}</div>
+            </td>
+            <td>
+              <div>属性 {{ row.canonicalAttributeCount }}</div>
+              <div>タグ {{ row.tagCount }}</div>
+            </td>
+            <td>
+              <div>レビュー {{ row.reviewConflictCount }}</div>
+              <div>診断 {{ row.diagnosticConflictCount }}</div>
+            </td>
+            <td>
+              {% for target in row.payloadTargets %}
+                <div>
+                  <strong>{{ target.targetLabel }}</strong>
+                  <span class="muted">属性 {{ target.attributeCount }} / タグ {{ target.tagCount }}</span>
+                </div>
+              {% empty %}
+                -
+              {% endfor %}
+            </td>
+            <td>
+              <div><a href="{{ row.detailUrl }}">詳細</a></div>
+              <div><a href="{{ row.tagReviewUrl }}">タグレビュー</a></div>
+            </td>
+            <td>
+              <div><a href="{{ row.bootstrapApiUrl }}">viewer bootstrap</a></div>
+              <div><a href="{{ row.ragPayloadApiUrl }}">RAG payload</a></div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7">登録済み図面はありません。</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

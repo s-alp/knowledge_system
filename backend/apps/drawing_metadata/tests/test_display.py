@@ -11,6 +11,7 @@ from apps.drawing_metadata.services.display import (
     build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
+from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 
@@ -735,3 +736,55 @@ def test_tag_review_page_renders_composed_tag_candidates(client, sample_registra
     assert "本番受け渡し payload 候補" in content
     assert "対象別属性候補" in content
     assert "図面詳細にタグと属性情報が表示" in content
+
+
+@pytest.mark.django_db
+def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="handoff-sample.icd",
+        source_path=r"J:\SAMPLE\handoff-sample.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "source_full_path": r"J:\SAMPLE\handoff-sample.icd",
+            "source_file_name": "handoff-sample.icd",
+            "source_directory_path": r"J:\SAMPLE",
+            "customer_name": "澁谷工業",
+            "equipment_category": "供給台",
+            "material_keywords": ["SUS304"],
+        },
+        derived_tags_json=[],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "source_full_path": r"J:\SAMPLE\handoff-sample.icd",
+            "source_file_name": "handoff-sample.icd",
+            "source_directory_path": r"J:\SAMPLE",
+            "equipment_category": "供給台",
+            "part_names": ["TOP"],
+            "part_tree_paths": ["TOP"],
+        },
+        derived_tags_json=[],
+    )
+
+    dashboard = build_handoff_dashboard_payload([drawing])
+    response = client.get("/drawing-metadata/handoff/")
+
+    assert dashboard["summaryCards"][0]["value"] == 1
+    assert dashboard["summaryCards"][2]["value"] == 1
+    assert dashboard["rows"][0]["has2d"] is True
+    assert dashboard["rows"][0]["has3d"] is True
+    assert dashboard["rows"][0]["payloadTargets"][0]["targetLabel"] == "図面"
+    assert response.status_code == 200
+    content = response.content.decode("utf-8")
+    assert "創屋連携確認" in content
+    assert "handoff-sample.icd" in content
+    assert "/api/v1/drawings/" in content
+    assert "viewer bootstrap" in content
+    assert "RAG payload" in content

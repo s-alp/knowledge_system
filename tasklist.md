@@ -185,6 +185,7 @@
 - [x] 本番ナレッジシステムをChrome実画面で追加確認し、メニュー経由の正しいURLとして統合検索 `/web/integrated_search`、類似検索 `/web/drawing/similar_search` を確認。プロジェクト詳細はタグ/属性欄なし、製品・装置・ユニット詳細と部品詳細は属性情報欄あり、図面詳細はタグ/属性情報欄あり
 - [x] タグレビュー画面に本番受け渡しpayload候補、対象別属性候補、対象別タグ候補を追加。図面/製品・装置・ユニット/部品/プロジェクトへ何を渡すかを1画面で確認できるようにし、`output\knowledge_ui_screenshots_2026-07-15\89-local-tag-review-payload-targets.jpg` でChrome確認
 - [x] 既存2D/3Dビューワーの bootstrap API 契約を確認し、`/api/v1/drawings/{drawingId}/bootstrap` 互換の読み取り専用APIを追加
+- [x] ブラウザで見せるローカル検証用成果物の入口として `/drawing-metadata/handoff/` を追加。本番組み込みUIではなく、抽出・正規化・タグ生成・対象別payload・APIリンクの横断確認画面として扱う
 
 ## 次に着手する
 
