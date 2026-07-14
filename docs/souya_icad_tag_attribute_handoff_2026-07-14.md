@@ -79,6 +79,7 @@
 | --- | --- | --- | --- |
 | `source_file` | `full_path`, `directory_path`, `file_name`, `extension` | 保存フォルダ、ファイル名、拡張子 | ユーザー要望により検索・追跡用属性として保持 |
 | `raw_extract_2d` | `view_sheets`, `print_frames`, `layers`, `texts`, `dimensions`, `geometry_primitives` | SXNETから取得した2D証拠 | 図枠外/印刷枠外は削除せず `inside_print_area` で判定 |
+| `raw_2d_sections` | `title_block`, `drawing_body`, `dimensions`, `notes`, `balloons`, `manufacturing_symbols` | 2D証拠を画面/fixture向けに6区画へ整理した要約 | `raw_2d_sections.v1`。印刷枠がある図面では `inside_print_area=true` の要素だけを自動利用数へ含める |
 | `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
 | `derived_tags` | `tag`, `source`, `confidence`, `manual_flag`, `tag_rule_version` | 自動タグ候補 | 採用前にレビュー可能 |
@@ -199,6 +200,7 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
 - 2D/3D両方あり: 20図面
 - 契約検証: `output\souya_handoff\drawing_metadata_fixture_contract_validation_2026-07-15.json` で `valid=true`、issue 0件
 - 検証内訳: 2D snapshot 20件、3D snapshot 25件、図面/製品・装置・ユニット/部品/プロジェクト各25件の読み取り専用payload
+- 2D構造化セクション: 2D snapshot 20件すべてに `raw_2d_sections.v1` の6区画が揃う。契約検証スクリプトでも2D snapshotでは同セクションを必須チェックする
 - 代表候補数:
   - `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd`: 図面 attrs=5/tags=2、製品 attrs=1、部品 attrs=5/tags=1、プロジェクト attrs=1
   - `217008-41J-3004.icd`: 図面 attrs=4/tags=2、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1
@@ -319,13 +321,14 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 
 - 本番部品詳細には `属性情報` 欄があり、サンプルでは空表示だった。部品タグ・属性の受け口として重要。
 - 本番図面一覧には、検索条件、図面タイプ、ステータス、紐づき概要が見える。タグ列は未表示。
-- 本番プロジェクト一覧、製品・装置・ユニット一覧、部品一覧にもタグ列は見えない。タグを活用するなら、一覧条件・詳細属性・関連情報のどこへ反映するかを創屋と確認する。
+- 本番プロジェクト一覧、製品・装置・ユニット一覧、部品一覧にもタグ列は見えない。タグを活用するなら、一覧条件・詳細属性・関連情報のどこへ反映するかを創屋と確認する。製品・装置・ユニットは実メニュー遷移で `/web/product` を確認した
 - 本番AI検索はチャット履歴と質問欄が中心で、タグを直接編集する場所ではない。タグは検索前フィルタ、RAG投入payload、ランキング信号として裏側で使うのが自然。
 - 本番類似検索は2D/3Dチェック、検索ファイル、類似度、図面名、用途、規格、重要度フィルタが見える。ICAD抽出タグは類似検索フィルタや重みづけ補助にも使える。
 - 本番図面詳細には `タグ` と `属性情報` 欄、2D/3D切替、2Dプレビューが見える。初期連携先は引き続き図面詳細を最優先にする。
 - 本番図面詳細の3D切替では `/web/public/models/test_000445.gltf` がHTMLを返し、GLTFとして読めずアプリ全体がエラー画面になった。抽出器の問題ではないが、創屋への2D/3Dプレビュー連携確認事項に含める。
 - ローカル詳細画面では `CAA5012-02434000K1R1.icd` について `2Dあり`、`3Dあり`、viewerタグ、保存フォルダ、パーツ付加情報数が表示される。
 - ローカルタグレビュー画面では、図面/製品・装置・ユニット/部品/プロジェクトの適用先候補、統合タグ、2Dタグ、3Dタグ、競合が確認できる。
+- ローカル詳細画面の `2D構造化セクション` では、図枠、中央図面、寸法、注記、バルーン、製造記号の6行が表示される。`schema=raw_2d_sections.v1`、印刷枠内/外/判定不明、自動利用件数、短いサンプルを確認できる。証跡は `output\knowledge_ui_screenshots_2026-07-15\68-local-drawing-detail-2d-structured-sections.png`
 
 ```json
 {

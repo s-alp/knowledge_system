@@ -137,6 +137,30 @@ def _make_display_row(key: str, label: str, value, display_value: str) -> dict:
     }
 
 
+def _raw_2d_section_rows(raw_2d_sections: dict | None) -> list[dict]:
+    rows: list[dict] = []
+    for section in (raw_2d_sections or {}).get("sections", []) or []:
+        if not isinstance(section, dict):
+            continue
+        samples = section.get("samples") or []
+        sample_texts = _string_values(sample.get("text") for sample in samples if isinstance(sample, dict))
+        rows.append(
+            {
+                "key": section.get("key"),
+                "label": section.get("label") or section.get("key"),
+                "description": section.get("description"),
+                "sourceNames": ", ".join(section.get("source_names") or []),
+                "totalCount": section.get("total_count", 0),
+                "trustedCount": section.get("trusted_count", 0),
+                "insidePrintAreaCount": section.get("inside_print_area_count", 0),
+                "outsidePrintAreaCount": section.get("outside_print_area_count", 0),
+                "unknownPrintAreaCount": section.get("unknown_print_area_count", 0),
+                "sampleText": _display_list(sample_texts, limit=3),
+            }
+        )
+    return rows
+
+
 def _reconciliation_row(item: dict) -> dict:
     status = item.get("status") or "empty"
     return {
@@ -774,6 +798,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     title_block_candidates = canonical_attributes.get("title_block_candidates", []) or []
     revision_note_candidates = canonical_attributes.get("revision_note_candidates", []) or []
     geometry_feature_candidates = canonical_attributes.get("geometry_feature_candidates", []) or []
+    raw_2d_sections = canonical_attributes.get("raw_2d_sections") or {}
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
     displayed_layer_count = len([layer for layer in layers if layer.get("is_displayed")])
@@ -825,6 +850,9 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     return {
         "summaryRows": summary_rows,
         "sourceFileRows": _source_file_rows(canonical_attributes),
+        "sectionSchemaVersion": raw_2d_sections.get("schema_version"),
+        "sectionPrintAreaPolicy": raw_2d_sections.get("print_area_policy"),
+        "sectionRows": _raw_2d_section_rows(raw_2d_sections),
         "viewSheets": _view_sheet_preview_items(view_sheets),
         "viewSheetTotal": len(view_sheets),
         "viewSheetsTruncated": len(view_sheets) > 10,

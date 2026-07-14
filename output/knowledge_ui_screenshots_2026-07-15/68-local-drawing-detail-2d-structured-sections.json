@@ -1,0 +1,79 @@
+{
+  "firstRows": [
+    [
+      "図枠",
+      "title_block_candidates",
+      "2",
+      "2",
+      "2",
+      "0",
+      "0",
+      "ワーク重量より１２．４倍の吸引力がある, １．０８（Ｎ）÷０．０８７（Ｎ）＝１２．４ ワーク重量より１２．４倍の吸引力がある"
+    ],
+    [
+      "中央図面",
+      "geometry_primitives",
+      "338",
+      "69",
+      "69",
+      "269",
+      "0",
+      "SxGeomLine2D, SxGeomLine2D, SxGeomLine2D ほか2件"
+    ],
+    [
+      "寸法",
+      "dimensions",
+      "156",
+      "32",
+      "32",
+      "124",
+      "0",
+      "寸法候補, 寸法候補, 寸法候補 ほか2件"
+    ],
+    [
+      "注記",
+      "texts, revision_note_candidates",
+      "93",
+      "16",
+      "16",
+      "22",
+      "55",
+      "昇降部：６．８５ｋｇ, ◆, {F供給台シフターＹ軸F} ほか2件"
+    ],
+    [
+      "バルーン",
+      "balloons",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "未抽出"
+    ],
+    [
+      "製造記号",
+      "geometry_primitives, weld_notes, tolerances",
+      "28",
+      "3",
+      "3",
+      "17",
+      "8",
+      "SxGeomCircle2D, SxGeomCircle2D, SxGeomCircle2D"
+    ]
+  ],
+  "hasSectionHeading": true,
+  "maxCellLength": 62,
+  "policy": "schema=raw_2d_sections.v1 / printAreaPolicy=inside_only_when_print_frames_exist",
+  "sectionHeaders": [
+    "区画",
+    "取得元",
+    "全件",
+    "自動利用",
+    "印刷枠内",
+    "印刷枠外",
+    "判定不明",
+    "サンプル"
+  ],
+  "sectionRowCount": 6,
+  "url": "http://127.0.0.1:8001/drawing-metadata/0e04246b-e8a2-4b46-a485-9312f6112d33/"
+}

@@ -427,6 +427,10 @@ ICAD / sxnet.dll
 }
 ```
 
+2026-07-15 のPoC実装では、2Dの完全なraw配列を削らずに残しつつ、画面/fixture向けの境界として `canonical_attributes.raw_2d_sections` を追加した。schema は `raw_2d_sections.v1` とし、`title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` の6区画を必須にする。印刷枠がある図面では `inside_print_area=true` の要素だけを自動利用数へ含め、印刷枠外/判定不明は件数とraw証跡に残す。
+
+創屋引き渡しfixtureでは、2D snapshot 20件すべてに上記6区画が揃うことを契約検証済み。ローカル詳細画面でも `2D構造化セクション` として、区画、取得元、全件、自動利用、印刷枠内/外/判定不明、短いサンプルを表示する。
+
 ## 12. 検証計画
 
 一社・一案件だけで検証しない。
@@ -476,6 +480,8 @@ ICAD / sxnet.dll
 13. Gemini classifier を optional plugin として作る
 14. 創屋提供用 import package / fixture を作る
 15. 実サンプルで評価表を作る
+
+実装状況として、3、14はPoC実装済み。1はraw本体の正式版固定までは継続だが、創屋連携fixtureの読み取り契約として `raw_2d_sections.v1` を検証対象にした。
 
 ## 14. 創屋へ確認すべきこと
 

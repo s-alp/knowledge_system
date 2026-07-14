@@ -301,6 +301,41 @@
         </tbody>
       </table>
 
+      <h3>2D構造化セクション</h3>
+      {% if snapshot_2d_display.sectionRows %}
+        <p class="muted">schema={{ snapshot_2d_display.sectionSchemaVersion }} / printAreaPolicy={{ snapshot_2d_display.sectionPrintAreaPolicy }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>区画</th>
+              <th>取得元</th>
+              <th>全件</th>
+              <th>自動利用</th>
+              <th>印刷枠内</th>
+              <th>印刷枠外</th>
+              <th>判定不明</th>
+              <th>サンプル</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in snapshot_2d_display.sectionRows %}
+              <tr>
+                <td title="{{ row.description }}">{{ row.label }}</td>
+                <td>{{ row.sourceNames }}</td>
+                <td>{{ row.totalCount }}</td>
+                <td>{{ row.trustedCount }}</td>
+                <td>{{ row.insidePrintAreaCount }}</td>
+                <td>{{ row.outsidePrintAreaCount }}</td>
+                <td>{{ row.unknownPrintAreaCount }}</td>
+                <td>{{ row.sampleText }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>2D構造化セクションはありません。</p>
+      {% endif %}
+
       <h3>ビュー別取得状況</h3>
       {% if snapshot_2d_display.viewCoverageRows %}
         <table>

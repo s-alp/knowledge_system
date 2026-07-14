@@ -486,6 +486,36 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
             "hole_candidate_count": 3,
             "hole_candidate_diameters": [6.0, 8.0],
             "slot_candidate_dimensions": [{"major_diameter": 22.0, "minor_diameter": 8.0}],
+            "raw_2d_sections": {
+                "schema_version": "raw_2d_sections.v1",
+                "print_area_policy": "inside_only_when_print_frames_exist",
+                "sections": [
+                    {
+                        "key": "title_block",
+                        "label": "図枠",
+                        "description": "図枠欄候補です。",
+                        "source_names": ["title_block_candidates"],
+                        "total_count": 1,
+                        "trusted_count": 1,
+                        "inside_print_area_count": 1,
+                        "outside_print_area_count": 0,
+                        "unknown_print_area_count": 0,
+                        "samples": [{"text": "材質 SUS304"}],
+                    },
+                    {
+                        "key": "dimensions",
+                        "label": "寸法",
+                        "description": "寸法候補です。",
+                        "source_names": ["dimensions"],
+                        "total_count": 1,
+                        "trusted_count": 0,
+                        "inside_print_area_count": 0,
+                        "outside_print_area_count": 1,
+                        "unknown_print_area_count": 0,
+                        "samples": [],
+                    },
+                ],
+            },
         },
     )
 
@@ -519,6 +549,11 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["titleBlockCandidates"][0]["field"] == "材質"
     assert payload["titleBlockCandidates"][0]["value"] == "SUS304"
     assert payload["titleBlockCandidates"][0]["evidenceText"] == "材質 SUS304"
+    section_by_key = {row["key"]: row for row in payload["sectionRows"]}
+    assert payload["sectionSchemaVersion"] == "raw_2d_sections.v1"
+    assert section_by_key["title_block"]["trustedCount"] == 1
+    assert section_by_key["title_block"]["sampleText"] == "材質 SUS304"
+    assert section_by_key["dimensions"]["outsidePrintAreaCount"] == 1
     assert payload["revisionNoteCandidates"][0]["value"] == "A 寸法変更"
     assert payload["revisionNoteCandidates"][0]["matchedKeywords"] == "訂正内容, 変更"
     assert payload["revisionNoteCandidates"][0]["insidePrintArea"] == "inside"

@@ -43,6 +43,16 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
     "SxGeomCircle2D": {"feature": "hole_candidate", "label": "穴/円候補", "tag": "形状候補:穴", "confidence": "low"},
 }
 
+TWO_D_SECTION_DEFINITIONS: tuple[tuple[str, str, str], ...] = (
+    ("title_block", "図枠", "図番、材質、担当者、改訂などの図枠欄候補です。"),
+    ("drawing_body", "中央図面", "形状線、円、スプラインなど中央図面を構成する図形候補です。"),
+    ("dimensions", "寸法", "寸法値、接頭/接尾記号、公差寸法などの寸法候補です。"),
+    ("notes", "注記", "図面内の一般注記、訂正内容、文字注記の候補です。"),
+    ("balloons", "バルーン", "部品番号や参照番号として使われるバルーン候補です。"),
+    ("manufacturing_symbols", "製造記号", "表面粗さ、切断線、データム、幾何公差、溶接記号などの候補です。"),
+)
+MANUFACTURING_GEOMETRY_TYPES = set(GEOMETRY_FEATURE_RULES)
+
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
 MATERIAL_VALUE_PATTERN = re.compile(
     r"(?<![A-Z0-9])(SUS[0-9][0-9A-Z-]*|SUS(?!-)|SS400[A-Z-]*|SPCC|S[0-9]{2}C|A[0-9]{4}P?|AL|SKD[0-9]*|SKS[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*|PETG|PET|POM|PVC|PTFE|PPS|NBR|EPDM|FKM|PP)(?![A-Z0-9])",
@@ -182,6 +192,243 @@ def _trusted_print_area_items(items: Iterable[dict], *, has_print_frames: bool) 
         for item in items
         if isinstance(item, dict) and _is_usable_print_area_item(item, has_print_frames=has_print_frames)
     ]
+
+
+def _print_area_count_summary(items: Iterable[dict]) -> dict[str, int]:
+    counts = {"inside": 0, "outside": 0, "unknown": 0}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        inside_print_area = item.get("inside_print_area")
+        if inside_print_area is True:
+            counts["inside"] += 1
+        elif inside_print_area is False:
+            counts["outside"] += 1
+        else:
+            counts["unknown"] += 1
+    return counts
+
+
+def _first_present(*values):
+    for value in values:
+        if value is not None:
+            return value
+    return None
+
+
+def _item_position(item: dict) -> str | None:
+    x = _first_present(item.get("position_x"), item.get("center_x"), item.get("x1"))
+    y = _first_present(item.get("position_y"), item.get("center_y"), item.get("y1"))
+    if x is None or y is None:
+        return None
+    return f"{x}, {y}"
+
+
+def _sample_text(value: object, *, max_length: int = 120) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    if len(text) <= max_length:
+        return text
+    return f"{text[:max_length]}..."
+
+
+def _item_display_text(item: dict) -> str | None:
+    if item.get("evidence_text"):
+        return _sample_text(item["evidence_text"])
+    if item.get("joined_text"):
+        return _sample_text(item["joined_text"])
+    text_lines = item.get("text_lines")
+    if isinstance(text_lines, list) and text_lines:
+        return _sample_text(" / ".join(str(line) for line in text_lines if line))
+    dimension_values = _flatten_strings(
+        str(value)
+        for value in [
+            item.get("value_1"),
+            item.get("value_2"),
+            item.get("value1"),
+            item.get("value2"),
+            item.get("mark_2"),
+            item.get("mark_3"),
+            item.get("mark2"),
+            item.get("mark3"),
+            item.get("front_word"),
+            item.get("back_word"),
+        ]
+        if value is not None
+    )
+    if dimension_values:
+        return _sample_text(" ".join(dimension_values))
+    if isinstance(item.get("summary"), str) and "line_color=" in item["summary"]:
+        return "寸法候補"
+    return _sample_text(item.get("text") or item.get("geometry_type") or item.get("summary"))
+
+
+def _section_samples(items: Iterable[dict], *, limit: int = 5) -> list[dict]:
+    samples: list[dict] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        sample = {
+            "text": _item_display_text(item),
+            "source_type": item.get("source_type") or item.get("geometry_type") or item.get("field"),
+            "view_name": item.get("view_name"),
+            "layer_no": item.get("layer_no"),
+            "position": _item_position(item),
+            "inside_print_area": item.get("inside_print_area"),
+        }
+        samples.append({key: value for key, value in sample.items() if value is not None})
+        if len(samples) >= limit:
+            break
+    return samples
+
+
+def _make_2d_section(
+    *,
+    key: str,
+    all_items: list[dict],
+    trusted_items: list[dict],
+    source_names: list[str],
+) -> dict:
+    definition_by_key = {definition_key: (label, description) for definition_key, label, description in TWO_D_SECTION_DEFINITIONS}
+    label, description = definition_by_key[key]
+    print_area_counts = _print_area_count_summary(all_items)
+    return {
+        "key": key,
+        "label": label,
+        "description": description,
+        "source_names": source_names,
+        "total_count": len(all_items),
+        "trusted_count": len(trusted_items),
+        "inside_print_area_count": print_area_counts["inside"],
+        "outside_print_area_count": print_area_counts["outside"],
+        "unknown_print_area_count": print_area_counts["unknown"],
+        "samples": _section_samples(trusted_items),
+    }
+
+
+def _build_2d_sections(
+    *,
+    raw_extract: dict,
+    canonical: dict,
+    has_print_frames: bool,
+    trusted_texts: list[dict],
+    trusted_dimensions: list[dict],
+    trusted_weld_notes: list[dict],
+    trusted_balloons: list[dict],
+    trusted_tolerances: list[dict],
+) -> dict:
+    texts = raw_extract.get("texts", []) or []
+    dimensions = raw_extract.get("dimensions", []) or []
+    primitives = raw_extract.get("geometry_primitives", []) or []
+    weld_notes = raw_extract.get("weld_notes", []) or []
+    balloons = raw_extract.get("balloons", []) or []
+    tolerances = raw_extract.get("tolerances", []) or []
+    trusted_primitives = _trusted_print_area_items(primitives, has_print_frames=has_print_frames)
+
+    title_block_candidates = canonical.get("title_block_candidates", []) or []
+    title_block_evidence = {candidate.get("evidence_text") for candidate in title_block_candidates if candidate.get("evidence_text")}
+    revision_note_candidates = canonical.get("revision_note_candidates", []) or []
+
+    manufacturing_primitives = [
+        primitive
+        for primitive in primitives
+        if primitive.get("geometry_type") in MANUFACTURING_GEOMETRY_TYPES
+    ]
+    trusted_manufacturing_primitives = [
+        primitive
+        for primitive in trusted_primitives
+        if primitive.get("geometry_type") in MANUFACTURING_GEOMETRY_TYPES
+    ]
+    drawing_body_primitives = [
+        primitive
+        for primitive in primitives
+        if primitive.get("geometry_type") not in MANUFACTURING_GEOMETRY_TYPES
+    ]
+    trusted_drawing_body_primitives = [
+        primitive
+        for primitive in trusted_primitives
+        if primitive.get("geometry_type") not in MANUFACTURING_GEOMETRY_TYPES
+    ]
+
+    note_texts = [
+        text
+        for text in texts
+        if (text.get("joined_text") or " / ".join(text.get("text_lines", []) or [])) not in title_block_evidence
+    ]
+    trusted_note_texts = [
+        text
+        for text in trusted_texts
+        if (text.get("joined_text") or " / ".join(text.get("text_lines", []) or [])) not in title_block_evidence
+    ]
+    revision_note_items = [
+        {
+            "evidence_text": candidate.get("evidence_text"),
+            "text": candidate.get("value"),
+            "view_name": candidate.get("view_name"),
+            "layer_no": candidate.get("layer_no"),
+            "position_x": candidate.get("position_x"),
+            "position_y": candidate.get("position_y"),
+            "inside_print_area": candidate.get("inside_print_area"),
+            "source_type": "revision_note_candidate",
+        }
+        for candidate in revision_note_candidates
+    ]
+    note_items = [*note_texts, *revision_note_items]
+    trusted_note_items = [
+        *trusted_note_texts,
+        *[
+            item
+            for item in revision_note_items
+            if _is_usable_print_area_item(item, has_print_frames=has_print_frames)
+        ],
+    ]
+
+    sections = [
+        _make_2d_section(
+            key="title_block",
+            all_items=title_block_candidates,
+            trusted_items=title_block_candidates,
+            source_names=["title_block_candidates"],
+        ),
+        _make_2d_section(
+            key="drawing_body",
+            all_items=drawing_body_primitives,
+            trusted_items=trusted_drawing_body_primitives,
+            source_names=["geometry_primitives"],
+        ),
+        _make_2d_section(
+            key="dimensions",
+            all_items=dimensions,
+            trusted_items=trusted_dimensions,
+            source_names=["dimensions"],
+        ),
+        _make_2d_section(
+            key="notes",
+            all_items=note_items,
+            trusted_items=trusted_note_items,
+            source_names=["texts", "revision_note_candidates"],
+        ),
+        _make_2d_section(
+            key="balloons",
+            all_items=balloons,
+            trusted_items=trusted_balloons,
+            source_names=["balloons"],
+        ),
+        _make_2d_section(
+            key="manufacturing_symbols",
+            all_items=[*manufacturing_primitives, *weld_notes, *tolerances],
+            trusted_items=[*trusted_manufacturing_primitives, *trusted_weld_notes, *trusted_tolerances],
+            source_names=["geometry_primitives", "weld_notes", "tolerances"],
+        ),
+    ]
+    return {
+        "schema_version": "raw_2d_sections.v1",
+        "print_area_policy": "inside_only_when_print_frames_exist" if has_print_frames else "include_unknown_when_no_print_frames",
+        "sections": sections,
+    }
 
 
 def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool = False) -> list[dict]:
@@ -662,6 +909,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "unresolved_part_exists": False,
         "text_tokens": [],
         "label_texts": [],
+        "raw_2d_sections": None,
         "title_block_fields": {},
         "title_block_candidates": [],
         "revision_note_candidates": [],
@@ -827,6 +1075,16 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)
         canonical.update(_build_geometry_attribute_summary(primitives, has_print_frames=has_print_frames))
+        canonical["raw_2d_sections"] = _build_2d_sections(
+            raw_extract=raw_extract,
+            canonical=canonical,
+            has_print_frames=has_print_frames,
+            trusted_texts=trusted_texts,
+            trusted_dimensions=trusted_dimensions,
+            trusted_weld_notes=trusted_weld_notes,
+            trusted_balloons=trusted_balloons,
+            trusted_tolerances=trusted_tolerances,
+        )
 
         search_tokens = (
             source_path_tokens

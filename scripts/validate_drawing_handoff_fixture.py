@@ -18,6 +18,14 @@ from typing import Any
 EXPECTED_TARGET_KEYS = {"drawing", "product", "part", "project"}
 EXPECTED_ATTRIBUTE_PAYLOAD_KEYS = {"attribute", "attribute_option", "attribute_value"}
 EXPECTED_WRITE_POLICY = "preview_only_no_production_write"
+EXPECTED_2D_SECTION_KEYS = {
+    "title_block",
+    "drawing_body",
+    "dimensions",
+    "notes",
+    "balloons",
+    "manufacturing_symbols",
+}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -37,8 +45,11 @@ def _validate_snapshot(snapshot: dict[str, Any], *, path: str, expected_mode: st
         _add_issue(issues, f"{path}.extractionMode", f"expected {expected_mode!r}")
     if not isinstance(snapshot.get("rawExtract"), dict):
         _add_issue(issues, f"{path}.rawExtract", "must be an object")
-    if not isinstance(snapshot.get("canonicalAttributes"), dict):
+    canonical_attributes = snapshot.get("canonicalAttributes")
+    if not isinstance(canonical_attributes, dict):
         _add_issue(issues, f"{path}.canonicalAttributes", "must be an object")
+    elif expected_mode == "2d":
+        _validate_2d_sections(canonical_attributes, path=f"{path}.canonicalAttributes.raw_2d_sections", issues=issues)
     if not isinstance(snapshot.get("derivedTags"), list):
         _add_issue(issues, f"{path}.derivedTags", "must be a list")
     latest_job = snapshot.get("latestJob")
@@ -46,6 +57,47 @@ def _validate_snapshot(snapshot: dict[str, Any], *, path: str, expected_mode: st
         _add_issue(issues, f"{path}.latestJob", "must be an object")
     elif latest_job.get("status") != "succeeded":
         _add_issue(issues, f"{path}.latestJob.status", "must be succeeded in a handoff fixture")
+
+
+def _validate_2d_sections(canonical_attributes: dict[str, Any], *, path: str, issues: list[dict[str, Any]]) -> None:
+    sections_payload = canonical_attributes.get("raw_2d_sections")
+    if not isinstance(sections_payload, dict):
+        _add_issue(issues, path, "2d snapshots must include raw_2d_sections")
+        return
+    if sections_payload.get("schema_version") != "raw_2d_sections.v1":
+        _add_issue(issues, f"{path}.schema_version", "must be raw_2d_sections.v1")
+    if sections_payload.get("print_area_policy") not in {"inside_only_when_print_frames_exist", "include_unknown_when_no_print_frames"}:
+        _add_issue(issues, f"{path}.print_area_policy", "unknown print area policy")
+
+    sections = sections_payload.get("sections")
+    if not isinstance(sections, list):
+        _add_issue(issues, f"{path}.sections", "must be a list")
+        return
+    keys = {section.get("key") for section in sections if isinstance(section, dict)}
+    if keys != EXPECTED_2D_SECTION_KEYS:
+        _add_issue(issues, f"{path}.sections", "must include the six standard 2d section keys exactly")
+
+    for index, section in enumerate(sections):
+        section_path = f"{path}.sections[{index}]"
+        if not isinstance(section, dict):
+            _add_issue(issues, section_path, "must be an object")
+            continue
+        for key in ("key", "label", "description"):
+            if not _is_non_empty_string(section.get(key)):
+                _add_issue(issues, f"{section_path}.{key}", "must be a non-empty string")
+        if not isinstance(section.get("source_names"), list):
+            _add_issue(issues, f"{section_path}.source_names", "must be a list")
+        for key in (
+            "total_count",
+            "trusted_count",
+            "inside_print_area_count",
+            "outside_print_area_count",
+            "unknown_print_area_count",
+        ):
+            if not isinstance(section.get(key), int):
+                _add_issue(issues, f"{section_path}.{key}", "must be an integer")
+        if not isinstance(section.get("samples"), list):
+            _add_issue(issues, f"{section_path}.samples", "must be a list")
 
 
 def _validate_attribute(attribute: dict[str, Any], *, path: str, issues: list[dict[str, Any]]) -> None:

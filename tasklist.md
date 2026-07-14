@@ -32,6 +32,7 @@
   - `knowledgeSystemPayloadPreview` を登録済み11図面のfixtureへ同梱確認済み。ただしローカルDB内の古い11件は正規化属性が薄く、10件は対象別属性候補0件。実抽出入り代表では部品向け候補2件を確認。
   - 抽出済みJSONをDBへ再投入する `import_drawing_metadata_extracts` を追加。代表3図面の2D/3Dを取り込み直してfixtureを14図面へ更新し、payload候補あり4図面を確認。
   - `build_icad_extract_import_manifest.py` で共有済み112 JSONから24図面/43ファイルを選定。manifest取込後の登録は35図面。創屋引き渡しfixtureはsnapshotなし10図面を除外し、抽出済み25図面、2D/3D両方あり20図面。
+  - 創屋引き渡しfixture契約検証で、2D snapshot 20件すべてに `raw_2d_sections.v1` の6区画が揃うことを確認。検証スクリプト側でも2D構造化セクション必須をチェックする。
   - manifest取込後の代表図面 `CAA5012-02434000K1R1.icd` をローカルDjango詳細画面でChrome確認。図面/製品・装置・ユニット/部品/プロジェクト別の `本番タグ・属性 payload プレビュー` が見た目上も表示され、payload表の横長文字列向け折り返しと横スクロールを追加。
   - 2D詳細画面に `ビュー別取得状況` と `レイヤー別取得状況` を追加。文字/寸法/図形primitiveをビュー別・レイヤー別に集計し、印刷枠内/外/判定不明の件数を確認できるようにした。
   - `summarize_2d_extraction_coverage.py` で共有済み2D抽出JSONを集計。代表manifestでは2D対象19ファイル中、ビュー情報なし17、印刷枠情報なし17、レイヤー情報なし17、印刷枠判定不明1,388要素を確認。全量側は途中抽出JSONを含むため再抽出対象の洗い出しに使う。
@@ -51,8 +52,6 @@
   - 訂正内容候補がある場合は、本文ではなく存在だけを `改訂情報あり` タグとして生成。
   - 3D材質APIを追加。`6800DDU.icd` で `material_probe_status=available`、`SUS440C`、比重7.7、17要素を確認。
 - 次に着手する場合:
-  - v2 raw schema を確定する。
-  - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
   - `cross_source_reconciliation` として 2D 候補、3D 候補、採用値、差異、要確認理由を保持する。
   - Gemini API は曖昧分類の補助に限定し、CAD に存在しない値の推測採用は禁止する。
 
@@ -137,6 +136,7 @@
 - [x] 2D訂正内容候補を正規化属性と詳細画面に追加
 - [x] 訂正内容候補から低ノイズの `改訂情報あり` タグを生成
 - [x] `SxInfPartTree.entpart` 経由で3D部品単位の材質一覧を取得し、`parts[].materials` と高信頼の部品材質候補へ反映
+- [x] 2D raw証跡を `raw_2d_sections.v1` として `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` の6区画へ構造化。印刷枠がある場合は `inside_print_area=true` の要素だけを自動利用数へ含める
 - [x] ナレッジシステム実画面をChromeで再確認し、図面/プロジェクト/製品・装置・ユニット/部品詳細のタグ/属性表示差分をスクリーンショット保存
 - [x] 共有済みICAD 39件で `parts[].materials` の取得率、部品パス、warning を横断集計
 - [x] 材質ID `ZZZ`, `75`, `CDQ` を未解決材質として分離し、低信頼の `材質要確認` タグにする
@@ -177,6 +177,8 @@
 - [x] 本番ナレッジシステムのプロジェクト、製品・装置・ユニット、部品、図面、AI検索、類似検索をChrome実画面で再確認し、読み取り専用スクリーンショットを `output\knowledge_ui_screenshots_2026-07-15` に保存
 - [x] 本番ナレッジシステム図面詳細の2D/3D切替をChromeで目視確認し、3D GLTF読み込みエラーを記録
 - [x] ローカルDjango詳細画面とタグレビュー画面をChromeで目視確認し、2D/3Dあり、viewerタグ、保存フォルダ、パーツ付加情報数、統合タグ、2D/3D競合が画面に出ることを確認
+- [x] 2D構造化セクションを詳細画面へ追加し、`CAA5012-02434000K1R1.icd` で図枠/中央図面/寸法/注記/バルーン/製造記号の6行、印刷枠内外/判定不明件数、サンプルが見えることをChromeで確認
+- [x] 本番ナレッジシステム実画面をChromeで再確認し、プロジェクト/製品・装置・ユニット/部品/図面/AI検索/類似検索のスクリーンショットを `output\knowledge_ui_screenshots_2026-07-15\60-*.png` 以降へ保存。製品・装置・ユニットの実URLは `/web/product`
 
 ## 次に着手する
 

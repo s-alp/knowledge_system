@@ -196,6 +196,13 @@ def test_normalize_2d_raw_extract():
     assert canonical["slot_candidate_dimensions"][0]["minor_diameter"] == 8.0
     assert canonical["hole_candidate_count"] == 1
     assert canonical["hole_candidate_diameters"] == [6.0]
+    sections_by_key = {section["key"]: section for section in canonical["raw_2d_sections"]["sections"]}
+    assert canonical["raw_2d_sections"]["schema_version"] == "raw_2d_sections.v1"
+    assert set(sections_by_key) == {"title_block", "drawing_body", "dimensions", "notes", "balloons", "manufacturing_symbols"}
+    assert sections_by_key["title_block"]["trusted_count"] >= 4
+    assert sections_by_key["dimensions"]["trusted_count"] == 1
+    assert sections_by_key["balloons"]["trusted_count"] == 1
+    assert sections_by_key["manufacturing_symbols"]["trusted_count"] >= 4
 
 
 def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
@@ -243,3 +250,8 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     assert canonical["hole_candidate_count"] == 0
     assert canonical["cut_line_count"] == 1
     assert not any(tag["tag"] == "材質:SS400" for tag in tags)
+    sections_by_key = {section["key"]: section for section in canonical["raw_2d_sections"]["sections"]}
+    assert canonical["raw_2d_sections"]["print_area_policy"] == "inside_only_when_print_frames_exist"
+    assert sections_by_key["notes"]["unknown_print_area_count"] >= 2
+    assert sections_by_key["notes"]["trusted_count"] == 0
+    assert sections_by_key["manufacturing_symbols"]["trusted_count"] == 1
