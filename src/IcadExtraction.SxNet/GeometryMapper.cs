@@ -57,13 +57,37 @@ namespace IcadExtraction.SxNet
                         payload.GeometryPrimitives.Add(MapPrimitive(geometry, viewName, sourceItem.LayerNo));
                         break;
                     case "SxGeomWeld":
-                        payload.WeldNotes.Add(new WeldNotePayload { ViewName = viewName, LayerNo = sourceItem.LayerNo, Text = ReflectionHelpers.BuildSummaryText(geometry) });
+                        payload.WeldNotes.Add(new WeldNotePayload
+                        {
+                            ViewName = viewName,
+                            LayerNo = sourceItem.LayerNo,
+                            PositionX = GetPositionX(geometry, "pnt"),
+                            PositionY = GetPositionY(geometry, "pnt"),
+                            PositionZ = GetPositionZ(geometry, "pnt"),
+                            Text = ReflectionHelpers.BuildSummaryText(geometry),
+                        });
                         break;
                     case "SxGeomBalloon":
-                        payload.Balloons.Add(new BalloonPayload { ViewName = viewName, LayerNo = sourceItem.LayerNo, Text = ReflectionHelpers.BuildSummaryText(geometry) });
+                        payload.Balloons.Add(new BalloonPayload
+                        {
+                            ViewName = viewName,
+                            LayerNo = sourceItem.LayerNo,
+                            PositionX = GetPositionX(geometry, "pnt"),
+                            PositionY = GetPositionY(geometry, "pnt"),
+                            PositionZ = GetPositionZ(geometry, "pnt"),
+                            Text = ReflectionHelpers.BuildSummaryText(geometry),
+                        });
                         break;
                     case "SxGeomTol":
-                        payload.Tolerances.Add(new TolerancePayload { ViewName = viewName, LayerNo = sourceItem.LayerNo, Text = ReflectionHelpers.BuildSummaryText(geometry) });
+                        payload.Tolerances.Add(new TolerancePayload
+                        {
+                            ViewName = viewName,
+                            LayerNo = sourceItem.LayerNo,
+                            PositionX = GetPositionX(geometry, "pnt"),
+                            PositionY = GetPositionY(geometry, "pnt"),
+                            PositionZ = GetPositionZ(geometry, "pnt"),
+                            Text = ReflectionHelpers.BuildSummaryText(geometry),
+                        });
                         break;
                     default:
                         warnings.Add(new WarningPayload
@@ -88,6 +112,9 @@ namespace IcadExtraction.SxNet
                 SourceType = sourceType,
                 ViewName = viewName,
                 LayerNo = layerNo,
+                PositionX = GetPositionX(geometry, "pnt"),
+                PositionY = GetPositionY(geometry, "pnt"),
+                PositionZ = GetPositionZ(geometry, "pnt"),
                 JoinedText = textLines.Count == 0 ? null : string.Join(" ", textLines),
             };
         }
@@ -99,6 +126,9 @@ namespace IcadExtraction.SxNet
             {
                 ViewName = viewName,
                 LayerNo = layerNo,
+                PositionX = GetPositionX(geometry, "pnt1"),
+                PositionY = GetPositionY(geometry, "pnt1"),
+                PositionZ = GetPositionZ(geometry, "pnt1"),
                 Value1 = ReflectionHelpers.GetString(dimensionInfo, "value_1"),
                 Value2 = ReflectionHelpers.GetString(dimensionInfo, "value_2"),
                 FrontWord = ReflectionHelpers.GetString(dimensionInfo, "front_word"),
@@ -120,6 +150,21 @@ namespace IcadExtraction.SxNet
                 GeometryType = geometry.GetType().Name,
                 Summary = ReflectionHelpers.BuildSummaryText(geometry),
             };
+        }
+
+        private static double? GetPositionX(object geometry, string memberName)
+        {
+            return ReflectionHelpers.GetPositionComponent(geometry, memberName, "x");
+        }
+
+        private static double? GetPositionY(object geometry, string memberName)
+        {
+            return ReflectionHelpers.GetPositionComponent(geometry, memberName, "y");
+        }
+
+        private static double? GetPositionZ(object geometry, string memberName)
+        {
+            return ReflectionHelpers.GetPositionComponent(geometry, memberName, "z");
         }
     }
 }

@@ -28,6 +28,7 @@ namespace IcadExtraction.SxNet
                 }
                 rawExtract.PrintFrames.AddRange(TryResolvePrintFrames(context, warnings));
                 rawExtract.Layers.AddRange(TryResolveLayers(context, warnings));
+                ApplyPrintAreaClassification(rawExtract);
                 return new ExtractionEnvelope
                 {
                     InputPath = inputPath,
@@ -36,6 +37,63 @@ namespace IcadExtraction.SxNet
                     Warnings = warnings,
                 };
             }
+        }
+
+        private static void ApplyPrintAreaClassification(RawExtract2DPayload rawExtract)
+        {
+            foreach (var text in rawExtract.Texts)
+            {
+                text.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, text.PositionX, text.PositionY);
+            }
+
+            foreach (var dimension in rawExtract.Dimensions)
+            {
+                dimension.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, dimension.PositionX, dimension.PositionY);
+            }
+
+            foreach (var weldNote in rawExtract.WeldNotes)
+            {
+                weldNote.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, weldNote.PositionX, weldNote.PositionY);
+            }
+
+            foreach (var balloon in rawExtract.Balloons)
+            {
+                balloon.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, balloon.PositionX, balloon.PositionY);
+            }
+
+            foreach (var tolerance in rawExtract.Tolerances)
+            {
+                tolerance.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, tolerance.PositionX, tolerance.PositionY);
+            }
+        }
+
+        private static bool? ResolveInsidePrintArea(IEnumerable<PrintFramePayload> printFrames, double? x, double? y)
+        {
+            if (!x.HasValue || !y.HasValue)
+            {
+                return null;
+            }
+
+            var usableFrames = printFrames
+                .Where(frame =>
+                    frame.RangeMinX.HasValue &&
+                    frame.RangeMinY.HasValue &&
+                    frame.RangeMaxX.HasValue &&
+                    frame.RangeMaxY.HasValue)
+                .ToArray();
+            if (usableFrames.Length == 0)
+            {
+                return null;
+            }
+
+            return usableFrames.Any(frame =>
+            {
+                var minX = Math.Min(frame.RangeMinX!.Value, frame.RangeMaxX!.Value);
+                var maxX = Math.Max(frame.RangeMinX!.Value, frame.RangeMaxX!.Value);
+                var minY = Math.Min(frame.RangeMinY!.Value, frame.RangeMaxY!.Value);
+                var maxY = Math.Max(frame.RangeMinY!.Value, frame.RangeMaxY!.Value);
+                return x.Value >= minX && x.Value <= maxX && y.Value >= minY && y.Value <= maxY;
+            });
         }
 
         private static IEnumerable<LayerPayload> TryResolveLayers(SxNetOpenContext context, IList<WarningPayload> warnings)

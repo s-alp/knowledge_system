@@ -26,6 +26,7 @@
   - 本番フロント資産では `drawing_attributes` / `product_attributes` / `part_attributes` の参照を確認。`project_attributes` は未確認。
   - 図面詳細系には `tags` / `attributes` の受け口があるため、創屋への初期連携は図面詳細を優先候補にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
+  - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
 - 次に着手する場合:
   - v2 raw schema を確定する。
   - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
@@ -87,10 +88,11 @@
 - [x] Django側にタグ候補レビュー画面を追加
 - [x] 最新共有16件の `detect` を実行して結果を保存
 - [x] 本番ナレッジシステム実画面とフロント資産を読み取り専用で確認
+- [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
+- [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
 
 ## 次に着手する
 
-- [ ] 2D文字・寸法・注記の座標取得と `inside_print_area` 判定を実装
 - [ ] `SxGeomSpline2D` など未対応2Dジオメトリを構造化
 - [ ] `SxEnt.getMass()` / `getMassList()` で重量、質量、体積、面積を実サンプル確認
 - [ ] 2D図枠欄名辞書と Gemini API 低温度 JSON 分類を実装

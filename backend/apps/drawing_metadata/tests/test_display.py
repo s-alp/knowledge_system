@@ -146,8 +146,27 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                 }
             ],
             "layers": [{"no": 1, "name": "図枠", "is_displayed": True, "is_searchable": True}],
-            "texts": [{"view_name": "!XY", "layer_no": 1, "joined_text": "材質 SUS304", "text_lines": ["材質 SUS304"]}],
-            "dimensions": [{"view_name": "!XY", "layer_no": 1, "value_1": "100"}],
+            "texts": [
+                {
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "position_x": 12.5,
+                    "position_y": 34.0,
+                    "inside_print_area": True,
+                    "joined_text": "材質 SUS304",
+                    "text_lines": ["材質 SUS304"],
+                }
+            ],
+            "dimensions": [
+                {
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "position_x": 450.0,
+                    "position_y": 34.0,
+                    "inside_print_area": False,
+                    "value_1": "100",
+                }
+            ],
             "geometry_primitives": [{"view_name": "!XY", "layer_no": 1, "geometry_type": "SxGeomLine2D"}],
         },
         canonical_attributes={
@@ -168,7 +187,10 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["printFrames"][0]["size"] == "A3"
     assert payload["layers"][0]["name"] == "図枠"
     assert payload["textSamples"][0]["text"] == "材質 SUS304"
+    assert payload["textSamples"][0]["position"] == "12.5, 34.0"
+    assert payload["textSamples"][0]["insidePrintArea"] == "inside"
     assert payload["dimensionSamples"][0]["value"] == "100"
+    assert payload["dimensionSamples"][0]["insidePrintArea"] == "outside"
 
 
 @pytest.mark.django_db

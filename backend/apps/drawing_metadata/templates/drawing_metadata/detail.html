@@ -231,6 +231,8 @@
             <tr>
               <th>ビュー名</th>
               <th>レイヤー</th>
+              <th>座標</th>
+              <th>印刷枠</th>
               <th>文字</th>
             </tr>
           </thead>
@@ -239,6 +241,8 @@
               <tr>
                 <td>{{ text.viewName }}</td>
                 <td>{{ text.layerNo }}</td>
+                <td>{{ text.position }}</td>
+                <td>{{ text.insidePrintArea }}</td>
                 <td>{{ text.text }}</td>
               </tr>
             {% endfor %}
@@ -256,6 +260,8 @@
             <tr>
               <th>ビュー名</th>
               <th>レイヤー</th>
+              <th>座標</th>
+              <th>印刷枠</th>
               <th>寸法値/記号</th>
             </tr>
           </thead>
@@ -264,6 +270,8 @@
               <tr>
                 <td>{{ dimension.viewName }}</td>
                 <td>{{ dimension.layerNo }}</td>
+                <td>{{ dimension.position }}</td>
+                <td>{{ dimension.insidePrintArea }}</td>
                 <td>{{ dimension.value }}</td>
               </tr>
             {% endfor %}

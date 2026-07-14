@@ -141,6 +141,8 @@ def _text_preview_items(texts: list[dict], limit: int = 8) -> list[dict]:
             {
                 "viewName": _display_value(text.get("view_name")),
                 "layerNo": _display_value(text.get("layer_no")),
+                "position": _display_value(_position_label(text)),
+                "insidePrintArea": _display_value(_inside_print_area_label(text.get("inside_print_area"))),
                 "text": _display_value(text.get("joined_text") or " / ".join(text.get("text_lines", []) or [])),
             }
         )
@@ -166,6 +168,8 @@ def _dimension_preview_items(dimensions: list[dict], limit: int = 8) -> list[dic
             {
                 "viewName": _display_value(dimension.get("view_name")),
                 "layerNo": _display_value(dimension.get("layer_no")),
+                "position": _display_value(_position_label(dimension)),
+                "insidePrintArea": _display_value(_inside_print_area_label(dimension.get("inside_print_area"))),
                 "value": _display_value(" ".join(values) if values else None),
             }
         )
@@ -234,6 +238,22 @@ def _part_ex_info_preview_items(raw_parts: list[dict], limit: int = 8) -> list[d
         if len(previews) >= limit:
             break
     return previews
+
+
+def _position_label(item: dict) -> str | None:
+    x = item.get("position_x")
+    y = item.get("position_y")
+    if x is None or y is None:
+        return None
+    return f"{x}, {y}"
+
+
+def _inside_print_area_label(value) -> str | None:
+    if value is True:
+        return "inside"
+    if value is False:
+        return "outside"
+    return None
 
 
 def build_composed_display_payload(composed_metadata: dict) -> dict:

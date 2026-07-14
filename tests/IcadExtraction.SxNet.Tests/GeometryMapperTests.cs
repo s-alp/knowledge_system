@@ -13,9 +13,9 @@ namespace IcadExtraction.SxNet.Tests
             var warnings = new List<WarningPayload>();
             var geometries = new object[]
             {
-                new SxGeomText { txt = new[] { "澁谷工業", "SES" }, text_line_num = 2 },
+                new SxGeomText { txt = new[] { "澁谷工業", "SES" }, text_line_num = 2, pnt = new SxPos { x = 10.5, y = 20.25, z = 0.0 } },
                 new SxGeomLabel { txt = new[] { "ロボット" }, text_line_num = 1 },
-                new SxGeomLengthDim { diminfo = new DimInfo { value_1 = "100", mark_2 = "M5" } },
+                new SxGeomLengthDim { diminfo = new DimInfo { value_1 = "100", mark_2 = "M5" }, pnt1 = new SxPos { x = -1.0, y = 2.0, z = 0.0 } },
                 new SxGeomLine2D { x1 = 0.0, y1 = 1.0, x2 = 2.0, y2 = 3.0 },
                 new SxGeomWeld { atr_weld = "WELD-A" },
                 new SxGeomBalloon { txt = "B1" },
@@ -31,12 +31,24 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Single(payload.Balloons);
             Assert.Single(payload.Tolerances);
             Assert.Single(warnings);
+            Assert.Equal(10.5, payload.Texts[0].PositionX);
+            Assert.Equal(20.25, payload.Texts[0].PositionY);
+            Assert.Equal(-1.0, payload.Dimensions[0].PositionX);
+            Assert.Equal(2.0, payload.Dimensions[0].PositionY);
+        }
+
+        public sealed class SxPos
+        {
+            public double x;
+            public double y;
+            public double z;
         }
 
         public sealed class SxGeomText
         {
             public string[]? txt;
             public int text_line_num;
+            public SxPos? pnt;
         }
 
         public sealed class SxGeomLabel
@@ -48,6 +60,7 @@ namespace IcadExtraction.SxNet.Tests
         public sealed class SxGeomLengthDim
         {
             public DimInfo? diminfo;
+            public SxPos? pnt1;
         }
 
         public sealed class DimInfo

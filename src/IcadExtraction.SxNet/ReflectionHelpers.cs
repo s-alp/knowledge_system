@@ -82,6 +82,12 @@ namespace IcadExtraction.SxNet
                 .ToList();
         }
 
+        public static double? GetPositionComponent(object? instance, string memberName, string componentName)
+        {
+            var position = GetMemberValue(instance, memberName);
+            return GetDouble(position, componentName);
+        }
+
         private static double? ConvertToDouble(object? value)
         {
             if (value == null)

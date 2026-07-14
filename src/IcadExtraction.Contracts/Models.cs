@@ -82,6 +82,10 @@ namespace IcadExtraction.Contracts
         public string SourceType { get; set; } = "text";
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string? JoinedText { get; set; }
     }
 
@@ -89,6 +93,10 @@ namespace IcadExtraction.Contracts
     {
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string? Value1 { get; set; }
         public string? Value2 { get; set; }
         public string? FrontWord { get; set; }
@@ -104,6 +112,10 @@ namespace IcadExtraction.Contracts
     {
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
@@ -111,6 +123,10 @@ namespace IcadExtraction.Contracts
     {
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string? Text { get; set; }
     }
 
@@ -118,6 +134,10 @@ namespace IcadExtraction.Contracts
     {
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
