@@ -1,9 +1,12 @@
 import json
+from io import BytesIO
+from urllib.error import HTTPError
 
 import pytest
 
 from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiConfigurationError,
+    GeminiResponseError,
     apply_title_block_classifications,
     classify_title_block_candidates,
 )
@@ -63,6 +66,25 @@ def test_classify_title_block_candidates_posts_json_and_filters_response(setting
     body = json.loads(req.data.decode("utf-8"))
     assert body["generationConfig"]["temperature"] == 0.0
     assert body["generationConfig"]["responseMimeType"] == "application/json"
+
+
+def test_classify_title_block_candidates_reports_http_error_body(settings):
+    settings.GEMINI_API_KEY = "test-key"
+
+    def fake_urlopen(req, timeout):
+        raise HTTPError(
+            req.full_url,
+            400,
+            "Bad Request",
+            hdrs=None,
+            fp=BytesIO(b'{"error":{"message":"JSON mode is not enabled"}}'),
+        )
+
+    with pytest.raises(GeminiResponseError, match="JSON mode is not enabled"):
+        classify_title_block_candidates(
+            [{"field": None, "value": "SUS304", "evidence_text": "材質 SUS304"}],
+            urlopen=fake_urlopen,
+        )
 
 
 def test_apply_title_block_classifications_adds_missing_field_without_overwrite():

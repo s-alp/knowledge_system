@@ -102,11 +102,20 @@ def _looks_like_title_block_label(value: str) -> bool:
     )
 
 
+def _contains_replacement_character(value: str | None) -> bool:
+    return bool(value and "\ufffd" in value)
+
+
 def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> bool:
     if not value:
         return False
     stripped = value.strip()
-    return bool(stripped) and len(stripped) <= max_length and not _looks_like_title_block_label(stripped)
+    return (
+        bool(stripped)
+        and len(stripped) <= max_length
+        and not _contains_replacement_character(stripped)
+        and not _looks_like_title_block_label(stripped)
+    )
 
 
 def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
@@ -121,6 +130,8 @@ def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
             continue
 
         for line_index, line in enumerate(lines):
+            if _contains_replacement_character(line):
+                continue
             normalized_line = _normalize_for_match(line)
             for field, rule in TITLE_BLOCK_FIELD_RULES.items():
                 max_value_length = int(rule.get("max_value_length", 80))

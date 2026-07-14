@@ -58,11 +58,21 @@ def classify_title_block_candidates(
         response = urlopen(req, timeout=30)
         body = response.read().decode("utf-8")
     except HTTPError as exc:
-        raise GeminiResponseError(f"Gemini API returned HTTP {exc.code}.") from exc
+        raise GeminiResponseError(f"Gemini API returned HTTP {exc.code}: {_read_error_body(exc)}") from exc
     except URLError as exc:
         raise GeminiResponseError(f"Gemini API request failed: {exc.reason}") from exc
 
     return _parse_response(body, len(candidates))
+
+
+def _read_error_body(exc: HTTPError) -> str:
+    try:
+        body = exc.read().decode("utf-8", errors="replace").strip()
+    except OSError:
+        return "no response body"
+    if not body:
+        return "empty response body"
+    return body[:500]
 
 
 def apply_title_block_classifications(canonical_attributes: dict, classifications: list[dict]) -> dict:

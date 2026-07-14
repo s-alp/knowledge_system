@@ -169,6 +169,6 @@
 
 - 3D材質APIの部品単位紐づけは候補生成まで実装済み。次は複数部品/複数材質でのSXNET側対応可否調査
 - 2D図枠欄名辞書の客先横断拡充
-- Gemini API低温度JSON分類は2D抽出ジョブへ組み込み済み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として記録する。既存候補値の分類補助に限定し、ルール抽出済みの属性は上書きしない
+- Gemini API低温度JSON分類は2D抽出ジョブへ組み込み済み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として記録する。既存候補値の分類補助に限定し、ルール抽出済みの属性は上書きしない。現時点の実API確認は `API_KEY_INVALID` で未完了
 - 長穴、穴数、断面、表面粗さ値は PoC で属性化済み。次は実サンプル横断で、円/楕円を穴・長穴として断定できる条件を詰める
 - 2D/3D照合結果の採用値、差異、要確認理由は PoC 画面表示まで実装済み。次は本番API/fixture名確定後の項目名合わせ
