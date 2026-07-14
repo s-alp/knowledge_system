@@ -1,0 +1,3644 @@
+{
+  "input_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
+  "source_file": {
+    "full_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
+    "directory_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース",
+    "file_name": "PSG011-PA1300_ベース.icd",
+    "file_name_without_extension": "PSG011-PA1300_ベース",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "2d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 28806,
+  "warnings": [],
+  "raw_extract": {
+    "view_sheets": [
+      {
+        "name": "isome4",
+        "comment": null,
+        "scale": 0.1,
+        "angle": 0.0,
+        "type": 3,
+        "view_type": 0,
+        "geometry_count": 11
+      },
+      {
+        "name": "isome1",
+        "comment": null,
+        "scale": 0.16666667,
+        "angle": 0.0,
+        "type": 3,
+        "view_type": 0,
+        "geometry_count": 30
+      },
+      {
+        "name": "@PLN1",
+        "comment": null,
+        "scale": 1.0,
+        "angle": 0.0,
+        "type": 0,
+        "view_type": 0,
+        "geometry_count": 0
+      },
+      {
+        "name": "isome2",
+        "comment": null,
+        "scale": 0.16666667,
+        "angle": 90.000000000000014,
+        "type": 3,
+        "view_type": 0,
+        "geometry_count": 18
+      },
+      {
+        "name": "isome5",
+        "comment": null,
+        "scale": 0.1,
+        "angle": 0.0,
+        "type": 3,
+        "view_type": 0,
+        "geometry_count": 10
+      },
+      {
+        "name": "isome3",
+        "comment": null,
+        "scale": 0.16666667,
+        "angle": 270.0,
+        "type": 3,
+        "view_type": 0,
+        "geometry_count": 12
+      },
+      {
+        "name": "!XY",
+        "comment": null,
+        "scale": 0.16666667,
+        "angle": 0.0,
+        "type": 2,
+        "view_type": 2,
+        "geometry_count": 12
+      },
+      {
+        "name": "!!GLOBAL",
+        "comment": null,
+        "scale": 1.0,
+        "angle": 0.0,
+        "type": 1,
+        "view_type": 0,
+        "geometry_count": 10
+      }
+    ],
+    "print_frames": [
+      {
+        "no": 1,
+        "size": "A0",
+        "vertical": false,
+        "dinfo": [
+          1189.0,
+          841.0,
+          1.0,
+          0.0,
+          0.0,
+          1189.0,
+          841.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "drawing_scale": 1.0,
+        "range_min_x": 0.0,
+        "range_min_y": 0.0,
+        "range_max_x": 1189.0,
+        "range_max_y": 841.0
+      }
+    ],
+    "layers": [
+      {
+        "no": 1,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 2,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 3,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 4,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 5,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 6,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 7,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 8,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 9,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 10,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 11,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 12,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 13,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 14,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 15,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 16,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 17,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 18,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 19,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 20,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 21,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 22,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 23,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 24,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 25,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 26,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 27,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 28,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 29,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 30,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 31,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 32,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 33,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 34,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 35,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 36,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 37,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 38,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 39,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 40,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 41,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 42,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 43,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 44,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 45,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 46,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 47,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 48,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 49,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 50,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 51,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 52,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 53,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 54,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 55,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 56,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 57,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 58,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 59,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 60,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 61,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 62,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 63,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 64,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 65,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 66,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 67,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 68,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 69,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 70,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 71,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 72,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 73,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 74,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 75,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 76,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 77,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 78,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 79,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 80,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 81,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 82,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 83,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 84,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 85,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 86,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 87,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 88,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 89,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 90,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 91,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 92,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 93,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 94,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 95,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 96,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 97,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 98,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 99,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 100,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 101,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 102,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 103,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 104,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 105,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 106,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 107,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 108,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 109,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 110,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 111,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 112,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 113,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 114,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 115,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 116,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 117,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 118,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 119,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 120,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 121,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 122,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 123,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 124,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 125,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 126,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 127,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 128,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 129,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 130,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 131,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 132,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 133,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 134,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 135,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 136,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 137,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 138,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 139,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 140,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 141,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 142,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 143,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 144,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 145,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 146,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 147,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 148,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 149,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 150,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 151,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 152,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 153,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 154,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 155,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 156,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 157,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 158,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 159,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 160,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 161,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 162,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 163,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 164,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 165,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 166,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 167,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 168,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 169,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 170,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 171,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 172,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 173,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 174,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 175,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 176,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 177,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 178,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 179,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 180,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 181,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 182,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 183,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 184,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 185,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 186,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 187,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 188,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 189,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 190,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 191,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 192,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 193,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 194,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 195,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 196,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 197,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 198,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 199,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 200,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 201,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 202,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 203,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 204,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 205,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 206,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 207,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 208,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 209,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 210,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 211,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 212,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 213,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 214,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 215,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 216,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 217,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 218,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 219,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 220,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 221,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 222,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 223,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 224,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 225,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 226,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 227,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 228,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 229,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 230,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 231,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 232,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 233,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 234,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 235,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 236,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 237,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 238,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 239,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 240,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 241,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 242,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 243,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 244,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 245,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 246,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 247,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 248,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 249,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 250,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 251,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 252,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 253,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 254,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      },
+      {
+        "no": 255,
+        "name": null,
+        "is_displayed": true,
+        "is_searchable": true
+      }
+    ],
+    "texts": [
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００５",
+          "吊具"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome4",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００５ 吊具"
+      },
+      {
+        "text_lines": [
+          "チャックテーブル　センター",
+          "加工位置"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "チャックテーブル　センター 加工位置"
+      },
+      {
+        "text_lines": [
+          "トイシスピンドル　センター"
+        ],
+        "line_count": 1,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "トイシスピンドル　センター"
+      },
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００２",
+          "制御盤ＢＯＸ架台"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００２ 制御盤ＢＯＸ架台"
+      },
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００１",
+          "ベッド"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００１ ベッド"
+      },
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００４",
+          "パン"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００４ パン"
+      },
+      {
+        "text_lines": [
+          "チャックテーブル　センター",
+          "原位置"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "チャックテーブル　センター 原位置"
+      },
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００３",
+          "パン"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００３ パン"
+      },
+      {
+        "text_lines": [
+          "シール座金（ミスミ）",
+          "ＧＳＷ６"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "シール座金（ミスミ） ＧＳＷ６"
+      },
+      {
+        "text_lines": [
+          "ハイマウント（倉敷化工）",
+          "ＭＹ-１４Ｂ"
+        ],
+        "line_count": 2,
+        "source_type": "label",
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "inside_print_area": null,
+        "joined_text": "ハイマウント（倉敷化工） ＭＹ-１４Ｂ"
+      },
+      {
+        "text_lines": [
+          "ＦＬ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": -151.70115575,
+        "position_y": 29.70765389,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "joined_text": "ＦＬ"
+      },
+      {
+        "text_lines": [
+          "宅美（ＡＰ）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1071.13069485,
+        "position_y": 26.79613505,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "宅美（ＡＰ）"
+      },
+      {
+        "text_lines": [
+          "ＩＳＯ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1059.0,
+        "position_y": 56.0,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "ＩＳＯ"
+      },
+      {
+        "text_lines": [
+          "村谷（ＡＰ）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1031.13069485,
+        "position_y": 26.79613505,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "村谷（ＡＰ）"
+      },
+      {
+        "text_lines": [
+          "ＩＳＯ　２７６８－ｍｋ"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1020.0,
+        "position_y": 42.0,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "ＩＳＯ　２７６８－ｍｋ"
+      },
+      {
+        "text_lines": [
+          "Technical Specification："
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 5,
+        "position_x": 27.96224432,
+        "position_y": 89.57737076,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "Technical Specification："
+      },
+      {
+        "text_lines": [
+          "ベース"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1140.0,
+        "position_y": 31.0,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "ベース"
+      },
+      {
+        "text_lines": [
+          "（ＳＣＡＬＥ　１：６）"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1149.35426961,
+        "position_y": 69.5999999,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "（ＳＣＡＬＥ　１：６）"
+      },
+      {
+        "text_lines": [
+          "ＰＳＧ０１１－ＰＡ１３００"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1140.0,
+        "position_y": 12.0,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "ＰＳＧ０１１－ＰＡ１３００"
+      },
+      {
+        "text_lines": [
+          "’２６．０６．１９"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1056.54182766,
+        "position_y": 26.79613505,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "’２６．０６．１９"
+      },
+      {
+        "text_lines": [
+          "’２６．０６．１５"
+        ],
+        "line_count": 1,
+        "source_type": "text",
+        "view_name": "!!GLOBAL",
+        "layer_no": 1,
+        "position_x": 1016.54182766,
+        "position_y": 26.79613505,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "joined_text": "’２６．０６．１５"
+      }
+    ],
+    "dimensions": [
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1400.0,
+        "position_y": -87.60004995,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 700.0,
+        "position_y": -87.60004995,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1400.0,
+        "position_y": -135.60004995,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1688.02311288,
+        "position_y": 3725.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -136.7181037,
+        "position_y": 3250.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -136.7181037,
+        "position_y": 2432.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -91.94515448,
+        "position_y": 974.6357899,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -136.7181037,
+        "position_y": 907.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1640.17810059,
+        "position_y": 241.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1640.17810059,
+        "position_y": 1300.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -54.26956776,
+        "position_y": 0.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": -54.26956776,
+        "position_y": 786.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1096.0,
+        "position_y": 173.83258057,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=2; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 174.0,
+        "position_y": 663.82659912,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 700.0,
+        "position_y": 663.82659912,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=2; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "position_x": 1398.0,
+        "position_y": 173.83258057,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3250.0,
+        "position_y": -137.99663728,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3725.0,
+        "position_y": -137.99663728,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3029.10844615,
+        "position_y": -8.4,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=2; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3844.88603404,
+        "position_y": 653.4,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3844.88603404,
+        "position_y": 72.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "position_x": 3844.88603404,
+        "position_y": 18.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": 1694.98795099,
+        "position_y": 627.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": 1640.49869318,
+        "position_y": 627.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": 1640.49869318,
+        "position_y": 68.0,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "position_x": 1694.98795099,
+        "position_y": 696.4,
+        "position_z": 0.0,
+        "inside_print_area": false,
+        "value1": null,
+        "value2": null,
+        "front_word": null,
+        "back_word": null,
+        "upper_tol": null,
+        "lower_tol": null,
+        "mark2": null,
+        "mark3": null,
+        "summary": "line_color=1; line_width=3; text_color=7; text_width=2; rouway=3; round=-3; suppress=True; multiple=0; angtype=1; dispang=1; tiltang=-5; arrow1_type=2; arrow2_type=2; aidline1=1; aidline2=1; term1_mark=1; term2_mark=1; dot=False; dimval_height=4; dimval_width_ratio=1; space_ratio=1; dimtol_ratio=0; aidline_tilt=0; arrow_width=2.4; arrow_ang=15; dot_diam=0.8; dimval_scale=1; dimval_space=0.5; underline1_len=0; underline2_len=1"
+      }
+    ],
+    "geometry_primitives": [
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -631.79886359,
+        "position_y": 476.63040382,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -631.79886359,
+        "center_y": 476.63040382,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 179.99998633962164,
+        "end_angle": 45.000013660380155,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; ang=0; sang=179.999986339622; eang=45.0000136603802; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -631.79886359,
+        "position_y": 476.63040382,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -631.79886359,
+        "center_y": 476.63040382,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 225.00000000000179,
+        "end_angle": 134.99999999999815,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=225.000000000002; eang=134.999999999998; ang=0; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -631.79886359,
+        "position_y": 476.63040382,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -631.79886359,
+        "center_y": 476.63040382,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 0.0,
+        "end_angle": 179.99998633962164,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=0; eang=179.999986339622; ang=0; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -2046.00992596,
+        "position_y": -339.86799739,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -2046.00992596,
+        "center_y": -339.86799739,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 179.9999806813077,
+        "end_angle": 45.000019318696424,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=179.999980681308; eang=45.0000193186964; ang=0; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -2046.00992596,
+        "position_y": -339.86799739,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -2046.00992596,
+        "center_y": -339.86799739,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 225.00000000000406,
+        "end_angle": 134.99999999999588,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=225.000000000004; eang=134.999999999996; ang=0; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": -2046.00992596,
+        "position_y": -339.86799739,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": -2046.00992596,
+        "center_y": -339.86799739,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 0.0,
+        "end_angle": 179.9999806813077,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=0; eang=179.999980681308; ang=0; type=8"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome4",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=3822.34741211; type=2"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=1314.24928053; type=2"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=1314.24928053; type=2"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=1314.24928053; type=2"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomCircle2D",
+        "position_x": 388.5,
+        "position_y": 504.99852158,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 388.5,
+        "center_y": 504.99852158,
+        "center_z": 0.0,
+        "radius": 4.0,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": true,
+        "summary": "radius=4; type=4"
+      },
+      {
+        "view_name": "isome1",
+        "layer_no": 1,
+        "geometry_type": "SxGeomCircle2D",
+        "position_x": 388.4962575,
+        "position_y": 2504.99872854,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 388.4962575,
+        "center_y": 2504.99872854,
+        "center_z": 0.0,
+        "radius": 4.0,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius=4; type=4"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=3348.85544735; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=3; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=3; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "isome2",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=8; type=2"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 631.79886359,
+        "position_y": 571.7510726,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 631.79886359,
+        "center_y": 571.7510726,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 45.000000000001819,
+        "end_angle": 134.99999999999815,
+        "point_count": null,
+        "inside_print_area": true,
+        "summary": "radius1=4; radius2=2.30940166; sang=45.0000000000018; eang=134.999999999998; ang=0; type=8"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 631.79886359,
+        "position_y": 571.7510726,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 631.79886359,
+        "center_y": 571.7510726,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 180.0,
+        "end_angle": 179.99998633962164,
+        "point_count": null,
+        "inside_print_area": true,
+        "summary": "radius1=4; radius2=2.30940166; sang=180; eang=179.999986339622; ang=0; type=8"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 631.79886359,
+        "position_y": 571.7510726,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 631.79886359,
+        "center_y": 571.7510726,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 359.99998633962167,
+        "end_angle": 45.000013660380155,
+        "point_count": null,
+        "inside_print_area": true,
+        "summary": "radius1=4; radius2=2.30940166; sang=359.999986339622; eang=45.0000136603802; ang=0; type=8"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 2046.00992596,
+        "position_y": 1388.24947381,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 2046.00992596,
+        "center_y": 1388.24947381,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 45.000000000004164,
+        "end_angle": 134.99999999999582,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=45.0000000000042; eang=134.999999999996; ang=0; type=8"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 2046.00992596,
+        "position_y": 1388.24947381,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 2046.00992596,
+        "center_y": 1388.24947381,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 180.0,
+        "end_angle": 180.00001931869232,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=180; eang=180.000019318692; ang=0; type=8"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=12.24744715; type=2"
+      },
+      {
+        "view_name": "isome5",
+        "layer_no": 1,
+        "geometry_type": "SxGeomElparc2D",
+        "position_x": 2046.00992596,
+        "position_y": 1388.24947381,
+        "position_z": 0.0,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": 2046.00992596,
+        "center_y": 1388.24947381,
+        "center_z": 0.0,
+        "radius": null,
+        "radius1": 4.0,
+        "radius2": 2.30940166,
+        "start_angle": 0.0,
+        "end_angle": 44.999980681311854,
+        "point_count": null,
+        "inside_print_area": false,
+        "summary": "radius1=4; radius2=2.30940166; sang=0; eang=44.9999806813119; ang=0; type=8"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=3348.85544735; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=8; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=8; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "isome3",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=197; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=692; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=1679.71797253; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=8; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      },
+      {
+        "view_name": "!XY",
+        "layer_no": 1,
+        "geometry_type": "SxGeomLine2D",
+        "position_x": null,
+        "position_y": null,
+        "position_z": null,
+        "end_x": null,
+        "end_y": null,
+        "end_z": null,
+        "center_x": null,
+        "center_y": null,
+        "center_z": null,
+        "radius": null,
+        "radius1": null,
+        "radius2": null,
+        "start_angle": null,
+        "end_angle": null,
+        "point_count": null,
+        "inside_print_area": null,
+        "summary": "leng=15; type=2"
+      }
+    ],
+    "weld_notes": [],
+    "balloons": [],
+    "tolerances": []
+  }
+}

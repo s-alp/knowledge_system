@@ -1,0 +1,316 @@
+{
+  "input_path": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+  "source_file": {
+    "full_path": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+    "directory_path": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図",
+    "file_name": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+    "file_name_without_extension": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS)",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 3569,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)"
+        ],
+        "name": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "name": "一般構造用圧延鋼材",
+              "matid": "SS400",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "溝形鋼_100*50*5*7.5"
+        ],
+        "name": "溝形鋼_100*50*5*7.5",
+        "comment": "溝形鋼_100*50*5*7.5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 8,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.85,
+      "area": 4612505.04945725,
+      "volume": 14568789.437093129,
+      "mass": 11.66198417,
+      "weight": 114.36499708,
+      "length": 0.0,
+      "center_of_gravity_x": 1070.0,
+      "center_of_gravity_y": 50.01179781,
+      "center_of_gravity_z": -614.00003,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "14568789.4370931",
+        "area": "4612505.04945725",
+        "length": "0",
+        "density": "7.85",
+        "mass": "11.66198417",
+        "weight": "114.36499708",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 8,
+        "raw_fields": {
+          "matid": "SS400",
+          "name": "一般構造用圧延鋼材",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

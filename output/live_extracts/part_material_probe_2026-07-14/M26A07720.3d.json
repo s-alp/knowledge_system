@@ -1,0 +1,72 @@
+{
+  "input_path": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
+  "source_file": {
+    "full_path": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
+    "directory_path": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業",
+    "file_name": "M26A07720.icd",
+    "file_name_without_extension": "M26A07720",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 7141,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "M26A07720",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "M26A07720"
+        ],
+        "name": "M26A07720",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 1,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 1.0,
+      "area": 215981.2258202,
+      "volume": 244114.08104632,
+      "mass": 0.02489271,
+      "weight": 0.24411408,
+      "length": 0.0,
+      "center_of_gravity_x": 300.0,
+      "center_of_gravity_y": 52.3,
+      "center_of_gravity_z": 9.67005913,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "244114.08104632",
+        "area": "215981.2258202",
+        "length": "0",
+        "density": "1",
+        "mass": "0.02489271",
+        "weight": "0.24411408",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "no_materials",
+    "materials": []
+  }
+}

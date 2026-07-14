@@ -1,0 +1,94 @@
+{
+  "input_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
+  "source_file": {
+    "full_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
+    "directory_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部",
+    "file_name": "CAA5012-02435010P1R1.icd",
+    "file_name_without_extension": "CAA5012-02435010P1R1",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 6446,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "CAA5012-02435010P1R1",
+      "comment": "押サエブロックブラケット2",
+      "ex_info": "User_Type,\"加工品\",User_Name,\"押サエブロックブラケット2\",User_Material,\"SS400\",User_Surfacetreatment,\"無電解Ni10μm\"",
+      "ex_info_fields": {
+        "User_Type": "加工品",
+        "User_Name": "押サエブロックブラケット2",
+        "User_Material": "SS400",
+        "User_Surfacetreatment": "無電解Ni10μm"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "CAA5012-02435010P1R1"
+        ],
+        "name": "CAA5012-02435010P1R1",
+        "comment": "押サエブロックブラケット2",
+        "ex_info": "User_Type,\"加工品\",User_Name,\"押サエブロックブラケット2\",User_Material,\"SS400\",User_Surfacetreatment,\"無電解Ni10μm\"",
+        "ex_info_fields": {
+          "User_Type": "加工品",
+          "User_Name": "押サエブロックブラケット2",
+          "User_Material": "SS400",
+          "User_Surfacetreatment": "無電解Ni10μm"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 1,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.85,
+      "area": 6482.43916112,
+      "volume": 14767.90648567,
+      "mass": 0.01182137,
+      "weight": 0.11592807,
+      "length": 0.0,
+      "center_of_gravity_x": 41.82254967,
+      "center_of_gravity_y": 20.73481099,
+      "center_of_gravity_z": 4.0,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "14767.90648567",
+        "area": "6482.43916112",
+        "length": "0",
+        "density": "7.85",
+        "mass": "0.01182137",
+        "weight": "0.11592807",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 1,
+        "raw_fields": {
+          "name": "一般構造用圧延鋼材",
+          "matid": "SS400",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

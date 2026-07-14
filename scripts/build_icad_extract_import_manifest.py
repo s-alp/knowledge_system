@@ -88,7 +88,7 @@ def _score(mode: str, path: Path, metrics: dict) -> int:
             + metrics["layerCount"] * 4
             + metrics["viewSheetCount"] * 6
         )
-        for keyword, bonus in (("allviews", 180), ("primitives", 140), ("v2meta", 120), ("layered", 80), ("positioned", 60)):
+        for keyword, bonus in (("latest", 240), ("allviews", 180), ("primitives", 140), ("v2meta", 120), ("layered", 80), ("positioned", 60)):
             if keyword in lowered:
                 score += bonus
         return score

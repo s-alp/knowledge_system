@@ -237,6 +237,51 @@ python scripts\summarize_2d_extraction_coverage.py `
 
 全量ディレクトリ確認の結果は `output\souya_handoff\icad_2d_extraction_coverage_summary_2026-07-15.json` に保存した。全量側は古い途中抽出JSONも含むため、品質判断ではなく、再抽出対象の洗い出しに使う。代表manifestでも2D情報の薄いファイルが多いため、次工程では最新抽出器で代表2Dファイルを再抽出し、`view_sheets` / `print_frames` / `layers` / `inside_print_area` が入ったJSONへ置き換える。
 
+2026-07-15 に代表manifestの2D対象19件を最新runnerで再抽出し、旧manifestの2D JSONを置き換えた。
+
+- 実行スクリプト: `scripts\run_manifest_2d_reextract_2026_07_15.ps1`
+- 再抽出出力先: `output\live_extracts\manifest_2d_reextract_2026-07-15`
+- 再抽出manifest: `output\souya_handoff\icad_extract_import_manifest_reextract_2026-07-15.json`
+- 2Dカバレッジ: `output\souya_handoff\icad_2d_reextract_coverage_selected_manifest_2026-07-15.json`
+- fixture: `output\souya_handoff\drawing_metadata_fixture_reextract_2026-07-15.json`
+
+再抽出後の代表manifest対象の集計結果:
+
+- 2D対象: 19ファイル
+- ビュー/用紙数: 121
+- 印刷枠数: 22
+- レイヤー数: 4,845
+- 取得対象要素: 23,300件
+- 文字: 1,310件
+- 寸法: 1,492件
+- 図形primitive: 20,477件
+- 印刷枠内: 1,844件
+- 印刷枠外: 7,887件
+- 印刷枠判定不明: 13,569件
+- ビュー情報なし: 0件
+- レイヤー未設定要素: 741件
+- 印刷枠なし: 1ファイル
+
+旧manifestでは `ビュー情報なし17ファイル`、`印刷枠情報なし17ファイル`、`レイヤー情報なし17ファイル` だったため、最新抽出器で全ビュー・印刷枠・レイヤー取得は大きく改善した。ただし、印刷枠判定不明はまだ多い。ここは安易に削除フィルタを入れず、図面別に `inside_print_area=unknown` の理由を確認してから、検索・タグ生成対象から外すかどうかを決める。
+
+同日に本番ナレッジシステムの実画面もChromeで再確認した。登録、変更、削除は行っていない。
+
+- 部品詳細: `output\knowledge_ui_screenshots_2026-07-15\01-part-detail-current.png`
+- 図面一覧: `output\knowledge_ui_screenshots_2026-07-15\02-drawing-list.png`
+- 図面詳細2D: `output\knowledge_ui_screenshots_2026-07-15\03-drawing-detail-2d.png`
+- 図面詳細3Dエラー: `output\knowledge_ui_screenshots_2026-07-15\04-drawing-detail-3d-error.png`
+- ローカル詳細: `output\knowledge_ui_screenshots_2026-07-15\05-local-detail.png`
+- ローカルタグレビュー: `output\knowledge_ui_screenshots_2026-07-15\06-local-tag-review.png`
+
+確認結果:
+
+- 本番部品詳細には `属性情報` 欄があり、サンプルでは空表示だった。部品タグ・属性の受け口として重要。
+- 本番図面一覧には、検索条件、図面タイプ、ステータス、紐づき概要が見える。タグ列は未表示。
+- 本番図面詳細には `タグ` と `属性情報` 欄、2D/3D切替、2Dプレビューが見える。初期連携先は引き続き図面詳細を最優先にする。
+- 本番図面詳細の3D切替では `/web/public/models/test_000445.gltf` がHTMLを返し、GLTFとして読めずアプリ全体がエラー画面になった。抽出器の問題ではないが、創屋への2D/3Dプレビュー連携確認事項に含める。
+- ローカル詳細画面では `CAA5012-02434000K1R1.icd` について `2Dあり`、`3Dあり`、viewerタグ、保存フォルダ、パーツ付加情報数が表示される。
+- ローカルタグレビュー画面では、図面/製品・装置・ユニット/部品/プロジェクトの適用先候補、統合タグ、2Dタグ、3Dタグ、競合が確認できる。
+
 ```json
 {
   "drawingId": "host drawing id",

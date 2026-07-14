@@ -1,0 +1,98 @@
+{
+  "input_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
+  "source_file": {
+    "full_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
+    "directory_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部",
+    "file_name": "CAA5012-02430002P1R1.icd",
+    "file_name_without_extension": "CAA5012-02430002P1R1",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 3380,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "CAA5012-02430002P1R1",
+      "comment": "ブロック",
+      "ex_info": "User_Type,\"加工品\",User_Name,\"ブロック\",User_Material,\"SS400\",User_Surfacetreatment,\"無電解Ni10μm\",User_Heattreatment,\"－\",User_Hardness,\"－\"",
+      "ex_info_fields": {
+        "User_Type": "加工品",
+        "User_Name": "ブロック",
+        "User_Material": "SS400",
+        "User_Surfacetreatment": "無電解Ni10μm",
+        "User_Heattreatment": "－",
+        "User_Hardness": "－"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "CAA5012-02430002P1R1"
+        ],
+        "name": "CAA5012-02430002P1R1",
+        "comment": "ブロック",
+        "ex_info": "User_Type,\"加工品\",User_Name,\"ブロック\",User_Material,\"SS400\",User_Surfacetreatment,\"無電解Ni10μm\",User_Heattreatment,\"－\",User_Hardness,\"－\"",
+        "ex_info_fields": {
+          "User_Type": "加工品",
+          "User_Name": "ブロック",
+          "User_Material": "SS400",
+          "User_Surfacetreatment": "無電解Ni10μm",
+          "User_Heattreatment": "－",
+          "User_Hardness": "－"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 1,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.85,
+      "area": 55440.57546209,
+      "volume": 263610.10126113,
+      "mass": 0.21101388,
+      "weight": 2.06933929,
+      "length": 0.0,
+      "center_of_gravity_x": -14.13899827,
+      "center_of_gravity_y": -1.79747172,
+      "center_of_gravity_z": -22.73097959,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "263610.10126113",
+        "area": "55440.57546209",
+        "length": "0",
+        "density": "7.85",
+        "mass": "0.21101388",
+        "weight": "2.06933929",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 1,
+        "raw_fields": {
+          "name": "一般構造用圧延鋼材",
+          "matid": "SS400",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "input_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
+  "source_file": {
+    "full_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
+    "directory_path": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部",
+    "file_name": "CAA5012-02434006P1R1.icd",
+    "file_name_without_extension": "CAA5012-02434006P1R1",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 9119,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "CAA5012-02434006P1R1",
+      "comment": "プレート",
+      "ex_info": "User_Type,\"加工品\",User_Name,\"プレート\",User_Material,\"A5052\",User_Surfacetreatment,\"アルマイト白\"",
+      "ex_info_fields": {
+        "User_Type": "加工品",
+        "User_Name": "プレート",
+        "User_Material": "A5052",
+        "User_Surfacetreatment": "アルマイト白"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "CAA5012-02434006P1R1"
+        ],
+        "name": "CAA5012-02434006P1R1",
+        "comment": "プレート",
+        "ex_info": "User_Type,\"加工品\",User_Name,\"プレート\",User_Material,\"A5052\",User_Surfacetreatment,\"アルマイト白\"",
+        "ex_info_fields": {
+          "User_Type": "加工品",
+          "User_Name": "プレート",
+          "User_Material": "A5052",
+          "User_Surfacetreatment": "アルマイト白"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 1,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 2.69,
+      "area": 38268.06923995,
+      "volume": 139989.79150244,
+      "mass": 0.03839971,
+      "weight": 0.37657254,
+      "length": 0.0,
+      "center_of_gravity_x": -94.83545703,
+      "center_of_gravity_y": -45.77008773,
+      "center_of_gravity_z": -6.31633448,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "139989.79150244",
+        "area": "38268.06923995",
+        "length": "0",
+        "density": "2.69",
+        "mass": "0.03839971",
+        "weight": "0.37657254",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "A5052P",
+        "name": "アルミ板",
+        "specific_gravity": 2.69,
+        "element_count": 1,
+        "raw_fields": {
+          "name": "アルミ板",
+          "matid": "A5052P",
+          "spe_grav": "2.69"
+        }
+      }
+    ]
+  }
+}

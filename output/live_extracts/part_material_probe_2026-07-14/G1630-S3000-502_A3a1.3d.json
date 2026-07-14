@@ -1,0 +1,124 @@
+{
+  "input_path": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
+  "source_file": {
+    "full_path": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
+    "directory_path": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業",
+    "file_name": "G1630-S3000-502_A3a1.icd",
+    "file_name_without_extension": "G1630-S3000-502_A3a1",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 4976,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "G1630-S3000-502_A3a1",
+      "comment": "クサビ",
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "G1630-S3000-502_A3a1"
+        ],
+        "name": "G1630-S3000-502_A3a1",
+        "comment": "クサビ",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "G1630-S3000-502_A3a1",
+          "AJSTF12-30"
+        ],
+        "name": "AJSTF12-30",
+        "comment": null,
+        "ex_info": "User_MisumiFA_SpecNumber,\"AJSTF12-30\",User_MisumiFA_Material,\"S45C相当\",User_MisumiFA_Supplier,\"MISUMI\",User_MisumiFA_ProductName,\"ｱｼﾞｬｽﾄﾎﾞﾙﾄ\",User_MisumiFA_Off-the-shelf,\"1\",User_MisumiFA_ProductSeriesName,\"アジャストボルト　六角タイプ　並目・細目\",User_MisumiFA_SeriesId,\"110302668770\",User_MisumiFA_CategoryCode,\"M0311030000\",User_MisumiFA_NewSeriesId,\"1001511\",User_MisumiFA_Systemparts,\"1\"",
+        "ex_info_fields": {
+          "User_MisumiFA_SpecNumber": "AJSTF12-30",
+          "User_MisumiFA_Material": "S45C相当",
+          "User_MisumiFA_Supplier": "MISUMI",
+          "User_MisumiFA_ProductName": "ｱｼﾞｬｽﾄﾎﾞﾙﾄ",
+          "User_MisumiFA_Off-the-shelf": "1",
+          "User_MisumiFA_ProductSeriesName": "アジャストボルト　六角タイプ　並目・細目",
+          "User_MisumiFA_SeriesId": "110302668770",
+          "User_MisumiFA_CategoryCode": "M0311030000",
+          "User_MisumiFA_NewSeriesId": "1001511",
+          "User_MisumiFA_Systemparts": "1"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "S45C相当",
+            "name": "S45C相当_MisumiFA",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "name": "S45C相当_MisumiFA",
+              "matid": "S45C相当",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 2,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 1.21817279,
+      "area": 48019.99864813,
+      "volume": 416877.97019234,
+      "mass": 0.05178419,
+      "weight": 0.5078294,
+      "length": 0.0,
+      "center_of_gravity_x": 145.401383,
+      "center_of_gravity_y": 22.13635555,
+      "center_of_gravity_z": 20.0,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "416877.97019234",
+        "area": "48019.99864813",
+        "length": "0",
+        "density": "1.21817279",
+        "mass": "0.05178419",
+        "weight": "0.5078294",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "S45C相当",
+        "name": "S45C相当_MisumiFA",
+        "specific_gravity": 7.85,
+        "element_count": 1,
+        "raw_fields": {
+          "matid": "S45C相当",
+          "name": "S45C相当_MisumiFA",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

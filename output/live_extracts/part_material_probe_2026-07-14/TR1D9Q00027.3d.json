@@ -1,0 +1,981 @@
+{
+  "input_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
+  "source_file": {
+    "full_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
+    "directory_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ",
+    "file_name": "TR1D9Q00027.icd",
+    "file_name_without_extension": "TR1D9Q00027",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 97379,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "TR1D9Q000270",
+      "comment": "中子検査・段積み部(部品手配)",
+      "ex_info": "User_Type,\"0組立\",User_WBHIN1,\"TR1D\",User_WBHIN2,\"9Q\",User_WBHIN3,\"00\",User_WBHIN4,\"027\",User_WBHIN5,\"0\",User_WBHNA,\"中子検査・段積み部(部品手配)\",User_WBZAI1,\"無し\"",
+      "ex_info_fields": {
+        "User_Type": "0組立",
+        "User_WBHIN1": "TR1D",
+        "User_WBHIN2": "9Q",
+        "User_WBHIN3": "00",
+        "User_WBHIN4": "027",
+        "User_WBHIN5": "0",
+        "User_WBHNA": "中子検査・段積み部(部品手配)",
+        "User_WBZAI1": "無し"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "TR1D9Q000270"
+        ],
+        "name": "TR1D9Q000270",
+        "comment": "中子検査・段積み部(部品手配)",
+        "ex_info": "User_Type,\"0組立\",User_WBHIN1,\"TR1D\",User_WBHIN2,\"9Q\",User_WBHIN3,\"00\",User_WBHIN4,\"027\",User_WBHIN5,\"0\",User_WBHNA,\"中子検査・段積み部(部品手配)\",User_WBZAI1,\"無し\"",
+        "ex_info_fields": {
+          "User_Type": "0組立",
+          "User_WBHIN1": "TR1D",
+          "User_WBHIN2": "9Q",
+          "User_WBHIN3": "00",
+          "User_WBHIN4": "027",
+          "User_WBHIN5": "0",
+          "User_WBHNA": "中子検査・段積み部(部品手配)",
+          "User_WBZAI1": "無し"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "A-4"
+        ],
+        "name": "A-4",
+        "comment": "スリット",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"スリット\",User_WCMNA,\"キーエンス\",User_WCTYP,\"A-4\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "スリット",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "A-4"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "ZZ購入品",
+            "specific_gravity": 1.0,
+            "element_count": 2,
+            "raw_fields": {
+              "name": "ZZ購入品",
+              "matid": "ZZZ",
+              "spe_grav": "1"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "AS1201FS-M5-06"
+        ],
+        "name": "AS1201FS-M5-06",
+        "comment": "スピードコントローラ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"スピードコントローラ\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"ＳＭＣ\",User_WCTYP,\"AS1201FS-M5-06\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "スピードコントローラ",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "ＳＭＣ",
+          "User_WCTYP": "AS1201FS-M5-06"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "ZZ購入品",
+            "specific_gravity": 1.0,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "ZZ購入品",
+              "spe_grav": "1"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "AS1201FS-M5-06"
+        ],
+        "name": "AS1201FS-M5-06",
+        "comment": "スピードコントローラ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"スピードコントローラ\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"ＳＭＣ\",User_WCTYP,\"AS1201FS-M5-06\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "スピードコントローラ",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "ＳＭＣ",
+          "User_WCTYP": "AS1201FS-M5-06"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "ZZ購入品",
+            "specific_gravity": 1.0,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "ZZ購入品",
+              "spe_grav": "1"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "FU-15"
+        ],
+        "name": "FU-15",
+        "comment": "ファイバセンサ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ファイバセンサ\",User_WBZAI1,\"無し\",User_WCMCD,\"057\",User_WCMNA,\"キーエンス\",User_WCTYP,\"FU-15\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ファイバセンサ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "057",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "FU-15"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "MGPM12-20Z-M9BL"
+        ],
+        "name": "MGPM12-20Z-M9BL",
+        "comment": "ガイド付シリンダ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ガイド付シリンダ\",User_WBZAI1,\"無し\",User_WCMCD,\"121\",User_WCMNA,\"ＳＭＣ\",User_WCTYP,\"MGPM12-20Z-M9BL\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ガイド付シリンダ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "121",
+          "User_WCMNA": "ＳＭＣ",
+          "User_WCTYP": "MGPM12-20Z-M9BL"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "PZ-M51"
+        ],
+        "name": "PZ-M51",
+        "comment": "光電センサ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"光電センサ\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"キーエンス\",User_WCTYP,\"PZ-M51\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "光電センサ",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "PZ-M51"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "ZZ購入品",
+            "specific_gravity": 1.0,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "ZZ購入品",
+              "spe_grav": "1"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "PZ-M61"
+        ],
+        "name": "PZ-M61",
+        "comment": "光電センサ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"光電センサ\",User_WBZAI1,\"無し\",User_WCMNA,\"キーエンス\",User_WCTYP,\"PZ-M61\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "光電センサ",
+          "User_WBZAI1": "無し",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "PZ-M61"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "PZ-M61",
+          "R-5"
+        ],
+        "name": "R-5",
+        "comment": "リフレクタ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"リフレクタ\",User_WCMCD,\"057\",User_WCMNA,\"キーエンス\",User_WCTYP,\"R-5\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "リフレクタ",
+          "User_WCMCD": "057",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "R-5"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "R-5"
+        ],
+        "name": "R-5",
+        "comment": "反射板",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"反射板\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"キーエンス\",User_WCTYP,\"R-5\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "反射板",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "キーエンス",
+          "User_WCTYP": "R-5"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "ZZ購入品",
+            "specific_gravity": 1.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "ZZ購入品",
+              "spe_grav": "1"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL5"
+        ],
+        "name": "SFN-EL5",
+        "comment": "S EasyナットL",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"S EasyナットL\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL5\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "S EasyナットL",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL5"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "質量0.0093kg",
+            "specific_gravity": 6.8382,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "質量0.0093kg",
+              "spe_grav": "6.8382"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL5"
+        ],
+        "name": "SFN-EL5",
+        "comment": "S EasyナットL",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"S EasyナットL\",User_WBZAI1,\"ＲＭ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL5\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "S EasyナットL",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL5"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "ZZZ",
+            "name": "質量0.0093kg",
+            "specific_gravity": 6.8382,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "ZZZ",
+              "name": "質量0.0093kg",
+              "spe_grav": "6.8382"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "Ｓ＿ＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"Ｓ＿ＥａｓｙナットＬ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "Ｓ＿ＥａｓｙナットＬ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "Ｓ＿ＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"Ｓ＿ＥａｓｙナットＬ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "Ｓ＿ＥａｓｙナットＬ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "Ｓ＿ＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"Ｓ＿ＥａｓｙナットＬ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "Ｓ＿ＥａｓｙナットＬ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "Ｓ＿ＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"Ｓ＿ＥａｓｙナットＬ\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "Ｓ＿ＥａｓｙナットＬ",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "ＳＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ＳＥａｓｙナットＬ\",User_WBZAI1,\"無し\",User_WCMCD,\"J64\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ＳＥａｓｙナットＬ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "J64",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "ＳＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ＳＥａｓｙナットＬ\",User_WBZAI1,\"無し\",User_WCMCD,\"J64\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ＳＥａｓｙナットＬ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "J64",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "ＳＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ＳＥａｓｙナットＬ\",User_WBZAI1,\"無し\",User_WCMCD,\"J64\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ＳＥａｓｙナットＬ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "J64",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "SFN-EL6"
+        ],
+        "name": "SFN-EL6",
+        "comment": "ＳＥａｓｙナットＬ",
+        "ex_info": "User_Type,\"2購入\",User_WBHNA,\"ＳＥａｓｙナットＬ\",User_WBZAI1,\"無し\",User_WCMCD,\"J64\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"SFN-EL6\"",
+        "ex_info_fields": {
+          "User_Type": "2購入",
+          "User_WBHNA": "ＳＥａｓｙナットＬ",
+          "User_WBZAI1": "無し",
+          "User_WCMCD": "J64",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "SFN-EL6"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 2,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q110270"
+        ],
+        "name": "TR1D9Q110270",
+        "comment": "TR1D9Q11027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q110270"
+        ],
+        "name": "TR1D9Q110270",
+        "comment": "TR1D9Q11027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q110270"
+        ],
+        "name": "TR1D9Q110270",
+        "comment": "TR1D9Q11027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q110270"
+        ],
+        "name": "TR1D9Q110270",
+        "comment": "TR1D9Q11027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q120270"
+        ],
+        "name": "TR1D9Q120270",
+        "comment": "TR1D9Q12027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q130270"
+        ],
+        "name": "TR1D9Q130270",
+        "comment": "TR1D9Q13027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q140270"
+        ],
+        "name": "TR1D9Q140270",
+        "comment": "TR1D9Q14027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q150270"
+        ],
+        "name": "TR1D9Q150270",
+        "comment": "TR1D9Q15027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q150270"
+        ],
+        "name": "TR1D9Q150270",
+        "comment": "TR1D9Q15027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q160270"
+        ],
+        "name": "TR1D9Q160270",
+        "comment": "TR1D9Q16027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q170270"
+        ],
+        "name": "TR1D9Q170270",
+        "comment": "TR1D9Q17027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q180270"
+        ],
+        "name": "TR1D9Q180270",
+        "comment": "TR1D9Q18027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q190270"
+        ],
+        "name": "TR1D9Q190270",
+        "comment": "TR1D9Q19027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "TR1D9Q000270",
+          "TR1D9Q200270"
+        ],
+        "name": "TR1D9Q200270",
+        "comment": "TR1D9Q20027",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 39,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 1.67642787,
+      "area": 63635.92857619,
+      "volume": 129916.95147963,
+      "mass": 0.02220905,
+      "weight": 0.2177964,
+      "length": 0.0,
+      "center_of_gravity_x": -1393.05492486,
+      "center_of_gravity_y": 928.09028759,
+      "center_of_gravity_z": -307.05405706,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "129916.95147963",
+        "area": "63635.92857619",
+        "length": "0",
+        "density": "1.67642787",
+        "mass": "0.02220905",
+        "weight": "0.2177964",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "ZZZ",
+        "name": "質量0.0093kg",
+        "specific_gravity": 6.8382,
+        "element_count": 4,
+        "raw_fields": {
+          "name": "質量0.0093kg",
+          "matid": "ZZZ",
+          "spe_grav": "6.8382"
+        }
+      },
+      {
+        "mat_id": "SUS304",
+        "name": "03ステンレス鋼",
+        "specific_gravity": 7.93,
+        "element_count": 16,
+        "raw_fields": {
+          "matid": "SUS304",
+          "name": "03ステンレス鋼",
+          "spe_grav": "7.93"
+        }
+      },
+      {
+        "mat_id": "ZZZ",
+        "name": "ZZ購入品",
+        "specific_gravity": 1.0,
+        "element_count": 9,
+        "raw_fields": {
+          "matid": "ZZZ",
+          "name": "ZZ購入品",
+          "spe_grav": "1"
+        }
+      }
+    ]
+  }
+}

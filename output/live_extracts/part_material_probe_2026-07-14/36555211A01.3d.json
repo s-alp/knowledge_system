@@ -1,0 +1,170 @@
+{
+  "input_path": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\01_3Dモデル\\36555211A01.icd",
+  "source_file": {
+    "full_path": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\01_3Dモデル\\36555211A01.icd",
+    "directory_path": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\01_3Dモデル",
+    "file_name": "36555211A01.icd",
+    "file_name_without_extension": "36555211A01",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 8215,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "36555211A010",
+      "comment": "ジョイント",
+      "ex_info": "User_Type,\"1製作\",User_WBHIN1,\"3655\",User_WBHIN2,\"52\",User_WBHIN3,\"11\",User_WBHIN4,\"A01\",User_WBHIN5,\"0\",User_WBHNA,\"ジョイント\",User_WBZAI1,\"ＳＵＳ３０４Ｂ\"",
+      "ex_info_fields": {
+        "User_Type": "1製作",
+        "User_WBHIN1": "3655",
+        "User_WBHIN2": "52",
+        "User_WBHIN3": "11",
+        "User_WBHIN4": "A01",
+        "User_WBHIN5": "0",
+        "User_WBHNA": "ジョイント",
+        "User_WBZAI1": "ＳＵＳ３０４Ｂ"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "36555211A010"
+        ],
+        "name": "36555211A010",
+        "comment": "ジョイント",
+        "ex_info": "User_Type,\"1製作\",User_WBHIN1,\"3655\",User_WBHIN2,\"52\",User_WBHIN3,\"11\",User_WBHIN4,\"A01\",User_WBHIN5,\"0\",User_WBHNA,\"ジョイント\",User_WBZAI1,\"ＳＵＳ３０４Ｂ\"",
+        "ex_info_fields": {
+          "User_Type": "1製作",
+          "User_WBHIN1": "3655",
+          "User_WBHIN2": "52",
+          "User_WBHIN3": "11",
+          "User_WBHIN4": "A01",
+          "User_WBHIN5": "0",
+          "User_WBHNA": "ジョイント",
+          "User_WBZAI1": "ＳＵＳ３０４Ｂ"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "36555211A010",
+          "3*6-SUS304"
+        ],
+        "name": "3*6-SUS304",
+        "comment": "スプリングピン",
+        "ex_info": "User_Type,\"X雑\",User_WBHNA,\"スプリングピン\",User_WBZAI1,\"ＳＵＳ３０４\",User_WCMCD,\"999\"",
+        "ex_info_fields": {
+          "User_Type": "X雑",
+          "User_WBHNA": "スプリングピン",
+          "User_WBZAI1": "ＳＵＳ３０４",
+          "User_WCMCD": "999"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 1,
+            "raw_fields": {
+              "name": "03ステンレス鋼",
+              "matid": "SUS304",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "36555211A010",
+          "3*6-SUS304"
+        ],
+        "name": "3*6-SUS304",
+        "comment": "スプリングピン",
+        "ex_info": "User_Type,\"X雑\",User_WBHNA,\"スプリングピン\",User_WBZAI1,\"ＳＵＳ３０４\",User_WCMCD,\"999\"",
+        "ex_info_fields": {
+          "User_Type": "X雑",
+          "User_WBHNA": "スプリングピン",
+          "User_WBZAI1": "ＳＵＳ３０４",
+          "User_WCMCD": "999"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "03ステンレス鋼",
+            "specific_gravity": 7.93,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "03ステンレス鋼",
+              "spe_grav": "7.93"
+            }
+          }
+        ]
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 3,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.93,
+      "area": 14676.11107146,
+      "volume": 38360.32582165,
+      "mass": 0.0310195,
+      "weight": 0.30419738,
+      "length": 0.0,
+      "center_of_gravity_x": 19.9918518,
+      "center_of_gravity_y": -0.20384235,
+      "center_of_gravity_z": -0.10308676,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "38360.32582165",
+        "area": "14676.11107146",
+        "length": "0",
+        "density": "7.93",
+        "mass": "0.0310195",
+        "weight": "0.30419738",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SUS304",
+        "name": "03ステンレス鋼",
+        "specific_gravity": 7.93,
+        "element_count": 3,
+        "raw_fields": {
+          "matid": "SUS304",
+          "name": "03ステンレス鋼",
+          "spe_grav": "7.93"
+        }
+      }
+    ]
+  }
+}

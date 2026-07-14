@@ -1,0 +1,141 @@
+{
+  "input_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+  "source_file": {
+    "full_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+    "directory_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K",
+    "file_name": "TR1D9K99027.icd",
+    "file_name_without_extension": "TR1D9K99027",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 20741,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "TR1D9K990271",
+      "comment": "アルミフレーム",
+      "ex_info": "User_Type,\"1製作\",User_WBHIN1,\"TR1D\",User_WBHIN2,\"9K\",User_WBHIN3,\"99\",User_WBHIN4,\"027\",User_WBHIN5,\"1\",User_WBHNA,\"アルミフレーム\",User_WBZAI1,\"ＲＭ\",User_WCMCD,\"D27\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"TR1D9K910270\"",
+      "ex_info_fields": {
+        "User_Type": "1製作",
+        "User_WBHIN1": "TR1D",
+        "User_WBHIN2": "9K",
+        "User_WBHIN3": "99",
+        "User_WBHIN4": "027",
+        "User_WBHIN5": "1",
+        "User_WBHNA": "アルミフレーム",
+        "User_WBZAI1": "ＲＭ",
+        "User_WCMCD": "D27",
+        "User_WCMNA": "ＳＵＳ",
+        "User_WCTYP": "TR1D9K910270"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "TR1D9K990271"
+        ],
+        "name": "TR1D9K990271",
+        "comment": "アルミフレーム",
+        "ex_info": "User_Type,\"1製作\",User_WBHIN1,\"TR1D\",User_WBHIN2,\"9K\",User_WBHIN3,\"99\",User_WBHIN4,\"027\",User_WBHIN5,\"1\",User_WBHNA,\"アルミフレーム\",User_WBZAI1,\"ＲＭ\",User_WCMCD,\"D27\",User_WCMNA,\"ＳＵＳ\",User_WCTYP,\"TR1D9K910270\"",
+        "ex_info_fields": {
+          "User_Type": "1製作",
+          "User_WBHIN1": "TR1D",
+          "User_WBHIN2": "9K",
+          "User_WBHIN3": "99",
+          "User_WBHIN4": "027",
+          "User_WBHIN5": "1",
+          "User_WBHNA": "アルミフレーム",
+          "User_WBZAI1": "ＲＭ",
+          "User_WCMCD": "D27",
+          "User_WCMNA": "ＳＵＳ",
+          "User_WCTYP": "TR1D9K910270"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 235,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 2.81402799,
+      "area": 6095633.36731694,
+      "volume": 7517101.77712398,
+      "mass": 2.15703985,
+      "weight": 21.15333481,
+      "length": 0.0,
+      "center_of_gravity_x": 493.73778867,
+      "center_of_gravity_y": 975.91491807,
+      "center_of_gravity_z": -240.00000112,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "7517101.77712398",
+        "area": "6095633.36731694",
+        "length": "0",
+        "density": "2.81402799",
+        "mass": "2.15703985",
+        "weight": "21.15333481",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "A5000",
+        "name": "12アルミ合金",
+        "specific_gravity": 2.68,
+        "element_count": 24,
+        "raw_fields": {
+          "name": "12アルミ合金",
+          "matid": "A5000",
+          "spe_grav": "2.68"
+        }
+      },
+      {
+        "mat_id": "SUS304",
+        "name": "03ステンレス鋼",
+        "specific_gravity": 7.93,
+        "element_count": 192,
+        "raw_fields": {
+          "matid": "SUS304",
+          "name": "03ステンレス鋼",
+          "spe_grav": "7.93"
+        }
+      },
+      {
+        "mat_id": "A1000",
+        "name": "11アルミ合金",
+        "specific_gravity": 2.71,
+        "element_count": 11,
+        "raw_fields": {
+          "matid": "A1000",
+          "name": "11アルミ合金",
+          "spe_grav": "2.71"
+        }
+      },
+      {
+        "mat_id": "ZZZ",
+        "name": "ZZ購入品",
+        "specific_gravity": 1.0,
+        "element_count": 8,
+        "raw_fields": {
+          "matid": "ZZZ",
+          "name": "ZZ購入品",
+          "spe_grav": "1"
+        }
+      }
+    ]
+  }
+}

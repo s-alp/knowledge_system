@@ -1,0 +1,1128 @@
+{
+  "input_path": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
+  "source_file": {
+    "full_path": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
+    "directory_path": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図",
+    "file_name": "23022-013_231218.icd",
+    "file_name_without_extension": "23022-013_231218",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 8320,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "23022-013_231218",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "23022-013_231218"
+        ],
+        "name": "23022-013_231218",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "1"
+        ],
+        "name": "1",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "name": "一般構造用圧延鋼材",
+              "matid": "SS400",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "1"
+        ],
+        "name": "1",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "1"
+        ],
+        "name": "1",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "1"
+        ],
+        "name": "1",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "23022-013_231218",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 36,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.85,
+      "area": 4078273.72260891,
+      "volume": 9754165.84457923,
+      "mass": 7.80798763,
+      "weight": 76.57020188,
+      "length": 0.0,
+      "center_of_gravity_x": 637.54189922,
+      "center_of_gravity_y": 645.58345228,
+      "center_of_gravity_z": -331.0195469,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "9754165.84457923",
+        "area": "4078273.72260891",
+        "length": "0",
+        "density": "7.85",
+        "mass": "7.80798763",
+        "weight": "76.57020188",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 36,
+        "raw_fields": {
+          "name": "一般構造用圧延鋼材",
+          "matid": "SS400",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

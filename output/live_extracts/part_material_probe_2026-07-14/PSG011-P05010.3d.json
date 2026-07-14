@@ -1,0 +1,390 @@
+{
+  "input_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
+  "source_file": {
+    "full_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
+    "directory_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+    "file_name": "PSG011-P05010.icd",
+    "file_name_without_extension": "PSG011-P05010",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 12680,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "PSG011-P05010",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "PSG011-P05010"
+        ],
+        "name": "PSG011-P05010",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 21,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.77102006,
+      "area": 383588.0594422,
+      "volume": 588697.67322158,
+      "mass": 0.46649788,
+      "weight": 4.57478143,
+      "length": 0.0,
+      "center_of_gravity_x": 215.41709391,
+      "center_of_gravity_y": -79.90601886,
+      "center_of_gravity_z": 24.92963816,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "588697.67322158",
+        "area": "383588.0594422",
+        "length": "0",
+        "density": "7.77102006",
+        "mass": "0.46649788",
+        "weight": "4.57478143",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "SS400 一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 3,
+        "raw_fields": {
+          "name": "SS400 一般構造用圧延鋼材",
+          "matid": "SS400",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

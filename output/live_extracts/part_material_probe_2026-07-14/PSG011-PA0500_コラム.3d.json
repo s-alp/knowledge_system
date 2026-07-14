@@ -1,0 +1,5235 @@
+{
+  "input_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
+  "source_file": {
+    "full_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
+    "directory_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム",
+    "file_name": "PSG011-PA0500_コラム.icd",
+    "file_name_without_extension": "PSG011-PA0500_コラム",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 83285,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "PSG011-PA0500_コラム",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム"
+        ],
+        "name": "PSG011-PA0500_コラム",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し"
+        ],
+        "name": "＠ケーブル取り回し",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010"
+        ],
+        "name": "PSG011-P05010",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 3,
+            "raw_fields": {
+              "name": "SS400 一般構造用圧延鋼材",
+              "matid": "SS400",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05010",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05010",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011"
+        ],
+        "name": "PSG011-P05011",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 2,
+            "raw_fields": {
+              "name": "SS400 一般構造用圧延鋼材",
+              "matid": "SS400",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8"
+        ],
+        "name": "ﾄﾗｽ小ﾈｼﾞ(+)_M6*8",
+        "comment": "十字穴付小ねじ-トラス_M6*8(6)",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M6*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*10",
+        "comment": "六角穴付ボルト_M6*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M6*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*10",
+        "comment": "六角穴付ボルト_M6*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M6*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*10",
+        "comment": "六角穴付ボルト_M6*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05011",
+          "六角穴付ﾎﾞﾙﾄ_M6*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*10",
+        "comment": "六角穴付ボルト_M6*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05011",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012"
+        ],
+        "name": "PSG011-P05012",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05012",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05012",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013"
+        ],
+        "name": "PSG011-P05013",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05013",
+          "六角穴付ﾎﾞﾙﾄ_M5*8"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*8",
+        "comment": "六角穴付ボルト_M5*8",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05013",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05014"
+        ],
+        "name": "PSG011-P05014",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05014",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05024"
+        ],
+        "name": "PSG011-P05024",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05024",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025"
+        ],
+        "name": "PSG011-P05025",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025"
+        ],
+        "name": "PSG011-P05025",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025"
+        ],
+        "name": "PSG011-P05025",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025"
+        ],
+        "name": "PSG011-P05025",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "PSG011-P05025",
+          "六角穴付ﾎﾞﾙﾄ_M5*35"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*35",
+        "comment": "六角穴付ボルト_M5*35",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05025",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ケーブル取り回し",
+          "TKP35H22-30W63R50+10L-FO-MI_椿本"
+        ],
+        "name": "TKP35H22-30W63R50+10L-FO-MI_椿本",
+        "comment": "TKP35H22-30W63R50+10L-FO-MI_椿本",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": true,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知"
+        ],
+        "name": "＠ストローク検知",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "EE-1010-3"
+        ],
+        "name": "EE-1010-3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05008"
+        ],
+        "name": "PSG011-P05008",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05008",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "SS400 一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05008",
+          "六角穴付ﾎﾞﾙﾄ_M6*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*12",
+        "comment": "六角穴付ボルト_M6*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05008",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05008",
+          "六角穴付ﾎﾞﾙﾄ_M6*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*12",
+        "comment": "六角穴付ボルト_M6*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05008",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05008",
+          "六角穴付ﾎﾞﾙﾄ_M6*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*12",
+        "comment": "六角穴付ボルト_M6*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05008",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05009"
+        ],
+        "name": "PSG011-P05009",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05009",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "SS400 一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05009",
+          "六角穴付ﾎﾞﾙﾄ_M6*25"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*25",
+        "comment": "六角穴付ボルト_M6*25",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05009",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05009",
+          "六角穴付ﾎﾞﾙﾄ_M6*25"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*25",
+        "comment": "六角穴付ボルト_M6*25",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05009",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05009",
+          "六角穴付ﾎﾞﾙﾄ_M6*25"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*25",
+        "comment": "六角穴付ボルト_M6*25",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05009",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026"
+        ],
+        "name": "PSG011-P05026",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026"
+        ],
+        "name": "PSG011-P05026",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05026",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05026",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05027"
+        ],
+        "name": "PSG011-P05027",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05027",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05027",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05027",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05027",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05027",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05027",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05027",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05027",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05027",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05028"
+        ],
+        "name": "PSG011-P05028",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05028",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05028",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05028",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05028",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05028",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05028",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05028",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05028",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05028",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05029"
+        ],
+        "name": "PSG011-P05029",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05029",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05029",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05029",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05029",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05029",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05029",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05029",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05029",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05029",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05030"
+        ],
+        "name": "PSG011-P05030",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05030",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05030",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05030",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05030",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05030",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05030",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05030",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "PSG011-P05030",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05030",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671A_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671A_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671A_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671A_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671A_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671A_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671A_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671A_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "フォトマイクロセンサ_EE-SX671A_オムロン"
+        ],
+        "name": "フォトマイクロセンサ_EE-SX671A_オムロン",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "＠ストローク検知",
+          "六角穴付ﾎﾞﾙﾄ_M3*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M3*12",
+        "comment": "六角穴付ボルト_M3*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001"
+        ],
+        "name": "PSG011-P05001",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "FC300",
+            "name": "ねずみ鋳鉄",
+            "specific_gravity": 7.3,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "FC300",
+              "name": "ねずみ鋳鉄",
+              "spe_grav": "7.3"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "平座金-並丸A_20"
+        ],
+        "name": "平座金-並丸A_20",
+        "comment": "平座金-並丸Ａ_20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05001",
+          "六角穴付ﾎﾞﾙﾄ_M20*70"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M20*70",
+        "comment": "六角穴付ボルト_M20*70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05001",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003"
+        ],
+        "name": "PSG011-P05003",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05003",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05003",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004"
+        ],
+        "name": "PSG011-P05004",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "SUS304 ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "SUS304 ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "平座金-並丸A_5"
+        ],
+        "name": "平座金-並丸A_5",
+        "comment": "平座金-並丸Ａ_5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05004",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05004",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005"
+        ],
+        "name": "PSG011-P05005",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "SUS304 ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "SUS304 ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005"
+        ],
+        "name": "PSG011-P05005",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "SUS304 ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "SUS304 ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05005",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05005",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05006"
+        ],
+        "name": "PSG011-P05006",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05006",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "SUS304 ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "SUS304 ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05006",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05006",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05006",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05006",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05006",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05006",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05006",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05006",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05007"
+        ],
+        "name": "PSG011-P05007",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05007",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SUS304",
+            "name": "SUS304 ステンレス鋼",
+            "specific_gravity": 8.0,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SUS304",
+              "name": "SUS304 ステンレス鋼",
+              "spe_grav": "8"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05007",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05007",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05007",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05007",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05007",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05007",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05007",
+          "六角穴付ﾎﾞﾙﾄ_M5*10"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*10",
+        "comment": "六角穴付ボルト_M5*10",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05007",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015"
+        ],
+        "name": "PSG011-P05015",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "S45C",
+            "name": "S45C 機械構造用炭素鋼",
+            "specific_gravity": 7.84,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "S45C",
+              "name": "S45C 機械構造用炭素鋼",
+              "spe_grav": "7.84"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015"
+        ],
+        "name": "PSG011-P05015",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "S45C",
+            "name": "S45C 機械構造用炭素鋼",
+            "specific_gravity": 7.84,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "S45C",
+              "name": "S45C 機械構造用炭素鋼",
+              "spe_grav": "7.84"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015"
+        ],
+        "name": "PSG011-P05015",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "S45C",
+            "name": "S45C 機械構造用炭素鋼",
+            "specific_gravity": 7.84,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "S45C",
+              "name": "S45C 機械構造用炭素鋼",
+              "spe_grav": "7.84"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015"
+        ],
+        "name": "PSG011-P05015",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "S45C",
+            "name": "S45C 機械構造用炭素鋼",
+            "specific_gravity": 7.84,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "S45C",
+              "name": "S45C 機械構造用炭素鋼",
+              "spe_grav": "7.84"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05015",
+          "六角穴付ﾎﾞﾙﾄ_M6*20"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M6*20",
+        "comment": "六角穴付ボルト_M6*20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05015",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05016"
+        ],
+        "name": "PSG011-P05016",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05016",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05016",
+          "六角穴付ﾎﾞﾙﾄ_M8*16"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M8*16",
+        "comment": "六角穴付ボルト_M8*16",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05016",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05016",
+          "六角穴付ﾎﾞﾙﾄ_M8*16"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M8*16",
+        "comment": "六角穴付ボルト_M8*16",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05016",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05017"
+        ],
+        "name": "PSG011-P05017",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05017",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05017",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05017",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05017",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05017",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05017",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05017",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05017",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05017",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018"
+        ],
+        "name": "PSG011-P05018",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05018",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05018",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05019"
+        ],
+        "name": "PSG011-P05019",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05019",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05020"
+        ],
+        "name": "PSG011-P05020",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05020",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05020",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05020",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05020",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05020",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021"
+        ],
+        "name": "PSG011-P05021",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "SS400 一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "カラー_WSSB25-12-5_ミスミ"
+        ],
+        "name": "カラー_WSSB25-12-5_ミスミ",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "カラー_WSSB25-12-5_ミスミ"
+        ],
+        "name": "カラー_WSSB25-12-5_ミスミ",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "平座金-並丸A_12"
+        ],
+        "name": "平座金-並丸A_12",
+        "comment": "平座金-並丸Ａ_12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "平座金-並丸A_12"
+        ],
+        "name": "平座金-並丸A_12",
+        "comment": "平座金-並丸Ａ_12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾅｯﾄ-1種_M12"
+        ],
+        "name": "六角ﾅｯﾄ-1種_M12",
+        "comment": "六角ナット－１種－上_M12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾅｯﾄ-1種_M12"
+        ],
+        "name": "六角ﾅｯﾄ-1種_M12",
+        "comment": "六角ナット－１種－上_M12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45",
+        "comment": "六角ボルト-全ねじＡ_M12*45",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45",
+        "comment": "六角ボルト-全ねじＡ_M12*45",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45",
+        "comment": "六角ボルト-全ねじＡ_M12*45",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*45",
+        "comment": "六角ボルト-全ねじＡ_M12*45",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角穴付ﾎﾞﾙﾄ_M12*40"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M12*40",
+        "comment": "六角穴付ボルト_M12*40",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05021",
+          "六角穴付ﾎﾞﾙﾄ_M12*40"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M12*40",
+        "comment": "六角穴付ボルト_M12*40",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05021",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022"
+        ],
+        "name": "PSG011-P05022",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "SS400 一般構造用圧延鋼材",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SS400",
+              "name": "SS400 一般構造用圧延鋼材",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "カラー_WSSB25-12-5_ミスミ"
+        ],
+        "name": "カラー_WSSB25-12-5_ミスミ",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "カラー_WSSB25-12-5_ミスミ"
+        ],
+        "name": "カラー_WSSB25-12-5_ミスミ",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "平座金-並丸A_12"
+        ],
+        "name": "平座金-並丸A_12",
+        "comment": "平座金-並丸Ａ_12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "平座金-並丸A_12"
+        ],
+        "name": "平座金-並丸A_12",
+        "comment": "平座金-並丸Ａ_12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾅｯﾄ-1種_M12"
+        ],
+        "name": "六角ﾅｯﾄ-1種_M12",
+        "comment": "六角ナット－１種－上_M12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾅｯﾄ-1種_M12"
+        ],
+        "name": "六角ﾅｯﾄ-1種_M12",
+        "comment": "六角ナット－１種－上_M12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*55"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*55",
+        "comment": "六角ボルト-全ねじＡ_M12*55",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*55"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*55",
+        "comment": "六角ボルト-全ねじＡ_M12*55",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*60"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*60",
+        "comment": "六角ボルト-全ねじＡ_M12*60",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*60"
+        ],
+        "name": "六角ﾎﾞﾙﾄ-全ﾈｼﾞA_M12*60",
+        "comment": "六角ボルト-全ねじＡ_M12*60",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角穴付ﾎﾞﾙﾄ_M12*50"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M12*50",
+        "comment": "六角穴付ボルト_M12*50",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05022",
+          "六角穴付ﾎﾞﾙﾄ_M12*50"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M12*50",
+        "comment": "六角穴付ボルト_M12*50",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05022",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05023"
+        ],
+        "name": "PSG011-P05023",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05023",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": true,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SPCC",
+            "name": "SPCC 冷間圧延鋼板",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "matid": "SPCC",
+              "name": "SPCC 冷間圧延鋼板",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05023",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05023",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05023",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05023",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05023",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05023",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "PSG011-P05023",
+          "六角穴付ﾎﾞﾙﾄ_M5*12"
+        ],
+        "name": "六角穴付ﾎﾞﾙﾄ_M5*12",
+        "comment": "六角穴付ボルト_M5*12",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": "PSG011-P05023",
+        "ref_model_path": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": true,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "RM40L-27B_ケーブルグラント_ミスミ"
+        ],
+        "name": "RM40L-27B_ケーブルグラント_ミスミ",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "ｱｲﾎﾞﾙﾄ_M20"
+        ],
+        "name": "ｱｲﾎﾞﾙﾄ_M20",
+        "comment": "アイボルト_M20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "ｱｲﾎﾞﾙﾄ_M20"
+        ],
+        "name": "ｱｲﾎﾞﾙﾄ_M20",
+        "comment": "アイボルト_M20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "ｱｲﾎﾞﾙﾄ_M20"
+        ],
+        "name": "ｱｲﾎﾞﾙﾄ_M20",
+        "comment": "アイボルト_M20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "PSG011-PA0500_コラム",
+          "ｱｲﾎﾞﾙﾄ_M20"
+        ],
+        "name": "ｱｲﾎﾞﾙﾄ_M20",
+        "comment": "アイボルト_M20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 273,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.2430472,
+      "area": 12673429.414744889,
+      "volume": 174728684.38025925,
+      "mass": 129.05203189,
+      "weight": 1265.56810849,
+      "length": 0.0,
+      "center_of_gravity_x": 5.24991055,
+      "center_of_gravity_y": 641.05451087,
+      "center_of_gravity_z": -269.56057453,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "174728684.380259",
+        "area": "12673429.4147449",
+        "length": "0",
+        "density": "7.2430472",
+        "mass": "129.05203189",
+        "weight": "1265.56810849",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SPCC",
+        "name": "SPCC 冷間圧延鋼板",
+        "specific_gravity": 7.85,
+        "element_count": 7,
+        "raw_fields": {
+          "name": "SPCC 冷間圧延鋼板",
+          "matid": "SPCC",
+          "spe_grav": "7.85"
+        }
+      },
+      {
+        "mat_id": "S45C",
+        "name": "S45C 機械構造用炭素鋼",
+        "specific_gravity": 7.84,
+        "element_count": 4,
+        "raw_fields": {
+          "matid": "S45C",
+          "name": "S45C 機械構造用炭素鋼",
+          "spe_grav": "7.84"
+        }
+      },
+      {
+        "mat_id": "SUS304",
+        "name": "SUS304 ステンレス鋼",
+        "specific_gravity": 8.0,
+        "element_count": 5,
+        "raw_fields": {
+          "matid": "SUS304",
+          "name": "SUS304 ステンレス鋼",
+          "spe_grav": "8"
+        }
+      },
+      {
+        "mat_id": "SS400",
+        "name": "SS400 一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 9,
+        "raw_fields": {
+          "matid": "SS400",
+          "name": "SS400 一般構造用圧延鋼材",
+          "spe_grav": "7.85"
+        }
+      },
+      {
+        "mat_id": "SPCC",
+        "name": "SPCC",
+        "specific_gravity": 7.85,
+        "element_count": 3,
+        "raw_fields": {
+          "matid": "SPCC",
+          "name": "SPCC",
+          "spe_grav": "7.85"
+        }
+      },
+      {
+        "mat_id": "FC300",
+        "name": "ねずみ鋳鉄",
+        "specific_gravity": 7.3,
+        "element_count": 1,
+        "raw_fields": {
+          "matid": "FC300",
+          "name": "ねずみ鋳鉄",
+          "spe_grav": "7.3"
+        }
+      },
+      {
+        "mat_id": "SUS304",
+        "name": "ステンレス鋼",
+        "specific_gravity": 8.0,
+        "element_count": 1,
+        "raw_fields": {
+          "matid": "SUS304",
+          "name": "ステンレス鋼",
+          "spe_grav": "8"
+        }
+      }
+    ]
+  }
+}

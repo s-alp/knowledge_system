@@ -1,0 +1,124 @@
+{
+  "input_path": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+  "source_file": {
+    "full_path": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+    "directory_path": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン",
+    "file_name": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+    "file_name_without_extension": "9NK5E51B70-00-BRACKET-A0-3D-01",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 8659,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "9NK5E51B70-00-BRACKET-A0-3D-01",
+      "comment": "9NK-5E0-4K70",
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "9NK5E51B70-00-BRACKET-A0-3D-01"
+        ],
+        "name": "9NK5E51B70-00-BRACKET-A0-3D-01",
+        "comment": "9NK-5E0-4K70",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "9NK5E51B70-00-BRACKET-A0-3D-01",
+          "等辺山形鋼_40*40*5"
+        ],
+        "name": "等辺山形鋼_40*40*5",
+        "comment": "等辺山形鋼_40*40*5",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": true,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": [
+          {
+            "mat_id": "SS400",
+            "name": "一般構造用圧延鋼材（機械加工）",
+            "specific_gravity": 7.85,
+            "element_count": 1,
+            "raw_fields": {
+              "name": "一般構造用圧延鋼材（機械加工）",
+              "matid": "SS400",
+              "spe_grav": "7.85"
+            }
+          }
+        ]
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 19,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.85,
+      "area": 2377834.48040915,
+      "volume": 5868013.45086095,
+      "mass": 4.69721114,
+      "weight": 46.06390559,
+      "length": 0.0,
+      "center_of_gravity_x": -478.10979897,
+      "center_of_gravity_y": 219.63168082,
+      "center_of_gravity_z": -782.87441585,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "5868013.45086095",
+        "area": "2377834.48040915",
+        "length": "0",
+        "density": "7.85",
+        "mass": "4.69721114",
+        "weight": "46.06390559",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材",
+        "specific_gravity": 7.85,
+        "element_count": 15,
+        "raw_fields": {
+          "matid": "SS400",
+          "name": "一般構造用圧延鋼材",
+          "spe_grav": "7.85"
+        }
+      },
+      {
+        "mat_id": "SS400",
+        "name": "一般構造用圧延鋼材（機械加工）",
+        "specific_gravity": 7.85,
+        "element_count": 1,
+        "raw_fields": {
+          "matid": "SS400",
+          "name": "一般構造用圧延鋼材（機械加工）",
+          "spe_grav": "7.85"
+        }
+      }
+    ]
+  }
+}

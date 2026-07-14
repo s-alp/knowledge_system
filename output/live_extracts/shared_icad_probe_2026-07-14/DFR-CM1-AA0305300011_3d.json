@@ -1,0 +1,31 @@
+{
+  "input_path": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 3260,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "DFR-CM1-AA0305300011",
+      "comment": null,
+      "ex_info": null
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "DFR-CM1-AA0305300011"
+        ],
+        "name": "DFR-CM1-AA0305300011",
+        "comment": null,
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false
+      }
+    ]
+  }
+}

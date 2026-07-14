@@ -1,0 +1,118 @@
+{
+  "input_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+  "source_file": {
+    "full_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+    "directory_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部",
+    "file_name": "217008-41J-3004.icd",
+    "file_name_without_extension": "217008-41J-3004",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 3309,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "217008-41J-3004",
+      "comment": "レール",
+      "ex_info": "User_type,\"1\",User_syori1,\"ＨＣｒメッキ\",User_syori2,\"****\",User_netu,\"***\",User_hrc,\"**\",User_maker,\"*\",User_bikou,\"*\",User_souchi,\"PSAT2-3_S/Aライン\",User_unit,\"レール部\",User_kenzu,\"長屋\",User_sekkei,\"中村\",User_seizu,\"アルパイン\",User_SNO,\"5004\",User_Partsname,\"★ｶﾞｲﾄﾞﾚｰﾙ\",User_Material,\"SK3\",User_Surfacefinishing,\"硬質ｸﾛﾑﾒｯｷ\"",
+      "ex_info_fields": {
+        "User_type": "1",
+        "User_syori1": "ＨＣｒメッキ",
+        "User_syori2": "****",
+        "User_netu": "***",
+        "User_hrc": "**",
+        "User_maker": "*",
+        "User_bikou": "*",
+        "User_souchi": "PSAT2-3_S/Aライン",
+        "User_unit": "レール部",
+        "User_kenzu": "長屋",
+        "User_sekkei": "中村",
+        "User_seizu": "アルパイン",
+        "User_SNO": "5004",
+        "User_Partsname": "★ｶﾞｲﾄﾞﾚｰﾙ",
+        "User_Material": "SK3",
+        "User_Surfacefinishing": "硬質ｸﾛﾑﾒｯｷ"
+      }
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "217008-41J-3004"
+        ],
+        "name": "217008-41J-3004",
+        "comment": "レール",
+        "ex_info": "User_type,\"1\",User_syori1,\"ＨＣｒメッキ\",User_syori2,\"****\",User_netu,\"***\",User_hrc,\"**\",User_maker,\"*\",User_bikou,\"*\",User_souchi,\"PSAT2-3_S/Aライン\",User_unit,\"レール部\",User_kenzu,\"長屋\",User_sekkei,\"中村\",User_seizu,\"アルパイン\",User_SNO,\"5004\",User_Partsname,\"★ｶﾞｲﾄﾞﾚｰﾙ\",User_Material,\"SK3\",User_Surfacefinishing,\"硬質ｸﾛﾑﾒｯｷ\"",
+        "ex_info_fields": {
+          "User_type": "1",
+          "User_syori1": "ＨＣｒメッキ",
+          "User_syori2": "****",
+          "User_netu": "***",
+          "User_hrc": "**",
+          "User_maker": "*",
+          "User_bikou": "*",
+          "User_souchi": "PSAT2-3_S/Aライン",
+          "User_unit": "レール部",
+          "User_kenzu": "長屋",
+          "User_sekkei": "中村",
+          "User_seizu": "アルパイン",
+          "User_SNO": "5004",
+          "User_Partsname": "★ｶﾞｲﾄﾞﾚｰﾙ",
+          "User_Material": "SK3",
+          "User_Surfacefinishing": "硬質ｸﾛﾑﾒｯｷ"
+        },
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 1,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 7.84,
+      "area": 6654.74792615,
+      "volume": 9250.4763502,
+      "mass": 0.00739536,
+      "weight": 0.07252373,
+      "length": 0.0,
+      "center_of_gravity_x": -109.5676998,
+      "center_of_gravity_y": 2.87635914,
+      "center_of_gravity_z": 3.92579356,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "9250.4763502",
+        "area": "6654.74792615",
+        "length": "0",
+        "density": "7.84",
+        "mass": "0.00739536",
+        "weight": "0.07252373",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "available",
+    "materials": [
+      {
+        "mat_id": "SKS3",
+        "name": "合金工具鋼",
+        "specific_gravity": 7.84,
+        "element_count": 1,
+        "raw_fields": {
+          "name": "合金工具鋼",
+          "matid": "SKS3",
+          "spe_grav": "7.84"
+        }
+      }
+    ]
+  }
+}

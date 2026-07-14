@@ -1,0 +1,140 @@
+{
+  "input_path": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+  "source_file": {
+    "full_path": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+    "directory_path": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81",
+    "file_name": "U8718-S71-002_A3.icd",
+    "file_name_without_extension": "U8718-S71-002_A3",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 10296,
+  "warnings": [],
+  "raw_extract": {
+    "top_part": {
+      "name": "U8718-S71-002_A3",
+      "comment": null,
+      "ex_info": null,
+      "ex_info_fields": {}
+    },
+    "parts": [
+      {
+        "tree_path": [
+          "U8718-S71-002_A3"
+        ],
+        "name": "U8718-S71-002_A3",
+        "comment": null,
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "U8718-S71-002_A3",
+          "th-8x20"
+        ],
+        "name": "th-8x20",
+        "comment": "TH-8x20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "U8718-S71-002_A3",
+          "th-8x20"
+        ],
+        "name": "th-8x20",
+        "comment": "TH-8x20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "U8718-S71-002_A3",
+          "th-8x20"
+        ],
+        "name": "th-8x20",
+        "comment": "TH-8x20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      },
+      {
+        "tree_path": [
+          "U8718-S71-002_A3",
+          "th-8x20"
+        ],
+        "name": "th-8x20",
+        "comment": "TH-8x20",
+        "ex_info": null,
+        "ex_info_fields": {},
+        "ref_model_name": null,
+        "ref_model_path": null,
+        "is_external": false,
+        "is_mirror": false,
+        "is_read_only": false,
+        "is_unloaded": false,
+        "materials": []
+      }
+    ],
+    "mass_probe_status": "available",
+    "mass_properties": {
+      "element_count": 6,
+      "unit_name": "mm-kg",
+      "unit_type": 2,
+      "is_si": false,
+      "density": 1.0,
+      "area": 907521.9837814,
+      "volume": 2005241.0036128,
+      "mass": 0.20447768,
+      "weight": 2.005241,
+      "length": 0.0,
+      "center_of_gravity_x": 486.44052906,
+      "center_of_gravity_y": -0.48202358,
+      "center_of_gravity_z": -0.00207866,
+      "raw_fields": {
+        "is_SI": "False",
+        "unit_type": "2",
+        "volume": "2005241.0036128",
+        "area": "907521.9837814",
+        "length": "0",
+        "density": "1",
+        "mass": "0.20447768",
+        "weight": "2.005241",
+        "specific_moment": "0",
+        "specific_radius": "0"
+      }
+    },
+    "material_probe_status": "no_materials",
+    "materials": []
+  }
+}
