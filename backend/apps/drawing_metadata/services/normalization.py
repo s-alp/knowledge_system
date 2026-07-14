@@ -204,6 +204,10 @@ def _build_geometry_feature_candidates(primitives: list[dict]) -> list[dict]:
     return list(grouped.values())
 
 
+def _material_id(material: dict) -> str | None:
+    return material.get("mat_id") or material.get("matid")
+
+
 def normalize_raw_extract(raw_payload: dict) -> dict:
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
@@ -254,6 +258,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "area_value": None,
         "density_value": None,
         "center_of_gravity": None,
+        "material_probe_status": None,
+        "material_ids": [],
+        "material_names": [],
+        "material_specific_gravities": [],
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -291,6 +299,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         top_part = raw_extract.get("top_part", {})
         parts = raw_extract.get("parts", [])
         mass_properties = raw_extract.get("mass_properties", {}) or {}
+        materials = raw_extract.get("materials", []) or []
         canonical["top_part_name"] = top_part.get("name")
         canonical["top_part_comment"] = top_part.get("comment")
         canonical["top_part_ex_info"] = top_part.get("ex_info")
@@ -308,6 +317,15 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 f"{mass_properties.get('center_of_gravity_y')}, "
                 f"{mass_properties.get('center_of_gravity_z')}"
             )
+        canonical["material_probe_status"] = raw_extract.get("material_probe_status")
+        canonical["material_ids"] = _flatten_strings(_material_id(material) for material in materials)
+        canonical["material_names"] = _flatten_strings(material.get("name") for material in materials)
+        canonical["material_specific_gravities"] = [
+            material.get("specific_gravity")
+            for material in materials
+            if material.get("specific_gravity") is not None
+        ]
+        canonical["material_keywords"] = _flatten_strings(canonical["material_ids"] + canonical["material_names"])
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]
@@ -333,6 +351,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 top_part.get("name"),
                 top_part.get("comment"),
                 top_part.get("ex_info"),
+                *canonical["material_keywords"],
                 *canonical["part_names"],
                 *canonical["part_comments"],
                 *canonical["part_ex_info_tokens"],

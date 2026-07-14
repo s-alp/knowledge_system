@@ -58,7 +58,7 @@
 | 未解決外部参照 | A | `SxInfPart.is_unloaded` | 実装済み | 抽出信頼度に影響 |
 | 参照図面名 | A | `SxInfPart.ref_model_name` | 実装済み | 外部パーツ、外部パーツ配下内部パーツで有効 |
 | 参照図面格納フォルダ | A | `SxInfPart.path` | 実装済み | 参照解決、ファイル追跡 |
-| 材質 | A | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()`, `SxEntSeg.getInfMaterial()` -> `SxInfMaterial` | 未実装 | `matid`, `name`, `spe_grav` を取得可能 |
+| 材質 | A | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()`, `SxEntSeg.getInfMaterial()` -> `SxInfMaterial` | 一部実装済み | 3D全体の要素材質一覧は実装済み。部品単位材質は未実装 |
 | 重量 | A/C | `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` -> `SxInfMass.weight` | 実装済み | `mass_probe_status` と `mass_properties.weight` に保持。対象要素なし/例外は warning |
 | 質量 | A/C | `SxInfMass.mass` | 実装済み | `mass_properties.mass` に保持。測定対象がシートの場合は無効になる可能性 |
 | 体積 | A/C | `SxInfMass.volume` | 実装済み | `mass_properties.volume` に保持。シートの場合 `0.0` の可能性 |
@@ -199,4 +199,4 @@
 
 最新の共有16件では、全件 `has_3d=true`、9件 `has_2d=true` だった。7件は `has_2d_container=true` だが `has_2d=false` であり、2DグローバルVSまたはVSコンテナの存在だけでは「図面情報あり」と判定できないことが確認できた。
 
-3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。2D図枠欄名解析は初期辞書と候補表示まで進んだ。2D primitive は一部を特徴候補タグ化した。まだ完全把握できていない領域は、部品単位マスプロパティ、3D材質API、2D図枠欄名辞書の客先横断拡充、長穴/穴数の確定判定、2D/3D属性照合ルールである。
+3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。3D材質は全体要素の材質一覧取得まで進んだ。2D図枠欄名解析は初期辞書と候補表示まで進んだ。2D primitive は一部を特徴候補タグ化した。まだ完全把握できていない領域は、部品単位マスプロパティ、部品単位3D材質、2D図枠欄名辞書の客先横断拡充、長穴/穴数の確定判定、2D/3D属性照合ルールである。

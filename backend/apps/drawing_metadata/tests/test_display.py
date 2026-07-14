@@ -87,6 +87,10 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
                 "center_of_gravity_y": 2.0,
                 "center_of_gravity_z": 3.0,
             },
+            "material_probe_status": "available",
+            "materials": [
+                {"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93, "element_count": 2},
+            ],
             "parts": [
                 {
                     "tree_path": ["TR1D9K990271"],
@@ -111,6 +115,9 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
             "area_value": 1024.0,
             "density_value": 1.0,
             "center_of_gravity": "1.0, 2.0, 3.0",
+            "material_probe_status": "available",
+            "material_ids": ["SUS304"],
+            "material_names": ["SUS304"],
         },
     )
 
@@ -123,6 +130,10 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
     assert row_by_key["mass_unit_name"] == "mm-kg"
     assert row_by_key["mass_value"] == "0.02220905"
     assert row_by_key["center_of_gravity"] == "1.0, 2.0, 3.0"
+    material_row_by_key = {row["key"]: row["displayValue"] for row in payload["materialRows"]}
+    assert payload["hasMaterials"] is True
+    assert material_row_by_key["material_probe_status"] == "available"
+    assert material_row_by_key["material_1"] == "SUS304 / SUS304 / 7.93 / elements=2"
 
 
 def test_build_tag_review_display_maps_tags_to_target_candidates():

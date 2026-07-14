@@ -312,6 +312,27 @@ def _mass_property_rows(raw_extract: dict, canonical_attributes: dict) -> list[d
     ]
 
 
+def _material_rows(raw_extract: dict, canonical_attributes: dict) -> list[dict]:
+    materials = raw_extract.get("materials", []) or []
+    rows = [
+        _make_row("material_probe_status", "取得状態", canonical_attributes.get("material_probe_status") or raw_extract.get("material_probe_status")),
+        _make_row("material_count", "材質数", len(materials) if materials else None),
+    ]
+    for index, material in enumerate(materials[:8], start=1):
+        material_id = material.get("mat_id") or material.get("matid")
+        label = material.get("name") or material_id or f"材質{index}"
+        value_parts = _string_values(
+            [
+                material_id,
+                material.get("name"),
+                material.get("specific_gravity"),
+                f"elements={material.get('element_count')}" if material.get("element_count") is not None else None,
+            ]
+        )
+        rows.append(_make_row(f"material_{index}", label, " / ".join(value_parts)))
+    return rows
+
+
 def _position_label(item: dict) -> str | None:
     x = item.get("position_x")
     y = item.get("position_y")
@@ -478,6 +499,7 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("mass_value", "3D質量", canonical_attributes.get("mass_value")),
         _make_row("weight_value", "3D重量", canonical_attributes.get("weight_value")),
         _make_row("volume_value", "3D体積", canonical_attributes.get("volume_value")),
+        _make_row("material_probe_status", "3D材質取得状態", canonical_attributes.get("material_probe_status") or raw_extract.get("material_probe_status")),
         _make_row("external_part_exists", "外部参照パーツあり", canonical_attributes.get("external_part_exists", False)),
         _make_row("mirror_part_exists", "ミラーパーツあり", canonical_attributes.get("mirror_part_exists", False)),
         _make_row("unresolved_part_exists", "未解決パーツあり", canonical_attributes.get("unresolved_part_exists", False)),
@@ -497,6 +519,8 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "partExInfoTotal": len([part for part in raw_parts if part.get("ex_info_fields")]),
         "massPropertyRows": _mass_property_rows(raw_extract, canonical_attributes),
         "hasMassProperties": bool(raw_extract.get("mass_properties")),
+        "materialRows": _material_rows(raw_extract, canonical_attributes),
+        "hasMaterials": bool(raw_extract.get("materials")),
         "externalPartExists": bool(canonical_attributes.get("external_part_exists", False)),
         "mirrorPartExists": bool(canonical_attributes.get("mirror_part_exists", False)),
         "unresolvedPartExists": bool(canonical_attributes.get("unresolved_part_exists", False)),

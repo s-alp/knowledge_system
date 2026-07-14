@@ -27,6 +27,11 @@ def test_normalize_3d_raw_extract():
                 "center_of_gravity_y": 20.0,
                 "center_of_gravity_z": 30.0,
             },
+            "material_probe_status": "available",
+            "materials": [
+                {"matid": "SUS304", "name": "SUS304", "specific_gravity": 7.93, "element_count": 2},
+                {"matid": "A5052", "name": "AL", "specific_gravity": 2.68, "element_count": 1},
+            ],
             "top_part": {
                 "name": "KO小山ガントリー",
                 "comment": "広島アルミではない",
@@ -62,8 +67,13 @@ def test_normalize_3d_raw_extract():
     assert canonical["volume_value"] == 701.64779731
     assert canonical["area_value"] == 1858.76904715
     assert canonical["center_of_gravity"] == "10.0, 20.0, 30.0"
+    assert canonical["material_probe_status"] == "available"
+    assert canonical["material_ids"] == ["SUS304", "A5052"]
+    assert canonical["material_names"] == ["SUS304", "AL"]
+    assert canonical["material_specific_gravities"] == [7.93, 2.68]
     assert "SMC" in canonical["maker_keywords"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
+    assert any(tag["tag"] == "材質:SUS304" for tag in tags)
 
 
 def test_normalize_2d_raw_extract():

@@ -75,6 +75,17 @@ namespace IcadExtraction.Contracts
         public List<PartPayload> Parts { get; set; } = new List<PartPayload>();
         public string MassProbeStatus { get; set; } = "not_attempted";
         public MassPropertyPayload? MassProperties { get; set; }
+        public string MaterialProbeStatus { get; set; } = "not_attempted";
+        public List<MaterialPayload> Materials { get; set; } = new List<MaterialPayload>();
+    }
+
+    public sealed class MaterialPayload
+    {
+        public string? MatId { get; set; }
+        public string? Name { get; set; }
+        public double? SpecificGravity { get; set; }
+        public int ElementCount { get; set; }
+        public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
     }
 
     public sealed class MassPropertyPayload

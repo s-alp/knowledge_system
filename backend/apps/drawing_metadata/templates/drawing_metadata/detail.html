@@ -467,6 +467,28 @@
         <p>マスプロパティはありません。</p>
       {% endif %}
 
+      <h3>3D材質</h3>
+      {% if snapshot_3d_display.hasMaterials %}
+        <table>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>値</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in snapshot_3d_display.materialRows %}
+              <tr>
+                <th>{{ row.label }}</th>
+                <td>{{ row.displayValue }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>3D材質はありません。</p>
+      {% endif %}
+
       <h3>部品ツリーパスの先頭サンプル</h3>
       {% if snapshot_3d_display.partTreePaths %}
         <ul class="compact-list">

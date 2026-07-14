@@ -27,6 +27,9 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
     if "maker_keywords" not in excluded_sources:
         for maker in canonical_attributes.get("maker_keywords", []):
             add_tag(f"メーカー:{maker}", "maker_keywords", confidence="medium")
+    if "material_keywords" not in excluded_sources:
+        for material in canonical_attributes.get("material_keywords", []):
+            add_tag(f"材質:{material}", "material_keywords", confidence="medium")
     if "spec_tokens" not in excluded_sources:
         for spec in canonical_attributes.get("spec_tokens", []):
             if spec in {"SES"}:

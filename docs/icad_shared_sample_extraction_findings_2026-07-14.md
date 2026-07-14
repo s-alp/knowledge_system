@@ -417,6 +417,18 @@ Django正規化層で、2D文字から図枠欄候補を作る初期辞書を追
 
 現時点では実API呼び出しをジョブに組み込まず、サービスとモックテストまでに止めている。次に組み込む場合は、図枠辞書で低信頼または未分類になった候補だけを対象にする。
 
+### 12.10 3D材質APIの初期実装
+
+`SxWF.getExtent()` と `SxWF.getEntList(SxBox, false)` で3D要素を集め、`SxEnt.getInfMaterialList(SxEnt[])` から `SxInfMaterial` を取得する probe を追加した。戻り値は要素ごとの配列がネストするため、再帰的に平坦化してから `matid`, `name`, `spe_grav` で重複集約する。
+
+実サンプル結果:
+
+| ファイル | material_probe_status | material_count | 材質ID | 比重 | element_count | 所見 |
+| --- | --- | ---: | --- | ---: | ---: | --- |
+| `6800DDU.icd` | `available` | 1 | `SUS440C` | 7.7 | 17 | warningなし。日本語材質名は文字化けがあるため材質IDを主キー寄りに扱う |
+
+Django側では `material_probe_status`, `material_ids`, `material_names`, `material_specific_gravities`, `material_keywords` に正規化し、`材質:<値>` タグ候補も生成する。
+
 ## 13. 2D座標と印刷枠内外判定
 
 2026-07-14 の追加実装で、2D文字、寸法、溶接、バルーン、幾何公差系 payload に以下を追加した。

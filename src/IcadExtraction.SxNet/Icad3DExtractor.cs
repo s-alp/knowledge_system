@@ -28,6 +28,7 @@ namespace IcadExtraction.SxNet
                 var topPartExInfo = getInfExTopPartMethod?.Invoke(globalWf, null)?.ToString();
                 var rawExtract = new PartTreeFlattener().Flatten(rootNode, topPartExInfo);
                 new IcadMassPropertyProbe().Apply(globalWf, context.Assembly, rawExtract, warnings);
+                new IcadMaterialProbe().Apply(globalWf, context.Assembly, rawExtract, warnings);
 
                 return new ExtractionEnvelope
                 {

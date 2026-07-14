@@ -23,7 +23,7 @@
 | --- | --- | --- | --- |
 | `source_file` | `full_path`, `directory_path`, `file_name`, `extension` | 保存フォルダ、ファイル名、拡張子 | ユーザー要望により検索・追跡用属性として保持 |
 | `raw_extract_2d` | `view_sheets`, `print_frames`, `layers`, `texts`, `dimensions`, `geometry_primitives` | SXNETから取得した2D証拠 | 図枠外/印刷枠外は削除せず `inside_print_area` で判定 |
-| `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
+| `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
 | `derived_tags` | `tag`, `source`, `confidence`, `manual_flag`, `tag_rule_version` | 自動タグ候補 | 採用前にレビュー可能 |
 | `conflicts` | `key`, `value2d`, `value3d`, `reason` | 2D/3D差異 | どちらかを正本に固定しない |
@@ -41,6 +41,7 @@
 | 2D特徴 | ハッチング、表面粗さ、切断線、データム、幾何公差、長穴候補、穴候補 | `geometry_feature_candidates` | 図面タグ候補 | 候補。長穴/穴は低信頼 |
 | 3D構成 | 最上位パーツ名、部品数、外部参照、ミラー、未解決参照 | `top_part`, `parts` | 図面属性、タグ候補 | 高 |
 | 3D重量 | 質量、重量、体積、面積、密度、重心、単位、計算対象要素数 | `mass_properties` | 図面属性 | 中から高。`mass_probe_status` と warning を併記 |
+| 3D材質 | 材質ID、材質名、比重、対象要素数 | `materials` | 図面属性、材質タグ候補 | 中。日本語材質名は文字コード揺れがあるため材質IDを主キー寄りに扱う |
 | パーツ付加情報 | 客先固有フィールド、PRFX候補、材質候補、ユニット候補 | `parts[].ex_info_fields` | 図面属性、部品属性 | 中。客先ごとの辞書化が必要 |
 
 ## 4. プロジェクトへ連携する項目
@@ -132,7 +133,7 @@
 
 ## 9. こちら側の残実装
 
-- 3D材質APIの実サンプル実装
+- 3D材質APIの部品単位紐づけ。全体要素の材質一覧取得は実装済み
 - 2D図枠欄名辞書の客先横断拡充
 - Gemini API低温度JSON分類のジョブ組み込み。分類サービスの入口は実装済みだが、曖昧欄名の分類補助に限定し、CADに存在しない値を生成しない
 - 長穴、穴数、断面、表面粗さ値を候補ではなく確定属性にする追加ロジック

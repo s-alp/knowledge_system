@@ -139,6 +139,8 @@ ICAD からのタグ・属性付与は、最初から「タグを作る処理」
 
 Gemini API 連携は `title_block_candidates` の欄名分類補助として入口を追加した。`responseMimeType=application/json`、温度 `0.0` を前提に、候補 index と許可 field 名だけを返させる。CAD内に存在しない値の生成採用は禁止する。
 
+3D材質は `SxEnt.getInfMaterialList(SxEnt[])` による全体要素の材質一覧取得を追加した。`6800DDU.icd` では `SUS440C`, 比重 `7.7`, 対象17要素を取得できた。部品単位の材質紐づけは次段階に残す。
+
 ### 5.2 中央の図面本体
 
 中央図面は、RAG に全文投入する対象ではなく、検索補助の設計特徴量として扱う。
@@ -503,6 +505,7 @@ ICAD / sxnet.dll
 - [x] 2D primitive から形状・記号特徴候補タグを生成した
 - [x] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成した
 - [x] Gemini API 低温度JSON分類サービスの入口を追加した
+- [x] 3D全体要素の材質一覧を取得した
 - [ ] 実サンプル CAD で v2 schema の抽出結果を作る
 - [ ] 本番ナレッジシステムの実データ構造を確認して fixture を作る
 - [ ] API 名 / 引数名を実装時に SXNET HTML と再照合する
