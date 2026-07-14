@@ -141,16 +141,12 @@
 - [x] RAG投入用の読み取り専用 `rag-payload` API を追加し、事前フィルタ・再ランキング信号・要確認理由を分離
 - [x] 材質ID辞書を正式材質・要確認・除外に分け、未登録コードを通常材質タグへ混ぜない
 - [x] 2D図枠候補で `製図者` や `１．使用材料` のラベル片を値として誤採用しないよう強化
+- [x] 創屋連携確認用に detail/viewer/RAG payload を同梱した fixture 出力コマンドを追加
 
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
-    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
 ## 保留中の確認事項
 
 - [ ] ナレッジシステム本体 Django のバージョン確認

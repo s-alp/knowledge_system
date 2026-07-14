@@ -86,6 +86,14 @@
 
 ## 7. API/fixture の最小契約案
 
+PoC側では、創屋確認用の fixture 出力として以下を用意した。
+
+```powershell
+python backend\manage.py export_drawing_metadata_fixtures --output output\souya_handoff\drawing_metadata_fixture.json
+```
+
+この fixture には、図面詳細API相当の `detailApiPayload`、2D/3Dビューワー初期表示用の `viewerBootstrap`、RAG投入用の `ragPayload` を同梱する。登録、変更、削除は行わない読み取り専用の受け渡しJSONである。
+
 ```json
 {
   "drawingId": "host drawing id",
