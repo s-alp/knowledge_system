@@ -208,6 +208,35 @@ manifest取込後の代表図面として、2D/3D両方があり、かつpayload
 - 確認結果: 図面、製品・装置・ユニット、部品、プロジェクトの4対象が表示される。`登録・変更・削除は行わず` の注意文も表示される。payload表は横長の保存パス、endpoint、候補タグを扱うため、専用の横スクロール枠と折り返しを付けた。Chrome実画面ではpayloadセルの文字あふれ0件を確認した。
 - 代表候補数: 図面 attrs=5/tags=9、製品 attrs=1、部品 attrs=27/tags=9、プロジェクト attrs=1。
 
+2026-07-15 に 2D の全ビュー、レイヤー、印刷枠内外判定を確認するため、詳細画面へ `ビュー別取得状況` と `レイヤー別取得状況` を追加した。文字、寸法、図形をまとめて、ビュー別/レイヤー別に何件取れているか、印刷枠内/外/不明が何件あるかを表示する。
+
+同日に `scripts\summarize_2d_extraction_coverage.py` を追加し、共有済み2D抽出JSONを集計した。
+
+```powershell
+python scripts\summarize_2d_extraction_coverage.py `
+  --manifest output\souya_handoff\icad_extract_import_manifest_2026-07-15.json `
+  --output output\souya_handoff\icad_2d_extraction_coverage_manifest_2026-07-15.json
+```
+
+代表manifest対象の集計結果:
+
+- 2D対象: 19ファイル
+- ビュー/用紙数: 12
+- 印刷枠数: 2
+- レイヤー数: 510
+- 取得対象要素: 1,967件
+- 文字: 581件
+- 寸法: 63件
+- 図形primitive: 1,312件
+- 印刷枠内: 235件
+- 印刷枠外: 344件
+- 印刷枠判定不明: 1,388件
+- ビュー情報なし: 17ファイル
+- 印刷枠情報なし: 17ファイル
+- レイヤー情報なし: 17ファイル
+
+全量ディレクトリ確認の結果は `output\souya_handoff\icad_2d_extraction_coverage_summary_2026-07-15.json` に保存した。全量側は古い途中抽出JSONも含むため、品質判断ではなく、再抽出対象の洗い出しに使う。代表manifestでも2D情報の薄いファイルが多いため、次工程では最新抽出器で代表2Dファイルを再抽出し、`view_sheets` / `print_frames` / `layers` / `inside_print_area` が入ったJSONへ置き換える。
+
 ```json
 {
   "drawingId": "host drawing id",

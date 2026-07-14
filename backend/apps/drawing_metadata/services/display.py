@@ -370,6 +370,133 @@ def _layer_preview_items(layers: list[dict], limit: int = 10) -> list[dict]:
     ]
 
 
+def _inside_print_area_counts(items: list[dict]) -> dict[str, int]:
+    counts = {"inside": 0, "outside": 0, "unknown": 0}
+    for item in items:
+        value = item.get("inside_print_area")
+        if value is True:
+            counts["inside"] += 1
+        elif value is False:
+            counts["outside"] += 1
+        else:
+            counts["unknown"] += 1
+    return counts
+
+
+def _source_type(item: dict) -> str:
+    if item.get("geometry_type"):
+        return "geometry"
+    if any(item.get(key) is not None for key in ("value_1", "value_2", "front_word", "back_word")):
+        return "dimension"
+    if item.get("text_lines") or item.get("joined_text"):
+        return "text"
+    return str(item.get("source_type") or "other")
+
+
+def _view_coverage_items(view_sheets: list[dict], inspectable_items: list[dict], limit: int = 12) -> list[dict]:
+    by_view: dict[str, dict] = {}
+
+    for view_sheet in view_sheets:
+        name = str(view_sheet.get("name") or "未抽出")
+        by_view[name] = {
+            "viewName": _display_value(name),
+            "declaredGeometryCount": _display_value(view_sheet.get("geometry_count")),
+            "textCount": 0,
+            "dimensionCount": 0,
+            "geometryCount": 0,
+            "insideCount": 0,
+            "outsideCount": 0,
+            "unknownPrintAreaCount": 0,
+        }
+
+    for item in inspectable_items:
+        name = str(item.get("view_name") or "未抽出")
+        row = by_view.setdefault(
+            name,
+            {
+                "viewName": _display_value(name),
+                "declaredGeometryCount": "未抽出",
+                "textCount": 0,
+                "dimensionCount": 0,
+                "geometryCount": 0,
+                "insideCount": 0,
+                "outsideCount": 0,
+                "unknownPrintAreaCount": 0,
+            },
+        )
+        source_type = _source_type(item)
+        if source_type == "text":
+            row["textCount"] += 1
+        elif source_type == "dimension":
+            row["dimensionCount"] += 1
+        elif source_type == "geometry":
+            row["geometryCount"] += 1
+
+        inside_print_area = item.get("inside_print_area")
+        if inside_print_area is True:
+            row["insideCount"] += 1
+        elif inside_print_area is False:
+            row["outsideCount"] += 1
+        else:
+            row["unknownPrintAreaCount"] += 1
+
+    def sort_key(row: dict) -> tuple[int, str]:
+        total = row["textCount"] + row["dimensionCount"] + row["geometryCount"]
+        return (-total, row["viewName"])
+
+    return sorted(by_view.values(), key=sort_key)[:limit]
+
+
+def _layer_coverage_items(layers: list[dict], inspectable_items: list[dict], limit: int = 12) -> list[dict]:
+    by_layer: dict[str, dict] = {}
+
+    for layer in layers:
+        no = layer.get("no")
+        key = str(no) if no is not None else "未抽出"
+        by_layer[key] = {
+            "layerNo": _display_value(no),
+            "layerName": _display_value(layer.get("name")),
+            "displayed": _display_value(layer.get("is_displayed")),
+            "searchable": _display_value(layer.get("is_searchable")),
+            "textCount": 0,
+            "dimensionCount": 0,
+            "geometryCount": 0,
+            "outsideCount": 0,
+        }
+
+    for item in inspectable_items:
+        no = item.get("layer_no")
+        key = str(no) if no is not None else "未抽出"
+        row = by_layer.setdefault(
+            key,
+            {
+                "layerNo": _display_value(no),
+                "layerName": "未抽出",
+                "displayed": "未抽出",
+                "searchable": "未抽出",
+                "textCount": 0,
+                "dimensionCount": 0,
+                "geometryCount": 0,
+                "outsideCount": 0,
+            },
+        )
+        source_type = _source_type(item)
+        if source_type == "text":
+            row["textCount"] += 1
+        elif source_type == "dimension":
+            row["dimensionCount"] += 1
+        elif source_type == "geometry":
+            row["geometryCount"] += 1
+        if item.get("inside_print_area") is False:
+            row["outsideCount"] += 1
+
+    def sort_key(row: dict) -> tuple[int, str]:
+        total = row["textCount"] + row["dimensionCount"] + row["geometryCount"]
+        return (-total, row["layerNo"])
+
+    return sorted(by_layer.values(), key=sort_key)[:limit]
+
+
 def _part_ex_info_preview_items(raw_parts: list[dict], limit: int = 8) -> list[dict]:
     previews: list[dict] = []
     for part in raw_parts:
@@ -650,9 +777,14 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
     displayed_layer_count = len([layer for layer in layers if layer.get("is_displayed")])
+    view_names_with_items = {item.get("view_name") for item in inspectable_items if item.get("view_name")}
+    declared_view_names = {view_sheet.get("name") for view_sheet in view_sheets if view_sheet.get("name")}
+    print_area_counts = _inside_print_area_counts(inspectable_items)
 
     summary_rows = [
         _make_row("view_sheet_count", "ビュー/用紙数", len(view_sheets)),
+        _make_row("view_with_item_count", "要素取得済みビュー数", len(view_names_with_items)),
+        _make_row("view_without_item_count", "要素未取得ビュー数", len(declared_view_names - view_names_with_items)),
         _make_row("print_frame_count", "印刷枠数", len(print_frames)),
         _make_row("layer_count", "レイヤー数", len(layers)),
         _make_row("displayed_layer_count", "表示レイヤー数", displayed_layer_count),
@@ -661,6 +793,9 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("revision_note_count", "訂正内容候補数", canonical_attributes.get("revision_note_count")),
         _make_row("geometry_primitive_count", "線・円などの図形数", len(primitives)),
         _make_row("layer_tagged_count", "所属レイヤー取得済み要素数", layer_tagged_count),
+        _make_row("inside_print_area_count", "印刷枠内要素数", print_area_counts["inside"]),
+        _make_row("outside_print_area_count", "印刷枠外要素数", print_area_counts["outside"]),
+        _make_row("unknown_print_area_count", "印刷枠判定不明要素数", print_area_counts["unknown"]),
         _make_row("surface_roughness_count", "表面粗さ記号数", canonical_attributes.get("surface_roughness_count")),
         _make_row("section_feature_count", "断面/切断表現数", canonical_attributes.get("section_feature_count")),
         _make_row("slot_candidate_count", "長穴/楕円候補数", canonical_attributes.get("slot_candidate_count")),
@@ -693,11 +828,15 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "viewSheets": _view_sheet_preview_items(view_sheets),
         "viewSheetTotal": len(view_sheets),
         "viewSheetsTruncated": len(view_sheets) > 10,
+        "viewCoverageRows": _view_coverage_items(view_sheets, inspectable_items),
+        "viewCoverageTotal": len({*(declared_view_names or set()), *(view_names_with_items or set())}),
         "printFrames": _print_frame_preview_items(print_frames),
         "printFrameTotal": len(print_frames),
         "layers": _layer_preview_items(layers),
         "layerTotal": len(layers),
         "layersTruncated": len(layers) > 10,
+        "layerCoverageRows": _layer_coverage_items(layers, inspectable_items),
+        "layerCoverageTotal": len({str(layer.get("no")) for layer in layers if layer.get("no") is not None} | {str(item.get("layer_no")) for item in inspectable_items if item.get("layer_no") is not None}),
         "textSamples": _text_preview_items(texts),
         "textTotal": len(texts),
         "titleBlockCandidates": _title_block_candidate_items(title_block_candidates),

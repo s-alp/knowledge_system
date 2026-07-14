@@ -301,6 +301,76 @@
         </tbody>
       </table>
 
+      <h3>ビュー別取得状況</h3>
+      {% if snapshot_2d_display.viewCoverageRows %}
+        <table>
+          <thead>
+            <tr>
+              <th>ビュー名</th>
+              <th>宣言要素数</th>
+              <th>文字</th>
+              <th>寸法</th>
+              <th>図形</th>
+              <th>印刷枠内</th>
+              <th>印刷枠外</th>
+              <th>判定不明</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in snapshot_2d_display.viewCoverageRows %}
+              <tr>
+                <td>{{ row.viewName }}</td>
+                <td>{{ row.declaredGeometryCount }}</td>
+                <td>{{ row.textCount }}</td>
+                <td>{{ row.dimensionCount }}</td>
+                <td>{{ row.geometryCount }}</td>
+                <td>{{ row.insideCount }}</td>
+                <td>{{ row.outsideCount }}</td>
+                <td>{{ row.unknownPrintAreaCount }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.viewCoverageTotal }} ビュー中 {{ snapshot_2d_display.viewCoverageRows|length }} 件を表示しています。</p>
+      {% else %}
+        <p>ビュー別取得状況はありません。</p>
+      {% endif %}
+
+      <h3>レイヤー別取得状況</h3>
+      {% if snapshot_2d_display.layerCoverageRows %}
+        <table>
+          <thead>
+            <tr>
+              <th>レイヤー</th>
+              <th>名前</th>
+              <th>表示</th>
+              <th>検索対象</th>
+              <th>文字</th>
+              <th>寸法</th>
+              <th>図形</th>
+              <th>印刷枠外</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in snapshot_2d_display.layerCoverageRows %}
+              <tr>
+                <td>{{ row.layerNo }}</td>
+                <td>{{ row.layerName }}</td>
+                <td>{{ row.displayed }}</td>
+                <td>{{ row.searchable }}</td>
+                <td>{{ row.textCount }}</td>
+                <td>{{ row.dimensionCount }}</td>
+                <td>{{ row.geometryCount }}</td>
+                <td>{{ row.outsideCount }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.layerCoverageTotal }} レイヤー中 {{ snapshot_2d_display.layerCoverageRows|length }} 件を表示しています。</p>
+      {% else %}
+        <p>レイヤー別取得状況はありません。</p>
+      {% endif %}
+
       <h3>ビュー/用紙</h3>
       {% if snapshot_2d_display.viewSheets %}
         <table>

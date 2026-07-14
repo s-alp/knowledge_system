@@ -424,6 +424,13 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                     "position_y": 2.0,
                     "inside_print_area": True,
                     "summary": "spline",
+                },
+                {
+                    "view_name": "!DETAIL",
+                    "layer_no": None,
+                    "geometry_type": "SxGeomLine2D",
+                    "inside_print_area": None,
+                    "summary": "unknown layer",
                 }
             ],
         },
@@ -484,10 +491,25 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
 
     row_by_key = {row["key"]: row["displayValue"] for row in payload["summaryRows"]}
     assert row_by_key["view_sheet_count"] == "1"
+    assert row_by_key["view_with_item_count"] == "2"
+    assert row_by_key["view_without_item_count"] == "0"
     assert row_by_key["print_frame_count"] == "1"
     assert row_by_key["layer_tagged_count"] == "3"
+    assert row_by_key["inside_print_area_count"] == "2"
+    assert row_by_key["outside_print_area_count"] == "1"
+    assert row_by_key["unknown_print_area_count"] == "1"
     assert row_by_key["revision_note_count"] == "1"
     assert payload["sourceFileRows"][0]["displayValue"] == "sample.icd"
+    view_coverage_by_name = {row["viewName"]: row for row in payload["viewCoverageRows"]}
+    assert view_coverage_by_name["!XY"]["textCount"] == 1
+    assert view_coverage_by_name["!XY"]["dimensionCount"] == 1
+    assert view_coverage_by_name["!XY"]["geometryCount"] == 1
+    assert view_coverage_by_name["!XY"]["outsideCount"] == 1
+    assert view_coverage_by_name["!DETAIL"]["unknownPrintAreaCount"] == 1
+    layer_coverage_by_no = {row["layerNo"]: row for row in payload["layerCoverageRows"]}
+    assert layer_coverage_by_no["1"]["textCount"] == 1
+    assert layer_coverage_by_no["1"]["dimensionCount"] == 1
+    assert layer_coverage_by_no["未抽出"]["geometryCount"] == 1
     assert payload["viewSheets"][0]["name"] == "!XY"
     assert payload["printFrames"][0]["size"] == "A3"
     assert payload["layers"][0]["name"] == "図枠"
@@ -580,7 +602,8 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
 
     assert response.status_code == 200
     assert response.context["composed_display"]["hiddenKeys"] == ["text_tokens", "spec_tokens", "part_keywords"]
-    assert response.context["snapshot_2d_display"]["summaryRows"][4]["displayValue"] == "1"
+    snapshot_2d_summary = {row["key"]: row["displayValue"] for row in response.context["snapshot_2d_display"]["summaryRows"]}
+    assert snapshot_2d_summary["text_count"] == "1"
     assert response.context["snapshot_3d_display"]["partCount"] == 2
     assert response.context["snapshot_3d_display"]["partExInfoTotal"] == 1
     assert response.context["handoff_display"]["apiLinks"][0]["label"] == "詳細API"
