@@ -146,3 +146,71 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
     assert bootstrap["metadata"]["paperSize"] == "A3"
     assert bootstrap["metadata"]["owner"] == "設計者A"
     assert bootstrap["metadata"]["tags"] == ["材質:SUS304", "装置:ロボット"]
+
+
+@pytest.mark.django_db
+def test_rag_payload_returns_filters_and_ranking_signals(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="sample.icd",
+        source_path=r"C:\projects\customer\sample.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "customer_name": "澁谷工業",
+            "project_name": "アイソレータ",
+            "equipment_category": "供給台",
+            "document_kind": "部品図",
+            "drawing_number": "DWG-001",
+            "drawing_name": "ブラケット",
+            "paper_size": "A3",
+            "dimension_values": ["10", "20"],
+            "weld_note_texts": ["全周溶接"],
+            "unresolved_material_keywords": ["ZZZ"],
+        },
+        derived_tags_json=[],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "equipment_category": "供給台",
+            "part_names": ["BRACKET-A", "BRACKET-A"],
+            "maker_keywords": ["SMC"],
+            "material_keywords": ["SUS304"],
+            "part_material_candidates": [
+                {
+                    "part_path": "Top.BRACKET-A",
+                    "part_name": "BRACKET-A",
+                    "material_id": "SUS304",
+                    "source": "3d_part_material",
+                    "confidence": "high",
+                }
+            ],
+        },
+        derived_tags_json=[],
+    )
+
+    client = APIClient()
+    response = client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["schemaVersion"] == "drawing_metadata_rag_payload.v1"
+    assert payload["drawing"]["sourceFolder"] == r"C:\projects\customer"
+    assert payload["preFilters"]["customerName"] == "澁谷工業"
+    assert payload["preFilters"]["projectName"] == "アイソレータ"
+    assert payload["preFilters"]["equipmentCategory"] == "供給台"
+    assert payload["preFilters"]["documentKind"] == "部品図"
+    assert payload["rankingSignals"]["partNames"] == ["BRACKET-A"]
+    assert payload["rankingSignals"]["makerKeywords"] == ["SMC"]
+    assert payload["rankingSignals"]["materialKeywords"] == ["SUS304"]
+    assert payload["rankingSignals"]["unresolvedMaterialKeywords"] == ["ZZZ"]
+    assert payload["partMaterialCandidates"][0]["part_path"] == "Top.BRACKET-A"
+    assert "材質:SUS304" in payload["rankingSignals"]["tags"]
+    assert "材質要確認:ZZZ" in payload["rankingSignals"]["tags"]
+    assert payload["reconciliation"]["requiresReview"] is True
+    assert payload["reconciliation"]["reviewFlags"][0]["code"] == "unresolved_material"

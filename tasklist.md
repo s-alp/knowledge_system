@@ -138,6 +138,7 @@
 - [x] Windows 抽出 worker と Linux/Docker backend の接続方式をDB-backed workerとして確定
 - [x] 抽出開始前にjob leaseを抽出timeoutより長く延長し、長時間ICAD処理中の二重claimを防止
 - [x] detail API に viewer 仕様互換の `viewerBootstrap` を追加
+- [x] RAG投入用の読み取り専用 `rag-payload` API を追加し、事前フィルタ・再ランキング信号・要確認理由を分離
 
 ## 次に着手する
 
@@ -150,16 +151,6 @@
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
-- [ ] RAG 更新ジョブとの連携を具体化
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\extraction_result_schema_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_implementation_backlog_2026-05-26.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\services\composition.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\services\tag_builder.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\api\views.py`
-
 ## 保留中の確認事項
 
 - [ ] ナレッジシステム本体 Django のバージョン確認

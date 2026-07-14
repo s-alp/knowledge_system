@@ -20,5 +20,10 @@ urlpatterns = [
         views.RegistrationOverrideApiView.as_view(),
         name="drawing-metadata-registration-overrides",
     ),
+    path(
+        "drawing-metadata/registrations/<uuid:drawing_id>/rag-payload",
+        views.RegistrationRagPayloadApiView.as_view(),
+        name="drawing-metadata-registration-rag-payload",
+    ),
     path("drawing-metadata/jobs/<uuid:job_id>", views.JobDetailApiView.as_view(), name="drawing-metadata-job-detail"),
 ]

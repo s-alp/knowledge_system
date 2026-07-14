@@ -310,6 +310,18 @@ drawing_metadata/
 - 抽出確定後
 - 手動補正確定後
 
+### 10.4 2026-07-14 実装反映
+
+- `GET /api/v1/drawing-metadata/registrations/{drawingId}/rag-payload` を追加した。
+- この API は登録・更新・削除を行わず、抽出済み `canonicalAttributes` と `derivedTags` から RAG 投入用 payload を返す。
+- payload は以下に分ける。
+  - `preFilters`: `customerName`, `projectName`, `equipmentCategory`, `documentKind`, `sourceFormat`, `drawingNumber`, `drawingName`, `paperSize`
+  - `rankingSignals`: `partNames`, `makerKeywords`, `dimensionValues`, `specTokens`, `processKeywords`, `weldNoteTexts`, `materialKeywords`, `unresolvedMaterialKeywords`, `surfaceTreatmentTokens`, `heatTreatmentKeywords`, `inspectionKeywords`, `changeKeywords`, `issueKeywords`, `tags`
+  - `partMaterialCandidates`: 3D部品単位材質の候補
+  - `searchTextChunks`: 検索本文へ混ぜる候補文字列
+  - `reconciliation`: 2D/3D差異や未解決材質など、投入前レビューが必要な理由
+- 創屋側の本体ジョブ基盤が共有されたら、この payload を RAG 再インデックスジョブの入力に接続する。
+
 ## 11. 移植前提での実装方針
 
 本体が無い現状では、以下の方針が安全である。

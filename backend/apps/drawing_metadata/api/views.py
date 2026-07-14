@@ -16,6 +16,7 @@ from apps.drawing_metadata.api.serializers import (
 )
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
+from apps.drawing_metadata.services.rag_payload import build_rag_payload
 
 
 class RegistrationListApiView(APIView):
@@ -83,6 +84,18 @@ class RegistrationOverrideApiView(APIView):
                 "derivedTags": snapshot.derived_tags_json,
             }
         )
+
+
+class RegistrationRagPayloadApiView(APIView):
+    def get(self, request, drawing_id):
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+                "jobs",
+            ),
+            pk=drawing_id,
+        )
+        return Response(build_rag_payload(drawing))
 
 
 class JobDetailApiView(APIView):
