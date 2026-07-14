@@ -27,6 +27,7 @@
   - 図面詳細系には `tags` / `attributes` の受け口があるため、創屋への初期連携は図面詳細を優先候補にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
+  - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
 - 次に着手する場合:
   - v2 raw schema を確定する。
   - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
@@ -90,17 +91,15 @@
 - [x] 本番ナレッジシステム実画面とフロント資産を読み取り専用で確認
 - [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
+- [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み
+- [x] `TR1D9K99027.icd` / `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認
 
 ## 次に着手する
 
-- [ ] `SxGeomSpline2D` など未対応2Dジオメトリを構造化
+- [ ] 2D primitive から長穴、穴数、断面、ハッチング、表面粗さなどの形状特徴タグを生成
 - [ ] `SxEnt.getMass()` / `getMassList()` で重量、質量、体積、面積を実サンプル確認
 - [ ] 2D図枠欄名辞書と Gemini API 低温度 JSON 分類を実装
 - [ ] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
-- [ ] `SxGeomSpline2D` を raw_extract へ取り込む
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\extraction_result_schema_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_extraction_poc_setup_2026-05-28.md`
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`

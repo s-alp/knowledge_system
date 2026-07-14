@@ -146,6 +146,22 @@ namespace IcadExtraction.Contracts
         public string? ViewName { get; set; }
         public int? LayerNo { get; set; }
         public string GeometryType { get; set; } = string.Empty;
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public double? EndX { get; set; }
+        public double? EndY { get; set; }
+        public double? EndZ { get; set; }
+        public double? CenterX { get; set; }
+        public double? CenterY { get; set; }
+        public double? CenterZ { get; set; }
+        public double? Radius { get; set; }
+        public double? Radius1 { get; set; }
+        public double? Radius2 { get; set; }
+        public double? StartAngle { get; set; }
+        public double? EndAngle { get; set; }
+        public int? PointCount { get; set; }
+        public bool? InsidePrintArea { get; set; }
         public string Summary { get; set; } = string.Empty;
     }
 

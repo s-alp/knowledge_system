@@ -282,6 +282,39 @@
         <p>寸法情報はありません。</p>
       {% endif %}
 
+      <h3>図形サンプル</h3>
+      {% if snapshot_2d_display.geometryPrimitiveSamples %}
+        <table>
+          <thead>
+            <tr>
+              <th>ビュー名</th>
+              <th>レイヤー</th>
+              <th>種別</th>
+              <th>座標</th>
+              <th>中心</th>
+              <th>印刷枠</th>
+              <th>概要</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for primitive in snapshot_2d_display.geometryPrimitiveSamples %}
+              <tr>
+                <td>{{ primitive.viewName }}</td>
+                <td>{{ primitive.layerNo }}</td>
+                <td>{{ primitive.geometryType }}</td>
+                <td>{{ primitive.position }}</td>
+                <td>{{ primitive.center }}</td>
+                <td>{{ primitive.insidePrintArea }}</td>
+                <td>{{ primitive.summary }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.geometryPrimitiveTotal }} 件中 {{ snapshot_2d_display.geometryPrimitiveSamples|length }} 件を表示しています。</p>
+      {% else %}
+        <p>図形情報はありません。</p>
+      {% endif %}
+
       <h3>正規化属性</h3>
       <pre>{{ snapshot_2d.canonical_attributes_json|pprint }}</pre>
       <h3>派生タグ</h3>

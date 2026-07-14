@@ -176,6 +176,23 @@ def _dimension_preview_items(dimensions: list[dict], limit: int = 8) -> list[dic
     return previews
 
 
+def _primitive_preview_items(primitives: list[dict], limit: int = 8) -> list[dict]:
+    previews: list[dict] = []
+    for primitive in primitives[:limit]:
+        previews.append(
+            {
+                "viewName": _display_value(primitive.get("view_name")),
+                "layerNo": _display_value(primitive.get("layer_no")),
+                "geometryType": _display_value(primitive.get("geometry_type")),
+                "position": _display_value(_position_label(primitive)),
+                "center": _display_value(_center_label(primitive)),
+                "insidePrintArea": _display_value(_inside_print_area_label(primitive.get("inside_print_area"))),
+                "summary": _display_value(primitive.get("summary")),
+            }
+        )
+    return previews
+
+
 def _view_sheet_preview_items(view_sheets: list[dict], limit: int = 10) -> list[dict]:
     return [
         {
@@ -243,6 +260,14 @@ def _part_ex_info_preview_items(raw_parts: list[dict], limit: int = 8) -> list[d
 def _position_label(item: dict) -> str | None:
     x = item.get("position_x")
     y = item.get("position_y")
+    if x is None or y is None:
+        return None
+    return f"{x}, {y}"
+
+
+def _center_label(item: dict) -> str | None:
+    x = item.get("center_x")
+    y = item.get("center_y")
     if x is None or y is None:
         return None
     return f"{x}, {y}"
@@ -362,6 +387,8 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "textTotal": len(texts),
         "dimensionSamples": _dimension_preview_items(dimensions),
         "dimensionTotal": len(dimensions),
+        "geometryPrimitiveSamples": _primitive_preview_items(primitives),
+        "geometryPrimitiveTotal": len(primitives),
     }
 
 

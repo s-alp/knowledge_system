@@ -54,6 +54,14 @@ namespace IcadExtraction.SxNet
                     case "SxGeomLine2D":
                     case "SxGeomArc2D":
                     case "SxGeomCircle2D":
+                    case "SxGeomSpline2D":
+                    case "SxGeomEllipse2D":
+                    case "SxGeomElparc2D":
+                    case "SxGeomHatch":
+                    case "SxGeomSmark":
+                    case "SxGeomCutLine":
+                    case "SxGeomDelta":
+                    case "SxGeomTolDatum":
                         payload.GeometryPrimitives.Add(MapPrimitive(geometry, viewName, sourceItem.LayerNo));
                         break;
                     case "SxGeomWeld":
@@ -143,13 +151,154 @@ namespace IcadExtraction.SxNet
 
         private static GeometryPrimitivePayload MapPrimitive(object geometry, string? viewName, int? layerNo)
         {
+            var geometryType = geometry.GetType().Name;
             return new GeometryPrimitivePayload
             {
                 ViewName = viewName,
                 LayerNo = layerNo,
-                GeometryType = geometry.GetType().Name,
+                GeometryType = geometryType,
+                PositionX = ResolvePositionX(geometry, geometryType),
+                PositionY = ResolvePositionY(geometry, geometryType),
+                PositionZ = ResolvePositionZ(geometry, geometryType),
+                EndX = ResolveEndX(geometry, geometryType),
+                EndY = ResolveEndY(geometry, geometryType),
+                EndZ = ResolveEndZ(geometry, geometryType),
+                CenterX = ResolveCenterX(geometry),
+                CenterY = ResolveCenterY(geometry),
+                CenterZ = ResolveCenterZ(geometry),
+                Radius = ReflectionHelpers.GetDouble(geometry, "radius"),
+                Radius1 = ReflectionHelpers.GetDouble(geometry, "radius1"),
+                Radius2 = ReflectionHelpers.GetDouble(geometry, "radius2"),
+                StartAngle = ReflectionHelpers.GetDouble(geometry, "sang"),
+                EndAngle = ReflectionHelpers.GetDouble(geometry, "eang"),
+                PointCount = ResolvePointCount(geometry, geometryType),
                 Summary = ReflectionHelpers.BuildSummaryText(geometry),
             };
+        }
+
+        private static double? ResolvePositionX(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "x1");
+            }
+
+            return GetPositionX(geometry, ResolvePrimaryPositionMember(geometryType));
+        }
+
+        private static double? ResolvePositionY(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "y1");
+            }
+
+            return GetPositionY(geometry, ResolvePrimaryPositionMember(geometryType));
+        }
+
+        private static double? ResolvePositionZ(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "z1");
+            }
+
+            return GetPositionZ(geometry, ResolvePrimaryPositionMember(geometryType));
+        }
+
+        private static double? ResolveEndX(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "x2");
+            }
+
+            if (geometryType == "SxGeomCutLine")
+            {
+                return GetPositionX(geometry, "pnt2");
+            }
+
+            return null;
+        }
+
+        private static double? ResolveEndY(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "y2");
+            }
+
+            if (geometryType == "SxGeomCutLine")
+            {
+                return GetPositionY(geometry, "pnt2");
+            }
+
+            return null;
+        }
+
+        private static double? ResolveEndZ(object geometry, string geometryType)
+        {
+            if (geometryType == "SxGeomLine2D")
+            {
+                return ReflectionHelpers.GetDouble(geometry, "z2");
+            }
+
+            if (geometryType == "SxGeomCutLine")
+            {
+                return GetPositionZ(geometry, "pnt2");
+            }
+
+            return null;
+        }
+
+        private static double? ResolveCenterX(object geometry)
+        {
+            return GetPositionX(geometry, "cp");
+        }
+
+        private static double? ResolveCenterY(object geometry)
+        {
+            return GetPositionY(geometry, "cp");
+        }
+
+        private static double? ResolveCenterZ(object geometry)
+        {
+            return GetPositionZ(geometry, "cp");
+        }
+
+        private static int? ResolvePointCount(object geometry, string geometryType)
+        {
+            if (geometryType != "SxGeomSpline2D")
+            {
+                return null;
+            }
+
+            var vecList = ReflectionHelpers.GetMemberValue(geometry, "vec_list");
+            var count = 1;
+            foreach (var _ in ReflectionHelpers.Enumerate(vecList))
+            {
+                count++;
+            }
+
+            return count;
+        }
+
+        private static string ResolvePrimaryPositionMember(string geometryType)
+        {
+            switch (geometryType)
+            {
+                case "SxGeomSpline2D":
+                    return "pos";
+                case "SxGeomElparc2D":
+                case "SxGeomEllipse2D":
+                case "SxGeomCircle2D":
+                case "SxGeomArc2D":
+                    return "cp";
+                case "SxGeomCutLine":
+                    return "pnt1";
+                default:
+                    return "pnt";
+            }
         }
 
         private static double? GetPositionX(object geometry, string memberName)

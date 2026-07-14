@@ -89,9 +89,9 @@
 | 文字 | A | `SxGeomText.txt`, `text_line_num`, `pnt`, `atr_word` | 実装済み | 図枠・注記・表内文字の材料 |
 | 注記 | A | `SxGeomLabel.txt`, `lead_line`, `underline` | 実装済み | 材質、表面処理、塗装、規格、担当者等の抽出元 |
 | 線 / 円 / 円弧 | A | `SxGeomLine2D`, `SxGeomCircle2D`, `SxGeomArc2D` | 実装済み | 図枠・中央図面・表罫線の解析元 |
-| スプライン | A | `SxGeomSpline2D` | 未対応 warning | 実サンプル2Dで warning 多数。中央図面解析には追加対応必須 |
-| 楕円 / 楕円弧 | A | `SxGeomEllipse2D`, `SxGeomElparc2D` | 未実装 | 中央図面特徴 |
-| ハッチング | A | `SxGeomHatch` | 未実装 | 断面、材質表現、加工領域 |
+| スプライン | A | `SxGeomSpline2D` | primitive実装済み | 開始座標、点数、角度候補を保持。形状特徴タグ化は未実装 |
+| 楕円 / 楕円弧 | A | `SxGeomEllipse2D`, `SxGeomElparc2D` | primitive実装済み | 中心、半径、角度候補を保持 |
+| ハッチング | A | `SxGeomHatch` | primitive実装済み | パターン等は summary 保持。断面/材質表現としての意味付けは未実装 |
 | 長さ寸法 | A | `SxGeomLengthDim`, `SxDimValueAtr`, `SxDimLineAtr` | 実装入口あり | 現行マッピングはフィールド名要再確認 |
 | 角度寸法 | A | `SxGeomAngDim` | 実装入口あり | 同上 |
 | 径寸法 | A | `SxGeomDiaDim` | 実装入口あり | φ/R等のタグ候補 |
@@ -100,11 +100,11 @@
 | 円弧長寸法 | A | `SxGeomArcLengDim` | 実装入口あり | 曲げ/円弧特徴 |
 | 寸法値詳細 | A | `SxDimValueAtr` | 実装入口あり | 実寸/擬寸、前置/後置/上下文字、公差、φ/R/M/□ |
 | 幾何公差 | A | `SxGeomTol` | summaryのみ | 構造化未実装 |
-| 表面粗さ | A | `SxGeomSmark` | 未実装 | 除去加工、筋目方向、JIS種別、指示値 |
+| 表面粗さ | A | `SxGeomSmark` | primitive実装済み | 位置と summary を保持。除去加工、筋目方向、JIS種別、指示値の正規化は未実装 |
 | 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | summaryのみ | 溶接種別、開先、仕上げ等は構造化未実装 |
 | 仕上げ記号 | A | `SxGeomFinishMark` | 未実装 | 仕上げ工程タグ |
 | バルーン | A | `SxGeomBalloon` | summaryのみ | `txt1`, `txt2`, `num_use`, `lead_line` 等は構造化未実装 |
-| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 未実装 | 断面図/詳細図/矢視判定 |
+| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線はprimitive実装済み | 断面図/詳細図/矢視判定は未実装 |
 | 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 未実装 | `name`, `part3d_name`, `ref_model_name`, `ref_vs_name` |
 | レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 未実装 | 参照先図面名、参照VS名、配置スケール |
 | 図面名 | A/B | `SxInfModel.name`、図枠文字 | モデル名未実装、文字は実装済み | 2D/3D両方で照合対象 |
@@ -194,6 +194,7 @@
 | 保存フォルダ/ファイル名 | 実装済み | runner の `source_file` と Django canonical attributes に保持 |
 | パーツ付加情報 | 実装済み | `ex_inf` を `ex_info_fields` として展開。澁谷工業系サンプルで取得確認済み |
 | 本番ナレッジ連携受け口 | 読み取り確認済み | 図面/製品/部品属性 API はフロント資産で参照あり。プロジェクト属性 API は未確認 |
+| 未対応2Dジオメトリ | primitive実装済み | `SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomElparc2D`, `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomDelta`, `SxGeomTolDatum` を warning ではなく raw evidence として保持 |
 
 最新の共有16件では、全件 `has_3d=true`、9件 `has_2d=true` だった。7件は `has_2d_container=true` だが `has_2d=false` であり、2DグローバルVSまたはVSコンテナの存在だけでは「図面情報あり」と判定できないことが確認できた。
 

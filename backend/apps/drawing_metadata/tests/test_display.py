@@ -167,7 +167,17 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                     "value_1": "100",
                 }
             ],
-            "geometry_primitives": [{"view_name": "!XY", "layer_no": 1, "geometry_type": "SxGeomLine2D"}],
+            "geometry_primitives": [
+                {
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "geometry_type": "SxGeomSpline2D",
+                    "position_x": 1.0,
+                    "position_y": 2.0,
+                    "inside_print_area": True,
+                    "summary": "spline",
+                }
+            ],
         },
         canonical_attributes={
             "source_file_name": "sample.icd",
@@ -191,6 +201,9 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["textSamples"][0]["insidePrintArea"] == "inside"
     assert payload["dimensionSamples"][0]["value"] == "100"
     assert payload["dimensionSamples"][0]["insidePrintArea"] == "outside"
+    assert payload["geometryPrimitiveSamples"][0]["geometryType"] == "SxGeomSpline2D"
+    assert payload["geometryPrimitiveSamples"][0]["position"] == "1.0, 2.0"
+    assert payload["geometryPrimitiveSamples"][0]["insidePrintArea"] == "inside"
 
 
 @pytest.mark.django_db

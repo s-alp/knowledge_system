@@ -51,6 +51,13 @@ namespace IcadExtraction.SxNet
                 dimension.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, dimension.PositionX, dimension.PositionY);
             }
 
+            foreach (var primitive in rawExtract.GeometryPrimitives)
+            {
+                var x = primitive.PositionX ?? primitive.CenterX;
+                var y = primitive.PositionY ?? primitive.CenterY;
+                primitive.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, x, y);
+            }
+
             foreach (var weldNote in rawExtract.WeldNotes)
             {
                 weldNote.InsidePrintArea = ResolveInsidePrintArea(rawExtract.PrintFrames, weldNote.PositionX, weldNote.PositionY);
