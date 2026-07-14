@@ -137,6 +137,7 @@
 - [x] symbol / hatch / cutline 系の2D geometryを primitive として保持し、特徴候補タグへ展開
 - [x] Windows 抽出 worker と Linux/Docker backend の接続方式をDB-backed workerとして確定
 - [x] 抽出開始前にjob leaseを抽出timeoutより長く延長し、長時間ICAD処理中の二重claimを防止
+- [x] detail API に viewer 仕様互換の `viewerBootstrap` を追加
 
 ## 次に着手する
 
@@ -149,15 +150,6 @@
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
-- [ ] viewer detail API 契約へ接続
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_attribute_management_ui_plan_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`
-    - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\viewer-specification.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\services\composition.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\api\serializers.py`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\backend\apps\drawing_metadata\api\views.py`
 - [ ] RAG 更新ジョブとの連携を具体化
   - 参照資料:
     - `C:\Users\s-iwata\Desktop\knowledge_system\docs\django_integration_plan_2026-05-28.md`

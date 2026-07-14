@@ -259,6 +259,9 @@ viewer の `DrawingOverviewPanel` を参考に、以下を表示する。
 - 手動補正を保存できる
 - 再抽出を起動できる
 - viewer と同じ図面 ID で連携できる
+- `GET /api/v1/drawing-metadata/registrations/{drawingId}` が viewer 仕様に合わせた `viewerBootstrap` を返す
+  - `title`, `version`, `defaultMode`, `availability.has2d/has3d`
+  - `metadata.drawingNumber`, `drawingName`, `drawingType`, `paperSize`, `status`, `owner`, `designPurpose`, `tags`
 
 ## 10. 結論
 

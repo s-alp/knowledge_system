@@ -103,3 +103,46 @@ def test_detail_returns_snapshots_by_mode(sample_registration_payload):
     assert payload["snapshotsByMode"]["2d"]["extractionMode"] == "2d"
     assert payload["snapshotsByMode"]["3d"]["extractionMode"] == "3d"
     assert payload["composedMetadata"]["canonicalAttributes"]["equipment_category"] == "ガントリー"
+
+
+@pytest.mark.django_db
+def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "drawing_number": "DWG-001",
+            "drawing_name": "供給台",
+            "paper_size": "A3",
+            "revision": "R1",
+            "designer": "設計者A",
+            "equipment_category": "ロボット",
+        },
+        derived_tags_json=[
+            {"tag": "材質:SUS304", "manual_flag": True},
+            {"tag": "材質:SUS304", "manual_flag": True},
+        ],
+    )
+
+    client = APIClient()
+    response = client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}")
+
+    assert response.status_code == 200
+    bootstrap = response.json()["viewerBootstrap"]
+    assert bootstrap["drawingId"] == str(drawing.id)
+    assert bootstrap["title"] == "供給台"
+    assert bootstrap["version"] == "R1"
+    assert bootstrap["defaultMode"] == "2d"
+    assert bootstrap["availability"] == {"has2d": True, "has3d": False}
+    assert bootstrap["metadata"]["drawingNumber"] == "DWG-001"
+    assert bootstrap["metadata"]["drawingName"] == "供給台"
+    assert bootstrap["metadata"]["drawingType"] == "ロボット"
+    assert bootstrap["metadata"]["paperSize"] == "A3"
+    assert bootstrap["metadata"]["owner"] == "設計者A"
+    assert bootstrap["metadata"]["tags"] == ["材質:SUS304", "装置:ロボット"]

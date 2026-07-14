@@ -131,6 +131,43 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
         return statuses
 
 
+def _has_value(value) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, (list, dict)):
+        return len(value) > 0
+    return True
+
+
+def _first_value(*values):
+    for value in values:
+        if _has_value(value):
+            return value
+    return None
+
+
+def _as_optional_string(value) -> str | None:
+    if not _has_value(value):
+        return None
+    return str(value)
+
+
+def _tag_names(tags: list[dict]) -> list[str]:
+    names: list[str] = []
+    seen: set[str] = set()
+    for tag in tags:
+        if not isinstance(tag, dict):
+            continue
+        name = tag.get("tag")
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        names.append(str(name))
+    return names
+
+
 class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     drawingId = serializers.UUIDField(source="id")
     hostDrawingId = serializers.CharField(source="host_drawing_id")
@@ -138,6 +175,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     sourceFormat = serializers.CharField(source="source_format")
     snapshotsByMode = serializers.SerializerMethodField()
     composedMetadata = serializers.SerializerMethodField()
+    viewerBootstrap = serializers.SerializerMethodField()
     createdAt = serializers.DateTimeField(source="created_at")
     updatedAt = serializers.DateTimeField(source="updated_at")
 
@@ -151,6 +189,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
             "sourceFormat",
             "snapshotsByMode",
             "composedMetadata",
+            "viewerBootstrap",
             "createdAt",
             "updatedAt",
         )
@@ -163,6 +202,46 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
 
     def get_composedMetadata(self, obj: RegisteredDrawing) -> dict:
         return compose_drawing_metadata(obj)
+
+    def get_viewerBootstrap(self, obj: RegisteredDrawing) -> dict:
+        snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in obj.snapshots.all()}
+        composed_metadata = compose_drawing_metadata(obj)
+        canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
+        has_2d = "2d" in snapshots_by_mode
+        has_3d = "3d" in snapshots_by_mode
+        drawing_name = _first_value(canonical_attributes.get("drawing_name"), obj.filename)
+        drawing_number = _first_value(
+            canonical_attributes.get("drawing_number"),
+            canonical_attributes.get("part_number"),
+        )
+        return {
+            "drawingId": str(obj.id),
+            "title": _as_optional_string(drawing_name) or obj.filename,
+            "version": _as_optional_string(canonical_attributes.get("revision")),
+            "defaultMode": "2d" if has_2d else "3d",
+            "availability": {
+                "has2d": has_2d,
+                "has3d": has_3d,
+            },
+            "metadata": {
+                "drawingNumber": _as_optional_string(drawing_number),
+                "drawingName": _as_optional_string(drawing_name),
+                "drawingType": _as_optional_string(
+                    _first_value(canonical_attributes.get("drawing_type"), canonical_attributes.get("equipment_category"))
+                ),
+                "paperSize": _as_optional_string(
+                    _first_value(canonical_attributes.get("paper_size"), canonical_attributes.get("drawing_size"))
+                ),
+                "status": _as_optional_string(canonical_attributes.get("status")),
+                "owner": _as_optional_string(
+                    _first_value(canonical_attributes.get("owner"), canonical_attributes.get("designer"))
+                ),
+                "designPurpose": _as_optional_string(
+                    _first_value(canonical_attributes.get("intention"), canonical_attributes.get("design_purpose"))
+                ),
+                "tags": _tag_names(composed_metadata.get("derivedTags", []) or []),
+            },
+        }
 
 
 class ManualOverrideSerializer(serializers.Serializer):
