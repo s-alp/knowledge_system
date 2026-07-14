@@ -149,6 +149,58 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
 
 
 @pytest.mark.django_db
+def test_viewer_bootstrap_endpoint_matches_existing_viewer_contract(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="viewer-sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "drawing_number": "DWG-002",
+            "drawing_name": "ロードカップ",
+            "drawing_size": "A2",
+            "revision": "R3",
+            "owner": "承認者B",
+            "design_purpose": "既存2D/3Dビューワー連携確認",
+        },
+        derived_tags_json=[{"tag": "装置:搬送部", "manual_flag": True}],
+    )
+
+    client = APIClient()
+    detail_response = client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}")
+    bootstrap_response = client.get(f"/api/v1/drawings/{drawing.id}/bootstrap")
+    bootstrap_slash_response = client.get(f"/api/v1/drawings/{drawing.id}/bootstrap/")
+
+    assert detail_response.status_code == 200
+    assert bootstrap_response.status_code == 200
+    assert bootstrap_slash_response.status_code == 200
+    detail_bootstrap = detail_response.json()["viewerBootstrap"]
+    assert bootstrap_response.json() == detail_bootstrap
+    assert bootstrap_slash_response.json() == detail_bootstrap
+    assert bootstrap_response.json() == {
+        "drawingId": str(drawing.id),
+        "title": "ロードカップ",
+        "version": "R3",
+        "defaultMode": "3d",
+        "availability": {"has2d": False, "has3d": True},
+        "metadata": {
+            "drawingNumber": "DWG-002",
+            "drawingName": "ロードカップ",
+            "drawingType": None,
+            "paperSize": "A2",
+            "status": None,
+            "owner": "承認者B",
+            "designPurpose": "既存2D/3Dビューワー連携確認",
+            "tags": ["装置:搬送部"],
+        },
+    }
+
+
+@pytest.mark.django_db
 def test_rag_payload_returns_filters_and_ranking_signals(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
@@ -235,4 +287,5 @@ def test_api_accepts_trailing_slashes(sample_registration_payload):
 
     assert client.get("/api/v1/drawing-metadata/registrations/").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/").status_code == 200
+    assert client.get(f"/api/v1/drawings/{drawing.id}/bootstrap/").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/").status_code == 200

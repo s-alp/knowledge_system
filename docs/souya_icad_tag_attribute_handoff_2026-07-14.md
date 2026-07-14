@@ -217,6 +217,13 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
 - `GET /api/v1/drawing-metadata/registrations/{drawingId}/rag-payload/`: `schemaVersion=drawing_metadata_rag_payload.v1`
 - 末尾スラッシュあり/なしの両方をAPIルーティングで受ける。フロント実装差で404にならないようにするため。
 
+提出済みの 2D/3D ビューワー側では、初期表示情報を `GET /api/v1/drawings/{drawingId}/bootstrap` で取得する契約になっている。こちらの detail API に含めている `viewerBootstrap` と同一形状で返せるよう、読み取り専用の互換APIを追加した。
+
+- `GET /api/v1/drawings/{drawingId}/bootstrap`: 2D/3Dビューワー互換の `DrawingBootstrapResponse`
+- `GET /api/v1/drawings/{drawingId}/bootstrap/`: 末尾スラッシュありも許容
+- 返却項目: `drawingId`, `title`, `version`, `defaultMode`, `availability.has2d`, `availability.has3d`, `metadata.drawingNumber`, `metadata.drawingName`, `metadata.drawingType`, `metadata.paperSize`, `metadata.status`, `metadata.owner`, `metadata.designPurpose`, `metadata.tags`
+- 方針: 本番データ登録は行わず、既存ビューワーが図面詳細から起動されたときの初期表示だけを支える。2D/3Dファイルオープン処理そのものは、創屋側の既存 viewer 連携口と接続する。
+
 2026-07-15 にローカル詳細画面へ `創屋連携・viewer/RAG 受け渡し確認` 欄を追加した。初心者でも確認できるよう、詳細API、RAG投入payload API、タグレビュー画面へのリンク、viewer初期化情報、RAG事前フィルタ、RAGランキング信号、投入前レビューを表形式で表示する。
 
 同欄へ `本番タグ・属性 payload プレビュー` を追加した。図面、製品・装置・ユニット、部品、プロジェクトの各対象について、既存受け口、タグAPI状態、タグ候補、属性候補数、payloadキー、候補endpointを表示する。`attribute` / `attribute_option` は本番マスタIDが必要なため、プレビューでは `null` とし、`bindingStatus=needs_attribute_master_binding` として創屋確認待ちを明示する。

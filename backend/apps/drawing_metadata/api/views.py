@@ -49,6 +49,19 @@ class RegistrationDetailApiView(APIView):
         return Response(RegisteredDrawingDetailSerializer(drawing).data)
 
 
+class DrawingViewerBootstrapApiView(APIView):
+    def get(self, request, drawing_id):
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+                "jobs",
+            ),
+            pk=drawing_id,
+        )
+        detail_payload = RegisteredDrawingDetailSerializer(drawing).data
+        return Response(detail_payload["viewerBootstrap"])
+
+
 class RegistrationExtractApiView(APIView):
     def post(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)

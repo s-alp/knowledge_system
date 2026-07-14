@@ -17,6 +17,16 @@ urlpatterns = [
         name="drawing-metadata-registration-detail-slash",
     ),
     path(
+        "drawings/<uuid:drawing_id>/bootstrap",
+        views.DrawingViewerBootstrapApiView.as_view(),
+        name="drawing-viewer-bootstrap",
+    ),
+    path(
+        "drawings/<uuid:drawing_id>/bootstrap/",
+        views.DrawingViewerBootstrapApiView.as_view(),
+        name="drawing-viewer-bootstrap-slash",
+    ),
+    path(
         "drawing-metadata/registrations/<uuid:drawing_id>/extract",
         views.RegistrationExtractApiView.as_view(),
         name="drawing-metadata-registration-extract",
