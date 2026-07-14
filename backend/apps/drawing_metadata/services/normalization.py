@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 import re
+import unicodedata
 
 from django.conf import settings
 
@@ -42,6 +43,7 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
 }
 
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
+MATERIAL_VALUE_PATTERN = re.compile(r"\b(SUS[0-9A-Z]*|SS[0-9A-Z]*|S[0-9]{2}C|A[0-9]{4}|AL|SKD[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*)\b", re.IGNORECASE)
 
 
 def _flatten_strings(values: Iterable[str | None]) -> list[str]:
@@ -307,6 +309,67 @@ def _material_id(material: dict) -> str | None:
     return material.get("mat_id") or material.get("matid")
 
 
+def _part_path(part: dict, index: int) -> str:
+    return ".".join(part.get("tree_path", []) or [part.get("name") or f"part_{index}"])
+
+
+def _normalize_material_text(value: str | None) -> str | None:
+    if not value:
+        return None
+    normalized = unicodedata.normalize("NFKC", value).strip().upper()
+    match = MATERIAL_VALUE_PATTERN.search(normalized)
+    return match.group(1) if match else None
+
+
+def _build_part_material_candidates(parts: list[dict], materials: list[dict]) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, str | None, str]] = set()
+
+    if len(parts) == 1 and len(materials) == 1:
+        part = parts[0]
+        material = materials[0]
+        part_path = _part_path(part, 0)
+        material_id = _material_id(material)
+        candidates.append(
+            {
+                "part_path": part_path,
+                "part_name": part.get("name"),
+                "material_id": material_id,
+                "material_name": material.get("name"),
+                "specific_gravity": material.get("specific_gravity"),
+                "source": "3d_material_single_part",
+                "confidence": "high",
+                "reason": "単一パーツかつ3D材質一覧も単一のため、全体材質を当該パーツ候補として採用しました。",
+            }
+        )
+        seen.add((part_path, material_id, "3d_material_single_part"))
+
+    for index, part in enumerate(parts):
+        part_path = _part_path(part, index)
+        for field_key, field_value in (part.get("ex_info_fields", {}) or {}).items():
+            material_text = _normalize_material_text(str(field_value))
+            if not material_text:
+                continue
+            key = (part_path, material_text, f"part_ex_info_fields.{field_key}")
+            if key in seen:
+                continue
+            seen.add(key)
+            candidates.append(
+                {
+                    "part_path": part_path,
+                    "part_name": part.get("name"),
+                    "material_id": material_text,
+                    "material_name": str(field_value).strip(),
+                    "specific_gravity": None,
+                    "source": f"part_ex_info_fields.{field_key}",
+                    "confidence": "medium",
+                    "reason": "パーツ付加情報の値が材質表記パターンに一致したため、部品材質候補として保持しました。",
+                }
+            )
+
+    return candidates
+
+
 def normalize_raw_extract(raw_payload: dict) -> dict:
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
@@ -361,6 +424,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "material_ids": [],
         "material_names": [],
         "material_specific_gravities": [],
+        "part_material_candidates": [],
+        "part_material_candidate_count": 0,
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -446,6 +511,13 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             value
             for part in parts
             for value in [part.get("ex_info"), *(part.get("ex_info_fields", {}) or {}).values()]
+        )
+        canonical["part_material_candidates"] = _build_part_material_candidates(parts, materials)
+        canonical["part_material_candidate_count"] = len(canonical["part_material_candidates"])
+        canonical["material_keywords"] = _merge_unique(
+            canonical["material_keywords"]
+            + _flatten_strings(candidate.get("material_id") for candidate in canonical["part_material_candidates"])
+            + _flatten_strings(candidate.get("material_name") for candidate in canonical["part_material_candidates"])
         )
         canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
         canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)

@@ -48,6 +48,10 @@ def test_normalize_3d_raw_extract():
                     "is_mirror": False,
                     "is_read_only": True,
                     "is_unloaded": False,
+                    "ex_info_fields": {
+                        "User_WBZAI1": "ＲＭ",
+                        "User_WCMNA": "ＳＵＳ",
+                    },
                 }
             ],
         },
@@ -71,6 +75,10 @@ def test_normalize_3d_raw_extract():
     assert canonical["material_ids"] == ["SUS304", "A5052"]
     assert canonical["material_names"] == ["SUS304", "AL"]
     assert canonical["material_specific_gravities"] == [7.93, 2.68]
+    assert canonical["part_material_candidate_count"] == 1
+    assert canonical["part_material_candidates"][0]["part_path"] == "Top.UnitA"
+    assert canonical["part_material_candidates"][0]["material_id"] == "SUS"
+    assert canonical["part_material_candidates"][0]["confidence"] == "medium"
     assert "SMC" in canonical["maker_keywords"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)

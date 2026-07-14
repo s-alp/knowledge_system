@@ -370,6 +370,22 @@ def _material_rows(raw_extract: dict, canonical_attributes: dict) -> list[dict]:
     return rows
 
 
+def _part_material_candidate_items(candidates: list[dict], limit: int = 12) -> list[dict]:
+    return [
+        {
+            "partPath": _display_value(candidate.get("part_path")),
+            "partName": _display_value(candidate.get("part_name")),
+            "material": _display_value(candidate.get("material_id") or candidate.get("material_name")),
+            "materialName": _display_value(candidate.get("material_name")),
+            "specificGravity": _display_value(candidate.get("specific_gravity")),
+            "source": _display_value(candidate.get("source")),
+            "confidence": _display_value(candidate.get("confidence")),
+            "reason": _display_value(candidate.get("reason")),
+        }
+        for candidate in candidates[:limit]
+    ]
+
+
 def _position_label(item: dict) -> str | None:
     x = item.get("position_x")
     y = item.get("position_y")
@@ -569,6 +585,7 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("weight_value", "3D重量", canonical_attributes.get("weight_value")),
         _make_row("volume_value", "3D体積", canonical_attributes.get("volume_value")),
         _make_row("material_probe_status", "3D材質取得状態", canonical_attributes.get("material_probe_status") or raw_extract.get("material_probe_status")),
+        _make_row("part_material_candidate_count", "部品材質候補数", canonical_attributes.get("part_material_candidate_count")),
         _make_row("external_part_exists", "外部参照パーツあり", canonical_attributes.get("external_part_exists", False)),
         _make_row("mirror_part_exists", "ミラーパーツあり", canonical_attributes.get("mirror_part_exists", False)),
         _make_row("unresolved_part_exists", "未解決パーツあり", canonical_attributes.get("unresolved_part_exists", False)),
@@ -590,6 +607,8 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "hasMassProperties": bool(raw_extract.get("mass_properties")),
         "materialRows": _material_rows(raw_extract, canonical_attributes),
         "hasMaterials": bool(raw_extract.get("materials")),
+        "partMaterialCandidates": _part_material_candidate_items(canonical_attributes.get("part_material_candidates", []) or []),
+        "partMaterialCandidateTotal": len(canonical_attributes.get("part_material_candidates", []) or []),
         "externalPartExists": bool(canonical_attributes.get("external_part_exists", False)),
         "mirrorPartExists": bool(canonical_attributes.get("mirror_part_exists", False)),
         "unresolvedPartExists": bool(canonical_attributes.get("unresolved_part_exists", False)),

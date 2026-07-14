@@ -141,6 +141,29 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
             "material_probe_status": "available",
             "material_ids": ["SUS304"],
             "material_names": ["SUS304"],
+            "part_material_candidate_count": 2,
+            "part_material_candidates": [
+                {
+                    "part_path": "TR1D9K990271",
+                    "part_name": "TR1D9K990271",
+                    "material_id": "SUS304",
+                    "material_name": "SUS304",
+                    "specific_gravity": 7.93,
+                    "source": "3d_material_single_part",
+                    "confidence": "high",
+                    "reason": "単一パーツかつ3D材質一覧も単一のため、全体材質を当該パーツ候補として採用しました。",
+                },
+                {
+                    "part_path": "TR1D9K990271",
+                    "part_name": "TR1D9K990271",
+                    "material_id": "SUS",
+                    "material_name": "ＳＵＳ",
+                    "specific_gravity": None,
+                    "source": "part_ex_info_fields.User_WCMNA",
+                    "confidence": "medium",
+                    "reason": "パーツ付加情報の値が材質表記パターンに一致したため、部品材質候補として保持しました。",
+                },
+            ],
         },
     )
 
@@ -157,6 +180,10 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
     assert payload["hasMaterials"] is True
     assert material_row_by_key["material_probe_status"] == "available"
     assert material_row_by_key["material_1"] == "SUS304 / SUS304 / 7.93 / elements=2"
+    assert payload["partMaterialCandidateTotal"] == 2
+    assert payload["partMaterialCandidates"][0]["partPath"] == "TR1D9K990271"
+    assert payload["partMaterialCandidates"][0]["material"] == "SUS304"
+    assert payload["partMaterialCandidates"][1]["source"] == "part_ex_info_fields.User_WCMNA"
 
 
 def test_build_tag_review_display_maps_tags_to_target_candidates():

@@ -538,6 +538,39 @@
         <p>3D材質はありません。</p>
       {% endif %}
 
+      <h3>部品材質候補</h3>
+      {% if snapshot_3d_display.partMaterialCandidates %}
+        <table>
+          <thead>
+            <tr>
+              <th>パーツ階層</th>
+              <th>部品名</th>
+              <th>材質候補</th>
+              <th>材質名</th>
+              <th>比重</th>
+              <th>根拠</th>
+              <th>信頼度</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for candidate in snapshot_3d_display.partMaterialCandidates %}
+              <tr>
+                <td>{{ candidate.partPath }}</td>
+                <td>{{ candidate.partName }}</td>
+                <td>{{ candidate.material }}</td>
+                <td>{{ candidate.materialName }}</td>
+                <td>{{ candidate.specificGravity }}</td>
+                <td>{{ candidate.source }}</td>
+                <td>{{ candidate.confidence }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_3d_display.partMaterialCandidateTotal }} 件中 {{ snapshot_3d_display.partMaterialCandidates|length }} 件を表示しています。</p>
+      {% else %}
+        <p>部品材質候補はありません。</p>
+      {% endif %}
+
       <h3>部品ツリーパスの先頭サンプル</h3>
       {% if snapshot_3d_display.partTreePaths %}
         <ul class="compact-list">
