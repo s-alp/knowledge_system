@@ -29,7 +29,8 @@ class Command(BaseCommand):
     help = "抽出済み ICAD JSON を RegisteredDrawing / Snapshot へ取り込みます。"
 
     def add_arguments(self, parser) -> None:
-        parser.add_argument("json_paths", nargs="+", help="抽出済み JSON ファイルまたはディレクトリ。")
+        parser.add_argument("json_paths", nargs="*", help="抽出済み JSON ファイルまたはディレクトリ。")
+        parser.add_argument("--manifest", action="append", default=[], help="代表抽出JSON manifest。複数指定できます。")
         parser.add_argument("--glob", default="*.json", help="ディレクトリ指定時の検索パターン。既定は *.json。")
         parser.add_argument("--mode", choices=[EXTRACTION_MODE_2D, EXTRACTION_MODE_3D], help="全入力に適用する抽出mode。")
         parser.add_argument(
@@ -46,6 +47,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options) -> None:
         input_files = self._collect_input_files(options["json_paths"], options["glob"])
+        input_files.extend(self._collect_manifest_files(options["manifest"]))
+        input_files = sorted(dict.fromkeys(input_files))
         if not input_files:
             raise CommandError("取り込み対象JSONが見つかりません。")
 
@@ -126,6 +129,33 @@ class Command(BaseCommand):
                 continue
             raise CommandError(f"指定パスがファイルでもディレクトリでもありません: {path}")
         return sorted(dict.fromkeys(input_files))
+
+    def _collect_manifest_files(self, raw_manifest_paths: list[str]) -> list[Path]:
+        input_files: list[Path] = []
+        for raw_manifest_path in raw_manifest_paths:
+            manifest_path = Path(raw_manifest_path).expanduser()
+            if not manifest_path.exists():
+                raise CommandError(f"manifest が存在しません: {manifest_path}")
+            payload = self._load_payload(manifest_path)
+            paths = payload.get("selectedPaths")
+            if paths is None:
+                paths = [
+                    selected_file.get("path")
+                    for entry in payload.get("entries", []) or []
+                    for selected_file in entry.get("selectedFiles", []) or []
+                ]
+            if not isinstance(paths, list):
+                raise CommandError(f"manifest の selectedPaths がlistではありません: {manifest_path}")
+            for raw_path in paths:
+                if not raw_path:
+                    continue
+                path = Path(str(raw_path)).expanduser()
+                if not path.exists():
+                    raise CommandError(f"manifest 内のJSONが存在しません: {path}")
+                if not path.is_file():
+                    raise CommandError(f"manifest 内のパスがファイルではありません: {path}")
+                input_files.append(path.resolve())
+        return input_files
 
     def _load_payload(self, input_file: Path) -> dict:
         try:

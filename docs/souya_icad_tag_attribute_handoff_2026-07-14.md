@@ -159,6 +159,30 @@ python backend\manage.py import_drawing_metadata_extracts path\to\sample_2d.json
   - `DFR-CM1-AA0305300011.icd`: 図面 attrs=2/tags=2、製品 attrs=1、部品 attrs=3/tags=1、プロジェクト attrs=1
   - `TR1D9K99027.icd`: 図面 attrs=2/tags=4、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1
 
+さらに、共有済み抽出JSONをそのまま全部取り込まず、客先差と2D/3Dペアを優先して代表を選ぶ `scripts\build_icad_extract_import_manifest.py` を追加した。
+
+```powershell
+python scripts\build_icad_extract_import_manifest.py `
+  --input-root output\live_extracts\shared_icad_probe_2026-07-14 `
+  --input-root output\live_extracts\part_material_probe_2026-07-14 `
+  --input-root output\live_extracts\mass_probe_2026-07-14 `
+  --max-drawings 24 `
+  --output output\souya_handoff\icad_extract_import_manifest_2026-07-15.json
+```
+
+manifestは112 JSONを確認し、24図面/43ファイルを選定した。選定後の分布は、2D/3Dペア19図面、3Dのみ5図面。客先ヒントは、ライズ5、ラップマスターウォルターズジャパン5、シブヤパッケージングシステム2、その他は SBY / NKS / ZCSET / DNPE / 宮本工業所 / 不二越などを1件ずつ含む。
+
+manifest経由でローカルDBへ取り込み、fixtureを再生成した。
+
+- 再生成後の出力件数: 35図面
+- `knowledgeSystemPayloadPreview` 候補あり: 25図面
+- 2D/3D両方あり: 20図面
+- 代表候補数:
+  - `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd`: 図面 attrs=5/tags=2、製品 attrs=1、部品 attrs=5/tags=1、プロジェクト attrs=1
+  - `217008-41J-3004.icd`: 図面 attrs=4/tags=2、製品 attrs=1、部品 attrs=7/tags=2、プロジェクト attrs=1
+  - `474300AC219.icd`: 図面 attrs=5/tags=20、製品 attrs=1、部品 attrs=38/tags=20、プロジェクト attrs=1
+  - `CAA5012-02434000K1R1.icd`: 図面 attrs=5/tags=9、製品 attrs=1、部品 attrs=27/tags=9、プロジェクト attrs=1
+
 同日にローカルDjangoを `http://127.0.0.1:8001` で起動し、実HTTPでも確認した。
 
 - `GET /drawing-metadata/`: HTTP 200
