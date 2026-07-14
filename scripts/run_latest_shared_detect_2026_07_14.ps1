@@ -48,6 +48,7 @@ $summary = foreach ($sample in $samples) {
         has_2d_container = $null
         view_sheet_count = $null
         print_frame_count = $null
+        segment_count = $null
         geometry_count = $null
         part_count = $null
         warning_count = $null
@@ -72,6 +73,7 @@ $summary = foreach ($sample in $samples) {
             $record.has_2d_container = $json.detection.has_2d_container
             $record.view_sheet_count = $json.detection.two_d.view_sheet_count
             $record.print_frame_count = $json.detection.two_d.print_frame_count
+            $record.segment_count = $json.detection.two_d.segment_count
             $record.geometry_count = $json.detection.two_d.geometry_count
             $record.part_count = $json.detection.three_d.part_count
             $record.warning_count = @($json.warnings).Count
@@ -88,5 +90,5 @@ $summary = foreach ($sample in $samples) {
 
 $summaryPath = Join-Path $OutputDirectory "_summary.json"
 $summary | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $summaryPath -Encoding utf8
-$summary | Format-Table file, exists, exit_code, has_2d, has_3d, view_sheet_count, print_frame_count, geometry_count, part_count, warning_count -AutoSize
+$summary | Format-Table file, exists, exit_code, has_2d, has_3d, view_sheet_count, print_frame_count, segment_count, geometry_count, part_count, warning_count -AutoSize
 Write-Output "summary_path=$summaryPath"

@@ -9,51 +9,87 @@ namespace IcadExtraction.SxNet
 {
     public static class IcadProcessStarter
     {
+        private const string IcadSessionMutexName = @"Local\KnowledgeSystem.IcadExtraction.IcadSession";
+        private const int DefaultSessionLockWaitSeconds = 600;
+
         public sealed class IcadProcessLease : IDisposable
         {
             private readonly Process? _startedProcess;
             private readonly bool _shutdownOnDispose;
+            private readonly Mutex? _sessionMutex;
+            private readonly bool _sessionLockAcquired;
 
-            public IcadProcessLease(WarningPayload? startupWarning, Process? startedProcess, bool shutdownOnDispose)
+            public IcadProcessLease(
+                WarningPayload? startupWarning,
+                Process? startedProcess,
+                bool shutdownOnDispose,
+                Mutex? sessionMutex,
+                bool sessionLockAcquired)
             {
                 StartupWarning = startupWarning;
                 _startedProcess = startedProcess;
                 _shutdownOnDispose = shutdownOnDispose;
+                _sessionMutex = sessionMutex;
+                _sessionLockAcquired = sessionLockAcquired;
             }
 
             public WarningPayload? StartupWarning { get; }
 
             public void Dispose()
             {
-                if (!_shutdownOnDispose || _startedProcess == null)
+                try
+                {
+                    if (!_shutdownOnDispose || _startedProcess == null)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        if (_startedProcess.HasExited)
+                        {
+                            return;
+                        }
+
+                        if (_startedProcess.CloseMainWindow())
+                        {
+                            if (_startedProcess.WaitForExit(5000))
+                            {
+                                return;
+                            }
+                        }
+
+                        if (!_startedProcess.HasExited)
+                        {
+                            _startedProcess.Kill();
+                            _startedProcess.WaitForExit(5000);
+                        }
+                    }
+                    catch
+                    {
+                        // 後処理での失敗は抽出結果自体を壊さない。
+                    }
+                }
+                finally
+                {
+                    ReleaseSessionLock();
+                }
+            }
+
+            private void ReleaseSessionLock()
+            {
+                if (!_sessionLockAcquired || _sessionMutex == null)
                 {
                     return;
                 }
 
                 try
                 {
-                    if (_startedProcess.HasExited)
-                    {
-                        return;
-                    }
-
-                    if (_startedProcess.CloseMainWindow())
-                    {
-                        if (_startedProcess.WaitForExit(5000))
-                        {
-                            return;
-                        }
-                    }
-
-                    if (!_startedProcess.HasExited)
-                    {
-                        _startedProcess.Kill();
-                        _startedProcess.WaitForExit(5000);
-                    }
+                    _sessionMutex.ReleaseMutex();
                 }
-                catch
+                finally
                 {
-                    // 後処理での失敗は抽出結果自体を壊さない。
+                    _sessionMutex.Dispose();
                 }
             }
         }
@@ -77,9 +113,58 @@ namespace IcadExtraction.SxNet
 
         public static IcadProcessLease EnsureRunning(string? executablePath, int startupWaitSeconds, bool shutdownIfAutostarted)
         {
+            var normalizedStartupWaitSeconds = Math.Max(1, startupWaitSeconds);
+            var sessionLockWaitSeconds = Math.Max(DefaultSessionLockWaitSeconds, normalizedStartupWaitSeconds);
+            var sessionMutex = new Mutex(false, IcadSessionMutexName);
+            var lockAcquired = false;
+            try
+            {
+                try
+                {
+                    lockAcquired = sessionMutex.WaitOne(TimeSpan.FromSeconds(sessionLockWaitSeconds));
+                }
+                catch (AbandonedMutexException)
+                {
+                    lockAcquired = true;
+                }
+
+                if (!lockAcquired)
+                {
+                    throw new TimeoutException(
+                        $"ICAD session lock could not be acquired within {sessionLockWaitSeconds} seconds."
+                    );
+                }
+
+                return EnsureRunningExclusive(
+                    executablePath,
+                    normalizedStartupWaitSeconds,
+                    shutdownIfAutostarted,
+                    sessionMutex,
+                    lockAcquired
+                );
+            }
+            catch
+            {
+                if (lockAcquired)
+                {
+                    sessionMutex.ReleaseMutex();
+                }
+
+                sessionMutex.Dispose();
+                throw;
+            }
+        }
+
+        private static IcadProcessLease EnsureRunningExclusive(
+            string? executablePath,
+            int startupWaitSeconds,
+            bool shutdownIfAutostarted,
+            Mutex sessionMutex,
+            bool sessionLockAcquired)
+        {
             if (IsRunning())
             {
-                return new IcadProcessLease(null, null, false);
+                return new IcadProcessLease(null, null, false, sessionMutex, sessionLockAcquired);
             }
 
             if (string.IsNullOrWhiteSpace(executablePath))
@@ -111,7 +196,9 @@ namespace IcadExtraction.SxNet
                             Message = $"ICAD was started automatically via {executablePath}.",
                         },
                         startedProcess,
-                        shutdownIfAutostarted
+                        shutdownIfAutostarted,
+                        sessionMutex,
+                        sessionLockAcquired
                     );
                 }
 

@@ -270,6 +270,7 @@ namespace IcadExtraction.Contracts
         public bool HasContent { get; set; }
         public int ViewSheetCount { get; set; }
         public int PrintFrameCount { get; set; }
+        public int SegmentCount { get; set; }
         public int GeometryCount { get; set; }
     }
 

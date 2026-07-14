@@ -131,6 +131,8 @@
 - [x] 材質ID `ZZZ`, `75`, `CDQ` を未解決材質として分離し、低信頼の `材質要確認` タグにする
 - [x] 文字化け図枠候補をGemini分類対象から除外し、元候補indexへ戻して適用する
 - [x] 共有抽出JSON 69件でGemini分類前フィルタを再プローブし、上位5サンプルのU+FFFD除外0件を記録
+- [x] ICAD/SXNETアクセスをプロセス間Mutexで直列化し、3並列detectが全件成功することを確認
+- [x] 2D/3D有無判定を強化し、2Dセグメント数を `detect` 出力と共有16件サマリに追加
 
 ## 次に着手する
 
@@ -143,14 +145,6 @@
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
-- [ ] 2D/3D有無判定とICAD起動済み判定を強化
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_2d_3d_extraction_capability_matrix_2026-07-14.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Runner\Program.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\IcadProcessStarter.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\SxNetOpenContext.cs`
 - [ ] VS一覧と印刷枠を raw_extract へ取り込む
   - 参照資料:
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxModel.getVSList.html`

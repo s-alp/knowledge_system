@@ -34,14 +34,16 @@ namespace IcadExtraction.SxNet
         {
             var viewSheetCount = CountOrWarn(() => context.GetVsList().Count(), "detect_2d_vs_list_failed", warnings);
             var printFrameCount = CountOrWarn(() => context.GetInfPrintList().Count(), "detect_2d_print_frame_list_failed", warnings);
+            var segmentCount = CountOrWarn(() => CountAllViewSegments(context), "detect_2d_segment_count_failed", warnings);
             var geometryCount = CountOrWarn(() => CountAllViewGeometries(context), "detect_2d_geometry_count_failed", warnings);
             return new DetectionEvidence2DPayload
             {
                 ViewSheetCount = viewSheetCount,
                 PrintFrameCount = printFrameCount,
+                SegmentCount = segmentCount,
                 GeometryCount = geometryCount,
                 HasContainer = viewSheetCount > 0 || printFrameCount > 0,
-                HasContent = geometryCount > 0,
+                HasContent = segmentCount > 0 || geometryCount > 0,
             };
         }
 
@@ -90,6 +92,34 @@ namespace IcadExtraction.SxNet
             }
 
             return viewSheets.Sum(CountViewGeometries);
+        }
+
+        private static int CountAllViewSegments(SxNetOpenContext context)
+        {
+            var viewSheets = context.GetVsList().ToArray();
+            if (viewSheets.Length == 0)
+            {
+                return CountViewSegments(context.GetGlobalVs());
+            }
+
+            return viewSheets.Sum(CountViewSegments);
+        }
+
+        private static int CountViewSegments(object viewSheet)
+        {
+            var vsType = viewSheet.GetType();
+            var getSegListMethod = vsType.GetMethods()
+                .FirstOrDefault(method =>
+                    method.Name == "getSegList" &&
+                    method.GetParameters().Length == 4);
+
+            if (getSegListMethod == null)
+            {
+                return 0;
+            }
+
+            var segments = getSegListMethod.Invoke(viewSheet, new object[] { 0, int.MaxValue, false, false });
+            return ReflectionHelpers.Enumerate(segments).Count();
         }
 
         private static int CountViewGeometries(object viewSheet)
