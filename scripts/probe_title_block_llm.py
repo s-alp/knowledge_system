@@ -36,16 +36,21 @@ def _is_2d_payload(path: Path, payload: dict) -> bool:
 
 
 def _candidate_summary(path: Path, payload: dict) -> dict:
+    from apps.drawing_metadata.services.llm_title_block_classifier import filter_classifiable_title_block_candidates
     from apps.drawing_metadata.services.normalization import normalize_raw_extract
 
     canonical = normalize_raw_extract(payload)
     candidates = canonical.get("title_block_candidates") or []
+    llm_candidates, _ = filter_classifiable_title_block_candidates(candidates)
     return {
         "path": str(path),
         "file": path.name,
         "candidate_count": len(candidates),
+        "llm_candidate_count": len(llm_candidates),
+        "skipped_replacement_character_count": len(candidates) - len(llm_candidates),
         "selected_fields": canonical.get("title_block_fields") or {},
         "candidates": candidates,
+        "llm_candidates": llm_candidates,
     }
 
 
@@ -71,7 +76,7 @@ def _classify(summary: dict, limit_candidates: int) -> dict:
         classify_title_block_candidates,
     )
 
-    candidates = summary["candidates"][:limit_candidates]
+    candidates = summary["llm_candidates"][:limit_candidates]
     classifications = classify_title_block_candidates(candidates)
     canonical = {
         "title_block_fields": dict(summary["selected_fields"]),
@@ -143,6 +148,8 @@ def main() -> int:
             "file": summary["file"],
             "path": summary["path"],
             "candidate_count": summary["candidate_count"],
+            "llm_candidate_count": summary["llm_candidate_count"],
+            "skipped_replacement_character_count": summary["skipped_replacement_character_count"],
             "selected_fields": summary["selected_fields"],
             "candidate_preview": [
                 {
@@ -154,7 +161,7 @@ def main() -> int:
                     "layer_no": candidate.get("layer_no"),
                     "inside_print_area": candidate.get("inside_print_area"),
                 }
-                for candidate in summary["candidates"][: args.limit_candidates]
+                for candidate in summary["llm_candidates"][: args.limit_candidates]
             ],
         }
         if args.classify:

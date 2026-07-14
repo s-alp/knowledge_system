@@ -169,3 +169,52 @@ def test_process_job_records_gemini_failure_as_warning(monkeypatch, settings, tm
             "source": "gemini_title_block_classifier",
         }
     ]
+
+
+def test_classify_2d_title_block_candidates_skips_replacement_characters(monkeypatch, settings):
+    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
+    settings.GEMINI_API_KEY = "test-key"
+    canonical_attributes = {
+        "title_block_fields": {},
+        "title_block_candidates": [
+            {
+                "field": "material",
+                "label": "材質",
+                "value": "�",
+                "confidence": "low",
+                "evidence_text": "材質 �",
+            },
+            {
+                "field": "material",
+                "label": "材質",
+                "value": "SUS304",
+                "confidence": "low",
+                "evidence_text": "材質 SUS304",
+            },
+        ],
+    }
+    warnings = []
+
+    def fake_classify_title_block_candidates(candidates):
+        assert candidates == [canonical_attributes["title_block_candidates"][1]]
+        return [{"index": 0, "field": "material", "confidence": "high", "reason": "材質値に見える"}]
+
+    monkeypatch.setattr(
+        extraction_tasks,
+        "classify_title_block_candidates",
+        fake_classify_title_block_candidates,
+    )
+
+    extraction_tasks._classify_2d_title_block_candidates(canonical_attributes, warnings)
+
+    assert warnings == [
+        {
+            "code": "title_block_llm_skipped_replacement_characters",
+            "message": "Replacement-character title-block candidates were skipped before Gemini classification: 1",
+            "source": "gemini_title_block_classifier",
+            "count": 1,
+        }
+    ]
+    assert "llm_field" not in canonical_attributes["title_block_candidates"][0]
+    assert canonical_attributes["title_block_candidates"][1]["llm_field"] == "material"
+    assert canonical_attributes["title_block_fields"]["material"] == "SUS304"

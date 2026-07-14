@@ -9,6 +9,8 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiResponseError,
     apply_title_block_classifications,
     classify_title_block_candidates,
+    filter_classifiable_title_block_candidates,
+    remap_title_block_classification_indexes,
 )
 
 
@@ -85,6 +87,23 @@ def test_classify_title_block_candidates_reports_http_error_body(settings):
             [{"field": None, "value": "SUS304", "evidence_text": "材質 SUS304"}],
             urlopen=fake_urlopen,
         )
+
+
+def test_filter_classifiable_candidates_keeps_original_index_map():
+    candidates = [
+        {"field": "material", "value": "�", "evidence_text": "材質 �"},
+        {"field": "material", "value": "SUS304", "evidence_text": "材質 SUS304"},
+    ]
+
+    filtered, original_indexes = filter_classifiable_title_block_candidates(candidates)
+    remapped = remap_title_block_classification_indexes(
+        [{"index": 0, "field": "material", "confidence": "high", "reason": "材質欄"}],
+        original_indexes,
+    )
+
+    assert filtered == [candidates[1]]
+    assert original_indexes == [1]
+    assert remapped == [{"index": 1, "field": "material", "confidence": "high", "reason": "材質欄"}]
 
 
 def test_apply_title_block_classifications_adds_missing_field_without_overwrite():

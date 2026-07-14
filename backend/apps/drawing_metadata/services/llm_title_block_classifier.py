@@ -22,6 +22,46 @@ class GeminiResponseError(RuntimeError):
 UrlOpen = Callable[..., object]
 
 
+def has_replacement_character(candidate: dict) -> bool:
+    """Return true when a candidate still contains lost-character markers."""
+    values = [
+        candidate.get("field"),
+        candidate.get("value"),
+        candidate.get("evidence_text"),
+        candidate.get("view_name"),
+    ]
+    return any("\ufffd" in str(value) for value in values if value is not None)
+
+
+def filter_classifiable_title_block_candidates(candidates: list[dict]) -> tuple[list[dict], list[int]]:
+    """Filter LLM inputs while keeping a map back to the original candidate list."""
+    classifiable: list[dict] = []
+    original_indexes: list[int] = []
+    for index, candidate in enumerate(candidates):
+        if not isinstance(candidate, dict):
+            continue
+        if has_replacement_character(candidate):
+            continue
+        classifiable.append(candidate)
+        original_indexes.append(index)
+    return classifiable, original_indexes
+
+
+def remap_title_block_classification_indexes(classifications: list[dict], original_indexes: list[int]) -> list[dict]:
+    """Convert LLM result indexes back to the canonical title_block_candidates indexes."""
+    remapped: list[dict] = []
+    for classification in classifications:
+        if not isinstance(classification, dict):
+            continue
+        filtered_index = classification.get("index")
+        if not isinstance(filtered_index, int) or filtered_index < 0 or filtered_index >= len(original_indexes):
+            continue
+        item = dict(classification)
+        item["index"] = original_indexes[filtered_index]
+        remapped.append(item)
+    return remapped
+
+
 def classify_title_block_candidates(
     candidates: list[dict],
     *,

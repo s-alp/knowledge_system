@@ -19,6 +19,8 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiResponseError,
     apply_title_block_classifications,
     classify_title_block_candidates,
+    filter_classifiable_title_block_candidates,
+    remap_title_block_classification_indexes,
 )
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
@@ -89,8 +91,22 @@ def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: li
     if not candidates:
         return
 
+    classifiable_candidates, original_indexes = filter_classifiable_title_block_candidates(candidates)
+    skipped_count = len(candidates) - len(classifiable_candidates)
+    if skipped_count:
+        warnings.append(
+            {
+                "code": "title_block_llm_skipped_replacement_characters",
+                "message": f"Replacement-character title-block candidates were skipped before Gemini classification: {skipped_count}",
+                "source": "gemini_title_block_classifier",
+                "count": skipped_count,
+            }
+        )
+    if not classifiable_candidates:
+        return
+
     try:
-        classifications = classify_title_block_candidates(candidates)
+        classifications = classify_title_block_candidates(classifiable_candidates)
     except (GeminiConfigurationError, GeminiResponseError) as exc:
         warnings.append(
             {
@@ -101,6 +117,7 @@ def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: li
         )
         return
 
+    classifications = remap_title_block_classification_indexes(classifications, original_indexes)
     apply_title_block_classifications(canonical_attributes, classifications)
 
 

@@ -326,6 +326,8 @@ Gemini API は現行ドキュメント上、生成設定で `temperature` を指
 
 Gemini の出力は必ずバリデーションし、schema 不一致、根拠 ID 不足、存在しない値、禁止 enum は破棄する。
 
+実装上は、LLMへ渡す前に文字化け候補を除外する。U+FFFD を含む候補はCAD由来の監査証跡として `title_block_candidates` には残すが、Gemini分類対象からは外し、除外件数を warning に残す。除外後の配列でGeminiが返した index は、元の `title_block_candidates` の index に戻してから適用する。
+
 ## 9. 創屋へ渡すべき成果物
 
 創屋が本番ナレッジシステムへ組み込む前提で、こちらは以下を提供する。
