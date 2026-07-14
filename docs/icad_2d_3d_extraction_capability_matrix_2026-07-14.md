@@ -59,12 +59,12 @@
 | 参照図面名 | A | `SxInfPart.ref_model_name` | 実装済み | 外部パーツ、外部パーツ配下内部パーツで有効 |
 | 参照図面格納フォルダ | A | `SxInfPart.path` | 実装済み | 参照解決、ファイル追跡 |
 | 材質 | A | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()`, `SxEntSeg.getInfMaterial()` -> `SxInfMaterial` | 未実装 | `matid`, `name`, `spe_grav` を取得可能 |
-| 重量 | A/C | `SxEnt.getMass()`, `SxEnt.getMassList()` -> `SxInfMass.weight` | 未実装 | 対象要素が表示されている必要あり。ワイヤ対象外、シート/ソリッド混在で例外 |
-| 質量 | A/C | `SxInfMass.mass` | 未実装 | 測定対象がシートの場合は無効 |
-| 体積 | A/C | `SxInfMass.volume` | 未実装 | シートの場合 `0.0` |
-| 面積 | A/C | `SxInfMass.area` | 未実装 | マスプロパティの一部 |
-| 比重 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 未実装 | 要素に材質設定がある場合、`SxOptMass.density` は無視される |
-| 重心 | A/C | `SxInfMass.pos` | 未実装 | マスプロパティ計算結果 |
+| 重量 | A/C | `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` -> `SxInfMass.weight` | 実装済み | `mass_probe_status` と `mass_properties.weight` に保持。対象要素なし/例外は warning |
+| 質量 | A/C | `SxInfMass.mass` | 実装済み | `mass_properties.mass` に保持。測定対象がシートの場合は無効になる可能性 |
+| 体積 | A/C | `SxInfMass.volume` | 実装済み | `mass_properties.volume` に保持。シートの場合 `0.0` の可能性 |
+| 面積 | A/C | `SxInfMass.area` | 実装済み | `mass_properties.area` に保持 |
+| 比重/密度 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 一部実装済み | `SxInfMass.density` は保持。材質API由来の `spe_grav` は未実装 |
+| 重心 | A/C | `SxInfMass.pos` | 実装済み | `center_of_gravity_x/y/z` として保持 |
 | 慣性モーメント | A/C | `SxInfMass.inf_global_moment`, `inf_gravity_moment`, `inf_main_moment` | 未実装 | 検索タグより設計解析属性向け |
 | 図面サイズ | C | `SxInfPrint` または 2D出図範囲との照合 | 未実装 | 3D単独の固定属性としては未確認。モデル内の2D情報から取れる可能性が高い |
 | PRFX | B/D | 任意情報、パーツ名、参照図面名に含まれる可能性 | 未実装 | SXNET固定フィールドとしてはヒットなし |
@@ -134,8 +134,9 @@
 以下は、SXNET資料上の候補または文字解析方針はあるが、実サンプル横断での取得率が未確認。
 
 - 3D重量:
-  - `SxEnt.getMass` で取れる根拠はある。
-  - ただし対象要素の表示状態、シート/ソリッド混在、ワイヤ除外、パーツ/グループ単位の扱いを実サンプルで確認する必要がある。
+  - `SxWF.getExtent()` -> `SxWF.getEntList(SxBox, false)` -> `SxEnt.getMass(SxOptMass, SxEnt[])` で実装済み。
+  - 共有サンプル3件で `mass_probe_status=available` を確認済み。
+  - ただし対象要素なし、ICAD側計算例外、ワイヤ/シート混在の影響は `mass_probe_status` と warning で記録する。
 - 3D図面サイズ:
   - `SxInfPrint` で出図範囲枠情報は取れる。
   - 3D単独属性として図面サイズを持つか、2D出図範囲由来かを分ける必要がある。
@@ -159,7 +160,7 @@
 1. `SxModel.getInf()` と `SxModel.getInfPrintList()` を現行抽出に追加し、図面名、VS数、WF数、出図範囲、用紙サイズ、作画スケールを出す。
 2. `SxVS.getInf()` を追加し、VS名、尺度、ビュー種別を出す。
 3. `SxEnt.getInfList()` と `SxEnt.getInfMaterialList()` を2D/3Dそれぞれで出す。
-4. `SxEnt.getMass()` / `getMassList()` を3Dサンプルで試し、重量・質量・体積・面積・単位・例外条件を確認する。
+4. 3Dマスプロパティは実装済み。今後は部品単位/グループ単位の粒度と、例外条件のサンプル数を増やす。
 5. `SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomElparc2D`, `SxGeomHatch`, `SxGeomSmark`, `SxGeomFinishMark`, `SxGeomSymbol`, `SxGeomCutLine`, `SxGeomArrowView` を構造化する。
 6. 2D文字を座標付きで保持し、図枠領域と中央図面領域に分類する。
 7. 図枠欄名辞書を作り、担当者、承認者、日付、材質、重量、表面処理、塗装指示、PRFX、ユニット番号を候補抽出する。
@@ -176,7 +177,7 @@
 - 文字/図枠解析で取るもの:
   - 担当者、承認者、日付、材質、重量、表面処理、塗装指示、PRFX、ユニット番号、客先固有欄。
 - 実サンプル検証が必要なもの:
-  - 重量の安定取得、図枠欄の抽出率、2D/3D間の照合ルール、寸法/記号の実データでの分類率。
+  - 図枠欄の抽出率、2D/3D間の照合ルール、寸法/記号の実データでの分類率、3Dマスプロパティの例外条件。
 
 したがって、現資料は「再設計資料」としては成立しているが、創屋へ最終仕様として渡すには、このマトリクスを実サンプル結果で埋める追加フェーズが必要。
 
@@ -198,4 +199,4 @@
 
 最新の共有16件では、全件 `has_3d=true`、9件 `has_2d=true` だった。7件は `has_2d_container=true` だが `has_2d=false` であり、2DグローバルVSまたはVSコンテナの存在だけでは「図面情報あり」と判定できないことが確認できた。
 
-まだ完全把握できていない領域は変わらない。特に、重量/マスプロパティ、2D文字座標による印刷枠内外判定、図枠欄名解析、未対応ジオメトリの構造化、2D/3D属性照合ルールは次フェーズで詰める。
+3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。まだ完全把握できていない領域は、部品単位マスプロパティ、3D材質API、2D図枠欄名解析、2D primitive からの形状特徴タグ化、2D/3D属性照合ルールである。

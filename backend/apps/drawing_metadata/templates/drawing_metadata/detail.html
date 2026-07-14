@@ -379,6 +379,28 @@
         </tbody>
       </table>
 
+      <h3>マスプロパティ</h3>
+      {% if snapshot_3d_display.hasMassProperties %}
+        <table>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>値</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in snapshot_3d_display.massPropertyRows %}
+              <tr>
+                <th>{{ row.label }}</th>
+                <td>{{ row.displayValue }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>マスプロパティはありません。</p>
+      {% endif %}
+
       <h3>部品ツリーパスの先頭サンプル</h3>
       {% if snapshot_3d_display.partTreePaths %}
         <ul class="compact-list">

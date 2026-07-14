@@ -72,6 +72,15 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "top_part_name": None,
         "top_part_comment": None,
         "top_part_ex_info": None,
+        "mass_probe_status": None,
+        "mass_unit_name": None,
+        "mass_element_count": None,
+        "mass_value": None,
+        "weight_value": None,
+        "volume_value": None,
+        "area_value": None,
+        "density_value": None,
+        "center_of_gravity": None,
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -106,9 +115,24 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
     if source_kind == "3d":
         top_part = raw_extract.get("top_part", {})
         parts = raw_extract.get("parts", [])
+        mass_properties = raw_extract.get("mass_properties", {}) or {}
         canonical["top_part_name"] = top_part.get("name")
         canonical["top_part_comment"] = top_part.get("comment")
         canonical["top_part_ex_info"] = top_part.get("ex_info")
+        canonical["mass_probe_status"] = raw_extract.get("mass_probe_status")
+        canonical["mass_unit_name"] = mass_properties.get("unit_name")
+        canonical["mass_element_count"] = mass_properties.get("element_count")
+        canonical["mass_value"] = mass_properties.get("mass")
+        canonical["weight_value"] = mass_properties.get("weight")
+        canonical["volume_value"] = mass_properties.get("volume")
+        canonical["area_value"] = mass_properties.get("area")
+        canonical["density_value"] = mass_properties.get("density")
+        if all(mass_properties.get(key) is not None for key in ("center_of_gravity_x", "center_of_gravity_y", "center_of_gravity_z")):
+            canonical["center_of_gravity"] = (
+                f"{mass_properties.get('center_of_gravity_x')}, "
+                f"{mass_properties.get('center_of_gravity_y')}, "
+                f"{mass_properties.get('center_of_gravity_z')}"
+            )
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]

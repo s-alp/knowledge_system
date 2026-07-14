@@ -24,6 +24,12 @@ COMPOSED_SUMMARY_FIELDS = (
     ("extraction_status", "抽出状態"),
     ("confidence_summary", "信頼度"),
     ("top_part_name", "最上位パーツ名"),
+    ("mass_probe_status", "3D重量取得状態"),
+    ("mass_unit_name", "3D重量単位"),
+    ("mass_value", "3D質量"),
+    ("weight_value", "3D重量"),
+    ("volume_value", "3D体積"),
+    ("area_value", "3D面積"),
     ("external_part_exists", "外部参照パーツあり"),
     ("mirror_part_exists", "ミラーパーツあり"),
     ("unresolved_part_exists", "未解決パーツあり"),
@@ -257,12 +263,36 @@ def _part_ex_info_preview_items(raw_parts: list[dict], limit: int = 8) -> list[d
     return previews
 
 
+def _mass_property_rows(raw_extract: dict, canonical_attributes: dict) -> list[dict]:
+    mass_properties = raw_extract.get("mass_properties", {}) or {}
+    return [
+        _make_row("mass_probe_status", "取得状態", canonical_attributes.get("mass_probe_status") or raw_extract.get("mass_probe_status")),
+        _make_row("mass_element_count", "計算対象要素数", canonical_attributes.get("mass_element_count") or mass_properties.get("element_count")),
+        _make_row("mass_unit_name", "単位", canonical_attributes.get("mass_unit_name") or mass_properties.get("unit_name")),
+        _make_row("mass_value", "質量", canonical_attributes.get("mass_value") or mass_properties.get("mass")),
+        _make_row("weight_value", "重量", canonical_attributes.get("weight_value") or mass_properties.get("weight")),
+        _make_row("volume_value", "体積", canonical_attributes.get("volume_value") or mass_properties.get("volume")),
+        _make_row("area_value", "面積", canonical_attributes.get("area_value") or mass_properties.get("area")),
+        _make_row("density_value", "密度", canonical_attributes.get("density_value") or mass_properties.get("density")),
+        _make_row("center_of_gravity", "重心", canonical_attributes.get("center_of_gravity") or _mass_center_label(mass_properties)),
+    ]
+
+
 def _position_label(item: dict) -> str | None:
     x = item.get("position_x")
     y = item.get("position_y")
     if x is None or y is None:
         return None
     return f"{x}, {y}"
+
+
+def _mass_center_label(item: dict) -> str | None:
+    x = item.get("center_of_gravity_x")
+    y = item.get("center_of_gravity_y")
+    z = item.get("center_of_gravity_z")
+    if x is None or y is None or z is None:
+        return None
+    return f"{x}, {y}, {z}"
 
 
 def _center_label(item: dict) -> str | None:
@@ -404,6 +434,10 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     summary_rows = [
         _make_row("top_part_name", "最上位パーツ名", canonical_attributes.get("top_part_name")),
         _make_row("part_count", "抽出パーツ数", part_count),
+        _make_row("mass_probe_status", "3D重量取得状態", canonical_attributes.get("mass_probe_status") or raw_extract.get("mass_probe_status")),
+        _make_row("mass_value", "3D質量", canonical_attributes.get("mass_value")),
+        _make_row("weight_value", "3D重量", canonical_attributes.get("weight_value")),
+        _make_row("volume_value", "3D体積", canonical_attributes.get("volume_value")),
         _make_row("external_part_exists", "外部参照パーツあり", canonical_attributes.get("external_part_exists", False)),
         _make_row("mirror_part_exists", "ミラーパーツあり", canonical_attributes.get("mirror_part_exists", False)),
         _make_row("unresolved_part_exists", "未解決パーツあり", canonical_attributes.get("unresolved_part_exists", False)),
@@ -421,6 +455,8 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "refModelNamesTruncated": len(ref_model_names) > 5,
         "partExInfoSamples": _part_ex_info_preview_items(raw_parts),
         "partExInfoTotal": len([part for part in raw_parts if part.get("ex_info_fields")]),
+        "massPropertyRows": _mass_property_rows(raw_extract, canonical_attributes),
+        "hasMassProperties": bool(raw_extract.get("mass_properties")),
         "externalPartExists": bool(canonical_attributes.get("external_part_exists", False)),
         "mirrorPartExists": bool(canonical_attributes.get("mirror_part_exists", False)),
         "unresolvedPartExists": bool(canonical_attributes.get("unresolved_part_exists", False)),

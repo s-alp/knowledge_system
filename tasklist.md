@@ -24,10 +24,13 @@
   - 最新16件は `detect` を実行済み。全件 `has_3d=true`、9件 `has_2d=true`、7件は `has_2d_container=true` だが2D実体なし。
   - 本番ナレッジシステムの実画面は読み取り専用で確認済み。図面/プロジェクト/製品・装置・ユニット/部品の一覧にはタグ・属性列は未表示。
   - 本番フロント資産では `drawing_attributes` / `product_attributes` / `part_attributes` の参照を確認。`project_attributes` は未確認。
-  - 図面詳細系には `tags` / `attributes` の受け口があるため、創屋への初期連携は図面詳細を優先候補にする。
+  - 図面詳細系には `tags` / `attributes` の受け口があり、実画面でも基本情報に `タグ` と `属性情報` が見えるため、創屋への初期連携は図面詳細を優先候補にする。
+  - 製品・装置・ユニット詳細と部品詳細には `属性情報` が見えるがタグ欄は未確認。プロジェクト詳細にはタグ/属性の表示口が見えない。
+  - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
+  - 3Dマスプロパティは `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` で実装済み。`6800DDU.icd` / `474300AC219.icd` / `TR1D9Q00027.icd` で `mass_probe_status=available` を確認。
 - 次に着手する場合:
   - v2 raw schema を確定する。
   - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
@@ -93,11 +96,13 @@
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
 - [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み
 - [x] `TR1D9K99027.icd` / `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認
+- [x] 3Dマスプロパティを raw extract / canonical / detail display に追加
+- [x] 実サンプル3件で重量・質量・体積・面積・重心取得を確認
+- [x] ナレッジシステム実画面を視覚確認し、図面/プロジェクト/製品・装置・ユニット/部品の受け口差分を整理
 
 ## 次に着手する
 
 - [ ] 2D primitive から長穴、穴数、断面、ハッチング、表面粗さなどの形状特徴タグを生成
-- [ ] `SxEnt.getMass()` / `getMassList()` で重量、質量、体積、面積を実サンプル確認
 - [ ] 2D図枠欄名辞書と Gemini API 低温度 JSON 分類を実装
 - [ ] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`

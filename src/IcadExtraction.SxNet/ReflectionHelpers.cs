@@ -27,6 +27,31 @@ namespace IcadExtraction.SxNet
             return field?.GetValue(instance);
         }
 
+        public static bool SetMemberValue(object? instance, string memberName, object? value)
+        {
+            if (instance == null)
+            {
+                return false;
+            }
+
+            var type = instance.GetType();
+            var property = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (property != null && property.CanWrite)
+            {
+                property.SetValue(instance, value, null);
+                return true;
+            }
+
+            var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (field == null)
+            {
+                return false;
+            }
+
+            field.SetValue(instance, value);
+            return true;
+        }
+
         public static string? GetString(object? instance, string memberName)
         {
             var value = GetMemberValue(instance, memberName);

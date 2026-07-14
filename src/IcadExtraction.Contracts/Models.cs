@@ -73,6 +73,26 @@ namespace IcadExtraction.Contracts
     {
         public TopPartPayload TopPart { get; set; } = new TopPartPayload();
         public List<PartPayload> Parts { get; set; } = new List<PartPayload>();
+        public string MassProbeStatus { get; set; } = "not_attempted";
+        public MassPropertyPayload? MassProperties { get; set; }
+    }
+
+    public sealed class MassPropertyPayload
+    {
+        public int ElementCount { get; set; }
+        public string UnitName { get; set; } = string.Empty;
+        public int? UnitType { get; set; }
+        public bool IsSi { get; set; }
+        public double? Density { get; set; }
+        public double? Area { get; set; }
+        public double? Volume { get; set; }
+        public double? Mass { get; set; }
+        public double? Weight { get; set; }
+        public double? Length { get; set; }
+        public double? CenterOfGravityX { get; set; }
+        public double? CenterOfGravityY { get; set; }
+        public double? CenterOfGravityZ { get; set; }
+        public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
     }
 
     public sealed class TextPayload

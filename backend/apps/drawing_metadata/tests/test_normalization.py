@@ -14,6 +14,19 @@ def test_normalize_3d_raw_extract():
             "extension": ".icd",
         },
         "raw_extract": {
+            "mass_probe_status": "available",
+            "mass_properties": {
+                "element_count": 17,
+                "unit_name": "mm-kg",
+                "mass": 0.00055092,
+                "weight": 0.00540269,
+                "volume": 701.64779731,
+                "area": 1858.76904715,
+                "density": 1.0,
+                "center_of_gravity_x": 10.0,
+                "center_of_gravity_y": 20.0,
+                "center_of_gravity_z": 30.0,
+            },
             "top_part": {
                 "name": "KO小山ガントリー",
                 "comment": "広島アルミではない",
@@ -41,6 +54,14 @@ def test_normalize_3d_raw_extract():
     assert canonical["source_directory_path"] == r"J:\KO小山"
     assert canonical["customer_name"] == "コマツ小山"
     assert canonical["equipment_category"] == "ガントリー"
+    assert canonical["mass_probe_status"] == "available"
+    assert canonical["mass_unit_name"] == "mm-kg"
+    assert canonical["mass_element_count"] == 17
+    assert canonical["mass_value"] == 0.00055092
+    assert canonical["weight_value"] == 0.00540269
+    assert canonical["volume_value"] == 701.64779731
+    assert canonical["area_value"] == 1858.76904715
+    assert canonical["center_of_gravity"] == "10.0, 20.0, 30.0"
     assert "SMC" in canonical["maker_keywords"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
 

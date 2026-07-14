@@ -74,6 +74,19 @@ def test_build_3d_snapshot_display_shows_multiple_paths_for_cassette_sample():
 def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
     payload = build_3d_snapshot_display(
         raw_extract={
+            "mass_probe_status": "available",
+            "mass_properties": {
+                "element_count": 39,
+                "unit_name": "mm-kg",
+                "mass": 0.02220905,
+                "weight": 0.2177964,
+                "volume": 129916.95147963,
+                "area": 1024.0,
+                "density": 1.0,
+                "center_of_gravity_x": 1.0,
+                "center_of_gravity_y": 2.0,
+                "center_of_gravity_z": 3.0,
+            },
             "parts": [
                 {
                     "tree_path": ["TR1D9K990271"],
@@ -89,12 +102,27 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
         canonical_attributes={
             "top_part_name": "TR1D9K990271",
             "part_names": ["TR1D9K990271"],
+            "mass_probe_status": "available",
+            "mass_unit_name": "mm-kg",
+            "mass_element_count": 39,
+            "mass_value": 0.02220905,
+            "weight_value": 0.2177964,
+            "volume_value": 129916.95147963,
+            "area_value": 1024.0,
+            "density_value": 1.0,
+            "center_of_gravity": "1.0, 2.0, 3.0",
         },
     )
 
     assert payload["partExInfoTotal"] == 1
     assert payload["partExInfoSamples"][0]["path"] == "TR1D9K990271"
     assert payload["partExInfoSamples"][0]["fields"][0] == {"key": "User_WBZAI1", "value": "ＲＭ"}
+    assert payload["hasMassProperties"] is True
+    row_by_key = {row["key"]: row["displayValue"] for row in payload["massPropertyRows"]}
+    assert row_by_key["mass_probe_status"] == "available"
+    assert row_by_key["mass_unit_name"] == "mm-kg"
+    assert row_by_key["mass_value"] == "0.02220905"
+    assert row_by_key["center_of_gravity"] == "1.0, 2.0, 3.0"
 
 
 def test_build_tag_review_display_maps_tags_to_target_candidates():
