@@ -35,6 +35,7 @@
   - 3Dマスプロパティは `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` で実装済み。`6800DDU.icd` / `474300AC219.icd` / `TR1D9Q00027.icd` で `mass_probe_status=available` を確認。
   - 2D図枠欄名候補を `title_block_candidates` と `title_block_fields` として追加。`TR1D9K99027_allviews_2d.json` は候補10件、`DFR-CM1-AA0305300011_2d.json` は材質候補を確認。
   - 2D primitive 由来の `geometry_feature_candidates` を追加。`CAA5012-02430002P1R1_primitives_2d.json` でハッチング8件、表面粗さ2件、長穴候補17件を確認。
+  - Gemini API 低温度JSON分類サービスを追加。`title_block_candidates` の欄名分類補助に限定し、許可field外や範囲外indexは破棄する。
 - 次に着手する場合:
   - v2 raw schema を確定する。
   - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
@@ -106,11 +107,12 @@
 - [x] 2D図枠欄名の初期辞書、候補レビュー表示、図枠由来タグ生成を追加
 - [x] 2D primitive から形状・記号特徴候補タグを生成
 - [x] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
+- [x] Gemini API 低温度JSON分類サービスの入口を追加
 
 ## 次に着手する
 
 - [ ] 長穴、穴数、断面、表面粗さ値などを候補ではなく確定属性にする追加ロジックを実装
-- [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini API 低温度 JSON 分類は曖昧欄名の補助として追加
+- [ ] 2D図枠欄名辞書を実サンプルで拡充し、Gemini API 低温度 JSON 分類をジョブへ組み込む
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:
