@@ -10,7 +10,12 @@ from django.views import View
 
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
-from apps.drawing_metadata.services.display import build_3d_snapshot_display, build_composed_display_payload
+from apps.drawing_metadata.services.display import (
+    build_2d_snapshot_display,
+    build_3d_snapshot_display,
+    build_composed_display_payload,
+    build_tag_review_display_payload,
+)
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 
 
@@ -53,6 +58,14 @@ class RegistrationDetailPageView(View):
                 "snapshot_3d": snapshot_3d,
                 "composed_metadata": composed_metadata,
                 "composed_display": build_composed_display_payload(composed_metadata),
+                "snapshot_2d_display": (
+                    build_2d_snapshot_display(
+                        raw_extract=snapshot_2d.raw_extract_json,
+                        canonical_attributes=snapshot_2d.canonical_attributes_json,
+                    )
+                    if snapshot_2d
+                    else None
+                ),
                 "snapshot_3d_display": (
                     build_3d_snapshot_display(
                         raw_extract=snapshot_3d.raw_extract_json,
@@ -104,6 +117,32 @@ class RegistrationDetailPageView(View):
 
         messages.error(request, "未対応の操作です。")
         return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
+
+
+class TagReviewPageView(View):
+    template_name = "drawing_metadata/tag_review.html"
+
+    def get(self, request: HttpRequest, drawing_id) -> HttpResponse:
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+                "jobs",
+            ),
+            pk=drawing_id,
+        )
+        snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in drawing.snapshots.all()}
+        composed_metadata = compose_drawing_metadata(drawing)
+        return render(
+            request,
+            self.template_name,
+            {
+                "drawing": drawing,
+                "tag_review_display": build_tag_review_display_payload(
+                    composed_metadata=composed_metadata,
+                    snapshots_by_mode=snapshots_by_mode,
+                ),
+            },
+        )
 
 
 class JobDetailPageView(View):

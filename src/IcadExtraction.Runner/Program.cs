@@ -19,6 +19,8 @@ namespace IcadExtraction.Runner
                 {
                     case "extract":
                         return RunExtract(command);
+                    case "detect":
+                        return RunDetect(command);
                     case "self-check":
                         return RunSelfCheck(command);
                     default:
@@ -64,6 +66,7 @@ namespace IcadExtraction.Runner
             }
 
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
+            envelope.SourceFile = BuildSourceFilePayload(inputPath);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
             if (autostartWarning != null)
             {
@@ -90,6 +93,56 @@ namespace IcadExtraction.Runner
             var message = new SxNetRuntimeGuard().SelfCheck(sxnetDllPath);
             Console.WriteLine(message);
             return 0;
+        }
+
+        private static int RunDetect(CliCommand command)
+        {
+            var inputPath = RequireOption(command, "input-path");
+            var outputPath = RequireOption(command, "output-path");
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var icadExecutablePath = OptionalOption(command, "icad-executable-path");
+            var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
+            var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+
+            var stopwatch = Stopwatch.StartNew();
+            using var icadLease = IcadProcessStarter.EnsureRunning(
+                icadExecutablePath,
+                icadStartupWaitSeconds,
+                shutdownIfAutostarted
+            );
+            var envelope = new IcadPresenceDetector().Detect(sxnetDllPath, inputPath);
+            envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
+            envelope.SourceFile = BuildSourceFilePayload(inputPath);
+            envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
+            if (icadLease.StartupWarning != null)
+            {
+                envelope.Warnings.Insert(0, icadLease.StartupWarning);
+            }
+
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy(),
+                },
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Include,
+            };
+            File.WriteAllText(outputPath, JsonConvert.SerializeObject(envelope, serializerSettings));
+            return 0;
+        }
+
+        private static SourceFilePayload BuildSourceFilePayload(string inputPath)
+        {
+            return new SourceFilePayload
+            {
+                FullPath = inputPath,
+                DirectoryPath = Path.GetDirectoryName(inputPath),
+                FileName = Path.GetFileName(inputPath),
+                FileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath),
+                Extension = Path.GetExtension(inputPath),
+            };
         }
 
         private static string RequireOption(CliCommand command, string optionName)

@@ -1,5 +1,37 @@
 # tasklist
 
+## 2026-07-14 再設計メモ
+
+- 新規方針:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_cad_tag_attribute_redesign_2026-07-14.md`
+- 取得可能性調査:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_2d_3d_extraction_capability_matrix_2026-07-14.md`
+- 共有サンプル実抽出メモ:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
+- 位置づけ:
+  - 既存 PoC の延長ではなく、ICAD 2D/3D から何を取得し、何にタグ・属性を付与するかを再定義した設計メモ。
+  - 取得可能性調査では、SXNET根拠、現行PoC実装状況、実サンプル確認状況、未確認事項を分けている。
+  - 旧 `texts` / `dimensions` 中心の 2D 抽出では粗いため、`図枠` / `中央図面` / `寸法・注記・加工指示` を分ける。
+  - 3D は `SxWF.getInfPartTree()` を中核に、アセンブリ、部品、外部参照、材質、要素統計を分ける。
+  - 2D/3D のどちらかを固定の正本にせず、図面名、図面サイズ、重量、材質、PRFX、ユニット番号などは両方から候補取得して照合する。
+  - 2D からも材質、重量、担当者、承認者、日付、尺度、表面処理、塗装指示などを取得対象にする。
+  - 現行抽出器は2D/3D有無を明示判定しておらず、空に近い抽出でも成功扱いになるため、`detect` または `source-kind=auto` が必要。
+  - 図枠外/印刷範囲外の文字は、現時点では削除せず、座標と出図範囲を記録して `inside_print_area` として判定する方針。
+  - 2D訂正表/訂正理由と、3Dパーツ付加情報はタグ・属性生成の重要な evidence source として追加する。
+  - 客先が分散した実データを前提に、会社別固定座標ではなく、VS一覧、印刷枠、文字座標、部品付加情報を汎用証拠として保存する。
+  - ICAD SX 2025 では `ICADX4J.EXE` が起動済みプロセスとして残るため、起動済み判定に `icadx4j` を含める。
+  - 現時点で確認済みの共有サンプルは39件。追加サンプルが必要な場合は、必要なデータ種別を明示してユーザーへ依頼する。
+  - 最新16件は `detect` を実行済み。全件 `has_3d=true`、9件 `has_2d=true`、7件は `has_2d_container=true` だが2D実体なし。
+  - 本番ナレッジシステムの実画面は読み取り専用で確認済み。図面/プロジェクト/製品・装置・ユニット/部品の一覧にはタグ・属性列は未表示。
+  - 本番フロント資産では `drawing_attributes` / `product_attributes` / `part_attributes` の参照を確認。`project_attributes` は未確認。
+  - 図面詳細系には `tags` / `attributes` の受け口があるため、創屋への初期連携は図面詳細を優先候補にする。
+  - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
+- 次に着手する場合:
+  - v2 raw schema を確定する。
+  - 2D 抽出を `title_block` / `drawing_body` / `dimensions` / `notes` / `balloons` / `manufacturing_symbols` へ分離する。
+  - `cross_source_reconciliation` として 2D 候補、3D 候補、採用値、差異、要確認理由を保持する。
+  - Gemini API は曖昧分類の補助に限定し、CAD に存在しない値の推測採用は禁止する。
+
 ## 別会話で再開する人向け
 
 ### 最初に読む資料
@@ -45,9 +77,24 @@
 - [x] `source_kind` を drawing から job / snapshot 単位へ移行
 - [x] Windows worker 前提の mode-aware API / snapshot 構成へ更新
 - [x] ICAD auto-start / auto-shutdown オプションを追加
+- [x] ICAD起動済み判定に `icadx4j` を追加
+- [x] `detect` コマンドで2D/3D有無、2Dコンテナ有無、VS/印刷枠/ジオメトリ/パーツ数を返す
+- [x] 2D抽出を全VS対象に拡張
+- [x] 2D抽出でVS情報、印刷枠、レイヤー、要素所属レイヤーを保持
+- [x] 抽出結果に保存フォルダ、ファイル名、拡張子を保持
+- [x] 3Dパーツ付加情報を `ex_info_fields` として保持
+- [x] Django詳細画面に2D/3D抽出サマリを追加
+- [x] Django側にタグ候補レビュー画面を追加
+- [x] 最新共有16件の `detect` を実行して結果を保存
+- [x] 本番ナレッジシステム実画面とフロント資産を読み取り専用で確認
 
 ## 次に着手する
 
+- [ ] 2D文字・寸法・注記の座標取得と `inside_print_area` 判定を実装
+- [ ] `SxGeomSpline2D` など未対応2Dジオメトリを構造化
+- [ ] `SxEnt.getMass()` / `getMassList()` で重量、質量、体積、面積を実サンプル確認
+- [ ] 2D図枠欄名辞書と Gemini API 低温度 JSON 分類を実装
+- [ ] 図面/プロジェクト/製品・装置・ユニット/部品別の創屋連携項目表を作成
 - [ ] `SxGeomSpline2D` を raw_extract へ取り込む
   - 参照資料:
     - `C:\Users\s-iwata\Desktop\knowledge_system\docs\extraction_result_schema_2026-05-28.md`
@@ -57,6 +104,23 @@
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
+- [ ] 2D/3D有無判定とICAD起動済み判定を強化
+  - 参照資料:
+    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_2d_3d_extraction_capability_matrix_2026-07-14.md`
+  - 次に触るファイル:
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Runner\Program.cs`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\IcadProcessStarter.cs`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\SxNetOpenContext.cs`
+- [ ] VS一覧と印刷枠を raw_extract へ取り込む
+  - 参照資料:
+    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxModel.getVSList.html`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxModel.getInfPrintList.html`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
+  - 次に触るファイル:
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\Icad2DExtractor.cs`
+    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
 - [ ] symbol / hatch / cutline 系の 2D geometry 対応を追加
   - 参照資料:
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`

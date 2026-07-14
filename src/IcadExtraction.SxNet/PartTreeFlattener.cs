@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
@@ -15,6 +16,7 @@ namespace IcadExtraction.SxNet
                 Comment = ReflectionHelpers.GetString(rootInf, "comment"),
                 ExInfo = topPartExInfo ?? ReflectionHelpers.GetString(rootNode, "ex_inf"),
             };
+            payload.TopPart.ExInfoFields = ParseExInfoFields(payload.TopPart.ExInfo);
 
             VisitNode(rootNode, new List<string>(), payload.Parts);
             return payload;
@@ -32,11 +34,14 @@ namespace IcadExtraction.SxNet
 
             if (info != null)
             {
+                var exInfo = ReflectionHelpers.GetString(node, "ex_inf");
                 output.Add(new PartPayload
                 {
                     TreePath = currentPath,
                     Name = name,
                     Comment = ReflectionHelpers.GetString(info, "comment"),
+                    ExInfo = exInfo,
+                    ExInfoFields = ParseExInfoFields(exInfo),
                     RefModelName = ReflectionHelpers.GetString(info, "ref_model_name"),
                     RefModelPath = ReflectionHelpers.GetString(info, "path"),
                     IsExternal = ReflectionHelpers.GetBool(info, "is_external"),
@@ -50,6 +55,28 @@ namespace IcadExtraction.SxNet
             {
                 VisitNode(child, currentPath, output);
             }
+        }
+
+        private static Dictionary<string, string> ParseExInfoFields(string? exInfo)
+        {
+            var fields = new Dictionary<string, string>();
+            if (string.IsNullOrWhiteSpace(exInfo))
+            {
+                return fields;
+            }
+
+            foreach (Match match in Regex.Matches(exInfo, "(?:\"(?<key_quoted>[^\"]+)\"|(?<key>[^,\\s]+))\\s*,\\s*\"(?<value>[^\"]*)\""))
+            {
+                var key = (match.Groups["key_quoted"].Success ? match.Groups["key_quoted"].Value : match.Groups["key"].Value).Trim();
+                if (key.Length == 0)
+                {
+                    continue;
+                }
+
+                fields[key] = match.Groups["value"].Value.Trim();
+            }
+
+            return fields;
         }
     }
 }

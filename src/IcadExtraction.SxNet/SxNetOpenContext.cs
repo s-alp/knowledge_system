@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace IcadExtraction.SxNet
@@ -55,6 +56,28 @@ namespace IcadExtraction.SxNet
             return InvokeModelMethod("getGlobalVS");
         }
 
+        public IEnumerable<object> GetVsList()
+        {
+            return InvokeModelCollectionMethod("getVSList");
+        }
+
+        public IEnumerable<object> GetInfPrintList()
+        {
+            return InvokeModelCollectionMethod("getInfPrintList");
+        }
+
+        public IEnumerable<object> GetInfLayerList()
+        {
+            var sxSysType = Assembly.GetType("sxnet.SxSys", throwOnError: true);
+            var method = sxSysType.GetMethod("getInfLayer", Type.EmptyTypes);
+            if (method == null)
+            {
+                throw new MissingMethodException("sxnet.SxSys.getInfLayer()");
+            }
+
+            return ReflectionHelpers.Enumerate(method.Invoke(null, null));
+        }
+
         private object InvokeModelMethod(string methodName)
         {
             var method = _model.GetType().GetMethod(methodName, Type.EmptyTypes);
@@ -70,6 +93,17 @@ namespace IcadExtraction.SxNet
             }
 
             return result;
+        }
+
+        private IEnumerable<object> InvokeModelCollectionMethod(string methodName)
+        {
+            var method = _model.GetType().GetMethod(methodName, Type.EmptyTypes);
+            if (method == null)
+            {
+                throw new MissingMethodException($"{_model.GetType().FullName}.{methodName}()");
+            }
+
+            return ReflectionHelpers.Enumerate(method.Invoke(_model, null));
         }
 
         public void Dispose()

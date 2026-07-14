@@ -25,6 +25,7 @@ namespace IcadExtraction.SxNet.Tests
                             path = @"C:\ref-a.icd",
                             is_external = true,
                         },
+                        ex_inf = "User_WBZAI1,\"RM\",\"User_WCMNA\",\"ＳＵＳ\"",
                         child_list = new[]
                         {
                             new FakePartTree
@@ -40,6 +41,8 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal("Top", payload.TopPart.Name);
             Assert.Equal("top ex", payload.TopPart.ExInfo);
             Assert.Equal(3, payload.Parts.Count);
+            Assert.Equal("RM", payload.Parts[1].ExInfoFields["User_WBZAI1"]);
+            Assert.Equal("ＳＵＳ", payload.Parts[1].ExInfoFields["User_WCMNA"]);
             Assert.Equal(new List<string> { "Top", "ChildA", "Leaf" }, payload.Parts[2].TreePath);
         }
 

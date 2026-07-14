@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -63,6 +64,57 @@ namespace IcadExtraction.SxNet
             }
 
             return 0;
+        }
+
+        public static double? GetDouble(object? instance, string memberName)
+        {
+            var value = GetMemberValue(instance, memberName);
+            return ConvertToDouble(value);
+        }
+
+        public static List<double> ExtractDoubleList(object? instance, string memberName)
+        {
+            var value = GetMemberValue(instance, memberName);
+            return Enumerate(value)
+                .Select(ConvertToDouble)
+                .Where(item => item.HasValue)
+                .Select(item => item!.Value)
+                .ToList();
+        }
+
+        private static double? ConvertToDouble(object? value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (value is double number)
+            {
+                return number;
+            }
+
+            if (value is float single)
+            {
+                return single;
+            }
+
+            if (value is decimal decimalNumber)
+            {
+                return (double)decimalNumber;
+            }
+
+            if (double.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed))
+            {
+                return parsed;
+            }
+
+            if (double.TryParse(value.ToString(), out parsed))
+            {
+                return parsed;
+            }
+
+            return null;
         }
 
         public static IEnumerable<object> Enumerate(object? instance)

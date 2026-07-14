@@ -34,6 +34,15 @@ def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> s
 def normalize_raw_extract(raw_payload: dict) -> dict:
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
+    source_file = raw_payload.get("source_file", {}) or raw_extract.get("_source_file", {}) or {}
+    source_path_tokens = _flatten_strings(
+        [
+            source_file.get("full_path"),
+            source_file.get("directory_path"),
+            source_file.get("file_name"),
+            source_file.get("file_name_without_extension"),
+        ]
+    )
 
     canonical = {
         "drawing_number": None,
@@ -54,12 +63,20 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "extraction_status": "success",
         "ocr_used": False,
         "confidence_summary": "medium",
+        "source_full_path": source_file.get("full_path"),
+        "source_directory_path": source_file.get("directory_path"),
+        "source_file_name": source_file.get("file_name"),
+        "source_file_stem": source_file.get("file_name_without_extension"),
+        "source_extension": source_file.get("extension"),
+        "source_path_tokens": source_path_tokens,
         "top_part_name": None,
         "top_part_comment": None,
         "top_part_ex_info": None,
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
+        "part_ex_info_fields": {},
+        "part_ex_info_tokens": [],
         "ref_model_names": [],
         "ref_model_paths": [],
         "external_part_exists": False,
@@ -95,6 +112,16 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]
+        canonical["part_ex_info_fields"] = {
+            ".".join(part.get("tree_path", []) or [part.get("name") or f"part_{index}"]): part.get("ex_info_fields", {})
+            for index, part in enumerate(parts)
+            if part.get("ex_info_fields")
+        }
+        canonical["part_ex_info_tokens"] = _flatten_strings(
+            value
+            for part in parts
+            for value in [part.get("ex_info"), *(part.get("ex_info_fields", {}) or {}).values()]
+        )
         canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
         canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)
         canonical["external_part_exists"] = any(part.get("is_external") for part in parts)
@@ -103,11 +130,13 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
 
         search_tokens = _flatten_strings(
             [
+                *source_path_tokens,
                 top_part.get("name"),
                 top_part.get("comment"),
                 top_part.get("ex_info"),
                 *canonical["part_names"],
                 *canonical["part_comments"],
+                *canonical["part_ex_info_tokens"],
                 *canonical["ref_model_names"],
             ]
         )
@@ -141,7 +170,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
 
         search_tokens = (
-            canonical["text_tokens"]
+            source_path_tokens
+            + canonical["text_tokens"]
             + canonical["dimension_symbols"]
             + canonical["weld_note_texts"]
             + canonical["balloon_keys"]

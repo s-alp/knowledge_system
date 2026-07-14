@@ -68,6 +68,8 @@ namespace IcadExtraction.SxNet
         private static readonly string[] CandidateProcessNames =
         {
             "icad",
+            // この環境の ICAD SX 2025 は実行本体が ICADX4J.EXE として残る。
+            "icadx4j",
             "icadsx02",
             "icadsx02_x86",
             "RICAD",

@@ -83,6 +83,9 @@
   </div>
 
   <div class="actions">
+    <a href="/drawing-metadata/{{ drawing.id }}/tags/">
+      <button type="button">タグ候補レビュー</button>
+    </a>
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="action" value="extract" />
@@ -103,6 +106,174 @@
       {% if snapshot_2d.latest_job %}
         <p><a href="/drawing-metadata/jobs/{{ snapshot_2d.latest_job.id }}/">最新 2D ジョブを見る</a></p>
       {% endif %}
+      <p class="muted">2D 図面から取れたビュー、印刷枠、レイヤー、文字、寸法の確認用サマリです。生 JSON を読む前に、図面内のどこから情報が取れているかを確認します。</p>
+
+      <h3>ファイル情報</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_2d_display.sourceFileRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>確認サマリ</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_2d_display.summaryRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>ビュー/用紙</h3>
+      {% if snapshot_2d_display.viewSheets %}
+        <table>
+          <thead>
+            <tr>
+              <th>ビュー名</th>
+              <th>要素数</th>
+              <th>尺度</th>
+              <th>コメント</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for view_sheet in snapshot_2d_display.viewSheets %}
+              <tr>
+                <td>{{ view_sheet.name }}</td>
+                <td>{{ view_sheet.geometryCount }}</td>
+                <td>{{ view_sheet.scale }}</td>
+                <td>{{ view_sheet.comment }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.viewSheetTotal }} 件中 {{ snapshot_2d_display.viewSheets|length }} 件を表示しています。</p>
+      {% else %}
+        <p>ビュー/用紙情報はありません。</p>
+      {% endif %}
+
+      <h3>印刷枠</h3>
+      {% if snapshot_2d_display.printFrames %}
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>サイズ</th>
+              <th>尺度</th>
+              <th>範囲</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for print_frame in snapshot_2d_display.printFrames %}
+              <tr>
+                <td>{{ print_frame.no }}</td>
+                <td>{{ print_frame.size }}</td>
+                <td>{{ print_frame.scale }}</td>
+                <td>{{ print_frame.range }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>印刷枠情報はありません。</p>
+      {% endif %}
+
+      <h3>レイヤー</h3>
+      {% if snapshot_2d_display.layers %}
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>名前</th>
+              <th>表示</th>
+              <th>検索対象</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for layer in snapshot_2d_display.layers %}
+              <tr>
+                <td>{{ layer.no }}</td>
+                <td>{{ layer.name }}</td>
+                <td>{{ layer.displayed }}</td>
+                <td>{{ layer.searchable }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.layerTotal }} 件中 {{ snapshot_2d_display.layers|length }} 件を表示しています。</p>
+      {% else %}
+        <p>レイヤー情報はありません。</p>
+      {% endif %}
+
+      <h3>文字サンプル</h3>
+      {% if snapshot_2d_display.textSamples %}
+        <table>
+          <thead>
+            <tr>
+              <th>ビュー名</th>
+              <th>レイヤー</th>
+              <th>文字</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for text in snapshot_2d_display.textSamples %}
+              <tr>
+                <td>{{ text.viewName }}</td>
+                <td>{{ text.layerNo }}</td>
+                <td>{{ text.text }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.textTotal }} 件中 {{ snapshot_2d_display.textSamples|length }} 件を表示しています。</p>
+      {% else %}
+        <p>文字情報はありません。</p>
+      {% endif %}
+
+      <h3>寸法サンプル</h3>
+      {% if snapshot_2d_display.dimensionSamples %}
+        <table>
+          <thead>
+            <tr>
+              <th>ビュー名</th>
+              <th>レイヤー</th>
+              <th>寸法値/記号</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dimension in snapshot_2d_display.dimensionSamples %}
+              <tr>
+                <td>{{ dimension.viewName }}</td>
+                <td>{{ dimension.layerNo }}</td>
+                <td>{{ dimension.value }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.dimensionTotal }} 件中 {{ snapshot_2d_display.dimensionSamples|length }} 件を表示しています。</p>
+      {% else %}
+        <p>寸法情報はありません。</p>
+      {% endif %}
+
       <h3>正規化属性</h3>
       <pre>{{ snapshot_2d.canonical_attributes_json|pprint }}</pre>
       <h3>派生タグ</h3>
@@ -131,6 +302,24 @@
     <h2>3D 抽出</h2>
     {% if snapshot_3d %}
       <p class="muted">raw / canonical から確認用に組み立てたサマリです。図面によっては疎い抽出結果になるため、件数とサンプルを先に確認します。</p>
+      <h3>ファイル情報</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_3d_display.sourceFileRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
       <h3>確認サマリ</h3>
       <table>
         <thead>
@@ -171,6 +360,36 @@
         <p class="muted">{{ snapshot_3d_display.refModelNameTotal }} 件中 {{ snapshot_3d_display.refModelNames|length }} 件を表示しています。</p>
       {% else %}
         <p>参照モデル名はありません。</p>
+      {% endif %}
+
+      <h3>パーツ付加情報の先頭サンプル</h3>
+      {% if snapshot_3d_display.partExInfoSamples %}
+        <table>
+          <thead>
+            <tr>
+              <th>パーツ階層</th>
+              <th>付加情報</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for part_ex_info in snapshot_3d_display.partExInfoSamples %}
+              <tr>
+                <td>{{ part_ex_info.path }}</td>
+                <td>
+                  <ul class="compact-list">
+                    {% for field in part_ex_info.fields %}
+                      <li>{{ field.key }} = {{ field.value }}</li>
+                    {% endfor %}
+                  </ul>
+                  <p class="muted">{{ part_ex_info.fieldTotal }} 項目中 {{ part_ex_info.fields|length }} 項目を表示しています。</p>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">付加情報があるパーツ {{ snapshot_3d_display.partExInfoTotal }} 件中 {{ snapshot_3d_display.partExInfoSamples|length }} 件を表示しています。</p>
+      {% else %}
+        <p>パーツ付加情報はありません。</p>
       {% endif %}
 
       {% if snapshot_3d.latest_job %}

@@ -1,0 +1,112 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <div class="actions">
+    <a href="/drawing-metadata/{{ drawing.id }}/">
+      <button type="button">図面詳細へ戻る</button>
+    </a>
+  </div>
+
+  <div class="panel">
+    <h2>{{ tag_review_display.title }}</h2>
+    <p class="muted">抽出 JSON から作ったタグ候補を、どの画面・データに渡すか確認するための画面です。本番ナレッジシステムへ直接保存する画面ではありません。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>根拠</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tag_review_display.evidenceRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>適用先候補</h2>
+    <p class="muted">本物のナレッジシステム確認では、一覧画面にタグ列は見えませんでした。図面詳細の tags / attributes、部品属性 API、各詳細画面の補助タブが主な受け口候補です。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>対象</th>
+          <th>確認メモ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tag_review_display.targetRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.displayValue }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for group in tag_review_display.groups %}
+    <div class="panel">
+      <h2>{{ group.label }}</h2>
+      <p class="muted">{{ group.description }}</p>
+      {% if group.tags %}
+        <table>
+          <thead>
+            <tr>
+              <th>タグ</th>
+              <th>根拠属性</th>
+              <th>信頼度</th>
+              <th>手動</th>
+              <th>適用候補</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tag in group.tags %}
+              <tr>
+                <td>{{ tag.tag }}</td>
+                <td>{{ tag.source }}</td>
+                <td>{{ tag.confidence }}</td>
+                <td>{{ tag.manualFlag }}</td>
+                <td>{{ tag.targetCandidates|join:", " }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>タグ候補はありません。</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="panel">
+    <h2>競合</h2>
+    {% if tag_review_display.conflicts %}
+      <table>
+        <thead>
+          <tr>
+            <th>属性</th>
+            <th>2D 値</th>
+            <th>3D 値</th>
+            <th>採用</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for conflict in tag_review_display.conflicts %}
+            <tr>
+              <td>{{ conflict.attribute }}</td>
+              <td>{{ conflict.mode2dValue }}</td>
+              <td>{{ conflict.mode3dValue }}</td>
+              <td>{{ conflict.chosenMode }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>競合はありません。</p>
+    {% endif %}
+  </div>
+{% endblock %}

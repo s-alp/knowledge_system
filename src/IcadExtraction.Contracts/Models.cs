@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace IcadExtraction.Contracts
 {
@@ -50,6 +51,7 @@ namespace IcadExtraction.Contracts
         public string? Name { get; set; }
         public string? Comment { get; set; }
         public string? ExInfo { get; set; }
+        public Dictionary<string, string> ExInfoFields { get; set; } = new Dictionary<string, string>();
     }
 
     public sealed class PartPayload
@@ -57,6 +59,8 @@ namespace IcadExtraction.Contracts
         public List<string> TreePath { get; set; } = new List<string>();
         public string? Name { get; set; }
         public string? Comment { get; set; }
+        public string? ExInfo { get; set; }
+        public Dictionary<string, string> ExInfoFields { get; set; } = new Dictionary<string, string>();
         public string? RefModelName { get; set; }
         public string? RefModelPath { get; set; }
         public bool IsExternal { get; set; }
@@ -76,11 +80,15 @@ namespace IcadExtraction.Contracts
         public List<string> TextLines { get; set; } = new List<string>();
         public int LineCount { get; set; }
         public string SourceType { get; set; } = "text";
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string? JoinedText { get; set; }
     }
 
     public sealed class DimensionPayload
     {
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string? Value1 { get; set; }
         public string? Value2 { get; set; }
         public string? FrontWord { get; set; }
@@ -94,27 +102,70 @@ namespace IcadExtraction.Contracts
 
     public sealed class WeldNotePayload
     {
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
     public sealed class BalloonPayload
     {
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string? Text { get; set; }
     }
 
     public sealed class TolerancePayload
     {
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
     public sealed class GeometryPrimitivePayload
     {
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
         public string GeometryType { get; set; } = string.Empty;
         public string Summary { get; set; } = string.Empty;
     }
 
+    public sealed class ViewSheetPayload
+    {
+        public string? Name { get; set; }
+        public string? Comment { get; set; }
+        public double? Scale { get; set; }
+        public double? Angle { get; set; }
+        public int Type { get; set; }
+        public int ViewType { get; set; }
+        public int GeometryCount { get; set; }
+    }
+
+    public sealed class PrintFramePayload
+    {
+        public int No { get; set; }
+        public string? Size { get; set; }
+        public bool Vertical { get; set; }
+        public List<double> Dinfo { get; set; } = new List<double>();
+        public double? DrawingScale { get; set; }
+        public double? RangeMinX { get; set; }
+        public double? RangeMinY { get; set; }
+        public double? RangeMaxX { get; set; }
+        public double? RangeMaxY { get; set; }
+    }
+
+    public sealed class LayerPayload
+    {
+        public int No { get; set; }
+        public string? Name { get; set; }
+        public bool IsDisplayed { get; set; }
+        public bool IsSearchable { get; set; }
+    }
+
     public sealed class RawExtract2DPayload
     {
+        public List<ViewSheetPayload> ViewSheets { get; set; } = new List<ViewSheetPayload>();
+        public List<PrintFramePayload> PrintFrames { get; set; } = new List<PrintFramePayload>();
+        public List<LayerPayload> Layers { get; set; } = new List<LayerPayload>();
         public List<TextPayload> Texts { get; set; } = new List<TextPayload>();
         public List<DimensionPayload> Dimensions { get; set; } = new List<DimensionPayload>();
         public List<GeometryPrimitivePayload> GeometryPrimitives { get; set; } = new List<GeometryPrimitivePayload>();
@@ -123,9 +174,19 @@ namespace IcadExtraction.Contracts
         public List<TolerancePayload> Tolerances { get; set; } = new List<TolerancePayload>();
     }
 
+    public sealed class SourceFilePayload
+    {
+        public string FullPath { get; set; } = string.Empty;
+        public string? DirectoryPath { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string FileNameWithoutExtension { get; set; } = string.Empty;
+        public string Extension { get; set; } = string.Empty;
+    }
+
     public sealed class ExtractionEnvelope
     {
         public string InputPath { get; set; } = string.Empty;
+        public SourceFilePayload SourceFile { get; set; } = new SourceFilePayload();
         public string SourceFormat { get; set; } = "icad";
         public string SourceKind { get; set; } = string.Empty;
         public string ExtractorName { get; set; } = SchemaVersions.ExtractorName;
@@ -133,5 +194,48 @@ namespace IcadExtraction.Contracts
         public long ElapsedMs { get; set; }
         public List<WarningPayload> Warnings { get; set; } = new List<WarningPayload>();
         public object RawExtract { get; set; } = new Dictionary<string, object>();
+    }
+
+    public sealed class DetectionEvidence2DPayload
+    {
+        public bool HasContainer { get; set; }
+        public bool HasContent { get; set; }
+        public int ViewSheetCount { get; set; }
+        public int PrintFrameCount { get; set; }
+        public int GeometryCount { get; set; }
+    }
+
+    public sealed class DetectionEvidence3DPayload
+    {
+        public bool HasContent { get; set; }
+        public string? TopPartName { get; set; }
+        public int PartCount { get; set; }
+    }
+
+    public sealed class DetectionPayload
+    {
+        [JsonProperty("has_2d")]
+        public bool Has2D { get; set; }
+
+        [JsonProperty("has_2d_container")]
+        public bool Has2DContainer { get; set; }
+
+        [JsonProperty("has_3d")]
+        public bool Has3D { get; set; }
+
+        public DetectionEvidence2DPayload TwoD { get; set; } = new DetectionEvidence2DPayload();
+        public DetectionEvidence3DPayload ThreeD { get; set; } = new DetectionEvidence3DPayload();
+    }
+
+    public sealed class DetectionEnvelope
+    {
+        public string InputPath { get; set; } = string.Empty;
+        public SourceFilePayload SourceFile { get; set; } = new SourceFilePayload();
+        public string SourceFormat { get; set; } = "icad";
+        public string ExtractorName { get; set; } = SchemaVersions.ExtractorName;
+        public string ExtractorVersion { get; set; } = SchemaVersions.SchemaVersion;
+        public long ElapsedMs { get; set; }
+        public List<WarningPayload> Warnings { get; set; } = new List<WarningPayload>();
+        public DetectionPayload Detection { get; set; } = new DetectionPayload();
     }
 }

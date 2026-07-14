@@ -85,11 +85,14 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
         )
         canonical_attributes = normalize_raw_extract(result.payload)
         derived_tags = build_derived_tags(canonical_attributes)
+        raw_extract = dict(result.payload.get("raw_extract", {}))
+        if result.payload.get("source_file"):
+            raw_extract["_source_file"] = result.payload["source_file"]
         save_extraction_snapshot(
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,
             job=job,
-            raw_extract=result.payload.get("raw_extract", {}),
+            raw_extract=raw_extract,
             canonical_attributes=canonical_attributes,
             derived_tags=derived_tags,
             executed_by=executed_by,
