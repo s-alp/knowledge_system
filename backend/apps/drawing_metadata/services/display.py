@@ -504,7 +504,34 @@ def build_composed_display_payload(composed_metadata: dict) -> dict:
     }
 
 
-def build_integration_handoff_display_payload(*, viewer_bootstrap: dict, rag_payload: dict, api_links: dict) -> dict:
+def _knowledge_payload_target_rows(knowledge_payload_preview: dict | None) -> list[dict]:
+    rows: list[dict] = []
+    for target in (knowledge_payload_preview or {}).get("targets", []) or []:
+        attributes = target.get("attributes", []) or []
+        tags = target.get("tags", []) or []
+        rows.append(
+            {
+                "targetKey": target.get("targetKey"),
+                "label": target.get("label"),
+                "existingReception": _display_value(target.get("existingReception")),
+                "tagApiStatus": _display_value(target.get("tagApiStatus")),
+                "tagPreview": _display_list(tags),
+                "attributeCount": len(attributes),
+                "payloadKeys": _display_list(target.get("attributePayloadKeys", [])),
+                "candidateEndpoint": _display_value(target.get("candidateEndpoint")),
+                "reviewRequired": _display_value(target.get("reviewRequired")),
+            }
+        )
+    return rows
+
+
+def build_integration_handoff_display_payload(
+    *,
+    viewer_bootstrap: dict,
+    rag_payload: dict,
+    api_links: dict,
+    knowledge_payload_preview: dict | None = None,
+) -> dict:
     availability = viewer_bootstrap.get("availability", {}) or {}
     metadata = viewer_bootstrap.get("metadata", {}) or {}
     pre_filters = rag_payload.get("preFilters", {}) or {}
@@ -556,6 +583,8 @@ def build_integration_handoff_display_payload(*, viewer_bootstrap: dict, rag_pay
             _make_row("partMaterialCandidateCount", "部品材質候補数", len(part_material_candidates)),
             _make_row("searchTextChunkCount", "検索テキスト断片数", len(search_text_chunks)),
         ],
+        "knowledgePayloadSchemaVersion": (knowledge_payload_preview or {}).get("schemaVersion"),
+        "knowledgePayloadTargetRows": _knowledge_payload_target_rows(knowledge_payload_preview),
         "reviewFlags": review_flags,
     }
 

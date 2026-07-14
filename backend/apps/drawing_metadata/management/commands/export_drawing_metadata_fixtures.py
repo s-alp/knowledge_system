@@ -45,6 +45,7 @@ class Command(BaseCommand):
                     "filename": drawing.filename,
                     "detailApiPayload": detail_payload,
                     "viewerBootstrap": detail_payload.get("viewerBootstrap"),
+                    "knowledgeSystemPayloadPreview": detail_payload.get("knowledgeSystemPayloadPreview"),
                     "ragPayload": build_rag_payload(drawing),
                 }
             )

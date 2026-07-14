@@ -9,6 +9,7 @@ from apps.drawing_metadata.models import (
     EXTRACTION_MODE_CHOICES,
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
@@ -176,6 +177,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     snapshotsByMode = serializers.SerializerMethodField()
     composedMetadata = serializers.SerializerMethodField()
     viewerBootstrap = serializers.SerializerMethodField()
+    knowledgeSystemPayloadPreview = serializers.SerializerMethodField()
     createdAt = serializers.DateTimeField(source="created_at")
     updatedAt = serializers.DateTimeField(source="updated_at")
 
@@ -190,6 +192,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
             "snapshotsByMode",
             "composedMetadata",
             "viewerBootstrap",
+            "knowledgeSystemPayloadPreview",
             "createdAt",
             "updatedAt",
         )
@@ -202,6 +205,9 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
 
     def get_composedMetadata(self, obj: RegisteredDrawing) -> dict:
         return compose_drawing_metadata(obj)
+
+    def get_knowledgeSystemPayloadPreview(self, obj: RegisteredDrawing) -> dict:
+        return build_knowledge_system_payload_preview(drawing=obj, composed_metadata=compose_drawing_metadata(obj))
 
     def get_viewerBootstrap(self, obj: RegisteredDrawing) -> dict:
         snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in obj.snapshots.all()}

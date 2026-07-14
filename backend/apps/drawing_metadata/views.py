@@ -51,6 +51,7 @@ class RegistrationDetailPageView(View):
         composed_metadata = compose_drawing_metadata(drawing)
         detail_api_payload = RegisteredDrawingDetailSerializer(drawing).data
         viewer_bootstrap = detail_api_payload.get("viewerBootstrap", {})
+        knowledge_payload_preview = detail_api_payload.get("knowledgeSystemPayloadPreview", {})
         rag_payload = build_rag_payload(drawing)
         api_links = {
             "detail_api": request.build_absolute_uri(f"/api/v1/drawing-metadata/registrations/{drawing.id}/"),
@@ -74,6 +75,7 @@ class RegistrationDetailPageView(View):
                 "handoff_display": build_integration_handoff_display_payload(
                     viewer_bootstrap=viewer_bootstrap,
                     rag_payload=rag_payload,
+                    knowledge_payload_preview=knowledge_payload_preview,
                     api_links=api_links,
                 ),
                 "snapshot_2d_display": (

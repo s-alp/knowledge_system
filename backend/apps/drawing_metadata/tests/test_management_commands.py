@@ -87,6 +87,8 @@ def test_export_drawing_metadata_fixtures_writes_handoff_payload(tmp_path):
     assert item["drawingId"] == str(drawing.id)
     assert item["detailApiPayload"]["viewerBootstrap"]["metadata"]["tags"] == ["客先:澁谷工業", "装置:ロボット", "材質:SUS304"]
     assert item["viewerBootstrap"]["availability"] == {"has2d": False, "has3d": True}
+    assert item["knowledgeSystemPayloadPreview"]["schemaVersion"] == "knowledge_system_payload_preview.v1"
+    assert item["knowledgeSystemPayloadPreview"]["targets"][0]["targetKey"] == "drawing"
     assert item["ragPayload"]["preFilters"]["customerName"] == "澁谷工業"
     assert item["ragPayload"]["rankingSignals"]["partNames"] == ["PART-A"]
     assert "exported 1 drawing fixture" in stdout.getvalue()

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "drawing_metadata_handoff_fixture.v1",
-  "generatedAt": "2026-07-14T16:42:40.885718+00:00",
+  "generatedAt": "2026-07-14T18:03:54.083549+00:00",
   "itemCount": 11,
   "items": [
     {
@@ -67,6 +67,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "448e0819-4b2f-4c06-ba86-2ecaa42332da",
+            "hostDrawingId": "",
+            "filename": "9NK452RS60-03-CASSETTE-A0-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452RS60-03-CASSETTE-A0-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.248415+09:00",
         "updatedAt": "2026-05-28T13:35:39.248415+09:00"
       },
@@ -89,6 +202,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "448e0819-4b2f-4c06-ba86-2ecaa42332da",
+          "hostDrawingId": "",
+          "filename": "9NK452RS60-03-CASSETTE-A0-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452RS60-03-CASSETTE-A0-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -203,6 +429,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "1c82c722-fa41-4d3f-a7fa-c369928c5694",
+            "hostDrawingId": "",
+            "filename": "9NK452W140-02-SPACER-A2-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W140-02-SPACER-A2-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.260015+09:00",
         "updatedAt": "2026-05-28T13:35:39.260525+09:00"
       },
@@ -225,6 +564,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "1c82c722-fa41-4d3f-a7fa-c369928c5694",
+          "hostDrawingId": "",
+          "filename": "9NK452W140-02-SPACER-A2-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W140-02-SPACER-A2-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -339,6 +791,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "4513c393-acf2-490d-b456-fcb0c84b0217",
+            "hostDrawingId": "",
+            "filename": "9NK452W470-02-PLATE-A1-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W470-02-PLATE-A1-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.271436+09:00",
         "updatedAt": "2026-05-28T13:35:39.271436+09:00"
       },
@@ -361,6 +926,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "4513c393-acf2-490d-b456-fcb0c84b0217",
+          "hostDrawingId": "",
+          "filename": "9NK452W470-02-PLATE-A1-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W470-02-PLATE-A1-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -475,6 +1153,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "40d9ed15-e5ea-4047-ba5d-df05bafca439",
+            "hostDrawingId": "",
+            "filename": "9NK452W480-00-PAD-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W480-00-PAD-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.281489+09:00",
         "updatedAt": "2026-05-28T13:35:39.281489+09:00"
       },
@@ -497,6 +1288,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "40d9ed15-e5ea-4047-ba5d-df05bafca439",
+          "hostDrawingId": "",
+          "filename": "9NK452W480-00-PAD-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W480-00-PAD-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -611,6 +1515,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "2f9bd6fa-abc6-4d18-83d2-3bb8d96b77e0",
+            "hostDrawingId": "",
+            "filename": "9NK452W490-01-CLAMPER-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W490-01-CLAMPER-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.292029+09:00",
         "updatedAt": "2026-05-28T13:35:39.292029+09:00"
       },
@@ -633,6 +1650,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "2f9bd6fa-abc6-4d18-83d2-3bb8d96b77e0",
+          "hostDrawingId": "",
+          "filename": "9NK452W490-01-CLAMPER-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W490-01-CLAMPER-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -747,6 +1877,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "4e663ae3-7ecf-4403-9032-60ee00d652c9",
+            "hostDrawingId": "",
+            "filename": "9NK452W500-02-SPACER-A2-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W500-02-SPACER-A2-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.301590+09:00",
         "updatedAt": "2026-05-28T13:35:39.301590+09:00"
       },
@@ -769,6 +2012,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "4e663ae3-7ecf-4403-9032-60ee00d652c9",
+          "hostDrawingId": "",
+          "filename": "9NK452W500-02-SPACER-A2-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W500-02-SPACER-A2-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -883,6 +2239,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "bbb6897e-c7de-4a7c-8e38-b4e1352caa1d",
+            "hostDrawingId": "",
+            "filename": "9NK452W620-00-BLOCK-A2-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W620-00-BLOCK-A2-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.313141+09:00",
         "updatedAt": "2026-05-28T13:35:39.313141+09:00"
       },
@@ -905,6 +2374,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "bbb6897e-c7de-4a7c-8e38-b4e1352caa1d",
+          "hostDrawingId": "",
+          "filename": "9NK452W620-00-BLOCK-A2-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W620-00-BLOCK-A2-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -1019,6 +2601,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "38286a76-f48f-418f-b659-cb00f08fdba7",
+            "hostDrawingId": "",
+            "filename": "9NK452W630-00-PLATE-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W630-00-PLATE-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.321675+09:00",
         "updatedAt": "2026-05-28T13:35:39.321675+09:00"
       },
@@ -1041,6 +2736,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "38286a76-f48f-418f-b659-cb00f08fdba7",
+          "hostDrawingId": "",
+          "filename": "9NK452W630-00-PLATE-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W630-00-PLATE-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -1155,6 +2963,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "322f4a3c-e26c-4679-8796-32d291be2462",
+            "hostDrawingId": "",
+            "filename": "9NK452W650-00-PAD-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W650-00-PAD-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.330702+09:00",
         "updatedAt": "2026-05-28T13:35:39.330702+09:00"
       },
@@ -1177,6 +3098,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "322f4a3c-e26c-4679-8796-32d291be2462",
+          "hostDrawingId": "",
+          "filename": "9NK452W650-00-PAD-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W650-00-PAD-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -1291,6 +3325,119 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "8691d433-7e81-4a40-bc93-9abe9c998cc2",
+            "hostDrawingId": "",
+            "filename": "9NK452W660-00-BLOCK-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W660-00-BLOCK-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T13:35:39.341757+09:00",
         "updatedAt": "2026-05-28T13:35:39.342256+09:00"
       },
@@ -1313,6 +3460,119 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "8691d433-7e81-4a40-bc93-9abe9c998cc2",
+          "hostDrawingId": "",
+          "filename": "9NK452W660-00-BLOCK-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452W660-00-BLOCK-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",
@@ -9997,6 +12257,157 @@
             "tags": []
           }
         },
+        "knowledgeSystemPayloadPreview": {
+          "schemaVersion": "knowledge_system_payload_preview.v1",
+          "source": {
+            "drawingId": "7d47aa93-de58-467d-a145-4a584cd6c52b",
+            "hostDrawingId": "9NK452WX90-00-LINER-A3-3D-01",
+            "filename": "9NK452WX90-00-LINER-A3-3D-01.icd",
+            "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452WX90-00-LINER-A3-3D-01.icd",
+            "sourceFormat": "icad"
+          },
+          "contractEvidence": {
+            "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+            "attributeValueShape": {
+              "attribute": "attribute master id; Souya binding required",
+              "attribute_option": "option id when input type is select; Souya binding required",
+              "attribute_value": "free text value"
+            },
+            "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+          },
+          "targets": [
+            {
+              "targetKey": "drawing",
+              "label": "図面",
+              "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+              "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "candidate_existing",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "図面の tags は既存表示口があるため第一優先の連携候補。",
+                "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+              ]
+            },
+            {
+              "targetKey": "product",
+              "label": "製品・装置・ユニット",
+              "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+                "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+              ]
+            },
+            {
+              "targetKey": "part",
+              "label": "部品",
+              "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+              "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_use_attribute_fallback",
+              "tags": [],
+              "attributes": [
+                {
+                  "sourcePath": "canonicalAttributes.top_part_name",
+                  "attributeName": "代表部品名",
+                  "attribute": null,
+                  "attributeOption": null,
+                  "attributeValue": "9NK452WX90-00-LINER-A3-3D-01",
+                  "payloadShape": {
+                    "attribute": null,
+                    "attribute_option": null,
+                    "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                  },
+                  "bindingStatus": "needs_attribute_master_binding"
+                },
+                {
+                  "sourcePath": "canonicalAttributes.part_names",
+                  "attributeName": "部品名候補",
+                  "attribute": null,
+                  "attributeOption": null,
+                  "attributeValue": "9NK452WX90-00-LINER-A3-3D-01",
+                  "payloadShape": {
+                    "attribute": null,
+                    "attribute_option": null,
+                    "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                  },
+                  "bindingStatus": "needs_attribute_master_binding"
+                }
+              ],
+              "payloadPreview": {
+                "attributes": [
+                  {
+                    "attribute": null,
+                    "attribute_option": null,
+                    "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                  },
+                  {
+                    "attribute": null,
+                    "attribute_option": null,
+                    "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                  }
+                ]
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+                "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+              ]
+            },
+            {
+              "targetKey": "project",
+              "label": "プロジェクト",
+              "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+              "candidateEndpoint": null,
+              "writePolicy": "preview_only_no_production_write",
+              "tagApiStatus": "not_found_requires_souya_extension",
+              "tags": [],
+              "attributes": [],
+              "payloadPreview": {
+                "attributes": []
+              },
+              "attributePayloadKeys": [
+                "attribute",
+                "attribute_option",
+                "attribute_value"
+              ],
+              "reviewRequired": true,
+              "notes": [
+                "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+                "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+              ]
+            }
+          ]
+        },
         "createdAt": "2026-05-28T10:47:50.848454+09:00",
         "updatedAt": "2026-05-28T10:47:50.848954+09:00"
       },
@@ -10019,6 +12430,157 @@
           "designPurpose": null,
           "tags": []
         }
+      },
+      "knowledgeSystemPayloadPreview": {
+        "schemaVersion": "knowledge_system_payload_preview.v1",
+        "source": {
+          "drawingId": "7d47aa93-de58-467d-a145-4a584cd6c52b",
+          "hostDrawingId": "9NK452WX90-00-LINER-A3-3D-01",
+          "filename": "9NK452WX90-00-LINER-A3-3D-01.icd",
+          "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452WX90-00-LINER-A3-3D-01.icd",
+          "sourceFormat": "icad"
+        },
+        "contractEvidence": {
+          "frontendProbePath": "output/knowledge_ui_screenshots_2026-07-15/frontend_entity_payload_contract_probe.json",
+          "attributeValueShape": {
+            "attribute": "attribute master id; Souya binding required",
+            "attribute_option": "option id when input type is select; Souya binding required",
+            "attribute_value": "free text value"
+          },
+          "productionWritePolicy": "本番ナレッジシステムへ登録・変更・削除は行わず、fixture/API上のプレビューだけを生成する。"
+        },
+        "targets": [
+          {
+            "targetKey": "drawing",
+            "label": "図面",
+            "existingReception": "図面詳細にタグと属性情報が表示され、drawing_attributes マスタAPI候補も本番フロント資産で確認済み。",
+            "candidateEndpoint": "/drawings/{drawingInternalId}/ または同等の図面更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "candidate_existing",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "図面の tags は既存表示口があるため第一優先の連携候補。",
+              "attribute / attribute_option は本番マスタIDが必要なため、ここでは名前と値のプレビューに留める。"
+            ]
+          },
+          {
+            "targetKey": "product",
+            "label": "製品・装置・ユニット",
+            "existingReception": "詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "装置カテゴリ、PRFX、ユニット番号は製品・装置・ユニット側の検索/絞り込みに効く候補。",
+              "タグ専用口が未確認のため、自動タグ候補は属性値として代替できる形も併記する。"
+            ]
+          },
+          {
+            "targetKey": "part",
+            "label": "部品",
+            "existingReception": "詳細画面に属性情報が表示され、part_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
+            "candidateEndpoint": "/parts/{partInternalId}/ または同等の部品更新API（創屋確認前）",
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_use_attribute_fallback",
+            "tags": [],
+            "attributes": [
+              {
+                "sourcePath": "canonicalAttributes.top_part_name",
+                "attributeName": "代表部品名",
+                "attribute": null,
+                "attributeOption": null,
+                "attributeValue": "9NK452WX90-00-LINER-A3-3D-01",
+                "payloadShape": {
+                  "attribute": null,
+                  "attribute_option": null,
+                  "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                },
+                "bindingStatus": "needs_attribute_master_binding"
+              },
+              {
+                "sourcePath": "canonicalAttributes.part_names",
+                "attributeName": "部品名候補",
+                "attribute": null,
+                "attributeOption": null,
+                "attributeValue": "9NK452WX90-00-LINER-A3-3D-01",
+                "payloadShape": {
+                  "attribute": null,
+                  "attribute_option": null,
+                  "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                },
+                "bindingStatus": "needs_attribute_master_binding"
+              }
+            ],
+            "payloadPreview": {
+              "attributes": [
+                {
+                  "attribute": null,
+                  "attribute_option": null,
+                  "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                },
+                {
+                  "attribute": null,
+                  "attribute_option": null,
+                  "attribute_value": "9NK452WX90-00-LINER-A3-3D-01"
+                }
+              ]
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "3Dパーツ付加情報と材質候補は部品側の属性候補として扱う。",
+              "部品レコードとの突合キーは未確定のため、entityHint にパーツパス/パーツ名を保持する。"
+            ]
+          },
+          {
+            "targetKey": "project",
+            "label": "プロジェクト",
+            "existingReception": "本番フロント資産では project_attributes / project tags を未確認。",
+            "candidateEndpoint": null,
+            "writePolicy": "preview_only_no_production_write",
+            "tagApiStatus": "not_found_requires_souya_extension",
+            "tags": [],
+            "attributes": [],
+            "payloadPreview": {
+              "attributes": []
+            },
+            "attributePayloadKeys": [
+              "attribute",
+              "attribute_option",
+              "attribute_value"
+            ],
+            "reviewRequired": true,
+            "notes": [
+              "客先・案件・装置カテゴリはプロジェクト側でも有効だが、既存保存口は創屋確認が必要。",
+              "既存APIが無い場合は補助タブ、関連図面由来の集約、または新規属性APIのいずれかを検討する。"
+            ]
+          }
+        ]
       },
       "ragPayload": {
         "schemaVersion": "drawing_metadata_rag_payload.v1",

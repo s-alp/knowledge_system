@@ -11,6 +11,7 @@ from apps.drawing_metadata.services.display import (
     build_integration_handoff_display_payload,
     build_tag_review_display_payload,
 )
+from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 
 
@@ -252,6 +253,31 @@ def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_con
                 "reviewFlags": [{"code": "cross_source_conflict", "severity": "medium", "attribute": "material"}],
             },
         },
+        knowledge_payload_preview={
+            "schemaVersion": "knowledge_system_payload_preview.v1",
+            "targets": [
+                {
+                    "targetKey": "drawing",
+                    "label": "図面",
+                    "existingReception": "図面詳細にタグと属性情報が表示される。",
+                    "tagApiStatus": "candidate_existing",
+                    "tags": ["客先:澁谷工業", "材質:SUS304"],
+                    "attributes": [
+                        {
+                            "attributeName": "材質",
+                            "payloadShape": {
+                                "attribute": None,
+                                "attribute_option": None,
+                                "attribute_value": "SUS304",
+                            },
+                        }
+                    ],
+                    "attributePayloadKeys": ["attribute", "attribute_option", "attribute_value"],
+                    "candidateEndpoint": "/drawings/{drawingInternalId}/",
+                    "reviewRequired": True,
+                }
+            ],
+        },
         api_links={
             "detail_api": "http://testserver/api/v1/drawing-metadata/registrations/1/",
             "rag_payload_api": "http://testserver/api/v1/drawing-metadata/registrations/1/rag-payload/",
@@ -274,6 +300,75 @@ def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_con
     assert signal_row_by_key["materialKeywords"]["displayValue"] == "SUS304"
     assert review_row_by_key["requiresReview"] == "あり"
     assert review_row_by_key["conflictCount"] == "1"
+    assert payload["knowledgePayloadSchemaVersion"] == "knowledge_system_payload_preview.v1"
+    assert payload["knowledgePayloadTargetRows"][0]["label"] == "図面"
+    assert payload["knowledgePayloadTargetRows"][0]["attributeCount"] == 1
+    assert payload["knowledgePayloadTargetRows"][0]["payloadKeys"] == "attribute, attribute_option, attribute_value"
+
+
+@pytest.mark.django_db
+def test_build_knowledge_system_payload_preview_maps_targets_without_production_write():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="host-001",
+        filename="sample.icd",
+        source_path=r"J:\SAMPLE\sample.icd",
+        source_format="icad",
+    )
+
+    payload = build_knowledge_system_payload_preview(
+        drawing=drawing,
+        composed_metadata={
+            "canonicalAttributes": {
+                "customer_name": "澁谷工業",
+                "equipment_category": "ロボット",
+                "drawing_number": "9NK-001",
+                "drawing_name": "BRACKET",
+                "paper_size": "A3",
+                "title_block_fields": {
+                    "material": "SUS304",
+                    "surface_treatment": "黒染め",
+                    "coating_instruction": "マンセル 5Y7/1",
+                    "scale": "1:2",
+                    "prfx": "RAA4844",
+                    "unit_number": "U01",
+                },
+                "part_names": ["BRACKET"],
+                "material_keywords": ["SUS304"],
+                "part_material_candidates": [
+                    {
+                        "part_path": "TOP > BRACKET",
+                        "part_name": "BRACKET",
+                        "material_id": "SUS304",
+                    }
+                ],
+            },
+            "derivedTags": [
+                {"tag": "客先:澁谷工業"},
+                {"tag": "装置:ロボット"},
+                {"tag": "材質:SUS304"},
+                {"tag": "PRFX:RAA4844"},
+                {"tag": "ユニット:U01"},
+            ],
+        },
+    )
+
+    targets = {target["targetKey"]: target for target in payload["targets"]}
+    assert payload["schemaVersion"] == "knowledge_system_payload_preview.v1"
+    assert payload["contractEvidence"]["productionWritePolicy"].startswith("本番ナレッジシステムへ登録")
+    assert targets["drawing"]["writePolicy"] == "preview_only_no_production_write"
+    assert targets["drawing"]["payloadPreview"]["tags"] == [
+        "客先:澁谷工業",
+        "装置:ロボット",
+        "材質:SUS304",
+        "PRFX:RAA4844",
+        "ユニット:U01",
+    ]
+    assert any(item["attributeName"] == "材質" and item["attributeValue"] == "SUS304" for item in targets["drawing"]["attributes"])
+    assert targets["product"]["tagApiStatus"] == "not_found_use_attribute_fallback"
+    assert any(item["attributeName"] == "自動タグ候補" and item["attributeValue"] == "PRFX:RAA4844" for item in targets["product"]["attributes"])
+    assert any(item.get("entityHint") == "TOP > BRACKET" for item in targets["part"]["attributes"])
+    assert targets["part"]["attributes"][-1]["bindingStatus"] == "needs_attribute_master_binding"
+    assert targets["project"]["candidateEndpoint"] is None
 
 
 def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
@@ -493,6 +588,9 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert "統合結果（viewer/RAG 用の統合属性）" in response.content.decode("utf-8")
     assert "創屋連携・viewer/RAG 受け渡し確認" in response.content.decode("utf-8")
     assert "RAG ランキング信号" in response.content.decode("utf-8")
+    assert "本番タグ・属性 payload プレビュー" in response.content.decode("utf-8")
+    assert response.context["handoff_display"]["knowledgePayloadTargetRows"][0]["label"] == "図面"
+    assert response.context["handoff_display"]["knowledgePayloadTargetRows"][0]["reviewRequired"] == "あり"
     assert "2D/3D 照合結果" in response.content.decode("utf-8")
 
 
