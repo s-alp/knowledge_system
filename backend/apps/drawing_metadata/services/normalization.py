@@ -63,6 +63,7 @@ TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
     "月",
     "日",
     "欄",
+    "使用",
 }
 
 
@@ -143,7 +144,9 @@ def _contains_replacement_character(value: str | None) -> bool:
 
 def _looks_like_title_block_label_fragment(value: str) -> bool:
     normalized = _normalize_for_match(value)
-    return normalized in {_normalize_for_match(item) for item in TITLE_BLOCK_LABEL_FRAGMENT_VALUES}
+    normalized_without_number = re.sub(r"^[0-9０-９]+[.．、\-\s　]*", "", normalized)
+    fragment_values = {_normalize_for_match(item) for item in TITLE_BLOCK_LABEL_FRAGMENT_VALUES}
+    return normalized in fragment_values or normalized_without_number in fragment_values
 
 
 def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> bool:
@@ -176,13 +179,15 @@ def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
             normalized_line = _normalize_for_match(line)
             for field, rule in TITLE_BLOCK_FIELD_RULES.items():
                 max_value_length = int(rule.get("max_value_length", 80))
-                for keyword in rule["keywords"]:
+                for keyword in sorted(rule["keywords"], key=lambda item: len(str(item)), reverse=True):
                     normalized_keyword = _normalize_for_match(str(keyword))
                     if normalized_keyword not in normalized_line:
                         continue
 
                     value = _strip_label_value(line, str(keyword))
                     confidence = "medium" if _is_title_block_value_usable(value, max_length=max_value_length) else "low"
+                    if confidence == "low":
+                        value = None
                     if not value and line_index + 1 < len(lines):
                         next_value = lines[line_index + 1].strip()
                         if _is_title_block_value_usable(next_value, max_length=max_value_length):

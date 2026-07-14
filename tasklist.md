@@ -140,11 +140,11 @@
 - [x] detail API に viewer 仕様互換の `viewerBootstrap` を追加
 - [x] RAG投入用の読み取り専用 `rag-payload` API を追加し、事前フィルタ・再ランキング信号・要確認理由を分離
 - [x] 材質ID辞書を正式材質・要確認・除外に分け、未登録コードを通常材質タグへ混ぜない
+- [x] 2D図枠候補で `製図者` や `１．使用材料` のラベル片を値として誤採用しないよう強化
 
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
-- [ ] 2D図枠欄名辞書を実サンプルで拡充する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
     - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
   - 次に触るファイル:
