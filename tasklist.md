@@ -133,6 +133,8 @@
 - [x] 共有抽出JSON 69件でGemini分類前フィルタを再プローブし、上位5サンプルのU+FFFD除外0件を記録
 - [x] ICAD/SXNETアクセスをプロセス間Mutexで直列化し、3並列detectが全件成功することを確認
 - [x] 2D/3D有無判定を強化し、2Dセグメント数を `detect` 出力と共有16件サマリに追加
+- [x] VS一覧と印刷枠を raw_extract に取り込み、Django詳細画面の2Dサマリへ表示
+- [x] symbol / hatch / cutline 系の2D geometryを primitive として保持し、特徴候補タグへ展開
 
 ## 次に着手する
 
@@ -144,23 +146,6 @@
   - 次に触るファイル:
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
-- [ ] VS一覧と印刷枠を raw_extract へ取り込む
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxModel.getVSList.html`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxModel.getInfPrintList.html`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Contracts\Models.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\Icad2DExtractor.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
-- [ ] symbol / hatch / cutline 系の 2D geometry 対応を追加
-  - 参照資料:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\sxnet.SxEntSeg.getGeomList.html`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\docs\extraction_result_schema_2026-05-28.md`
-  - 次に触るファイル:
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\GeometryMapper.cs`
-    - `C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.SxNet\ReflectionHelpers.cs`
     - `C:\Users\s-iwata\Desktop\knowledge_system\tests\IcadExtraction.SxNet.Tests\GeometryMapperTests.cs`
 - [ ] Windows 抽出 worker と Linux/Docker backend の接続方式を確定
   - 参照資料:
