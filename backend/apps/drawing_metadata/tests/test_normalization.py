@@ -150,6 +150,7 @@ def test_normalize_2d_raw_extract():
     assert canonical["revision_note_count"] == 1
     assert canonical["revision_note_candidates"][0]["value"] == "A 寸法変更"
     assert canonical["revision_note_candidates"][0]["confidence"] == "medium"
+    assert any(tag["tag"] == "改訂情報あり" for tag in tags)
     assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
     assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
     assert any(tag["tag"] == "ユニット:U01" for tag in tags)

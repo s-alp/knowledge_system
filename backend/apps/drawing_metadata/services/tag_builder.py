@@ -51,5 +51,7 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
             tag = candidate.get("tag")
             if tag:
                 add_tag(tag, "geometry_feature_candidates", confidence=candidate.get("confidence", "low"))
+    if "revision_note_candidates" not in excluded_sources and canonical_attributes.get("revision_note_candidates"):
+        add_tag("改訂情報あり", "revision_note_candidates", confidence="medium")
 
     return tags
