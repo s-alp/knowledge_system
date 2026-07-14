@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+import re
 
 from django.conf import settings
 
@@ -39,6 +40,8 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
     "SxGeomElparc2D": {"feature": "slot_candidate", "label": "長穴/楕円弧候補", "tag": "形状候補:長穴", "confidence": "low"},
     "SxGeomCircle2D": {"feature": "hole_candidate", "label": "穴/円候補", "tag": "形状候補:穴", "confidence": "low"},
 }
+
+SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
 
 
 def _flatten_strings(values: Iterable[str | None]) -> list[str]:
@@ -204,6 +207,102 @@ def _build_geometry_feature_candidates(primitives: list[dict]) -> list[dict]:
     return list(grouped.values())
 
 
+def _double_diameter(radius) -> float | None:
+    if radius is None:
+        return None
+    return radius * 2
+
+
+def _center_label(primitive: dict) -> str | None:
+    x = primitive.get("center_x")
+    y = primitive.get("center_y")
+    if x is None or y is None:
+        return None
+    return f"{x}, {y}"
+
+
+def _extract_surface_roughness_values(primitive: dict) -> list[str]:
+    values: list[str] = []
+    for text in _flatten_strings([primitive.get("val1"), primitive.get("value"), primitive.get("summary")]):
+        for match in SURFACE_ROUGHNESS_PATTERN.finditer(text):
+            values.append(f"{match.group(1)} {match.group(2)}")
+    return _merge_unique(values)
+
+
+def _merge_unique(items: Iterable) -> list:
+    merged: list = []
+    seen: set[str] = set()
+    for item in items:
+        key = repr(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(item)
+    return merged
+
+
+def _build_geometry_attribute_summary(primitives: list[dict]) -> dict:
+    summary = {
+        "surface_roughness_count": 0,
+        "surface_roughness_values": [],
+        "section_feature_count": 0,
+        "cut_line_count": 0,
+        "hatch_or_section_count": 0,
+        "slot_candidate_count": 0,
+        "slot_candidate_dimensions": [],
+        "hole_candidate_count": 0,
+        "hole_candidate_diameters": [],
+    }
+
+    roughness_values: list[str] = []
+    hole_diameters: list[float] = []
+    slot_dimensions: list[dict] = []
+
+    for primitive in primitives:
+        if primitive.get("inside_print_area") is False:
+            continue
+        geometry_type = primitive.get("geometry_type")
+        if geometry_type == "SxGeomSmark":
+            summary["surface_roughness_count"] += 1
+            roughness_values.extend(_extract_surface_roughness_values(primitive))
+            continue
+        if geometry_type == "SxGeomCutLine":
+            summary["cut_line_count"] += 1
+            summary["section_feature_count"] += 1
+            continue
+        if geometry_type == "SxGeomHatch":
+            summary["hatch_or_section_count"] += 1
+            summary["section_feature_count"] += 1
+            continue
+        if geometry_type == "SxGeomCircle2D":
+            summary["hole_candidate_count"] += 1
+            diameter = _double_diameter(primitive.get("radius"))
+            if diameter is not None:
+                hole_diameters.append(diameter)
+            continue
+        if geometry_type in {"SxGeomElparc2D", "SxGeomEllipse2D"}:
+            summary["slot_candidate_count"] += 1
+            radius1 = primitive.get("radius1")
+            radius2 = primitive.get("radius2")
+            slot_dimensions.append(
+                {
+                    "geometry_type": geometry_type,
+                    "center": _center_label(primitive),
+                    "major_radius": radius1,
+                    "minor_radius": radius2,
+                    "major_diameter": _double_diameter(radius1),
+                    "minor_diameter": _double_diameter(radius2),
+                    "start_angle": primitive.get("start_angle"),
+                    "end_angle": primitive.get("end_angle"),
+                }
+            )
+
+    summary["surface_roughness_values"] = _merge_unique(roughness_values)
+    summary["hole_candidate_diameters"] = _merge_unique(hole_diameters)
+    summary["slot_candidate_dimensions"] = slot_dimensions
+    return summary
+
+
 def _material_id(material: dict) -> str | None:
     return material.get("mat_id") or material.get("matid")
 
@@ -283,6 +382,15 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "balloon_keys": [],
         "surface_treatment_tokens": [],
         "geometry_feature_candidates": [],
+        "surface_roughness_count": 0,
+        "surface_roughness_values": [],
+        "section_feature_count": 0,
+        "cut_line_count": 0,
+        "hatch_or_section_count": 0,
+        "slot_candidate_count": 0,
+        "slot_candidate_dimensions": [],
+        "hole_candidate_count": 0,
+        "hole_candidate_diameters": [],
         "spec_tokens": [],
         "part_keywords": [],
         "material_keywords": [],
@@ -390,6 +498,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["title_block_candidates"] = _build_title_block_candidates(texts)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives)
+        canonical.update(_build_geometry_attribute_summary(primitives))
 
         search_tokens = (
             source_path_tokens

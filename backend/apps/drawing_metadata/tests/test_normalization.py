@@ -99,9 +99,21 @@ def test_normalize_2d_raw_extract():
             ],
             "dimensions": [{"value_1": "100", "value_2": None, "mark_2": "M5", "mark_3": None, "front_word": None, "back_word": None}],
             "geometry_primitives": [
-                {"geometry_type": "SxGeomSmark", "summary": "surface roughness", "inside_print_area": True},
+                {"geometry_type": "SxGeomSmark", "summary": "val1=Ra 6.3", "inside_print_area": True},
+                {"geometry_type": "SxGeomHatch", "summary": "hatch", "inside_print_area": True},
                 {"geometry_type": "SxGeomCutLine", "summary": "cut line", "inside_print_area": True},
-                {"geometry_type": "SxGeomElparc2D", "summary": "ellipse arc", "inside_print_area": True},
+                {
+                    "geometry_type": "SxGeomElparc2D",
+                    "summary": "ellipse arc",
+                    "inside_print_area": True,
+                    "center_x": 5.0,
+                    "center_y": 10.0,
+                    "radius1": 11.0,
+                    "radius2": 4.0,
+                    "start_angle": 10.0,
+                    "end_angle": 90.0,
+                },
+                {"geometry_type": "SxGeomCircle2D", "summary": "inside circle", "inside_print_area": True, "radius": 3.0},
                 {"geometry_type": "SxGeomCircle2D", "summary": "outside circle", "inside_print_area": False},
             ],
             "weld_notes": [{"text": "WELD A"}],
@@ -129,5 +141,15 @@ def test_normalize_2d_raw_extract():
     assert "加工指示:表面粗さ" in feature_tags
     assert "図面特徴:切断線" in feature_tags
     assert "形状候補:長穴" in feature_tags
-    assert "形状候補:穴" not in feature_tags
+    assert "形状候補:穴" in feature_tags
     assert any(tag["tag"] == "加工指示:表面粗さ" for tag in tags)
+    assert canonical["surface_roughness_count"] == 1
+    assert canonical["surface_roughness_values"] == ["Ra 6.3"]
+    assert canonical["section_feature_count"] == 2
+    assert canonical["cut_line_count"] == 1
+    assert canonical["hatch_or_section_count"] == 1
+    assert canonical["slot_candidate_count"] == 1
+    assert canonical["slot_candidate_dimensions"][0]["major_diameter"] == 22.0
+    assert canonical["slot_candidate_dimensions"][0]["minor_diameter"] == 8.0
+    assert canonical["hole_candidate_count"] == 1
+    assert canonical["hole_candidate_diameters"] == [6.0]

@@ -89,6 +89,16 @@ def _make_row(key: str, label: str, value) -> dict:
     }
 
 
+def _make_display_row(key: str, label: str, value, display_value: str) -> dict:
+    return {
+        "key": key,
+        "label": label,
+        "value": value,
+        "displayValue": display_value,
+        "hasValue": _has_value(value),
+    }
+
+
 def _reconciliation_row(item: dict) -> dict:
     status = item.get("status") or "empty"
     return {
@@ -491,6 +501,30 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("dimension_count", "寸法数", len(dimensions)),
         _make_row("geometry_primitive_count", "線・円などの図形数", len(primitives)),
         _make_row("layer_tagged_count", "所属レイヤー取得済み要素数", layer_tagged_count),
+        _make_row("surface_roughness_count", "表面粗さ記号数", canonical_attributes.get("surface_roughness_count")),
+        _make_row("section_feature_count", "断面/切断表現数", canonical_attributes.get("section_feature_count")),
+        _make_row("slot_candidate_count", "長穴/楕円候補数", canonical_attributes.get("slot_candidate_count")),
+        _make_row("hole_candidate_count", "穴/円候補数", canonical_attributes.get("hole_candidate_count")),
+    ]
+    geometry_attribute_rows = [
+        _make_display_row(
+            "surface_roughness_values",
+            "表面粗さ値",
+            canonical_attributes.get("surface_roughness_values", []),
+            ", ".join(canonical_attributes.get("surface_roughness_values", []) or []) or "未抽出",
+        ),
+        _make_display_row(
+            "hole_candidate_diameters",
+            "穴/円候補径",
+            canonical_attributes.get("hole_candidate_diameters", []),
+            ", ".join(str(value) for value in canonical_attributes.get("hole_candidate_diameters", []) or []) or "未抽出",
+        ),
+        _make_display_row(
+            "slot_candidate_dimensions",
+            "長穴/楕円候補寸法",
+            canonical_attributes.get("slot_candidate_dimensions", []),
+            str(len(canonical_attributes.get("slot_candidate_dimensions", []) or [])),
+        ),
     ]
 
     return {
@@ -514,6 +548,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "geometryPrimitiveTotal": len(primitives),
         "geometryFeatureCandidates": _geometry_feature_candidate_items(geometry_feature_candidates),
         "geometryFeatureCandidateTotal": len(geometry_feature_candidates),
+        "geometryAttributeRows": geometry_attribute_rows,
     }
 
 

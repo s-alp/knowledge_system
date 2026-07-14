@@ -272,6 +272,13 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                     "sample_summaries": ["roughness-a", "roughness-b"],
                 }
             ],
+            "surface_roughness_count": 2,
+            "surface_roughness_values": ["Ra 6.3"],
+            "section_feature_count": 1,
+            "slot_candidate_count": 1,
+            "hole_candidate_count": 3,
+            "hole_candidate_diameters": [6.0, 8.0],
+            "slot_candidate_dimensions": [{"major_diameter": 22.0, "minor_diameter": 8.0}],
         },
     )
 
@@ -297,6 +304,14 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["geometryFeatureCandidates"][0]["label"] == "表面粗さ"
     assert payload["geometryFeatureCandidates"][0]["tag"] == "加工指示:表面粗さ"
     assert payload["geometryFeatureCandidates"][0]["count"] == "2"
+    assert row_by_key["surface_roughness_count"] == "2"
+    assert row_by_key["section_feature_count"] == "1"
+    assert row_by_key["slot_candidate_count"] == "1"
+    assert row_by_key["hole_candidate_count"] == "3"
+    geometry_attribute_by_key = {row["key"]: row["displayValue"] for row in payload["geometryAttributeRows"]}
+    assert geometry_attribute_by_key["surface_roughness_values"] == "Ra 6.3"
+    assert geometry_attribute_by_key["hole_candidate_diameters"] == "6.0, 8.0"
+    assert geometry_attribute_by_key["slot_candidate_dimensions"] == "1"
 
 
 @pytest.mark.django_db

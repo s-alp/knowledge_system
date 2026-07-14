@@ -379,6 +379,24 @@
         <p>形状・記号特徴候補はありません。</p>
       {% endif %}
 
+      <h3>形状・記号属性</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_2d_display.geometryAttributeRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
       <h3>図形サンプル</h3>
       {% if snapshot_2d_display.geometryPrimitiveSamples %}
         <table>
