@@ -106,6 +106,7 @@ def test_normalize_2d_raw_extract():
                 {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": False, "position_x": 999.0, "position_y": 999.0},
                 {"text_lines": ["材質 \ufffd\ufffd"], "source_type": "text", "inside_print_area": True, "position_x": 11.0, "position_y": 20.0},
                 {"text_lines": ["製図者"], "source_type": "text", "inside_print_area": True, "position_x": 12.0, "position_y": 20.0},
+                {"text_lines": ["訂正内容", "A 寸法変更"], "source_type": "text", "inside_print_area": True, "position_x": 13.0, "position_y": 20.0},
             ],
             "dimensions": [{"value_1": "100", "value_2": None, "mark_2": "M5", "mark_3": None, "front_word": None, "back_word": None}],
             "geometry_primitives": [
@@ -146,6 +147,9 @@ def test_normalize_2d_raw_extract():
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
     assert all("\ufffd" not in str(candidate.get("evidence_text")) for candidate in canonical["title_block_candidates"])
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)
+    assert canonical["revision_note_count"] == 1
+    assert canonical["revision_note_candidates"][0]["value"] == "A 寸法変更"
+    assert canonical["revision_note_candidates"][0]["confidence"] == "medium"
     assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
     assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
     assert any(tag["tag"] == "ユニット:U01" for tag in tags)

@@ -325,6 +325,41 @@
         <p>図枠項目候補はありません。</p>
       {% endif %}
 
+      <h3>訂正内容候補</h3>
+      {% if snapshot_2d_display.revisionNoteCandidates %}
+        <table>
+          <thead>
+            <tr>
+              <th>候補値</th>
+              <th>信頼度</th>
+              <th>一致語</th>
+              <th>ビュー名</th>
+              <th>レイヤー</th>
+              <th>座標</th>
+              <th>印刷枠</th>
+              <th>根拠文字</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for candidate in snapshot_2d_display.revisionNoteCandidates %}
+              <tr>
+                <td>{{ candidate.value }}</td>
+                <td>{{ candidate.confidence }}</td>
+                <td>{{ candidate.matchedKeywords }}</td>
+                <td>{{ candidate.viewName }}</td>
+                <td>{{ candidate.layerNo }}</td>
+                <td>{{ candidate.position }}</td>
+                <td>{{ candidate.insidePrintArea }}</td>
+                <td>{{ candidate.evidenceText }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="muted">{{ snapshot_2d_display.revisionNoteCandidateTotal }} 件中 {{ snapshot_2d_display.revisionNoteCandidates|length }} 件を表示しています。</p>
+      {% else %}
+        <p>訂正内容候補はありません。</p>
+      {% endif %}
+
       <h3>寸法サンプル</h3>
       {% if snapshot_2d_display.dimensionSamples %}
         <table>

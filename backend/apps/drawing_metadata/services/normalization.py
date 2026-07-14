@@ -44,6 +44,7 @@ GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
 
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
 MATERIAL_VALUE_PATTERN = re.compile(r"\b(SUS[0-9A-Z]*|SS[0-9A-Z]*|S[0-9]{2}C|A[0-9]{4}|AL|SKD[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*)\b", re.IGNORECASE)
+REVISION_NOTE_KEYWORDS = ["訂正内容", "改訂内容", "訂正", "改訂", "変更", "修正", "rev", "revision"]
 TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
     "者",
     "人",
@@ -189,6 +190,59 @@ def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
                         }
                     )
                     break
+
+    return candidates
+
+
+def _build_revision_note_candidates(texts: list[dict]) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, float | None, float | None]] = set()
+
+    for text in texts:
+        if text.get("inside_print_area") is False:
+            continue
+        lines = _text_lines_from_payload(text)
+        if not lines:
+            continue
+        evidence_text = " ".join(lines).strip()
+        if not evidence_text or _contains_replacement_character(evidence_text):
+            continue
+        normalized_evidence = _normalize_for_match(evidence_text)
+        matched_keywords = [
+            keyword
+            for keyword in REVISION_NOTE_KEYWORDS
+            if _normalize_for_match(keyword) in normalized_evidence
+        ]
+        if not matched_keywords:
+            continue
+
+        value = None
+        for keyword in matched_keywords:
+            stripped_value = _strip_label_value(evidence_text, keyword)
+            if _is_title_block_value_usable(stripped_value, max_length=160):
+                value = stripped_value
+                break
+        if value is None and _is_title_block_value_usable(evidence_text, max_length=160):
+            value = evidence_text
+
+        key = (evidence_text, text.get("position_x"), text.get("position_y"))
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append(
+            {
+                "value": value,
+                "evidence_text": evidence_text,
+                "matched_keywords": matched_keywords,
+                "confidence": "medium" if value else "low",
+                "view_name": text.get("view_name"),
+                "layer_no": text.get("layer_no"),
+                "position_x": text.get("position_x"),
+                "position_y": text.get("position_y"),
+                "inside_print_area": text.get("inside_print_area"),
+                "source": "2d_revision_text",
+            }
+        )
 
     return candidates
 
@@ -472,6 +526,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "label_texts": [],
         "title_block_fields": {},
         "title_block_candidates": [],
+        "revision_note_candidates": [],
+        "revision_note_count": 0,
         "dimension_values": [],
         "dimension_symbols": [],
         "tolerance_texts": [],
@@ -601,6 +657,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
         canonical["title_block_candidates"] = _build_title_block_candidates(texts)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
+        canonical["revision_note_candidates"] = _build_revision_note_candidates(texts)
+        canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives)
         canonical.update(_build_geometry_attribute_summary(primitives))
 
@@ -608,6 +666,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             source_path_tokens
             + canonical["text_tokens"]
             + _flatten_strings(str(value) for value in canonical["title_block_fields"].values())
+            + _flatten_strings(candidate.get("value") for candidate in canonical["revision_note_candidates"])
             + canonical["dimension_symbols"]
             + canonical["weld_note_texts"]
             + canonical["balloon_keys"]

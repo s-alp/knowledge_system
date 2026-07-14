@@ -288,6 +288,20 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                     "evidence_text": "材質 SUS304",
                 }
             ],
+            "revision_note_candidates": [
+                {
+                    "value": "A 寸法変更",
+                    "evidence_text": "訂正内容 A 寸法変更",
+                    "matched_keywords": ["訂正内容", "変更"],
+                    "confidence": "medium",
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "position_x": 20.0,
+                    "position_y": 40.0,
+                    "inside_print_area": True,
+                }
+            ],
+            "revision_note_count": 1,
             "geometry_feature_candidates": [
                 {
                     "feature": "surface_roughness",
@@ -313,6 +327,7 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert row_by_key["view_sheet_count"] == "1"
     assert row_by_key["print_frame_count"] == "1"
     assert row_by_key["layer_tagged_count"] == "3"
+    assert row_by_key["revision_note_count"] == "1"
     assert payload["sourceFileRows"][0]["displayValue"] == "sample.icd"
     assert payload["viewSheets"][0]["name"] == "!XY"
     assert payload["printFrames"][0]["size"] == "A3"
@@ -323,6 +338,9 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["titleBlockCandidates"][0]["field"] == "材質"
     assert payload["titleBlockCandidates"][0]["value"] == "SUS304"
     assert payload["titleBlockCandidates"][0]["evidenceText"] == "材質 SUS304"
+    assert payload["revisionNoteCandidates"][0]["value"] == "A 寸法変更"
+    assert payload["revisionNoteCandidates"][0]["matchedKeywords"] == "訂正内容, 変更"
+    assert payload["revisionNoteCandidates"][0]["insidePrintArea"] == "inside"
     assert payload["dimensionSamples"][0]["value"] == "100"
     assert payload["dimensionSamples"][0]["insidePrintArea"] == "outside"
     assert payload["geometryPrimitiveSamples"][0]["geometryType"] == "SxGeomSpline2D"

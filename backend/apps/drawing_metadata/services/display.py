@@ -213,6 +213,22 @@ def _title_block_candidate_items(candidates: list[dict], limit: int = 12) -> lis
     return previews
 
 
+def _revision_note_items(candidates: list[dict], limit: int = 8) -> list[dict]:
+    return [
+        {
+            "value": _display_value(candidate.get("value")),
+            "confidence": _display_value(candidate.get("confidence")),
+            "matchedKeywords": _display_value(", ".join(candidate.get("matched_keywords", []) or [])),
+            "viewName": _display_value(candidate.get("view_name")),
+            "layerNo": _display_value(candidate.get("layer_no")),
+            "position": _display_value(_position_label(candidate)),
+            "insidePrintArea": _display_value(_inside_print_area_label(candidate.get("inside_print_area"))),
+            "evidenceText": _display_value(candidate.get("evidence_text")),
+        }
+        for candidate in candidates[:limit]
+    ]
+
+
 def _dimension_preview_items(dimensions: list[dict], limit: int = 8) -> list[dict]:
     previews: list[dict] = []
     for dimension in dimensions[:limit]:
@@ -506,6 +522,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     print_frames = raw_extract.get("print_frames", []) or []
     layers = raw_extract.get("layers", []) or []
     title_block_candidates = canonical_attributes.get("title_block_candidates", []) or []
+    revision_note_candidates = canonical_attributes.get("revision_note_candidates", []) or []
     geometry_feature_candidates = canonical_attributes.get("geometry_feature_candidates", []) or []
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
@@ -518,6 +535,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("displayed_layer_count", "表示レイヤー数", displayed_layer_count),
         _make_row("text_count", "文字数", len(texts)),
         _make_row("dimension_count", "寸法数", len(dimensions)),
+        _make_row("revision_note_count", "訂正内容候補数", canonical_attributes.get("revision_note_count")),
         _make_row("geometry_primitive_count", "線・円などの図形数", len(primitives)),
         _make_row("layer_tagged_count", "所属レイヤー取得済み要素数", layer_tagged_count),
         _make_row("surface_roughness_count", "表面粗さ記号数", canonical_attributes.get("surface_roughness_count")),
@@ -561,6 +579,8 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         "textTotal": len(texts),
         "titleBlockCandidates": _title_block_candidate_items(title_block_candidates),
         "titleBlockCandidateTotal": len(title_block_candidates),
+        "revisionNoteCandidates": _revision_note_items(revision_note_candidates),
+        "revisionNoteCandidateTotal": len(revision_note_candidates),
         "dimensionSamples": _dimension_preview_items(dimensions),
         "dimensionTotal": len(dimensions),
         "geometryPrimitiveSamples": _primitive_preview_items(primitives),
