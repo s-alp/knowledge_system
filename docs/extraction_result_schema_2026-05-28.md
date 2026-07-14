@@ -69,16 +69,44 @@
       "tree_path": ["Top", "Sub1", "PartA"],
       "name": "string|null",
       "comment": "string|null",
+      "ex_info": "string|null",
+      "ex_info_fields": {
+        "User_WBZAI1": "string"
+      },
       "ref_model_name": "string|null",
       "ref_model_path": "string|null",
       "is_external": true,
       "is_mirror": false,
       "is_read_only": false,
-      "is_unloaded": false
+      "is_unloaded": false,
+      "materials": [
+        {
+          "matid": "SUS304",
+          "name": "SUS304",
+          "specific_gravity": 7.93,
+          "element_count": 2,
+          "raw_fields": {
+            "matid": "SUS304",
+            "name": "SUS304",
+            "spe_grav": "7.93"
+          }
+        }
+      ]
+    }
+  ],
+  "material_probe_status": "available|not_attempted|failed",
+  "materials": [
+    {
+      "matid": "SUS304",
+      "name": "SUS304",
+      "specific_gravity": 7.93,
+      "element_count": 2
     }
   ]
 }
 ```
+
+`parts[].materials` は `SxInfPartTree.entpart` から得た `SxEntPart.getInfMaterialList()` の結果である。SXNET資料上、このメソッドは子パーツ内の要素を含まないため、親子を合算せず各部品ノードの根拠として保持する。部品別APIが失敗した場合は `warnings[].code=part_material_probe_failed` に部品パス付きで記録し、抽出全体は継続する。
 
 ## 4. `raw_extract` の 2D 形
 
@@ -178,6 +206,19 @@
   "spec_tokens": [],
   "part_keywords": [],
   "material_keywords": [],
+  "part_material_candidates": [
+    {
+      "part_path": "Top.Sub1.PartA",
+      "part_name": "PartA",
+      "material_id": "SUS304",
+      "material_name": "SUS304",
+      "specific_gravity": 7.93,
+      "source": "3d_part_material",
+      "confidence": "high",
+      "reason": "ICAD部品ツリーのSxEntPartから材質一覧を取得できたため、当該部品の材質候補として採用しました。"
+    }
+  ],
+  "part_material_candidate_count": 1,
   "maker_keywords": [],
   "process_keywords": [],
   "heat_treatment_keywords": [],

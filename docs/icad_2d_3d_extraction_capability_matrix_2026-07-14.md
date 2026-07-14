@@ -58,12 +58,12 @@
 | 未解決外部参照 | A | `SxInfPart.is_unloaded` | 実装済み | 抽出信頼度に影響 |
 | 参照図面名 | A | `SxInfPart.ref_model_name` | 実装済み | 外部パーツ、外部パーツ配下内部パーツで有効 |
 | 参照図面格納フォルダ | A | `SxInfPart.path` | 実装済み | 参照解決、ファイル追跡 |
-| 材質 | A | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()`, `SxEntSeg.getInfMaterial()` -> `SxInfMaterial` | 一部実装済み | 3D全体の要素材質一覧は実装済み。部品単位材質は未実装 |
+| 材質 | A | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()`, `SxEntSeg.getInfMaterial()` -> `SxInfMaterial` | 実装済み | 3D全体の要素材質一覧と、部品ツリー各ノードの `entpart.getInfMaterialList()` を実装。部品単位は `parts[].materials` と `part_material_candidates` に保持 |
 | 重量 | A/C | `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` -> `SxInfMass.weight` | 実装済み | `mass_probe_status` と `mass_properties.weight` に保持。対象要素なし/例外は warning |
 | 質量 | A/C | `SxInfMass.mass` | 実装済み | `mass_properties.mass` に保持。測定対象がシートの場合は無効になる可能性 |
 | 体積 | A/C | `SxInfMass.volume` | 実装済み | `mass_properties.volume` に保持。シートの場合 `0.0` の可能性 |
 | 面積 | A/C | `SxInfMass.area` | 実装済み | `mass_properties.area` に保持 |
-| 比重/密度 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 一部実装済み | `SxInfMass.density` は保持。材質API由来の `spe_grav` は未実装 |
+| 比重/密度 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 実装済み | `SxInfMass.density` と、全体/部品材質API由来の `spe_grav` を保持 |
 | 重心 | A/C | `SxInfMass.pos` | 実装済み | `center_of_gravity_x/y/z` として保持 |
 | 慣性モーメント | A/C | `SxInfMass.inf_global_moment`, `inf_gravity_moment`, `inf_main_moment` | 未実装 | 検索タグより設計解析属性向け |
 | 図面サイズ | C | `SxInfPrint` または 2D出図範囲との照合 | 未実装 | 3D単独の固定属性としては未確認。モデル内の2D情報から取れる可能性が高い |
@@ -198,11 +198,11 @@
 | 未対応2Dジオメトリ | primitive実装済み | `SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomElparc2D`, `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomDelta`, `SxGeomTolDatum` を warning ではなく raw evidence として保持 |
 | 2D/3D属性照合 | 基本形実装済み | `reconciledAttributes` に一致、片側のみ、統合、手動上書き、競合、採用値、理由を保持。詳細画面にもレビュー行を表示 |
 | 2D形状・記号属性 | 実装済み | 表面粗さ記号数/値、断面・切断表現数、長穴/楕円候補数、穴/円候補数、候補径を canonical attributes と詳細画面へ表示 |
-| 3D部品材質候補 | 実装済み | 単一パーツ/単一材質は高信頼で紐づけ。パーツ付加情報内の材質表記パターンは中信頼候補として保持 |
+| 3D部品材質候補 | 実装済み | `SxInfPartTree.entpart` から `SxEntPart.getInfMaterialList()` を呼び、部品別材質は高信頼候補として保持。単一パーツ/単一全体材質とパーツ付加情報は補助候補として保持 |
 | Gemini図枠分類補助 | 実装済み | 2D抽出ジョブで `title_block_candidates` を低温度JSON分類し、`title_block_llm_classifications` と候補行の `llm_*` に保持。APIキー未設定時はスキップ、API失敗時は warning に記録。実API確認は `API_KEY_INVALID` で採用率未確認 |
 | 図枠欄名断片の誤採用抑止 | 実装済み | `製図者` など欄名だけの文字から `者` を値として採用しない。候補行は残し、採用値からは除外 |
 | 2D訂正内容候補 | 実装済み | `訂正内容`, `改訂内容`, `変更`, `修正`, `REV` 系の文字を `revision_note_candidates` に保持。詳細画面にも根拠文字、座標、印刷枠内外を表示 |
 
 最新の共有16件では、全件 `has_3d=true`、9件 `has_2d=true` だった。7件は `has_2d_container=true` だが `has_2d=false` であり、2DグローバルVSまたはVSコンテナの存在だけでは「図面情報あり」と判定できないことが確認できた。
 
-3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。3D材質は全体要素の材質一覧取得と部品材質候補生成まで進んだ。2D図枠欄名解析は初期辞書、候補表示、Gemini低温度JSON分類のジョブ組み込みまで進んだ。2D primitive は特徴候補タグと形状・記号属性の両方へ展開した。2D/3D属性照合は基本形を実装し、競合だけでなく片側欠落や統合理由も保持できる。まだ完全把握できていない領域は、部品単位マスプロパティ、複数部品/複数材質の厳密紐づけ、2D図枠欄名辞書の客先横断拡充、円/楕円を穴・長穴として断定する客先横断条件である。
+3D重量/マスプロパティは実装と共有サンプル3件での取得確認まで進んだ。3D材質は全体要素の材質一覧取得、部品ツリー各ノードの材質一覧取得、部品材質候補生成まで進んだ。2D図枠欄名解析は初期辞書、候補表示、Gemini低温度JSON分類のジョブ組み込みまで進んだ。2D primitive は特徴候補タグと形状・記号属性の両方へ展開した。2D/3D属性照合は基本形を実装し、競合だけでなく片側欠落や統合理由も保持できる。まだ完全把握できていない領域は、部品単位マスプロパティ、部品材質APIを共有実サンプル全件で走らせたときの客先横断取得率、2D図枠欄名辞書の客先横断拡充、円/楕円を穴・長穴として断定する客先横断条件である。

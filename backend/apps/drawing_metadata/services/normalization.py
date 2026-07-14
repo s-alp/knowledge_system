@@ -411,6 +411,29 @@ def _build_part_material_candidates(parts: list[dict], materials: list[dict]) ->
     candidates: list[dict] = []
     seen: set[tuple[str, str | None, str]] = set()
 
+    for index, part in enumerate(parts):
+        part_path = _part_path(part, index)
+        for material in part.get("materials", []) or []:
+            material_id = _material_id(material)
+            material_name = material.get("name")
+            material_key = material_id or material_name
+            key = (part_path, material_key, "3d_part_material")
+            if key in seen:
+                continue
+            seen.add(key)
+            candidates.append(
+                {
+                    "part_path": part_path,
+                    "part_name": part.get("name"),
+                    "material_id": material_id,
+                    "material_name": material_name,
+                    "specific_gravity": material.get("specific_gravity"),
+                    "source": "3d_part_material",
+                    "confidence": "high",
+                    "reason": "ICAD部品ツリーのSxEntPartから材質一覧を取得できたため、当該部品の材質候補として採用しました。",
+                }
+            )
+
     if len(parts) == 1 and len(materials) == 1:
         part = parts[0]
         material = materials[0]

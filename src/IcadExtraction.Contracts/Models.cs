@@ -67,6 +67,7 @@ namespace IcadExtraction.Contracts
         public bool IsMirror { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsUnloaded { get; set; }
+        public List<MaterialPayload> Materials { get; set; } = new List<MaterialPayload>();
     }
 
     public sealed class RawExtract3DPayload

@@ -26,6 +26,14 @@ namespace IcadExtraction.SxNet.Tests
                             is_external = true,
                         },
                         ex_inf = "User_WBZAI1,\"RM\",\"User_WCMNA\",\"ＳＵＳ\"",
+                        entpart = new FakeEntPart
+                        {
+                            Materials = new[]
+                            {
+                                new FakeMaterial { matid = "SUS304", name = "SUS304", spe_grav = 7.93 },
+                                new FakeMaterial { matid = "SUS304", name = "SUS304", spe_grav = 7.93 },
+                            }
+                        },
                         child_list = new[]
                         {
                             new FakePartTree
@@ -43,6 +51,10 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(3, payload.Parts.Count);
             Assert.Equal("RM", payload.Parts[1].ExInfoFields["User_WBZAI1"]);
             Assert.Equal("ＳＵＳ", payload.Parts[1].ExInfoFields["User_WCMNA"]);
+            Assert.Single(payload.Parts[1].Materials);
+            Assert.Equal("SUS304", payload.Parts[1].Materials[0].MatId);
+            Assert.Equal(2, payload.Parts[1].Materials[0].ElementCount);
+            Assert.Empty(payload.Parts[2].Materials);
             Assert.Equal(new List<string> { "Top", "ChildA", "Leaf" }, payload.Parts[2].TreePath);
         }
 
@@ -50,6 +62,7 @@ namespace IcadExtraction.SxNet.Tests
         {
             public FakePartInfo? inf;
             public string? ex_inf;
+            public FakeEntPart? entpart;
             public FakePartTree[]? child_list;
         }
 
@@ -63,6 +76,23 @@ namespace IcadExtraction.SxNet.Tests
             public bool is_mirror;
             public bool is_read_only;
             public bool is_unloaded;
+        }
+
+        public sealed class FakeEntPart
+        {
+            public FakeMaterial[]? Materials { get; set; }
+
+            public FakeMaterial[]? getInfMaterialList()
+            {
+                return Materials;
+            }
+        }
+
+        public sealed class FakeMaterial
+        {
+            public string? matid;
+            public string? name;
+            public double spe_grav;
         }
     }
 }

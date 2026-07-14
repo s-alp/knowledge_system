@@ -6,7 +6,7 @@ namespace IcadExtraction.SxNet
 {
     public sealed class PartTreeFlattener
     {
-        public RawExtract3DPayload Flatten(object rootNode, string? topPartExInfo)
+        public RawExtract3DPayload Flatten(object rootNode, string? topPartExInfo, List<WarningPayload>? warnings = null)
         {
             var payload = new RawExtract3DPayload();
             var rootInf = ReflectionHelpers.GetMemberValue(rootNode, "inf");
@@ -18,11 +18,11 @@ namespace IcadExtraction.SxNet
             };
             payload.TopPart.ExInfoFields = ParseExInfoFields(payload.TopPart.ExInfo);
 
-            VisitNode(rootNode, new List<string>(), payload.Parts);
+            VisitNode(rootNode, new List<string>(), payload.Parts, warnings);
             return payload;
         }
 
-        private void VisitNode(object node, List<string> ancestorPath, List<PartPayload> output)
+        private void VisitNode(object node, List<string> ancestorPath, List<PartPayload> output, List<WarningPayload>? warnings)
         {
             var info = ReflectionHelpers.GetMemberValue(node, "inf");
             var name = ReflectionHelpers.GetString(info, "name");
@@ -48,12 +48,13 @@ namespace IcadExtraction.SxNet
                     IsMirror = ReflectionHelpers.GetBool(info, "is_mirror"),
                     IsReadOnly = ReflectionHelpers.GetBool(info, "is_read_only"),
                     IsUnloaded = ReflectionHelpers.GetBool(info, "is_unloaded"),
+                    Materials = ExtractPartMaterials(node, currentPath, warnings),
                 });
             }
 
             foreach (var child in ReflectionHelpers.Enumerate(ReflectionHelpers.GetMemberValue(node, "child_list")))
             {
-                VisitNode(child, currentPath, output);
+                VisitNode(child, currentPath, output, warnings);
             }
         }
 
@@ -77,6 +78,47 @@ namespace IcadExtraction.SxNet
             }
 
             return fields;
+        }
+
+        private static List<MaterialPayload> ExtractPartMaterials(object node, List<string> partPath, List<WarningPayload>? warnings)
+        {
+            var entPart = ReflectionHelpers.GetMemberValue(node, "entpart");
+            var getInfMaterialList = entPart?.GetType().GetMethod("getInfMaterialList", System.Type.EmptyTypes);
+            if (getInfMaterialList == null)
+            {
+                return new List<MaterialPayload>();
+            }
+
+            try
+            {
+                var materialInfos = getInfMaterialList.Invoke(entPart, null);
+                return new List<MaterialPayload>(IcadMaterialProbe.MapMaterials(ReflectionHelpers.Enumerate(materialInfos)));
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                AddPartMaterialWarning(partPath, ex.InnerException ?? ex, warnings);
+                return new List<MaterialPayload>();
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
+            {
+                AddPartMaterialWarning(partPath, ex, warnings);
+                return new List<MaterialPayload>();
+            }
+        }
+
+        private static void AddPartMaterialWarning(List<string> partPath, System.Exception ex, List<WarningPayload>? warnings)
+        {
+            if (warnings == null)
+            {
+                return;
+            }
+
+            var path = partPath.Count == 0 ? "(unknown)" : string.Join(".", partPath);
+            warnings.Add(new WarningPayload
+            {
+                Code = "part_material_probe_failed",
+                Message = $"部品材質の取得に失敗しました。part_path={path}; {ex.GetType().Name}: {ex.Message}",
+            });
         }
     }
 }
