@@ -273,7 +273,11 @@ python scripts\summarize_2d_extraction_coverage.py `
 - 不明primitive型: `SxGeomHatch` 169件
 - 残りは主に `SxGeomHatch` と、`Ｙ` など座標なし文字である
 
-したがって、次の残課題は線分座標ではなく、ハッチングを印刷枠判定対象に含めるか、座標なし文字をタグ生成から除外するかの整理である。安易に削除フィルタを入れず、証跡として保持しつつ検索・タグ生成対象から外す制御を検討する。
+SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、`pitch`、`ex_name`、`ex_scale`、`type` が中心で、直接の座標または外接矩形は確認できなかった。そのため、ハッチング座標は捏造しない。raw extract には証跡として保持し、印刷枠が取得できている図面では `inside_print_area=true` と判定できた要素だけを自動タグ・検索候補へ使う。
+
+2026-07-15 に正規化層へ上記制御を追加した。印刷枠がある図面では、`inside_print_area=null` の文字、寸法記号、溶接注記、バルーン、幾何primitiveを `part_keywords`、`spec_tokens`、図枠候補、訂正内容候補、形状特徴候補から除外する。raw の `text_tokens` や `geometry_primitives` は削除せず、後から人が確認できる証跡として残す。印刷枠が取れない図面では従来どおり `null` を保持して、情報欠落で一律に捨てない。
+
+比較結果は `output\souya_handoff\drawing_metadata_fixture_tag_diff_unknown_filter_2026-07-15.json` に保存した。旧fixture比で、2D/3D snapshot数は45件のまま、自動タグ9件、`part_keywords` 1,031件、`spec_tokens` 1,014件、ハッチング/断面カウント169件を削減した。削除されたタグは、座標不明ハッチング由来の `図面特徴:ハッチング` と、枠外/枠不明テキスト由来のユニット・装置タグであり、図枠外データの誤反映抑止として妥当である。
 
 同日に本番ナレッジシステムの実画面もChromeで再確認した。登録、変更、削除は行っていない。
 

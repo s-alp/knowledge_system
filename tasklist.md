@@ -168,6 +168,9 @@
 - [x] 再抽出manifestをDBへ取り込み、創屋連携fixture 35図面を `drawing_metadata_fixture_reextract_2026-07-15.json` として再生成
 - [x] `SxGeomLine2D` の座標取得を scalar `x1/y1/x2/y2` だけでなく `pnt1/pnt2` 系へ拡張し、代表2D 19件で印刷枠判定不明を `488` まで低減
 - [x] `analyze_2d_print_area_unknowns.py` を追加し、印刷枠判定不明の理由を座標欠落/座標あり判定失敗/primitive型別に分解して確認
+- [x] SXNETの `SxGeomHatch` は直接座標/外接矩形を確認できないため座標を捏造せず、raw証跡として残す方針を資料化
+- [x] 印刷枠がある図面では `inside_print_area=true` の要素だけを自動タグ・検索候補へ使い、枠不明要素はraw証跡に残すよう正規化層を強化
+- [x] 旧fixtureとの差分を `drawing_metadata_fixture_tag_diff_unknown_filter_2026-07-15.json` に保存し、自動タグ9件、`part_keywords` 1,031件、`spec_tokens` 1,014件、ハッチング/断面カウント169件のノイズ削減を確認
 - [x] 本番ナレッジシステムのプロジェクト、製品・装置・ユニット、部品、図面、AI検索、類似検索をChrome実画面で再確認し、読み取り専用スクリーンショットを `output\knowledge_ui_screenshots_2026-07-15` に保存
 - [x] 本番ナレッジシステム図面詳細の2D/3D切替をChromeで目視確認し、3D GLTF読み込みエラーを記録
 - [x] ローカルDjango詳細画面とタグレビュー画面をChromeで目視確認し、2D/3Dあり、viewerタグ、保存フォルダ、パーツ付加情報数、統合タグ、2D/3D競合が画面に出ることを確認
@@ -175,7 +178,6 @@
 ## 次に着手する
 
 - [ ] 有効なGemini APIキーで2D図枠分類の採用率を再確認する
-- [ ] 残りの印刷枠判定不明488件を、ハッチングと座標なし文字に分けて、タグ生成除外にするか証跡保存に留めるか決める
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

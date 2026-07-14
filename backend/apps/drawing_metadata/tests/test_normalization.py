@@ -196,3 +196,50 @@ def test_normalize_2d_raw_extract():
     assert canonical["slot_candidate_dimensions"][0]["minor_diameter"] == 8.0
     assert canonical["hole_candidate_count"] == 1
     assert canonical["hole_candidate_diameters"] == [6.0]
+
+
+def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
+    payload = {
+        "source_format": "icad",
+        "source_kind": "2d",
+        "source_file": {"full_path": r"J:\sample\unknown-print-area.icd"},
+        "raw_extract": {
+            "print_frames": [{"id": "frame-1"}],
+            "texts": [
+                {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": None},
+                {"text_lines": ["SMC"], "source_type": "text", "inside_print_area": None},
+                {"text_lines": ["材質 SUS304"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 20.0},
+                {"text_lines": ["訂正内容", "旧注記"], "source_type": "text", "inside_print_area": None},
+            ],
+            "weld_notes": [{"text": "枠不明溶接", "inside_print_area": None}],
+            "balloons": [{"text": "枠内バルーン", "inside_print_area": True}],
+            "tolerances": [{"text": "SES", "inside_print_area": None}],
+            "geometry_primitives": [
+                {"geometry_type": "SxGeomHatch", "summary": "unknown hatch", "inside_print_area": None},
+                {"geometry_type": "SxGeomCircle2D", "summary": "unknown circle", "inside_print_area": None, "radius": 3.0},
+                {"geometry_type": "SxGeomCutLine", "summary": "inside cut line", "inside_print_area": True},
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+    tags = build_derived_tags(canonical)
+
+    assert canonical["title_block_fields"]["material"] == "SUS304"
+    assert "材質 SS400" in canonical["text_tokens"]
+    assert "材質 SS400" not in canonical["part_keywords"]
+    assert "SMC" not in canonical["maker_keywords"]
+    assert "SES" not in canonical["spec_tokens"]
+    assert "枠不明溶接" in canonical["weld_note_texts"]
+    assert "枠不明溶接" not in canonical["part_keywords"]
+    assert "枠内バルーン" in canonical["part_keywords"]
+    assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
+    assert canonical["revision_note_count"] == 0
+    feature_tags = {candidate["tag"] for candidate in canonical["geometry_feature_candidates"]}
+    assert "図面特徴:ハッチング" not in feature_tags
+    assert "形状候補:穴" not in feature_tags
+    assert "図面特徴:切断線" in feature_tags
+    assert canonical["hatch_or_section_count"] == 0
+    assert canonical["hole_candidate_count"] == 0
+    assert canonical["cut_line_count"] == 1
+    assert not any(tag["tag"] == "材質:SS400" for tag in tags)

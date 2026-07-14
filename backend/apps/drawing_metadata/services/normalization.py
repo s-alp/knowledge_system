@@ -162,12 +162,34 @@ def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> 
     )
 
 
-def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
+def _has_print_frames(raw_extract: dict) -> bool:
+    print_frames = raw_extract.get("print_frames") or []
+    return isinstance(print_frames, list) and bool(print_frames)
+
+
+def _is_usable_print_area_item(item: dict, *, has_print_frames: bool) -> bool:
+    inside_print_area = item.get("inside_print_area")
+    if inside_print_area is False:
+        return False
+    if has_print_frames and inside_print_area is not True:
+        return False
+    return True
+
+
+def _trusted_print_area_items(items: Iterable[dict], *, has_print_frames: bool) -> list[dict]:
+    return [
+        item
+        for item in items
+        if isinstance(item, dict) and _is_usable_print_area_item(item, has_print_frames=has_print_frames)
+    ]
+
+
+def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool = False) -> list[dict]:
     candidates: list[dict] = []
     seen: set[tuple[str, str, str | None, float | None, float | None]] = set()
 
     for text in texts:
-        if text.get("inside_print_area") is False:
+        if not _is_usable_print_area_item(text, has_print_frames=has_print_frames):
             continue
         lines = _text_lines_from_payload(text)
         if not lines:
@@ -218,12 +240,12 @@ def _build_title_block_candidates(texts: list[dict]) -> list[dict]:
     return candidates
 
 
-def _build_revision_note_candidates(texts: list[dict]) -> list[dict]:
+def _build_revision_note_candidates(texts: list[dict], *, has_print_frames: bool = False) -> list[dict]:
     candidates: list[dict] = []
     seen: set[tuple[str, float | None, float | None]] = set()
 
     for text in texts:
-        if text.get("inside_print_area") is False:
+        if not _is_usable_print_area_item(text, has_print_frames=has_print_frames):
             continue
         lines = _text_lines_from_payload(text)
         if not lines:
@@ -287,10 +309,10 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
     return selected
 
 
-def _build_geometry_feature_candidates(primitives: list[dict]) -> list[dict]:
+def _build_geometry_feature_candidates(primitives: list[dict], *, has_print_frames: bool = False) -> list[dict]:
     grouped: dict[str, dict] = {}
     for primitive in primitives:
-        if primitive.get("inside_print_area") is False:
+        if not _is_usable_print_area_item(primitive, has_print_frames=has_print_frames):
             continue
         geometry_type = primitive.get("geometry_type")
         rule = GEOMETRY_FEATURE_RULES.get(geometry_type)
@@ -353,7 +375,7 @@ def _merge_unique(items: Iterable) -> list:
     return merged
 
 
-def _build_geometry_attribute_summary(primitives: list[dict]) -> dict:
+def _build_geometry_attribute_summary(primitives: list[dict], *, has_print_frames: bool = False) -> dict:
     summary = {
         "surface_roughness_count": 0,
         "surface_roughness_values": [],
@@ -371,7 +393,7 @@ def _build_geometry_attribute_summary(primitives: list[dict]) -> dict:
     slot_dimensions: list[dict] = []
 
     for primitive in primitives:
-        if primitive.get("inside_print_area") is False:
+        if not _is_usable_print_area_item(primitive, has_print_frames=has_print_frames):
             continue
         geometry_type = primitive.get("geometry_type")
         if geometry_type == "SxGeomSmark":
@@ -759,6 +781,25 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         weld_notes = raw_extract.get("weld_notes", [])
         balloons = raw_extract.get("balloons", [])
         tolerances = raw_extract.get("tolerances", [])
+        has_print_frames = _has_print_frames(raw_extract)
+        trusted_texts = _trusted_print_area_items(texts, has_print_frames=has_print_frames)
+        trusted_dimensions = _trusted_print_area_items(dimensions, has_print_frames=has_print_frames)
+        trusted_weld_notes = _trusted_print_area_items(weld_notes, has_print_frames=has_print_frames)
+        trusted_balloons = _trusted_print_area_items(balloons, has_print_frames=has_print_frames)
+        trusted_tolerances = _trusted_print_area_items(tolerances, has_print_frames=has_print_frames)
+        trusted_text_tokens = _flatten_strings(
+            text_line
+            for text in trusted_texts
+            for text_line in text.get("text_lines", [])
+        )
+        trusted_dimension_symbols = _flatten_strings(
+            value
+            for dimension in trusted_dimensions
+            for value in [dimension.get("mark_2"), dimension.get("mark_3"), dimension.get("front_word"), dimension.get("back_word")]
+        )
+        trusted_weld_note_texts = _flatten_strings(note.get("text") for note in trusted_weld_notes)
+        trusted_balloon_keys = _flatten_strings(balloon.get("text") for balloon in trusted_balloons)
+        trusted_tolerance_texts = _flatten_strings(tolerance.get("text") for tolerance in trusted_tolerances)
 
         canonical["text_tokens"] = _flatten_strings(
             text_line
@@ -779,23 +820,23 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["weld_note_texts"] = _flatten_strings(note.get("text") for note in weld_notes)
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
-        canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
-        canonical["title_block_candidates"] = _build_title_block_candidates(texts)
+        canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
+        canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
-        canonical["revision_note_candidates"] = _build_revision_note_candidates(texts)
+        canonical["revision_note_candidates"] = _build_revision_note_candidates(texts, has_print_frames=has_print_frames)
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
-        canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives)
-        canonical.update(_build_geometry_attribute_summary(primitives))
+        canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)
+        canonical.update(_build_geometry_attribute_summary(primitives, has_print_frames=has_print_frames))
 
         search_tokens = (
             source_path_tokens
-            + canonical["text_tokens"]
+            + trusted_text_tokens
             + _flatten_strings(str(value) for value in canonical["title_block_fields"].values())
             + _flatten_strings(candidate.get("value") for candidate in canonical["revision_note_candidates"])
-            + canonical["dimension_symbols"]
-            + canonical["weld_note_texts"]
-            + canonical["balloon_keys"]
-            + canonical["tolerance_texts"]
+            + trusted_dimension_symbols
+            + trusted_weld_note_texts
+            + trusted_balloon_keys
+            + trusted_tolerance_texts
         )
         canonical["part_keywords"] = search_tokens
 
