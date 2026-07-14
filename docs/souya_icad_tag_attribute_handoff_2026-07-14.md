@@ -199,6 +199,15 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。
 - 画面確認画像: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-metadata-handoff-viewport.png`
 - DOM確認: `創屋連携・viewer/RAG 受け渡し確認`, `詳細API`, `RAG投入payload API`, `viewer 初期化情報`, `RAG 事前フィルタ`, `RAG ランキング信号`, `投入前レビュー`, `本番タグ・属性 payload プレビュー` が表示されることを確認
 
+manifest取込後の代表図面として、2D/3D両方があり、かつpayload候補が多い `CAA5012-02434000K1R1.icd` をローカル詳細画面で見た目確認した。
+
+- ローカル確認URL: `http://127.0.0.1:8001/drawing-metadata/0e04246b-e8a2-4b46-a485-9312f6112d33/`
+- 画面上部: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-top-caa5012.png`
+- payloadプレビュー: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-payload-preview-caa5012.png`
+- DOM/寸法確認: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-payload-preview-caa5012.metrics.json`
+- 確認結果: 図面、製品・装置・ユニット、部品、プロジェクトの4対象が表示される。`登録・変更・削除は行わず` の注意文も表示される。payload表は横長の保存パス、endpoint、候補タグを扱うため、専用の横スクロール枠と折り返しを付けた。Chrome実画面ではpayloadセルの文字あふれ0件を確認した。
+- 代表候補数: 図面 attrs=5/tags=9、製品 attrs=1、部品 attrs=27/tags=9、プロジェクト attrs=1。
+
 ```json
 {
   "drawingId": "host drawing id",

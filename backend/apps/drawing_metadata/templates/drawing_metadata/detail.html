@@ -116,32 +116,34 @@
 
     <h3>本番タグ・属性 payload プレビュー</h3>
     <p class="muted">本番ナレッジシステムへ登録・変更・削除は行わず、創屋確認用に「渡すならこの形」という候補だけを表示します。</p>
-    <table>
-      <thead>
-        <tr>
-          <th>対象</th>
-          <th>既存受け口</th>
-          <th>タグ状態</th>
-          <th>タグ候補</th>
-          <th>属性候補数</th>
-          <th>payloadキー</th>
-          <th>候補endpoint</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in handoff_display.knowledgePayloadTargetRows %}
+    <div class="table-scroll">
+      <table class="payload-table">
+        <thead>
           <tr>
-            <th>{{ row.label }}</th>
-            <td>{{ row.existingReception }}</td>
-            <td>{{ row.tagApiStatus }}</td>
-            <td>{{ row.tagPreview }}</td>
-            <td>{{ row.attributeCount }}</td>
-            <td>{{ row.payloadKeys }}</td>
-            <td>{{ row.candidateEndpoint }}</td>
+            <th>対象</th>
+            <th>既存受け口</th>
+            <th>タグ状態</th>
+            <th>タグ候補</th>
+            <th>属性候補数</th>
+            <th>payloadキー</th>
+            <th>候補endpoint</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for row in handoff_display.knowledgePayloadTargetRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.existingReception }}</td>
+              <td>{{ row.tagApiStatus }}</td>
+              <td>{{ row.tagPreview }}</td>
+              <td>{{ row.attributeCount }}</td>
+              <td>{{ row.payloadKeys }}</td>
+              <td>{{ row.candidateEndpoint }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="panel">

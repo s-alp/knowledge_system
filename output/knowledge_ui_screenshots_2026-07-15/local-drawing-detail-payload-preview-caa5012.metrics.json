@@ -1,0 +1,18 @@
+{
+  "documentScrollWidth": 1905,
+  "innerWidth": 1920,
+  "overflowingPayloadCellCount": 0,
+  "payloadHeadingSeen": true,
+  "scrollWrapClass": "table-scroll",
+  "tableClass": "payload-table",
+  "tableWidth": 1823,
+  "visibleTextChecks": {
+    "drawingTarget": true,
+    "noProductionWriteText": true,
+    "partTarget": true,
+    "previewHeading": true,
+    "productTarget": true,
+    "projectTarget": true
+  },
+  "wrapWidth": 1823
+}

@@ -32,6 +32,7 @@
   - `knowledgeSystemPayloadPreview` を登録済み11図面のfixtureへ同梱確認済み。ただしローカルDB内の古い11件は正規化属性が薄く、10件は対象別属性候補0件。実抽出入り代表では部品向け候補2件を確認。
   - 抽出済みJSONをDBへ再投入する `import_drawing_metadata_extracts` を追加。代表3図面の2D/3Dを取り込み直してfixtureを14図面へ更新し、payload候補あり4図面を確認。
   - `build_icad_extract_import_manifest.py` で共有済み112 JSONから24図面/43ファイルを選定。manifest取込後のfixtureは35図面、payload候補あり25図面、2D/3D両方あり20図面。
+  - manifest取込後の代表図面 `CAA5012-02434000K1R1.icd` をローカルDjango詳細画面でChrome確認。図面/製品・装置・ユニット/部品/プロジェクト別の `本番タグ・属性 payload プレビュー` が見た目上も表示され、payload表の横長文字列向け折り返しと横スクロールを追加。
   - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
@@ -108,6 +109,7 @@
 - [x] Django側にタグ候補レビュー画面を追加
 - [x] 最新共有16件の `detect` を実行して結果を保存
 - [x] 本番ナレッジシステム実画面とフロント資産を読み取り専用で確認
+- [x] manifest取込後の代表図面で本番タグ・属性payloadプレビューのローカル実画面確認を実施
 - [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
 - [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み
