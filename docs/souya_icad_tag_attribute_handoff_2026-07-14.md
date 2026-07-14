@@ -94,6 +94,16 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
 
 この fixture には、図面詳細API相当の `detailApiPayload`、2D/3Dビューワー初期表示用の `viewerBootstrap`、RAG投入用の `ragPayload` を同梱する。登録、変更、削除は行わない読み取り専用の受け渡しJSONである。
 
+2026-07-15 に通常DBの登録済み図面で実生成した。
+
+- 出力先: `output\souya_handoff\drawing_metadata_fixture_2026-07-15.json`
+- 出力件数: 11図面
+- 契約チェック: 11件すべてに `detailApiPayload`, `viewerBootstrap`, `ragPayload` が存在
+- 実抽出入り代表: `9NK452WX90-00-LINER-A3-3D-01.icd`
+  - `viewerBootstrap.availability.has2d=true`
+  - `viewerBootstrap.availability.has3d=true`
+  - `ragPayload.schemaVersion=drawing_metadata_rag_payload.v1`
+
 ```json
 {
   "drawingId": "host drawing id",
