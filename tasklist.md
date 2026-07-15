@@ -218,6 +218,7 @@
 - [x] `probe_3d_preview_assets.py` を追加し、manifest上位8件で3D STL preview生成を横断実行。ライズ、シブヤパッケージングシステム、ラップマスターウォルターズジャパン、SBY、NKS、ZCSET、宮本工業所、アースエンジニアリングの8件すべて `viewer_assets.3d.status=ready`、warning 0件。STLサイズは96,271 bytes から 74,086,436 bytes まで確認
 - [x] 本番ナレッジシステム確認ではプロジェクト詳細にタグ/属性表示口が見えないため、プロジェクト側は一旦保留。既存受け口候補がある「製品・装置・ユニット」と「部品」向けに、タグチップ、属性情報、創屋連携payload候補を表示するページを追加。`/drawing-metadata/{id}/product-unit/` と `/drawing-metadata/{id}/parts/` をローカル起動中backendでHTTP確認し、どちらも200応答とタグ・属性UI表示を確認
 - [x] 本番ナレッジシステム実画面を再確認し、左側メニューに「図面管理」「製品・装置・ユニット」「部品」が並ぶこと、各詳細の「関連情報」で紐づき確認を行うことを反映。ローカル画面の上部独自ボタンを撤去し、左側メニューと紐づき確認欄へ統一
+- [x] Djangoジョブ経由で実ICAD `217008-41J-3004.icd` の3D抽出を実行し、`e32596c9-3fa6-4ae8-9f57-634aaf9ce85b.stl` 96,271 bytes を `preview_assets` へ生成。`viewer3d/open` が `actual_stl` を返し、既存3Dビューワーで実STL、タグ・属性候補、関連情報、左メニューの「製品・装置・ユニット」表記、ステータス「表示中」をPlaywrightで確認
 
 ## 次に着手する
 

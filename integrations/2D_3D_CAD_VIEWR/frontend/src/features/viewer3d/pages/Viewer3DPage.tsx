@@ -219,7 +219,7 @@ export function Viewer3DPage({
             {clippingState.enabled && !edgeHighlightEnabled ? <span>断面キャップを優先するため、輪郭強調はOFFです。</span> : null}
             {!resolvedError && job?.status && job.status !== "ready" ? <span>Status: {job.status}</span> : null}
             {!loadingMessage && !resolvedError && !sectionCapNotice && (!job?.status || job.status === "ready") ? (
-              <span>待機中</span>
+              <span>{job?.status === "ready" && job.modelUrl ? "表示中" : "待機中"}</span>
             ) : null}
           </div>
         </div>

@@ -120,6 +120,7 @@ describe("Viewer3DPage", () => {
     const scene = await screen.findByTestId("viewer-3d-scene");
     const sectionPosition = screen.getByText(/断面位置:/);
 
+    expect(screen.getByText("表示中")).toBeInTheDocument();
     expect(header.compareDocumentPosition(toolbarButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(toolbarButton.compareDocumentPosition(scene) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(scene.compareDocumentPosition(sectionPosition) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();

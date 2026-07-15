@@ -1,6 +1,5 @@
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Canvas, useLoader, useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import {
   AlwaysStencilFunc,
   BackSide,
@@ -24,6 +23,7 @@ import {
   ReplaceStencilOp,
   Vector3,
 } from "three";
+import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
@@ -163,10 +163,35 @@ function ModelContent({
           onCapSupportResolved={onCapSupportResolved}
         />
       )}
-      <OrbitControls ref={controlsRef} makeDefault enablePan enableZoom screenSpacePanning />
+      <CameraOrbitControls controlsRef={controlsRef} />
       <SceneReadySignal onReady={onReady} />
     </>
   );
+}
+
+function CameraOrbitControls({ controlsRef }: { controlsRef: MutableRefObject<ThreeOrbitControls | null> }) {
+  const { camera, gl, invalidate } = useThree();
+
+  useEffect(() => {
+    const controls = new ThreeOrbitControls(camera, gl.domElement);
+    controls.enablePan = true;
+    controls.enableZoom = true;
+    controls.screenSpacePanning = true;
+    controlsRef.current = controls;
+
+    const handleChange = () => invalidate();
+    controls.addEventListener("change", handleChange);
+
+    return () => {
+      controls.removeEventListener("change", handleChange);
+      controls.dispose();
+      if (controlsRef.current === controls) {
+        controlsRef.current = null;
+      }
+    };
+  }, [camera, controlsRef, gl.domElement, invalidate]);
+
+  return null;
 }
 
 function StlModel({

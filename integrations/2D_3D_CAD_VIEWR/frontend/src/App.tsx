@@ -29,7 +29,7 @@ type NavigationGroup = {
 const navigationGroups: NavigationGroup[] = [
   {
     title: "メイン",
-    items: ["プロジェクト", "製品", "部品", "図面管理", "文書管理"],
+    items: ["プロジェクト", "製品・装置・ユニット", "部品", "図面管理", "文書管理"],
   },
   {
     title: "検索",

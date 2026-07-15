@@ -184,13 +184,13 @@ export function buildDrawingKnowledgeMock(bootstrap: DrawingBootstrapResponse): 
           },
           {
             id: "product",
-            label: "製品",
+            label: "製品・装置・ユニット",
             items: [
               {
                 id: "product-main",
                 title: "OP30 カセット",
-                subtitle: "製品マスタ",
-                description: `${drawingName} が属する製品系統を表すモック情報です。部品表や派生図面への接続を想定しています。`,
+                subtitle: "製品・装置・ユニットマスタ",
+                description: `${drawingName} が属する製品・装置・ユニット系統を表すモック情報です。部品表や派生図面への接続を想定しています。`,
                 chips: ["量産", "標準"],
               },
             ],
@@ -224,7 +224,7 @@ export function buildDrawingKnowledgeMock(bootstrap: DrawingBootstrapResponse): 
         ]
       : [
           { id: "project", label: "プロジェクト", items: [] },
-          { id: "product", label: "製品", items: [] },
+          { id: "product", label: "製品・装置・ユニット", items: [] },
           { id: "parts", label: "部品", items: [] },
           { id: "conversation", label: "会話ログ", items: [] },
         ],

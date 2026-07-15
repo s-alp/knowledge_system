@@ -83,7 +83,12 @@ describe("drawingKnowledge", () => {
       version: "ver.2",
       updatedBy: "創屋 太郎",
     });
-    expect(detail.relatedTabs.map((tab) => tab.label)).toEqual(["プロジェクト", "製品", "部品", "会話ログ"]);
+    expect(detail.relatedTabs.map((tab) => tab.label)).toEqual([
+      "プロジェクト",
+      "製品・装置・ユニット",
+      "部品",
+      "会話ログ",
+    ]);
     expect(detail.changeHistory).toHaveLength(3);
   });
 
