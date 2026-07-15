@@ -10,3 +10,17 @@ backend/var/
 backend/.env
 **/bin/
 **/obj/
+
+# Local verification artifacts
+output/live_extracts/
+output/knowledge_ui_screenshots_*/
+output/souya_handoff/*_probe_*.json
+output/souya_handoff/*_trial_*.json
+output/souya_handoff/*_subset_*.json
+knowledge-system-home-2026-07-14.png
+tmp/
+
+# Local raw/customer handoff bundles
+*.zip
+BT50/
+ナレッジシステムお披露目会向け/
