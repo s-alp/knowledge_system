@@ -6,6 +6,8 @@ interface DrawingSupplementPanelsProps {
   detail: DrawingKnowledgeMock;
 }
 
+const ATTRIBUTE_VALUE_PREVIEW_LENGTH = 160;
+
 export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps) {
   const [activeTabId, setActiveTabId] = useState(detail.relatedTabs[0]?.id ?? "");
   const activeTab =
@@ -89,9 +91,17 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
                       {target.attributes.slice(0, 6).map((attribute) => (
                         <div key={`${target.targetKey}-${attribute.name}-${attribute.value}`}>
                           <dt>{attribute.name}</dt>
-                          <dd>{attribute.value}</dd>
+                          <dd>
+                            <AttributeValue value={attribute.value} />
+                          </dd>
                         </div>
                       ))}
+                      {target.attributes.length > 6 ? (
+                        <div>
+                          <dt>ほか</dt>
+                          <dd>{target.attributes.length - 6} 属性</dd>
+                        </div>
+                      ) : null}
                     </dl>
                   ) : null}
                 </article>
@@ -196,5 +206,22 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
         </div>
       </section>
     </>
+  );
+}
+
+function AttributeValue({ value }: { value: string }) {
+  if (value.length <= ATTRIBUTE_VALUE_PREVIEW_LENGTH) {
+    return <>{value}</>;
+  }
+
+  const preview = `${value.slice(0, ATTRIBUTE_VALUE_PREVIEW_LENGTH)}...`;
+
+  return (
+    <details className="attribute-value-details">
+      <summary>
+        <span className="attribute-value-preview">{preview}</span>
+      </summary>
+      <p>{value}</p>
+    </details>
   );
 }

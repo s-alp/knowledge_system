@@ -28,6 +28,48 @@ const detail: DrawingKnowledgeMock = {
           entityHint: "-",
           bindingStatus: "needs_attribute_master_binding",
         },
+        {
+          name: "パーツ付加情報トークン",
+          value: "User_type,User_syori1,User_syori2,User_netu,User_hrc,User_maker,User_bikou,User_souchi,User_unit,User_kenzu,User_sekkei,User_seizu,User_SNO,User_Partsname,User_Material,User_Surfacefinishing",
+          sourcePath: "canonicalAttributes.part_ex_info_tokens",
+          entityHint: "-",
+          bindingStatus: "needs_part_record_and_attribute_master_binding",
+        },
+        {
+          name: "属性2",
+          value: "value2",
+          sourcePath: "canonicalAttributes.extra2",
+          entityHint: "-",
+          bindingStatus: "needs_attribute_master_binding",
+        },
+        {
+          name: "属性3",
+          value: "value3",
+          sourcePath: "canonicalAttributes.extra3",
+          entityHint: "-",
+          bindingStatus: "needs_attribute_master_binding",
+        },
+        {
+          name: "属性4",
+          value: "value4",
+          sourcePath: "canonicalAttributes.extra4",
+          entityHint: "-",
+          bindingStatus: "needs_attribute_master_binding",
+        },
+        {
+          name: "属性5",
+          value: "value5",
+          sourcePath: "canonicalAttributes.extra5",
+          entityHint: "-",
+          bindingStatus: "needs_attribute_master_binding",
+        },
+        {
+          name: "属性6",
+          value: "value6",
+          sourcePath: "canonicalAttributes.extra6",
+          entityHint: "-",
+          bindingStatus: "needs_attribute_master_binding",
+        },
       ],
       notes: [],
     },
@@ -47,5 +89,8 @@ describe("DrawingSupplementPanels", () => {
     expect(within(panel as HTMLElement).getByText("装置:供給台")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("材質")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("SUS304")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("パーツ付加情報トークン")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText(/User_Surfacefinishing/)).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("1 属性")).toBeInTheDocument();
   });
 });

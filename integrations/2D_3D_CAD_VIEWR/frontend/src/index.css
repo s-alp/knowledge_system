@@ -638,6 +638,28 @@ p {
   overflow-wrap: anywhere;
 }
 
+.attribute-value-details {
+  display: grid;
+  gap: 8px;
+}
+
+.attribute-value-details summary {
+  cursor: pointer;
+  color: var(--primary-blue);
+  overflow-wrap: anywhere;
+}
+
+.attribute-value-details p {
+  margin-top: 8px;
+  color: var(--text-color-strong);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.attribute-value-preview {
+  color: var(--text-color-strong);
+}
+
 .panel-header {
   display: flex;
   gap: 16px;
