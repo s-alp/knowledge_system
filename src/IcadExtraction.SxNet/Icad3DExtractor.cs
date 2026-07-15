@@ -13,6 +13,16 @@ namespace IcadExtraction.SxNet
 
         public ExtractionEnvelope Extract(string sxnetDllPath, string inputPath, ExtractionConditionOptions options)
         {
+            return Extract(sxnetDllPath, inputPath, options, new PreviewAssetOptions());
+        }
+
+        public ExtractionEnvelope Extract(
+            string sxnetDllPath,
+            string inputPath,
+            ExtractionConditionOptions options,
+            PreviewAssetOptions previewAssetOptions
+        )
+        {
             var warnings = new List<WarningPayload>();
             using (var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, inputPath))
             {
@@ -58,6 +68,11 @@ namespace IcadExtraction.SxNet
                 else
                 {
                     rawExtract.MaterialProbeStatus = "skipped_by_options";
+                }
+                var viewer3DAssets = new IcadPreviewAssetExporter().Export3DStl(context, inputPath, previewAssetOptions, warnings);
+                if (viewer3DAssets.Count > 0)
+                {
+                    rawExtract.ViewerAssets["3d"] = viewer3DAssets;
                 }
                 rawExtract.ConditionDiagnostics = BuildConditionDiagnostics(rawExtract, options);
 

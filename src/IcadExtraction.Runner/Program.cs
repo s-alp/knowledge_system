@@ -47,6 +47,7 @@ namespace IcadExtraction.Runner
             var extractionProfile = OptionalOption(command, "extraction-profile") ?? "default";
             var extractionOptions = OptionalJsonObjectOption(command, "extraction-options-json");
             var conditionOptions = ExtractionConditionOptions.FromDictionary(extractionOptions);
+            var previewAssetOptions = BuildPreviewAssetOptions(command);
 
             var stopwatch = Stopwatch.StartNew();
             using var icadLease = IcadProcessStarter.EnsureRunning(
@@ -58,11 +59,11 @@ namespace IcadExtraction.Runner
             ExtractionEnvelope envelope;
             if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad3DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions);
+                envelope = new Icad3DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions, previewAssetOptions);
             }
             else if (string.Equals(sourceKind, "2d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad2DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions);
+                envelope = new Icad2DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions, previewAssetOptions);
             }
             else
             {
@@ -149,6 +150,18 @@ namespace IcadExtraction.Runner
                 FileName = Path.GetFileName(inputPath),
                 FileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath),
                 Extension = Path.GetExtension(inputPath),
+            };
+        }
+
+        private static PreviewAssetOptions BuildPreviewAssetOptions(CliCommand command)
+        {
+            var outputDirectory = OptionalOption(command, "preview-output-dir");
+            return new PreviewAssetOptions
+            {
+                Enabled = !string.IsNullOrWhiteSpace(outputDirectory),
+                OutputDirectory = outputDirectory,
+                PublicBaseUrl = OptionalOption(command, "preview-public-base-url"),
+                FileNamePrefix = OptionalOption(command, "preview-file-name-prefix"),
             };
         }
 

@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+from django.conf import settings
 from django.db.models import Prefetch
-from django.shortcuts import get_object_or_404
+from django.http import FileResponse, Http404
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -201,6 +205,17 @@ class DrawingViewer3DPreviewApiView(APIView):
         return HttpResponse(stl, content_type="model/stl; charset=utf-8")
 
 
+class DrawingPreviewAssetApiView(APIView):
+    def get(self, request, job_id, filename):
+        job_directory = (settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)).resolve()
+        requested_path = (job_directory / filename).resolve()
+        if not _is_relative_to(requested_path, job_directory) or not requested_path.is_file():
+            raise Http404("preview asset not found")
+
+        content_type = "model/stl" if requested_path.suffix.lower() == ".stl" else "application/octet-stream"
+        return FileResponse(requested_path.open("rb"), content_type=content_type, filename=requested_path.name)
+
+
 class RegistrationExtractApiView(APIView):
     def post(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
@@ -264,7 +279,13 @@ def _get_snapshot_or_404(*, drawing: RegisteredDrawing, extraction_mode: str) ->
         None,
     )
     if snapshot is None:
-        from django.http import Http404
-
         raise Http404(f"{extraction_mode} snapshot is missing")
     return snapshot
+
+
+def _is_relative_to(path: Path, parent: Path) -> bool:
+    try:
+        path.relative_to(parent)
+    except ValueError:
+        return False
+    return True

@@ -212,10 +212,13 @@
 - [x] コピー済み2D/3Dビューワーを `VITE_DEV_PROXY_TARGET=http://127.0.0.1:8001` で起動し、実データ `XH30-A08001-R03-JP_ロードカップ部改造.icd` の `viewerBootstrap` を表示。図面/プロジェクト/製品・装置・ユニット/部品の4対象、タグ候補、属性候補、レビュー要表示をPlaywrightで確認
 - [x] knowledge_system側に `/api/v1/drawings/{drawingId}/viewer2d/open` / `viewer3d/open` を追加。現時点ではICADプレビュー変換API未接続のため、HTML 404ではなく `viewer_2d_source_not_connected` / `viewer_3d_source_not_connected` のJSONエラーを返し、ビューワー画面の `Unexpected token '<'` とReactの最大更新深度警告を解消
 - [x] `U8718-S71-002_A3.icd` を条件profile付きで再抽出。dry-runで `PLAN 2d 2d_all_views_layers_print_frame` を確認し、実ジョブ `a42eedae-749b-4c15-847d-f42bd106ce28` が `activeExtractionProfile=2d_all_views_layers_print_frame` / `scanAllViews=true` / `scanAllLayers=true` / `classifyPrintFrame=true` / `recordOutsidePrintFrame=true` / `recordUnknownPrintArea=true` で成功。bootstrapは `has2d=true`, `has3d=true`, `status=extracted`
+- [x] SXNET `SxModel.export(path, fname, file_type)` と `SxOptExport.FILE_TYPE_STL_MULTI=8` を確認し、C#抽出runnerへ `--preview-output-dir` / `--preview-public-base-url` / `--preview-file-name-prefix` を追加。3D抽出時にSTLプレビュー資産を `viewer_assets.3d` へ保存し、Django側の `/api/v1/drawing-metadata-preview-assets/{job_id}/{filename}` で配信できるようにした
+- [x] 既存ビューワー連携の実資産URL判定を同一Django内の相対URLにも対応。`viewer3d/open` は生成STLの `viewer_assets.3d[].url` があればメタデータSTLより優先して既存3Dビューワーadapterへ渡す。2DはSXNET print/plot設定未検証のため、プレビュー生成要求時に `viewer_assets.2d[].status=unsupported` とwarningを残す
 
 ## 次に着手する
 
-- [ ] ICAD抽出JSONから2Dプレビュー画像/PDF相当、3D表示用モデル相当へつなぐ変換・配信APIを既存2D/3Dビューワー契約へ接続し、`viewer2d/open` / `viewer3d/open` を実プレビュー表示まで到達させる
+- [ ] 実ICAD共有サンプルで `--preview-output-dir` 付き3D抽出を実行し、SXNET STL生成が実ファイルとして成功するか、ICAD環境・表示ウィンドウ条件・マルチボディ条件ごとの失敗理由を記録する
+- [ ] 2Dは `SxFileModel.print(SxInfPlot, string)` / `print(string)` とプロッタ設定を実機で確認し、PDF/JPEG/TIFF相当または中間PS/画像化のどれで既存2Dビューワーへ渡すかを確定する
 - [ ] 共有済みサンプルを追加で条件profile付き再抽出し、ビュー差、レイヤー差、印刷枠差、パーツ付加情報差の検出率と未解決理由を横断集計する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項

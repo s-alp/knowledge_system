@@ -371,6 +371,8 @@ def _asset_dicts(value: object, *, mode: str) -> list[dict]:
 def _is_fetchable_url(value: str | None) -> bool:
     if not value:
         return False
+    if value.startswith("/"):
+        return True
     parsed = urlparse(value)
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 

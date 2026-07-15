@@ -78,6 +78,17 @@ namespace IcadExtraction.SxNet
             return ReflectionHelpers.Enumerate(method.Invoke(null, null));
         }
 
+        public void ExportModel(string outputDirectory, string fileName, int fileType)
+        {
+            var exportMethod = _model.GetType().GetMethod("export", new[] { typeof(string), typeof(string), typeof(int) });
+            if (exportMethod == null)
+            {
+                throw new MissingMethodException($"{_model.GetType().FullName}.export(string, string, int)");
+            }
+
+            exportMethod.Invoke(_model, new object[] { outputDirectory, fileName, fileType });
+        }
+
         private object InvokeModelMethod(string methodName)
         {
             var method = _model.GetType().GetMethod(methodName, Type.EmptyTypes);

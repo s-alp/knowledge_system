@@ -57,6 +57,11 @@ urlpatterns = [
         name="drawing-viewer3d-preview-stl",
     ),
     path(
+        "drawing-metadata-preview-assets/<uuid:job_id>/<path:filename>",
+        views.DrawingPreviewAssetApiView.as_view(),
+        name="drawing-metadata-preview-asset",
+    ),
+    path(
         "drawing-metadata/registrations/<uuid:drawing_id>/extract",
         views.RegistrationExtractApiView.as_view(),
         name="drawing-metadata-registration-extract",

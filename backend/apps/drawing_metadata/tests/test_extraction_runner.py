@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -34,7 +35,7 @@ def test_run_extractor_wraps_timeout(monkeypatch, settings):
 
 
 @pytest.mark.django_db
-def test_build_extractor_command_uses_extraction_mode_and_icad_options(settings):
+def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_assets(settings):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="sample-command",
         filename="sample.icd",
@@ -45,11 +46,14 @@ def test_build_extractor_command_uses_extraction_mode_and_icad_options(settings)
     settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
     settings.DRAWING_METADATA_ICAD_EXECUTABLE = r"C:\ICADSX\bin\icad.exe"
     settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS = 8
+    settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT = Path(r"C:\temp\drawing_metadata_preview_assets")
+    settings.DRAWING_METADATA_PREVIEW_ASSET_BASE_URL = "/api/v1/drawing-metadata-preview-assets"
 
     command = build_extractor_command(
         drawing=drawing,
         extraction_mode="2d",
-        output_path="C:\\temp\\out.json",
+        output_path=Path(r"C:\temp\out.json"),
+        job_id="11111111-1111-1111-1111-111111111111",
         extraction_profile="2d_all_views_layers_print_frame",
         extraction_options={"scanAllViews": True, "scanAllLayers": True},
     )
@@ -61,3 +65,9 @@ def test_build_extractor_command_uses_extraction_mode_and_icad_options(settings)
     assert "--extraction-options-json" in command
     assert '{"scanAllViews":true,"scanAllLayers":true}' in command
     assert "--icad-executable-path" in command
+    assert "--preview-output-dir" in command
+    assert r"C:\temp\drawing_metadata_preview_assets\11111111-1111-1111-1111-111111111111" in command
+    assert "--preview-public-base-url" in command
+    assert "/api/v1/drawing-metadata-preview-assets/11111111-1111-1111-1111-111111111111" in command
+    assert "--preview-file-name-prefix" in command
+    assert "11111111-1111-1111-1111-111111111111" in command

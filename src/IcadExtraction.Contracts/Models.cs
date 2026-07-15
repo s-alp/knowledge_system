@@ -74,6 +74,7 @@ namespace IcadExtraction.Contracts
     {
         public TopPartPayload TopPart { get; set; } = new TopPartPayload();
         public List<PartPayload> Parts { get; set; } = new List<PartPayload>();
+        public Dictionary<string, List<ViewerAssetPayload>> ViewerAssets { get; set; } = new Dictionary<string, List<ViewerAssetPayload>>();
         public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
         public string MassProbeStatus { get; set; } = "not_attempted";
         public MassPropertyPayload? MassProperties { get; set; }
@@ -106,6 +107,21 @@ namespace IcadExtraction.Contracts
         public double? CenterOfGravityY { get; set; }
         public double? CenterOfGravityZ { get; set; }
         public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
+    }
+
+    public sealed class ViewerAssetPayload
+    {
+        public string Mode { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Source { get; set; } = string.Empty;
+        public string? Filename { get; set; }
+        public string? Extension { get; set; }
+        public string? MimeType { get; set; }
+        public string? ModelFormat { get; set; }
+        public string? FilePath { get; set; }
+        public string? Url { get; set; }
+        public long? SizeBytes { get; set; }
+        public string? Message { get; set; }
     }
 
     public sealed class TextPayload
@@ -233,6 +249,7 @@ namespace IcadExtraction.Contracts
     public sealed class RawExtract2DPayload
     {
         public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, List<ViewerAssetPayload>> ViewerAssets { get; set; } = new Dictionary<string, List<ViewerAssetPayload>>();
         public List<ViewSheetPayload> ViewSheets { get; set; } = new List<ViewSheetPayload>();
         public List<PrintFramePayload> PrintFrames { get; set; } = new List<PrintFramePayload>();
         public List<LayerPayload> Layers { get; set; } = new List<LayerPayload>();
@@ -267,6 +284,14 @@ namespace IcadExtraction.Contracts
         public long ElapsedMs { get; set; }
         public List<WarningPayload> Warnings { get; set; } = new List<WarningPayload>();
         public object RawExtract { get; set; } = new Dictionary<string, object>();
+    }
+
+    public sealed class PreviewAssetOptions
+    {
+        public bool Enabled { get; set; }
+        public string? OutputDirectory { get; set; }
+        public string? PublicBaseUrl { get; set; }
+        public string? FileNamePrefix { get; set; }
     }
 
     public sealed class DetectionEvidence2DPayload

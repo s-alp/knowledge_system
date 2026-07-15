@@ -4,6 +4,7 @@ import json
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import quote
 
 from django.conf import settings
 
@@ -25,6 +26,7 @@ def build_extractor_command(
     drawing: RegisteredDrawing,
     extraction_mode: str,
     output_path: Path,
+    job_id=None,
     extraction_profile: str = "default",
     extraction_options: dict | None = None,
 ) -> list[str]:
@@ -60,6 +62,12 @@ def build_extractor_command(
                 "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
             ]
         )
+    if job_id is not None:
+        preview_output_dir = settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)
+        preview_base_url = settings.DRAWING_METADATA_PREVIEW_ASSET_BASE_URL.rstrip("/") + f"/{quote(str(job_id))}"
+        command.extend(["--preview-output-dir", str(preview_output_dir)])
+        command.extend(["--preview-public-base-url", preview_base_url])
+        command.extend(["--preview-file-name-prefix", str(job_id)])
     return command
 
 
@@ -79,6 +87,7 @@ def run_extractor(
         drawing=drawing,
         extraction_mode=extraction_mode,
         output_path=output_path,
+        job_id=job_id,
         extraction_profile=extraction_profile,
         extraction_options=extraction_options,
     )

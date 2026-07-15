@@ -14,6 +14,16 @@ namespace IcadExtraction.SxNet
 
         public ExtractionEnvelope Extract(string sxnetDllPath, string inputPath, ExtractionConditionOptions options)
         {
+            return Extract(sxnetDllPath, inputPath, options, new PreviewAssetOptions());
+        }
+
+        public ExtractionEnvelope Extract(
+            string sxnetDllPath,
+            string inputPath,
+            ExtractionConditionOptions options,
+            PreviewAssetOptions previewAssetOptions
+        )
+        {
             var warnings = new List<WarningPayload>();
             using (var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, inputPath))
             {
@@ -40,6 +50,21 @@ namespace IcadExtraction.SxNet
                 if (options.ScanAllLayers)
                 {
                     rawExtract.Layers.AddRange(TryResolveLayers(context, warnings));
+                }
+                if (previewAssetOptions.Enabled)
+                {
+                    const string message = "2D preview asset export is not implemented yet. Print/plot settings must be verified per ICAD environment.";
+                    rawExtract.ViewerAssets["2d"] = new List<ViewerAssetPayload>
+                    {
+                        new ViewerAssetPayload
+                        {
+                            Mode = "2d",
+                            Status = "unsupported",
+                            Source = "sxnet_print",
+                            Message = message,
+                        },
+                    };
+                    warnings.Add(new WarningPayload { Code = "viewer_2d_asset_export_unsupported", Message = message });
                 }
                 rawExtract.ConditionDiagnostics = BuildConditionDiagnostics(rawExtract, options);
                 return new ExtractionEnvelope

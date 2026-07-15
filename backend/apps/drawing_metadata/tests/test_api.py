@@ -1,3 +1,7 @@
+import tempfile
+from pathlib import Path
+from uuid import uuid4
+
 import pytest
 from rest_framework.test import APIClient
 
@@ -357,6 +361,62 @@ def test_viewer_open_prefers_actual_preview_assets_when_snapshot_provides_urls(s
     assert payload_3d["modelFormat"] == "stl"
     assert payload_3d["modelUrl"] == "https://pdm.example.local/previews/viewer-actual-assets.stl"
     assert payload_3d["diagnostics"]["previewKind"] == "actual_stl"
+
+
+@pytest.mark.django_db
+def test_viewer_open_accepts_generated_relative_preview_asset_urls(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="viewer-generated-assets.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    job_id = uuid4()
+    model_url = f"/api/v1/drawing-metadata-preview-assets/{job_id}/{job_id}.stl"
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "viewer_assets": {
+                "3d": [
+                    {
+                        "url": model_url,
+                        "filename": f"{job_id}.stl",
+                        "extension": "stl",
+                        "model_format": "stl",
+                        "status": "ready",
+                    }
+                ]
+            }
+        },
+    )
+
+    client = APIClient()
+    response = client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open", {}, format="json")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["modelFormat"] == "stl"
+    assert payload["modelUrl"] == model_url
+    assert payload["diagnostics"]["previewKind"] == "actual_stl"
+
+
+@pytest.mark.django_db
+def test_preview_asset_endpoint_serves_generated_file(settings):
+    job_id = uuid4()
+    with tempfile.TemporaryDirectory() as temp_dir:
+        settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT = Path(temp_dir) / "preview_assets"
+        asset_dir = settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)
+        asset_dir.mkdir(parents=True)
+        asset_path = asset_dir / "model.stl"
+        asset_path.write_text("solid generated\nendsolid generated\n", encoding="utf-8")
+
+        client = APIClient()
+        response = client.get(f"/api/v1/drawing-metadata-preview-assets/{job_id}/model.stl")
+
+        assert response.status_code == 200
+        assert response["Content-Type"].startswith("model/stl")
+        assert b"solid generated" in b"".join(response.streaming_content)
 
 
 @pytest.mark.django_db
