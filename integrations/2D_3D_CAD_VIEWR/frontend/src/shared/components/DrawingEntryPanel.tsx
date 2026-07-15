@@ -8,7 +8,7 @@ interface DrawingEntryPanelProps {
   debugInputsEnabled: boolean;
   initialValue?: string;
   onLocalFileLaunch: (mode: LocalLaunchMode, file: File) => void;
-  onIcadMetadataLaunch: () => void;
+  onIcadMetadataLaunch: (file: File | null) => void;
 }
 
 const twoDFileExtensions = new Set(["pdf", "jpg", "jpeg", "tif", "tiff"]);
@@ -32,10 +32,13 @@ export function DrawingEntryPanel({
   onIcadMetadataLaunch,
 }: DrawingEntryPanelProps) {
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
+  const icadFileInputRef = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState<string | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [selectedIcadFile, setSelectedIcadFile] = useState<File | null>(null);
+  const [icadStatus, setIcadStatus] = useState<string | null>(null);
 
   const handleOpen = () => {
     const drawingId = resolveDrawingIdFromCandidate(value);
@@ -166,9 +169,59 @@ export function DrawingEntryPanel({
               </p>
             </div>
           </div>
-          <button className="secondary-button" type="button" onClick={onIcadMetadataLaunch}>
-            ICADからタグ・属性を取得
+          <label className="input-stack">
+            <span className="field-label">ICADファイル</span>
+            <div className="launcher-file-row">
+              <input
+                type="text"
+                value={selectedIcadFile?.name ?? ""}
+                readOnly
+                placeholder=".icd ファイル未選択"
+              />
+              <input
+                ref={icadFileInputRef}
+                className="sr-only-input"
+                type="file"
+                accept=".icd"
+                onClick={(event) => {
+                  const target = event.currentTarget;
+                  target.value = "";
+                  setIcadStatus("ICADファイル選択ダイアログを開いています。");
+                }}
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  setSelectedIcadFile(file);
+
+                  if (!file) {
+                    setIcadStatus(null);
+                    return;
+                  }
+
+                  if (!file.name.toLowerCase().endsWith(".icd")) {
+                    setError("ICAD抽出では .icd ファイルを選択してください。");
+                    setIcadStatus("対応外のファイル形式です。");
+                    return;
+                  }
+
+                  setError(null);
+                  setIcadStatus("ICAD抽出対象として選択しました。設定確認へ進めます。");
+                }}
+              />
+              <button
+                className="primary-button launcher-file-button"
+                type="button"
+                onClick={() => {
+                  icadFileInputRef.current?.click();
+                }}
+              >
+                ICADファイルを選択
+              </button>
+            </div>
+          </label>
+          <button className="secondary-button" type="button" onClick={() => onIcadMetadataLaunch(selectedIcadFile)}>
+            タグ・属性取得へ進む
           </button>
+          {icadStatus ? <p className="section-description">{icadStatus}</p> : null}
         </div>
 
         {error ? <p className="error-text">{error}</p> : null}

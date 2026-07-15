@@ -17,9 +17,11 @@ describe("DrawingEntryPanel", () => {
 
     expect(screen.getByText("図面を開く")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "ICADからタグ・属性を取得" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "ICADファイルを選択" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "ICADからタグ・属性を取得" }));
+    fireEvent.click(screen.getByRole("button", { name: "タグ・属性取得へ進む" }));
 
     expect(handleIcadMetadataLaunch).toHaveBeenCalledTimes(1);
+    expect(handleIcadMetadataLaunch).toHaveBeenCalledWith(null);
   });
 });
