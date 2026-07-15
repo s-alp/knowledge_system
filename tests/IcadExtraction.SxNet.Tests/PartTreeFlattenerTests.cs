@@ -58,6 +58,46 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(new List<string> { "Top", "ChildA", "Leaf" }, payload.Parts[2].TreePath);
         }
 
+        [Fact]
+        public void Flatten_RespectsMaterialAndExtendedInfoOptions()
+        {
+            var root = new FakePartTree
+            {
+                inf = new FakePartInfo { name = "Top", comment = "root" },
+                ex_inf = "User_TOP,\"TOP-EX\"",
+                child_list = new[]
+                {
+                    new FakePartTree
+                    {
+                        inf = new FakePartInfo { name = "ChildA", comment = "comment-a" },
+                        ex_inf = "User_WCMNA,\"ＳＵＳ\"",
+                        entpart = new FakeEntPart
+                        {
+                            Materials = new[]
+                            {
+                                new FakeMaterial { matid = "SUS304", name = "SUS304", spe_grav = 7.93 },
+                            }
+                        },
+                    }
+                }
+            };
+
+            var payload = new PartTreeFlattener().Flatten(
+                root,
+                "top ex",
+                warnings: null,
+                scanPartMaterials: false,
+                scanPartExtendedInfo: false
+            );
+
+            Assert.Null(payload.TopPart.ExInfo);
+            Assert.Empty(payload.TopPart.ExInfoFields);
+            Assert.Equal(2, payload.Parts.Count);
+            Assert.Null(payload.Parts[1].ExInfo);
+            Assert.Empty(payload.Parts[1].ExInfoFields);
+            Assert.Empty(payload.Parts[1].Materials);
+        }
+
         public sealed class FakePartTree
         {
             public FakePartInfo? inf;

@@ -20,6 +20,106 @@
     </div>
   </div>
 
+  <section class="viewer-embed-shell">
+    <div class="viewer-stage-preview">
+      <div class="viewer-toolbar">
+        <span class="viewer-tool-button">2D</span>
+        <span class="viewer-tool-button">3D</span>
+        <span class="viewer-tool-button">Fit</span>
+      </div>
+      <div class="viewer-canvas-preview">
+        <div class="viewer-paper-preview">
+          <div class="viewer-title-block-preview">
+            <strong>{{ viewer_tag_panel.title|default:drawing.filename }}</strong>
+            <span>{{ viewer_tag_panel.version|default:"-" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="viewer-tag-panel">
+      <div class="viewer-panel-heading">
+        <div>
+          <p class="section-eyebrow">Viewer Metadata</p>
+          <h2>{{ viewer_tag_panel.title|default:drawing.filename }}</h2>
+        </div>
+        <div class="mode-badge-row">
+          {% for badge in viewer_tag_panel.modeBadges %}
+            <span class="mode-badge {% if badge.available %}available{% endif %}">{{ badge.label }} {{ badge.displayValue }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <dl class="viewer-meta-list">
+        {% for row in viewer_tag_panel.metadataRows %}
+          <div>
+            <dt>{{ row.label }}</dt>
+            <dd>{{ row.displayValue }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+
+      <div class="tag-chip-wrap">
+        {% for tag in viewer_tag_panel.tags %}
+          <span class="tag-chip">{{ tag }}</span>
+        {% empty %}
+          <span class="muted">タグ候補はありません。</span>
+        {% endfor %}
+        {% if viewer_tag_panel.tagsTruncated %}
+          <span class="tag-chip subdued">ほか</span>
+        {% endif %}
+      </div>
+
+      <div class="viewer-quality-row">
+        <div>
+          <strong>{{ viewer_tag_panel.targetCount }}</strong>
+          <span>対象</span>
+        </div>
+        <div>
+          <strong>{{ viewer_tag_panel.tagCount }}</strong>
+          <span>タグ</span>
+        </div>
+        <div>
+          <strong>{{ viewer_tag_panel.attributeCount }}</strong>
+          <span>属性</span>
+        </div>
+        <div>
+          <strong>{{ viewer_tag_panel.reviewRequired }}</strong>
+          <span>レビュー</span>
+        </div>
+      </div>
+
+      <div class="target-stack">
+        {% for target in viewer_tag_panel.targetCards %}
+          <section class="target-row">
+            <div class="target-row-header">
+              <strong>{{ target.label }}</strong>
+              <span>{{ target.tagApiStatus }}</span>
+            </div>
+            <div class="target-row-chips">
+              {% for tag in target.tags %}
+                <span class="tag-chip compact">{{ tag }}</span>
+              {% empty %}
+                <span class="muted">タグなし</span>
+              {% endfor %}
+            </div>
+            {% if target.attributes %}
+              <dl class="target-attribute-list">
+                {% for attribute in target.attributes %}
+                  <div>
+                    <dt>{{ attribute.name }}</dt>
+                    <dd>{{ attribute.value }}</dd>
+                  </div>
+                {% endfor %}
+              </dl>
+            {% endif %}
+          </section>
+        {% endfor %}
+      </div>
+
+      <p class="muted">抽出状態: {{ viewer_tag_panel.extractionStatus|default:"未抽出" }} / 未抽出: {{ viewer_tag_panel.missingModes }}</p>
+    </aside>
+  </section>
+
   <div class="panel">
     <h2>{{ handoff_display.title }}</h2>
     <p class="muted">{{ handoff_display.description }}</p>

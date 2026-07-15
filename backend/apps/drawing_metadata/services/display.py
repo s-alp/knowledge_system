@@ -745,6 +745,79 @@ def _knowledge_payload_target_rows(knowledge_payload_preview: dict | None) -> li
     return rows
 
 
+def _viewer_tag_target_cards(tag_attributes: dict | None) -> list[dict]:
+    cards: list[dict] = []
+    for target in (tag_attributes or {}).get("targets", []) or []:
+        if not isinstance(target, dict):
+            continue
+        attributes = target.get("attributes") or []
+        tags = _string_values(target.get("tags") or [])
+        cards.append(
+            {
+                "targetKey": target.get("targetKey"),
+                "label": target.get("label") or target.get("targetKey"),
+                "tagApiStatus": _display_value(target.get("tagApiStatus")),
+                "writePolicy": _display_value(target.get("writePolicy")),
+                "reviewRequired": _display_value(target.get("reviewRequired")),
+                "tagCount": len(tags),
+                "attributeCount": len(attributes),
+                "tags": tags[:12],
+                "tagsTruncated": len(tags) > 12,
+                "attributes": [
+                    {
+                        "name": _display_value(attribute.get("name")),
+                        "value": _display_value(attribute.get("value")),
+                        "sourcePath": _display_value(attribute.get("sourcePath")),
+                        "entityHint": _display_value(attribute.get("entityHint")),
+                        "bindingStatus": _display_value(attribute.get("bindingStatus")),
+                    }
+                    for attribute in attributes[:8]
+                    if isinstance(attribute, dict)
+                ],
+                "attributesTruncated": len(attributes) > 8,
+                "notes": target.get("notes") or [],
+            }
+        )
+    return cards
+
+
+def build_viewer_tag_panel_display_payload(*, viewer_bootstrap: dict) -> dict:
+    metadata = viewer_bootstrap.get("metadata", {}) or {}
+    availability = viewer_bootstrap.get("availability", {}) or {}
+    tag_attributes = metadata.get("tagAttributes") or {}
+    extraction_diagnostics = metadata.get("extractionDiagnostics") or {}
+    target_cards = _viewer_tag_target_cards(tag_attributes)
+    tag_count = sum(card["tagCount"] for card in target_cards)
+    attribute_count = sum(card["attributeCount"] for card in target_cards)
+
+    return {
+        "title": viewer_bootstrap.get("title"),
+        "version": viewer_bootstrap.get("version"),
+        "defaultMode": viewer_bootstrap.get("defaultMode"),
+        "modeBadges": [
+            {"label": "2D", "available": bool(availability.get("has2d")), "displayValue": "あり" if availability.get("has2d") else "なし"},
+            {"label": "3D", "available": bool(availability.get("has3d")), "displayValue": "あり" if availability.get("has3d") else "なし"},
+        ],
+        "metadataRows": [
+            _make_row("drawingNumber", "図番", metadata.get("drawingNumber")),
+            _make_row("drawingName", "図面名", metadata.get("drawingName")),
+            _make_row("drawingType", "分類", metadata.get("drawingType")),
+            _make_row("paperSize", "図面サイズ", metadata.get("paperSize")),
+            _make_row("owner", "担当者", metadata.get("owner")),
+        ],
+        "tags": _string_values(metadata.get("tags") or [])[:18],
+        "tagsTruncated": len(_string_values(metadata.get("tags") or [])) > 18,
+        "targetCards": target_cards,
+        "targetCount": len(target_cards),
+        "tagCount": tag_count,
+        "attributeCount": attribute_count,
+        "reviewRequired": _display_value(tag_attributes.get("reviewRequired")),
+        "displayPolicy": tag_attributes.get("displayPolicy"),
+        "extractionStatus": extraction_diagnostics.get("status"),
+        "missingModes": _display_list(extraction_diagnostics.get("missingModes", [])),
+    }
+
+
 def build_integration_handoff_display_payload(
     *,
     viewer_bootstrap: dict,

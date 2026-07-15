@@ -8,21 +8,38 @@ namespace IcadExtraction.SxNet
     {
         public RawExtract3DPayload Flatten(object rootNode, string? topPartExInfo, List<WarningPayload>? warnings = null)
         {
+            return Flatten(rootNode, topPartExInfo, warnings, scanPartMaterials: true, scanPartExtendedInfo: true);
+        }
+
+        public RawExtract3DPayload Flatten(
+            object rootNode,
+            string? topPartExInfo,
+            List<WarningPayload>? warnings,
+            bool scanPartMaterials,
+            bool scanPartExtendedInfo)
+        {
             var payload = new RawExtract3DPayload();
             var rootInf = ReflectionHelpers.GetMemberValue(rootNode, "inf");
+            var resolvedTopPartExInfo = scanPartExtendedInfo ? topPartExInfo ?? ReflectionHelpers.GetString(rootNode, "ex_inf") : null;
             payload.TopPart = new TopPartPayload
             {
                 Name = ReflectionHelpers.GetString(rootInf, "name"),
                 Comment = ReflectionHelpers.GetString(rootInf, "comment"),
-                ExInfo = topPartExInfo ?? ReflectionHelpers.GetString(rootNode, "ex_inf"),
+                ExInfo = resolvedTopPartExInfo,
             };
             payload.TopPart.ExInfoFields = ParseExInfoFields(payload.TopPart.ExInfo);
 
-            VisitNode(rootNode, new List<string>(), payload.Parts, warnings);
+            VisitNode(rootNode, new List<string>(), payload.Parts, warnings, scanPartMaterials, scanPartExtendedInfo);
             return payload;
         }
 
-        private void VisitNode(object node, List<string> ancestorPath, List<PartPayload> output, List<WarningPayload>? warnings)
+        private void VisitNode(
+            object node,
+            List<string> ancestorPath,
+            List<PartPayload> output,
+            List<WarningPayload>? warnings,
+            bool scanPartMaterials,
+            bool scanPartExtendedInfo)
         {
             var info = ReflectionHelpers.GetMemberValue(node, "inf");
             var name = ReflectionHelpers.GetString(info, "name");
@@ -34,7 +51,7 @@ namespace IcadExtraction.SxNet
 
             if (info != null)
             {
-                var exInfo = ReflectionHelpers.GetString(node, "ex_inf");
+                var exInfo = scanPartExtendedInfo ? ReflectionHelpers.GetString(node, "ex_inf") : null;
                 output.Add(new PartPayload
                 {
                     TreePath = currentPath,
@@ -48,13 +65,13 @@ namespace IcadExtraction.SxNet
                     IsMirror = ReflectionHelpers.GetBool(info, "is_mirror"),
                     IsReadOnly = ReflectionHelpers.GetBool(info, "is_read_only"),
                     IsUnloaded = ReflectionHelpers.GetBool(info, "is_unloaded"),
-                    Materials = ExtractPartMaterials(node, currentPath, warnings),
+                    Materials = scanPartMaterials ? ExtractPartMaterials(node, currentPath, warnings) : new List<MaterialPayload>(),
                 });
             }
 
             foreach (var child in ReflectionHelpers.Enumerate(ReflectionHelpers.GetMemberValue(node, "child_list")))
             {
-                VisitNode(child, currentPath, output, warnings);
+                VisitNode(child, currentPath, output, warnings, scanPartMaterials, scanPartExtendedInfo);
             }
         }
 

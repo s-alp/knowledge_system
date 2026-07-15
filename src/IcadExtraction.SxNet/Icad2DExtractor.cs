@@ -9,13 +9,18 @@ namespace IcadExtraction.SxNet
     {
         public ExtractionEnvelope Extract(string sxnetDllPath, string inputPath)
         {
+            return Extract(sxnetDllPath, inputPath, ExtractionConditionOptions.Default);
+        }
+
+        public ExtractionEnvelope Extract(string sxnetDllPath, string inputPath, ExtractionConditionOptions options)
+        {
             var warnings = new List<WarningPayload>();
             using (var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, inputPath))
             {
                 var globalVs = context.GetGlobalVs();
                 Ensure2DWindow(globalVs, warnings);
                 var rawExtract = new RawExtract2DPayload();
-                foreach (var viewGeometry in TryResolveAllViewGeometries(context, warnings))
+                foreach (var viewGeometry in TryResolveAllViewGeometries(context, warnings, options))
                 {
                     rawExtract.ViewSheets.Add(viewGeometry.ViewSheet);
                     var mapped = new GeometryMapper().Map(viewGeometry.Geometries, warnings, viewGeometry.ViewSheet.Name);
@@ -26,9 +31,17 @@ namespace IcadExtraction.SxNet
                     rawExtract.Balloons.AddRange(mapped.Balloons);
                     rawExtract.Tolerances.AddRange(mapped.Tolerances);
                 }
-                rawExtract.PrintFrames.AddRange(TryResolvePrintFrames(context, warnings));
-                rawExtract.Layers.AddRange(TryResolveLayers(context, warnings));
-                ApplyPrintAreaClassification(rawExtract);
+                if (options.ClassifyPrintFrame)
+                {
+                    rawExtract.PrintFrames.AddRange(TryResolvePrintFrames(context, warnings));
+                    ApplyPrintAreaClassification(rawExtract);
+                    ApplyPrintAreaRetention(rawExtract, options);
+                }
+                if (options.ScanAllLayers)
+                {
+                    rawExtract.Layers.AddRange(TryResolveLayers(context, warnings));
+                }
+                rawExtract.ConditionDiagnostics = BuildConditionDiagnostics(rawExtract, options);
                 return new ExtractionEnvelope
                 {
                     InputPath = inputPath,
@@ -37,6 +50,52 @@ namespace IcadExtraction.SxNet
                     Warnings = warnings,
                 };
             }
+        }
+
+        private static Dictionary<string, object> BuildConditionDiagnostics(RawExtract2DPayload rawExtract, ExtractionConditionOptions options)
+        {
+            return new Dictionary<string, object>
+            {
+                ["scanAllViews"] = options.ScanAllViews,
+                ["scanAllLayers"] = options.ScanAllLayers,
+                ["classifyPrintFrame"] = options.ClassifyPrintFrame,
+                ["recordOutsidePrintFrame"] = options.RecordOutsidePrintFrame,
+                ["recordUnknownPrintArea"] = options.RecordUnknownPrintArea,
+                ["viewSheetCount"] = rawExtract.ViewSheets.Count,
+                ["layerCount"] = rawExtract.Layers.Count,
+                ["printFrameCount"] = rawExtract.PrintFrames.Count,
+                ["textCount"] = rawExtract.Texts.Count,
+                ["dimensionCount"] = rawExtract.Dimensions.Count,
+                ["geometryPrimitiveCount"] = rawExtract.GeometryPrimitives.Count,
+            };
+        }
+
+        private static void ApplyPrintAreaRetention(RawExtract2DPayload rawExtract, ExtractionConditionOptions options)
+        {
+            if (options.RecordOutsidePrintFrame && options.RecordUnknownPrintArea)
+            {
+                return;
+            }
+
+            rawExtract.Texts = rawExtract.Texts.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.Dimensions = rawExtract.Dimensions.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.GeometryPrimitives = rawExtract.GeometryPrimitives.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.WeldNotes = rawExtract.WeldNotes.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.Balloons = rawExtract.Balloons.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.Tolerances = rawExtract.Tolerances.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+        }
+
+        private static bool KeepPrintAreaItem(bool? insidePrintArea, ExtractionConditionOptions options)
+        {
+            if (insidePrintArea == false)
+            {
+                return options.RecordOutsidePrintFrame;
+            }
+            if (insidePrintArea == null)
+            {
+                return options.RecordUnknownPrintArea;
+            }
+            return true;
         }
 
         private static void ApplyPrintAreaClassification(RawExtract2DPayload rawExtract)
@@ -160,16 +219,16 @@ namespace IcadExtraction.SxNet
             }
         }
 
-        private static IEnumerable<ViewGeometryPayload> TryResolveAllViewGeometries(SxNetOpenContext context, IList<WarningPayload> warnings)
+        private static IEnumerable<ViewGeometryPayload> TryResolveAllViewGeometries(SxNetOpenContext context, IList<WarningPayload> warnings, ExtractionConditionOptions options)
         {
             try
             {
                 var viewSheets = context.GetVsList().ToArray();
-                if (viewSheets.Length == 0)
+                if (!options.ScanAllViews || viewSheets.Length == 0)
                 {
                     var globalVs = context.GetGlobalVs();
                     var viewName = TryResolveViewSheetName(globalVs);
-                    var geometries = TryResolveAllGeometries(globalVs, warnings, viewName).ToArray();
+                    var geometries = TryResolveAllGeometries(globalVs, warnings, viewName, options).ToArray();
                     return new[] { new ViewGeometryPayload(MapViewSheet(globalVs, geometries.Length), geometries) };
                 }
 
@@ -177,7 +236,7 @@ namespace IcadExtraction.SxNet
                     .Select(viewSheet =>
                     {
                         var viewName = TryResolveViewSheetName(viewSheet);
-                        var geometries = TryResolveAllGeometries(viewSheet, warnings, viewName).ToArray();
+                        var geometries = TryResolveAllGeometries(viewSheet, warnings, viewName, options).ToArray();
                         return new ViewGeometryPayload(MapViewSheet(viewSheet, geometries.Length), geometries);
                     })
                     .ToArray();
@@ -240,7 +299,7 @@ namespace IcadExtraction.SxNet
             };
         }
 
-        private static IEnumerable<GeometrySourceItem> TryResolveAllGeometries(object globalVs, IList<WarningPayload> warnings, string? viewName)
+        private static IEnumerable<GeometrySourceItem> TryResolveAllGeometries(object globalVs, IList<WarningPayload> warnings, string? viewName, ExtractionConditionOptions options)
         {
             var vsType = globalVs.GetType();
             var getSegListMethod = vsType.GetMethods()
@@ -282,7 +341,9 @@ namespace IcadExtraction.SxNet
 
                 var geometries = getGeomListMethod.Invoke(null, new object[] { typedSegments });
                 var geometryArray = ReflectionHelpers.Enumerate(geometries).ToArray();
-                var layerNumbers = TryResolveSegmentLayers(globalVs, typedSegments, segmentArray.Length, warnings);
+                var layerNumbers = options.ScanAllLayers
+                    ? TryResolveSegmentLayers(globalVs, typedSegments, segmentArray.Length, warnings)
+                    : Enumerable.Repeat<int?>(null, geometryArray.Length).ToArray();
                 if (layerNumbers.Length != geometryArray.Length)
                 {
                     warnings.Add(new WarningPayload

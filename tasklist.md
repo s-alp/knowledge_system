@@ -41,7 +41,7 @@
   - `summarize_2d_extraction_coverage.py` で共有済み2D抽出JSONを集計。代表manifestでは2D対象19ファイル中、ビュー情報なし17、印刷枠情報なし17、レイヤー情報なし17、印刷枠判定不明1,388要素を確認。全量側は途中抽出JSONを含むため再抽出対象の洗い出しに使う。
   - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
-  - 2026-07-15 に `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `tmp\reference\2D_3D_CAD_VIEWR` へコピーし、提出済み2D/3Dビューワーの実装を基準に再確認した。完成版UIはDjango検証画面ではなく、2D/3Dビューワーの `drawingId -> bootstrap -> viewer2d/viewer3d open` の流れにタグ・属性補助パネルを足す方針へ戻す。
+  - 2026-07-15 に `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `integrations\2D_3D_CAD_VIEWR` へコピーし、提出済み2D/3Dビューワーの実装を基準に再確認した。完成版UIはDjango検証画面ではなく、2D/3Dビューワーの `drawingId -> bootstrap -> viewer2d/viewer3d open` の流れにタグ・属性補助パネルを足す方針へ戻す。
   - 提出済み2D/3Dビューワーの `GET /api/v1/drawings/{drawingId}/bootstrap` 契約を確認し、detail API 内の `viewerBootstrap` と同一形状を返す読み取り専用互換APIを追加。末尾スラッシュありも許容する。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
@@ -199,10 +199,14 @@
 - [x] Python 3.12.10 で `drawing_metadata` テスト49件と `manage.py check` を確認
 - [x] Django worker から C# 抽出CLIへ `--extraction-profile` / `--extraction-options-json` を渡し、抽出結果JSONへ `extraction_profile` / `extraction_options` / `condition_diagnostics` として保存するようにした
 - [x] .NET 8 の solution test と net48 runner build で、条件profile/options追加後も既存抽出runnerがビルドできることを確認
+- [x] `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `integrations\2D_3D_CAD_VIEWR` へコピーし、`.env` / DB / media / frontend build / node_modules はignore、`.env.example` は追跡対象として整理
+- [x] コピーした2D/3Dビューワーの bootstrap 型へ `metadata.tagAttributes` / `metadata.extractionDiagnostics` を追加し、補助パネルで図面/プロジェクト/製品・装置・ユニット/部品別のタグ・属性候補を表示
+- [x] `extraction_options` を C# 2D/3D 抽出ロジック内へ反映し、全ビュー/全レイヤー/印刷枠/図枠外記録/パーツツリー/材質/パーツ付加情報/重量系の走査条件を切り替え可能にした
+- [x] 条件反映後に `drawing_metadata` pytest、Django check、.NET solution test、net48 runner build、コピー済みビューワーの対象Vitestとfrontend buildを確認
 
 ## 次に着手する
 
-- [ ] `extraction_options` を 2D/3D 抽出ロジック内の走査条件へ反映し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の再抽出条件が実データに効くことを確認する
+- [ ] 共有済みサンプルを条件profile付きで再抽出し、2D/3Dビューワー統合画面で実データのタグ・属性補助パネル、ビュー差、レイヤー差、印刷枠差、パーツ付加情報差を確認する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

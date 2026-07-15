@@ -17,6 +17,7 @@ from apps.drawing_metadata.services.display import (
     build_composed_display_payload,
     build_integration_handoff_display_payload,
     build_tag_review_display_payload,
+    build_viewer_tag_panel_display_payload,
 )
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
@@ -99,6 +100,7 @@ class RegistrationDetailPageView(View):
                     knowledge_payload_preview=knowledge_payload_preview,
                     api_links=api_links,
                 ),
+                "viewer_tag_panel": build_viewer_tag_panel_display_payload(viewer_bootstrap=viewer_bootstrap),
                 "snapshot_2d_display": (
                     build_2d_snapshot_display(
                         raw_extract=snapshot_2d.raw_extract_json,

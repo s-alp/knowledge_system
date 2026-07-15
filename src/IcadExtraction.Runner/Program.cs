@@ -46,6 +46,7 @@ namespace IcadExtraction.Runner
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
             var extractionProfile = OptionalOption(command, "extraction-profile") ?? "default";
             var extractionOptions = OptionalJsonObjectOption(command, "extraction-options-json");
+            var conditionOptions = ExtractionConditionOptions.FromDictionary(extractionOptions);
 
             var stopwatch = Stopwatch.StartNew();
             using var icadLease = IcadProcessStarter.EnsureRunning(
@@ -57,11 +58,11 @@ namespace IcadExtraction.Runner
             ExtractionEnvelope envelope;
             if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad3DExtractor().Extract(sxnetDllPath, inputPath);
+                envelope = new Icad3DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions);
             }
             else if (string.Equals(sourceKind, "2d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad2DExtractor().Extract(sxnetDllPath, inputPath);
+                envelope = new Icad2DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions);
             }
             else
             {
@@ -73,7 +74,7 @@ namespace IcadExtraction.Runner
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
             envelope.ExtractionProfile = extractionProfile;
             envelope.ExtractionOptions = extractionOptions;
-            envelope.ConditionDiagnostics = BuildConditionDiagnostics(sourceKind, extractionProfile, extractionOptions);
+            envelope.ConditionDiagnostics = conditionOptions.ToDiagnostics(sourceKind, extractionProfile, extractionOptions.Keys);
             if (autostartWarning != null)
             {
                 envelope.Warnings.Insert(0, autostartWarning);
@@ -148,37 +149,6 @@ namespace IcadExtraction.Runner
                 FileName = Path.GetFileName(inputPath),
                 FileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath),
                 Extension = Path.GetExtension(inputPath),
-            };
-        }
-
-        private static Dictionary<string, object> BuildConditionDiagnostics(
-            string sourceKind,
-            string extractionProfile,
-            Dictionary<string, object> extractionOptions)
-        {
-            var requiredChecks = new List<string>();
-            if (string.Equals(sourceKind, "2d", StringComparison.OrdinalIgnoreCase))
-            {
-                requiredChecks.Add("allViews");
-                requiredChecks.Add("allLayers");
-                requiredChecks.Add("printFrame");
-                requiredChecks.Add("outsidePrintFrame");
-            }
-            else if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
-            {
-                requiredChecks.Add("partTree");
-                requiredChecks.Add("partMaterials");
-                requiredChecks.Add("partAttributes");
-                requiredChecks.Add("massProperties");
-            }
-
-            return new Dictionary<string, object>
-            {
-                ["schemaVersion"] = "extract_condition_diagnostics.v1",
-                ["sourceKind"] = sourceKind,
-                ["extractionProfile"] = extractionProfile,
-                ["optionKeys"] = new List<string>(extractionOptions.Keys),
-                ["requiredConditionChecks"] = requiredChecks,
             };
         }
 

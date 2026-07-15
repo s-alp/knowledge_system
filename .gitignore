@@ -24,3 +24,12 @@ tmp/
 *.zip
 BT50/
 ナレッジシステムお披露目会向け/
+
+# Copied 2D/3D viewer integration artifacts
+integrations/2D_3D_CAD_VIEWR/.env
+integrations/2D_3D_CAD_VIEWR/backend/db.sqlite3
+integrations/2D_3D_CAD_VIEWR/backend/media/
+integrations/2D_3D_CAD_VIEWR/frontend/dist/
+integrations/2D_3D_CAD_VIEWR/frontend/*.tsbuildinfo
+integrations/2D_3D_CAD_VIEWR/frontend/*.js
+integrations/2D_3D_CAD_VIEWR/frontend/*.d.ts

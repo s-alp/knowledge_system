@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    working_dir: /app/backend
+    env_file:
+      - .env
+    environment:
+      DJANGO_SQLITE_PATH: /app/runtime/db.sqlite3
+      VIEWER_STORAGE_ROOT: /app/runtime/media/viewer
+      VIEWER_LOCAL_FILE_ENABLED: "true"
+    command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - backend-runtime:/app/runtime
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: base
+    working_dir: /app/frontend
+    env_file:
+      - .env
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+      VITE_DEV_PROXY_TARGET: http://backend:8000
+      VITE_LOCAL_FILE_ENABLED: "true"
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - .:/app
+      - frontend-node-modules:/app/frontend/node_modules
+
+volumes:
+  backend-runtime:
+  frontend-node-modules:

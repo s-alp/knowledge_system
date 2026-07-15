@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - .env
+    environment:
+      DJANGO_SQLITE_PATH: /app/runtime/db.sqlite3
+      VIEWER_STORAGE_ROOT: /app/runtime/media/viewer
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend-runtime:/app/runtime
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api/v1}
+        VITE_LOCAL_FILE_ENABLED: ${VITE_LOCAL_FILE_ENABLED:-false}
+    ports:
+      - "4173:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend-runtime:

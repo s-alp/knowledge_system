@@ -74,6 +74,7 @@ namespace IcadExtraction.Contracts
     {
         public TopPartPayload TopPart { get; set; } = new TopPartPayload();
         public List<PartPayload> Parts { get; set; } = new List<PartPayload>();
+        public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
         public string MassProbeStatus { get; set; } = "not_attempted";
         public MassPropertyPayload? MassProperties { get; set; }
         public string MaterialProbeStatus { get; set; } = "not_attempted";
@@ -231,6 +232,7 @@ namespace IcadExtraction.Contracts
 
     public sealed class RawExtract2DPayload
     {
+        public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
         public List<ViewSheetPayload> ViewSheets { get; set; } = new List<ViewSheetPayload>();
         public List<PrintFramePayload> PrintFrames { get; set; } = new List<PrintFramePayload>();
         public List<LayerPayload> Layers { get; set; } = new List<LayerPayload>();
