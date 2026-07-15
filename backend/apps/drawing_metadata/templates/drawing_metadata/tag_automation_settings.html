@@ -1,0 +1,58 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <div class="panel">
+    <h2>{{ settings_display.title }}</h2>
+    <p class="muted">{{ settings_display.summary }}</p>
+    <p class="muted">この画面は設定確認用です。本番ナレッジシステムへの登録・変更・削除は行いません。</p>
+    <table>
+      <tbody>
+        {% for row in settings_display.runtimeRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>対象別マッピング</h2>
+    <p class="muted">タグ自動取得の設定値はシステム設定に置き、抽出結果の確認・再抽出・手直しは図面管理で行います。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>対象</th>
+          <th>表示先</th>
+          <th>反映候補</th>
+          <th>確認導線</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in settings_display.targetRows %}
+          <tr>
+            <th>{{ row.target }}</th>
+            <td>{{ row.displayPage }}</td>
+            <td>{{ row.storedAs }}</td>
+            <td>{{ row.reviewRoute }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>取得・採用ルール</h2>
+    <table>
+      <tbody>
+        {% for row in settings_display.ruleRows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

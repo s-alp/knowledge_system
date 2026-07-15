@@ -23,6 +23,7 @@ from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashb
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
 
 
 class HandoffDashboardPageView(View):
@@ -53,6 +54,19 @@ class RegistrationListPageView(View):
             "jobs",
         ).all()
         return render(request, self.template_name, {"drawings": drawings})
+
+
+class TagAutomationSettingsPageView(View):
+    template_name = "drawing_metadata/tag_automation_settings.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(
+            request,
+            self.template_name,
+            {
+                "settings_display": build_tag_automation_settings_payload(),
+            },
+        )
 
 
 class RegistrationDetailPageView(View):

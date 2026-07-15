@@ -115,6 +115,9 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
           {detail.tagAttributePolicy !== "-" ? (
             <p className="tag-policy-note">{detail.tagAttributePolicy}</p>
           ) : null}
+          <p className="tag-policy-note">
+            抽出結果の確認、再抽出、手直しは図面管理のタグ候補レビューで行います。
+          </p>
         </div>
       </section>
 

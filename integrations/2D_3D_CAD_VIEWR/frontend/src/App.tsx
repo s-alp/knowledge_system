@@ -10,6 +10,7 @@ import {
   type DetailPageKey,
 } from "./features/knowledgeEntities/EntityPages";
 import type { KnowledgePageKey } from "./features/knowledgeEntities/types";
+import { TagAutomationSettingsPage } from "./features/knowledgeSettings/TagAutomationSettingsPage";
 import { resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./shared/drawingRoute";
 import { isViewerDebugInputsEnabled } from "./shared/env";
 import { useDrawingBootstrap } from "./shared/hooks/useDrawingBootstrap";
@@ -187,6 +188,10 @@ export default function App() {
             onNavigate={(nextPage) => openKnowledgePage(nextPage, true)}
           />
         );
+      }
+
+      if (activePage === "system") {
+        return <TagAutomationSettingsPage detail={activeDetailMock} />;
       }
 
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;

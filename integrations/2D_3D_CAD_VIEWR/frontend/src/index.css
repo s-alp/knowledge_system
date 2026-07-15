@@ -553,6 +553,13 @@ p {
   background: rgba(203, 213, 225, 0.9);
 }
 
+.production-section-note {
+  margin: 6px 0 0;
+  color: var(--text-color-muted);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
 .production-search-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(260px, 1fr));
