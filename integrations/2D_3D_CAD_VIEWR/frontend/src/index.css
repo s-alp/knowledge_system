@@ -473,6 +473,19 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
 }
 
+.related-card-button {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.related-card-button:hover {
+  border-color: var(--primary-blue);
+  box-shadow: 0 8px 18px rgba(59, 105, 164, 0.12);
+}
+
 .revision-card {
   grid-template-columns: minmax(0, 1fr) minmax(240px, 0.75fr);
   align-items: start;

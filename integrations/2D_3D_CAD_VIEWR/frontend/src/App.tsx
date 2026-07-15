@@ -96,14 +96,17 @@ type KnowledgeField = {
   value: string;
 };
 
+type KnowledgeRelatedItem = {
+  title: string;
+  subtitle: string;
+  description: string;
+  chips: string[];
+  targetPage?: KnowledgePageKey;
+};
+
 type KnowledgeRelatedSection = {
   label: string;
-  items: {
-    title: string;
-    subtitle: string;
-    description: string;
-    chips: string[];
-  }[];
+  items: KnowledgeRelatedItem[];
 };
 
 type KnowledgeEntityRecord = {
@@ -139,6 +142,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "製品・装置・ユニット",
             description: "プロジェクトに紐づく装置・ユニットの詳細へ接続します。",
             chips: ["製品・装置・ユニット", "進行中"],
+            targetPage: "product",
           },
         ],
       },
@@ -150,6 +154,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "図面管理",
             description: "2D画像図、3D中間ファイル、図面タグを扱う図面管理へ接続します。",
             chips: ["図面", "2D/3D"],
+            targetPage: "drawing",
           },
         ],
       },
@@ -193,6 +198,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "部品詳細",
             description: "部品詳細ページへ接続し、材質・表面処理・重量・タグを確認します。",
             chips: ["部品", "材質"],
+            targetPage: "part",
           },
         ],
       },
@@ -204,6 +210,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "図面管理",
             description: "2D画像図と3D中間ファイルのビューワー、図面タグ表示へ接続します。",
             chips: ["図面", "2D/3D"],
+            targetPage: "drawing",
           },
         ],
       },
@@ -237,6 +244,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "製品・装置・ユニット詳細",
             description: "部品が属する製品・装置・ユニットへ接続します。",
             chips: ["ユニット", "親"],
+            targetPage: "product",
           },
         ],
       },
@@ -248,6 +256,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "図面管理",
             description: "図面管理で2D画像図、3D中間ファイル、図面タグを確認します。",
             chips: ["図面", "照合"],
+            targetPage: "drawing",
           },
         ],
       },
@@ -259,6 +268,7 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
             subtitle: "文書管理",
             description: "部品属性と照合する文書情報の接続先です。",
             chips: ["文書", "表面処理"],
+            targetPage: "document",
           },
         ],
       },
@@ -266,7 +276,61 @@ const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEn
   },
 };
 
-function EntityDetailPage({ pageKey }: { pageKey: "project" | "product" | "part" }) {
+function RelatedCard({
+  item,
+  sectionLabel,
+  onNavigate,
+}: {
+  item: KnowledgeRelatedItem;
+  sectionLabel: string;
+  onNavigate: (page: KnowledgePageKey) => void;
+}) {
+  const content = (
+    <>
+      <div className="related-card-header">
+        <div>
+          <strong>{item.title}</strong>
+          <p>{item.subtitle}</p>
+        </div>
+      </div>
+      <p className="related-card-description">{item.description}</p>
+      <div className="related-card-chips">
+        {item.chips.map((chip) => (
+          <span key={chip} className="related-chip">
+            {chip}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+
+  if (!item.targetPage) {
+    return (
+      <article className="related-card">
+        {content}
+      </article>
+    );
+  }
+
+  return (
+    <button
+      className="related-card related-card-button"
+      type="button"
+      onClick={() => onNavigate(item.targetPage!)}
+      aria-label={`${sectionLabel}: ${item.title} を開く`}
+    >
+      {content}
+    </button>
+  );
+}
+
+function EntityDetailPage({
+  pageKey,
+  onNavigate,
+}: {
+  pageKey: "project" | "product" | "part";
+  onNavigate: (page: KnowledgePageKey) => void;
+}) {
   const record = knowledgeEntityRecords[pageKey];
 
   return (
@@ -318,22 +382,12 @@ function EntityDetailPage({ pageKey }: { pageKey: "project" | "product" | "part"
               <h3>{section.label}</h3>
               <div className="related-card-grid">
                 {section.items.map((item) => (
-                  <article key={`${section.label}-${item.title}`} className="related-card">
-                    <div className="related-card-header">
-                      <div>
-                        <strong>{item.title}</strong>
-                        <p>{item.subtitle}</p>
-                      </div>
-                    </div>
-                    <p className="related-card-description">{item.description}</p>
-                    <div className="related-card-chips">
-                      {item.chips.map((chip) => (
-                        <span key={chip} className="related-chip">
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-                  </article>
+                  <RelatedCard
+                    key={`${section.label}-${item.title}`}
+                    item={item}
+                    sectionLabel={section.label}
+                    onNavigate={onNavigate}
+                  />
                 ))}
               </div>
             </section>
@@ -422,7 +476,7 @@ export default function App() {
   const pageContent = (() => {
     if (activePage !== "drawing") {
       if (activePage === "project" || activePage === "product" || activePage === "part") {
-        return <EntityDetailPage pageKey={activePage} />;
+        return <EntityDetailPage pageKey={activePage} onNavigate={setActivePage} />;
       }
 
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;
