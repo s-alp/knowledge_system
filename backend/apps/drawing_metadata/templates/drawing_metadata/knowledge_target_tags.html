@@ -1,0 +1,132 @@
+{% extends "drawing_metadata/base.html" %}
+
+{% block content %}
+  <div class="actions">
+    <a href="/drawing-metadata/{{ drawing.id }}/">
+      <button type="button">図面詳細へ戻る</button>
+    </a>
+    <a href="/drawing-metadata/{{ drawing.id }}/tags/">
+      <button type="button">タグ候補レビュー</button>
+    </a>
+    <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">
+      <button type="button">製品・装置・ユニット</button>
+    </a>
+    <a href="/drawing-metadata/{{ drawing.id }}/parts/">
+      <button type="button">部品</button>
+    </a>
+  </div>
+
+  <section class="panel">
+    <p class="section-eyebrow">Knowledge System Target</p>
+    <h2>{{ target.label }} タグ・属性ページ案</h2>
+    <div class="grid">
+      <div>
+        <strong>元図面</strong>
+        <p>{{ source.filename }}</p>
+      </div>
+      <div>
+        <strong>既存受け口</strong>
+        <p>{{ target.existingReception }}</p>
+      </div>
+      <div>
+        <strong>タグAPI状態</strong>
+        <p><span class="status-pill">{{ target.tagApiStatus }}</span></p>
+      </div>
+      <div>
+        <strong>書き込み方針</strong>
+        <p>{{ target.writePolicy }}</p>
+      </div>
+    </div>
+    <ul class="compact-list">
+      {% for note in target.notes %}
+        <li>{{ note }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>タグ表示</h2>
+    {% if target.tags %}
+      <div class="tag-chip-wrap">
+        {% for tag in target.tags %}
+          <span class="tag-chip">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">タグ候補はありません。</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>属性情報</h2>
+    {% if target.attributes %}
+      <div class="table-scroll">
+        <table class="payload-table">
+          <thead>
+            <tr>
+              <th>属性名</th>
+              <th>属性値</th>
+              <th>根拠</th>
+              <th>部品ヒント</th>
+              <th>紐づけ状態</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for attribute in target.attributes %}
+              <tr>
+                <td>{{ attribute.attributeName }}</td>
+                <td>{{ attribute.attributeValue }}</td>
+                <td>{{ attribute.sourcePath }}</td>
+                <td>{{ attribute.entityHint }}</td>
+                <td>{{ attribute.bindingStatus }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">属性候補はありません。</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>創屋連携 payload 候補</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th>候補endpoint</th>
+          <td>{{ target.candidateEndpoint }}</td>
+        </tr>
+        <tr>
+          <th>属性payloadキー</th>
+          <td>{{ target.attributePayloadKeys|join:", " }}</td>
+        </tr>
+        <tr>
+          <th>レビュー要否</th>
+          <td>{{ target.reviewRequired }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>{{ target.payloadPreview|pprint }}</pre>
+  </section>
+
+  <section class="panel">
+    <h2>根拠</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th>本番解析証跡</th>
+          <td>{{ contract_evidence.frontendProbePath }}</td>
+        </tr>
+        <tr>
+          <th>本番書き込み方針</th>
+          <td>{{ contract_evidence.productionWritePolicy }}</td>
+        </tr>
+        <tr>
+          <th>元パス</th>
+          <td>{{ source.sourcePath }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

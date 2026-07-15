@@ -739,6 +739,69 @@ def test_tag_review_page_renders_composed_tag_candidates(client, sample_registra
 
 
 @pytest.mark.django_db
+def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="target-pages.icd",
+        source_path=r"J:\SAMPLE\target-pages.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={},
+        canonical_attributes_json={
+            "customer_name": "澁谷工業",
+            "project_name": "アイソレータ",
+            "equipment_category": "供給台",
+            "source_file_name": "target-pages.icd",
+            "source_directory_path": r"J:\SAMPLE",
+            "title_block_fields": {
+                "prfx": "TR1",
+                "unit_number": "U-100",
+            },
+            "material_keywords": ["SUS304"],
+        },
+        derived_tags_json=[],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={},
+        canonical_attributes_json={
+            "top_part_name": "BRACKET",
+            "part_names": ["BRACKET", "BASE"],
+            "material_keywords": ["SUS304"],
+            "part_material_candidates": [
+                {
+                    "part_path": "TOP.BRACKET",
+                    "part_name": "BRACKET",
+                    "material_id": "SUS304",
+                }
+            ],
+        },
+        derived_tags_json=[],
+    )
+
+    product_response = client.get(f"/drawing-metadata/{drawing.id}/product-unit/")
+    part_response = client.get(f"/drawing-metadata/{drawing.id}/parts/")
+
+    assert product_response.status_code == 200
+    product_content = product_response.content.decode("utf-8")
+    assert "製品・装置・ユニット タグ・属性ページ案" in product_content
+    assert "装置:供給台" in product_content
+    assert "PRFX" in product_content
+    assert "タグAPI状態" in product_content
+
+    assert part_response.status_code == 200
+    part_content = part_response.content.decode("utf-8")
+    assert "部品 タグ・属性ページ案" in part_content
+    assert "材質:SUS304" in part_content
+    assert "TOP.BRACKET" in part_content
+    assert "needs_part_record_and_attribute_master_binding" in part_content
+
+
+@pytest.mark.django_db
 def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],

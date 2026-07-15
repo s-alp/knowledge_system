@@ -193,9 +193,56 @@ class TagReviewPageView(View):
         )
 
 
+class KnowledgeTargetTagPageView(View):
+    template_name = "drawing_metadata/knowledge_target_tags.html"
+    target_key = ""
+
+    def get(self, request: HttpRequest, drawing_id) -> HttpResponse:
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+                "jobs",
+            ),
+            pk=drawing_id,
+        )
+        composed_metadata = compose_drawing_metadata(drawing)
+        knowledge_payload_preview = build_knowledge_system_payload_preview(
+            drawing=drawing,
+            composed_metadata=composed_metadata,
+        )
+        target = _target_payload_or_404(knowledge_payload_preview, self.target_key)
+        return render(
+            request,
+            self.template_name,
+            {
+                "drawing": drawing,
+                "target": target,
+                "source": knowledge_payload_preview.get("source", {}),
+                "contract_evidence": knowledge_payload_preview.get("contractEvidence", {}),
+            },
+        )
+
+
+class ProductUnitTagPageView(KnowledgeTargetTagPageView):
+    target_key = "product"
+
+
+class PartTagPageView(KnowledgeTargetTagPageView):
+    target_key = "part"
+
+
 class JobDetailPageView(View):
     template_name = "drawing_metadata/job_detail.html"
 
     def get(self, request: HttpRequest, job_id) -> HttpResponse:
         job = get_object_or_404(DrawingMetadataExtractionJob.objects.select_related("drawing"), pk=job_id)
         return render(request, self.template_name, {"job": job})
+
+
+def _target_payload_or_404(knowledge_payload_preview: dict, target_key: str) -> dict:
+    for target in knowledge_payload_preview.get("targets", []) or []:
+        if isinstance(target, dict) and target.get("targetKey") == target_key:
+            return target
+    from django.http import Http404
+
+    raise Http404(f"{target_key} target payload is missing")

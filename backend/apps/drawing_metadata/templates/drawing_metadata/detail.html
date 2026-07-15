@@ -346,6 +346,12 @@
     <a href="/drawing-metadata/{{ drawing.id }}/tags/">
       <button type="button">タグ候補レビュー</button>
     </a>
+    <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">
+      <button type="button">製品・装置・ユニット</button>
+    </a>
+    <a href="/drawing-metadata/{{ drawing.id }}/parts/">
+      <button type="button">部品</button>
+    </a>
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="action" value="extract" />
