@@ -62,6 +62,56 @@ class DrawingViewerBootstrapApiView(APIView):
         return Response(detail_payload["viewerBootstrap"])
 
 
+class DrawingViewerOpenApiView(APIView):
+    extraction_mode = ""
+    display_mode = ""
+
+    def post(self, request, drawing_id):
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+            ),
+            pk=drawing_id,
+        )
+        snapshot = next(
+            (snapshot for snapshot in drawing.snapshots.all() if snapshot.extraction_mode == self.extraction_mode),
+            None,
+        )
+        if snapshot is None:
+            return Response(
+                {
+                    "error": {
+                        "code": f"viewer_{self.extraction_mode}_snapshot_missing",
+                        "message": f"{self.display_mode}の抽出snapshotがないため、プレビューを開始できません。",
+                    }
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            {
+                "error": {
+                    "code": f"viewer_{self.extraction_mode}_source_not_connected",
+                    "message": (
+                        f"{self.display_mode}の抽出JSONは取得済みですが、プレビュー変換・配信APIは未接続です。"
+                        "創屋連携時は既存2D/3Dビューワーの変換APIへ接続してください。"
+                    ),
+                }
+            },
+            status=status.HTTP_501_NOT_IMPLEMENTED,
+        )
+
+
+class DrawingViewer2DOpenApiView(DrawingViewerOpenApiView):
+    extraction_mode = "2d"
+    display_mode = "2D"
+
+
+class DrawingViewer3DOpenApiView(DrawingViewerOpenApiView):
+    extraction_mode = "3d"
+    display_mode = "3D"
+
+
 class RegistrationExtractApiView(APIView):
     def post(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)

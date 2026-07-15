@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 
 import type { TwoDDocumentAdapter } from "../adapters/types";
 import { Viewer2DToolbar } from "../controls/Viewer2DToolbar";
@@ -28,6 +28,11 @@ export function Viewer2DPreviewPane({
 }: Viewer2DPreviewPaneProps) {
   const [viewport, dispatchViewport] = useReducer(twoDViewportReducer, initialTwoDViewportState);
   const [stageSize, setStageSize] = useState({ width: 0, height: 480 });
+  const handleStageSizeChange = useCallback((width: number, height: number) => {
+    setStageSize((currentStageSize) =>
+      currentStageSize.width === width && currentStageSize.height === height ? currentStageSize : { width, height },
+    );
+  }, []);
 
   useEffect(() => {
     dispatchViewport({ type: "reset" });
@@ -78,7 +83,7 @@ export function Viewer2DPreviewPane({
         viewport={viewport}
         onViewportAction={dispatchViewport}
         onPageCountResolved={onPageCountResolved}
-        onStageSizeChange={(width, height) => setStageSize({ width, height })}
+        onStageSizeChange={handleStageSizeChange}
         onRendered={onRendered}
       />
     </>

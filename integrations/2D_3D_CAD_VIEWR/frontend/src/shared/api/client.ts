@@ -1,25 +1,15 @@
 import type { ApiErrorPayload, DrawingBootstrapResponse, Open2DResponse, Open3DResponse } from "../types/viewer";
 
-function resolveApiBaseUrl(): string {
-  const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL;
+export function resolveApiBaseUrl(
+  configuredBaseUrl = import.meta.env.VITE_API_BASE_URL,
+  isDev = import.meta.env.DEV,
+): string {
   if (configuredBaseUrl && configuredBaseUrl.trim().length > 0) {
-    if (
-      import.meta.env.DEV &&
-      configuredBaseUrl.startsWith("/") &&
-      typeof window !== "undefined" &&
-      /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)
-    ) {
-      return `${window.location.protocol}//${window.location.hostname}:8000${configuredBaseUrl}`;
-    }
     return configuredBaseUrl;
   }
 
-  if (
-    import.meta.env.DEV &&
-    typeof window !== "undefined" &&
-    /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)
-  ) {
-    return `${window.location.protocol}//${window.location.hostname}:8000/api/v1`;
+  if (isDev) {
+    return "/api/v1";
   }
 
   return "/api/v1";

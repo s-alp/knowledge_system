@@ -247,6 +247,47 @@ def test_viewer_bootstrap_endpoint_matches_existing_viewer_contract(sample_regis
 
 
 @pytest.mark.django_db
+def test_viewer_open_endpoints_return_json_errors_until_preview_source_is_connected(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="viewer-open-sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="2d")
+    DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="3d")
+
+    client = APIClient()
+    response_2d = client.post(f"/api/v1/drawings/{drawing.id}/viewer2d/open", {}, format="json")
+    response_3d = client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/", {}, format="json")
+
+    assert response_2d.status_code == 501
+    assert response_2d["Content-Type"] == "application/json"
+    assert response_2d.json()["error"]["code"] == "viewer_2d_source_not_connected"
+    assert "プレビュー変換・配信APIは未接続" in response_2d.json()["error"]["message"]
+    assert response_3d.status_code == 501
+    assert response_3d["Content-Type"] == "application/json"
+    assert response_3d.json()["error"]["code"] == "viewer_3d_source_not_connected"
+
+
+@pytest.mark.django_db
+def test_viewer_open_endpoint_reports_missing_snapshot_as_json(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="viewer-open-missing.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+
+    client = APIClient()
+    response = client.post(f"/api/v1/drawings/{drawing.id}/viewer2d/open", {}, format="json")
+
+    assert response.status_code == 404
+    assert response["Content-Type"] == "application/json"
+    assert response.json()["error"]["code"] == "viewer_2d_snapshot_missing"
+
+
+@pytest.mark.django_db
 def test_rag_payload_returns_filters_and_ranking_signals(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
@@ -334,4 +375,5 @@ def test_api_accepts_trailing_slashes(sample_registration_payload):
     assert client.get("/api/v1/drawing-metadata/registrations/").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/").status_code == 200
     assert client.get(f"/api/v1/drawings/{drawing.id}/bootstrap/").status_code == 200
+    assert client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/").status_code == 501
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/").status_code == 200

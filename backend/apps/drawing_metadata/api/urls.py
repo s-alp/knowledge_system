@@ -27,6 +27,26 @@ urlpatterns = [
         name="drawing-viewer-bootstrap-slash",
     ),
     path(
+        "drawings/<uuid:drawing_id>/viewer2d/open",
+        views.DrawingViewer2DOpenApiView.as_view(),
+        name="drawing-viewer2d-open",
+    ),
+    path(
+        "drawings/<uuid:drawing_id>/viewer2d/open/",
+        views.DrawingViewer2DOpenApiView.as_view(),
+        name="drawing-viewer2d-open-slash",
+    ),
+    path(
+        "drawings/<uuid:drawing_id>/viewer3d/open",
+        views.DrawingViewer3DOpenApiView.as_view(),
+        name="drawing-viewer3d-open",
+    ),
+    path(
+        "drawings/<uuid:drawing_id>/viewer3d/open/",
+        views.DrawingViewer3DOpenApiView.as_view(),
+        name="drawing-viewer3d-open-slash",
+    ),
+    path(
         "drawing-metadata/registrations/<uuid:drawing_id>/extract",
         views.RegistrationExtractApiView.as_view(),
         name="drawing-metadata-registration-extract",
