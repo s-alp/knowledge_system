@@ -29,17 +29,20 @@ namespace IcadExtraction.SxNet
             };
             payload.TopPart.ExInfoFields = ParseExInfoFields(payload.TopPart.ExInfo);
 
-            VisitNode(rootNode, new List<string>(), payload.Parts, warnings, scanPartMaterials, scanPartExtendedInfo);
+            var sequence = 0;
+            VisitNode(rootNode, new List<string>(), null, payload.Parts, warnings, scanPartMaterials, scanPartExtendedInfo, ref sequence);
             return payload;
         }
 
         private void VisitNode(
             object node,
             List<string> ancestorPath,
+            string? parentNodeId,
             List<PartPayload> output,
             List<WarningPayload>? warnings,
             bool scanPartMaterials,
-            bool scanPartExtendedInfo)
+            bool scanPartExtendedInfo,
+            ref int sequence)
         {
             var info = ReflectionHelpers.GetMemberValue(node, "inf");
             var name = ReflectionHelpers.GetString(info, "name");
@@ -49,11 +52,20 @@ namespace IcadExtraction.SxNet
                 currentPath.Add(name!);
             }
 
+            var children = new List<object>(ReflectionHelpers.Enumerate(ReflectionHelpers.GetMemberValue(node, "child_list")));
+            var nodeId = $"node-{sequence:D6}";
+            sequence += 1;
+
             if (info != null)
             {
                 var exInfo = scanPartExtendedInfo ? ReflectionHelpers.GetString(node, "ex_inf") : null;
                 output.Add(new PartPayload
                 {
+                    NodeId = nodeId,
+                    ParentNodeId = parentNodeId,
+                    Depth = ancestorPath.Count,
+                    ChildCount = children.Count,
+                    EntityKind = children.Count == 0 ? "part" : ancestorPath.Count == 0 ? "assembly" : "subassembly",
                     TreePath = currentPath,
                     Name = name,
                     Comment = ReflectionHelpers.GetString(info, "comment"),
@@ -69,9 +81,18 @@ namespace IcadExtraction.SxNet
                 });
             }
 
-            foreach (var child in ReflectionHelpers.Enumerate(ReflectionHelpers.GetMemberValue(node, "child_list")))
+            foreach (var child in children)
             {
-                VisitNode(child, currentPath, output, warnings, scanPartMaterials, scanPartExtendedInfo);
+                VisitNode(
+                    child,
+                    currentPath,
+                    info != null ? nodeId : parentNodeId,
+                    output,
+                    warnings,
+                    scanPartMaterials,
+                    scanPartExtendedInfo,
+                    ref sequence
+                );
             }
         }
 

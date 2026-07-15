@@ -4,6 +4,28 @@ from apps.drawing_metadata.api import views
 
 
 urlpatterns = [
+    path(
+        "drawing-metadata/settings/tag-automation",
+        views.TagAutomationSettingsApiView.as_view(),
+        name="drawing-metadata-tag-automation-settings",
+    ),
+    path(
+        "drawing-metadata/settings/tag-automation/",
+        views.TagAutomationSettingsApiView.as_view(),
+        name="drawing-metadata-tag-automation-settings-slash",
+    ),
+    path("knowledge-entities", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list"),
+    path("knowledge-entities/", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list-slash"),
+    path(
+        "knowledge-entities/<uuid:entity_id>",
+        views.IcadEntityDetailApiView.as_view(),
+        name="icad-knowledge-entity-detail",
+    ),
+    path(
+        "knowledge-entities/<uuid:entity_id>/",
+        views.IcadEntityDetailApiView.as_view(),
+        name="icad-knowledge-entity-detail-slash",
+    ),
     path("drawing-metadata/registrations", views.RegistrationListApiView.as_view(), name="drawing-metadata-registration-list"),
     path("drawing-metadata/registrations/", views.RegistrationListApiView.as_view(), name="drawing-metadata-registration-list-slash"),
     path(
@@ -90,6 +112,16 @@ urlpatterns = [
         "drawing-metadata/registrations/<uuid:drawing_id>/overrides/",
         views.RegistrationOverrideApiView.as_view(),
         name="drawing-metadata-registration-overrides-slash",
+    ),
+    path(
+        "drawing-metadata/registrations/<uuid:drawing_id>/review",
+        views.RegistrationReviewApiView.as_view(),
+        name="drawing-metadata-registration-review",
+    ),
+    path(
+        "drawing-metadata/registrations/<uuid:drawing_id>/review/",
+        views.RegistrationReviewApiView.as_view(),
+        name="drawing-metadata-registration-review-slash",
     ),
     path(
         "drawing-metadata/registrations/<uuid:drawing_id>/rag-payload",

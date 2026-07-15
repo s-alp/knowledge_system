@@ -51,18 +51,11 @@ namespace IcadExtraction.SxNet
                             return;
                         }
 
-                        if (_startedProcess.CloseMainWindow())
+                        if (!IcadWindowCloser.TryCloseWithoutSaving(_startedProcess, TimeSpan.FromSeconds(15)))
                         {
-                            if (_startedProcess.WaitForExit(5000))
-                            {
-                                return;
-                            }
-                        }
-
-                        if (!_startedProcess.HasExited)
-                        {
-                            _startedProcess.Kill();
-                            _startedProcess.WaitForExit(5000);
+                            Console.Error.WriteLine(
+                                "ICADの安全な自動終了を完了できなかったため、強制終了せず起動状態を維持しました。"
+                            );
                         }
                     }
                     catch
@@ -177,7 +170,7 @@ namespace IcadExtraction.SxNet
                 throw new FileNotFoundException("ICAD executable was not found", executablePath);
             }
 
-            var startedProcess = Process.Start(new ProcessStartInfo
+            Process.Start(new ProcessStartInfo
             {
                 FileName = executablePath,
                 UseShellExecute = true,
@@ -187,7 +180,8 @@ namespace IcadExtraction.SxNet
             var deadline = DateTime.UtcNow.AddSeconds(Math.Max(1, startupWaitSeconds));
             while (DateTime.UtcNow < deadline)
             {
-                if (IsRunning())
+                var runningProcess = FindRunningProcess();
+                if (runningProcess != null)
                 {
                     return new IcadProcessLease(
                         new WarningPayload
@@ -195,7 +189,7 @@ namespace IcadExtraction.SxNet
                             Code = "icad_autostarted",
                             Message = $"ICAD was started automatically via {executablePath}.",
                         },
-                        startedProcess,
+                        runningProcess,
                         shutdownIfAutostarted,
                         sessionMutex,
                         sessionLockAcquired
@@ -211,6 +205,42 @@ namespace IcadExtraction.SxNet
         private static bool IsRunning()
         {
             return CandidateProcessNames.Any(name => Process.GetProcessesByName(name).Length > 0);
+        }
+
+        public static bool TryCloseRunningWithoutSaving(int timeoutSeconds = 15)
+        {
+            var runningProcess = FindRunningProcess();
+            if (runningProcess == null)
+            {
+                return true;
+            }
+
+            using (runningProcess)
+            {
+                return IcadWindowCloser.TryCloseWithoutSaving(
+                    runningProcess,
+                    TimeSpan.FromSeconds(Math.Max(1, timeoutSeconds))
+                );
+            }
+        }
+
+        private static Process? FindRunningProcess()
+        {
+            foreach (var processName in CandidateProcessNames)
+            {
+                foreach (var process in Process.GetProcessesByName(processName))
+                {
+                    process.Refresh();
+                    if (!process.HasExited && process.MainWindowHandle != IntPtr.Zero)
+                    {
+                        return process;
+                    }
+
+                    process.Dispose();
+                }
+            }
+
+            return null;
         }
 
         private static string ResolveExecutablePath()

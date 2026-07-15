@@ -249,6 +249,175 @@ def test_import_drawing_metadata_extracts_accepts_manifest(tmp_path):
 
 
 @pytest.mark.django_db
+def test_import_drawing_metadata_extracts_prefers_manifest_source_path(tmp_path):
+    corrupted_source_path = r"J:\�A�[�X\PART.icd"
+    canonical_source_path = r"J:\アースエンジニアリング\PART.icd"
+    payload_3d = {
+        "input_path": corrupted_source_path,
+        "source_file": {
+            "full_path": corrupted_source_path,
+            "directory_path": r"J:\�A�[�X",
+            "file_name": "�p�[�c.icd",
+            "file_name_without_extension": "�p�[�c",
+            "extension": ".icd",
+        },
+        "source_format": "icad",
+        "source_kind": "3d",
+        "raw_extract": {
+            "top_part": {"name": "PART"},
+            "parts": [{"tree_path": ["PART"], "name": "PART"}],
+        },
+    }
+    extract_path = tmp_path / "PART.3d.json"
+    extract_path.write_text(json.dumps(payload_3d, ensure_ascii=False), encoding="utf-8")
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schemaVersion": "icad_extract_import_manifest.v1",
+                "selectedPaths": [str(extract_path)],
+                "entries": [
+                    {
+                        "sourcePath": canonical_source_path,
+                        "selectedFiles": [{"mode": "3d", "path": str(extract_path)}],
+                    }
+                ],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    call_command("import_drawing_metadata_extracts", manifest=[str(manifest_path)])
+
+    drawing = RegisteredDrawing.objects.get(source_path=canonical_source_path)
+    assert drawing.filename == "PART.icd"
+    assert not RegisteredDrawing.objects.filter(source_path=corrupted_source_path).exists()
+    snapshot = DrawingMetadataSnapshot.objects.get(drawing=drawing, extraction_mode="3d")
+    assert snapshot.raw_extract_json["_source_file"]["full_path"] == canonical_source_path
+    assert snapshot.raw_extract_json["_source_file"]["file_name"] == "PART.icd"
+
+
+@pytest.mark.django_db
+def test_import_drawing_metadata_extracts_rebinds_unique_moved_source_and_filters_filename(tmp_path):
+    old_source_path = r"J:\OLD\MOVED.icd"
+    moved_source_path = r"J:\NEW\MOVED.icd"
+    existing = RegisteredDrawing.objects.create(
+        filename="MOVED.icd",
+        source_path=old_source_path,
+        source_format="icad",
+    )
+    moved_extract = tmp_path / "MOVED.3d.json"
+    moved_extract.write_text(
+        json.dumps(
+            {
+                "input_path": old_source_path,
+                "source_kind": "3d",
+                "raw_extract": {
+                    "top_part": {"name": "MOVED"},
+                    "parts": [{"tree_path": ["MOVED"], "name": "MOVED"}],
+                },
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    moved_2d_extract = tmp_path / "MOVED.2d.json"
+    moved_2d_extract.write_text(
+        json.dumps(
+            {
+                "input_path": old_source_path,
+                "source_kind": "2d",
+                "raw_extract": {"texts": [], "dimensions": [], "geometry_primitives": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    skipped_extract = tmp_path / "SKIPPED.3d.json"
+    skipped_extract.write_text(
+        json.dumps(
+            {
+                "input_path": r"J:\NEW\SKIPPED.icd",
+                "source_kind": "3d",
+                "raw_extract": {"top_part": {"name": "SKIPPED"}, "parts": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "sourcePath": moved_source_path,
+                        "selectedFiles": [
+                            {"mode": "2d", "path": str(moved_2d_extract)},
+                            {"mode": "3d", "path": str(moved_extract)},
+                        ],
+                    },
+                    {
+                        "sourcePath": r"J:\NEW\SKIPPED.icd",
+                        "selectedFiles": [{"mode": "3d", "path": str(skipped_extract)}],
+                    },
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    call_command(
+        "import_drawing_metadata_extracts",
+        manifest=[str(manifest_path)],
+        filename=["MOVED.icd"],
+        manifest_mode="3d",
+        rebind_moved_source=True,
+    )
+
+    existing.refresh_from_db()
+    assert existing.source_path == moved_source_path
+    assert RegisteredDrawing.objects.count() == 1
+    snapshot = DrawingMetadataSnapshot.objects.get(drawing=existing, extraction_mode="3d")
+    assert snapshot.raw_extract_json["_source_file"]["full_path"] == moved_source_path
+    assert not DrawingMetadataSnapshot.objects.filter(drawing=existing, extraction_mode="2d").exists()
+
+
+@pytest.mark.django_db
+def test_export_drawing_metadata_fixtures_filters_by_manifest_source_path(tmp_path):
+    included = RegisteredDrawing.objects.create(
+        filename="included.icd",
+        source_path=r"J:\SAMPLE\included.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(drawing=included, extraction_mode="3d")
+    excluded = RegisteredDrawing.objects.create(
+        filename="excluded.icd",
+        source_path=r"J:\SAMPLE\excluded.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(drawing=excluded, extraction_mode="3d")
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(
+        json.dumps({"entries": [{"sourcePath": included.source_path}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "fixture.json"
+
+    call_command(
+        "export_drawing_metadata_fixtures",
+        manifest=str(manifest_path),
+        output=str(output_path),
+    )
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["itemCount"] == 1
+    assert payload["items"][0]["filename"] == "included.icd"
+
+
+@pytest.mark.django_db
 def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="queue-missing",

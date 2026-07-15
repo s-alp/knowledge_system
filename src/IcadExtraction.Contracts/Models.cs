@@ -56,6 +56,11 @@ namespace IcadExtraction.Contracts
 
     public sealed class PartPayload
     {
+        public string? NodeId { get; set; }
+        public string? ParentNodeId { get; set; }
+        public int Depth { get; set; }
+        public int ChildCount { get; set; }
+        public string EntityKind { get; set; } = string.Empty;
         public List<string> TreePath { get; set; } = new List<string>();
         public string? Name { get; set; }
         public string? Comment { get; set; }

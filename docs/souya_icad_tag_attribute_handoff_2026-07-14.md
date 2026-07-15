@@ -472,3 +472,104 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 - Gemini API低温度JSON分類は2D抽出ジョブへ組み込み済み。APIキー未設定時はスキップし、API失敗時は `title_block_llm_classification_failed` warning として記録する。既存候補値の分類補助に限定し、ルール抽出済みの属性は上書きしない。2026-07-15 に `backend\.env` よりOS環境変数が優先されて古いキーを読んでいた問題を修正し、実API疎通を確認した。`gemini-flash-latest` を主モデル、`gemini-3.1-flash-lite` / `gemini-3.5-flash` をフォールバックにして、代表manifest上位5件すべてで分類応答を取得した。結果は `output\live_extracts\title_block_llm_probe_2026-07-14\gemini_probe_after_parse_fallback_2026-07-15.json` に保存した
 - 長穴、穴数、断面、表面粗さ値は PoC で属性化済み。次は実サンプル横断で、円/楕円を穴・長穴として断定できる条件を詰める
 - 2D/3D照合結果の採用値、差異、要確認理由は PoC 画面表示まで実装済み。次は本番API/fixture名確定後の項目名合わせ
+
+## 10. 共有39件の最終受け渡し状況
+
+2026-07-15 に、ユーザーから共有された客先横断39件を固定manifestとして再整理し、ローカルDB、fixture、製品・装置・ユニット／部品画面へ反映した。本番ナレッジシステムへの登録、変更、削除は行っていない。
+
+### 10.1 固定manifestとfixture
+
+- manifest: `output\souya_handoff\icad_extract_import_manifest_all_shared_2026-07-15.json`
+- fixture: `output\souya_handoff\drawing_metadata_fixture_all_shared_2026-07-15.json`
+- fixture検証: `output\souya_handoff\drawing_metadata_fixture_all_shared_validation_2026-07-15.json`
+- サンプル完了台帳: `output\souya_handoff\icad_shared_sample_completion_2026-07-15.json`
+- 対象: 39図面、抽出JSON 78件（各図面に2D/3D各1件）
+- 3D snapshot: 39/39
+- 2D snapshot: 39/39
+- 契約検証: `valid=true`、issue 0件
+- 読み取り専用payload: 図面、製品・装置・ユニット、部品、プロジェクトを各39件
+- 属性候補数: 図面158、部品370、製品・装置・ユニット43、プロジェクト43
+- タグ候補数: 図面168、部品116、製品・装置・ユニット2、プロジェクト2
+
+### 10.2 3D構成からの実エンティティ生成
+
+3D構成ノードに `nodeId`、`parentNodeId`、`depth`、`childCount`、`entityKind` を付けた。子を持つノードはアセンブリ／サブアセンブリとして「製品・装置・ユニット」、末端ノードは「部品」に分類する。39件取込後のローカルAPIでは、製品・装置・ユニット269件、部品3,783件を実データとして確認した。
+
+| API | 用途 |
+| --- | --- |
+| `GET /api/v1/knowledge-entities?target=product` | アセンブリ／サブアセンブリ一覧 |
+| `GET /api/v1/knowledge-entities?target=part` | 末端部品一覧 |
+| `GET /api/v1/knowledge-entities/{entityId}` | 属性、タグ、根拠、競合、関連情報、レビュー状態を含む詳細 |
+
+エンティティIDは図面IDと3DノードIDから安定生成する。同名部品が複数箇所に存在しても、階層位置の異なるノードとして扱う。
+
+### 10.3 レビューと確定状態
+
+抽出候補は表示しただけで確定扱いにしない。2D/3D snapshot単位に `pending`、`confirmed`、`needs_correction` を保持し、再抽出または手動上書き時は `pending` に戻す。レビュー操作はローカル監査ログへ記録する。
+
+| API | 用途 |
+| --- | --- |
+| `PATCH /drawing-metadata/registrations/{drawingId}/review` | 2Dまたは3D候補を確定／要手直しへ変更 |
+| `GET /drawing-metadata/settings/tag-automation` | AI、抽出対象、採用ルールの管理設定を取得 |
+| `PUT /drawing-metadata/settings/tag-automation` | ローカル管理設定を更新 |
+
+Gemini APIキーは設定値そのものを返さず、設定済みかどうかだけを返す。本番DB向けendpointは実装せず、創屋へはfixtureとAPI契約を渡す。
+
+### 10.4 2D再抽出の状態と理由
+
+39件を同一条件で再抽出した。途中で終了コード1が連続した際は、Runnerの例外チェーンとstack traceを出すようにして、`SxFileModel` 生成時の `sxnet.SxException: コマンド実行中の為処理できません` まで原因を特定した。SXNET HTMLの `SxSys.cancel()` と `SxSys.getCommand()` を確認し、診断用の `cancel` / `clear-command` コマンドも追加したが、孤立したコマンド状態は解消しなかった。
+
+ICADへ通常の終了要求を送り、旧V8L2形式からV8L3形式への保存確認には「いいえ」を選んで原本を変更せず終了した。その後クリーンに起動し直して全39件を再実行した結果は次のとおりである。強制終了、原本保存、創屋本番DB操作は行っていない。
+
+抽出器の自動起動leaseも同じ安全終了へ統一した。通常終了できない場合に `Process.Kill()` していた処理は廃止し、保存確認の「いいえ」を特定できた場合だけ押す。安全終了を完了できない場合は、強制終了せずICADを起動状態のまま残してエラーを出す。明示的な保守確認には次のコマンドを使用できる。
+
+```powershell
+src\IcadExtraction.Runner\bin\Debug\net48\IcadExtraction.Runner.exe `
+  shutdown-icad `
+  --timeout-seconds 20
+```
+
+- 最新2D抽出成功: 39/39
+- 2D要素あり: 31件
+- 2Dコンテナ／ビュー／レイヤーはあるが検査可能な2D要素なし: 8件
+- 最新3D抽出利用可能: 39/39
+- 共有元ファイル欠落: 0件
+- 未解決: 0件
+
+「2D要素なし」8件は抽出失敗ではない。VS/ビューとレイヤー情報は取得できた一方、文字・寸法・図形primitive・印刷枠が0件だったため、内容を捏造せずその状態を記録している。
+
+全39件の2Dカバレッジは `output\souya_handoff\icad_2d_extraction_coverage_all_shared_2026-07-15.json` に保存した。全ビュー210、印刷枠32、レイヤー9,945、検査可能要素30,055、文字1,752、寸法2,404、図形primitive 25,853を取得した。要素のビュー未所属は0件、印刷枠内5,088、枠外23,849、判定不明1,118である。判定不明とレイヤー未所属は証拠として保持し、自動タグ採用では印刷枠内を優先する。
+
+当初の参照先で見つからなかった `36555211A01.icd` と `32791729A01.icd` は、同じ共有案件内の移動後パスを特定した。manifestとローカルDBの保存パスを更新し、最終台帳では共有元ファイル欠落0件である。
+
+移動後パスの再紐付けには、同名図面がローカルDBに1件だけ存在する場合に限って使える明示オプションを追加した。同名図面が複数ある場合は処理を中断し、推測で付け替えない。
+
+```powershell
+python backend\manage.py import_drawing_metadata_extracts `
+  --manifest output\souya_handoff\icad_extract_import_manifest_all_shared_2026-07-15.json `
+  --filename 32791729A01.icd `
+  --filename 36555211A01.icd `
+  --rebind-moved-source
+```
+
+全件再取込時は、manifestの2D/3Dを分けて再現できる。移動元再紐付けは同名図面が一意の場合だけ許可し、曖昧なら中断する。
+
+```powershell
+python backend\manage.py import_drawing_metadata_extracts `
+  --manifest output\souya_handoff\icad_extract_import_manifest_all_shared_2026-07-15.json `
+  --manifest-mode 2d
+python backend\manage.py import_drawing_metadata_extracts `
+  --manifest output\souya_handoff\icad_extract_import_manifest_all_shared_2026-07-15.json `
+  --manifest-mode 3d
+```
+
+### 10.5 創屋との責任境界
+
+| 領域 | こちら | 創屋 |
+| --- | --- | --- |
+| ICAD 2D/3D/パーツ付加情報抽出 | 実装・検証 | 対象外 |
+| 正規化、照合、候補生成、根拠・競合・信頼度 | 実装・fixture提供 | 受入確認 |
+| 図面管理の抽出・レビュー導線 | ローカル統合版を提供 | 本番ナレッジシステムへ移植 |
+| 図面／製品・装置・ユニット／部品への表示 | ローカル統合版とAPI契約を提供 | 本番UI・本番マスタIDへ接続 |
+| 本番DB登録・更新・削除 | 実施しない | 創屋が仕様合意後に実装 |
+| 本番画面・フロント資産確認 | 読み取り専用のみ | 変更管理 |

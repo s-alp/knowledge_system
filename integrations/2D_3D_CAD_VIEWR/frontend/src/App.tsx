@@ -5,10 +5,10 @@ import { DrawingEntryPanel } from "./shared/components/DrawingEntryPanel";
 import { LicensePanel } from "./shared/components/LicensePanel";
 import {
   EntityDetailPage,
-  EntityListPage,
   PlaceholderKnowledgePage,
   type DetailPageKey,
 } from "./features/knowledgeEntities/EntityPages";
+import { IcadEntityDetailPage, IcadEntityListPage } from "./features/knowledgeEntities/IcadEntityPages";
 import { IcadExtractionReviewPage } from "./features/drawingMetadata/IcadExtractionReviewPage";
 import type { KnowledgePageKey } from "./features/knowledgeEntities/types";
 import { TagAutomationSettingsPage } from "./features/knowledgeSettings/TagAutomationSettingsPage";
@@ -116,6 +116,7 @@ export default function App() {
   const [showIcadExtractionReview, setShowIcadExtractionReview] = useState(false);
   const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
   const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState<{ entityId: string; drawingId: string } | null>(null);
   const detailMock = useMemo(
     () => (bootstrap ? buildDrawingKnowledgeMock(bootstrap) : null),
     [bootstrap],
@@ -147,9 +148,24 @@ export default function App() {
   const has2d = activeBootstrap?.availability.has2d ?? false;
   const has3d = activeBootstrap?.availability.has3d ?? false;
 
-  function openKnowledgePage(page: KnowledgePageKey, openDetail = false) {
+  function openKnowledgePage(page: KnowledgePageKey, openDetail = false, entityId?: string, entityDrawingId?: string) {
     setActivePage(page);
     setDetailPage(openDetail && (page === "project" || page === "product" || page === "part") ? page : null);
+    setSelectedEntity(
+      openDetail && (page === "product" || page === "part") && entityId && entityDrawingId
+        ? { entityId, drawingId: entityDrawingId }
+        : null,
+    );
+  }
+
+  function navigateFromEntity(page: KnowledgePageKey, entityId?: string, entityDrawingId?: string) {
+    if (page === "drawing" && entityDrawingId) {
+      const drawingUrl = new URL("/", window.location.origin);
+      drawingUrl.searchParams.set("drawingId", entityDrawingId);
+      window.location.assign(drawingUrl.toString());
+      return;
+    }
+    openKnowledgePage(page, page === "product" || page === "part", entityId, entityDrawingId);
   }
 
   const pageTitle = detailPage ? pageTitles[detailPage].replace("一覧", "詳細") : pageTitles[activePage];
@@ -166,19 +182,21 @@ export default function App() {
       if (activePage === "product" || activePage === "part") {
         if (detailPage === activePage) {
           return (
-            <EntityDetailPage
-              pageKey={activePage}
-              detail={activeDetailMock}
-              onNavigate={(nextPage) => openKnowledgePage(nextPage, true)}
+            <IcadEntityDetailPage
+              entityId={selectedEntity?.entityId ?? null}
+              drawingId={selectedEntity?.drawingId ?? null}
+              onNavigate={navigateFromEntity}
             />
           );
         }
 
         return (
-          <EntityListPage
-            pageKey={activePage}
-            detail={activeDetailMock}
-            onOpenDetail={() => setDetailPage(activePage)}
+          <IcadEntityListPage
+            targetKey={activePage}
+            onOpenDetail={(entityId, entityDrawingId) => {
+              setSelectedEntity({ entityId, drawingId: entityDrawingId });
+              setDetailPage(activePage);
+            }}
           />
         );
       }
@@ -194,7 +212,7 @@ export default function App() {
       }
 
       if (activePage === "system") {
-        return <TagAutomationSettingsPage detail={activeDetailMock} />;
+        return <TagAutomationSettingsPage />;
       }
 
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;
@@ -368,6 +386,7 @@ export default function App() {
                 onClick={() => {
                   if (detailPage) {
                     setDetailPage(null);
+                    setSelectedEntity(null);
                     return;
                   }
                   if (!drawingId && localLaunch) {

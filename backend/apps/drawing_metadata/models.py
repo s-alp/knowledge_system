@@ -70,6 +70,15 @@ class DrawingMetadataExtractionJob(models.Model):
 
 
 class DrawingMetadataSnapshot(models.Model):
+    REVIEW_PENDING = "pending"
+    REVIEW_CONFIRMED = "confirmed"
+    REVIEW_NEEDS_CORRECTION = "needs_correction"
+    REVIEW_STATUS_CHOICES = [
+        (REVIEW_PENDING, "Pending"),
+        (REVIEW_CONFIRMED, "Confirmed"),
+        (REVIEW_NEEDS_CORRECTION, "Needs correction"),
+    ]
+
     drawing = models.ForeignKey(RegisteredDrawing, on_delete=models.CASCADE, related_name="snapshots")
     extraction_mode = models.CharField(max_length=8, choices=EXTRACTION_MODE_CHOICES, db_index=True)
     latest_job = models.ForeignKey(
@@ -85,6 +94,9 @@ class DrawingMetadataSnapshot(models.Model):
     manual_overrides_json = models.JSONField(default=dict, blank=True)
     normalizer_version = models.CharField(max_length=32, blank=True)
     tag_rule_version = models.CharField(max_length=32, blank=True)
+    review_status = models.CharField(max_length=24, choices=REVIEW_STATUS_CHOICES, default=REVIEW_PENDING, db_index=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.CharField(max_length=255, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.CharField(max_length=255, blank=True)
 
@@ -105,10 +117,12 @@ class DrawingMetadataAuditLog(models.Model):
     ACTION_EXTRACTION = "extraction"
     ACTION_OVERRIDE = "override"
     ACTION_REQUEUE = "requeue"
+    ACTION_REVIEW = "review"
     ACTION_CHOICES = [
         (ACTION_EXTRACTION, "Extraction"),
         (ACTION_OVERRIDE, "Override"),
         (ACTION_REQUEUE, "Requeue"),
+        (ACTION_REVIEW, "Review"),
     ]
 
     id = models.BigAutoField(primary_key=True)

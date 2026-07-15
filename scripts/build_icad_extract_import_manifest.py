@@ -105,11 +105,11 @@ def _score(mode: str, path: Path, metrics: dict) -> int:
     return score
 
 
-def _candidate(path: Path, payload: dict) -> dict | None:
+def _candidate(path: Path, payload: dict, source_path_override: str | None = None) -> dict | None:
     if not isinstance(payload.get("raw_extract"), dict):
         return None
     mode = _mode(payload, path)
-    source_path = _source_path(payload)
+    source_path = source_path_override or _source_path(payload)
     if not mode or not source_path:
         return None
     metrics = _metrics(payload)
@@ -120,7 +120,26 @@ def _candidate(path: Path, payload: dict) -> dict | None:
         "metrics": metrics,
         "extractorVersion": payload.get("extractor_version"),
         "sourceKind": payload.get("source_kind"),
+        "sourcePath": source_path,
     }
+
+
+def _source_path_overrides(input_roots: list[Path]) -> dict[Path, str]:
+    overrides: dict[Path, str] = {}
+    for input_root in input_roots:
+        summary_paths = input_root.rglob("_summary.json") if input_root.is_dir() else []
+        for summary_path in summary_paths:
+            try:
+                rows = json.loads(summary_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            if not isinstance(rows, list):
+                continue
+            for row in rows:
+                if not isinstance(row, dict) or not row.get("output_path") or not row.get("file"):
+                    continue
+                overrides[Path(str(row["output_path"])).expanduser().resolve()] = str(row["file"])
+    return overrides
 
 
 def _best_by_mode(candidates: list[dict]) -> dict[str, dict]:
@@ -165,6 +184,7 @@ def _select_entries(entries: list[dict], max_drawings: int) -> list[dict]:
 
 def build_manifest(input_roots: list[Path], max_drawings: int) -> dict:
     grouped: dict[str, list[dict]] = defaultdict(list)
+    source_overrides = _source_path_overrides(input_roots)
     scanned = 0
     skipped = defaultdict(int)
 
@@ -175,11 +195,12 @@ def build_manifest(input_roots: list[Path], max_drawings: int) -> dict:
             if payload is None:
                 skipped["invalidJson"] += 1
                 continue
-            candidate = _candidate(path.resolve(), payload)
+            resolved_path = path.resolve()
+            candidate = _candidate(resolved_path, payload, source_overrides.get(resolved_path))
             if candidate is None:
                 skipped["notImportableExtract"] += 1
                 continue
-            grouped[_source_path(payload)].append(candidate)
+            grouped[candidate["sourcePath"]].append(candidate)
 
     entries: list[dict] = []
     for source_path, candidates in grouped.items():

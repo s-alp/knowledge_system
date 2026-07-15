@@ -31,6 +31,17 @@ class Command(BaseCommand):
     def add_arguments(self, parser) -> None:
         parser.add_argument("json_paths", nargs="*", help="抽出済み JSON ファイルまたはディレクトリ。")
         parser.add_argument("--manifest", action="append", default=[], help="代表抽出JSON manifest。複数指定できます。")
+        parser.add_argument(
+            "--filename",
+            action="append",
+            default=[],
+            help="manifest取込を指定したICADファイル名に限定します。複数指定できます。",
+        )
+        parser.add_argument(
+            "--manifest-mode",
+            choices=[EXTRACTION_MODE_2D, EXTRACTION_MODE_3D],
+            help="manifest内のselectedFilesを指定modeだけに限定します。",
+        )
         parser.add_argument("--glob", default="*.json", help="ディレクトリ指定時の検索パターン。既定は *.json。")
         parser.add_argument("--mode", choices=[EXTRACTION_MODE_2D, EXTRACTION_MODE_3D], help="全入力に適用する抽出mode。")
         parser.add_argument(
@@ -44,12 +55,27 @@ class Command(BaseCommand):
             help="JSON内に元ICADパスが無い場合だけ、JSONファイル自身のパスを source_path として使います。",
         )
         parser.add_argument("--executed-by", default="import_drawing_metadata_extracts")
+        parser.add_argument(
+            "--rebind-moved-source",
+            action="store_true",
+            help="source_path不一致時、同名図面が1件だけなら移動後パスへ付け替えます。",
+        )
 
     def handle(self, *args, **options) -> None:
-        input_files = self._collect_input_files(options["json_paths"], options["glob"])
-        input_files.extend(self._collect_manifest_files(options["manifest"]))
-        input_files = sorted(dict.fromkeys(input_files))
-        if not input_files:
+        input_specs = [(path, None) for path in self._collect_input_files(options["json_paths"], options["glob"])]
+        input_specs.extend(
+            self._collect_manifest_files(
+                options["manifest"],
+                options["filename"],
+                options["manifest_mode"],
+            )
+        )
+        deduplicated: dict[Path, str | None] = {}
+        for input_file, source_path_override in input_specs:
+            if input_file not in deduplicated or source_path_override:
+                deduplicated[input_file] = source_path_override
+        input_specs = sorted(deduplicated.items(), key=lambda item: item[0])
+        if not input_specs:
             raise CommandError("取り込み対象JSONが見つかりません。")
 
         imported = 0
@@ -57,7 +83,7 @@ class Command(BaseCommand):
         updated_drawings = 0
         skipped = 0
 
-        for input_file in input_files:
+        for input_file, source_path_override in input_specs:
             payload = self._load_payload(input_file)
             extraction_mode = options["mode"] or self._detect_mode(payload, input_file)
             if not extraction_mode:
@@ -70,7 +96,11 @@ class Command(BaseCommand):
             if "raw_extract" not in payload or not isinstance(payload["raw_extract"], dict):
                 raise CommandError(f"raw_extract が存在しない、またはdictではありません: {input_file}")
 
-            source_path = self._source_path(payload, input_file, options["use_json_path_as_source"])
+            source_path = source_path_override or self._source_path(
+                payload,
+                input_file,
+                options["use_json_path_as_source"],
+            )
             source_file = self._source_file_payload(payload, source_path)
             raw_extract = dict(payload["raw_extract"])
             raw_extract["_source_file"] = source_file
@@ -83,6 +113,7 @@ class Command(BaseCommand):
                     source_path=source_path,
                     filename=source_file["file_name"],
                     source_format=payload.get("source_format") or "icad",
+                    rebind_moved_source=options["rebind_moved_source"],
                 )
                 job = self._create_import_job(
                     drawing=drawing,
@@ -111,7 +142,7 @@ class Command(BaseCommand):
             self.style.SUCCESS(
                 "completed import "
                 f"imported={imported} created_drawings={created_drawings} "
-                f"updated_drawings={updated_drawings} skipped={skipped} total={len(input_files)}"
+                f"updated_drawings={updated_drawings} skipped={skipped} total={len(input_specs)}"
             )
         )
 
@@ -130,23 +161,40 @@ class Command(BaseCommand):
             raise CommandError(f"指定パスがファイルでもディレクトリでもありません: {path}")
         return sorted(dict.fromkeys(input_files))
 
-    def _collect_manifest_files(self, raw_manifest_paths: list[str]) -> list[Path]:
-        input_files: list[Path] = []
+    def _collect_manifest_files(
+        self,
+        raw_manifest_paths: list[str],
+        filenames: list[str],
+        manifest_mode: str | None,
+    ) -> list[tuple[Path, str | None]]:
+        input_specs: list[tuple[Path, str | None]] = []
         for raw_manifest_path in raw_manifest_paths:
             manifest_path = Path(raw_manifest_path).expanduser()
             if not manifest_path.exists():
                 raise CommandError(f"manifest が存在しません: {manifest_path}")
             payload = self._load_payload(manifest_path)
-            paths = payload.get("selectedPaths")
-            if paths is None:
-                paths = [
-                    selected_file.get("path")
-                    for entry in payload.get("entries", []) or []
-                    for selected_file in entry.get("selectedFiles", []) or []
+            entries = payload.get("entries", []) or []
+            if filenames:
+                requested_filenames = set(filenames)
+                entries = [
+                    entry
+                    for entry in entries
+                    if PureWindowsPath(str(entry.get("sourcePath") or "")).name in requested_filenames
                 ]
-            if not isinstance(paths, list):
-                raise CommandError(f"manifest の selectedPaths がlistではありません: {manifest_path}")
-            for raw_path in paths:
+            manifest_specs = [
+                (selected_file.get("path"), entry.get("sourcePath"))
+                for entry in entries
+                for selected_file in entry.get("selectedFiles", []) or []
+                if manifest_mode is None or selected_file.get("mode") == manifest_mode
+            ]
+            if not manifest_specs:
+                paths = payload.get("selectedPaths")
+                if paths is None:
+                    paths = []
+                if not isinstance(paths, list):
+                    raise CommandError(f"manifest の selectedPaths がlistではありません: {manifest_path}")
+                manifest_specs = [(path, None) for path in paths]
+            for raw_path, source_path_override in manifest_specs:
                 if not raw_path:
                     continue
                 path = Path(str(raw_path)).expanduser()
@@ -154,8 +202,8 @@ class Command(BaseCommand):
                     raise CommandError(f"manifest 内のJSONが存在しません: {path}")
                 if not path.is_file():
                     raise CommandError(f"manifest 内のパスがファイルではありません: {path}")
-                input_files.append(path.resolve())
-        return input_files
+                input_specs.append((path.resolve(), str(source_path_override) if source_path_override else None))
+        return input_specs
 
     def _load_payload(self, input_file: Path) -> dict:
         try:
@@ -187,21 +235,37 @@ class Command(BaseCommand):
         raise CommandError(f"元ICADパスを判定できません: {input_file}")
 
     def _source_file_payload(self, payload: dict, source_path: str) -> dict:
-        raw_extract = payload.get("raw_extract", {}) or {}
-        source_file = dict(payload.get("source_file", {}) or raw_extract.get("_source_file", {}) or {})
         windows_path = PureWindowsPath(source_path)
-        file_name = source_file.get("file_name") or windows_path.name
-        extension = source_file.get("extension") or windows_path.suffix
+        file_name = windows_path.name
         return {
-            "full_path": source_file.get("full_path") or source_path,
-            "directory_path": source_file.get("directory_path") or str(windows_path.parent),
+            "full_path": source_path,
+            "directory_path": str(windows_path.parent),
             "file_name": file_name,
-            "file_name_without_extension": source_file.get("file_name_without_extension") or PureWindowsPath(file_name).stem,
-            "extension": extension,
+            "file_name_without_extension": windows_path.stem,
+            "extension": windows_path.suffix,
         }
 
-    def _upsert_drawing(self, *, source_path: str, filename: str, source_format: str) -> tuple[RegisteredDrawing, bool, bool]:
+    def _upsert_drawing(
+        self,
+        *,
+        source_path: str,
+        filename: str,
+        source_format: str,
+        rebind_moved_source: bool,
+    ) -> tuple[RegisteredDrawing, bool, bool]:
         drawing = RegisteredDrawing.objects.filter(source_path=source_path).order_by("created_at").first()
+        if drawing is None and rebind_moved_source:
+            candidates = list(RegisteredDrawing.objects.filter(filename=filename).order_by("created_at")[:2])
+            if len(candidates) > 1:
+                raise CommandError(
+                    f"同名図面が複数あるため source_path を付け替えできません: {filename}"
+                )
+            if candidates:
+                drawing = candidates[0]
+                drawing.source_path = source_path
+                drawing.source_format = source_format
+                drawing.save(update_fields=["source_path", "source_format", "updated_at"])
+                return drawing, False, True
         if drawing is None:
             return (
                 RegisteredDrawing.objects.create(

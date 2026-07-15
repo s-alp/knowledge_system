@@ -24,6 +24,12 @@ namespace IcadExtraction.Runner
                         return RunDetect(command);
                     case "probe-2d-print":
                         return RunProbe2DPrint(command);
+                    case "cancel":
+                        return RunCancel(command);
+                    case "clear-command":
+                        return RunClearCommand(command);
+                    case "shutdown-icad":
+                        return RunShutdownIcad(command);
                     case "self-check":
                         return RunSelfCheck(command);
                     default:
@@ -32,9 +38,24 @@ namespace IcadExtraction.Runner
             }
             catch (Exception exception)
             {
-                Console.Error.WriteLine(exception.Message);
+                WriteExceptionDiagnostics(exception);
                 return 1;
             }
+        }
+
+        private static void WriteExceptionDiagnostics(Exception exception)
+        {
+            var depth = 0;
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                Console.Error.WriteLine($"error[{depth}].type={current.GetType().FullName}");
+                Console.Error.WriteLine($"error[{depth}].message={current.Message}");
+                depth++;
+            }
+
+            Console.Error.WriteLine("error.stack_trace_begin");
+            Console.Error.WriteLine(exception);
+            Console.Error.WriteLine("error.stack_trace_end");
         }
 
         private static int RunExtract(CliCommand command)
@@ -102,6 +123,38 @@ namespace IcadExtraction.Runner
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
             var message = new SxNetRuntimeGuard().SelfCheck(sxnetDllPath);
             Console.WriteLine(message);
+            return 0;
+        }
+
+        private static int RunCancel(CliCommand command)
+        {
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var sxnetPort = OptionalIntOption(command, "sxnet-port", 3999);
+            new SxNetCommandController().Cancel(sxnetDllPath, sxnetPort);
+            Console.WriteLine($"sxnet_cancel_requested port={sxnetPort}");
+            return 0;
+        }
+
+        private static int RunClearCommand(CliCommand command)
+        {
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var sxnetPort = OptionalIntOption(command, "sxnet-port", 3999);
+            var commandName = new SxNetCommandController().GetAndClearCommand(sxnetDllPath, sxnetPort);
+            Console.WriteLine($"sxnet_command_cleared command={commandName}");
+            return 0;
+        }
+
+        private static int RunShutdownIcad(CliCommand command)
+        {
+            var timeoutSeconds = OptionalIntOption(command, "timeout-seconds", 15);
+            if (!IcadProcessStarter.TryCloseRunningWithoutSaving(timeoutSeconds))
+            {
+                throw new InvalidOperationException(
+                    "ICADの安全な終了を完了できませんでした。強制終了は行っていません。"
+                );
+            }
+
+            Console.WriteLine("icad_shutdown_without_save_completed");
             return 0;
         }
 

@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 
 import {
+  applyDrawingMetadataReview,
   applyDrawingMetadataOverrides,
   enqueueDrawingMetadataExtraction,
   getDrawingMetadataRegistration,
+  getDrawingMetadataJob,
   uploadIcadDrawingMetadata,
   type DrawingMetadataExtractionMode,
   type DrawingMetadataJobResponse,
@@ -84,6 +86,25 @@ function collectCandidateTags(registration: DrawingMetadataRegistrationResponse 
   return tags.length ? tags : ["抽出後に候補表示"];
 }
 
+function formatReviewStatus(status: string | undefined) {
+  if (status === "confirmed") {
+    return "確認済み";
+  }
+  if (status === "needs_correction") {
+    return "要手直し";
+  }
+  return "確認待ち";
+}
+
+function formatJobStatus(status: string) {
+  return {
+    queued: "待機中",
+    processing: "抽出中",
+    succeeded: "完了",
+    failed: "失敗",
+  }[status] ?? status;
+}
+
 export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewPageProps) {
   const [registration, setRegistration] = useState<DrawingMetadataRegistrationResponse | null>(null);
   const [jobs, setJobs] = useState<DrawingMetadataJobResponse[]>([]);
@@ -127,6 +148,44 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
   }, [file]);
 
   const candidateTags = useMemo(() => collectCandidateTags(registration), [registration]);
+  const activeJobIds = jobs
+    .filter((job) => job.status === "queued" || job.status === "processing")
+    .map((job) => job.jobId)
+    .join(",");
+
+  useEffect(() => {
+    if (!activeJobIds || !registration) {
+      return;
+    }
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const nextJobs = await Promise.all(jobs.map((job) => getDrawingMetadataJob(job.jobId)));
+        if (cancelled) {
+          return;
+        }
+        setJobs(nextJobs);
+        if (!nextJobs.some((job) => job.status === "queued" || job.status === "processing")) {
+          const nextRegistration = await getDrawingMetadataRegistration(registration.drawingId);
+          if (!cancelled) {
+            setRegistration(nextRegistration);
+            setPhase("ready");
+            setMessage("抽出が完了しました。候補内容を確認してください。");
+          }
+        }
+      } catch (nextError) {
+        if (!cancelled) {
+          setError(nextError instanceof Error ? nextError.message : "抽出状態を確認できませんでした。");
+        }
+      }
+    };
+    void poll();
+    const timer = window.setInterval(() => void poll(), 1500);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [activeJobIds, registration?.drawingId]);
 
   async function refreshRegistration() {
     if (!registration) {
@@ -193,6 +252,32 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
     } catch (nextError) {
       setPhase("ready");
       setError(nextError instanceof Error ? nextError.message : "手直し保存に失敗しました。");
+    }
+  }
+
+  async function saveReviewDecision(
+    mode: DrawingMetadataExtractionMode,
+    decision: "confirmed" | "needs_correction",
+  ) {
+    if (!registration) {
+      setError("ICADファイルの登録後にレビューできます。");
+      return;
+    }
+    setPhase("saving");
+    setError(null);
+    try {
+      await applyDrawingMetadataReview(
+        registration.drawingId,
+        mode,
+        decision,
+        decision === "confirmed" ? "図面管理で候補内容を確認" : "図面管理で手直しが必要と判断",
+      );
+      await refreshRegistration();
+      setPhase("ready");
+      setMessage(`${mode.toUpperCase()} のレビュー状態を保存しました。`);
+    } catch (nextError) {
+      setPhase("ready");
+      setError(nextError instanceof Error ? nextError.message : "レビュー状態の保存に失敗しました。");
     }
   }
 
@@ -302,11 +387,51 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
         <div className="production-detail-grid">
           <div className="production-detail-field">
             <span>2D</span>
-            <p>{formatSnapshotStatus(registration, "2d")}</p>
+            <p>
+              {formatSnapshotStatus(registration, "2d")} / {formatReviewStatus(registration?.snapshotsByMode["2d"]?.reviewStatus)}
+            </p>
+            <div className="production-inline-actions">
+              <button
+                className="secondary-button"
+                type="button"
+                disabled={!registration?.snapshotsByMode["2d"] || phase === "saving"}
+                onClick={() => saveReviewDecision("2d", "confirmed")}
+              >
+                候補を確定
+              </button>
+              <button
+                className="secondary-button"
+                type="button"
+                disabled={!registration?.snapshotsByMode["2d"] || phase === "saving"}
+                onClick={() => saveReviewDecision("2d", "needs_correction")}
+              >
+                要手直し
+              </button>
+            </div>
           </div>
           <div className="production-detail-field">
             <span>3D</span>
-            <p>{formatSnapshotStatus(registration, "3d")}</p>
+            <p>
+              {formatSnapshotStatus(registration, "3d")} / {formatReviewStatus(registration?.snapshotsByMode["3d"]?.reviewStatus)}
+            </p>
+            <div className="production-inline-actions">
+              <button
+                className="secondary-button"
+                type="button"
+                disabled={!registration?.snapshotsByMode["3d"] || phase === "saving"}
+                onClick={() => saveReviewDecision("3d", "confirmed")}
+              >
+                候補を確定
+              </button>
+              <button
+                className="secondary-button"
+                type="button"
+                disabled={!registration?.snapshotsByMode["3d"] || phase === "saving"}
+                onClick={() => saveReviewDecision("3d", "needs_correction")}
+              >
+                要手直し
+              </button>
+            </div>
           </div>
           <div className="production-detail-field">
             <span>タグ候補</span>
@@ -340,6 +465,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
           </button>
         </div>
         <textarea
+          className="manual-json-editor"
           value={manualJson}
           onChange={(event) => setManualJson(event.target.value)}
           aria-label="手直しJSON"
@@ -364,7 +490,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                 <tr key={job.jobId}>
                   <td>{job.jobId}</td>
                   <td>{job.extractionMode.toUpperCase()}</td>
-                  <td>{job.status}</td>
+                  <td>{formatJobStatus(job.status)}</td>
                   <td>{job.extractionProfile}</td>
                 </tr>
               ))}

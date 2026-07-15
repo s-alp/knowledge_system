@@ -229,5 +229,18 @@
 
 - プロジェクト詳細のタグ/属性受け口は未確認。
 - 製品・装置・ユニット、部品のタグ保存口は未確認。属性情報欄は確認済み。
-- 2D/3Dビューワーのfrontendへ、タグ・属性パネルを実装する作業は未着手。
+- 2D/3Dビューワーfrontendには、図面向けタグ・属性パネル、ICAD登録・抽出・再抽出・手直し・候補確定画面を実装済み。
+- 製品・装置・ユニット一覧/詳細と部品一覧/詳細は固定モックではなく、ICAD 3D構成から生成した実データを表示する。子ノードありをアセンブリ/サブアセンブリ、子ノードなしを末端部品として分類する。
+- `GET /api/v1/knowledge-entities?target=product|part` と `GET /api/v1/knowledge-entities/{entityId}` を読み取りAPIとして使用する。
+- レビュー状態は2D/3D snapshotごとに `pending` / `confirmed` / `needs_correction` を保持する。再抽出または手直し後は `pending` へ戻す。
 - `viewerBootstrap.availability.has2d/has3d` はviewer表示可否であり、ICADの実体検出結果ではない。この区別をAPI資料に明記する必要がある。
+
+## 3D構成の対象分類
+
+| ICAD構成 | ナレッジ画面 | 判定 |
+| --- | --- | --- |
+| ルートで子ノードあり | 製品・装置・ユニット | アセンブリ |
+| 中間ノードで子ノードあり | 製品・装置・ユニット | サブアセンブリ |
+| 子ノードなし | 部品 | 末端部品 |
+
+ファイル名や客先別命名規則だけで分類しない。新しい抽出結果では `node_id`、`parent_node_id`、`depth`、`child_count`、`entity_kind` を使い、旧抽出結果では `tree_path` の親子関係から同じ分類を復元する。

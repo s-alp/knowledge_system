@@ -34,6 +34,12 @@ class ExtractRequestSerializer(serializers.Serializer):
         return value
 
 
+class ReviewDecisionSerializer(serializers.Serializer):
+    extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
+    decision = serializers.ChoiceField(choices=DrawingMetadataSnapshot.REVIEW_STATUS_CHOICES)
+    reason = serializers.CharField(required=False, allow_blank=True, default="")
+
+
 class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
     jobId = serializers.UUIDField(source="id")
     drawingId = serializers.UUIDField(source="drawing_id")
@@ -90,6 +96,9 @@ class SnapshotSerializer(serializers.ModelSerializer):
     manualOverrides = serializers.JSONField(source="manual_overrides_json")
     updatedAt = serializers.DateTimeField(source="updated_at")
     updatedBy = serializers.CharField(source="updated_by", allow_blank=True)
+    reviewStatus = serializers.CharField(source="review_status")
+    reviewedAt = serializers.DateTimeField(source="reviewed_at", allow_null=True)
+    reviewedBy = serializers.CharField(source="reviewed_by", allow_blank=True)
 
     class Meta:
         model = DrawingMetadataSnapshot
@@ -102,6 +111,9 @@ class SnapshotSerializer(serializers.ModelSerializer):
             "manualOverrides",
             "updatedAt",
             "updatedBy",
+            "reviewStatus",
+            "reviewedAt",
+            "reviewedBy",
         )
 
     def get_latestJob(self, obj: DrawingMetadataSnapshot) -> dict | None:

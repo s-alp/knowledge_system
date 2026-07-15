@@ -4,6 +4,7 @@ from copy import deepcopy
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 
 from apps.drawing_metadata.models import (
     DrawingMetadataAuditLog,
@@ -77,6 +78,9 @@ def save_extraction_snapshot(
     snapshot.derived_tags_json = derived_tags
     snapshot.normalizer_version = settings.DRAWING_METADATA_NORMALIZER_VERSION
     snapshot.tag_rule_version = settings.DRAWING_METADATA_TAG_RULE_VERSION
+    snapshot.review_status = DrawingMetadataSnapshot.REVIEW_PENDING
+    snapshot.reviewed_at = None
+    snapshot.reviewed_by = ""
     snapshot.updated_by = executed_by
     snapshot.save()
 
@@ -148,6 +152,9 @@ def apply_manual_overrides(
 
         snapshot.canonical_attributes_json = canonical_attributes
         snapshot.derived_tags_json = derived_tags
+        snapshot.review_status = DrawingMetadataSnapshot.REVIEW_PENDING
+        snapshot.reviewed_at = None
+        snapshot.reviewed_by = ""
         snapshot.updated_by = executed_by
         snapshot.save()
 
@@ -165,3 +172,30 @@ def apply_manual_overrides(
             executed_by=executed_by,
         )
         return snapshot
+
+
+def apply_review_decision(
+    *,
+    snapshot: DrawingMetadataSnapshot,
+    decision: str,
+    reason: str,
+    executed_by: str,
+) -> DrawingMetadataSnapshot:
+    with transaction.atomic():
+        locked = DrawingMetadataSnapshot.objects.select_for_update().get(pk=snapshot.pk)
+        before_status = locked.review_status
+        locked.review_status = decision
+        locked.reviewed_at = timezone.now()
+        locked.reviewed_by = executed_by
+        locked.save(update_fields=["review_status", "reviewed_at", "reviewed_by", "updated_at"])
+
+        DrawingMetadataAuditLog.objects.create(
+            drawing=locked.drawing,
+            extraction_mode=locked.extraction_mode,
+            action_type=DrawingMetadataAuditLog.ACTION_REVIEW,
+            reason=reason,
+            before_json={"review_status": before_status},
+            after_json={"review_status": decision},
+            executed_by=executed_by,
+        )
+        return locked

@@ -190,6 +190,42 @@ flowchart TD
 - drawing 解決: `backend/apps/viewer/services/pdm.py`
 - drawing API 入口: `backend/apps/viewer/api/views.py`
 
+## ICADタグ・属性取得と対象物画面
+
+ICAD抽出は、画像/PDFの2D表示とSTL/STEPの3D表示とは別の処理である。図面管理の入口からICADファイルを登録し、専用レビュー画面で抽出状態と候補を扱う。
+
+```mermaid
+flowchart LR
+    entry["図面管理 / ICADから情報を取得"] --> upload["ICAD登録API"]
+    upload --> review["ICADタグ・属性取得"]
+    review --> enqueue["2D/3D抽出ジョブ"]
+    enqueue --> poll["ジョブ状態を自動確認"]
+    poll --> snapshot["2D/3D snapshot"]
+    snapshot --> correction["再抽出 / 手直し"]
+    snapshot --> decision["候補を確定 / 要手直し"]
+    snapshot --> drawing["図面詳細のタグ・属性"]
+    snapshot --> entities["3D構成を対象物へ分類"]
+    entities --> product["製品・装置・ユニット一覧/詳細"]
+    entities --> part["部品一覧/詳細"]
+```
+
+- 子ノードを持つ3D構成ノードはアセンブリまたはサブアセンブリとして「製品・装置・ユニット」へ出す。
+- 子ノードを持たない3D構成ノードは末端部品として「部品」へ出す。
+- 製品・装置・ユニット/部品の一覧・詳細は、図面viewerの読込状態に依存しない。
+- システム設定はAI/API/抽出対象/採用ルールの確認だけを担い、図面ごとの抽出・レビュー操作を置かない。
+- 創屋本番DBへの登録、変更、削除は行わない。
+
+対応API:
+
+- `POST /api/v1/drawing-metadata/registrations/upload`
+- `POST /api/v1/drawing-metadata/registrations/{drawingId}/extract`
+- `GET /api/v1/drawing-metadata/jobs/{jobId}`
+- `PATCH /api/v1/drawing-metadata/registrations/{drawingId}/overrides`
+- `PATCH /api/v1/drawing-metadata/registrations/{drawingId}/review`
+- `GET /api/v1/knowledge-entities?target=product|part`
+- `GET /api/v1/knowledge-entities/{entityId}`
+- `GET /api/v1/drawing-metadata/settings/tag-automation`
+
 ## なぜこの分離か
 
 - PDM 側の変更を `drawingId を渡す` だけに抑えるため

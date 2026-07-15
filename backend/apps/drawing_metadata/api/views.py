@@ -20,10 +20,13 @@ from apps.drawing_metadata.api.serializers import (
     RegisteredDrawingCreateSerializer,
     RegisteredDrawingDetailSerializer,
     RegisteredDrawingListSerializer,
+    ReviewDecisionSerializer,
 )
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
-from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
+from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
+from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
 from apps.drawing_metadata.services.viewer_preview import (
     build_2d_preview_svg,
     build_3d_preview_stl,
@@ -48,6 +51,83 @@ class RegistrationListApiView(APIView):
         serializer.is_valid(raise_exception=True)
         drawing = serializer.save()
         return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)
+
+
+def _icad_entity_drawings_queryset():
+    return RegisteredDrawing.objects.prefetch_related(
+        Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
+        "audit_logs",
+    )
+
+
+class IcadEntityListApiView(APIView):
+    def get(self, request):
+        target_key = request.query_params.get("target") or None
+        if target_key not in {None, "product", "part"}:
+            return Response(
+                {"error": {"code": "icad_entity_target", "message": "target は product または part を指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        drawings = _icad_entity_drawings_queryset()
+        drawing_id = request.query_params.get("drawingId")
+        if drawing_id:
+            try:
+                drawing_uuid = uuid.UUID(drawing_id)
+            except ValueError:
+                return Response(
+                    {"error": {"code": "icad_entity_drawing_id", "message": "drawingId はUUIDで指定してください。"}},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            drawings = drawings.filter(pk=drawing_uuid)
+
+        try:
+            limit = int(request.query_params.get("limit", "50"))
+            offset = int(request.query_params.get("offset", "0"))
+        except ValueError:
+            return Response(
+                {"error": {"code": "icad_entity_pagination", "message": "limit と offset は整数で指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not 1 <= limit <= 250 or offset < 0:
+            return Response(
+                {"error": {"code": "icad_entity_pagination", "message": "limit は1～250、offset は0以上で指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            build_icad_entity_catalog(
+                drawings,
+                target_key=target_key,
+                query=request.query_params.get("q", ""),
+                offset=offset,
+                limit=limit,
+            )
+        )
+
+
+class IcadEntityDetailApiView(APIView):
+    def get(self, request, entity_id):
+        drawings = _icad_entity_drawings_queryset()
+        drawing_id = request.query_params.get("drawingId")
+        if drawing_id:
+            try:
+                drawing_uuid = uuid.UUID(drawing_id)
+            except ValueError:
+                return Response(
+                    {"error": {"code": "icad_entity_drawing_id", "message": "drawingId はUUIDで指定してください。"}},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            drawings = drawings.filter(pk=drawing_uuid)
+        entity = find_icad_entity(drawings, str(entity_id))
+        if entity is None:
+            raise Http404("ICAD構成エンティティが見つかりません。")
+        return Response(entity)
+
+
+class TagAutomationSettingsApiView(APIView):
+    def get(self, request):
+        return Response(build_tag_automation_settings_payload())
 
 
 class RegistrationUploadApiView(APIView):
@@ -287,6 +367,33 @@ class RegistrationOverrideApiView(APIView):
                 "manualOverrides": snapshot.manual_overrides_json,
                 "canonicalAttributes": snapshot.canonical_attributes_json,
                 "derivedTags": snapshot.derived_tags_json,
+            }
+        )
+
+
+class RegistrationReviewApiView(APIView):
+    def patch(self, request, drawing_id):
+        drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
+        serializer = ReviewDecisionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        snapshot = get_object_or_404(
+            DrawingMetadataSnapshot,
+            drawing=drawing,
+            extraction_mode=serializer.validated_data["extractionMode"],
+        )
+        snapshot = apply_review_decision(
+            snapshot=snapshot,
+            decision=serializer.validated_data["decision"],
+            reason=serializer.validated_data.get("reason", ""),
+            executed_by="api",
+        )
+        return Response(
+            {
+                "drawingId": str(drawing.id),
+                "extractionMode": snapshot.extraction_mode,
+                "reviewStatus": snapshot.review_status,
+                "reviewedAt": snapshot.reviewed_at,
+                "reviewedBy": snapshot.reviewed_by,
             }
         )
 

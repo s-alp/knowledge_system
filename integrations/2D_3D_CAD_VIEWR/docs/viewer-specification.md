@@ -105,6 +105,23 @@
 - これらは開発・検証用導線で使い、PDM 埋込の本番導線では使わない
 - 開発画面のローカルファイル導線では、拡張子から 2D/3D を自動判定して上記 upload API へ送る
 
+### ICADタグ・属性統合 API
+
+統合先 `knowledge_system/backend` が次のAPIを提供する。いずれもローカル抽出・レビュー用であり、創屋本番DBへ書き込まない。
+
+| API | 用途 |
+| --- | --- |
+| `POST /drawing-metadata/registrations/upload` | ICADファイルをローカル登録 |
+| `POST /drawing-metadata/registrations/{drawingId}/extract` | 2D/3D抽出を起票 |
+| `GET /drawing-metadata/jobs/{jobId}` | 待機中/抽出中/完了/失敗を確認 |
+| `PATCH /drawing-metadata/registrations/{drawingId}/overrides` | 候補を手直し |
+| `PATCH /drawing-metadata/registrations/{drawingId}/review` | 候補を確認済みまたは要手直しにする |
+| `GET /knowledge-entities?target=product|part` | 対象物一覧を取得 |
+| `GET /knowledge-entities/{entityId}` | 対象物詳細・親子関係・根拠を取得 |
+| `GET /drawing-metadata/settings/tag-automation` | 秘密値を除いた現在設定を取得 |
+
+3D対象物の分類は構成階層で行う。子ノードありは製品・装置・ユニット、子ノードなしは部品とし、ファイル名だけでは分類しない。
+
 ## レスポンス項目
 
 ### bootstrap

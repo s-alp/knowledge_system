@@ -5,7 +5,11 @@ param(
     [string]$SxNetDllPath = "C:\ICADSX\bin\sxnet.dll",
     [string]$OutputDirectory = "C:\Users\s-iwata\Desktop\knowledge_system\output\live_extracts\manifest_2d_reextract_2026-07-15",
     [int]$MaxFiles = 0,
-    [switch]$SkipExisting
+    [int]$TimeoutSeconds = 180,
+    [string[]]$FileName = @(),
+    [string[]]$ExcludeFileName = @(),
+    [switch]$SkipExisting,
+    [switch]$IncludeAllEntries
 )
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -26,7 +30,26 @@ if (-not (Test-Path -LiteralPath $SxNetDllPath)) {
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 
 $manifest = Get-Content -LiteralPath $ManifestPath -Raw -Encoding utf8 | ConvertFrom-Json
-$entries = @($manifest.entries | Where-Object { $PSItem.has2d -eq $true })
+$entries = if ($IncludeAllEntries) {
+    @($manifest.entries)
+}
+else {
+    @($manifest.entries | Where-Object { $PSItem.has2d -eq $true })
+}
+if ($FileName.Count -gt 0) {
+    $entries = @(
+        $entries | Where-Object {
+            $FileName -contains [System.IO.Path]::GetFileName([string]$PSItem.sourcePath)
+        }
+    )
+}
+if ($ExcludeFileName.Count -gt 0) {
+    $entries = @(
+        $entries | Where-Object {
+            $ExcludeFileName -notcontains [System.IO.Path]::GetFileName([string]$PSItem.sourcePath)
+        }
+    )
+}
 if ($MaxFiles -gt 0) {
     $entries = @($entries | Select-Object -First $MaxFiles)
 }
@@ -44,6 +67,7 @@ $summary = foreach ($entry in $entries) {
         output_path = $outputPath
         exists = Test-Path -LiteralPath $sourcePath
         skipped = $false
+        timed_out = $false
         exit_code = $null
         elapsed_ms = $null
         view_sheet_count = $null
@@ -56,6 +80,8 @@ $summary = foreach ($entry in $entries) {
         outside_print_area_count = $null
         unknown_print_area_count = $null
         warning_count = $null
+        stdout = $null
+        stderr = $null
         error = $null
     }
 
@@ -72,16 +98,49 @@ $summary = foreach ($entry in $entries) {
     }
 
     try {
-        & $RunnerPath extract `
-            --input-path $sourcePath `
-            --source-kind 2d `
-            --output-path $outputPath `
-            --sxnet-dll-path $SxNetDllPath `
-            --shutdown-icad-if-autostarted false
-        $record.exit_code = $LASTEXITCODE
+        $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+        $startInfo.FileName = $RunnerPath
+        $startInfo.UseShellExecute = $false
+        $startInfo.RedirectStandardOutput = $true
+        $startInfo.RedirectStandardError = $true
+        $startInfo.WorkingDirectory = (Get-Location).Path
+        foreach ($argument in @(
+            "extract",
+            "--input-path", $sourcePath,
+            "--source-kind", "2d",
+            "--output-path", $outputPath,
+            "--sxnet-dll-path", $SxNetDllPath,
+            "--shutdown-icad-if-autostarted", "false"
+        )) {
+            $startInfo.ArgumentList.Add([string]$argument)
+        }
+
+        $runnerProcess = [System.Diagnostics.Process]::Start($startInfo)
+        $stdoutTask = $runnerProcess.StandardOutput.ReadToEndAsync()
+        $stderrTask = $runnerProcess.StandardError.ReadToEndAsync()
+        if (-not $runnerProcess.WaitForExit($TimeoutSeconds * 1000)) {
+            try {
+                $runnerProcess.Kill($true)
+            }
+            catch {
+                $runnerProcess.Kill()
+            }
+            $runnerProcess.WaitForExit()
+            $record.timed_out = $true
+            $record.exit_code = -2
+            $record.error = "timeout_after_$($TimeoutSeconds)_seconds"
+        }
+        else {
+            $record.exit_code = $runnerProcess.ExitCode
+            if ($record.exit_code -ne 0) {
+                $record.error = "runner_exit_code_$($record.exit_code)"
+            }
+        }
+        $record.stdout = $stdoutTask.GetAwaiter().GetResult().Trim()
+        $record.stderr = $stderrTask.GetAwaiter().GetResult().Trim()
         $record.elapsed_ms = [int]((Get-Date) - $startedAt).TotalMilliseconds
 
-        if ($LASTEXITCODE -eq 0 -and (Test-Path -LiteralPath $outputPath)) {
+        if ($record.exit_code -eq 0 -and (Test-Path -LiteralPath $outputPath)) {
             $json = Get-Content -LiteralPath $outputPath -Raw -Encoding utf8 | ConvertFrom-Json
             $raw = $json.raw_extract
             $items = @($raw.texts) + @($raw.dimensions) + @($raw.geometry_primitives) + @($raw.weld_notes) + @($raw.balloons) + @($raw.tolerances)

@@ -1,7 +1,8 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  applyDrawingMetadataReview,
   enqueueDrawingMetadataExtraction,
   uploadIcadDrawingMetadata,
   type DrawingMetadataRegistrationResponse,
@@ -19,6 +20,22 @@ vi.mock("../../shared/api/client", () => ({
     extractionProfile: "2d_all_views_layers_print_frame",
     extractionOptions: {},
     errorMessage: "",
+  })),
+  getDrawingMetadataJob: vi.fn(async (jobId: string) => ({
+    jobId,
+    drawingId: "drawing-1",
+    extractionMode: jobId.endsWith("3d") ? "3d" : "2d",
+    status: "succeeded",
+    extractionProfile: "default",
+    extractionOptions: {},
+    errorMessage: "",
+  })),
+  applyDrawingMetadataReview: vi.fn(async (_drawingId: string, extractionMode: "2d" | "3d", decision: string) => ({
+    drawingId: "drawing-1",
+    extractionMode,
+    reviewStatus: decision,
+    reviewedAt: "2026-07-15T12:00:00+09:00",
+    reviewedBy: "api",
   })),
   applyDrawingMetadataOverrides: vi.fn(async () => ({
     drawingId: "drawing-1",
@@ -55,6 +72,7 @@ const registration: DrawingMetadataRegistrationResponse = {
 
 describe("IcadExtractionReviewPage", () => {
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -72,5 +90,39 @@ describe("IcadExtractionReviewPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "2D/3Dを抽出" }));
     await waitFor(() => expect(enqueueDrawingMetadataExtraction).toHaveBeenCalled());
+  });
+
+  it("confirms an extracted candidate from the dedicated review screen", async () => {
+    vi.mocked(uploadIcadDrawingMetadata).mockResolvedValue({
+      ...registration,
+      snapshotsByMode: {
+        "3d": {
+          extractionMode: "3d",
+          canonicalAttributes: { material: "SUS304" },
+          derivedTags: [{ tag: "材質:SUS304" }],
+          manualOverrides: {},
+          latestJob: null,
+          reviewStatus: "pending",
+          reviewedAt: null,
+          reviewedBy: "",
+        },
+      },
+    });
+    const file = new File(["icad"], "sample.icd", { type: "application/octet-stream" });
+
+    render(<IcadExtractionReviewPage file={file} onBack={vi.fn()} />);
+
+    const confirmButtons = await screen.findAllByRole("button", { name: "候補を確定" });
+    const enabledConfirmButton = confirmButtons.find((button) => !(button as HTMLButtonElement).disabled);
+    expect(enabledConfirmButton).toBeDefined();
+    fireEvent.click(enabledConfirmButton!);
+    await waitFor(() => {
+      expect(applyDrawingMetadataReview).toHaveBeenCalledWith(
+        "drawing-1",
+        "3d",
+        "confirmed",
+        "図面管理で候補内容を確認",
+      );
+    });
   });
 });

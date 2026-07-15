@@ -18,6 +18,9 @@ export interface DrawingMetadataSnapshotResponse {
   derivedTags: unknown[];
   manualOverrides: Record<string, unknown>;
   latestJob: DrawingMetadataJobResponse | null;
+  reviewStatus: "pending" | "confirmed" | "needs_correction";
+  reviewedAt: string | null;
+  reviewedBy: string;
 }
 
 export interface DrawingMetadataRegistrationResponse {
@@ -27,6 +30,93 @@ export interface DrawingMetadataRegistrationResponse {
   sourceFormat: string;
   snapshotsByMode: Partial<Record<DrawingMetadataExtractionMode, DrawingMetadataSnapshotResponse>>;
   viewerBootstrap: DrawingBootstrapResponse;
+}
+
+export type KnowledgeEntityTargetKey = "product" | "part";
+export type KnowledgeEntityKind = "assembly" | "subassembly" | "part";
+
+export interface KnowledgeEntityAttribute {
+  key: string;
+  label: string;
+  value: string;
+  source: string;
+  confidence: "high" | "medium" | "low" | string;
+  evidence: string;
+}
+
+export interface KnowledgeEntityTag {
+  value: string;
+  source: string;
+  confidence: "high" | "medium" | "low" | string;
+  evidence: string;
+}
+
+export interface KnowledgeEntityRelatedItem {
+  relationship: "parent" | "child";
+  entityId: string;
+  targetKey: KnowledgeEntityTargetKey;
+  entityKind: KnowledgeEntityKind;
+  name: string;
+  partNumber: string | null;
+}
+
+export interface KnowledgeEntityRecord {
+  entityId: string;
+  targetKey: KnowledgeEntityTargetKey;
+  entityKind: KnowledgeEntityKind;
+  classificationEvidence: string;
+  classificationConfidence: string;
+  name: string;
+  partNumber: string | null;
+  comment: string | null;
+  treePath: string[];
+  depth: number;
+  parentEntityId: string | null;
+  childEntityIds: string[];
+  childAssemblyCount: number;
+  childPartCount: number;
+  descendantPartCount: number;
+  drawingId: string;
+  drawingFilename: string;
+  sourcePath: string;
+  attributes: KnowledgeEntityAttribute[];
+  tags: KnowledgeEntityTag[];
+  conflicts: Array<Record<string, unknown>>;
+  reviewStatus: "pending" | "confirmed" | "needs_correction";
+  reviewRequired: boolean;
+  evidence: Array<Record<string, unknown>>;
+  history: Array<{
+    action: string;
+    mode: string;
+    reason: string;
+    executedBy: string;
+    executedAt: string;
+  }>;
+  updatedAt: string;
+  relatedEntities?: KnowledgeEntityRelatedItem[];
+  relatedDrawing?: { drawingId: string; filename: string };
+}
+
+export interface KnowledgeEntityCatalogResponse {
+  schemaVersion: string;
+  definitions: Record<KnowledgeEntityTargetKey, string>;
+  targetKey: KnowledgeEntityTargetKey | null;
+  count: number;
+  totalCount: number;
+  returnedCount: number;
+  offset: number;
+  limit: number | null;
+  items: KnowledgeEntityRecord[];
+  skippedDrawings: Array<{ drawingId: string; filename: string; reason: string }>;
+}
+
+export interface TagAutomationSettingsResponse {
+  title: string;
+  summary: string;
+  runtimeRows: Array<{ label: string; value: string }>;
+  operationRows: Array<{ area: string; screen: string; role: string; writePolicy: string }>;
+  targetRows: Array<{ target: string; displayPage: string; storedAs: string; reviewRoute: string }>;
+  ruleRows: Array<{ label: string; value: string }>;
 }
 
 export function resolveApiBaseUrl(
@@ -79,6 +169,28 @@ export function getDrawingMetadataRegistration(drawingId: string): Promise<Drawi
   return requestJson<DrawingMetadataRegistrationResponse>(`/drawing-metadata/registrations/${drawingId}`);
 }
 
+export function getKnowledgeEntities(
+  targetKey: KnowledgeEntityTargetKey,
+  query = "",
+  offset = 0,
+  limit = 50,
+): Promise<KnowledgeEntityCatalogResponse> {
+  const search = new URLSearchParams({ target: targetKey, offset: String(offset), limit: String(limit) });
+  if (query.trim()) {
+    search.set("q", query.trim());
+  }
+  return requestJson<KnowledgeEntityCatalogResponse>(`/knowledge-entities?${search.toString()}`);
+}
+
+export function getKnowledgeEntity(entityId: string, drawingId?: string): Promise<KnowledgeEntityRecord> {
+  const search = drawingId ? `?${new URLSearchParams({ drawingId }).toString()}` : "";
+  return requestJson<KnowledgeEntityRecord>(`/knowledge-entities/${entityId}${search}`);
+}
+
+export function getTagAutomationSettings(): Promise<TagAutomationSettingsResponse> {
+  return requestJson<TagAutomationSettingsResponse>("/drawing-metadata/settings/tag-automation");
+}
+
 export function uploadIcadDrawingMetadata(file: File): Promise<DrawingMetadataRegistrationResponse> {
   return uploadFile<DrawingMetadataRegistrationResponse>("/drawing-metadata/registrations/upload", file);
 }
@@ -92,6 +204,28 @@ export function enqueueDrawingMetadataExtraction(
   return requestJson<DrawingMetadataJobResponse>(`/drawing-metadata/registrations/${drawingId}/extract`, {
     method: "POST",
     body: JSON.stringify({ extractionMode, extractionProfile, extractionOptions }),
+  });
+}
+
+export function getDrawingMetadataJob(jobId: string): Promise<DrawingMetadataJobResponse> {
+  return requestJson<DrawingMetadataJobResponse>(`/drawing-metadata/jobs/${jobId}`);
+}
+
+export function applyDrawingMetadataReview(
+  drawingId: string,
+  extractionMode: DrawingMetadataExtractionMode,
+  decision: "confirmed" | "needs_correction",
+  reason: string,
+): Promise<{
+  drawingId: string;
+  extractionMode: DrawingMetadataExtractionMode;
+  reviewStatus: string;
+  reviewedAt: string;
+  reviewedBy: string;
+}> {
+  return requestJson(`/drawing-metadata/registrations/${drawingId}/review`, {
+    method: "PATCH",
+    body: JSON.stringify({ extractionMode, decision, reason }),
   });
 }
 

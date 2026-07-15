@@ -690,6 +690,10 @@ p {
   width: min(650px, 100%);
 }
 
+.entity-page .production-basic-section {
+  width: min(900px, 100%);
+}
+
 .production-section-header,
 .production-section-title-row,
 .production-section-actions {
@@ -734,13 +738,14 @@ p {
 .production-detail-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px 0;
+  gap: 15px 32px;
   padding: 16px 0;
 }
 
 .production-detail-field {
   display: grid;
   gap: 4px;
+  min-width: 0;
   min-height: 45px;
 }
 
@@ -754,6 +759,34 @@ p {
   color: var(--text-color-strong);
   font-size: 0.95rem;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.manual-json-editor {
+  width: 100%;
+  min-height: 140px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--surface-border-strong);
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--text-color-strong);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.manual-json-editor:focus {
+  border-color: var(--primary-blue);
+  outline: 2px solid rgba(37, 99, 235, 0.16);
+}
+
+.production-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
 }
 
 .production-attribute-block {

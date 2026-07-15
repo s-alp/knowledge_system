@@ -62,6 +62,141 @@ def test_registration_upload_rejects_non_icad(settings, tmp_path):
 
 
 @pytest.mark.django_db
+def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_key(settings):
+    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
+    settings.GEMINI_API_KEY = "secret-value-must-not-be-returned"
+    settings.GEMINI_MODEL = "gemini-test-model"
+    settings.GEMINI_TEMPERATURE = 0.0
+
+    response = APIClient().get("/api/v1/drawing-metadata/settings/tag-automation")
+
+    assert response.status_code == 200
+    payload = response.json()
+    runtime_by_label = {row["label"]: row["value"] for row in payload["runtimeRows"]}
+    assert runtime_by_label["LLM provider"] == "gemini"
+    assert runtime_by_label["Gemini APIキー"] == "設定済み"
+    assert runtime_by_label["主モデル"] == "gemini-test-model"
+    assert runtime_by_label["温度"] == "0.0"
+    assert "secret-value-must-not-be-returned" not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_icad_entity_api_classifies_assemblies_and_leaf_parts(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="assembly-sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": "MACHINE"},
+            "parts": [
+                {
+                    "node_id": "node-000000",
+                    "parent_node_id": None,
+                    "depth": 0,
+                    "child_count": 2,
+                    "entity_kind": "assembly",
+                    "tree_path": ["MACHINE"],
+                    "name": "MACHINE",
+                    "ex_info_fields": {"PRFX": "CAA5012"},
+                },
+                {
+                    "node_id": "node-000001",
+                    "parent_node_id": "node-000000",
+                    "depth": 1,
+                    "child_count": 1,
+                    "entity_kind": "subassembly",
+                    "tree_path": ["MACHINE", "FEEDER"],
+                    "name": "FEEDER",
+                    "ex_info_fields": {"ユニット番号": "34000"},
+                },
+                {
+                    "node_id": "node-000002",
+                    "parent_node_id": "node-000001",
+                    "depth": 2,
+                    "child_count": 0,
+                    "entity_kind": "part",
+                    "tree_path": ["MACHINE", "FEEDER", "BRACKET-A"],
+                    "name": "BRACKET-A",
+                    "ex_info_fields": {"部品番号": "CAA5012-02434006P1R1", "表面処理": "黒染め"},
+                    "materials": [{"mat_id": "SS400", "name": "一般構造用圧延鋼材"}],
+                },
+                {
+                    "node_id": "node-000003",
+                    "parent_node_id": "node-000000",
+                    "depth": 1,
+                    "child_count": 0,
+                    "entity_kind": "part",
+                    "tree_path": ["MACHINE", "COVER-B"],
+                    "name": "COVER-B",
+                    "ex_info_fields": {},
+                    "materials": [{"mat_id": "SUS304"}],
+                },
+            ],
+        },
+        canonical_attributes_json={
+            "customer_name": "ライズ",
+            "drawing_number": "CAA5012-02434006P1R1",
+            "part_names": ["MACHINE", "FEEDER", "BRACKET-A", "COVER-B"],
+        },
+        derived_tags_json=[],
+    )
+
+    client = APIClient()
+    product_response = client.get(f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}")
+    part_response = client.get(f"/api/v1/knowledge-entities?target=part&drawingId={drawing.id}")
+
+    assert product_response.status_code == 200
+    assert part_response.status_code == 200
+    products = product_response.json()["items"]
+    parts = part_response.json()["items"]
+    assert [item["entityKind"] for item in products] == ["assembly", "subassembly"]
+    assert {item["name"] for item in parts} == {"BRACKET-A", "COVER-B"}
+    bracket = next(item for item in parts if item["name"] == "BRACKET-A")
+    assert bracket["partNumber"] == "CAA5012-02434006P1R1"
+    assert any(tag["value"] == "材質:SS400" for tag in bracket["tags"])
+    assert any(tag["value"] == "表面処理:黒染め" for tag in bracket["tags"])
+    assert bracket["parentEntityId"] == next(item["entityId"] for item in products if item["name"] == "FEEDER")
+
+    detail_response = client.get(f"/api/v1/knowledge-entities/{bracket['entityId']}")
+    assert detail_response.status_code == 200
+    assert detail_response.json()["treePath"] == ["MACHINE", "FEEDER", "BRACKET-A"]
+    assert detail_response.json()["classificationEvidence"] == "sxnet_node_fields"
+
+
+@pytest.mark.django_db
+def test_icad_entity_api_supports_legacy_tree_paths(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="legacy-sample.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "parts": [
+                {"tree_path": ["ROOT"], "name": "ROOT"},
+                {"tree_path": ["ROOT", "SUB"], "name": "SUB"},
+                {"tree_path": ["ROOT", "SUB", "PART"], "name": "PART"},
+            ]
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert [item["entityKind"] for item in payload["items"]] == ["assembly", "subassembly", "part"]
+    assert all(item["classificationEvidence"] == "legacy_tree_path_inference" for item in payload["items"])
+
+
+@pytest.mark.django_db
 def test_registration_extract_enqueue(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
@@ -145,6 +280,44 @@ def test_override_patch(sample_registration_payload):
     assert payload["extractionMode"] == "3d"
     assert payload["canonicalAttributes"]["equipment_category"] == "ガントリー"
     assert payload["derivedTags"][0]["tag"] == "装置:ガントリー"
+
+
+@pytest.mark.django_db
+def test_review_patch_persists_confirmation_and_override_resets_it(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename=sample_registration_payload["filename"],
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    snapshot = DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="3d")
+    client = APIClient()
+
+    response = client.patch(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/review",
+        {"extractionMode": "3d", "decision": "confirmed", "reason": "候補確認済み"},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.json()["reviewStatus"] == "confirmed"
+    snapshot.refresh_from_db()
+    assert snapshot.review_status == DrawingMetadataSnapshot.REVIEW_CONFIRMED
+    assert snapshot.reviewed_at is not None
+
+    override_response = client.patch(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/overrides",
+        {
+            "extractionMode": "3d",
+            "canonicalAttributes": {"material": {"value": "SUS304"}},
+            "reason": "材質を手直し",
+        },
+        format="json",
+    )
+    assert override_response.status_code == 200
+    snapshot.refresh_from_db()
+    assert snapshot.review_status == DrawingMetadataSnapshot.REVIEW_PENDING
+    assert snapshot.reviewed_at is None
 
 
 @pytest.mark.django_db

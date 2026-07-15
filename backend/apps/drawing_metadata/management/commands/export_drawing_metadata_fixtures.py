@@ -17,6 +17,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser) -> None:
         parser.add_argument("--drawing-id", action="append", default=[], help="出力対象の drawing UUID。複数指定できます。")
+        parser.add_argument("--manifest", help="ICAD抽出manifestの entries[].sourcePath に一致する図面だけを出力します。")
         parser.add_argument("--output", help="出力先 JSON。未指定の場合は標準出力へ出します。")
         parser.add_argument(
             "--include-empty-snapshots",
@@ -31,6 +32,24 @@ class Command(BaseCommand):
         ).order_by("filename", "id")
 
         drawing_ids = options["drawing_id"] or []
+        manifest_source_paths: list[str] = []
+        manifest_path_value = options.get("manifest")
+        if manifest_path_value:
+            manifest_path = Path(manifest_path_value)
+            if not manifest_path.is_file():
+                raise CommandError(f"manifest が見つかりません: {manifest_path}")
+            try:
+                manifest_payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                raise CommandError(f"manifest を読めません: {manifest_path}: {exc}") from exc
+            manifest_source_paths = [
+                str(entry["sourcePath"])
+                for entry in manifest_payload.get("entries", [])
+                if entry.get("sourcePath")
+            ]
+            if not manifest_source_paths:
+                raise CommandError(f"manifest に entries[].sourcePath がありません: {manifest_path}")
+            queryset = queryset.filter(source_path__in=manifest_source_paths)
         if drawing_ids:
             queryset = queryset.filter(id__in=drawing_ids)
 
@@ -39,6 +58,10 @@ class Command(BaseCommand):
             found_ids = {str(drawing.id) for drawing in drawings}
             missing_ids = sorted(set(drawing_ids) - found_ids)
             raise CommandError(f"指定された drawing-id が見つかりません: {', '.join(missing_ids)}")
+        if manifest_source_paths and len(drawings) != len(set(manifest_source_paths)):
+            found_paths = {drawing.source_path for drawing in drawings}
+            missing_paths = sorted(set(manifest_source_paths) - found_paths)
+            raise CommandError(f"manifest の sourcePath に一致する図面が見つかりません: {', '.join(missing_paths)}")
 
         items = []
         skipped_empty_snapshot_count = 0
