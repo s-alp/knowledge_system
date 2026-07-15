@@ -66,6 +66,7 @@
   - 画面確認証跡は `C:\Users\s-iwata\Desktop\knowledge_system\output\knowledge_ui_screenshots_2026-07-15\viewer-2d-svg-preview-full-2026-07-15.png` と `viewer-3d-stl-preview-fixed-full-2026-07-15.png` に保存。証跡画像は git 管理外。
   - コピー済み既存ビューワー backend を確認。実変換は `viewer2d/open/upload` が PDF/JPEG/TIFF、`viewer3d/open/upload` が STL/STEP、PDM drawingId 経由が `source_2d_url` / `source_3d_url` 解決という契約。`.icd` ファイルそのものを直接2D/3D表示資産へ変換する口は既存backendにはない。
   - `DrawingMetadataSnapshot` の `canonical_attributes_json` / `raw_extract_json` に `viewer_assets` または `preview_assets` を入れる薄い契約を追加。2D は PDF/JPEG/TIFF URL、3D は STL URL があればメタデータプレビューより優先して既存ビューワーへ渡す。TIFF は既存ビューワー同様、`pageImageUrls` がある場合だけ直接扱う。
+  - 2026-07-15 に本番ナレッジシステムの製品・装置・ユニット一覧/詳細、部品一覧/詳細をPlaywrightで読み取り確認。製品・部品一覧は `検索条件` と `検索結果` を白枠セクションで分け、結果はテーブル行クリックで詳細へ遷移する構成。詳細は `基本情報`、`属性情報`、`関連情報`、`変更履歴` を白枠セクションで表示する構成として、コピー済み2D/3Dビューワー側の製品・装置・ユニット/部品ページへ反映。図面管理は `図面を開く` 読み込み入口のまま維持していることをローカル5173で確認。
 - 次に着手する場合:
   - 今回の SVG/STL は「抽出結果を既存ビューワー面で確認するためのメタデータプレビュー」であり、CAD形状そのものの変換ではない。次は ICAD 側で PDF/STL/STEP 等の実表示資産を生成するか、既存2D/3Dビューワーbackendの STEP->STL 変換APIへ接続し、`.icd` 由来の実図面画像/PDF相当と実3Dモデル相当を返す。
   - `cross_source_reconciliation` として 2D 候補、3D 候補、採用値、差異、要確認理由を保持する。
