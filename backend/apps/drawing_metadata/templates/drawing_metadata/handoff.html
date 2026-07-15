@@ -44,7 +44,7 @@
       <thead>
         <tr>
           <th>図面</th>
-          <th>2D/3D</th>
+          <th>抽出snapshot</th>
           <th>属性/タグ</th>
           <th>2D/3D照合</th>
           <th>payload対象</th>
@@ -60,9 +60,10 @@
               <div class="muted">{{ row.sourcePath }}</div>
             </td>
             <td>
-              <div>2D: {{ row.has2d }}</div>
-              <div>3D: {{ row.has3d }}</div>
-              <div>初期: {{ row.defaultMode|default:"-" }}</div>
+              <div>{{ row.snapshotStateLabel }}</div>
+              <div>2D: {{ row.has2dLabel }}</div>
+              <div>3D: {{ row.has3dLabel }}</div>
+              <div>viewer初期: {{ row.defaultMode|default:"未抽出" }}</div>
             </td>
             <td>
               <div>属性 {{ row.canonicalAttributeCount }}</div>

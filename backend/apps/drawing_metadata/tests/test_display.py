@@ -780,6 +780,7 @@ def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_regi
     assert dashboard["summaryCards"][2]["value"] == 1
     assert dashboard["rows"][0]["has2d"] is True
     assert dashboard["rows"][0]["has3d"] is True
+    assert dashboard["rows"][0]["snapshotStateLabel"] == "2D/3D抽出済み"
     assert dashboard["rows"][0]["payloadTargets"][0]["targetLabel"] == "図面"
     assert response.status_code == 200
     content = response.content.decode("utf-8")
@@ -788,3 +789,26 @@ def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_regi
     assert "/api/v1/drawings/" in content
     assert "viewer bootstrap" in content
     assert "RAG payload" in content
+
+
+@pytest.mark.django_db
+def test_handoff_dashboard_marks_registration_without_snapshots_as_unextracted(client, sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="registered-only.icd",
+        source_path=r"J:\SAMPLE\registered-only.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+
+    dashboard = build_handoff_dashboard_payload([drawing])
+    response = client.get("/drawing-metadata/handoff/")
+
+    assert dashboard["summaryCards"][1]["value"] == 0
+    assert dashboard["rows"][0]["has2d"] is False
+    assert dashboard["rows"][0]["has3d"] is False
+    assert dashboard["rows"][0]["snapshotStateLabel"] == "未抽出"
+    assert dashboard["rows"][0]["defaultMode"] == ""
+    assert response.status_code == 200
+    content = response.content.decode("utf-8")
+    assert "registered-only.icd" in content
+    assert "未抽出" in content

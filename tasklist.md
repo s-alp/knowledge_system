@@ -10,6 +10,8 @@
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_shared_sample_extraction_findings_2026-07-14.md`
 - 創屋向け連携項目表:
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\souya_icad_tag_attribute_handoff_2026-07-14.md`
+- タグ選定・2D/3Dビューワー連携仕様:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_selection_and_viewer_ui_spec_2026-07-15.md`
 - 位置づけ:
   - 既存 PoC の延長ではなく、ICAD 2D/3D から何を取得し、何にタグ・属性を付与するかを再定義した設計メモ。
   - 取得可能性調査では、SXNET根拠、現行PoC実装状況、実サンプル確認状況、未確認事項を分けている。
@@ -39,6 +41,7 @@
   - `summarize_2d_extraction_coverage.py` で共有済み2D抽出JSONを集計。代表manifestでは2D対象19ファイル中、ビュー情報なし17、印刷枠情報なし17、レイヤー情報なし17、印刷枠判定不明1,388要素を確認。全量側は途中抽出JSONを含むため再抽出対象の洗い出しに使う。
   - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
+  - 2026-07-15 に `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `tmp\reference\2D_3D_CAD_VIEWR` へコピーし、提出済み2D/3Dビューワーの実装を基準に再確認した。完成版UIはDjango検証画面ではなく、2D/3Dビューワーの `drawingId -> bootstrap -> viewer2d/viewer3d open` の流れにタグ・属性補助パネルを足す方針へ戻す。
   - 提出済み2D/3Dビューワーの `GET /api/v1/drawings/{drawingId}/bootstrap` 契約を確認し、detail API 内の `viewerBootstrap` と同一形状を返す読み取り専用互換APIを追加。末尾スラッシュありも許容する。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
@@ -186,6 +189,8 @@
 - [x] タグレビュー画面に本番受け渡しpayload候補、対象別属性候補、対象別タグ候補を追加。図面/製品・装置・ユニット/部品/プロジェクトへ何を渡すかを1画面で確認できるようにし、`output\knowledge_ui_screenshots_2026-07-15\89-local-tag-review-payload-targets.jpg` でChrome確認
 - [x] 既存2D/3Dビューワーの bootstrap API 契約を確認し、`/api/v1/drawings/{drawingId}/bootstrap` 互換の読み取り専用APIを追加
 - [x] ブラウザで見せるローカル検証用成果物の入口として `/drawing-metadata/handoff/` を追加。本番組み込みUIではなく、抽出・正規化・タグ生成・対象別payload・APIリンクの横断確認画面として扱う
+- [x] `/drawing-metadata/handoff/` の `2D=false / 3D=false` 表示はICAD実体なしではなく、抽出snapshotなしを意味するため、検証画面上は `未抽出` / `2Dのみ抽出済み` / `3Dのみ抽出済み` / `2D/3D抽出済み` として表示するよう修正
+- [x] タグ選定仕様を作成し、タグ化する項目、属性に留める項目、自動タグ化しない項目、図面/プロジェクト/製品・装置・ユニット/部品別の適用先を整理
 
 ## 次に着手する
 

@@ -786,8 +786,8 @@ def build_integration_handoff_display_payload(
         "viewerRows": [
             _make_row("title", "viewerタイトル", viewer_bootstrap.get("title")),
             _make_row("defaultMode", "初期表示モード", viewer_bootstrap.get("defaultMode")),
-            _make_row("has2d", "2Dあり", availability.get("has2d")),
-            _make_row("has3d", "3Dあり", availability.get("has3d")),
+            _make_row("has2d", "2D viewer source/snapshot", availability.get("has2d")),
+            _make_row("has3d", "3D viewer source/snapshot", availability.get("has3d")),
             _make_row("drawingNumber", "図番", metadata.get("drawingNumber")),
             _make_row("drawingName", "図面名", metadata.get("drawingName")),
             _make_row("paperSize", "図面サイズ", metadata.get("paperSize")),

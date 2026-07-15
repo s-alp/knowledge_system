@@ -28,6 +28,16 @@ def _target_summary(targets: list[dict]) -> list[dict]:
     return rows
 
 
+def _snapshot_state_label(has_2d: bool, has_3d: bool) -> str:
+    if has_2d and has_3d:
+        return "2D/3D抽出済み"
+    if has_2d:
+        return "2Dのみ抽出済み"
+    if has_3d:
+        return "3Dのみ抽出済み"
+    return "未抽出"
+
+
 def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
     rows: list[dict] = []
     target_totals: dict[str, dict] = {}
@@ -85,6 +95,9 @@ def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
                 "sourcePath": drawing.source_path,
                 "has2d": has_2d,
                 "has3d": has_3d,
+                "has2dLabel": "あり" if has_2d else "なし",
+                "has3dLabel": "あり" if has_3d else "なし",
+                "snapshotStateLabel": _snapshot_state_label(has_2d, has_3d),
                 "defaultMode": "2d" if has_2d else "3d" if has_3d else "",
                 "canonicalAttributeCount": len(canonical_attributes),
                 "tagCount": _tag_count(derived_tags),
@@ -102,7 +115,7 @@ def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
         "summaryCards": [
             {"label": "登録図面", "value": len(drawings)},
             {"label": "抽出済み図面", "value": extracted_count},
-            {"label": "2D/3D両方あり", "value": both_2d_3d_count},
+            {"label": "2D/3D両snapshotあり", "value": both_2d_3d_count},
             {"label": "payload候補あり", "value": payload_ready_count},
             {"label": "レビュー競合", "value": review_conflict_count},
             {"label": "診断差分", "value": diagnostic_conflict_count},
