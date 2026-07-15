@@ -3,7 +3,7 @@ import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { DrawingSupplementPanels } from "./shared/components/DrawingSupplementPanels";
 import { DrawingEntryPanel } from "./shared/components/DrawingEntryPanel";
 import { LicensePanel } from "./shared/components/LicensePanel";
-import { resolveDrawingIdFromLocation } from "./shared/drawingRoute";
+import { resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./shared/drawingRoute";
 import { isViewerDebugInputsEnabled } from "./shared/env";
 import { useDrawingBootstrap } from "./shared/hooks/useDrawingBootstrap";
 import { buildDrawingKnowledgeMock } from "./shared/mock/drawingKnowledge";
@@ -45,7 +45,13 @@ const navigationGroups: NavigationGroup[] = [
   },
 ];
 
-function resolveInitialMode(bootstrap: DrawingBootstrapResponse): ViewMode {
+function resolveInitialMode(bootstrap: DrawingBootstrapResponse, requestedMode: ViewMode | null): ViewMode {
+  if (requestedMode === "2d" && bootstrap.availability.has2d) {
+    return "2d";
+  }
+  if (requestedMode === "3d" && bootstrap.availability.has3d) {
+    return "3d";
+  }
   if (bootstrap.defaultMode === "3d" && bootstrap.availability.has3d) {
     return "3d";
   }
@@ -60,6 +66,7 @@ export default function App() {
     () => resolveDrawingIdFromLocation(window.location.pathname, window.location.search),
     [],
   );
+  const requestedMode = useMemo(() => resolveViewerModeFromSearch(window.location.search), []);
   const debugInputsEnabled = useMemo(() => isViewerDebugInputsEnabled(), []);
   const { bootstrap, loading, error } = useDrawingBootstrap(drawingId);
   const [localLaunch, setLocalLaunch] = useState<LocalLaunchState | null>(null);
@@ -98,8 +105,8 @@ export default function App() {
     if (!activeBootstrap) {
       return;
     }
-    setMode(resolveInitialMode(activeBootstrap));
-  }, [activeBootstrap]);
+    setMode(resolveInitialMode(activeBootstrap, requestedMode));
+  }, [activeBootstrap, requestedMode]);
 
   const pageContent = (() => {
     if (!drawingId && localLaunch && localBootstrap && localDetailMock) {

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,6 +18,7 @@ from apps.drawing_metadata.api.serializers import (
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+from apps.drawing_metadata.services.viewer_preview import build_2d_preview_svg, build_3d_preview_stl
 
 
 class RegistrationListApiView(APIView):
@@ -88,17 +90,39 @@ class DrawingViewerOpenApiView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        if self.extraction_mode == "2d":
+            return Response(
+                {
+                    "sessionId": f"snapshot-2d-{drawing.id}",
+                    "filename": f"{drawing.filename}.preview.svg",
+                    "extension": "svg",
+                    "mimeType": "image/svg+xml",
+                    "sourceUrl": f"/api/v1/drawings/{drawing.id}/viewer2d/preview.svg",
+                    "pageCount": 1,
+                    "pageImageUrls": [],
+                    "diagnostics": {
+                        "source": "drawing_metadata_snapshot",
+                        "previewKind": "metadata_svg",
+                        "note": "抽出JSONを既存2Dビューワーの画像adapterで確認するための軽量プレビューです。",
+                    },
+                }
+            )
+
         return Response(
             {
-                "error": {
-                    "code": f"viewer_{self.extraction_mode}_source_not_connected",
-                    "message": (
-                        f"{self.display_mode}の抽出JSONは取得済みですが、プレビュー変換・配信APIは未接続です。"
-                        "創屋連携時は既存2D/3Dビューワーの変換APIへ接続してください。"
-                    ),
-                }
-            },
-            status=status.HTTP_501_NOT_IMPLEMENTED,
+                "jobId": f"snapshot-3d-{drawing.id}",
+                "filename": f"{drawing.filename}.preview.stl",
+                "sourceExtension": "stl",
+                "modelFormat": "stl",
+                "status": "ready",
+                "modelUrl": f"/api/v1/drawings/{drawing.id}/viewer3d/preview.stl",
+                "error": "",
+                "diagnostics": {
+                    "source": "drawing_metadata_snapshot",
+                    "previewKind": "metadata_stl",
+                    "note": "抽出JSONから作るメタデータ立体プレビューです。CAD形状そのものの変換API接続は別工程です。",
+                },
+            }
         )
 
 
@@ -110,6 +134,28 @@ class DrawingViewer2DOpenApiView(DrawingViewerOpenApiView):
 class DrawingViewer3DOpenApiView(DrawingViewerOpenApiView):
     extraction_mode = "3d"
     display_mode = "3D"
+
+
+class DrawingViewer2DPreviewApiView(APIView):
+    def get(self, request, drawing_id):
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related("snapshots"),
+            pk=drawing_id,
+        )
+        snapshot = _get_snapshot_or_404(drawing=drawing, extraction_mode="2d")
+        svg = build_2d_preview_svg(drawing=drawing, snapshot=snapshot)
+        return HttpResponse(svg, content_type="image/svg+xml; charset=utf-8")
+
+
+class DrawingViewer3DPreviewApiView(APIView):
+    def get(self, request, drawing_id):
+        drawing = get_object_or_404(
+            RegisteredDrawing.objects.prefetch_related("snapshots"),
+            pk=drawing_id,
+        )
+        snapshot = _get_snapshot_or_404(drawing=drawing, extraction_mode="3d")
+        stl = build_3d_preview_stl(drawing=drawing, snapshot=snapshot)
+        return HttpResponse(stl, content_type="model/stl; charset=utf-8")
 
 
 class RegistrationExtractApiView(APIView):
@@ -167,3 +213,15 @@ class JobDetailApiView(APIView):
     def get(self, request, job_id):
         job = get_object_or_404(DrawingMetadataExtractionJob.objects.select_related("drawing"), pk=job_id)
         return Response(DrawingMetadataExtractionJobSerializer(job).data)
+
+
+def _get_snapshot_or_404(*, drawing: RegisteredDrawing, extraction_mode: str) -> DrawingMetadataSnapshot:
+    snapshot = next(
+        (snapshot for snapshot in drawing.snapshots.all() if snapshot.extraction_mode == extraction_mode),
+        None,
+    )
+    if snapshot is None:
+        from django.http import Http404
+
+        raise Http404(f"{extraction_mode} snapshot is missing")
+    return snapshot

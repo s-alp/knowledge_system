@@ -56,7 +56,11 @@
   - 2D訂正内容候補を `revision_note_candidates` として追加。訂正/改訂/変更/修正/REV系の根拠文字、座標、印刷枠内外を保持し、詳細画面に表示。
   - 訂正内容候補がある場合は、本文ではなく存在だけを `改訂情報あり` タグとして生成。
   - 3D材質APIを追加。`6800DDU.icd` で `material_probe_status=available`、`SUS440C`、比重7.7、17要素を確認。
+  - 統合済み `integrations\2D_3D_CAD_VIEWR` の `viewer2d/open` / `viewer3d/open` を 501 応答から snapshot 由来プレビュー応答へ更新。2D は抽出JSONから生成した SVG、3D は抽出パーツ数に基づく STL メタデータプレビューを返し、既存ビューワーの raster/STL adapter で開けることを確認。
+  - `?mode=3d` を初期表示モードとして解釈するようにし、2D/3D 直リンクを分けて確認できるようにした。`acc7d751-2006-46a3-9e9a-469c0abaefa2` で 2D SVG プレビューと 3D STL プレビューが表示され、3D 側は Playwright コンソールエラー0件。
+  - 画面確認証跡は `C:\Users\s-iwata\Desktop\knowledge_system\output\knowledge_ui_screenshots_2026-07-15\viewer-2d-svg-preview-full-2026-07-15.png` と `viewer-3d-stl-preview-fixed-full-2026-07-15.png` に保存。証跡画像は git 管理外。
 - 次に着手する場合:
+  - 今回の SVG/STL は「抽出結果を既存ビューワー面で確認するためのメタデータプレビュー」であり、CAD形状そのものの変換ではない。次は ICAD または既存2D/3Dビューワー変換APIへ接続し、実図面画像/PDF相当と実3Dモデル相当を返す。
   - `cross_source_reconciliation` として 2D 候補、3D 候補、採用値、差異、要確認理由を保持する。
   - Gemini API は曖昧分類の補助に限定し、CAD に存在しない値の推測採用は禁止する。
 

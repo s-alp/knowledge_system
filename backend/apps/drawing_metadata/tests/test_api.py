@@ -247,27 +247,64 @@ def test_viewer_bootstrap_endpoint_matches_existing_viewer_contract(sample_regis
 
 
 @pytest.mark.django_db
-def test_viewer_open_endpoints_return_json_errors_until_preview_source_is_connected(sample_registration_payload):
+def test_viewer_open_endpoints_return_snapshot_preview_sources(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
         filename="viewer-open-sample.icd",
         source_path=sample_registration_payload["sourcePath"],
         source_format=sample_registration_payload["sourceFormat"],
     )
-    DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="2d")
-    DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="3d")
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={
+            "texts": [{"text_lines": ["材質 SUS304"], "x": 10, "y": 20, "inside_print_area": True}],
+            "dimensions": [{"value_1": "100", "x": 30, "y": 40, "inside_print_area": True}],
+            "print_frames": [{"size": "A3"}],
+        },
+        canonical_attributes_json={
+            "drawing_name": "ブラケット",
+            "drawing_number": "DWG-001",
+            "title_block_fields": {"material": "SUS304"},
+        },
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={"parts": [{"name": "TOP"}, {"name": "CHILD"}]},
+        canonical_attributes_json={"top_part_name": "TOP", "part_names": ["TOP", "CHILD"]},
+    )
 
     client = APIClient()
     response_2d = client.post(f"/api/v1/drawings/{drawing.id}/viewer2d/open", {}, format="json")
     response_3d = client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/", {}, format="json")
 
-    assert response_2d.status_code == 501
+    assert response_2d.status_code == 200
     assert response_2d["Content-Type"] == "application/json"
-    assert response_2d.json()["error"]["code"] == "viewer_2d_source_not_connected"
-    assert "プレビュー変換・配信APIは未接続" in response_2d.json()["error"]["message"]
-    assert response_3d.status_code == 501
+    payload_2d = response_2d.json()
+    assert payload_2d["extension"] == "svg"
+    assert payload_2d["mimeType"] == "image/svg+xml"
+    assert payload_2d["sourceUrl"] == f"/api/v1/drawings/{drawing.id}/viewer2d/preview.svg"
+    assert payload_2d["diagnostics"]["previewKind"] == "metadata_svg"
+
+    preview_2d = client.get(payload_2d["sourceUrl"])
+    assert preview_2d.status_code == 200
+    assert preview_2d["Content-Type"].startswith("image/svg+xml")
+    assert "ブラケット" in preview_2d.content.decode("utf-8")
+    assert "材質 SUS304" in preview_2d.content.decode("utf-8")
+
+    assert response_3d.status_code == 200
     assert response_3d["Content-Type"] == "application/json"
-    assert response_3d.json()["error"]["code"] == "viewer_3d_source_not_connected"
+    payload_3d = response_3d.json()
+    assert payload_3d["status"] == "ready"
+    assert payload_3d["modelFormat"] == "stl"
+    assert payload_3d["modelUrl"] == f"/api/v1/drawings/{drawing.id}/viewer3d/preview.stl"
+    assert payload_3d["diagnostics"]["previewKind"] == "metadata_stl"
+
+    preview_3d = client.get(payload_3d["modelUrl"])
+    assert preview_3d.status_code == 200
+    assert preview_3d["Content-Type"].startswith("model/stl")
+    assert preview_3d.content.decode("utf-8").startswith("solid icad_metadata_preview")
 
 
 @pytest.mark.django_db
@@ -375,5 +412,6 @@ def test_api_accepts_trailing_slashes(sample_registration_payload):
     assert client.get("/api/v1/drawing-metadata/registrations/").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/").status_code == 200
     assert client.get(f"/api/v1/drawings/{drawing.id}/bootstrap/").status_code == 200
-    assert client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/").status_code == 501
+    assert client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/").status_code == 200
+    assert client.get(f"/api/v1/drawings/{drawing.id}/viewer3d/preview.stl").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/").status_code == 200

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { resolveDrawingIdFromCandidate, resolveDrawingIdFromLocation } from "./drawingRoute";
+import { resolveDrawingIdFromCandidate, resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./drawingRoute";
 
 describe("resolveDrawingIdFromLocation", () => {
   it("extracts drawingId from pathname", () => {
@@ -32,5 +32,17 @@ describe("resolveDrawingIdFromLocation", () => {
     expect(resolveDrawingIdFromCandidate("35463219-5fe5-49a0-ae7f-ed25c5661be9")).toBe(
       "35463219-5fe5-49a0-ae7f-ed25c5661be9",
     );
+  });
+});
+
+describe("resolveViewerModeFromSearch", () => {
+  it("extracts 2D or 3D mode from query parameters", () => {
+    expect(resolveViewerModeFromSearch("?mode=2d")).toBe("2d");
+    expect(resolveViewerModeFromSearch("?mode=3D")).toBe("3d");
+  });
+
+  it("returns null when the mode is absent or unsupported", () => {
+    expect(resolveViewerModeFromSearch("")).toBeNull();
+    expect(resolveViewerModeFromSearch("?mode=pdf")).toBeNull();
   });
 });

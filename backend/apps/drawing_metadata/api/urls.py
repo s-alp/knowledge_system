@@ -37,6 +37,11 @@ urlpatterns = [
         name="drawing-viewer2d-open-slash",
     ),
     path(
+        "drawings/<uuid:drawing_id>/viewer2d/preview.svg",
+        views.DrawingViewer2DPreviewApiView.as_view(),
+        name="drawing-viewer2d-preview-svg",
+    ),
+    path(
         "drawings/<uuid:drawing_id>/viewer3d/open",
         views.DrawingViewer3DOpenApiView.as_view(),
         name="drawing-viewer3d-open",
@@ -45,6 +50,11 @@ urlpatterns = [
         "drawings/<uuid:drawing_id>/viewer3d/open/",
         views.DrawingViewer3DOpenApiView.as_view(),
         name="drawing-viewer3d-open-slash",
+    ),
+    path(
+        "drawings/<uuid:drawing_id>/viewer3d/preview.stl",
+        views.DrawingViewer3DPreviewApiView.as_view(),
+        name="drawing-viewer3d-preview-stl",
     ),
     path(
         "drawing-metadata/registrations/<uuid:drawing_id>/extract",

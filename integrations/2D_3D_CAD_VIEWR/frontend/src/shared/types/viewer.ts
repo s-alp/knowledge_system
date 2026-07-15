@@ -5,11 +5,16 @@ export interface Open2DResponse {
   // sourceUrl は元ファイル取得用、pageImageUrls は TIFF の各ページ画像取得用。
   sessionId: string;
   filename: string;
-  extension: "pdf" | "jpeg" | "tiff";
+  extension: "pdf" | "jpeg" | "tiff" | "svg";
   mimeType: string;
   sourceUrl: string;
   pageCount: number;
   pageImageUrls: string[];
+  diagnostics?: {
+    source?: string | null;
+    previewKind?: string | null;
+    note?: string | null;
+  };
 }
 
 export interface DrawingBootstrapResponse {
@@ -80,6 +85,11 @@ export interface Open3DResponse {
   status: Viewer3DStatus;
   modelUrl: string;
   error: string;
+  diagnostics?: {
+    source?: string | null;
+    previewKind?: string | null;
+    note?: string | null;
+  };
 }
 
 export interface ApiErrorPayload {

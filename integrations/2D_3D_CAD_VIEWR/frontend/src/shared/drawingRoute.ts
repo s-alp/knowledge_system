@@ -1,6 +1,8 @@
 const DRAWING_ID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+export type ViewerRouteMode = "2d" | "3d";
+
 export function normalizeDrawingId(candidate: string | null): string | null {
   if (!candidate) {
     return null;
@@ -43,4 +45,9 @@ export function resolveDrawingIdFromLocation(pathname: string, search: string): 
 
   const searchParams = new URLSearchParams(search);
   return normalizeDrawingId(searchParams.get("drawingId"));
+}
+
+export function resolveViewerModeFromSearch(search: string): ViewerRouteMode | null {
+  const mode = new URLSearchParams(search).get("mode")?.toLowerCase();
+  return mode === "2d" || mode === "3d" ? mode : null;
 }
