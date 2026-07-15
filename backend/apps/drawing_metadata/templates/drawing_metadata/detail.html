@@ -120,6 +120,38 @@
     </aside>
   </section>
 
+  <section class="panel">
+    <p class="section-eyebrow">Related Information</p>
+    <h2>紐づき確認</h2>
+    <p class="muted">本番ナレッジシステムの図面詳細にある「関連情報」に合わせ、図面から各対象レコードへ結びつける候補を確認します。</p>
+    <div class="tag-chip-wrap">
+      <span class="tag-chip">プロジェクト</span>
+      <span class="tag-chip">製品・装置・ユニット</span>
+      <span class="tag-chip">部品</span>
+      <span class="tag-chip subdued">会話ログ</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>対象</th>
+          <th>紐づき候補</th>
+          <th>確認状態</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in handoff_display.knowledgePayloadTargetRows %}
+          {% if row.label != "プロジェクト" %}
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.attributeCount }} 属性 / {{ row.tagCount }} タグ候補</td>
+              <td>{{ row.reviewRequired }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
   <div class="panel">
     <h2>{{ handoff_display.title }}</h2>
     <p class="muted">{{ handoff_display.description }}</p>
@@ -343,15 +375,6 @@
   </div>
 
   <div class="actions">
-    <a href="/drawing-metadata/{{ drawing.id }}/tags/">
-      <button type="button">タグ候補レビュー</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">
-      <button type="button">製品・装置・ユニット</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/parts/">
-      <button type="button">部品</button>
-    </a>
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="action" value="extract" />

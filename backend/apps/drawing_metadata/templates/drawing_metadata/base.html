@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <title>Drawing Metadata</title>
     <style>
-      body { font-family: Arial, sans-serif; margin: 24px; color: #222; }
+      body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f7f8fa; }
+      h1 { margin: 0; padding: 18px 24px; background: #fff; border-bottom: 1px solid #ddd; font-size: 22px; }
       table { border-collapse: collapse; width: 100%; margin-bottom: 24px; }
       th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
       th { background: #f5f5f5; }
@@ -15,6 +16,13 @@
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 24px; }
       .panel { border: 1px solid #ddd; padding: 16px; border-radius: 6px; background: #fff; }
       .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+      .app-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: calc(100vh - 62px); }
+      .side-nav { background: #fff; border-right: 1px solid #ddd; padding: 16px; display: grid; align-content: start; gap: 18px; }
+      .side-nav-section { display: grid; gap: 6px; }
+      .side-nav-title { color: #666; font-size: 12px; font-weight: 700; }
+      .side-nav a { display: block; padding: 8px 10px; border-radius: 4px; color: #222; }
+      .side-nav a:hover { background: #eef3fb; color: #0a58ca; }
+      .main-content { padding: 24px; min-width: 0; }
       textarea { width: 100%; min-height: 220px; font-family: Consolas, monospace; }
       pre { white-space: pre-wrap; word-break: break-word; background: #f8f8f8; border: 1px solid #ddd; padding: 12px; border-radius: 6px; }
       .status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #ececec; }
@@ -54,23 +62,47 @@
       .target-row-header { display: flex; justify-content: space-between; gap: 8px; }
       .target-row-header span { color: #666; font-size: 12px; }
       @media (max-width: 980px) {
+        .app-shell { grid-template-columns: 1fr; }
+        .side-nav { border-right: 0; border-bottom: 1px solid #ddd; }
         .viewer-embed-shell { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
     <h1><a href="/drawing-metadata/">Drawing Metadata</a></h1>
-    <div class="actions">
-      <a href="/drawing-metadata/">図面一覧</a>
-      <a href="/drawing-metadata/handoff/">創屋連携確認</a>
+    <div class="app-shell">
+      <aside class="side-nav">
+        <div class="side-nav-section">
+          <div class="side-nav-title">メイン</div>
+          {% if drawing %}
+            <a href="/drawing-metadata/{{ drawing.id }}/">図面管理</a>
+            <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">製品・装置・ユニット</a>
+            <a href="/drawing-metadata/{{ drawing.id }}/parts/">部品</a>
+          {% else %}
+            <a href="/drawing-metadata/">図面管理</a>
+          {% endif %}
+        </div>
+        {% if drawing %}
+          <div class="side-nav-section">
+            <div class="side-nav-title">確認</div>
+            <a href="/drawing-metadata/{{ drawing.id }}/tags/">タグ候補レビュー</a>
+          </div>
+        {% endif %}
+        <div class="side-nav-section">
+          <div class="side-nav-title">検証</div>
+          <a href="/drawing-metadata/handoff/">創屋連携確認</a>
+        </div>
+      </aside>
+      <main class="main-content">
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
     </div>
-    {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    {% block content %}{% endblock %}
   </body>
 </html>

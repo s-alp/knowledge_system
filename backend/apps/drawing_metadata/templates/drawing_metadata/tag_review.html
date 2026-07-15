@@ -1,18 +1,6 @@
 {% extends "drawing_metadata/base.html" %}
 
 {% block content %}
-  <div class="actions">
-    <a href="/drawing-metadata/{{ drawing.id }}/">
-      <button type="button">図面詳細へ戻る</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">
-      <button type="button">製品・装置・ユニット</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/parts/">
-      <button type="button">部品</button>
-    </a>
-  </div>
-
   <div class="panel">
     <h2>{{ tag_review_display.title }}</h2>
     <p class="muted">抽出 JSON から作ったタグ候補を、どの画面・データに渡すか確認するための画面です。本番ナレッジシステムへ直接保存する画面ではありません。</p>

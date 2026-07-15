@@ -271,7 +271,7 @@ def build_knowledge_system_payload_preview(*, drawing: RegisteredDrawing, compos
                 target_key="product",
                 label="製品・装置・ユニット",
                 existing_reception="詳細画面に属性情報が表示され、product_attributes マスタAPI候補を確認済み。タグ欄は未確認。",
-                candidate_endpoint="/products/{productInternalId}/ または同等の製品更新API（創屋確認前）",
+                candidate_endpoint="/products/{productInternalId}/ または同等の製品・装置・ユニット更新API（創屋確認前）",
                 attributes=product_attributes + _tag_fallback_attributes(product_tags),
                 tags=product_tags,
                 tag_api_status="not_found_use_attribute_fallback",

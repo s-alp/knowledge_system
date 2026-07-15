@@ -217,6 +217,7 @@
 - [x] 実ICAD `6800DDU.icd` で `--preview-output-dir` 付き3D抽出を実行し、SXNET export から `preview_probe_6800ddu_fixed.stl` 980,724 bytes を生成できることを確認。抽出JSONには `viewer_assets.3d[0].status=ready`、`model_format=stl`、`file_path`、`url`、`size_bytes` が入る
 - [x] `probe_3d_preview_assets.py` を追加し、manifest上位8件で3D STL preview生成を横断実行。ライズ、シブヤパッケージングシステム、ラップマスターウォルターズジャパン、SBY、NKS、ZCSET、宮本工業所、アースエンジニアリングの8件すべて `viewer_assets.3d.status=ready`、warning 0件。STLサイズは96,271 bytes から 74,086,436 bytes まで確認
 - [x] 本番ナレッジシステム確認ではプロジェクト詳細にタグ/属性表示口が見えないため、プロジェクト側は一旦保留。既存受け口候補がある「製品・装置・ユニット」と「部品」向けに、タグチップ、属性情報、創屋連携payload候補を表示するページを追加。`/drawing-metadata/{id}/product-unit/` と `/drawing-metadata/{id}/parts/` をローカル起動中backendでHTTP確認し、どちらも200応答とタグ・属性UI表示を確認
+- [x] 本番ナレッジシステム実画面を再確認し、左側メニューに「図面管理」「製品・装置・ユニット」「部品」が並ぶこと、各詳細の「関連情報」で紐づき確認を行うことを反映。ローカル画面の上部独自ボタンを撤去し、左側メニューと紐づき確認欄へ統一
 
 ## 次に着手する
 

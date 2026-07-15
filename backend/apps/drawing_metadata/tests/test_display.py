@@ -698,6 +698,16 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert response.context["handoff_display"]["knowledgePayloadTargetRows"][0]["label"] == "図面"
     assert response.context["handoff_display"]["knowledgePayloadTargetRows"][0]["reviewRequired"] == "あり"
     assert "2D/3D 照合結果" in response.content.decode("utf-8")
+    detail_content = response.content.decode("utf-8")
+    assert f"/drawing-metadata/{drawing.id}/" in detail_content
+    assert f"/drawing-metadata/{drawing.id}/product-unit/" in detail_content
+    assert f"/drawing-metadata/{drawing.id}/parts/" in detail_content
+    assert "図面管理" in detail_content
+    assert "製品・装置・ユニット" in detail_content
+    assert "部品" in detail_content
+    assert "紐づき確認" in detail_content
+    assert "関連情報" in detail_content
+    assert '<button type="button">製品・装置・ユニット</button>' not in detail_content
 
 
 @pytest.mark.django_db
@@ -792,6 +802,17 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
     assert "装置:供給台" in product_content
     assert "PRFX" in product_content
     assert "タグAPI状態" in product_content
+    assert f"/drawing-metadata/{drawing.id}/" in product_content
+    assert f"/drawing-metadata/{drawing.id}/product-unit/" in product_content
+    assert f"/drawing-metadata/{drawing.id}/parts/" in product_content
+    assert "図面管理" in product_content
+    assert "製品・装置・ユニット" in product_content
+    assert "部品" in product_content
+    assert "図面詳細へ戻る" not in product_content
+    assert "紐づき確認" in product_content
+    assert "親製品・装置・ユニット" in product_content
+    assert "子製品・装置・ユニット" in product_content
+    assert '<button type="button">製品・装置・ユニット</button>' not in product_content
 
     assert part_response.status_code == 200
     part_content = part_response.content.decode("utf-8")
@@ -799,6 +820,16 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
     assert "材質:SUS304" in part_content
     assert "TOP.BRACKET" in part_content
     assert "needs_part_record_and_attribute_master_binding" in part_content
+    assert f"/drawing-metadata/{drawing.id}/" in part_content
+    assert f"/drawing-metadata/{drawing.id}/product-unit/" in part_content
+    assert f"/drawing-metadata/{drawing.id}/parts/" in part_content
+    assert "図面管理" in part_content
+    assert "製品・装置・ユニット" in part_content
+    assert "部品" in part_content
+    assert "図面詳細へ戻る" not in part_content
+    assert "紐づき確認" in part_content
+    assert "本番の部品詳細" in part_content
+    assert '<button type="button">部品</button>' not in part_content
 
 
 @pytest.mark.django_db

@@ -1,21 +1,6 @@
 {% extends "drawing_metadata/base.html" %}
 
 {% block content %}
-  <div class="actions">
-    <a href="/drawing-metadata/{{ drawing.id }}/">
-      <button type="button">図面詳細へ戻る</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/tags/">
-      <button type="button">タグ候補レビュー</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">
-      <button type="button">製品・装置・ユニット</button>
-    </a>
-    <a href="/drawing-metadata/{{ drawing.id }}/parts/">
-      <button type="button">部品</button>
-    </a>
-  </div>
-
   <section class="panel">
     <p class="section-eyebrow">Knowledge System Target</p>
     <h2>{{ target.label }} タグ・属性ページ案</h2>
@@ -42,6 +27,49 @@
         <li>{{ note }}</li>
       {% endfor %}
     </ul>
+  </section>
+
+  <section class="panel">
+    <p class="section-eyebrow">Related Information</p>
+    <h2>紐づき確認</h2>
+    {% if target.targetKey == "product" %}
+      <p class="muted">本番の製品・装置・ユニット詳細にある「関連情報」に合わせ、プロジェクト、親子ユニット、部品、図面への紐づき候補を確認します。</p>
+      <div class="tag-chip-wrap">
+        <span class="tag-chip">プロジェクト</span>
+        <span class="tag-chip">親製品・装置・ユニット</span>
+        <span class="tag-chip">子製品・装置・ユニット</span>
+        <span class="tag-chip">部品</span>
+        <span class="tag-chip">図面</span>
+      </div>
+    {% elif target.targetKey == "part" %}
+      <p class="muted">本番の部品詳細にある「関連情報」に合わせ、製品・装置・ユニット、図面、文書への紐づき候補を確認します。</p>
+      <div class="tag-chip-wrap">
+        <span class="tag-chip">製品・装置・ユニット</span>
+        <span class="tag-chip">図面</span>
+        <span class="tag-chip subdued">文書</span>
+      </div>
+    {% endif %}
+    <table>
+      <thead>
+        <tr>
+          <th>紐づけ先</th>
+          <th>この画面で確認する候補</th>
+          <th>創屋連携時の扱い</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ target.label }}</td>
+          <td>{{ target.attributes|length }} 属性 / {{ target.tags|length }} タグ候補</td>
+          <td>{{ target.reviewRequired }}</td>
+        </tr>
+        <tr>
+          <td>元図面</td>
+          <td>{{ source.filename }}</td>
+          <td>本番側の図面ID・対象IDへ解決が必要</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <section class="panel">
