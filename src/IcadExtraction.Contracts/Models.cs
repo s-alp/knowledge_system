@@ -135,6 +135,7 @@ namespace IcadExtraction.Contracts
         public double? PositionY { get; set; }
         public double? PositionZ { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string? JoinedText { get; set; }
     }
 
@@ -146,6 +147,7 @@ namespace IcadExtraction.Contracts
         public double? PositionY { get; set; }
         public double? PositionZ { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string? Value1 { get; set; }
         public string? Value2 { get; set; }
         public string? FrontWord { get; set; }
@@ -165,6 +167,7 @@ namespace IcadExtraction.Contracts
         public double? PositionY { get; set; }
         public double? PositionZ { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
@@ -176,6 +179,7 @@ namespace IcadExtraction.Contracts
         public double? PositionY { get; set; }
         public double? PositionZ { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string? Text { get; set; }
     }
 
@@ -187,6 +191,7 @@ namespace IcadExtraction.Contracts
         public double? PositionY { get; set; }
         public double? PositionZ { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 
@@ -211,6 +216,7 @@ namespace IcadExtraction.Contracts
         public double? EndAngle { get; set; }
         public int? PointCount { get; set; }
         public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
         public string Summary { get; set; } = string.Empty;
     }
 

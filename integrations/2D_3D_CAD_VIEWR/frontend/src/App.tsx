@@ -17,33 +17,343 @@ const Viewer3DPage = lazy(() =>
 );
 
 type ViewMode = "2d" | "3d";
+type KnowledgePageKey =
+  | "project"
+  | "product"
+  | "part"
+  | "drawing"
+  | "document"
+  | "search"
+  | "chat"
+  | "similar"
+  | "customer"
+  | "notice"
+  | "master"
+  | "system";
 type LocalLaunchState = {
   mode: ViewMode;
   file: File;
 };
+type NavigationItem = {
+  key: KnowledgePageKey;
+  label: string;
+};
 type NavigationGroup = {
   title: string;
-  items: string[];
+  items: NavigationItem[];
 };
 
 const navigationGroups: NavigationGroup[] = [
   {
     title: "メイン",
-    items: ["プロジェクト", "製品・装置・ユニット", "部品", "図面管理", "文書管理"],
+    items: [
+      { key: "project", label: "プロジェクト" },
+      { key: "product", label: "製品・装置・ユニット" },
+      { key: "part", label: "部品" },
+      { key: "drawing", label: "図面管理" },
+      { key: "document", label: "文書管理" },
+    ],
   },
   {
     title: "検索",
-    items: ["統合検索", "チャット", "類似検索"],
+    items: [
+      { key: "search", label: "統合検索" },
+      { key: "chat", label: "チャット" },
+      { key: "similar", label: "類似検索" },
+    ],
   },
   {
     title: "営業",
-    items: ["顧客管理"],
+    items: [{ key: "customer", label: "顧客管理" }],
   },
   {
     title: "管理",
-    items: ["お知らせ管理", "マスタ設定", "システム設定"],
+    items: [
+      { key: "notice", label: "お知らせ管理" },
+      { key: "master", label: "マスタ設定" },
+      { key: "system", label: "システム設定" },
+    ],
   },
 ];
+
+const pageTitles: Record<KnowledgePageKey, string> = {
+  project: "プロジェクト詳細",
+  product: "製品・装置・ユニット詳細",
+  part: "部品詳細",
+  drawing: "図面管理",
+  document: "文書管理",
+  search: "統合検索",
+  chat: "チャット",
+  similar: "類似検索",
+  customer: "顧客管理",
+  notice: "お知らせ管理",
+  master: "マスタ設定",
+  system: "システム設定",
+};
+
+type KnowledgeField = {
+  label: string;
+  value: string;
+};
+
+type KnowledgeRelatedSection = {
+  label: string;
+  items: {
+    title: string;
+    subtitle: string;
+    description: string;
+    chips: string[];
+  }[];
+};
+
+type KnowledgeEntityRecord = {
+  pageKey: "project" | "product" | "part";
+  title: string;
+  fields: KnowledgeField[];
+  tags: string[];
+  attributes: KnowledgeField[];
+  relatedSections: KnowledgeRelatedSection[];
+};
+
+const knowledgeEntityRecords: Record<"project" | "product" | "part", KnowledgeEntityRecord> = {
+  project: {
+    pageKey: "project",
+    title: "PRJ-OP30 ライン改善",
+    fields: [
+      { label: "プロジェクト番号", value: "PRJ-OP30-2026" },
+      { label: "ステータス", value: "進行中" },
+      { label: "担当者", value: "設計 二階堂" },
+      { label: "関連客先", value: "澁谷工業" },
+    ],
+    tags: [],
+    attributes: [
+      { label: "案件分類", value: "工程改善" },
+      { label: "登録元", value: "ナレッジシステム画面確認に基づくモック" },
+    ],
+    relatedSections: [
+      {
+        label: "製品・装置・ユニット",
+        items: [
+          {
+            title: "OP30 カセット",
+            subtitle: "製品・装置・ユニット",
+            description: "プロジェクトに紐づく装置・ユニットの詳細へ接続します。",
+            chips: ["製品・装置・ユニット", "進行中"],
+          },
+        ],
+      },
+      {
+        label: "図面",
+        items: [
+          {
+            title: "TR1D9K99027",
+            subtitle: "図面管理",
+            description: "2D画像図、3D中間ファイル、図面タグを扱う図面管理へ接続します。",
+            chips: ["図面", "2D/3D"],
+          },
+        ],
+      },
+    ],
+  },
+  product: {
+    pageKey: "product",
+    title: "OP30 カセット",
+    fields: [
+      { label: "名称", value: "OP30 カセット" },
+      { label: "管理番号", value: "UNIT-OP30-0001" },
+      { label: "区分", value: "製品・装置・ユニット" },
+      { label: "担当者", value: "設計 二階堂" },
+      { label: "ステータス", value: "現行" },
+      { label: "関連プロジェクト", value: "PRJ-OP30 ライン改善" },
+    ],
+    tags: ["OP30", "カセット", "ユニット", "標準", "工程改善"],
+    attributes: [
+      { label: "PRFX", value: "TR1D9" },
+      { label: "ユニット番号", value: "OP30" },
+      { label: "客先", value: "澁谷工業" },
+      { label: "抽出元候補", value: "3Dトップ任意情報 / 2D図枠 / 保存フォルダ" },
+    ],
+    relatedSections: [
+      {
+        label: "親製品・装置・ユニット",
+        items: [
+          {
+            title: "包装ライン本体",
+            subtitle: "上位ユニット",
+            description: "本家ナレッジシステムの親ユニットタブに相当する紐づきです。",
+            chips: ["親ユニット"],
+          },
+        ],
+      },
+      {
+        label: "部品",
+        items: [
+          {
+            title: "TR1D9K99027 ブラケット",
+            subtitle: "部品詳細",
+            description: "部品詳細ページへ接続し、材質・表面処理・重量・タグを確認します。",
+            chips: ["部品", "材質"],
+          },
+        ],
+      },
+      {
+        label: "図面",
+        items: [
+          {
+            title: "TR1D9K99027",
+            subtitle: "図面管理",
+            description: "2D画像図と3D中間ファイルのビューワー、図面タグ表示へ接続します。",
+            chips: ["図面", "2D/3D"],
+          },
+        ],
+      },
+    ],
+  },
+  part: {
+    pageKey: "part",
+    title: "TR1D9K99027 ブラケット",
+    fields: [
+      { label: "部品番号", value: "TR1D9K99027" },
+      { label: "部品名", value: "ブラケット" },
+      { label: "材質", value: "SS400" },
+      { label: "表面処理", value: "黒染め" },
+      { label: "重量", value: "0.42 kg" },
+      { label: "関連ユニット", value: "OP30 カセット" },
+    ],
+    tags: ["ブラケット", "SS400", "黒染め", "購入/製作判定要確認"],
+    attributes: [
+      { label: "PRFX", value: "TR1D9K" },
+      { label: "材質", value: "SS400" },
+      { label: "表面処理", value: "黒染め" },
+      { label: "重量", value: "2D図枠/3D重量情報の照合対象" },
+      { label: "抽出元候補", value: "2D図枠 / 2D注記 / 3D材質 / パーツ付加情報" },
+    ],
+    relatedSections: [
+      {
+        label: "製品・装置・ユニット",
+        items: [
+          {
+            title: "OP30 カセット",
+            subtitle: "製品・装置・ユニット詳細",
+            description: "部品が属する製品・装置・ユニットへ接続します。",
+            chips: ["ユニット", "親"],
+          },
+        ],
+      },
+      {
+        label: "図面",
+        items: [
+          {
+            title: "TR1D9K99027",
+            subtitle: "図面管理",
+            description: "図面管理で2D画像図、3D中間ファイル、図面タグを確認します。",
+            chips: ["図面", "照合"],
+          },
+        ],
+      },
+      {
+        label: "文書",
+        items: [
+          {
+            title: "加工・表面処理指示",
+            subtitle: "文書管理",
+            description: "部品属性と照合する文書情報の接続先です。",
+            chips: ["文書", "表面処理"],
+          },
+        ],
+      },
+    ],
+  },
+};
+
+function EntityDetailPage({ pageKey }: { pageKey: "project" | "product" | "part" }) {
+  const record = knowledgeEntityRecords[pageKey];
+
+  return (
+    <section className="panel viewer-page entity-page">
+      <div className="panel-section knowledge-info-card">
+        <h2>{record.title}</h2>
+        <div className="detail-field-grid">
+          {record.fields.map((field) => (
+            <div key={field.label} className="detail-field">
+              <span className="detail-field-label">{field.label}</span>
+              <span className="detail-field-value">{field.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="panel-section">
+        <h2>タグ・属性</h2>
+        <div className="tag-target-card">
+          <div className="tag-chip-row">
+            {record.tags.length > 0 ? (
+              record.tags.map((tag) => (
+                <span key={tag} className="tag-chip">
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <span className="tag-target-empty">タグなし</span>
+            )}
+          </div>
+          <dl className="tag-attribute-list">
+            {record.attributes.map((attribute) => (
+              <div key={attribute.label}>
+                <dt>{attribute.label}</dt>
+                <dd>
+                  <span className="attribute-value-preview">{attribute.value}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      <div className="panel-section">
+        <h2>紐づき</h2>
+        <div className="knowledge-stack">
+          {record.relatedSections.map((section) => (
+            <section key={section.label} className="entity-related-section">
+              <h3>{section.label}</h3>
+              <div className="related-card-grid">
+                {section.items.map((item) => (
+                  <article key={`${section.label}-${item.title}`} className="related-card">
+                    <div className="related-card-header">
+                      <div>
+                        <strong>{item.title}</strong>
+                        <p>{item.subtitle}</p>
+                      </div>
+                    </div>
+                    <p className="related-card-description">{item.description}</p>
+                    <div className="related-card-chips">
+                      {item.chips.map((chip) => (
+                        <span key={chip} className="related-chip">
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PlaceholderKnowledgePage({ title }: { title: string }) {
+  return (
+    <section className="panel viewer-page">
+      <div className="panel-section workspace-message">
+        <h2>{title}</h2>
+        <p>現在の確認対象は図面、製品・装置・ユニット、部品です。</p>
+      </div>
+    </section>
+  );
+}
 
 function resolveInitialMode(bootstrap: DrawingBootstrapResponse, requestedMode: ViewMode | null): ViewMode {
   if (requestedMode === "2d" && bootstrap.availability.has2d) {
@@ -70,6 +380,7 @@ export default function App() {
   const debugInputsEnabled = useMemo(() => isViewerDebugInputsEnabled(), []);
   const { bootstrap, loading, error } = useDrawingBootstrap(drawingId);
   const [localLaunch, setLocalLaunch] = useState<LocalLaunchState | null>(null);
+  const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
   const detailMock = useMemo(
     () => (bootstrap ? buildDrawingKnowledgeMock(bootstrap) : null),
     [bootstrap],
@@ -109,6 +420,14 @@ export default function App() {
   }, [activeBootstrap, requestedMode]);
 
   const pageContent = (() => {
+    if (activePage !== "drawing") {
+      if (activePage === "project" || activePage === "product" || activePage === "part") {
+        return <EntityDetailPage pageKey={activePage} />;
+      }
+
+      return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;
+    }
+
     if (!drawingId && localLaunch && localBootstrap && localDetailMock) {
       return (
         <Suspense
@@ -223,12 +542,13 @@ export default function App() {
                 <div className="sidebar-links">
                   {group.items.map((item) => (
                     <button
-                      key={item}
-                      className={item === "図面管理" ? "sidebar-link active" : "sidebar-link"}
+                      key={item.key}
+                      className={item.key === activePage ? "sidebar-link active" : "sidebar-link"}
                       type="button"
+                      onClick={() => setActivePage(item.key)}
                     >
                       <span className="sidebar-link-marker" aria-hidden="true" />
-                      <span>{item}</span>
+                      <span>{item.label}</span>
                     </button>
                   ))}
                 </div>
@@ -267,34 +587,36 @@ export default function App() {
               >
                 ← 戻る
               </button>
-              <div className="mode-switch" role="radiogroup" aria-label="viewer mode">
-                {(["2d", "3d"] as ViewMode[]).map((tabMode) => (
-                  <label
-                    key={tabMode}
-                    className={tabMode === mode ? "mode-option active" : "mode-option"}
-                  >
-                    <input
-                      className="mode-option-input"
-                      type="radio"
-                      name="viewer-mode"
-                      checked={tabMode === mode}
-                      onChange={() => setMode(tabMode)}
-                      disabled={tabMode === "2d" ? !has2d : !has3d}
-                    />
-                    <span className="mode-option-indicator" aria-hidden="true" />
-                    <span>{tabMode === "2d" ? "2D" : "3D"}</span>
-                  </label>
-                ))}
-              </div>
+              {activePage === "drawing" ? (
+                <div className="mode-switch" role="radiogroup" aria-label="viewer mode">
+                  {(["2d", "3d"] as ViewMode[]).map((tabMode) => (
+                    <label
+                      key={tabMode}
+                      className={tabMode === mode ? "mode-option active" : "mode-option"}
+                    >
+                      <input
+                        className="mode-option-input"
+                        type="radio"
+                        name="viewer-mode"
+                        checked={tabMode === mode}
+                        onChange={() => setMode(tabMode)}
+                        disabled={tabMode === "2d" ? !has2d : !has3d}
+                      />
+                      <span className="mode-option-indicator" aria-hidden="true" />
+                      <span>{tabMode === "2d" ? "2D" : "3D"}</span>
+                    </label>
+                  ))}
+                </div>
+              ) : null}
             </div>
 
             <div className="page-heading">
-              <h1>図面詳細</h1>
+              <h1>{pageTitles[activePage]}</h1>
             </div>
 
             <div className="workspace">
               {pageContent}
-              {activeDetailMock ? <DrawingSupplementPanels detail={activeDetailMock} /> : null}
+              {activePage === "drawing" && activeDetailMock ? <DrawingSupplementPanels detail={activeDetailMock} /> : null}
             </div>
           </main>
         </div>

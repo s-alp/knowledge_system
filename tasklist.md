@@ -43,8 +43,10 @@
   - 図面詳細の3D表示切替では `/web/public/models/test_000445.gltf` 読み込みエラーを確認。抽出器とは別件だが、2D/3Dプレビュー fixture 作成時の創屋確認事項にする。
   - `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を確認し、タグ候補レビュー画面は既存ビューワー同様、薄い View と表示 service に分ける方針にした。
   - 2026-07-15 に `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `integrations\2D_3D_CAD_VIEWR` へコピーし、提出済み2D/3Dビューワーの実装を基準に再確認した。完成版UIはDjango検証画面ではなく、2D/3Dビューワーの `drawingId -> bootstrap -> viewer2d/viewer3d open` の流れにタグ・属性補助パネルを足す方針へ戻す。
+  - `integrations\2D_3D_CAD_VIEWR` は、図面管理を2D画像図/3D中間ファイルの読み込みと図面タグ表示に限定し、製品・装置・ユニット詳細と部品詳細は図面読み込み状態に依存しない独立ページとして表示する方針に修正。5173の実画面で `図面管理 -> 製品・装置・ユニット -> 部品 -> 図面管理` の切替と、製品/部品で `図面情報の読み込み後に表示します` が出ないことを確認。
   - 提出済み2D/3Dビューワーの `GET /api/v1/drawings/{drawingId}/bootstrap` 契約を確認し、detail API 内の `viewerBootstrap` と同一形状を返す読み取り専用互換APIを追加。末尾スラッシュありも許容する。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
+  - 2D文字・寸法・記号系に `print_frame_no` を追加。複数枚/複数印刷枠の図面で、要素がどの印刷枠に属するかを追跡する。`TR1D9K99027.icd` の再抽出では印刷枠1、文字190、寸法21、primitive862、文字の所属枠あり185件、印刷枠外文字5件を確認。
   - `probe-2d-print` を追加し、印刷実行なしで `SxModel.getInfPrintList()` と `SxInfPlot.getInfPlotList()` / `getInfDefPlot()` を確認。`TR1D9K99027.icd`、`DFR-CM1-AA0305300011.icd`、`217008-41J-3004.icd` は各1印刷枠、プロッタ3件、デフォルト `CubePDF` を取得できた。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
   - 3Dマスプロパティは `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` で実装済み。`6800DDU.icd` / `474300AC219.icd` / `TR1D9Q00027.icd` で `mass_probe_status=available` を確認。
@@ -128,6 +130,7 @@
 - [x] 代表manifestの2D対象19件を最新runnerで再抽出し、ビュー121、印刷枠22、レイヤー4845、寸法1492、図形primitive20477まで取得できることを確認
 - [x] 再抽出後の2Dカバレッジで `itemsWithoutView=0` を確認。`SxGeomLine2D` の `pnt1/pnt2` 座標取得を追加し、印刷枠判定不明は `unknownPrintArea=13569` から `488` まで減少。残りは主にハッチングと座標なし文字として記録
 - [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
+- [x] 2D文字・寸法・記号系へ所属印刷枠 `print_frame_no` を追加
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
 - [x] `probe-2d-print` で3サンプルの出図範囲枠とプロッタ定義を読み取り専用確認
 - [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み

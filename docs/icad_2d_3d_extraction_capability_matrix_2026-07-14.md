@@ -202,7 +202,7 @@
 | 2D/3D有無判定 | 実装済み | `detect` コマンドで `has_2d`, `has_2d_container`, `has_3d` を返す。2DはVSセグメント数とジオメトリ数を実体判定に使う |
 | 2D全VS確認 | 実装済み | `SxModel.getVSList()` 経由で全VSを走査する |
 | VS情報 | 実装済み | VS名、尺度、コメント、ジオメトリ数を raw extract に保持 |
-| 出図範囲枠 | 実装済み | `SxModel.getInfPrintList()` の結果を `print_frames` として保持 |
+| 出図範囲枠 | 実装済み | `SxModel.getInfPrintList()` の結果を `print_frames` として保持。2D文字・寸法・記号系には `inside_print_area` と所属枠 `print_frame_no` を保持 |
 | レイヤー情報 | 実装済み | レイヤー一覧と、取得可能な2D要素の `layer_no` を保持 |
 | 保存フォルダ/ファイル名 | 実装済み | runner の `source_file` と Django canonical attributes に保持 |
 | パーツ付加情報 | 実装済み | `ex_inf` を `ex_info_fields` として展開。澁谷工業系サンプルで取得確認済み |
