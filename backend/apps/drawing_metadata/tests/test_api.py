@@ -308,6 +308,58 @@ def test_viewer_open_endpoints_return_snapshot_preview_sources(sample_registrati
 
 
 @pytest.mark.django_db
+def test_viewer_open_prefers_actual_preview_assets_when_snapshot_provides_urls(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="viewer-actual-assets.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "viewer_assets": {
+                "2d": {
+                    "sourceUrl": "https://pdm.example.local/previews/viewer-actual-assets.pdf",
+                    "mimeType": "application/pdf",
+                    "pageCount": 2,
+                }
+            }
+        },
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "viewer_assets": {
+                "3d": {
+                    "modelUrl": "https://pdm.example.local/previews/viewer-actual-assets.stl",
+                    "modelFormat": "stl",
+                }
+            }
+        },
+    )
+
+    client = APIClient()
+    response_2d = client.post(f"/api/v1/drawings/{drawing.id}/viewer2d/open", {}, format="json")
+    response_3d = client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open", {}, format="json")
+
+    assert response_2d.status_code == 200
+    payload_2d = response_2d.json()
+    assert payload_2d["extension"] == "pdf"
+    assert payload_2d["sourceUrl"] == "https://pdm.example.local/previews/viewer-actual-assets.pdf"
+    assert payload_2d["pageCount"] == 2
+    assert payload_2d["diagnostics"]["previewKind"] == "actual_pdf"
+
+    assert response_3d.status_code == 200
+    payload_3d = response_3d.json()
+    assert payload_3d["modelFormat"] == "stl"
+    assert payload_3d["modelUrl"] == "https://pdm.example.local/previews/viewer-actual-assets.stl"
+    assert payload_3d["diagnostics"]["previewKind"] == "actual_stl"
+
+
+@pytest.mark.django_db
 def test_viewer_open_endpoint_reports_missing_snapshot_as_json(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],

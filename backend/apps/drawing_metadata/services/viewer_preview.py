@@ -1,9 +1,123 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from html import escape
 from math import isfinite
+from urllib.parse import urlparse
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
+
+
+@dataclass(slots=True)
+class Actual2DPreviewSource:
+    filename: str
+    extension: str
+    mime_type: str
+    source_url: str
+    page_count: int = 1
+    page_image_urls: list[str] | None = None
+    source_kind: str = "actual_2d_asset"
+
+
+@dataclass(slots=True)
+class Actual3DPreviewSource:
+    filename: str
+    source_extension: str
+    model_format: str
+    model_url: str
+    source_kind: str = "actual_3d_asset"
+
+
+TWO_D_EXTENSION_MIME = {
+    "pdf": ("pdf", "application/pdf"),
+    "jpg": ("jpeg", "image/jpeg"),
+    "jpeg": ("jpeg", "image/jpeg"),
+    "tif": ("tiff", "image/tiff"),
+    "tiff": ("tiff", "image/tiff"),
+}
+TWO_D_URL_KEYS = (
+    "source_2d_url",
+    "source2dUrl",
+    "viewer_2d_url",
+    "viewer2dUrl",
+    "preview_2d_url",
+    "preview2dUrl",
+    "pdf_url",
+    "pdfUrl",
+    "image_url",
+    "imageUrl",
+    "sourceUrl",
+    "url",
+    "file_path",
+    "filePath",
+)
+THREE_D_URL_KEYS = (
+    "source_3d_url",
+    "source3dUrl",
+    "viewer_3d_url",
+    "viewer3dUrl",
+    "preview_3d_url",
+    "preview3dUrl",
+    "model_url",
+    "modelUrl",
+    "stl_url",
+    "stlUrl",
+    "sourceUrl",
+    "url",
+    "file_path",
+    "filePath",
+)
+
+
+def resolve_actual_2d_preview_source(
+    *, drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot
+) -> Actual2DPreviewSource | None:
+    for asset in _iter_preview_assets(snapshot=snapshot, mode="2d"):
+        source_url = _first_text(*[asset.get(key) for key in TWO_D_URL_KEYS])
+        if not _is_fetchable_url(source_url):
+            continue
+        filename = _first_text(asset.get("filename"), asset.get("file_name"), asset.get("fileName"), source_url)
+        extension = _first_text(asset.get("extension"), asset.get("sourceExtension"), _extract_extension(filename))
+        normalized = TWO_D_EXTENSION_MIME.get(extension.lower())
+        if normalized is None:
+            continue
+        normalized_extension, default_mime = normalized
+        page_image_urls = _string_list(asset.get("pageImageUrls") or asset.get("page_image_urls"))
+        if normalized_extension == "tiff" and not page_image_urls:
+            # TIFF はブラウザ差を避けるため、既存ビューワー同様ページ画像URLが揃った時だけ直接利用する。
+            continue
+        return Actual2DPreviewSource(
+            filename=_filename_from_url_or_name(filename, fallback=f"{drawing.filename}.{normalized_extension}"),
+            extension=normalized_extension,
+            mime_type=_first_text(asset.get("mimeType"), asset.get("mime_type"), default_mime),
+            source_url=source_url,
+            page_count=_positive_int(asset.get("pageCount") or asset.get("page_count"), default=max(len(page_image_urls), 1)),
+            page_image_urls=page_image_urls,
+            source_kind=f"actual_{normalized_extension}",
+        )
+    return None
+
+
+def resolve_actual_3d_preview_source(
+    *, drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot
+) -> Actual3DPreviewSource | None:
+    for asset in _iter_preview_assets(snapshot=snapshot, mode="3d"):
+        source_url = _first_text(*[asset.get(key) for key in THREE_D_URL_KEYS])
+        if not _is_fetchable_url(source_url):
+            continue
+        filename = _first_text(asset.get("filename"), asset.get("file_name"), asset.get("fileName"), source_url)
+        extension = _first_text(asset.get("extension"), asset.get("sourceExtension"), _extract_extension(filename)).lower()
+        model_format = _first_text(asset.get("modelFormat"), asset.get("model_format"), extension).lower()
+        if extension in {"stl"} or model_format == "stl":
+            return Actual3DPreviewSource(
+                filename=_filename_from_url_or_name(filename, fallback=f"{drawing.filename}.stl"),
+                source_extension="stl",
+                model_format="stl",
+                model_url=source_url,
+                source_kind="actual_stl",
+            )
+        # STEP/STP は既存ビューワーbackendの変換APIに接続してから有効化する。
+    return None
 
 
 def build_2d_preview_svg(*, drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot) -> str:
@@ -224,3 +338,59 @@ def _first_text(*values: object) -> str:
 
 def _xml(value: object) -> str:
     return escape(str(value), quote=True)
+
+
+def _iter_preview_assets(*, snapshot: DrawingMetadataSnapshot, mode: str) -> list[dict]:
+    candidates: list[dict] = []
+    raw_extract = snapshot.raw_extract_json or {}
+    canonical = snapshot.canonical_attributes_json or {}
+    for source in (canonical, raw_extract):
+        if not isinstance(source, dict):
+            continue
+        candidates.extend(_asset_dicts(source.get("viewer_assets"), mode=mode))
+        candidates.extend(_asset_dicts(source.get("viewerAssets"), mode=mode))
+        candidates.extend(_asset_dicts(source.get("preview_assets"), mode=mode))
+        candidates.extend(_asset_dicts(source.get("previewAssets"), mode=mode))
+        candidates.append(source)
+    return candidates
+
+
+def _asset_dicts(value: object, *, mode: str) -> list[dict]:
+    if isinstance(value, dict):
+        nested = value.get(mode) or value.get(mode.upper())
+        if isinstance(nested, dict):
+            return [nested]
+        if isinstance(nested, list):
+            return [item for item in nested if isinstance(item, dict)]
+        return [value]
+    if isinstance(value, list):
+        return [item for item in value if isinstance(item, dict)]
+    return []
+
+
+def _is_fetchable_url(value: str | None) -> bool:
+    if not value:
+        return False
+    parsed = urlparse(value)
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def _extract_extension(value: str | None) -> str:
+    if not value or "." not in value:
+        return ""
+    normalized = value.split("?", 1)[0].split("#", 1)[0]
+    return normalized.rsplit(".", 1)[-1].lower()
+
+
+def _filename_from_url_or_name(value: str, *, fallback: str) -> str:
+    parsed = urlparse(value)
+    candidate = parsed.path.rsplit("/", 1)[-1] if parsed.path else value
+    return candidate or fallback
+
+
+def _positive_int(value: object, *, default: int) -> int:
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return default
+    return number if number > 0 else default

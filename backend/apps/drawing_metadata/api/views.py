@@ -18,7 +18,12 @@ from apps.drawing_metadata.api.serializers import (
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
-from apps.drawing_metadata.services.viewer_preview import build_2d_preview_svg, build_3d_preview_stl
+from apps.drawing_metadata.services.viewer_preview import (
+    build_2d_preview_svg,
+    build_3d_preview_stl,
+    resolve_actual_2d_preview_source,
+    resolve_actual_3d_preview_source,
+)
 
 
 class RegistrationListApiView(APIView):
@@ -91,6 +96,25 @@ class DrawingViewerOpenApiView(APIView):
             )
 
         if self.extraction_mode == "2d":
+            actual_source = resolve_actual_2d_preview_source(drawing=drawing, snapshot=snapshot)
+            if actual_source:
+                return Response(
+                    {
+                        "sessionId": f"actual-2d-{drawing.id}",
+                        "filename": actual_source.filename,
+                        "extension": actual_source.extension,
+                        "mimeType": actual_source.mime_type,
+                        "sourceUrl": actual_source.source_url,
+                        "pageCount": actual_source.page_count,
+                        "pageImageUrls": actual_source.page_image_urls or [],
+                        "diagnostics": {
+                            "source": "drawing_metadata_snapshot",
+                            "previewKind": actual_source.source_kind,
+                            "note": "snapshot内の実2Dプレビュー資産URLを既存2Dビューワーadapterへ渡しています。",
+                        },
+                    }
+                )
+
             return Response(
                 {
                     "sessionId": f"snapshot-2d-{drawing.id}",
@@ -104,6 +128,25 @@ class DrawingViewerOpenApiView(APIView):
                         "source": "drawing_metadata_snapshot",
                         "previewKind": "metadata_svg",
                         "note": "抽出JSONを既存2Dビューワーの画像adapterで確認するための軽量プレビューです。",
+                    },
+                }
+            )
+
+        actual_source = resolve_actual_3d_preview_source(drawing=drawing, snapshot=snapshot)
+        if actual_source:
+            return Response(
+                {
+                    "jobId": f"actual-3d-{drawing.id}",
+                    "filename": actual_source.filename,
+                    "sourceExtension": actual_source.source_extension,
+                    "modelFormat": actual_source.model_format,
+                    "status": "ready",
+                    "modelUrl": actual_source.model_url,
+                    "error": "",
+                    "diagnostics": {
+                        "source": "drawing_metadata_snapshot",
+                        "previewKind": actual_source.source_kind,
+                        "note": "snapshot内の実3Dプレビュー資産URLを既存3Dビューワーadapterへ渡しています。",
                     },
                 }
             )
