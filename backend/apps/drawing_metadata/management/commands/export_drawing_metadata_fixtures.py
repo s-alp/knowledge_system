@@ -13,7 +13,7 @@ from apps.drawing_metadata.services.rag_payload import build_rag_payload
 
 
 class Command(BaseCommand):
-    help = "創屋連携確認用に、図面メタデータ fixture JSON を出力します。"
+    help = "内部連携データ確認用に、図面メタデータ fixture JSON を出力します。"
 
     def add_arguments(self, parser) -> None:
         parser.add_argument("--drawing-id", action="append", default=[], help="出力対象の drawing UUID。複数指定できます。")
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--include-empty-snapshots",
             action="store_true",
-            help="抽出snapshotが未作成の図面もfixtureに含めます。通常の創屋連携確認では指定しません。",
+            help="抽出snapshotが未作成の図面もfixtureに含めます。通常の内部連携データ確認では指定しません。",
         )
 
     def handle(self, *args, **options) -> None:

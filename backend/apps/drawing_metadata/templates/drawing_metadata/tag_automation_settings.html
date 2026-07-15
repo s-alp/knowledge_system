@@ -4,7 +4,7 @@
   <div class="panel">
     <h2>{{ settings_display.title }}</h2>
     <p class="muted">{{ settings_display.summary }}</p>
-    <p class="muted">この画面ではタグ自動取得の設定と配置方針を扱います。本番ナレッジシステムへの登録・変更・削除は行いません。</p>
+    <p class="muted">この画面ではタグ自動取得の設定値を扱います。本番ナレッジシステムへの登録・変更・削除は行いません。</p>
     <table>
       <tbody>
         {% for row in settings_display.runtimeRows %}
@@ -18,8 +18,8 @@
   </div>
 
   <div class="panel">
-    <h2>運用配置</h2>
-    <p class="muted">設定値はシステム設定、抽出結果の確認・再抽出・手直しは図面管理、表示は各詳細画面に分けます。</p>
+    <h2>管理項目</h2>
+    <p class="muted">AI/API、抽出対象、採用ルール、表示先の設定を管理します。ユーザーの抽出作業は図面管理で行います。</p>
     <table>
       <thead>
         <tr>

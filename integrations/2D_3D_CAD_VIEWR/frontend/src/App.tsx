@@ -9,6 +9,7 @@ import {
   PlaceholderKnowledgePage,
   type DetailPageKey,
 } from "./features/knowledgeEntities/EntityPages";
+import { IcadExtractionReviewPage } from "./features/drawingMetadata/IcadExtractionReviewPage";
 import type { KnowledgePageKey } from "./features/knowledgeEntities/types";
 import { TagAutomationSettingsPage } from "./features/knowledgeSettings/TagAutomationSettingsPage";
 import { resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./shared/drawingRoute";
@@ -111,6 +112,8 @@ export default function App() {
   const debugInputsEnabled = useMemo(() => isViewerDebugInputsEnabled(), []);
   const { bootstrap, loading, error } = useDrawingBootstrap(drawingId);
   const [localLaunch, setLocalLaunch] = useState<LocalLaunchState | null>(null);
+  const [icadExtractionFile, setIcadExtractionFile] = useState<File | null>(null);
+  const [showIcadExtractionReview, setShowIcadExtractionReview] = useState(false);
   const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
   const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
   const detailMock = useMemo(
@@ -230,11 +233,26 @@ export default function App() {
     }
 
     if (!drawingId) {
+      if (showIcadExtractionReview) {
+        return (
+          <IcadExtractionReviewPage
+            file={icadExtractionFile}
+            onBack={() => {
+              setShowIcadExtractionReview(false);
+            }}
+          />
+        );
+      }
+
       return (
         <DrawingEntryPanel
           debugInputsEnabled={debugInputsEnabled}
           initialValue={window.location.href}
-          onIcadMetadataLaunch={() => openKnowledgePage("system")}
+          onIcadMetadataLaunch={(file) => {
+            setIcadExtractionFile(file);
+            setShowIcadExtractionReview(true);
+            openKnowledgePage("drawing");
+          }}
           onLocalFileLaunch={(nextMode, file) => {
             setLocalLaunch({ mode: nextMode, file });
             setMode(nextMode);
@@ -356,7 +374,7 @@ export default function App() {
                     setLocalLaunch(null);
                     return;
                   }
-                  window.history.back();
+                  openKnowledgePage("drawing");
                 }}
               >
                 ← 戻る

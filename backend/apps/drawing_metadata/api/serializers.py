@@ -218,7 +218,7 @@ def _viewer_tag_attributes_payload(knowledge_payload_preview: dict) -> dict:
     return {
         "schemaVersion": "viewer_tag_attributes.v1",
         "sourceSchemaVersion": knowledge_payload_preview.get("schemaVersion"),
-        "displayPolicy": "2D/3Dビューワー内の補助パネル表示用。ここから本番登録・更新・削除は行わない。",
+        "displayPolicy": "タグ・属性候補は図面管理で確認し、必要に応じて再抽出・手直しします。",
         "targets": targets,
         "targetCount": len(targets),
         "reviewRequired": any(target.get("reviewRequired") for target in targets),

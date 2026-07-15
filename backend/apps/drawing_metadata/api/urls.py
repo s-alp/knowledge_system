@@ -7,6 +7,16 @@ urlpatterns = [
     path("drawing-metadata/registrations", views.RegistrationListApiView.as_view(), name="drawing-metadata-registration-list"),
     path("drawing-metadata/registrations/", views.RegistrationListApiView.as_view(), name="drawing-metadata-registration-list-slash"),
     path(
+        "drawing-metadata/registrations/upload",
+        views.RegistrationUploadApiView.as_view(),
+        name="drawing-metadata-registration-upload",
+    ),
+    path(
+        "drawing-metadata/registrations/upload/",
+        views.RegistrationUploadApiView.as_view(),
+        name="drawing-metadata-registration-upload-slash",
+    ),
+    path(
         "drawing-metadata/registrations/<uuid:drawing_id>",
         views.RegistrationDetailApiView.as_view(),
         name="drawing-metadata-registration-detail",

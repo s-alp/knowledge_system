@@ -93,7 +93,7 @@ export function DrawingEntryPanel({
               <div>
                 <h2>ローカルファイルを開く</h2>
                 <p className="section-description">
-                  開発環境では、ここからローカルファイルを選ぶと 2D/3D を自動判定して詳細画面を開きます。
+                  ローカルファイルを選ぶと 2D/3D を自動判定して詳細画面を開きます。
                 </p>
                 <p className="section-description">
                   対応形式: 2D は `.pdf, .jpg, .jpeg, .tif, .tiff`、3D は `.stl, .step, .stp`
@@ -162,10 +162,7 @@ export function DrawingEntryPanel({
             <div>
               <h2>ICADからタグ・属性を取得</h2>
               <p className="section-description">
-                ICAD 2D/3D とパーツ付加情報を抽出ジョブへ渡し、タグ候補レビューで確認・再抽出・手直しします。
-              </p>
-              <p className="section-description">
-                既存の図面表示とは別の処理です。取得ルールとGemini設定はシステム設定で管理します。
+                ICADファイルを選択して、タグ・属性候補の取得を開始します。
               </p>
             </div>
           </div>
@@ -204,7 +201,7 @@ export function DrawingEntryPanel({
                   }
 
                   setError(null);
-                  setIcadStatus("ICAD抽出対象として選択しました。設定確認へ進めます。");
+                  setIcadStatus("ICAD抽出対象として選択しました。抽出・レビュー画面へ進めます。");
                 }}
               />
               <button
@@ -218,7 +215,12 @@ export function DrawingEntryPanel({
               </button>
             </div>
           </label>
-          <button className="secondary-button" type="button" onClick={() => onIcadMetadataLaunch(selectedIcadFile)}>
+          <button
+            className="secondary-button"
+            type="button"
+            disabled={!selectedIcadFile}
+            onClick={() => onIcadMetadataLaunch(selectedIcadFile)}
+          >
             タグ・属性取得へ進む
           </button>
           {icadStatus ? <p className="section-description">{icadStatus}</p> : null}

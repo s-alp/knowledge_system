@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from pathlib import Path
 
 from django.conf import settings
@@ -7,6 +8,7 @@ from django.db.models import Prefetch
 from django.http import FileResponse, Http404
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.text import get_valid_filename
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -45,6 +47,40 @@ class RegistrationListApiView(APIView):
         serializer = RegisteredDrawingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         drawing = serializer.save()
+        return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)
+
+
+class RegistrationUploadApiView(APIView):
+    def post(self, request):
+        uploaded_file = request.FILES.get("file")
+        if uploaded_file is None:
+            return Response(
+                {"error": {"code": "icad_file_required", "message": "ICADファイルを指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        original_name = get_valid_filename(uploaded_file.name)
+        if not original_name.lower().endswith(".icd"):
+            return Response(
+                {"error": {"code": "icad_file_extension", "message": ".icd ファイルを指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        upload_root = settings.DRAWING_METADATA_STORAGE_ROOT / "uploads"
+        upload_root.mkdir(parents=True, exist_ok=True)
+        stored_name = f"{uuid.uuid4()}_{original_name}"
+        stored_path = (upload_root / stored_name).resolve()
+
+        with stored_path.open("wb") as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+
+        drawing = RegisteredDrawing.objects.create(
+            host_drawing_id="",
+            filename=uploaded_file.name,
+            source_path=str(stored_path),
+            source_format="icad",
+        )
         return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)
 
 

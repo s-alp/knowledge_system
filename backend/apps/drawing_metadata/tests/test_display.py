@@ -853,7 +853,7 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert "0.0" in content
     assert "製品・装置・ユニット" in content
     assert "図面管理 &gt; タグ候補レビュー" in content
-    assert "運用配置" in content
+    assert "管理項目" in content
     assert "確認・再抽出・手直し" in content
     assert "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細" in content
     assert "本番ナレッジシステムへの登録・変更・削除は行いません" in content
@@ -905,7 +905,7 @@ def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_regi
     assert dashboard["rows"][0]["payloadTargets"][0]["targetLabel"] == "図面"
     assert response.status_code == 200
     content = response.content.decode("utf-8")
-    assert "創屋連携確認" in content
+    assert "内部連携データ確認" in content
     assert "handoff-sample.icd" in content
     assert "/api/v1/drawings/" in content
     assert "viewer bootstrap" in content

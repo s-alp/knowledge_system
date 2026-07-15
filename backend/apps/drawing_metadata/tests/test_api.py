@@ -3,6 +3,7 @@ from pathlib import Path
 from uuid import uuid4
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
 from apps.drawing_metadata.models import (
@@ -23,6 +24,41 @@ def test_registration_create_and_list(sample_registration_payload):
     list_response = client.get("/api/v1/drawing-metadata/registrations")
     assert list_response.status_code == 200
     assert list_response.json()[0]["drawingId"] == drawing_id
+
+
+@pytest.mark.django_db
+def test_registration_upload_icad_file(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
+    client = APIClient()
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile("sample.icd", b"icad-data")},
+        format="multipart",
+    )
+
+    assert response.status_code == 201
+    payload = response.json()
+    assert payload["filename"] == "sample.icd"
+    assert payload["sourceFormat"] == "icad"
+    stored_path = Path(payload["sourcePath"])
+    assert stored_path.exists()
+    assert stored_path.read_bytes() == b"icad-data"
+
+
+@pytest.mark.django_db
+def test_registration_upload_rejects_non_icad(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
+    client = APIClient()
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile("sample.txt", b"not-icad")},
+        format="multipart",
+    )
+
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "icad_file_extension"
 
 
 @pytest.mark.django_db

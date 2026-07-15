@@ -17,20 +17,20 @@ def build_tag_automation_settings_payload() -> dict:
             {"label": "フォールバックモデル", "value": ", ".join(fallback_models) if fallback_models else "-"},
             {"label": "温度", "value": str(getattr(settings, "GEMINI_TEMPERATURE", "0.0"))},
             {"label": "タグルール版", "value": getattr(settings, "DRAWING_METADATA_TAG_RULE_VERSION", "") or "-"},
-            {"label": "本番書き込み", "value": "行わない。創屋連携payloadの確認まで"},
+            {"label": "DB操作", "value": "登録・変更・削除は行わず、候補確認と連携データ出力まで"},
         ],
         "operationRows": [
             {
                 "area": "設定",
                 "screen": "システム設定 > タグ自動取得設定",
                 "role": "LLM、温度、タグルール、採用方針を管理する。",
-                "writePolicy": "本番保存は創屋実装側。こちらは設定値とpayload仕様を渡す。",
+                "writePolicy": "保存系の実装は埋め込み先で扱う。こちらは設定値と連携データ仕様を渡す。",
             },
             {
                 "area": "確認・再抽出・手直し",
                 "screen": "図面管理 > タグ候補レビュー",
-                "role": "2D/3D/パーツ付加情報の抽出結果、競合、対象別payloadを確認する。",
-                "writePolicy": "ローカルDBの手動補正と再抽出ジョブだけを扱う。",
+                "role": "2D/3D/パーツ付加情報の抽出結果、競合、タグ候補を確認する。",
+                "writePolicy": "手動補正と再抽出ジョブだけを扱う。",
             },
             {
                 "area": "表示",
@@ -40,8 +40,8 @@ def build_tag_automation_settings_payload() -> dict:
             },
             {
                 "area": "連携",
-                "screen": "創屋連携payload",
-                "role": "創屋が本番側に埋め込める形で対象、属性、タグ、根拠を出力する。",
+                "screen": "内部連携データ確認",
+                "role": "埋め込み先に渡せる形で対象、属性、タグ、根拠を出力する。",
                 "writePolicy": "読み取り確認とfixture/API出力まで。",
             },
         ],
@@ -56,13 +56,13 @@ def build_tag_automation_settings_payload() -> dict:
                 "target": "製品・装置・ユニット",
                 "displayPage": "製品・装置・ユニット詳細",
                 "storedAs": "属性情報 / 関連情報",
-                "reviewRoute": "図面管理 > 対象別payload確認",
+                "reviewRoute": "製品・装置・ユニット詳細",
             },
             {
                 "target": "部品",
                 "displayPage": "部品詳細",
                 "storedAs": "属性情報 / 関連情報",
-                "reviewRoute": "図面管理 > 対象別payload確認",
+                "reviewRoute": "部品詳細",
             },
             {
                 "target": "プロジェクト",

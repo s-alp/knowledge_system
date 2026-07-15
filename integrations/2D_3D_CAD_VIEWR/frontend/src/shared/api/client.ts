@@ -1,5 +1,34 @@
 import type { ApiErrorPayload, DrawingBootstrapResponse, Open2DResponse, Open3DResponse } from "../types/viewer";
 
+export type DrawingMetadataExtractionMode = "2d" | "3d";
+
+export interface DrawingMetadataJobResponse {
+  jobId: string;
+  drawingId: string;
+  extractionMode: DrawingMetadataExtractionMode;
+  status: string;
+  extractionProfile: string;
+  extractionOptions: Record<string, unknown>;
+  errorMessage: string;
+}
+
+export interface DrawingMetadataSnapshotResponse {
+  extractionMode: DrawingMetadataExtractionMode;
+  canonicalAttributes: Record<string, unknown>;
+  derivedTags: unknown[];
+  manualOverrides: Record<string, unknown>;
+  latestJob: DrawingMetadataJobResponse | null;
+}
+
+export interface DrawingMetadataRegistrationResponse {
+  drawingId: string;
+  filename: string;
+  sourcePath: string;
+  sourceFormat: string;
+  snapshotsByMode: Partial<Record<DrawingMetadataExtractionMode, DrawingMetadataSnapshotResponse>>;
+  viewerBootstrap: DrawingBootstrapResponse;
+}
+
 export function resolveApiBaseUrl(
   configuredBaseUrl = import.meta.env.VITE_API_BASE_URL,
   isDev = import.meta.env.DEV,
@@ -44,6 +73,44 @@ export function openViewer2D(url: string): Promise<Open2DResponse> {
 
 export function getDrawingBootstrap(drawingId: string): Promise<DrawingBootstrapResponse> {
   return requestJson<DrawingBootstrapResponse>(`/drawings/${drawingId}/bootstrap`);
+}
+
+export function getDrawingMetadataRegistration(drawingId: string): Promise<DrawingMetadataRegistrationResponse> {
+  return requestJson<DrawingMetadataRegistrationResponse>(`/drawing-metadata/registrations/${drawingId}`);
+}
+
+export function uploadIcadDrawingMetadata(file: File): Promise<DrawingMetadataRegistrationResponse> {
+  return uploadFile<DrawingMetadataRegistrationResponse>("/drawing-metadata/registrations/upload", file);
+}
+
+export function enqueueDrawingMetadataExtraction(
+  drawingId: string,
+  extractionMode: DrawingMetadataExtractionMode,
+  extractionProfile = "default",
+  extractionOptions: Record<string, unknown> = {},
+): Promise<DrawingMetadataJobResponse> {
+  return requestJson<DrawingMetadataJobResponse>(`/drawing-metadata/registrations/${drawingId}/extract`, {
+    method: "POST",
+    body: JSON.stringify({ extractionMode, extractionProfile, extractionOptions }),
+  });
+}
+
+export function applyDrawingMetadataOverrides(
+  drawingId: string,
+  extractionMode: DrawingMetadataExtractionMode,
+  canonicalAttributes: Record<string, unknown>,
+  reason: string,
+): Promise<{
+  drawingId: string;
+  extractionMode: DrawingMetadataExtractionMode;
+  manualOverrides: Record<string, unknown>;
+  canonicalAttributes: Record<string, unknown>;
+  derivedTags: unknown[];
+}> {
+  return requestJson(`/drawing-metadata/registrations/${drawingId}/overrides`, {
+    method: "PATCH",
+    body: JSON.stringify({ extractionMode, canonicalAttributes, reason }),
+  });
 }
 
 export function openDrawingViewer2D(drawingId: string): Promise<Open2DResponse> {

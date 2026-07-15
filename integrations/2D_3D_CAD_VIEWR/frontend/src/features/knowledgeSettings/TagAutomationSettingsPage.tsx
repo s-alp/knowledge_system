@@ -25,7 +25,7 @@ const runtimeSettingRows: SettingRow[] = [
   { label: "温度", value: "0.0" },
   { label: "出力形式", value: "JSON固定。許可済みfield名と候補indexのみ採用" },
   { label: "採用方針", value: "ICAD 2D/3D またはパーツ付加情報に存在する値だけを採用" },
-  { label: "本番書き込み", value: "行わない。創屋連携payloadの確認まで" },
+  { label: "DB操作", value: "行わない。抽出結果と設定内容の確認まで" },
 ];
 
 const operationRows: OperationRow[] = [
@@ -33,25 +33,25 @@ const operationRows: OperationRow[] = [
     area: "設定",
     screen: "システム設定 > タグ自動取得設定",
     role: "LLM、温度、タグルール、採用方針を管理する。",
-    writePolicy: "本番保存は創屋実装側。こちらは設定値とpayload仕様を渡す。",
+    writePolicy: "外部DBは操作しない。設定値と確認用データだけを扱う。",
   },
   {
-    area: "確認・再抽出・手直し",
-    screen: "図面管理 > タグ候補レビュー",
-    role: "2D/3D/パーツ付加情報の抽出結果、競合、対象別payloadを確認する。",
-    writePolicy: "ローカルDBの手動補正と再抽出ジョブだけを扱う。",
+    area: "抽出対象",
+    screen: "システム設定 > 抽出対象",
+    role: "2D、3D、パーツ付加情報、図枠外情報、レイヤー情報の取得対象を管理する。",
+    writePolicy: "ユーザー画面には設定済みの結果だけを反映する。",
   },
   {
-    area: "表示",
-    screen: "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細",
-    role: "確定候補をタグ・属性情報として表示し、紐づき候補も確認する。",
-    writePolicy: "本番ナレッジシステムの登録・変更・削除は行わない。",
+    area: "採用ルール",
+    screen: "システム設定 > 採用ルール",
+    role: "2D/3D照合、競合時の扱い、AI補助の採用範囲を管理する。",
+    writePolicy: "存在しない値は生成せず、抽出済み候補の分類補助だけに使う。",
   },
   {
-    area: "連携",
-    screen: "創屋連携payload",
-    role: "創屋が本番側に埋め込める形で対象、属性、タグ、根拠を出力する。",
-    writePolicy: "読み取り確認とfixture/API出力まで。",
+    area: "表示先",
+    screen: "システム設定 > 表示先",
+    role: "図面詳細、製品・装置・ユニット詳細、部品詳細への反映対象を管理する。",
+    writePolicy: "外部DBの登録・変更・削除は行わない。",
   },
 ];
 
@@ -66,19 +66,19 @@ const targetMappingRows: TargetMappingRow[] = [
     target: "製品・装置・ユニット",
     displayPage: "製品・装置・ユニット詳細",
     storedAs: "属性情報 / 関連情報",
-    reviewRoute: "図面管理 > 対象別payload確認",
+    reviewRoute: "製品・装置・ユニット詳細",
   },
   {
     target: "部品",
     displayPage: "部品詳細",
     storedAs: "属性情報 / 関連情報",
-    reviewRoute: "図面管理 > 対象別payload確認",
+    reviewRoute: "部品詳細",
   },
   {
     target: "プロジェクト",
     displayPage: "プロジェクト詳細",
     storedAs: "現時点は保留",
-    reviewRoute: "創屋の保存口確認後に再判定",
+    reviewRoute: "保存先確認後に再判定",
   },
 ];
 
@@ -90,7 +90,11 @@ const extractionRuleRows: SettingRow[] = [
 ];
 
 // この画面は設定の受け皿です。ICAD抽出とタグ生成の本体はバックエンド側で行います。
-export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledgeMock | null }) {
+export function TagAutomationSettingsPage({
+  detail,
+}: {
+  detail: DrawingKnowledgeMock | null;
+}) {
   const targetCount = detail?.tagAttributeTargets.length ?? 0;
   const tagCount = detail?.tagAttributeTargets.reduce((sum, target) => sum + target.tags.length, 0) ?? 0;
   const attributeCount =
@@ -103,7 +107,7 @@ export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledge
           <div>
             <h2>タグ自動取得設定</h2>
             <p className="production-section-note">
-              ICAD抽出からタグ候補を作るための運用設定です。登録・変更・削除は創屋側の本番実装範囲です。
+              ICAD抽出からタグ候補を作るための運用設定です。外部DBへの登録・変更・削除は行いません。
             </p>
           </div>
         </div>
@@ -119,7 +123,7 @@ export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledge
       </section>
 
       <section className="production-section">
-        <h2>運用配置</h2>
+        <h2>管理項目</h2>
         <div className="production-section-divider" />
         <div className="production-table-shell">
           <table className="production-table">
@@ -188,7 +192,7 @@ export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledge
       </section>
 
       <section className="production-section">
-        <h2>現在表示中データの候補数</h2>
+        <h2>設定反映状況</h2>
         <div className="production-section-divider" />
         <div className="production-detail-grid">
           <div className="production-detail-field">

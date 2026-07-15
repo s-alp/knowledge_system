@@ -1,7 +1,7 @@
 {% extends "drawing_metadata/base.html" %}
 
 {% block content %}
-  <h2>創屋連携確認</h2>
+  <h2>内部連携データ確認</h2>
 
   <div class="grid">
     {% for card in dashboard.summaryCards %}
@@ -12,7 +12,7 @@
     {% endfor %}
   </div>
 
-  <h2>対象別payload集計</h2>
+  <h2>対象別データ集計</h2>
   <table>
     <thead>
       <tr>
@@ -32,7 +32,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="4">payload候補はありません。</td>
+          <td colspan="4">連携候補はありません。</td>
         </tr>
       {% endfor %}
     </tbody>
@@ -47,7 +47,7 @@
           <th>抽出snapshot</th>
           <th>属性/タグ</th>
           <th>2D/3D照合</th>
-          <th>payload対象</th>
+          <th>連携対象</th>
           <th>確認リンク</th>
           <th>API</th>
         </tr>
