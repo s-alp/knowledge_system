@@ -214,10 +214,11 @@
 - [x] `U8718-S71-002_A3.icd` を条件profile付きで再抽出。dry-runで `PLAN 2d 2d_all_views_layers_print_frame` を確認し、実ジョブ `a42eedae-749b-4c15-847d-f42bd106ce28` が `activeExtractionProfile=2d_all_views_layers_print_frame` / `scanAllViews=true` / `scanAllLayers=true` / `classifyPrintFrame=true` / `recordOutsidePrintFrame=true` / `recordUnknownPrintArea=true` で成功。bootstrapは `has2d=true`, `has3d=true`, `status=extracted`
 - [x] SXNET `SxModel.export(path, fname, file_type)` と `SxOptExport.FILE_TYPE_STL_MULTI=8` を確認し、C#抽出runnerへ `--preview-output-dir` / `--preview-public-base-url` / `--preview-file-name-prefix` を追加。3D抽出時にSTLプレビュー資産を `viewer_assets.3d` へ保存し、Django側の `/api/v1/drawing-metadata-preview-assets/{job_id}/{filename}` で配信できるようにした
 - [x] 既存ビューワー連携の実資産URL判定を同一Django内の相対URLにも対応。`viewer3d/open` は生成STLの `viewer_assets.3d[].url` があればメタデータSTLより優先して既存3Dビューワーadapterへ渡す。2DはSXNET print/plot設定未検証のため、プレビュー生成要求時に `viewer_assets.2d[].status=unsupported` とwarningを残す
+- [x] 実ICAD `6800DDU.icd` で `--preview-output-dir` 付き3D抽出を実行し、SXNET export から `preview_probe_6800ddu_fixed.stl` 980,724 bytes を生成できることを確認。抽出JSONには `viewer_assets.3d[0].status=ready`、`model_format=stl`、`file_path`、`url`、`size_bytes` が入る
 
 ## 次に着手する
 
-- [ ] 実ICAD共有サンプルで `--preview-output-dir` 付き3D抽出を実行し、SXNET STL生成が実ファイルとして成功するか、ICAD環境・表示ウィンドウ条件・マルチボディ条件ごとの失敗理由を記録する
+- [ ] 実ICAD共有サンプル複数件で `--preview-output-dir` 付き3D抽出を横断実行し、単一部品/アセンブリ/外部参照/マルチボディごとのSTL生成成功率と失敗理由を集計する
 - [ ] 2Dは `SxFileModel.print(SxInfPlot, string)` / `print(string)` とプロッタ設定を実機で確認し、PDF/JPEG/TIFF相当または中間PS/画像化のどれで既存2Dビューワーへ渡すかを確定する
 - [ ] 共有済みサンプルを追加で条件profile付き再抽出し、ビュー差、レイヤー差、印刷枠差、パーツ付加情報差の検出率と未解決理由を横断集計する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映

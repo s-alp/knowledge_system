@@ -23,7 +23,8 @@ namespace IcadExtraction.SxNet
 
             var outputDirectory = Path.GetFullPath(options.OutputDirectory);
             Directory.CreateDirectory(outputDirectory);
-            var filename = BuildAssetFileName(inputPath, options, ".stl");
+            var exportBaseName = BuildAssetBaseName(inputPath, options);
+            var filename = exportBaseName + ".stl";
             var targetPath = Path.Combine(outputDirectory, filename);
             var startedAtUtc = DateTime.UtcNow.AddSeconds(-2);
 
@@ -35,7 +36,7 @@ namespace IcadExtraction.SxNet
                 }
 
                 var fileType = ResolveSxOptExportInt(context.Assembly, "FILE_TYPE_STL_MULTI", fallback: 8);
-                context.ExportModel(outputDirectory, filename, fileType);
+                context.ExportModel(outputDirectory, exportBaseName, fileType);
                 var exportedPath = ResolveExportedPath(outputDirectory, filename, startedAtUtc);
                 if (exportedPath == null)
                 {
@@ -92,13 +93,15 @@ namespace IcadExtraction.SxNet
             };
         }
 
-        private static string BuildAssetFileName(string inputPath, PreviewAssetOptions options, string extension)
+        private static string BuildAssetBaseName(string inputPath, PreviewAssetOptions options)
         {
             var prefix = string.IsNullOrWhiteSpace(options.FileNamePrefix)
                 ? Path.GetFileNameWithoutExtension(inputPath)
                 : options.FileNamePrefix;
             prefix = SanitizeFileName(prefix ?? "icad-preview");
-            return prefix.EndsWith(extension, StringComparison.OrdinalIgnoreCase) ? prefix : prefix + extension;
+            return prefix.EndsWith(".stl", StringComparison.OrdinalIgnoreCase)
+                ? Path.GetFileNameWithoutExtension(prefix)
+                : prefix;
         }
 
         private static string SanitizeFileName(string value)
