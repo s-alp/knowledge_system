@@ -22,6 +22,23 @@ namespace IcadExtraction.Contracts.Tests
         }
 
         [Fact]
+        public void Parse_PreservesExtractionConditionOptions()
+        {
+            var command = CliArgumentsParser.Parse(new[]
+            {
+                "extract",
+                "--input-path", @"C:\temp\sample.icd",
+                "--source-kind", "2d",
+                "--output-path", @"C:\temp\sample.json",
+                "--extraction-profile", "2d_all_views_layers_print_frame",
+                "--extraction-options-json", "{\"scanAllViews\":true}",
+            });
+
+            Assert.Equal("2d_all_views_layers_print_frame", command.Options["extraction-profile"]);
+            Assert.Equal("{\"scanAllViews\":true}", command.Options["extraction-options-json"]);
+        }
+
+        [Fact]
         public void Parse_ThrowsWhenOptionValueIsMissing()
         {
             var exception = Assert.Throws<ArgumentException>(() => CliArgumentsParser.Parse(new[] { "extract", "--input-path" }));

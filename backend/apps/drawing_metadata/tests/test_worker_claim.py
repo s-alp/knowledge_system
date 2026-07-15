@@ -73,10 +73,12 @@ def test_process_job_refreshes_lease_for_extractor_timeout(monkeypatch, settings
         lease_expires_at=timezone.now() + timedelta(seconds=5),
     )
 
-    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+    def fake_run_extractor(*, drawing, extraction_mode, job_id, extraction_profile, extraction_options):
         live_job = DrawingMetadataExtractionJob.objects.get(pk=job_id)
         assert live_job.lease_expires_at is not None
         assert live_job.lease_expires_at > timezone.now() + timedelta(seconds=300)
+        assert extraction_profile == "default"
+        assert extraction_options == {}
         return ExtractionRunResult(
             payload={
                 "source_format": "icad",
@@ -116,7 +118,9 @@ def test_process_job_applies_gemini_title_block_classification(monkeypatch, sett
         worker_name="test-worker",
     )
 
-    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+    def fake_run_extractor(*, drawing, extraction_mode, job_id, extraction_profile, extraction_options):
+        assert extraction_profile == "default"
+        assert extraction_options == {}
         return ExtractionRunResult(
             payload={
                 "source_format": "icad",
@@ -173,7 +177,9 @@ def test_process_job_records_gemini_failure_as_warning(monkeypatch, settings, tm
         worker_name="test-worker",
     )
 
-    def fake_run_extractor(*, drawing, extraction_mode, job_id):
+    def fake_run_extractor(*, drawing, extraction_mode, job_id, extraction_profile, extraction_options):
+        assert extraction_profile == "default"
+        assert extraction_options == {}
         return ExtractionRunResult(
             payload={
                 "source_format": "icad",

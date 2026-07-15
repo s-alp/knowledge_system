@@ -20,7 +20,14 @@ class ExtractionRunResult:
     output_path: Path
 
 
-def build_extractor_command(*, drawing: RegisteredDrawing, extraction_mode: str, output_path: Path) -> list[str]:
+def build_extractor_command(
+    *,
+    drawing: RegisteredDrawing,
+    extraction_mode: str,
+    output_path: Path,
+    extraction_profile: str = "default",
+    extraction_options: dict | None = None,
+) -> list[str]:
     executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
     if not executable:
         raise ExtractionRunnerError(
@@ -37,6 +44,10 @@ def build_extractor_command(*, drawing: RegisteredDrawing, extraction_mode: str,
         extraction_mode,
         "--output-path",
         str(output_path),
+        "--extraction-profile",
+        extraction_profile or "default",
+        "--extraction-options-json",
+        json.dumps(extraction_options or {}, ensure_ascii=False, separators=(",", ":")),
     ]
     if settings.DRAWING_METADATA_SXNET_DLL_PATH:
         command.extend(["--sxnet-dll-path", settings.DRAWING_METADATA_SXNET_DLL_PATH])
@@ -52,12 +63,25 @@ def build_extractor_command(*, drawing: RegisteredDrawing, extraction_mode: str,
     return command
 
 
-def run_extractor(*, drawing: RegisteredDrawing, extraction_mode: str, job_id) -> ExtractionRunResult:
+def run_extractor(
+    *,
+    drawing: RegisteredDrawing,
+    extraction_mode: str,
+    job_id,
+    extraction_profile: str = "default",
+    extraction_options: dict | None = None,
+) -> ExtractionRunResult:
     output_root = settings.DRAWING_METADATA_STORAGE_ROOT / "raw_extracts"
     output_root.mkdir(parents=True, exist_ok=True)
     output_path = output_root / f"{job_id}.json"
 
-    command = build_extractor_command(drawing=drawing, extraction_mode=extraction_mode, output_path=output_path)
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode=extraction_mode,
+        output_path=output_path,
+        extraction_profile=extraction_profile,
+        extraction_options=extraction_options,
+    )
     try:
         completed = subprocess.run(
             command,

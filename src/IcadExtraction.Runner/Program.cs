@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using IcadExtraction.Contracts;
@@ -43,6 +44,8 @@ namespace IcadExtraction.Runner
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
             var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+            var extractionProfile = OptionalOption(command, "extraction-profile") ?? "default";
+            var extractionOptions = OptionalJsonObjectOption(command, "extraction-options-json");
 
             var stopwatch = Stopwatch.StartNew();
             using var icadLease = IcadProcessStarter.EnsureRunning(
@@ -68,6 +71,9 @@ namespace IcadExtraction.Runner
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
             envelope.SourceFile = BuildSourceFilePayload(inputPath);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
+            envelope.ExtractionProfile = extractionProfile;
+            envelope.ExtractionOptions = extractionOptions;
+            envelope.ConditionDiagnostics = BuildConditionDiagnostics(sourceKind, extractionProfile, extractionOptions);
             if (autostartWarning != null)
             {
                 envelope.Warnings.Insert(0, autostartWarning);
@@ -145,6 +151,37 @@ namespace IcadExtraction.Runner
             };
         }
 
+        private static Dictionary<string, object> BuildConditionDiagnostics(
+            string sourceKind,
+            string extractionProfile,
+            Dictionary<string, object> extractionOptions)
+        {
+            var requiredChecks = new List<string>();
+            if (string.Equals(sourceKind, "2d", StringComparison.OrdinalIgnoreCase))
+            {
+                requiredChecks.Add("allViews");
+                requiredChecks.Add("allLayers");
+                requiredChecks.Add("printFrame");
+                requiredChecks.Add("outsidePrintFrame");
+            }
+            else if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
+            {
+                requiredChecks.Add("partTree");
+                requiredChecks.Add("partMaterials");
+                requiredChecks.Add("partAttributes");
+                requiredChecks.Add("massProperties");
+            }
+
+            return new Dictionary<string, object>
+            {
+                ["schemaVersion"] = "extract_condition_diagnostics.v1",
+                ["sourceKind"] = sourceKind,
+                ["extractionProfile"] = extractionProfile,
+                ["optionKeys"] = new List<string>(extractionOptions.Keys),
+                ["requiredConditionChecks"] = requiredChecks,
+            };
+        }
+
         private static string RequireOption(CliCommand command, string optionName)
         {
             if (!command.Options.TryGetValue(optionName, out var value) || string.IsNullOrWhiteSpace(value))
@@ -195,6 +232,25 @@ namespace IcadExtraction.Runner
             }
 
             throw new ArgumentException($"{optionName} must be boolean");
+        }
+
+        private static Dictionary<string, object> OptionalJsonObjectOption(CliCommand command, string optionName)
+        {
+            var value = OptionalOption(command, optionName);
+            if (value == null)
+            {
+                return new Dictionary<string, object>();
+            }
+
+            try
+            {
+                var parsed = JsonConvert.DeserializeObject<Dictionary<string, object>>(value);
+                return parsed ?? new Dictionary<string, object>();
+            }
+            catch (JsonException exception)
+            {
+                throw new ArgumentException($"{optionName} must be JSON object: {exception.Message}", exception);
+            }
         }
     }
 }

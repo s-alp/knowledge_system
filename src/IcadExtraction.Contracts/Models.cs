@@ -257,6 +257,9 @@ namespace IcadExtraction.Contracts
         public SourceFilePayload SourceFile { get; set; } = new SourceFilePayload();
         public string SourceFormat { get; set; } = "icad";
         public string SourceKind { get; set; } = string.Empty;
+        public string ExtractionProfile { get; set; } = "default";
+        public Dictionary<string, object> ExtractionOptions { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
         public string ExtractorName { get; set; } = SchemaVersions.ExtractorName;
         public string ExtractorVersion { get; set; } = SchemaVersions.SchemaVersion;
         public long ElapsedMs { get; set; }

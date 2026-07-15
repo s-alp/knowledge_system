@@ -197,10 +197,12 @@
 - [x] 未抽出・部分抽出を条件別再抽出キューへ回す土台を追加。ジョブに `extraction_profile` / `extraction_options_json` / `diagnostics_json` を保存し、2Dは全ビュー・全レイヤー・印刷枠、3Dはパーツツリー・材質・パーツ付加情報・重量系の再確認profileで起票できるようにした
 - [x] `queue_missing_drawing_metadata_extracts` 管理コマンドを追加し、snapshot欠落モードを「存在しない」ではなく、条件別再抽出対象としてキューへ積めるようにした
 - [x] Python 3.12.10 で `drawing_metadata` テスト49件と `manage.py check` を確認
+- [x] Django worker から C# 抽出CLIへ `--extraction-profile` / `--extraction-options-json` を渡し、抽出結果JSONへ `extraction_profile` / `extraction_options` / `condition_diagnostics` として保存するようにした
+- [x] .NET 8 の solution test と net48 runner build で、条件profile/options追加後も既存抽出runnerがビルドできることを確認
 
 ## 次に着手する
 
-- [ ] C#抽出器へ `extraction_profile` / `extraction_options_json` を渡し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の再抽出条件を実抽出に反映する
+- [ ] `extraction_options` を 2D/3D 抽出ロジック内の走査条件へ反映し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の再抽出条件が実データに効くことを確認する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

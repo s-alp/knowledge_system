@@ -50,8 +50,14 @@ def test_build_extractor_command_uses_extraction_mode_and_icad_options(settings)
         drawing=drawing,
         extraction_mode="2d",
         output_path="C:\\temp\\out.json",
+        extraction_profile="2d_all_views_layers_print_frame",
+        extraction_options={"scanAllViews": True, "scanAllLayers": True},
     )
 
     assert "--source-kind" in command
     assert "2d" in command
+    assert "--extraction-profile" in command
+    assert "2d_all_views_layers_print_frame" in command
+    assert "--extraction-options-json" in command
+    assert '{"scanAllViews":true,"scanAllLayers":true}' in command
     assert "--icad-executable-path" in command

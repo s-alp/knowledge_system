@@ -147,6 +147,8 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,
             job_id=job.id,
+            extraction_profile=job.extraction_profile or "default",
+            extraction_options=job.extraction_options_json or {},
         )
         warnings = list(result.payload.get("warnings", []))
         canonical_attributes = normalize_raw_extract(result.payload)
