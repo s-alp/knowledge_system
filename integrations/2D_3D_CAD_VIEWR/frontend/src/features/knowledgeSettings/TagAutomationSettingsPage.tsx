@@ -12,6 +12,13 @@ type TargetMappingRow = {
   reviewRoute: string;
 };
 
+type OperationRow = {
+  area: string;
+  screen: string;
+  role: string;
+  writePolicy: string;
+};
+
 const runtimeSettingRows: SettingRow[] = [
   { label: "設定配置", value: "システム設定 > タグ自動取得設定" },
   { label: "AI補助", value: "Gemini API を低温度で使用" },
@@ -19,6 +26,33 @@ const runtimeSettingRows: SettingRow[] = [
   { label: "出力形式", value: "JSON固定。許可済みfield名と候補indexのみ採用" },
   { label: "採用方針", value: "ICAD 2D/3D またはパーツ付加情報に存在する値だけを採用" },
   { label: "本番書き込み", value: "行わない。創屋連携payloadの確認まで" },
+];
+
+const operationRows: OperationRow[] = [
+  {
+    area: "設定",
+    screen: "システム設定 > タグ自動取得設定",
+    role: "LLM、温度、タグルール、採用方針を管理する。",
+    writePolicy: "本番保存は創屋実装側。こちらは設定値とpayload仕様を渡す。",
+  },
+  {
+    area: "確認・再抽出・手直し",
+    screen: "図面管理 > タグ候補レビュー",
+    role: "2D/3D/パーツ付加情報の抽出結果、競合、対象別payloadを確認する。",
+    writePolicy: "ローカルDBの手動補正と再抽出ジョブだけを扱う。",
+  },
+  {
+    area: "表示",
+    screen: "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細",
+    role: "確定候補をタグ・属性情報として表示し、紐づき候補も確認する。",
+    writePolicy: "本番ナレッジシステムの登録・変更・削除は行わない。",
+  },
+  {
+    area: "連携",
+    screen: "創屋連携payload",
+    role: "創屋が本番側に埋め込める形で対象、属性、タグ、根拠を出力する。",
+    writePolicy: "読み取り確認とfixture/API出力まで。",
+  },
 ];
 
 const targetMappingRows: TargetMappingRow[] = [
@@ -69,7 +103,7 @@ export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledge
           <div>
             <h2>タグ自動取得設定</h2>
             <p className="production-section-note">
-              ICAD抽出からタグ候補を作るための共通設定です。登録・変更・削除は創屋側の本番実装範囲です。
+              ICAD抽出からタグ候補を作るための運用設定です。登録・変更・削除は創屋側の本番実装範囲です。
             </p>
           </div>
         </div>
@@ -81,6 +115,33 @@ export function TagAutomationSettingsPage({ detail }: { detail: DrawingKnowledge
               <p>{row.value}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="production-section">
+        <h2>運用配置</h2>
+        <div className="production-section-divider" />
+        <div className="production-table-shell">
+          <table className="production-table">
+            <thead>
+              <tr>
+                <th>領域</th>
+                <th>画面</th>
+                <th>役割</th>
+                <th>書き込み方針</th>
+              </tr>
+            </thead>
+            <tbody>
+              {operationRows.map((row) => (
+                <tr key={row.area}>
+                  <th>{row.area}</th>
+                  <td>{row.screen}</td>
+                  <td>{row.role}</td>
+                  <td>{row.writePolicy}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 

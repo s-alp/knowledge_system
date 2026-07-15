@@ -4,13 +4,38 @@
   <div class="panel">
     <h2>{{ settings_display.title }}</h2>
     <p class="muted">{{ settings_display.summary }}</p>
-    <p class="muted">この画面は設定確認用です。本番ナレッジシステムへの登録・変更・削除は行いません。</p>
+    <p class="muted">この画面ではタグ自動取得の設定と配置方針を扱います。本番ナレッジシステムへの登録・変更・削除は行いません。</p>
     <table>
       <tbody>
         {% for row in settings_display.runtimeRows %}
           <tr>
             <th>{{ row.label }}</th>
             <td>{{ row.value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>運用配置</h2>
+    <p class="muted">設定値はシステム設定、抽出結果の確認・再抽出・手直しは図面管理、表示は各詳細画面に分けます。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>領域</th>
+          <th>画面</th>
+          <th>役割</th>
+          <th>書き込み方針</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in settings_display.operationRows %}
+          <tr>
+            <th>{{ row.area }}</th>
+            <td>{{ row.screen }}</td>
+            <td>{{ row.role }}</td>
+            <td>{{ row.writePolicy }}</td>
           </tr>
         {% endfor %}
       </tbody>

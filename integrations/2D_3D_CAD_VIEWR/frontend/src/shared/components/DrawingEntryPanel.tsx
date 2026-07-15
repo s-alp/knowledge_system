@@ -8,6 +8,7 @@ interface DrawingEntryPanelProps {
   debugInputsEnabled: boolean;
   initialValue?: string;
   onLocalFileLaunch: (mode: LocalLaunchMode, file: File) => void;
+  onIcadMetadataLaunch: () => void;
 }
 
 const twoDFileExtensions = new Set(["pdf", "jpg", "jpeg", "tif", "tiff"]);
@@ -28,6 +29,7 @@ export function DrawingEntryPanel({
   debugInputsEnabled,
   initialValue = "",
   onLocalFileLaunch,
+  onIcadMetadataLaunch,
 }: DrawingEntryPanelProps) {
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState(initialValue);
@@ -151,6 +153,23 @@ export function DrawingEntryPanel({
             {localStatus ? <p className="section-description">{localStatus}</p> : null}
           </div>
         ) : null}
+
+        <div className="launcher-local-section">
+          <div className="panel-header panel-header-stack">
+            <div>
+              <h2>ICADからタグ・属性を取得</h2>
+              <p className="section-description">
+                ICAD 2D/3D とパーツ付加情報を抽出ジョブへ渡し、タグ候補レビューで確認・再抽出・手直しします。
+              </p>
+              <p className="section-description">
+                既存の図面表示とは別の処理です。取得ルールとGemini設定はシステム設定で管理します。
+              </p>
+            </div>
+          </div>
+          <button className="secondary-button" type="button" onClick={onIcadMetadataLaunch}>
+            ICADからタグ・属性を取得
+          </button>
+        </div>
 
         {error ? <p className="error-text">{error}</p> : null}
       </div>

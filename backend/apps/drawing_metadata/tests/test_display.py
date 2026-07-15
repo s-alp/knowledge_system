@@ -798,7 +798,7 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
 
     assert product_response.status_code == 200
     product_content = product_response.content.decode("utf-8")
-    assert "製品・装置・ユニット タグ・属性ページ案" in product_content
+    assert "製品・装置・ユニット タグ・属性" in product_content
     assert "装置:供給台" in product_content
     assert "PRFX" in product_content
     assert "タグAPI状態" in product_content
@@ -816,7 +816,7 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
 
     assert part_response.status_code == 200
     part_content = part_response.content.decode("utf-8")
-    assert "部品 タグ・属性ページ案" in part_content
+    assert "部品 タグ・属性" in part_content
     assert "材質:SUS304" in part_content
     assert "TOP.BRACKET" in part_content
     assert "needs_part_record_and_attribute_master_binding" in part_content
@@ -853,6 +853,9 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert "0.0" in content
     assert "製品・装置・ユニット" in content
     assert "図面管理 &gt; タグ候補レビュー" in content
+    assert "運用配置" in content
+    assert "確認・再抽出・手直し" in content
+    assert "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細" in content
     assert "本番ナレッジシステムへの登録・変更・削除は行いません" in content
 
 

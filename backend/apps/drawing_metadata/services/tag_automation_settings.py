@@ -8,7 +8,7 @@ def build_tag_automation_settings_payload() -> dict:
     fallback_models = list(getattr(settings, "GEMINI_FALLBACK_MODELS", []) or [])
     return {
         "title": "タグ自動取得設定",
-        "summary": "ICAD 2D/3D 抽出結果からタグ・属性候補を作るための設定確認画面です。",
+        "summary": "ICAD 2D/3D 抽出結果からタグ・属性候補を作るための運用設定です。",
         "runtimeRows": [
             {"label": "設定配置", "value": "システム設定 > タグ自動取得設定"},
             {"label": "LLM provider", "value": getattr(settings, "DRAWING_METADATA_LLM_PROVIDER", "") or "-"},
@@ -18,6 +18,32 @@ def build_tag_automation_settings_payload() -> dict:
             {"label": "温度", "value": str(getattr(settings, "GEMINI_TEMPERATURE", "0.0"))},
             {"label": "タグルール版", "value": getattr(settings, "DRAWING_METADATA_TAG_RULE_VERSION", "") or "-"},
             {"label": "本番書き込み", "value": "行わない。創屋連携payloadの確認まで"},
+        ],
+        "operationRows": [
+            {
+                "area": "設定",
+                "screen": "システム設定 > タグ自動取得設定",
+                "role": "LLM、温度、タグルール、採用方針を管理する。",
+                "writePolicy": "本番保存は創屋実装側。こちらは設定値とpayload仕様を渡す。",
+            },
+            {
+                "area": "確認・再抽出・手直し",
+                "screen": "図面管理 > タグ候補レビュー",
+                "role": "2D/3D/パーツ付加情報の抽出結果、競合、対象別payloadを確認する。",
+                "writePolicy": "ローカルDBの手動補正と再抽出ジョブだけを扱う。",
+            },
+            {
+                "area": "表示",
+                "screen": "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細",
+                "role": "確定候補をタグ・属性情報として表示し、紐づき候補も確認する。",
+                "writePolicy": "本番ナレッジシステムの登録・変更・削除は行わない。",
+            },
+            {
+                "area": "連携",
+                "screen": "創屋連携payload",
+                "role": "創屋が本番側に埋め込める形で対象、属性、タグ、根拠を出力する。",
+                "writePolicy": "読み取り確認とfixture/API出力まで。",
+            },
         ],
         "targetRows": [
             {

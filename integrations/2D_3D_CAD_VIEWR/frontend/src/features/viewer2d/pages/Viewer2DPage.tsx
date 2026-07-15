@@ -137,14 +137,14 @@ export function Viewer2DPage({
     <>
       {debugInputsEnabled ? (
         <ViewerSourcePanel
-          title="開発用入力"
-          sectionLabel="Debug"
-          description="PDM 連携を使わず、URL やローカルファイルから手動検証できます。"
+          title="手動入力"
+          sectionLabel="Manual"
+          description="PDM 連携を使わず、URL やローカルファイルから読み込めます。"
           url={url}
           urlPlaceholder="https://example.com/file.pdf"
           urlButtonLabel="Open 2D"
           acceptedTypes=".pdf,.jpg,.jpeg,.tif,.tiff"
-          localHelperText="開発・検証用です。必要なときだけローカルファイルを選択してください。"
+          localHelperText="必要なときだけローカルファイルを選択してください。"
           selectedFileName={selectedFile?.name}
           localFileStatus={localFileStatus ?? undefined}
           openBusy={loading || isBusy}

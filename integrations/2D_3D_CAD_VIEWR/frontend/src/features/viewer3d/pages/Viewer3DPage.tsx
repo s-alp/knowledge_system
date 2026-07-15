@@ -183,14 +183,14 @@ export function Viewer3DPage({
     <>
       {debugInputsEnabled ? (
         <ViewerSourcePanel
-          title="開発用入力"
-          sectionLabel="Debug"
-          description="PDM 連携を使わず、URL やローカルファイルから手動検証できます。"
+          title="手動入力"
+          sectionLabel="Manual"
+          description="PDM 連携を使わず、URL やローカルファイルから読み込めます。"
           url={url}
           urlPlaceholder="https://example.com/model.step"
           urlButtonLabel="Open 3D"
           acceptedTypes=".stl,.step,.stp"
-          localHelperText="開発・検証用です。STEP もバックエンド経由で変換します。"
+          localHelperText="STEP もバックエンド経由で変換します。"
           selectedFileName={selectedFile?.name}
           localFileStatus={localFileStatus ?? undefined}
           openBusy={isBusy}

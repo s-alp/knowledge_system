@@ -234,6 +234,7 @@ export default function App() {
         <DrawingEntryPanel
           debugInputsEnabled={debugInputsEnabled}
           initialValue={window.location.href}
+          onIcadMetadataLaunch={() => openKnowledgePage("system")}
           onLocalFileLaunch={(nextMode, file) => {
             setLocalLaunch({ mode: nextMode, file });
             setMode(nextMode);
