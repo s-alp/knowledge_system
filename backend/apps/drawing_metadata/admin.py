@@ -17,9 +17,18 @@ class RegisteredDrawingAdmin(admin.ModelAdmin):
 
 @admin.register(DrawingMetadataExtractionJob)
 class DrawingMetadataExtractionJobAdmin(admin.ModelAdmin):
-    list_display = ("drawing", "extraction_mode", "status", "worker_name", "retry_count", "started_at", "finished_at")
-    search_fields = ("drawing__filename", "drawing__host_drawing_id", "error_message")
-    list_filter = ("status", "extraction_mode")
+    list_display = (
+        "drawing",
+        "extraction_mode",
+        "extraction_profile",
+        "status",
+        "worker_name",
+        "retry_count",
+        "started_at",
+        "finished_at",
+    )
+    search_fields = ("drawing__filename", "drawing__host_drawing_id", "error_message", "extraction_profile")
+    list_filter = ("status", "extraction_mode", "extraction_profile")
 
 
 @admin.register(DrawingMetadataSnapshot)

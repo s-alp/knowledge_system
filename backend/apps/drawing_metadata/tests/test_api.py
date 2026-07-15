@@ -2,6 +2,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from apps.drawing_metadata.models import (
+    DrawingMetadataExtractionJob,
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
@@ -38,6 +39,39 @@ def test_registration_extract_enqueue(sample_registration_payload):
     assert response.status_code == 202
     assert response.json()["status"] == "queued"
     assert response.json()["extractionMode"] == "3d"
+
+
+@pytest.mark.django_db
+def test_registration_extract_enqueue_accepts_condition_profile(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename=sample_registration_payload["filename"],
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    client = APIClient()
+
+    response = client.post(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/extract",
+        {
+            "extractionMode": "2d",
+            "extractionProfile": "2d_all_views_layers_print_frame",
+            "extractionOptions": {
+                "scanAllViews": True,
+                "scanAllLayers": True,
+                "classifyPrintFrame": True,
+            },
+        },
+        format="json",
+    )
+
+    assert response.status_code == 202
+    payload = response.json()
+    assert payload["extractionProfile"] == "2d_all_views_layers_print_frame"
+    assert payload["extractionOptions"]["scanAllViews"] is True
+    job = DrawingMetadataExtractionJob.objects.get(pk=payload["jobId"])
+    assert job.extraction_profile == "2d_all_views_layers_print_frame"
+    assert job.extraction_options_json["scanAllLayers"] is True
 
 
 @pytest.mark.django_db

@@ -246,3 +246,32 @@ def test_import_drawing_metadata_extracts_accepts_manifest(tmp_path):
     snapshot = DrawingMetadataSnapshot.objects.get(drawing=drawing, extraction_mode="3d")
     assert snapshot.canonical_attributes_json["top_part_name"] == "MANIFEST-PART"
     assert "imported=1" in stdout.getvalue()
+
+
+@pytest.mark.django_db
+def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="queue-missing",
+        filename="queue-missing.icd",
+        source_path=r"C:\temp\queue-missing.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={"drawing_name": "queue-missing"},
+    )
+
+    call_command("queue_missing_drawing_metadata_extracts", drawing_id=[str(drawing.id)], executed_by="test")
+
+    job = DrawingMetadataExtractionJob.objects.get(drawing=drawing, extraction_mode="3d")
+    assert job.status == DrawingMetadataExtractionJob.STATUS_QUEUED
+    assert job.extraction_profile == "3d_parts_materials_ex_info"
+    assert job.extraction_options_json["scanPartExtendedInfo"] is True
+    assert job.diagnostics_json["reason"] == "missing_snapshot"
+    assert job.diagnostics_json["requiredConditionChecks"] == [
+        "partTree",
+        "partMaterials",
+        "partAttributes",
+        "massProperties",
+    ]

@@ -19,11 +19,17 @@ def enqueue_extraction_job(
     extraction_mode: str,
     reason: str,
     executed_by: str,
+    extraction_profile: str = "default",
+    extraction_options: dict | None = None,
+    diagnostics: dict | None = None,
 ) -> DrawingMetadataExtractionJob:
     job = DrawingMetadataExtractionJob.objects.create(
         drawing=drawing,
         extraction_mode=extraction_mode,
         status=DrawingMetadataExtractionJob.STATUS_QUEUED,
+        extraction_profile=extraction_profile or "default",
+        extraction_options_json=extraction_options or {},
+        diagnostics_json=diagnostics or {},
         schema_version=settings.DRAWING_METADATA_SCHEMA_VERSION,
     )
     DrawingMetadataAuditLog.objects.create(
@@ -32,7 +38,14 @@ def enqueue_extraction_job(
         action_type=DrawingMetadataAuditLog.ACTION_REQUEUE,
         reason=reason,
         before_json={},
-        after_json={"job_id": str(job.id), "status": job.status, "extraction_mode": extraction_mode},
+        after_json={
+            "job_id": str(job.id),
+            "status": job.status,
+            "extraction_mode": extraction_mode,
+            "extraction_profile": job.extraction_profile,
+            "extraction_options": job.extraction_options_json,
+            "diagnostics": job.diagnostics_json,
+        },
         executed_by=executed_by,
     )
     return job

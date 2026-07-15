@@ -94,6 +94,9 @@ def test_process_job_refreshes_lease_for_extractor_timeout(monkeypatch, settings
 
     assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
     assert processed.lease_expires_at is None
+    assert processed.diagnostics_json["activeExtractionProfile"] == "default"
+    assert processed.diagnostics_json["activeExtractionOptions"] == {}
+    assert processed.diagnostics_json["resultWarningCount"] == 0
 
 
 @pytest.mark.django_db

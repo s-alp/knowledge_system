@@ -25,6 +25,13 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
 
 class ExtractRequestSerializer(serializers.Serializer):
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
+    extractionProfile = serializers.CharField(required=False, allow_blank=True, default="default")
+    extractionOptions = serializers.JSONField(required=False, default=dict)
+
+    def validate_extractionOptions(self, value):
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("extractionOptions は object で指定してください。")
+        return value
 
 
 class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
@@ -39,6 +46,9 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
     elapsedMs = serializers.IntegerField(source="elapsed_ms", allow_null=True)
     errorMessage = serializers.CharField(source="error_message", allow_blank=True)
     warnings = serializers.JSONField(source="warnings_json")
+    extractionProfile = serializers.CharField(source="extraction_profile", allow_blank=True)
+    extractionOptions = serializers.JSONField(source="extraction_options_json")
+    diagnostics = serializers.JSONField(source="diagnostics_json")
     extractorName = serializers.CharField(source="extractor_name", allow_blank=True)
     extractorVersion = serializers.CharField(source="extractor_version", allow_blank=True)
     schemaVersion = serializers.CharField(source="schema_version", allow_blank=True)
@@ -60,6 +70,9 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
             "elapsedMs",
             "errorMessage",
             "warnings",
+            "extractionProfile",
+            "extractionOptions",
+            "diagnostics",
             "extractorName",
             "extractorVersion",
             "schemaVersion",

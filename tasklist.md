@@ -193,11 +193,14 @@
 - [x] タグ選定仕様を作成し、タグ化する項目、属性に留める項目、自動タグ化しない項目、図面/プロジェクト/製品・装置・ユニット/部品別の適用先を整理
 - [x] 既存2D/3Dビューワー契約を壊さず、`viewerBootstrap.metadata.tagAttributes` に図面/プロジェクト/製品・装置・ユニット/部品別のタグ・属性補助パネルpayloadを追加
 - [x] 未抽出を放置せず、`viewerBootstrap.metadata.extractionDiagnostics` で `partial` / `not_extracted`、未抽出モード、ビュー差・レイヤー差・印刷枠差・パーツ付加情報差の再確認条件を返すようにした
-- [x] `backend\.venv` を Python 3.12.10 で作り直し、pytest の一時領域を `tmp/pytest` に固定して AppData 側権限に依存しないテスト実行へ切り替えた
+- [x] `backend\.venv` を Python 3.12.10 で作り直し、pytest の一時領域を `tmp/pytest_run` に固定して AppData 側権限に依存しないテスト実行へ切り替えた
+- [x] 未抽出・部分抽出を条件別再抽出キューへ回す土台を追加。ジョブに `extraction_profile` / `extraction_options_json` / `diagnostics_json` を保存し、2Dは全ビュー・全レイヤー・印刷枠、3Dはパーツツリー・材質・パーツ付加情報・重量系の再確認profileで起票できるようにした
+- [x] `queue_missing_drawing_metadata_extracts` 管理コマンドを追加し、snapshot欠落モードを「存在しない」ではなく、条件別再抽出対象としてキューへ積めるようにした
+- [x] Python 3.12.10 で `drawing_metadata` テスト49件と `manage.py check` を確認
 
 ## 次に着手する
 
-- [ ] 未抽出・部分抽出のICADを条件別再抽出キューへ回し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の失敗理由を実データごとに保存する
+- [ ] C#抽出器へ `extraction_profile` / `extraction_options_json` を渡し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の再抽出条件を実抽出に反映する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

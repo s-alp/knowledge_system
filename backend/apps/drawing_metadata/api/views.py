@@ -72,6 +72,8 @@ class RegistrationExtractApiView(APIView):
             extraction_mode=serializer.validated_data["extractionMode"],
             reason="API requested re-extract",
             executed_by="api",
+            extraction_profile=serializer.validated_data.get("extractionProfile") or "default",
+            extraction_options=serializer.validated_data.get("extractionOptions") or {},
         )
         return Response(DrawingMetadataExtractionJobSerializer(job).data, status=status.HTTP_202_ACCEPTED)
 

@@ -138,6 +138,11 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
     executed_by = f"worker:{job.worker_name or 'unknown'}"
     try:
         _refresh_processing_lease(job)
+        diagnostics = dict(job.diagnostics_json or {})
+        diagnostics["activeExtractionProfile"] = job.extraction_profile or "default"
+        diagnostics["activeExtractionOptions"] = job.extraction_options_json or {}
+        job.diagnostics_json = diagnostics
+        job.save(update_fields=["diagnostics_json", "updated_at"])
         result = run_extractor(
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,
@@ -166,6 +171,8 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
         job.elapsed_ms = int(result.payload.get("elapsed_ms") or 0)
         job.error_message = ""
         job.warnings_json = warnings
+        diagnostics["resultWarningCount"] = len(warnings)
+        job.diagnostics_json = diagnostics
         job.extractor_name = result.payload.get("extractor_name", "")
         job.extractor_version = result.payload.get("extractor_version", "")
         job.schema_version = settings.DRAWING_METADATA_SCHEMA_VERSION
@@ -177,6 +184,7 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
                 "elapsed_ms",
                 "error_message",
                 "warnings_json",
+                "diagnostics_json",
                 "extractor_name",
                 "extractor_version",
                 "schema_version",
