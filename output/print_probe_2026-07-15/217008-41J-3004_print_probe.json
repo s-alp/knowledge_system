@@ -1,0 +1,75 @@
+{
+  "input_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+  "source_file": {
+    "full_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+    "directory_path": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部",
+    "file_name": "217008-41J-3004.icd",
+    "file_name_without_extension": "217008-41J-3004",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 2966,
+  "warnings": [],
+  "print_probe": {
+    "print_frames": [
+      {
+        "no": 1,
+        "size": "A3",
+        "vertical": false,
+        "dinfo": [
+          420.0,
+          297.0,
+          1.0,
+          0.0,
+          -1.943E-05,
+          420.0,
+          297.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "drawing_scale": 1.0,
+        "range_min_x": 0.0,
+        "range_min_y": -1.943E-05,
+        "range_max_x": 420.0,
+        "range_max_y": 297.0
+      }
+    ],
+    "plotters": [
+      {
+        "no": "PLOT01",
+        "name": "CubePDF",
+        "is_default": true
+      },
+      {
+        "no": "PLOT03",
+        "name": "Cubepdf2",
+        "is_default": false
+      },
+      {
+        "no": "PLOT02",
+        "name": "Printer_005",
+        "is_default": false
+      }
+    ],
+    "default_plotter": {
+      "no": "PLOT01",
+      "name": "CubePDF",
+      "is_default": true
+    },
+    "print_execution_status": "not_attempted",
+    "print_execution_message": "This probe reads print frames and plotter definitions only. It does not execute SxModel.print."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "input_path": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+  "source_file": {
+    "full_path": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+    "directory_path": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図",
+    "file_name": "DFR-CM1-AA0305300011.icd",
+    "file_name_without_extension": "DFR-CM1-AA0305300011",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 3002,
+  "warnings": [],
+  "print_probe": {
+    "print_frames": [
+      {
+        "no": 1,
+        "size": "A3",
+        "vertical": false,
+        "dinfo": [
+          420.0,
+          297.0,
+          1.0,
+          -410.0,
+          -10.0,
+          10.0,
+          287.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "drawing_scale": 1.0,
+        "range_min_x": -410.0,
+        "range_min_y": -10.0,
+        "range_max_x": 10.0,
+        "range_max_y": 287.0
+      }
+    ],
+    "plotters": [
+      {
+        "no": "PLOT01",
+        "name": "CubePDF",
+        "is_default": true
+      },
+      {
+        "no": "PLOT03",
+        "name": "Cubepdf2",
+        "is_default": false
+      },
+      {
+        "no": "PLOT02",
+        "name": "Printer_005",
+        "is_default": false
+      }
+    ],
+    "default_plotter": {
+      "no": "PLOT01",
+      "name": "CubePDF",
+      "is_default": true
+    },
+    "print_execution_status": "not_attempted",
+    "print_execution_message": "This probe reads print frames and plotter definitions only. It does not execute SxModel.print."
+  }
+}

@@ -22,6 +22,8 @@ namespace IcadExtraction.Runner
                         return RunExtract(command);
                     case "detect":
                         return RunDetect(command);
+                    case "probe-2d-print":
+                        return RunProbe2DPrint(command);
                     case "self-check":
                         return RunSelfCheck(command);
                     default:
@@ -119,6 +121,44 @@ namespace IcadExtraction.Runner
                 shutdownIfAutostarted
             );
             var envelope = new IcadPresenceDetector().Detect(sxnetDllPath, inputPath);
+            envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
+            envelope.SourceFile = BuildSourceFilePayload(inputPath);
+            envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
+            if (icadLease.StartupWarning != null)
+            {
+                envelope.Warnings.Insert(0, icadLease.StartupWarning);
+            }
+
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy(),
+                },
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Include,
+            };
+            File.WriteAllText(outputPath, JsonConvert.SerializeObject(envelope, serializerSettings));
+            return 0;
+        }
+
+        private static int RunProbe2DPrint(CliCommand command)
+        {
+            var inputPath = RequireOption(command, "input-path");
+            var outputPath = RequireOption(command, "output-path");
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var icadExecutablePath = OptionalOption(command, "icad-executable-path");
+            var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
+            var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+
+            var stopwatch = Stopwatch.StartNew();
+            using var icadLease = IcadProcessStarter.EnsureRunning(
+                icadExecutablePath,
+                icadStartupWaitSeconds,
+                shutdownIfAutostarted
+            );
+            var envelope = new Icad2DPrintProbe().Probe(sxnetDllPath, inputPath);
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
             envelope.SourceFile = BuildSourceFilePayload(inputPath);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;

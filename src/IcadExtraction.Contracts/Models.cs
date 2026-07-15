@@ -337,4 +337,32 @@ namespace IcadExtraction.Contracts
         public List<WarningPayload> Warnings { get; set; } = new List<WarningPayload>();
         public DetectionPayload Detection { get; set; } = new DetectionPayload();
     }
+
+    public sealed class PlotterPayload
+    {
+        public string? No { get; set; }
+        public string? Name { get; set; }
+        public bool IsDefault { get; set; }
+    }
+
+    public sealed class PrintProbePayload
+    {
+        public List<PrintFramePayload> PrintFrames { get; set; } = new List<PrintFramePayload>();
+        public List<PlotterPayload> Plotters { get; set; } = new List<PlotterPayload>();
+        public PlotterPayload? DefaultPlotter { get; set; }
+        public string PrintExecutionStatus { get; set; } = "not_attempted";
+        public string PrintExecutionMessage { get; set; } = "This probe reads print frames and plotter definitions only. It does not execute SxModel.print.";
+    }
+
+    public sealed class PrintProbeEnvelope
+    {
+        public string InputPath { get; set; } = string.Empty;
+        public SourceFilePayload SourceFile { get; set; } = new SourceFilePayload();
+        public string SourceFormat { get; set; } = "icad";
+        public string ExtractorName { get; set; } = SchemaVersions.ExtractorName;
+        public string ExtractorVersion { get; set; } = SchemaVersions.SchemaVersion;
+        public long ElapsedMs { get; set; }
+        public List<WarningPayload> Warnings { get; set; } = new List<WarningPayload>();
+        public PrintProbePayload PrintProbe { get; set; } = new PrintProbePayload();
+    }
 }

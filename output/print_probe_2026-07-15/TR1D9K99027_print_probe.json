@@ -1,0 +1,75 @@
+{
+  "input_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+  "source_file": {
+    "full_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+    "directory_path": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K",
+    "file_name": "TR1D9K99027.icd",
+    "file_name_without_extension": "TR1D9K99027",
+    "extension": ".icd"
+  },
+  "source_format": "icad",
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 2649,
+  "warnings": [],
+  "print_probe": {
+    "print_frames": [
+      {
+        "no": 1,
+        "size": "A2",
+        "vertical": false,
+        "dinfo": [
+          594.0,
+          420.0,
+          1.0,
+          0.0,
+          0.0,
+          594.0,
+          420.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "drawing_scale": 1.0,
+        "range_min_x": 0.0,
+        "range_min_y": 0.0,
+        "range_max_x": 594.0,
+        "range_max_y": 420.0
+      }
+    ],
+    "plotters": [
+      {
+        "no": "PLOT01",
+        "name": "CubePDF",
+        "is_default": true
+      },
+      {
+        "no": "PLOT03",
+        "name": "Cubepdf2",
+        "is_default": false
+      },
+      {
+        "no": "PLOT02",
+        "name": "Printer_005",
+        "is_default": false
+      }
+    ],
+    "default_plotter": {
+      "no": "PLOT01",
+      "name": "CubePDF",
+      "is_default": true
+    },
+    "print_execution_status": "not_attempted",
+    "print_execution_message": "This probe reads print frames and plotter definitions only. It does not execute SxModel.print."
+  }
+}

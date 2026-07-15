@@ -66,7 +66,7 @@
 | 比重/密度 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 実装済み | `SxInfMass.density` と、全体/部品材質API由来の `spe_grav` を保持 |
 | 重心 | A/C | `SxInfMass.pos` | 実装済み | `center_of_gravity_x/y/z` として保持 |
 | 慣性モーメント | A/C | `SxInfMass.inf_global_moment`, `inf_gravity_moment`, `inf_main_moment` | 未実装 | 検索タグより設計解析属性向け |
-| 図面サイズ | C | `SxInfPrint` または 2D出図範囲との照合 | 未実装 | 3D単独の固定属性としては未確認。モデル内の2D情報から取れる可能性が高い |
+| 図面サイズ | C | `SxInfPrint` または 2D出図範囲との照合 | 実装済み | 3D単独の固定属性としては未確認。モデル内の2D情報から取れる可能性が高い |
 | PRFX | B/D | 任意情報、パーツ名、参照図面名に含まれる可能性 | 未実装 | SXNET固定フィールドとしてはヒットなし |
 | ユニット番号 | B/D | 任意情報、パーツ名、階層名に含まれる可能性 | 未実装 | SXNET固定フィールドとしてはヒットなし |
 
@@ -75,15 +75,15 @@
 | 項目 | 判定 | SXNET根拠 | 現行PoC | 補足 |
 | --- | --- | --- | --- | --- |
 | 2DグローバルVS | A | `SxModel.getGlobalVS()` | 実装済み | `"!!GLOBAL"` VSを取得 |
-| VS名 | A | `SxVS.getInf()` -> `SxInfVS.name` | 未実装 | シート/ビュー識別 |
-| VS尺度 | A | `SxInfVS.scale`, `SxInfSys.scale` | 未実装 | 図枠文字の尺度とも照合する |
-| VS種別 | A | `SxInfVS.type`, `view_type` | 未実装 | グローバルビュー、基本ビュー、ローカルビュー、子図 |
-| VSコメント | A | `SxInfVS.comment` | 未実装 | 子図で有効 |
-| 出図範囲枠 | A | `SxModel.getInfPrintList()` -> `SxInfPrint` | 未実装 | 図面サイズ・用紙・作画範囲の強い候補 |
-| 用紙サイズ | A | `SxInfPrint.size`, `SxInfPrint.dinfo[0]`, `[1]` | 未実装 | `"A0"～"A6"`, `"B1"～"B7"`, `"XY"` |
-| 用紙方向 | A | `SxInfPrint.vertical` | 未実装 | 縦/横 |
-| 作画スケール | A | `SxInfPrint.dinfo[2]` | 未実装 | `-1.0` は自動 |
-| 作画範囲 | A | `SxInfPrint.dinfo[3]`～`[6]` | 未実装 | 2Dグローバルビュー座標 |
+| VS名 | A | `SxVS.getInf()` -> `SxInfVS.name` | 実装済み | シート/ビュー識別 |
+| VS尺度 | A | `SxInfVS.scale`, `SxInfSys.scale` | 実装済み | 図枠文字の尺度とも照合する |
+| VS種別 | A | `SxInfVS.type`, `view_type` | 実装済み | グローバルビュー、基本ビュー、ローカルビュー、子図 |
+| VSコメント | A | `SxInfVS.comment` | 実装済み | 子図で有効 |
+| 出図範囲枠 | A | `SxModel.getInfPrintList()` -> `SxInfPrint` | 実装済み | 図面サイズ・用紙・作画範囲の強い候補。`probe-2d-print` でも単独確認可能 |
+| 用紙サイズ | A | `SxInfPrint.size`, `SxInfPrint.dinfo[0]`, `[1]` | 実装済み | `"A0"～"A6"`, `"B1"～"B7"`, `"XY"` |
+| 用紙方向 | A | `SxInfPrint.vertical` | 実装済み | 縦/横 |
+| 作画スケール | A | `SxInfPrint.dinfo[2]` | 実装済み | `-1.0` は自動 |
+| 作画範囲 | A | `SxInfPrint.dinfo[3]`～`[6]` | 実装済み | 2Dグローバルビュー座標 |
 | 2Dセグメント | A | `SxVS.getSegList()` | 実装済み | 可視/実像部品/レイヤ/タイプ条件あり |
 | 2Dジオメトリ一括取得 | A | `SxEntSeg.getGeomList()` | 実装済み | 型付きジオメトリへ変換 |
 | 文字 | A | `SxGeomText.txt`, `text_line_num`, `pnt`, `atr_word` | 実装済み | 図枠・注記・表内文字の材料 |
@@ -116,6 +116,18 @@
 | 塗装指示 | B/D | 文字、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし |
 | PRFX | B/D | 文字、図枠、部品表、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。客先固有辞書の拡充が必要 |
 | ユニット番号 | B/D | 文字、図枠、部品表、注記 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。客先固有辞書の拡充が必要 |
+
+### 4.1 2D印刷枠・プロッタ定義の実機確認
+
+2026-07-15 に `probe-2d-print` コマンドを追加し、`SxModel.getInfPrintList()` と `SxInfPlot.getInfPlotList()` / `getInfDefPlot()` を読み取り専用で確認した。`SxModel.print` は実行していない。
+
+| サンプル | 出図範囲枠 | プロッタ | デフォルト | 確認結果 |
+| --- | ---: | ---: | --- | --- |
+| `TR1D9K99027.icd` | 1 | 3 | `CubePDF` | A2横、範囲 `0,0` - `594,420` |
+| `DFR-CM1-AA0305300011.icd` | 1 | 3 | `CubePDF` | A3横、範囲 `-410,-10` - `10,287` |
+| `217008-41J-3004.icd` | 1 | 3 | `CubePDF` | A3横、範囲 `0,-0.00001943` - `420,297` |
+
+出力JSONは `output\print_probe_2026-07-15\*_print_probe.json` に保存した。現時点では印刷実行を行わず、既存2Dビューワーへ渡すPDF/JPEG/TIFF生成は次段階の確認対象とする。
 
 ## 5. 現行PoCの実サンプル確認
 

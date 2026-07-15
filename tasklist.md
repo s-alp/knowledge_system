@@ -45,6 +45,7 @@
   - 2026-07-15 に `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR` を `integrations\2D_3D_CAD_VIEWR` へコピーし、提出済み2D/3Dビューワーの実装を基準に再確認した。完成版UIはDjango検証画面ではなく、2D/3Dビューワーの `drawingId -> bootstrap -> viewer2d/viewer3d open` の流れにタグ・属性補助パネルを足す方針へ戻す。
   - 提出済み2D/3Dビューワーの `GET /api/v1/drawings/{drawingId}/bootstrap` 契約を確認し、detail API 内の `viewerBootstrap` と同一形状を返す読み取り専用互換APIを追加。末尾スラッシュありも許容する。
   - 2D文字・寸法・記号系に `position_x/y/z` と `inside_print_area` を追加。`TR1D9K99027.icd` では文字190件すべてに座標が付き、185件が印刷枠内、5件が印刷枠外。
+  - `probe-2d-print` を追加し、印刷実行なしで `SxModel.getInfPrintList()` と `SxInfPlot.getInfPlotList()` / `getInfDefPlot()` を確認。`TR1D9K99027.icd`、`DFR-CM1-AA0305300011.icd`、`217008-41J-3004.icd` は各1印刷枠、プロッタ3件、デフォルト `CubePDF` を取得できた。
   - `SxGeomSpline2D` / 楕円弧 / ハッチング / 表面粗さ / 切断線 / デルタ / データムを primitive として取り込み。`TR1D9K99027.icd` と `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認。
   - 3Dマスプロパティは `SxWF.getExtent()` -> `SxWF.getEntList()` -> `SxEnt.getMass()` で実装済み。`6800DDU.icd` / `474300AC219.icd` / `TR1D9Q00027.icd` で `mass_probe_status=available` を確認。
   - 2D図枠欄名候補を `title_block_candidates` と `title_block_fields` として追加。`TR1D9K99027_allviews_2d.json` は候補10件、`DFR-CM1-AA0305300011_2d.json` は材質候補を確認。
@@ -128,6 +129,7 @@
 - [x] 再抽出後の2Dカバレッジで `itemsWithoutView=0` を確認。`SxGeomLine2D` の `pnt1/pnt2` 座標取得を追加し、印刷枠判定不明は `unknownPrintArea=13569` から `488` まで減少。残りは主にハッチングと座標なし文字として記録
 - [x] 2D文字・寸法・記号系へ座標と `inside_print_area` を追加
 - [x] `TR1D9K99027.icd` で印刷枠内外判定を実データ確認
+- [x] `probe-2d-print` で3サンプルの出図範囲枠とプロッタ定義を読み取り専用確認
 - [x] `SxGeomSpline2D` など未対応2Dジオメトリを primitive として取り込み
 - [x] `TR1D9K99027.icd` / `CAA5012-02430002P1R1.icd` で `unsupported_geometry=0` を確認
 - [x] 3Dマスプロパティを raw extract / canonical / detail display に追加
@@ -225,7 +227,7 @@
 
 ## 次に着手する
 
-- [ ] 2Dは `SxFileModel.print(SxInfPlot, string)` / `print(string)` とプロッタ設定を実機で確認し、PDF/JPEG/TIFF相当または中間PS/画像化のどれで既存2Dビューワーへ渡すかを確定する
+- [ ] 2Dは `SxModel.print(...)` / `SxFileModel.print(...)` と CubePDF/プロッタ設定の実出力先を確認し、PDF/JPEG/TIFF相当または中間PS/画像化のどれで既存2Dビューワーへ渡すかを確定する
 - [ ] 実ICAD共有サンプルをさらに追加して `--preview-output-dir` 付き3D抽出を横断実行し、単一部品/アセンブリ/外部参照/マルチボディごとのSTL生成成功率と失敗理由を集計する
 - [ ] 共有済みサンプルを追加で条件profile付き再抽出し、ビュー差、レイヤー差、印刷枠差、パーツ付加情報差の検出率と未解決理由を横断集計する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
