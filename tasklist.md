@@ -191,9 +191,13 @@
 - [x] ブラウザで見せるローカル検証用成果物の入口として `/drawing-metadata/handoff/` を追加。本番組み込みUIではなく、抽出・正規化・タグ生成・対象別payload・APIリンクの横断確認画面として扱う
 - [x] `/drawing-metadata/handoff/` の `2D=false / 3D=false` 表示はICAD実体なしではなく、抽出snapshotなしを意味するため、検証画面上は `未抽出` / `2Dのみ抽出済み` / `3Dのみ抽出済み` / `2D/3D抽出済み` として表示するよう修正
 - [x] タグ選定仕様を作成し、タグ化する項目、属性に留める項目、自動タグ化しない項目、図面/プロジェクト/製品・装置・ユニット/部品別の適用先を整理
+- [x] 既存2D/3Dビューワー契約を壊さず、`viewerBootstrap.metadata.tagAttributes` に図面/プロジェクト/製品・装置・ユニット/部品別のタグ・属性補助パネルpayloadを追加
+- [x] 未抽出を放置せず、`viewerBootstrap.metadata.extractionDiagnostics` で `partial` / `not_extracted`、未抽出モード、ビュー差・レイヤー差・印刷枠差・パーツ付加情報差の再確認条件を返すようにした
+- [x] `backend\.venv` を Python 3.12.10 で作り直し、pytest の一時領域を `tmp/pytest` に固定して AppData 側権限に依存しないテスト実行へ切り替えた
 
 ## 次に着手する
 
+- [ ] 未抽出・部分抽出のICADを条件別再抽出キューへ回し、ビュー別/レイヤー別/印刷枠別/パーツ付加情報別の失敗理由を実データごとに保存する
 - [ ] 創屋確認後の本番API/fixture名を連携項目表へ反映
 ## 保留中の確認事項
 

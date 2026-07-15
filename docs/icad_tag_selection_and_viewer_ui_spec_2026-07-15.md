@@ -33,6 +33,83 @@
 5. タグ・属性はビューワー内の補助情報として、図面の視認や類似検索の補助に使う。
 6. 本番ナレッジシステムへの登録、更新、削除はこのPoC側からは行わない。創屋へ渡すのは読み取り用API契約、fixture、payload仕様である。
 
+### bootstrap拡張
+
+提出済み2D/3Dビューワーの既存契約を壊さないため、既存キーは維持する。
+
+- `metadata.tags`: 既存ビューワーでも表示できる単純なタグ名配列。
+- `metadata.tagAttributes`: タグ・属性補助パネル用の追加payload。既存ビューワーが未知キーを無視しても、2D/3D表示は壊れない。
+- `metadata.extractionDiagnostics`: 未抽出・部分抽出を放置しないための診断payload。ビュー差、レイヤー差、印刷枠差、パーツ付加情報差を再試行条件として明示する。
+
+`metadata.tagAttributes` の形:
+
+```json
+{
+  "schemaVersion": "viewer_tag_attributes.v1",
+  "sourceSchemaVersion": "knowledge_system_payload_preview.v1",
+  "displayPolicy": "2D/3Dビューワー内の補助パネル表示用。ここから本番登録・更新・削除は行わない。",
+  "targetCount": 4,
+  "reviewRequired": true,
+  "targets": [
+    {
+      "targetKey": "drawing",
+      "label": "図面",
+      "tagApiStatus": "candidate_existing",
+      "writePolicy": "preview_only_no_production_write",
+      "tags": ["材質:SUS304"],
+      "attributes": [
+        {
+          "name": "図面名",
+          "value": "BRACKET",
+          "sourcePath": "canonicalAttributes.drawing_name",
+          "entityHint": null,
+          "bindingStatus": "needs_attribute_master_binding"
+        }
+      ],
+      "reviewRequired": true,
+      "notes": ["図面の tags は既存表示口があるため第一優先の連携候補。"]
+    }
+  ]
+}
+```
+
+`tagAttributes.targets` は図面、プロジェクト、製品・装置・ユニット、部品を同時に返す。ビューワー側では初期表示で図面向けを開き、必要に応じて対象別タブまたは折りたたみで他対象候補を見せる。
+
+`metadata.extractionDiagnostics` の形:
+
+```json
+{
+  "schemaVersion": "viewer_extraction_diagnostics.v1",
+  "status": "partial",
+  "missingModes": ["2d"],
+  "policy": "未抽出は確定不可ではなく、ビュー差・レイヤー差・印刷枠差・パーツ付加情報差を条件別に再試行する。",
+  "requiredConditionChecks": [
+    {
+      "key": "allViews",
+      "label": "全ビュー走査",
+      "reason": "ICADは1データ内に複数枚・複数ビューを内包するため、初期ビューだけでは図枠・寸法・表題欄を取り逃がす。"
+    },
+    {
+      "key": "allLayers",
+      "label": "全レイヤー走査",
+      "reason": "寸法、表題欄、訂正履歴、材質、パーツ付加情報が客先や図面種別で別レイヤーに分かれる可能性がある。"
+    },
+    {
+      "key": "printFrame",
+      "label": "印刷枠判定",
+      "reason": "図枠外の作業メモや退避形状を本番タグ候補へ混入させないため、印刷範囲内外を分けて記録する。"
+    },
+    {
+      "key": "partAttributes",
+      "label": "パーツ付加情報",
+      "reason": "2D/3D形状とは別の情報源として、ニッケ・澁谷などの客先データに存在する付加情報を個別に読む。"
+    }
+  ]
+}
+```
+
+`status` は `extracted`、`partial`、`not_extracted` の3段階とする。`availability.has2d/has3d` が `false` の場合でも「存在しない」とは断定せず、`missingModes` と `requiredConditionChecks` を見て条件別再抽出へ回す。
+
 ## タグ化の基本方針
 
 タグは検索、絞り込み、類似検索、設計レビューの入口として使う。すべての抽出値をタグにしない。

@@ -169,6 +169,92 @@ def _tag_names(tags: list[dict]) -> list[str]:
     return names
 
 
+def _viewer_tag_attribute_targets(knowledge_payload_preview: dict) -> list[dict]:
+    targets: list[dict] = []
+    for target in knowledge_payload_preview.get("targets", []) or []:
+        attributes = []
+        for attribute in (target.get("attributes") or [])[:12]:
+            attributes.append(
+                {
+                    "name": attribute.get("attributeName"),
+                    "value": attribute.get("attributeValue"),
+                    "sourcePath": attribute.get("sourcePath"),
+                    "entityHint": attribute.get("entityHint"),
+                    "bindingStatus": attribute.get("bindingStatus"),
+                }
+            )
+
+        targets.append(
+            {
+                "targetKey": target.get("targetKey"),
+                "label": target.get("label"),
+                "existingReception": target.get("existingReception"),
+                "tagApiStatus": target.get("tagApiStatus"),
+                "writePolicy": target.get("writePolicy"),
+                "tags": (target.get("tags") or [])[:20],
+                "attributes": attributes,
+                "reviewRequired": bool(target.get("reviewRequired")),
+                "notes": target.get("notes") or [],
+            }
+        )
+    return targets
+
+
+def _viewer_tag_attributes_payload(knowledge_payload_preview: dict) -> dict:
+    targets = _viewer_tag_attribute_targets(knowledge_payload_preview)
+    return {
+        "schemaVersion": "viewer_tag_attributes.v1",
+        "sourceSchemaVersion": knowledge_payload_preview.get("schemaVersion"),
+        "displayPolicy": "2D/3Dビューワー内の補助パネル表示用。ここから本番登録・更新・削除は行わない。",
+        "targets": targets,
+        "targetCount": len(targets),
+        "reviewRequired": any(target.get("reviewRequired") for target in targets),
+    }
+
+
+def _viewer_extraction_diagnostics(has_2d: bool, has_3d: bool) -> dict:
+    missing_modes: list[str] = []
+    if not has_2d:
+        missing_modes.append("2d")
+    if not has_3d:
+        missing_modes.append("3d")
+
+    status = "extracted"
+    if len(missing_modes) == 2:
+        status = "not_extracted"
+    elif missing_modes:
+        status = "partial"
+
+    return {
+        "schemaVersion": "viewer_extraction_diagnostics.v1",
+        "status": status,
+        "missingModes": missing_modes,
+        "policy": "未抽出は確定不可ではなく、ビュー差・レイヤー差・印刷枠差・パーツ付加情報差を条件別に再試行する。",
+        "requiredConditionChecks": [
+            {
+                "key": "allViews",
+                "label": "全ビュー走査",
+                "reason": "ICADは1データ内に複数枚・複数ビューを内包するため、初期ビューだけでは図枠・寸法・表題欄を取り逃がす。",
+            },
+            {
+                "key": "allLayers",
+                "label": "全レイヤー走査",
+                "reason": "寸法、表題欄、訂正履歴、材質、パーツ付加情報が客先や図面種別で別レイヤーに分かれる可能性がある。",
+            },
+            {
+                "key": "printFrame",
+                "label": "印刷枠判定",
+                "reason": "図枠外の作業メモや退避形状を本番タグ候補へ混入させないため、印刷範囲内外を分けて記録する。",
+            },
+            {
+                "key": "partAttributes",
+                "label": "パーツ付加情報",
+                "reason": "2D/3D形状とは別の情報源として、ニッケ・澁谷などの客先データに存在する付加情報を個別に読む。",
+            },
+        ],
+    }
+
+
 class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     drawingId = serializers.UUIDField(source="id")
     hostDrawingId = serializers.CharField(source="host_drawing_id")
@@ -212,6 +298,10 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     def get_viewerBootstrap(self, obj: RegisteredDrawing) -> dict:
         snapshots_by_mode = {snapshot.extraction_mode: snapshot for snapshot in obj.snapshots.all()}
         composed_metadata = compose_drawing_metadata(obj)
+        knowledge_payload_preview = build_knowledge_system_payload_preview(
+            drawing=obj,
+            composed_metadata=composed_metadata,
+        )
         canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
         has_2d = "2d" in snapshots_by_mode
         has_3d = "3d" in snapshots_by_mode
@@ -246,6 +336,8 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
                     _first_value(canonical_attributes.get("intention"), canonical_attributes.get("design_purpose"))
                 ),
                 "tags": _tag_names(composed_metadata.get("derivedTags", []) or []),
+                "tagAttributes": _viewer_tag_attributes_payload(knowledge_payload_preview),
+                "extractionDiagnostics": _viewer_extraction_diagnostics(has_2d, has_3d),
             },
         }
 

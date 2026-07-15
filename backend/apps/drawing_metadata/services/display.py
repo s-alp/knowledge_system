@@ -754,6 +754,8 @@ def build_integration_handoff_display_payload(
 ) -> dict:
     availability = viewer_bootstrap.get("availability", {}) or {}
     metadata = viewer_bootstrap.get("metadata", {}) or {}
+    tag_attributes = metadata.get("tagAttributes") or {}
+    extraction_diagnostics = metadata.get("extractionDiagnostics") or {}
     pre_filters = rag_payload.get("preFilters", {}) or {}
     ranking_signals = rag_payload.get("rankingSignals", {}) or {}
     reconciliation = rag_payload.get("reconciliation", {}) or {}
@@ -793,6 +795,15 @@ def build_integration_handoff_display_payload(
             _make_row("paperSize", "図面サイズ", metadata.get("paperSize")),
             _make_row("owner", "担当者", metadata.get("owner")),
             _make_display_row("tags", "viewerタグ", metadata.get("tags", []), _display_list(metadata.get("tags", []))),
+            _make_row("tagAttributeTargetCount", "viewerタグ・属性対象数", tag_attributes.get("targetCount")),
+            _make_row("tagAttributeReviewRequired", "viewerタグ・属性レビュー要否", tag_attributes.get("reviewRequired")),
+            _make_row("extractionStatus", "抽出状態", extraction_diagnostics.get("status")),
+            _make_display_row(
+                "missingExtractionModes",
+                "未抽出モード",
+                extraction_diagnostics.get("missingModes", []),
+                _display_list(extraction_diagnostics.get("missingModes", [])),
+            ),
         ],
         "ragFilterRows": [_make_row(key, label, pre_filters.get(key)) for key, label in RAG_PRE_FILTER_FIELDS],
         "ragSignalRows": rag_signal_rows,

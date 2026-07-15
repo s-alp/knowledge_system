@@ -146,6 +146,16 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
     assert bootstrap["metadata"]["paperSize"] == "A3"
     assert bootstrap["metadata"]["owner"] == "設計者A"
     assert bootstrap["metadata"]["tags"] == ["材質:SUS304", "装置:ロボット"]
+    assert bootstrap["metadata"]["tagAttributes"]["schemaVersion"] == "viewer_tag_attributes.v1"
+    assert bootstrap["metadata"]["tagAttributes"]["reviewRequired"] is True
+    assert bootstrap["metadata"]["extractionDiagnostics"]["status"] == "partial"
+    assert bootstrap["metadata"]["extractionDiagnostics"]["missingModes"] == ["3d"]
+    target_by_key = {
+        target["targetKey"]: target
+        for target in bootstrap["metadata"]["tagAttributes"]["targets"]
+    }
+    assert target_by_key["drawing"]["tags"] == ["材質:SUS304", "装置:ロボット"]
+    assert any(attribute["name"] == "図面名" for attribute in target_by_key["drawing"]["attributes"])
 
 
 @pytest.mark.django_db
@@ -181,23 +191,25 @@ def test_viewer_bootstrap_endpoint_matches_existing_viewer_contract(sample_regis
     detail_bootstrap = detail_response.json()["viewerBootstrap"]
     assert bootstrap_response.json() == detail_bootstrap
     assert bootstrap_slash_response.json() == detail_bootstrap
-    assert bootstrap_response.json() == {
-        "drawingId": str(drawing.id),
-        "title": "ロードカップ",
-        "version": "R3",
-        "defaultMode": "3d",
-        "availability": {"has2d": False, "has3d": True},
-        "metadata": {
-            "drawingNumber": "DWG-002",
-            "drawingName": "ロードカップ",
-            "drawingType": None,
-            "paperSize": "A2",
-            "status": None,
-            "owner": "承認者B",
-            "designPurpose": "既存2D/3Dビューワー連携確認",
-            "tags": ["装置:搬送部"],
-        },
-    }
+    payload = bootstrap_response.json()
+    assert payload["drawingId"] == str(drawing.id)
+    assert payload["title"] == "ロードカップ"
+    assert payload["version"] == "R3"
+    assert payload["defaultMode"] == "3d"
+    assert payload["availability"] == {"has2d": False, "has3d": True}
+    assert payload["metadata"]["drawingNumber"] == "DWG-002"
+    assert payload["metadata"]["drawingName"] == "ロードカップ"
+    assert payload["metadata"]["drawingType"] is None
+    assert payload["metadata"]["paperSize"] == "A2"
+    assert payload["metadata"]["status"] is None
+    assert payload["metadata"]["owner"] == "承認者B"
+    assert payload["metadata"]["designPurpose"] == "既存2D/3Dビューワー連携確認"
+    assert payload["metadata"]["tags"] == ["装置:搬送部"]
+    assert payload["metadata"]["tagAttributes"]["schemaVersion"] == "viewer_tag_attributes.v1"
+    assert payload["metadata"]["tagAttributes"]["targetCount"] == 4
+    assert payload["metadata"]["extractionDiagnostics"]["schemaVersion"] == "viewer_extraction_diagnostics.v1"
+    assert payload["metadata"]["extractionDiagnostics"]["status"] == "partial"
+    assert payload["metadata"]["extractionDiagnostics"]["missingModes"] == ["2d"]
 
 
 @pytest.mark.django_db
