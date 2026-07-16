@@ -43,8 +43,22 @@ namespace IcadExtraction.Runner
 
         public static SxNetInputFileLease Create(string inputPath)
         {
+            return Create(inputPath, forceTemporaryCopy: false);
+        }
+
+        public static SxNetInputFileLease Create(string inputPath, bool forceTemporaryCopy)
+        {
             var originalPath = Path.GetFullPath(inputPath);
             EnsureInputFileExists(originalPath);
+
+            if (forceTemporaryCopy)
+            {
+                return CreateTemporaryCopyLease(
+                    originalPath,
+                    "temporary_copy_forced",
+                    "SXNETへ渡すパスを短く固定するため、ICADファイルを短い一時パスへコピーして開きました。原本パスはsource_file.full_pathに保持しています。"
+                );
+            }
 
             if (!RequiresAlternatePathForSxNet(originalPath))
             {
@@ -64,18 +78,9 @@ namespace IcadExtraction.Runner
                 );
             }
 
-            var temporaryDirectory = Path.Combine(Path.GetTempPath(), "icad-sxnet", Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(temporaryDirectory);
-            var extension = Path.GetExtension(originalPath);
-            var stagedPath = Path.Combine(temporaryDirectory, string.IsNullOrWhiteSpace(extension) ? "input.icd" : "input" + extension);
-            File.Copy(ToExtendedWindowsPath(originalPath), stagedPath, overwrite: false);
-
-            return new SxNetInputFileLease(
+            return CreateTemporaryCopyLease(
                 originalPath,
-                stagedPath,
                 "temporary_copy",
-                temporaryDirectory,
-                "sxnet_input_path_staged",
                 "SXNETのパス長制限を避けるため、ICADファイルを短い一時パスへコピーして開きました。外部参照がある図面では参照先の解決結果を確認してください。"
             );
         }
@@ -136,6 +141,28 @@ namespace IcadExtraction.Runner
             }
 
             return buffer.ToString();
+        }
+
+        private static SxNetInputFileLease CreateTemporaryCopyLease(
+            string originalPath,
+            string strategy,
+            string warningMessage
+        )
+        {
+            var temporaryDirectory = Path.Combine(Path.GetTempPath(), "icad-sxnet", Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(temporaryDirectory);
+            var extension = Path.GetExtension(originalPath);
+            var stagedPath = Path.Combine(temporaryDirectory, string.IsNullOrWhiteSpace(extension) ? "input.icd" : "input" + extension);
+            File.Copy(ToExtendedWindowsPath(originalPath), stagedPath, overwrite: false);
+
+            return new SxNetInputFileLease(
+                originalPath,
+                stagedPath,
+                strategy,
+                temporaryDirectory,
+                "sxnet_input_path_staged",
+                warningMessage
+            );
         }
 
         private static string ToExtendedWindowsPath(string path)

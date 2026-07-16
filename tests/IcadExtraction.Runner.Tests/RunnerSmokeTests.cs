@@ -54,5 +54,32 @@ namespace IcadExtraction.Runner.Tests
 
             Assert.True(SxNetInputFileLease.RequiresAlternatePathForSxNet(longPath));
         }
+
+        [Fact]
+        public void SxNetInputFileLease_ForceTemporaryCopyUsesShortStagedPath()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");
+            File.WriteAllText(tempPath, "dummy");
+            string stagedPath;
+            try
+            {
+                using (var lease = SxNetInputFileLease.Create(tempPath, forceTemporaryCopy: true))
+                {
+                    stagedPath = lease.SxNetInputPath;
+
+                    Assert.Equal(Path.GetFullPath(tempPath), lease.OriginalPath);
+                    Assert.NotEqual(Path.GetFullPath(tempPath), lease.SxNetInputPath);
+                    Assert.Equal("temporary_copy_forced", lease.Strategy);
+                    Assert.True(lease.UsedAlternatePath);
+                    Assert.True(File.Exists(lease.SxNetInputPath));
+                }
+
+                Assert.False(File.Exists(stagedPath));
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 }

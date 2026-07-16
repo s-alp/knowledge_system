@@ -25,7 +25,7 @@
     "file_name_without_extension": "string",
     "extension": "string",
     "sx_net_input_path": "string",
-    "sx_net_input_strategy": "original|windows_short_path|temporary_copy",
+    "sx_net_input_strategy": "original|windows_short_path|temporary_copy|temporary_copy_forced",
     "used_sx_net_alternate_path": false,
     "original_path_length": 0,
     "sx_net_input_path_length": 0
@@ -48,6 +48,7 @@
 - `input_path` と `source_file.full_path` は原本ICADパスを保持する
 - SXNETへ渡すパスは `source_file.sx_net_input_path` に保持する
 - 長パスなどでSXNETが開けない可能性がある場合、Runnerは `windows_short_path` を優先し、それでも短くならない場合だけ `temporary_copy` を使う
+- ブラウザアップロード由来のICADは、保存先パスが深くなりSXNETの開けない条件に寄りやすいため、Djangoから `temporary_copy_forced` を指定して短い一時パスで開く
 - `temporary_copy` は外部参照解決に影響し得るため、`warnings[].code=sxnet_input_path_staged` を出す
 - `warnings` は以下の形を基本にする
 

@@ -81,6 +81,8 @@ def build_extractor_command(
                 "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
             ]
         )
+    if _is_uploaded_icad_source(drawing.source_path):
+        command.extend(["--force-sxnet-staged-input", "true"])
     if job_id is not None:
         preview_output_dir = settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)
         preview_base_url = settings.DRAWING_METADATA_PREVIEW_ASSET_BASE_URL.rstrip("/") + f"/{quote(str(job_id))}"
@@ -88,6 +90,16 @@ def build_extractor_command(
         command.extend(["--preview-public-base-url", preview_base_url])
         command.extend(["--preview-file-name-prefix", str(job_id)])
     return command
+
+
+def _is_uploaded_icad_source(source_path: str) -> bool:
+    upload_root = (settings.DRAWING_METADATA_STORAGE_ROOT / "uploads").resolve(strict=False)
+    source = Path(source_path).resolve(strict=False)
+    try:
+        source.relative_to(upload_root)
+    except ValueError:
+        return False
+    return True
 
 
 def run_extractor(

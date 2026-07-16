@@ -123,3 +123,27 @@ def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_a
     assert "/api/v1/drawing-metadata-preview-assets/11111111-1111-1111-1111-111111111111" in command
     assert "--preview-file-name-prefix" in command
     assert "11111111-1111-1111-1111-111111111111" in command
+    assert "--force-sxnet-staged-input" not in command
+
+
+@pytest.mark.django_db
+def test_build_extractor_command_forces_staged_input_for_uploaded_icad(settings, tmp_path):
+    storage_root = tmp_path / "drawing_metadata"
+    uploaded_path = storage_root / "uploads" / "upload-id" / "sample.icd"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-uploaded-command",
+        filename="sample.icd",
+        source_path=str(uploaded_path),
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = storage_root
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode="3d",
+        output_path=Path(r"C:\temp\out.json"),
+    )
+
+    force_index = command.index("--force-sxnet-staged-input")
+    assert command[force_index + 1] == "true"

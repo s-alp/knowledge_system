@@ -71,9 +71,10 @@ namespace IcadExtraction.Runner
             var extractionOptions = OptionalJsonObjectOption(command, "extraction-options-json");
             var conditionOptions = ExtractionConditionOptions.FromDictionary(extractionOptions);
             var previewAssetOptions = BuildPreviewAssetOptions(command);
+            var forceSxNetStagedInput = OptionalBoolOption(command, "force-sxnet-staged-input", false);
 
             var stopwatch = Stopwatch.StartNew();
-            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
@@ -169,9 +170,10 @@ namespace IcadExtraction.Runner
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
             var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+            var forceSxNetStagedInput = OptionalBoolOption(command, "force-sxnet-staged-input", false);
 
             var stopwatch = Stopwatch.StartNew();
-            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
@@ -210,9 +212,10 @@ namespace IcadExtraction.Runner
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
             var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+            var forceSxNetStagedInput = OptionalBoolOption(command, "force-sxnet-staged-input", false);
 
             var stopwatch = Stopwatch.StartNew();
-            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
