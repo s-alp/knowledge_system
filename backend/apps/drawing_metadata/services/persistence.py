@@ -12,7 +12,7 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
-from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length, validate_icad_path_length
+from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length
 
 
 def enqueue_extraction_job(
@@ -26,7 +26,6 @@ def enqueue_extraction_job(
     diagnostics: dict | None = None,
 ) -> DrawingMetadataExtractionJob:
     validate_icad_filename_length(drawing.filename)
-    validate_icad_path_length(drawing.source_path)
 
     with transaction.atomic():
         active_job = (

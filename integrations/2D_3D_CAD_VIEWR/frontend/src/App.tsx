@@ -114,7 +114,7 @@ export default function App() {
   const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
   const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
   const [selectedEntity, setSelectedEntity] = useState<{ entityId: string; drawingId: string } | null>(null);
-  const detailMock = useMemo(
+  const knowledgeDetail = useMemo(
     () => (bootstrap ? buildDrawingKnowledgeDetail(bootstrap) : null),
     [bootstrap],
   );
@@ -136,12 +136,12 @@ export default function App() {
       metadata: {},
     };
   }, [localLaunch]);
-  const localDetailMock = useMemo(
+  const localKnowledgeDetail = useMemo(
     () => (localBootstrap ? buildDrawingKnowledgeDetail(localBootstrap) : null),
     [localBootstrap],
   );
   const activeBootstrap = localBootstrap ?? bootstrap;
-  const activeDetailMock = localDetailMock ?? detailMock;
+  const activeKnowledgeDetail = localKnowledgeDetail ?? knowledgeDetail;
   const has2d = activeBootstrap?.availability.has2d ?? false;
   const has3d = activeBootstrap?.availability.has3d ?? false;
 
@@ -205,7 +205,7 @@ export default function App() {
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;
     }
 
-    if (!drawingId && localLaunch && localBootstrap && localDetailMock) {
+    if (!drawingId && localLaunch && localBootstrap && localKnowledgeDetail) {
       return (
         <Suspense
           fallback={
@@ -218,7 +218,7 @@ export default function App() {
             <Viewer2DPage
               drawingId={localBootstrap.drawingId}
               bootstrap={localBootstrap}
-              knowledgeMock={localDetailMock}
+              knowledgeDetail={localKnowledgeDetail}
               debugInputsEnabled={false}
               autoOpenDrawingSource={false}
               initialLocalFile={localLaunch.file}
@@ -227,7 +227,7 @@ export default function App() {
             <Viewer3DPage
               drawingId={localBootstrap.drawingId}
               bootstrap={localBootstrap}
-              knowledgeMock={localDetailMock}
+              knowledgeDetail={localKnowledgeDetail}
               debugInputsEnabled={false}
               autoOpenDrawingSource={false}
               initialLocalFile={localLaunch.file}
@@ -279,7 +279,7 @@ export default function App() {
       );
     }
 
-    if (error || !bootstrap || !detailMock) {
+    if (error || !bootstrap || !knowledgeDetail) {
       return (
         <section className="panel viewer-page">
           <div className="panel-section workspace-message error-panel">
@@ -302,14 +302,14 @@ export default function App() {
           <Viewer2DPage
             drawingId={drawingId}
             bootstrap={bootstrap}
-            knowledgeMock={detailMock}
+            knowledgeDetail={knowledgeDetail}
             debugInputsEnabled={debugInputsEnabled}
           />
         ) : (
           <Viewer3DPage
             drawingId={drawingId}
             bootstrap={bootstrap}
-            knowledgeMock={detailMock}
+            knowledgeDetail={knowledgeDetail}
             debugInputsEnabled={debugInputsEnabled}
           />
         )}
@@ -416,8 +416,8 @@ export default function App() {
 
             <div className="workspace">
               {pageContent}
-              {activePage === "drawing" && activeDetailMock ? (
-                <DrawingSupplementPanels detail={activeDetailMock} />
+              {activePage === "drawing" && activeKnowledgeDetail ? (
+                <DrawingSupplementPanels detail={activeKnowledgeDetail} />
               ) : null}
             </div>
           </main>

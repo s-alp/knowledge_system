@@ -3,10 +3,15 @@ import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { DrawingSupplementPanels } from "./shared/components/DrawingSupplementPanels";
 import { DrawingEntryPanel } from "./shared/components/DrawingEntryPanel";
 import { LicensePanel } from "./shared/components/LicensePanel";
-import { resolveDrawingIdFromLocation } from "./shared/drawingRoute";
+import { PlaceholderKnowledgePage, type DetailPageKey } from "./features/knowledgeEntities/EntityPages";
+import { IcadEntityDetailPage, IcadEntityListPage } from "./features/knowledgeEntities/IcadEntityPages";
+import { IcadExtractionReviewPage } from "./features/drawingMetadata/IcadExtractionReviewPage";
+import type { KnowledgePageKey } from "./features/knowledgeEntities/types";
+import { TagAutomationSettingsPage } from "./features/knowledgeSettings/TagAutomationSettingsPage";
+import { resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./shared/drawingRoute";
 import { isViewerDebugInputsEnabled } from "./shared/env";
 import { useDrawingBootstrap } from "./shared/hooks/useDrawingBootstrap";
-import { buildDrawingKnowledgeMock } from "./shared/mock/drawingKnowledge";
+import { buildDrawingKnowledgeDetail } from "./shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse } from "./shared/types/viewer";
 
 const Viewer2DPage = lazy(() =>
@@ -21,31 +26,70 @@ type LocalLaunchState = {
   mode: ViewMode;
   file: File;
 };
+type NavigationItem = {
+  key: KnowledgePageKey;
+  label: string;
+};
 type NavigationGroup = {
   title: string;
-  items: string[];
+  items: NavigationItem[];
 };
 
 const navigationGroups: NavigationGroup[] = [
   {
     title: "メイン",
-    items: ["プロジェクト", "製品", "部品", "図面管理", "文書管理"],
+    items: [
+      { key: "project", label: "プロジェクト" },
+      { key: "product", label: "製品・装置・ユニット" },
+      { key: "part", label: "部品" },
+      { key: "drawing", label: "図面管理" },
+      { key: "document", label: "文書管理" },
+    ],
   },
   {
     title: "検索",
-    items: ["統合検索", "チャット", "類似検索"],
+    items: [
+      { key: "search", label: "統合検索" },
+      { key: "chat", label: "チャット" },
+      { key: "similar", label: "類似検索" },
+    ],
   },
   {
     title: "営業",
-    items: ["顧客管理"],
+    items: [{ key: "customer", label: "顧客管理" }],
   },
   {
     title: "管理",
-    items: ["お知らせ管理", "マスタ設定", "システム設定"],
+    items: [
+      { key: "notice", label: "お知らせ管理" },
+      { key: "master", label: "マスタ設定" },
+      { key: "system", label: "システム設定" },
+    ],
   },
 ];
 
-function resolveInitialMode(bootstrap: DrawingBootstrapResponse): ViewMode {
+const pageTitles: Record<KnowledgePageKey, string> = {
+  project: "プロジェクト詳細",
+  product: "製品・装置・ユニット一覧",
+  part: "部品一覧",
+  drawing: "図面管理",
+  document: "文書管理",
+  search: "統合検索",
+  chat: "チャット",
+  similar: "類似検索",
+  customer: "顧客管理",
+  notice: "お知らせ管理",
+  master: "マスタ設定",
+  system: "システム設定",
+};
+
+function resolveInitialMode(bootstrap: DrawingBootstrapResponse, requestedMode: ViewMode | null): ViewMode {
+  if (requestedMode === "2d" && bootstrap.availability.has2d) {
+    return "2d";
+  }
+  if (requestedMode === "3d" && bootstrap.availability.has3d) {
+    return "3d";
+  }
   if (bootstrap.defaultMode === "3d" && bootstrap.availability.has3d) {
     return "3d";
   }
@@ -60,11 +104,18 @@ export default function App() {
     () => resolveDrawingIdFromLocation(window.location.pathname, window.location.search),
     [],
   );
+  const requestedMode = useMemo(() => resolveViewerModeFromSearch(window.location.search), []);
   const debugInputsEnabled = useMemo(() => isViewerDebugInputsEnabled(), []);
   const { bootstrap, loading, error } = useDrawingBootstrap(drawingId);
   const [localLaunch, setLocalLaunch] = useState<LocalLaunchState | null>(null);
-  const detailMock = useMemo(
-    () => (bootstrap ? buildDrawingKnowledgeMock(bootstrap) : null),
+  const [icadExtractionFile, setIcadExtractionFile] = useState<File | null>(null);
+  const [icadExtractionSourcePath, setIcadExtractionSourcePath] = useState("");
+  const [showIcadExtractionReview, setShowIcadExtractionReview] = useState(false);
+  const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
+  const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState<{ entityId: string; drawingId: string } | null>(null);
+  const knowledgeDetail = useMemo(
+    () => (bootstrap ? buildDrawingKnowledgeDetail(bootstrap) : null),
     [bootstrap],
   );
   const [mode, setMode] = useState<ViewMode>("2d");
@@ -85,24 +136,76 @@ export default function App() {
       metadata: {},
     };
   }, [localLaunch]);
-  const localDetailMock = useMemo(
-    () => (localBootstrap ? buildDrawingKnowledgeMock(localBootstrap) : null),
+  const localKnowledgeDetail = useMemo(
+    () => (localBootstrap ? buildDrawingKnowledgeDetail(localBootstrap) : null),
     [localBootstrap],
   );
   const activeBootstrap = localBootstrap ?? bootstrap;
-  const activeDetailMock = localDetailMock ?? detailMock;
+  const activeKnowledgeDetail = localKnowledgeDetail ?? knowledgeDetail;
   const has2d = activeBootstrap?.availability.has2d ?? false;
   const has3d = activeBootstrap?.availability.has3d ?? false;
+
+  function openKnowledgePage(page: KnowledgePageKey, openDetail = false, entityId?: string, entityDrawingId?: string) {
+    setActivePage(page);
+    setDetailPage(openDetail && (page === "product" || page === "part") ? page : null);
+    setSelectedEntity(
+      openDetail && (page === "product" || page === "part") && entityId && entityDrawingId
+        ? { entityId, drawingId: entityDrawingId }
+        : null,
+    );
+  }
+
+  function navigateFromEntity(page: KnowledgePageKey, entityId?: string, entityDrawingId?: string) {
+    if (page === "drawing" && entityDrawingId) {
+      const drawingUrl = new URL("/", window.location.origin);
+      drawingUrl.searchParams.set("drawingId", entityDrawingId);
+      window.location.assign(drawingUrl.toString());
+      return;
+    }
+    openKnowledgePage(page, page === "product" || page === "part", entityId, entityDrawingId);
+  }
+
+  const pageTitle = detailPage ? pageTitles[detailPage].replace("一覧", "詳細") : pageTitles[activePage];
 
   useEffect(() => {
     if (!activeBootstrap) {
       return;
     }
-    setMode(resolveInitialMode(activeBootstrap));
-  }, [activeBootstrap]);
+    setMode(resolveInitialMode(activeBootstrap, requestedMode));
+  }, [activeBootstrap, requestedMode]);
 
   const pageContent = (() => {
-    if (!drawingId && localLaunch && localBootstrap && localDetailMock) {
+    if (activePage !== "drawing") {
+      if (activePage === "product" || activePage === "part") {
+        if (detailPage === activePage) {
+          return (
+            <IcadEntityDetailPage
+              entityId={selectedEntity?.entityId ?? null}
+              drawingId={selectedEntity?.drawingId ?? null}
+              onNavigate={navigateFromEntity}
+            />
+          );
+        }
+
+        return (
+          <IcadEntityListPage
+            targetKey={activePage}
+            onOpenDetail={(entityId, entityDrawingId) => {
+              setSelectedEntity({ entityId, drawingId: entityDrawingId });
+              setDetailPage(activePage);
+            }}
+          />
+        );
+      }
+
+      if (activePage === "system") {
+        return <TagAutomationSettingsPage />;
+      }
+
+      return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;
+    }
+
+    if (!drawingId && localLaunch && localBootstrap && localKnowledgeDetail) {
       return (
         <Suspense
           fallback={
@@ -115,7 +218,7 @@ export default function App() {
             <Viewer2DPage
               drawingId={localBootstrap.drawingId}
               bootstrap={localBootstrap}
-              knowledgeMock={localDetailMock}
+              knowledgeDetail={localKnowledgeDetail}
               debugInputsEnabled={false}
               autoOpenDrawingSource={false}
               initialLocalFile={localLaunch.file}
@@ -124,7 +227,7 @@ export default function App() {
             <Viewer3DPage
               drawingId={localBootstrap.drawingId}
               bootstrap={localBootstrap}
-              knowledgeMock={localDetailMock}
+              knowledgeDetail={localKnowledgeDetail}
               debugInputsEnabled={false}
               autoOpenDrawingSource={false}
               initialLocalFile={localLaunch.file}
@@ -135,10 +238,28 @@ export default function App() {
     }
 
     if (!drawingId) {
+      if (showIcadExtractionReview) {
+        return (
+          <IcadExtractionReviewPage
+            file={icadExtractionFile}
+            sourcePath={icadExtractionSourcePath}
+            onBack={() => {
+              setShowIcadExtractionReview(false);
+            }}
+          />
+        );
+      }
+
       return (
         <DrawingEntryPanel
           debugInputsEnabled={debugInputsEnabled}
           initialValue={window.location.href}
+          onIcadMetadataLaunch={(source) => {
+            setIcadExtractionFile(source.file);
+            setIcadExtractionSourcePath(source.sourcePath);
+            setShowIcadExtractionReview(true);
+            openKnowledgePage("drawing");
+          }}
           onLocalFileLaunch={(nextMode, file) => {
             setLocalLaunch({ mode: nextMode, file });
             setMode(nextMode);
@@ -158,7 +279,7 @@ export default function App() {
       );
     }
 
-    if (error || !bootstrap || !detailMock) {
+    if (error || !bootstrap || !knowledgeDetail) {
       return (
         <section className="panel viewer-page">
           <div className="panel-section workspace-message error-panel">
@@ -181,14 +302,14 @@ export default function App() {
           <Viewer2DPage
             drawingId={drawingId}
             bootstrap={bootstrap}
-            knowledgeMock={detailMock}
+            knowledgeDetail={knowledgeDetail}
             debugInputsEnabled={debugInputsEnabled}
           />
         ) : (
           <Viewer3DPage
             drawingId={drawingId}
             bootstrap={bootstrap}
-            knowledgeMock={detailMock}
+            knowledgeDetail={knowledgeDetail}
             debugInputsEnabled={debugInputsEnabled}
           />
         )}
@@ -216,12 +337,13 @@ export default function App() {
                 <div className="sidebar-links">
                   {group.items.map((item) => (
                     <button
-                      key={item}
-                      className={item === "図面管理" ? "sidebar-link active" : "sidebar-link"}
+                      key={item.key}
+                      className={item.key === activePage ? "sidebar-link active" : "sidebar-link"}
                       type="button"
+                      onClick={() => openKnowledgePage(item.key)}
                     >
                       <span className="sidebar-link-marker" aria-hidden="true" />
-                      <span>{item}</span>
+                      <span>{item.label}</span>
                     </button>
                   ))}
                 </div>
@@ -251,43 +373,52 @@ export default function App() {
                 className="back-link"
                 type="button"
                 onClick={() => {
+                  if (detailPage) {
+                    setDetailPage(null);
+                    setSelectedEntity(null);
+                    return;
+                  }
                   if (!drawingId && localLaunch) {
                     setLocalLaunch(null);
                     return;
                   }
-                  window.history.back();
+                  openKnowledgePage("drawing");
                 }}
               >
                 ← 戻る
               </button>
-              <div className="mode-switch" role="radiogroup" aria-label="viewer mode">
-                {(["2d", "3d"] as ViewMode[]).map((tabMode) => (
-                  <label
-                    key={tabMode}
-                    className={tabMode === mode ? "mode-option active" : "mode-option"}
-                  >
-                    <input
-                      className="mode-option-input"
-                      type="radio"
-                      name="viewer-mode"
-                      checked={tabMode === mode}
-                      onChange={() => setMode(tabMode)}
-                      disabled={tabMode === "2d" ? !has2d : !has3d}
-                    />
-                    <span className="mode-option-indicator" aria-hidden="true" />
-                    <span>{tabMode === "2d" ? "2D" : "3D"}</span>
-                  </label>
-                ))}
-              </div>
+              {activePage === "drawing" ? (
+                <div className="mode-switch" role="radiogroup" aria-label="viewer mode">
+                  {(["2d", "3d"] as ViewMode[]).map((tabMode) => (
+                    <label
+                      key={tabMode}
+                      className={tabMode === mode ? "mode-option active" : "mode-option"}
+                    >
+                      <input
+                        className="mode-option-input"
+                        type="radio"
+                        name="viewer-mode"
+                        checked={tabMode === mode}
+                        onChange={() => setMode(tabMode)}
+                        disabled={tabMode === "2d" ? !has2d : !has3d}
+                      />
+                      <span className="mode-option-indicator" aria-hidden="true" />
+                      <span>{tabMode === "2d" ? "2D" : "3D"}</span>
+                    </label>
+                  ))}
+                </div>
+              ) : null}
             </div>
 
             <div className="page-heading">
-              <h1>図面詳細</h1>
+              <h1>{pageTitle}</h1>
             </div>
 
             <div className="workspace">
               {pageContent}
-              {activeDetailMock ? <DrawingSupplementPanels detail={activeDetailMock} /> : null}
+              {activePage === "drawing" && activeKnowledgeDetail ? (
+                <DrawingSupplementPanels detail={activeKnowledgeDetail} />
+              ) : null}
             </div>
           </main>
         </div>

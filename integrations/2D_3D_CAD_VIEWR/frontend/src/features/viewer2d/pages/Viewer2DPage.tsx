@@ -15,7 +15,7 @@ import { useViewer2DDocument } from "../hooks/useViewer2DDocument";
 interface Viewer2DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeDetail;
+  knowledgeDetail: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;
@@ -24,7 +24,7 @@ interface Viewer2DPageProps {
 export function Viewer2DPage({
   drawingId,
   bootstrap,
-  knowledgeMock,
+  knowledgeDetail,
   debugInputsEnabled,
   autoOpenDrawingSource = true,
   initialLocalFile = null,
@@ -187,8 +187,8 @@ export function Viewer2DPage({
         <DrawingOverviewPanel
           version={bootstrap.version}
           fields={detailItems}
-          attributes={knowledgeMock.attributes}
-          remarks={knowledgeMock.remarks}
+          attributes={knowledgeDetail.attributes}
+          remarks={knowledgeDetail.remarks}
           footerContent={infoFooter}
         />
 

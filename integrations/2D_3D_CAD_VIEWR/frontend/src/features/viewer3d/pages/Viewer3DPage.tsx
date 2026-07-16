@@ -21,7 +21,7 @@ const ThreeDViewerScene = lazy(() =>
 interface Viewer3DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeDetail;
+  knowledgeDetail: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;
@@ -36,7 +36,7 @@ type CameraCommand =
 export function Viewer3DPage({
   drawingId,
   bootstrap,
-  knowledgeMock,
+  knowledgeDetail,
   debugInputsEnabled,
   autoOpenDrawingSource = true,
   initialLocalFile = null,
@@ -233,8 +233,8 @@ export function Viewer3DPage({
         <DrawingOverviewPanel
           version={bootstrap.version}
           fields={detailItems}
-          attributes={knowledgeMock.attributes}
-          remarks={knowledgeMock.remarks}
+          attributes={knowledgeDetail.attributes}
+          remarks={knowledgeDetail.remarks}
           footerContent={infoFooter}
         />
 

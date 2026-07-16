@@ -31,7 +31,6 @@ from apps.drawing_metadata.services.icad_entities import build_icad_entity_catal
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
 from apps.drawing_metadata.services.path_constraints import (
     validate_icad_filename_length,
-    validate_icad_path_length,
 )
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
@@ -241,7 +240,7 @@ def _reextract_condition_for_error(error_message: str) -> str:
     if not normalized:
         return "失敗理由が記録されていません。workerログとICAD起動状態を確認してください。"
     if "パスが長すぎます" in error_message or "ファイル名が長すぎます" in error_message:
-        return "SXNETのパス長制限に当たっています。短い作業フォルダへICADをコピーするか、短いファイル名へ変更して再登録します。"
+        return "SXNETのパス長制限に当たっています。現行抽出では短い一時パスへ退避して再抽出します。ファイル名自体が長すぎる場合だけ短い名前で再登録します。"
     if "timed out" in normalized or "timeout" in normalized:
         return "ICAD起動待ちまたは抽出時間が不足しています。ICAD起動状態とタイムアウト秒数を確認して再抽出します。"
     if "not drawing file" in normalized or "図面ファイル" in error_message:
@@ -328,7 +327,16 @@ class RegistrationUploadApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        original_name = get_valid_filename(uploaded_file.name)
+        raw_original_name = uploaded_file.name
+        try:
+            validate_icad_filename_length(raw_original_name)
+        except ValueError as exc:
+            return Response(
+                {"error": {"code": "icad_filename_too_long", "message": str(exc)}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        original_name = get_valid_filename(raw_original_name)
         if not original_name.lower().endswith(".icd"):
             return Response(
                 {"error": {"code": "icad_file_extension", "message": ".icd ファイルを指定してください。"}},
@@ -344,14 +352,7 @@ class RegistrationUploadApiView(APIView):
 
         upload_root = settings.DRAWING_METADATA_STORAGE_ROOT / "uploads"
         stored_directory = upload_root / str(uuid.uuid4())
-        stored_path = (stored_directory / original_name).resolve(strict=False)
-        try:
-            validate_icad_path_length(stored_path)
-        except ValueError as exc:
-            return Response(
-                {"error": {"code": "icad_path_too_long", "message": str(exc)}},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        stored_path = (stored_directory / "input.icd").resolve(strict=False)
 
         upload_root.mkdir(parents=True, exist_ok=True)
         stored_directory.mkdir(parents=True, exist_ok=True)
@@ -393,6 +394,7 @@ class RegistrationDetailApiView(APIView):
             RegisteredDrawing.objects.prefetch_related(
                 Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
                 "jobs",
+                "audit_logs",
             ),
             pk=drawing_id,
         )
@@ -405,6 +407,7 @@ class DrawingViewerBootstrapApiView(APIView):
             RegisteredDrawing.objects.prefetch_related(
                 Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
                 "jobs",
+                "audit_logs",
             ),
             pk=drawing_id,
         )

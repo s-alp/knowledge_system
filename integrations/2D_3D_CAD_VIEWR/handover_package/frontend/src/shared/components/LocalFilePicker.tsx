@@ -70,7 +70,7 @@ export function LocalFilePicker({
       </div>
       <div className="form-grid">
         <label className="input-stack">
-          <span className="field-label">検証用ファイル</span>
+          <span className="field-label">ローカルファイル</span>
           <input
             ref={inputRef}
             type="file"

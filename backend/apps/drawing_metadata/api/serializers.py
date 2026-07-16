@@ -11,7 +11,7 @@ from apps.drawing_metadata.models import (
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
-from apps.drawing_metadata.services.path_constraints import validate_icad_path_length
+from apps.drawing_metadata.services.path_constraints import icad_source_path_exists
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
@@ -27,11 +27,7 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
     def validate_sourcePath(self, value):
         if not value.lower().endswith(".icd"):
             raise serializers.ValidationError(".icd ファイルを指定してください。")
-        try:
-            validate_icad_path_length(value)
-        except ValueError as exc:
-            raise serializers.ValidationError(str(exc)) from exc
-        if not Path(value).exists():
+        if not icad_source_path_exists(value):
             raise serializers.ValidationError("指定されたICADファイルが見つかりません。原本パスを確認してください。")
         return value
 
@@ -286,6 +282,162 @@ def _viewer_tag_attributes_payload(knowledge_payload_preview: dict) -> dict:
     }
 
 
+def _label_for_payload_target(target_key: str | None) -> str:
+    return {
+        "project": "プロジェクト",
+        "product": "製品・装置・ユニット",
+        "part": "部品",
+        "drawing": "図面",
+    }.get(str(target_key or ""), str(target_key or "関連情報"))
+
+
+def _preview_text(value, fallback: str = "-") -> str:
+    if not _has_value(value):
+        return fallback
+    if isinstance(value, (list, tuple)):
+        return ", ".join(_preview_text(item, "") for item in value if _has_value(item)) or fallback
+    if isinstance(value, dict):
+        return ", ".join(f"{key}:{_preview_text(item, '')}" for key, item in value.items() if _has_value(item)) or fallback
+    return str(value)
+
+
+def _viewer_revision_history_payload(
+    *,
+    canonical_attributes: dict,
+    snapshots_by_mode: dict,
+) -> list[dict]:
+    items: list[dict] = []
+    revision_value = _as_optional_string(canonical_attributes.get("revision"))
+    candidates = canonical_attributes.get("revision_note_candidates") or []
+    source_snapshot = snapshots_by_mode.get("2d") or snapshots_by_mode.get("3d")
+    source_updated_at = source_snapshot.updated_at.isoformat() if source_snapshot else None
+    source_updated_by = source_snapshot.updated_by if source_snapshot and source_snapshot.updated_by else "ICAD抽出"
+
+    for index, candidate in enumerate(candidates[:8], start=1):
+        if not isinstance(candidate, dict):
+            continue
+        summary = _preview_text(candidate.get("value") or candidate.get("text") or candidate.get("matched_text"))
+        if summary == "-":
+            continue
+        inside_print_area = candidate.get("inside_print_area")
+        status = "印刷枠内" if inside_print_area is True else "印刷枠外/未判定" if inside_print_area is False else "判定未取得"
+        confidence = candidate.get("confidence")
+        if confidence:
+            status = f"{status} / 信頼度:{confidence}"
+        items.append(
+            {
+                "version": revision_value or f"訂正候補{index}",
+                "updatedAt": source_updated_at or "",
+                "updatedBy": source_updated_by,
+                "summary": summary,
+                "status": status,
+            }
+        )
+    return items
+
+
+def _viewer_related_tabs_payload(knowledge_payload_preview: dict) -> list[dict]:
+    tabs: list[dict] = []
+    for target in knowledge_payload_preview.get("targets", []) or []:
+        target_key = str(target.get("targetKey") or "")
+        label = _label_for_payload_target(target_key)
+        tags = [str(tag) for tag in (target.get("tags") or []) if _has_value(tag)]
+        attributes = target.get("attributes") or []
+        notes = [str(note) for note in (target.get("notes") or []) if _has_value(note)]
+        chips = tags[:4]
+        if attributes:
+            chips.append(f"属性{len(attributes)}件")
+        if not chips:
+            chips.append(str(target.get("tagApiStatus") or "候補"))
+
+        description = " / ".join(notes[:2]) or str(target.get("writePolicy") or target.get("existingReception") or "")
+        tabs.append(
+            {
+                "id": target_key or f"target-{len(tabs) + 1}",
+                "label": label,
+                "items": [
+                    {
+                        "id": target_key or f"target-{len(tabs) + 1}",
+                        "title": label,
+                        "subtitle": str(target.get("existingReception") or target.get("tagApiStatus") or "-"),
+                        "description": description or "-",
+                        "chips": chips,
+                    }
+                ],
+            }
+        )
+    return tabs
+
+
+def _viewer_change_history_payload(drawing: RegisteredDrawing, snapshots_by_mode: dict) -> list[dict]:
+    items: list[dict] = []
+    for audit_log in drawing.audit_logs.all()[:8]:
+        items.append(
+            {
+                "version": audit_log.extraction_mode.upper(),
+                "changedAt": audit_log.executed_at.isoformat(),
+                "changedBy": audit_log.executed_by or "system",
+                "summary": audit_log.reason or audit_log.action_type,
+            }
+        )
+
+    if items:
+        return items
+
+    for mode, snapshot in sorted(snapshots_by_mode.items()):
+        items.append(
+            {
+                "version": mode.upper(),
+                "changedAt": snapshot.updated_at.isoformat(),
+                "changedBy": snapshot.updated_by or "ICAD抽出",
+                "summary": f"{mode.upper()} snapshotを更新",
+            }
+        )
+    return items[:8]
+
+
+def _viewer_knowledge_detail_payload(
+    *,
+    drawing: RegisteredDrawing,
+    composed_metadata: dict,
+    knowledge_payload_preview: dict,
+    snapshots_by_mode: dict,
+) -> dict:
+    canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
+    attributes = []
+    for key, label in (
+        ("material", "材質"),
+        ("mass_value", "質量"),
+        ("weight_value", "重量"),
+        ("surface_treatment_tokens", "表面処理"),
+        ("paint_instruction_tokens", "塗装指示"),
+        ("scale", "尺度"),
+    ):
+        value = canonical_attributes.get(key)
+        if _has_value(value):
+            attributes.append({"label": label, "value": _preview_text(value)})
+
+    design_purpose = _as_optional_string(
+        _first_value(canonical_attributes.get("intention"), canonical_attributes.get("design_purpose"))
+    )
+    return {
+        "schemaVersion": "viewer_knowledge_detail.v1",
+        "attributes": attributes,
+        "remarks": design_purpose or _as_optional_string(canonical_attributes.get("revision")) or "-",
+        "revisionHistory": _viewer_revision_history_payload(
+            canonical_attributes=canonical_attributes,
+            snapshots_by_mode=snapshots_by_mode,
+        ),
+        "relatedTabs": _viewer_related_tabs_payload(knowledge_payload_preview),
+        "changeHistory": _viewer_change_history_payload(drawing, snapshots_by_mode),
+        "tagAttributeTargets": _viewer_tag_attribute_targets(knowledge_payload_preview),
+        "tagAttributePolicy": "タグ・属性候補は図面管理で確認し、必要に応じて再抽出・手直しします。",
+        "tagAttributeReviewRequired": any(
+            bool(target.get("reviewRequired")) for target in knowledge_payload_preview.get("targets", []) or []
+        ),
+    }
+
+
 def _viewer_extraction_diagnostics(has_2d: bool, has_3d: bool) -> dict:
     missing_modes: list[str] = []
     if not has_2d:
@@ -420,6 +572,12 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
                 ),
                 "tags": _tag_names(composed_metadata.get("derivedTags", []) or []),
                 "tagAttributes": _viewer_tag_attributes_payload(knowledge_payload_preview),
+                "knowledgeDetail": _viewer_knowledge_detail_payload(
+                    drawing=obj,
+                    composed_metadata=composed_metadata,
+                    knowledge_payload_preview=knowledge_payload_preview,
+                    snapshots_by_mode=snapshots_by_mode,
+                ),
                 "extractionDiagnostics": _viewer_extraction_diagnostics(has_2d, has_3d),
             },
         }

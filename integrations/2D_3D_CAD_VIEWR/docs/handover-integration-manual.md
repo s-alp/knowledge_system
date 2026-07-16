@@ -13,8 +13,8 @@
 - PDM 側は `/drawing/{drawingId}` の導線を持ち、viewer へは `drawingId` だけを渡す
 - viewer backend が PDM API を呼び、図面メタ情報と 2D/3D source URL を解決する
 - viewer backend は受信した Cookie / Authorization を PDM API 呼び出しへ引き継ぐ
-- frontend は drawingId 起点の詳細表示に徹し、基本情報は bootstrap、補助セクションは mock detail で構成する
-- 補助セクションは見た目合わせ用のモックであり、実データ連携対象外とする
+- frontend は drawingId 起点の詳細表示に徹し、基本情報は bootstrap、補助セクションは `metadata.knowledgeDetail` で構成する
+- 補助セクションは ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補から生成した実データ連携対象とする
 - debug 用 URL / upload UI は既定で隠す
 
 ## Docker で確認する場合
@@ -88,7 +88,7 @@ docker compose -f docker-compose.dev.yml up --build
 - `frontend/src/shared/drawingRoute.ts`
 - `frontend/src/shared/hooks/useDrawingBootstrap.ts`
 - `frontend/src/shared/types/viewer.ts`
-- `frontend/src/shared/mock/drawingKnowledge.ts`
+- `frontend/src/shared/knowledge/drawingKnowledge.ts`
 - `frontend/src/shared/components/DrawingEntryPanel.tsx`
 - `frontend/src/shared/components/DrawingOverviewPanel.tsx`
 - `frontend/src/shared/components/DrawingSupplementPanels.tsx`
@@ -103,7 +103,7 @@ docker compose -f docker-compose.dev.yml up --build
 2. 既存ルーティングを `/drawing/:drawingId` 相当の詳細画面へ接続する
 3. `VITE_API_BASE_URL` を受け取り側 API に合わせる
 4. 必要なら CSS を既存デザインシステムに合わせて調整する
-5. 基本情報カードと補助セクションを使う場合は `drawingKnowledge.ts` の mock detail をそのまま使い、モックであることを受け取り側へ明示する
+5. 基本情報カードと補助セクションを使う場合は `viewerBootstrap.metadata.knowledgeDetail` を `drawingKnowledge.ts` で正規化して渡す
 6. 静的配布するときは `VITE_API_BASE_URL` と `VITE_LOCAL_FILE_ENABLED` を build 時に確定させる
 7. 開発画面の `DrawingEntryPanel` では `drawingId / URL` とローカルファイル起動の両方を提供する
 

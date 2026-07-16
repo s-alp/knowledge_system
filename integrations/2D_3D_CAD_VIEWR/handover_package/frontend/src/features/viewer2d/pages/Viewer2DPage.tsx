@@ -6,7 +6,7 @@ import { ViewerSourcePanel } from "../../../shared/components/ViewerSourcePanel"
 import { getViewer2DLoadingMessage } from "../../../shared/loadingMessages";
 import { LoadingNotice } from "../../../shared/components/LoadingNotice";
 import { MetadataBar } from "../../../shared/components/MetadataBar";
-import { buildDrawingInfoFields, type DrawingKnowledgeMock } from "../../../shared/mock/drawingKnowledge";
+import { buildDrawingInfoFields, type DrawingKnowledgeDetail } from "../../../shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse, Open2DResponse } from "../../../shared/types/viewer";
 import { useViewerSourceLoader } from "../../../shared/hooks/useViewerSourceLoader";
 import { Viewer2DPreviewPane } from "../components/Viewer2DPreviewPane";
@@ -15,7 +15,7 @@ import { useViewer2DDocument } from "../hooks/useViewer2DDocument";
 interface Viewer2DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeMock;
+  knowledgeDetail: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;
@@ -24,7 +24,7 @@ interface Viewer2DPageProps {
 export function Viewer2DPage({
   drawingId,
   bootstrap,
-  knowledgeMock,
+  knowledgeDetail,
   debugInputsEnabled,
   autoOpenDrawingSource = true,
   initialLocalFile = null,
@@ -137,14 +137,14 @@ export function Viewer2DPage({
     <>
       {debugInputsEnabled ? (
         <ViewerSourcePanel
-          title="開発用入力"
-          sectionLabel="Debug"
-          description="PDM 連携を使わず、URL やローカルファイルから手動検証できます。"
+          title="手動入力"
+          sectionLabel="Manual"
+          description="PDM 連携を使わず、URL やローカルファイルから読み込めます。"
           url={url}
           urlPlaceholder="https://example.com/file.pdf"
           urlButtonLabel="Open 2D"
           acceptedTypes=".pdf,.jpg,.jpeg,.tif,.tiff"
-          localHelperText="開発・検証用です。必要なときだけローカルファイルを選択してください。"
+          localHelperText="必要なときだけローカルファイルを選択してください。"
           selectedFileName={selectedFile?.name}
           localFileStatus={localFileStatus ?? undefined}
           openBusy={loading || isBusy}
@@ -187,8 +187,8 @@ export function Viewer2DPage({
         <DrawingOverviewPanel
           version={bootstrap.version}
           fields={detailItems}
-          attributes={knowledgeMock.attributes}
-          remarks={knowledgeMock.remarks}
+          attributes={knowledgeDetail.attributes}
+          remarks={knowledgeDetail.remarks}
           footerContent={infoFooter}
         />
 

@@ -35,8 +35,8 @@
 - bootstrap は重い 3D 変換を行わない
 - frontend は bootstrap の `defaultMode` と `availability` を使って初期表示タブを決める
 - frontend は bootstrap の基本情報を詳細画面へ表示し、`metadata.tagAttributes` がある場合は図面/プロジェクト/製品・装置・ユニット/部品別のタグ・属性候補を補助パネルへ表示する
-- 改訂履歴・関連情報・変更履歴・属性情報・備考の補助セクションは mock detail で補完する
-- 補助セクションの mock detail は見た目合わせ用であり、実データ連携の対象外とする
+- 改訂履歴・関連情報・変更履歴・属性情報・備考の補助セクションは `metadata.knowledgeDetail` で受け取る
+- `metadata.knowledgeDetail` は ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補から生成し、固定モックを使わない
 
 ### 2D
 
@@ -249,8 +249,8 @@ type DrawingBootstrapResponse = {
 - 断面キャップは閉じた STL メッシュのみ対象
 - ローカルファイル機能は開発・検証用で、開発モードでは既定 ON、本番ビルドでは既定 OFF
 - ライセンス導線として UI のライセンス開示導線を削除しない
-- 改訂履歴、関連情報、変更履歴、属性情報、備考は現時点では frontend の mock detail で表現しており、PDM API の正式契約が固まり次第差し替える前提
-- 納品時点では補助セクションをモック表示のままとし、viewer の必須実装範囲には含めない
+- 改訂履歴、関連情報、変更履歴、属性情報、備考は `viewerBootstrap.metadata.knowledgeDetail` で表現する
+- 納品時点では補助セクションも実データ連携対象に含める
 - `枠線クリア` は現時点では見た目のみの表示で、実機能は持たない
 
 ## 非対応事項

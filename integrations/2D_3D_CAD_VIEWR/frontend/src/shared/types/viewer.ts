@@ -36,8 +36,43 @@ export interface DrawingBootstrapResponse {
     designPurpose?: string | null;
     tags?: string[];
     tagAttributes?: DrawingTagAttributes;
+    knowledgeDetail?: DrawingKnowledgeDetail;
     extractionDiagnostics?: DrawingExtractionDiagnostics;
   };
+}
+
+export interface DrawingField {
+  label: string;
+  value: string;
+}
+
+export interface DrawingRevisionItem {
+  version: string;
+  updatedAt: string;
+  updatedBy: string;
+  summary: string;
+  status: string;
+}
+
+export interface DrawingRelatedItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  chips: string[];
+}
+
+export interface DrawingRelatedTab {
+  id: string;
+  label: string;
+  items: DrawingRelatedItem[];
+}
+
+export interface DrawingChangeItem {
+  version: string;
+  changedAt: string;
+  changedBy: string;
+  summary: string;
 }
 
 export interface DrawingTagAttribute {
@@ -58,6 +93,37 @@ export interface DrawingTagAttributeTarget {
   attributes?: DrawingTagAttribute[];
   reviewRequired?: boolean;
   notes?: string[];
+}
+
+export interface DrawingKnowledgeTagAttributeItem {
+  name: string;
+  value: string;
+  sourcePath: string;
+  entityHint: string;
+  bindingStatus: string;
+}
+
+export interface DrawingKnowledgeTagAttributeTarget {
+  targetKey: string;
+  label: string;
+  tagApiStatus: string;
+  writePolicy: string;
+  reviewRequired: boolean;
+  tags: string[];
+  attributes: DrawingKnowledgeTagAttributeItem[];
+  notes: string[];
+}
+
+export interface DrawingKnowledgeDetail {
+  schemaVersion?: string | null;
+  attributes: DrawingField[];
+  remarks: string;
+  revisionHistory: DrawingRevisionItem[];
+  relatedTabs: DrawingRelatedTab[];
+  changeHistory: DrawingChangeItem[];
+  tagAttributeTargets: DrawingKnowledgeTagAttributeTarget[];
+  tagAttributePolicy: string;
+  tagAttributeReviewRequired: boolean;
 }
 
 export interface DrawingTagAttributes {

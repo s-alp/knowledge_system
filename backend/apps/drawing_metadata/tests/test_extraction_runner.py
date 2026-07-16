@@ -68,7 +68,7 @@ def test_decode_runner_output_accepts_cp932_stderr():
 
 
 @pytest.mark.django_db
-def test_build_extractor_command_rejects_too_long_path_before_sxnet(settings):
+def test_build_extractor_command_forces_staged_input_for_too_long_path(settings):
     long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="sample-long-path",
@@ -78,12 +78,14 @@ def test_build_extractor_command_rejects_too_long_path_before_sxnet(settings):
     )
     settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
 
-    with pytest.raises(ExtractionRunnerError, match="パスが長すぎます"):
-        build_extractor_command(
-            drawing=drawing,
-            extraction_mode="3d",
-            output_path=Path(r"C:\temp\out.json"),
-        )
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode="3d",
+        output_path=Path(r"C:\temp\out.json"),
+    )
+
+    force_index = command.index("--force-sxnet-staged-input")
+    assert command[force_index + 1] == "true"
 
 
 @pytest.mark.django_db

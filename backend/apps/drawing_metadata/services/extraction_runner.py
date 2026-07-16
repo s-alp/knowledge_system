@@ -9,7 +9,7 @@ from urllib.parse import quote
 from django.conf import settings
 
 from apps.drawing_metadata.models import RegisteredDrawing
-from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length, validate_icad_path_length
+from apps.drawing_metadata.services.path_constraints import requires_sxnet_staged_input, validate_icad_filename_length
 
 
 class ExtractionRunnerError(RuntimeError):
@@ -52,7 +52,6 @@ def build_extractor_command(
         )
     try:
         validate_icad_filename_length(drawing.filename)
-        validate_icad_path_length(drawing.source_path)
     except ValueError as exc:
         raise ExtractionRunnerError(str(exc)) from exc
 
@@ -81,7 +80,7 @@ def build_extractor_command(
                 "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
             ]
         )
-    if _is_uploaded_icad_source(drawing.source_path):
+    if _is_uploaded_icad_source(drawing.source_path) or requires_sxnet_staged_input(drawing.source_path):
         command.extend(["--force-sxnet-staged-input", "true"])
     if job_id is not None:
         preview_output_dir = settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)

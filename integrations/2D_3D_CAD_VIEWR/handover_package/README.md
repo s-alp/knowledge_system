@@ -11,8 +11,8 @@
 - frontend は `React / TypeScript / Vite`
 - STEP は既定で backend 側で `STL` に変換して表示
 - PDM 側の複雑な実装を避け、viewer backend が PDM API を呼んで図面情報を解決する
-- frontend は既存ナレッジ画面に寄せた図面詳細 UI を持ち、基本情報は bootstrap、補助セクションは mock detail で構成する
-- 補助セクションの mock detail は見た目合わせ用であり、実データ連携対象外
+- frontend は既存ナレッジ画面に寄せた図面詳細 UI を持ち、基本情報は bootstrap、補助セクションは `metadata.knowledgeDetail` で構成する
+- 補助セクションは ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補から生成した実データ連携対象
 - 社内 URL の直接参照は allowlist 設定時のみ有効にできる
 - URL 直入力 / ローカルファイル読み込み UI は開発・検証用で、本番ビルドでは既定で無効
 

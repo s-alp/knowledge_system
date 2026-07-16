@@ -12,7 +12,7 @@
 
 ## 組み込みの基本方針
 
-この viewer は `backend API` と `frontend UI` を分離しています。PDM 側は `/drawing/{drawingId}` の導線だけを持ち、viewer backend が PDM API を呼んで図面情報を解決する前提です。frontend は bootstrap の基本情報を詳細画面へ表示し、不足する補助セクションは mock detail で構成します。補助セクションは見た目合わせ用のモックであり、実データ連携の対象外です。
+この viewer は `backend API` と `frontend UI` を分離しています。PDM 側は `/drawing/{drawingId}` の導線だけを持ち、viewer backend が PDM API を呼んで図面情報を解決する前提です。frontend は bootstrap の基本情報を詳細画面へ表示し、補助セクションは `metadata.knowledgeDetail` の実データで構成します。`knowledgeDetail` は ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補から生成します。
 
 ## Docker でそのまま使う場合
 
@@ -79,7 +79,7 @@ docker compose -f docker-compose.dev.yml up --build
 6. Docker で DB を永続化する場合は `DJANGO_SQLITE_PATH` を volume 側へ向ける
 7. フロントを別オリジンで配信する場合は `CORS_ALLOWED_ORIGINS` を設定する
 8. `PDM_API_BASE_URL` と `PDM_DRAWING_RESOLVE_PATH_TEMPLATE` を相手先環境へ合わせる
-9. 補助セクションはモック表示であることを受け取り側へ明示する
+9. 補助セクションは `viewerBootstrap.metadata.knowledgeDetail` の実データであることを受け取り側へ明示する
 10. 社内 URL を直接開く場合は internal URL allowlist を設定する
 
 ### API 接続
@@ -110,7 +110,7 @@ docker compose -f docker-compose.dev.yml up --build
 - `frontend/src/shared/drawingRoute.ts`
 - `frontend/src/shared/hooks/useDrawingBootstrap.ts`
 - `frontend/src/shared/types/viewer.ts`
-- `frontend/src/shared/mock/drawingKnowledge.ts`
+- `frontend/src/shared/knowledge/drawingKnowledge.ts`
 - `frontend/src/shared/components/DrawingEntryPanel.tsx`
 - `frontend/src/shared/components/DrawingOverviewPanel.tsx`
 - `frontend/src/shared/components/DrawingSupplementPanels.tsx`
@@ -124,7 +124,7 @@ docker compose -f docker-compose.dev.yml up --build
 2. `VITE_API_BASE_URL` を受け取り側 API に合わせる
 3. `/drawing/:drawingId` 相当の詳細画面へ viewer を接続する
 4. CSS を既存デザインシステムに合わせて必要なら置き換える
-5. 基本情報カードと補助セクションを使う場合は `drawingKnowledge.ts` の mock detail を流用する
+5. 基本情報カードと補助セクションを使う場合は `viewerBootstrap.metadata.knowledgeDetail` を `drawingKnowledge.ts` で正規化して渡す
 6. 開発画面の `DrawingEntryPanel` では `drawingId / URL` とローカルファイル起動の両方を提供する
 7. 静的配布するときは `VITE_API_BASE_URL` と `VITE_LOCAL_FILE_ENABLED` を build 時に確定させる
 8. 開発モードでは debug UI は既定で表示される

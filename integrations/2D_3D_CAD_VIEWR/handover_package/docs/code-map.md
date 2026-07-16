@@ -80,6 +80,23 @@
 - `frontend/src/shared/components/DrawingEntryPanel.tsx`
   - 開発画面の入口として `drawingId / URL` 入力とローカルファイル起動を提供する
 
+### ICADタグ・属性と対象物
+
+- `frontend/src/features/drawingMetadata/IcadExtractionReviewPage.tsx`
+  - ICAD登録、2D/3D抽出、状態自動更新、条件付き再抽出、手直し、候補確定を担当する
+- `frontend/src/features/knowledgeEntities/IcadEntityPages.tsx`
+  - ICAD 3D構成由来の製品・装置・ユニット/部品の一覧と詳細を表示する
+- `frontend/src/features/knowledgeEntities/useKnowledgeEntities.ts`
+  - 対象物一覧/詳細APIの読込状態を管理する
+- `frontend/src/features/knowledgeSettings/TagAutomationSettingsPage.tsx`
+  - AI/API/抽出対象/採用ルールを実設定APIから表示する
+- `../backend/apps/drawing_metadata/services/icad_entities.py`
+  - 子ノードありをアセンブリ/サブアセンブリ、子ノードなしを末端部品として分類し、属性・タグ・根拠を組み立てる
+- `../backend/apps/drawing_metadata/api/views.py`
+  - ICAD登録、抽出ジョブ、レビュー、対象物、設定のAPI入口を提供する
+
+`../backend` は統合先の `knowledge_system/backend` を表す。提出viewer単体の `backend/apps/viewer` と混同しない。
+
 ### 2D viewer
 
 - `frontend/src/features/viewer2d/pages/Viewer2DPage.tsx`
@@ -144,8 +161,8 @@
   - ローディング状態表示
 - `frontend/src/shared/components/LicensePanel.tsx`
   - ヘッダー上の折りたたみ式ライセンス導線 UI
-- `frontend/src/shared/mock/drawingKnowledge.ts`
-  - bootstrap をもとに補助セクション用の mock detail を構成する
+- `frontend/src/shared/knowledge/drawingKnowledge.ts`
+  - `viewerBootstrap.metadata.knowledgeDetail` を補助セクション表示用に正規化する
 - `frontend/src/shared/env.ts`
   - フラグ系環境変数の解釈
 

@@ -70,7 +70,7 @@
 - TIFF はバックエンドでページごとに PNG 化して返す
 - STL はそのまま表示し、STEP は既定で STL に変換してから表示する
 - 断面キャップは閉じた STL メッシュを対象とする
-- 改訂履歴、関連情報、変更履歴、属性情報、備考は現時点では frontend の mock detail で構成している
+- 改訂履歴、関連情報、変更履歴、属性情報、備考は `viewerBootstrap.metadata.knowledgeDetail` の実データで構成している
 
 ## 参照資料
 
@@ -83,7 +83,7 @@
 - PDM 側は `drawingId` を渡すだけで、複雑な viewer 専用処理を持たない前提
 - 社内 URL の直接参照は allowlist 前提
 - ローカルファイル upload は既定で OFF
-- 補助セクションは mock detail 表示であり、正式な PDM API 契約が固まり次第差し替える
+- 補助セクションは `metadata.knowledgeDetail` 表示であり、ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補を使う
 
 ## ライセンス上の注意
 

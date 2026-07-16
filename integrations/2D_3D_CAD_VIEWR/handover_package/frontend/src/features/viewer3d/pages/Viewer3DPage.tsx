@@ -6,7 +6,7 @@ import { LoadingNotice } from "../../../shared/components/LoadingNotice";
 import { MetadataBar } from "../../../shared/components/MetadataBar";
 import { ViewerSourcePanel } from "../../../shared/components/ViewerSourcePanel";
 import { getViewer3DLoadingMessage } from "../../../shared/loadingMessages";
-import { buildDrawingInfoFields, type DrawingKnowledgeMock } from "../../../shared/mock/drawingKnowledge";
+import { buildDrawingInfoFields, type DrawingKnowledgeDetail } from "../../../shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse, Open3DResponse } from "../../../shared/types/viewer";
 import { useViewerSourceLoader } from "../../../shared/hooks/useViewerSourceLoader";
 import { Viewer3DSectionControls } from "../controls/Viewer3DSectionControls";
@@ -21,7 +21,7 @@ const ThreeDViewerScene = lazy(() =>
 interface Viewer3DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeMock;
+  knowledgeDetail: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;
@@ -36,7 +36,7 @@ type CameraCommand =
 export function Viewer3DPage({
   drawingId,
   bootstrap,
-  knowledgeMock,
+  knowledgeDetail,
   debugInputsEnabled,
   autoOpenDrawingSource = true,
   initialLocalFile = null,
@@ -183,14 +183,14 @@ export function Viewer3DPage({
     <>
       {debugInputsEnabled ? (
         <ViewerSourcePanel
-          title="開発用入力"
-          sectionLabel="Debug"
-          description="PDM 連携を使わず、URL やローカルファイルから手動検証できます。"
+          title="手動入力"
+          sectionLabel="Manual"
+          description="PDM 連携を使わず、URL やローカルファイルから読み込めます。"
           url={url}
           urlPlaceholder="https://example.com/model.step"
           urlButtonLabel="Open 3D"
           acceptedTypes=".stl,.step,.stp"
-          localHelperText="開発・検証用です。STEP もバックエンド経由で変換します。"
+          localHelperText="STEP もバックエンド経由で変換します。"
           selectedFileName={selectedFile?.name}
           localFileStatus={localFileStatus ?? undefined}
           openBusy={isBusy}
@@ -219,7 +219,7 @@ export function Viewer3DPage({
             {clippingState.enabled && !edgeHighlightEnabled ? <span>断面キャップを優先するため、輪郭強調はOFFです。</span> : null}
             {!resolvedError && job?.status && job.status !== "ready" ? <span>Status: {job.status}</span> : null}
             {!loadingMessage && !resolvedError && !sectionCapNotice && (!job?.status || job.status === "ready") ? (
-              <span>待機中</span>
+              <span>{job?.status === "ready" && job.modelUrl ? "表示中" : "待機中"}</span>
             ) : null}
           </div>
         </div>
@@ -233,8 +233,8 @@ export function Viewer3DPage({
         <DrawingOverviewPanel
           version={bootstrap.version}
           fields={detailItems}
-          attributes={knowledgeMock.attributes}
-          remarks={knowledgeMock.remarks}
+          attributes={knowledgeDetail.attributes}
+          remarks={knowledgeDetail.remarks}
           footerContent={infoFooter}
         />
 

@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-import type { DrawingKnowledgeMock } from "../mock/drawingKnowledge";
+import type { DrawingKnowledgeDetail } from "../knowledge/drawingKnowledge";
 
 interface DrawingSupplementPanelsProps {
-  detail: DrawingKnowledgeMock;
+  detail: DrawingKnowledgeDetail;
 }
+
+const ATTRIBUTE_VALUE_PREVIEW_LENGTH = 160;
 
 export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps) {
   const [activeTabId, setActiveTabId] = useState(detail.relatedTabs[0]?.id ?? "");
@@ -49,6 +51,73 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
               <p>改訂履歴はありません。</p>
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="panel supplemental-panel">
+        <div className="panel-section supplemental-section">
+          <div className="panel-header panel-header-inline">
+            <div>
+              <h2>タグ・属性候補</h2>
+            </div>
+            {detail.tagAttributeReviewRequired ? (
+              <span className="tag-review-status">レビュー要</span>
+            ) : null}
+          </div>
+          {detail.tagAttributeTargets.length > 0 ? (
+            <div className="tag-target-grid">
+              {detail.tagAttributeTargets.map((target) => (
+                <article key={target.targetKey} className="tag-target-card">
+                  <div className="tag-target-card-header">
+                    <div>
+                      <strong>{target.label}</strong>
+                      <p>{target.tagApiStatus}</p>
+                    </div>
+                    <span>{target.attributes.length} 属性</span>
+                  </div>
+                  <div className="tag-chip-row">
+                    {target.tags.length > 0 ? (
+                      target.tags.map((tag) => (
+                        <span key={tag} className="related-chip tag-chip">
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="tag-target-empty">タグなし</span>
+                    )}
+                  </div>
+                  {target.attributes.length > 0 ? (
+                    <dl className="tag-attribute-list">
+                      {target.attributes.slice(0, 6).map((attribute) => (
+                        <div key={`${target.targetKey}-${attribute.name}-${attribute.value}`}>
+                          <dt>{attribute.name}</dt>
+                          <dd>
+                            <AttributeValue value={attribute.value} />
+                          </dd>
+                        </div>
+                      ))}
+                      {target.attributes.length > 6 ? (
+                        <div>
+                          <dt>ほか</dt>
+                          <dd>{target.attributes.length - 6} 属性</dd>
+                        </div>
+                      ) : null}
+                    </dl>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state-panel compact supplemental-empty-state">
+              <p>タグ・属性候補はありません。</p>
+            </div>
+          )}
+          {detail.tagAttributePolicy !== "-" ? (
+            <p className="tag-policy-note">{detail.tagAttributePolicy}</p>
+          ) : null}
+          <p className="tag-policy-note">
+            抽出結果の確認、再抽出、手直しは図面管理のタグ候補レビューで行います。
+          </p>
         </div>
       </section>
 
@@ -140,5 +209,22 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
         </div>
       </section>
     </>
+  );
+}
+
+function AttributeValue({ value }: { value: string }) {
+  if (value.length <= ATTRIBUTE_VALUE_PREVIEW_LENGTH) {
+    return <>{value}</>;
+  }
+
+  const preview = `${value.slice(0, ATTRIBUTE_VALUE_PREVIEW_LENGTH)}...`;
+
+  return (
+    <details className="attribute-value-details">
+      <summary>
+        <span className="attribute-value-preview">{preview}</span>
+      </summary>
+      <p>{value}</p>
+    </details>
   );
 }

@@ -92,7 +92,7 @@ const bootstrap: DrawingBootstrapResponse = {
   metadata: {},
 };
 
-const knowledgeMock: DrawingKnowledgeDetail = {
+const knowledgeDetail: DrawingKnowledgeDetail = {
   attributes: [],
   remarks: "-",
   revisionHistory: [],
@@ -109,7 +109,7 @@ describe("Viewer3DPage", () => {
       <Viewer3DPage
         drawingId="drawing-1"
         bootstrap={bootstrap}
-        knowledgeMock={knowledgeMock}
+        knowledgeDetail={knowledgeDetail}
         debugInputsEnabled={false}
         autoOpenDrawingSource={false}
       />,

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 
@@ -22,7 +23,7 @@ def path_length_error(path: str | Path) -> str:
         f"ICADファイルのパスが長すぎます。SXNETへ渡すパスは"
         f"{WINDOWS_LEGACY_PATH_LIMIT}文字以下にしてください。"
         f"現在の文字数: {len(path_text)}。"
-        "短い作業フォルダへコピーして再登録してください。"
+        "現行抽出では短い一時パスへ退避して開きます。"
     )
 
 
@@ -34,3 +35,31 @@ def validate_icad_path_length(path: str | Path) -> None:
 def validate_icad_filename_length(filename: str) -> None:
     if len(filename) > WINDOWS_FILENAME_LIMIT:
         raise ValueError(filename_length_error(filename))
+
+
+def requires_sxnet_staged_input(path: str | Path) -> bool:
+    """SXNETへ直接渡すには危険な長さなら、短い一時パスへの退避を要求する。"""
+    return len(str(path)) > WINDOWS_LEGACY_PATH_LIMIT
+
+
+def icad_source_path_exists(path: str | Path) -> bool:
+    path_text = str(path)
+    candidates = [path_text]
+    if os.name == "nt":
+        candidates.append(_to_extended_windows_path(path_text))
+
+    for candidate in candidates:
+        try:
+            if Path(candidate).exists():
+                return True
+        except OSError:
+            continue
+    return False
+
+
+def _to_extended_windows_path(path: str) -> str:
+    if path.startswith("\\\\?\\"):
+        return path
+    if path.startswith("\\\\"):
+        return "\\\\?\\UNC\\" + path[2:]
+    return "\\\\?\\" + path

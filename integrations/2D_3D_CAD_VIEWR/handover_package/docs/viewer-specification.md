@@ -34,8 +34,9 @@
 - `GET /api/v1/drawings/{drawingId}/bootstrap` で図面メタ情報と availability を返す
 - bootstrap は重い 3D 変換を行わない
 - frontend は bootstrap の `defaultMode` と `availability` を使って初期表示タブを決める
-- frontend は bootstrap の基本情報を詳細画面へ表示し、改訂履歴・関連情報・変更履歴・属性情報・備考の補助セクションは mock detail で補完する
-- 補助セクションの mock detail は見た目合わせ用であり、実データ連携の対象外とする
+- frontend は bootstrap の基本情報を詳細画面へ表示し、`metadata.tagAttributes` がある場合は図面/プロジェクト/製品・装置・ユニット/部品別のタグ・属性候補を補助パネルへ表示する
+- 改訂履歴・関連情報・変更履歴・属性情報・備考の補助セクションは `metadata.knowledgeDetail` で受け取る
+- `metadata.knowledgeDetail` は ICAD抽出snapshot、訂正候補、監査ログ、タグ・属性連携候補から生成し、固定モックを使わない
 
 ### 2D
 
@@ -82,6 +83,7 @@
 - `drawing_file_versions` 方式では、viewer backend が `file_name` の拡張子から 2D / 3D の候補を判定する
 - `file_path` は viewer backend から取得可能な URL である必要がある
 - `drawing_name`、`drawing_no`、`drawing_type`、`drawing_status`、`paper_size`、`intention`、`owner`、`tags` は bootstrap 表示用メタ情報として利用する
+- `tagAttributes` は本番登録ではなく、viewer 右側の補助パネル表示用 payload として利用する
 
 ### セッション / ジョブ API
 
@@ -103,6 +105,23 @@
 - これらは開発・検証用導線で使い、PDM 埋込の本番導線では使わない
 - 開発画面のローカルファイル導線では、拡張子から 2D/3D を自動判定して上記 upload API へ送る
 
+### ICADタグ・属性統合 API
+
+統合先 `knowledge_system/backend` が次のAPIを提供する。いずれもローカル抽出・レビュー用であり、創屋本番DBへ書き込まない。
+
+| API | 用途 |
+| --- | --- |
+| `POST /drawing-metadata/registrations/upload` | ICADファイルをローカル登録 |
+| `POST /drawing-metadata/registrations/{drawingId}/extract` | 2D/3D抽出を起票 |
+| `GET /drawing-metadata/jobs/{jobId}` | 待機中/抽出中/完了/失敗を確認 |
+| `PATCH /drawing-metadata/registrations/{drawingId}/overrides` | 候補を手直し |
+| `PATCH /drawing-metadata/registrations/{drawingId}/review` | 候補を確認済みまたは要手直しにする |
+| `GET /knowledge-entities?target=product|part` | 対象物一覧を取得 |
+| `GET /knowledge-entities/{entityId}` | 対象物詳細・親子関係・根拠を取得 |
+| `GET /drawing-metadata/settings/tag-automation` | 秘密値を除いた現在設定を取得 |
+
+3D対象物の分類は構成階層で行う。子ノードありは製品・装置・ユニット、子ノードなしは部品とし、ファイル名だけでは分類しない。
+
 ## レスポンス項目
 
 ### bootstrap
@@ -123,6 +142,36 @@ type DrawingBootstrapResponse = {
     owner?: string | null;
     designPurpose?: string | null;
     tags?: string[];
+    tagAttributes?: {
+      schemaVersion?: string | null;
+      sourceSchemaVersion?: string | null;
+      displayPolicy?: string | null;
+      targetCount?: number;
+      reviewRequired?: boolean;
+      targets?: Array<{
+        targetKey?: string | null;
+        label?: string | null;
+        existingReception?: string | null;
+        tagApiStatus?: string | null;
+        writePolicy?: string | null;
+        tags?: string[];
+        attributes?: Array<{
+          name?: string | null;
+          value?: string | null;
+          sourcePath?: string | null;
+          entityHint?: string | null;
+          bindingStatus?: string | null;
+        }>;
+        reviewRequired?: boolean;
+        notes?: string[];
+      }>;
+    };
+    extractionDiagnostics?: {
+      schemaVersion?: string | null;
+      status?: string | null;
+      missingModes?: string[];
+      policy?: string | null;
+    };
   };
 };
 ```
@@ -200,8 +249,8 @@ type DrawingBootstrapResponse = {
 - 断面キャップは閉じた STL メッシュのみ対象
 - ローカルファイル機能は開発・検証用で、開発モードでは既定 ON、本番ビルドでは既定 OFF
 - ライセンス導線として UI のライセンス開示導線を削除しない
-- 改訂履歴、関連情報、変更履歴、属性情報、備考は現時点では frontend の mock detail で表現しており、PDM API の正式契約が固まり次第差し替える前提
-- 納品時点では補助セクションをモック表示のままとし、viewer の必須実装範囲には含めない
+- 改訂履歴、関連情報、変更履歴、属性情報、備考は `viewerBootstrap.metadata.knowledgeDetail` で表現する
+- 納品時点では補助セクションも実データ連携対象に含める
 - `枠線クリア` は現時点では見た目のみの表示で、実機能は持たない
 
 ## 非対応事項

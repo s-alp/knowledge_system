@@ -39,6 +39,7 @@
 
 - `metadata.tags`: 既存ビューワーでも表示できる単純なタグ名配列。
 - `metadata.tagAttributes`: タグ・属性補助パネル用の追加payload。既存ビューワーが未知キーを無視しても、2D/3D表示は壊れない。
+- `metadata.knowledgeDetail`: 改訂履歴、関連情報、変更履歴、属性情報、備考を表示する補助セクション用payload。固定モックではなく、ICAD抽出snapshot、訂正候補、監査ログ、創屋連携payload候補から作る。
 - `metadata.extractionDiagnostics`: 未抽出・部分抽出を放置しないための診断payload。ビュー差、レイヤー差、印刷枠差、パーツ付加情報差を再試行条件として明示する。
 
 `metadata.tagAttributes` の形:
@@ -74,6 +75,53 @@
 ```
 
 `tagAttributes.targets` は図面、プロジェクト、製品・装置・ユニット、部品を同時に返す。ビューワー側では初期表示で図面向けを開き、必要に応じて対象別タブまたは折りたたみで他対象候補を見せる。
+
+`metadata.knowledgeDetail` の形:
+
+```json
+{
+  "schemaVersion": "viewer_knowledge_detail.v1",
+  "attributes": [
+    {"label": "材質", "value": "SUS304"}
+  ],
+  "remarks": "2D/3D統合結果または設計目的",
+  "revisionHistory": [
+    {
+      "version": "R1",
+      "updatedAt": "2026-07-16T10:00:00+09:00",
+      "updatedBy": "ICAD抽出",
+      "summary": "A 寸法変更",
+      "status": "印刷枠内 / 信頼度:medium"
+    }
+  ],
+  "relatedTabs": [
+    {
+      "id": "drawing",
+      "label": "図面",
+      "items": [
+        {
+          "id": "drawing",
+          "title": "図面",
+          "subtitle": "図面詳細にタグと属性情報が表示される",
+          "description": "図面のtagsは既存表示口があるため第一優先の連携候補。",
+          "chips": ["材質:SUS304", "属性7件"]
+        }
+      ]
+    }
+  ],
+  "changeHistory": [
+    {
+      "version": "2D",
+      "changedAt": "2026-07-16T10:00:00+09:00",
+      "changedBy": "ICAD抽出",
+      "summary": "2D snapshotを更新"
+    }
+  ],
+  "tagAttributeTargets": [],
+  "tagAttributePolicy": "タグ・属性候補は図面管理で確認し、必要に応じて再抽出・手直しします。",
+  "tagAttributeReviewRequired": true
+}
+```
 
 `metadata.extractionDiagnostics` の形:
 

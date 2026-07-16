@@ -64,7 +64,7 @@ def test_registration_upload_icad_file(settings, tmp_path):
     assert payload["filename"] == "sample.icd"
     assert payload["sourceFormat"] == "icad"
     stored_path = Path(payload["sourcePath"])
-    assert stored_path.name == "sample.icd"
+    assert stored_path.name == "input.icd"
     assert stored_path.exists()
     assert stored_path.read_bytes() == b"icad-data"
     assert RegisteredDrawing.objects.get().source_content_sha256
@@ -109,7 +109,7 @@ def test_registration_upload_rejects_non_icad(settings, tmp_path):
 
 
 @pytest.mark.django_db
-def test_registration_upload_rejects_long_uploaded_name_that_exceeds_stored_path(settings, tmp_path):
+def test_registration_upload_accepts_django_normalized_long_filename(settings, tmp_path):
     settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
     client = APIClient()
     too_long_name = f"{'A' * 256}.icd"
@@ -120,10 +120,10 @@ def test_registration_upload_rejects_long_uploaded_name_that_exceeds_stored_path
         format="multipart",
     )
 
-    assert response.status_code == 400
-    assert response.json()["error"]["code"] == "icad_path_too_long"
-    assert "パスが長すぎます" in response.json()["error"]["message"]
-    assert RegisteredDrawing.objects.count() == 0
+    assert response.status_code == 201
+    drawing = RegisteredDrawing.objects.get()
+    assert len(drawing.filename) == 255
+    assert Path(drawing.source_path).name == "input.icd"
 
 
 def test_icad_filename_constraint_rejects_component_over_windows_limit():
@@ -132,23 +132,20 @@ def test_icad_filename_constraint_rejects_component_over_windows_limit():
 
 
 @pytest.mark.django_db
-def test_registration_upload_rejects_too_long_stored_path(settings, tmp_path):
-    long_storage_root = tmp_path
-    for _index in range(35):
-        long_storage_root = long_storage_root / "segment"
-    settings.DRAWING_METADATA_STORAGE_ROOT = long_storage_root
+def test_registration_upload_stores_short_internal_filename(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
     client = APIClient()
 
     response = client.post(
         "/api/v1/drawing-metadata/registrations/upload",
-        {"file": SimpleUploadedFile("sample.icd", b"icad-data")},
+        {"file": SimpleUploadedFile("customer_original_name.icd", b"icad-data")},
         format="multipart",
     )
 
-    assert response.status_code == 400
-    assert response.json()["error"]["code"] == "icad_path_too_long"
-    assert "パスが長すぎます" in response.json()["error"]["message"]
-    assert RegisteredDrawing.objects.count() == 0
+    assert response.status_code == 201
+    drawing = RegisteredDrawing.objects.get()
+    assert drawing.filename == "customer_original_name.icd"
+    assert Path(drawing.source_path).name == "input.icd"
 
 
 @pytest.mark.django_db
@@ -163,15 +160,21 @@ def test_registration_create_rejects_missing_original_path(sample_registration_p
 
 
 @pytest.mark.django_db
-def test_registration_create_rejects_too_long_original_path(sample_registration_payload):
+def test_registration_create_accepts_too_long_original_path_for_staged_sxnet(
+    monkeypatch, sample_registration_payload
+):
     client = APIClient()
     segment_path = "\\".join(["segment"] * 35)
     sample_registration_payload["sourcePath"] = rf"C:\{segment_path}\sample_3d.icd"
+    monkeypatch.setattr(
+        "apps.drawing_metadata.api.serializers.icad_source_path_exists",
+        lambda _path: True,
+    )
 
     response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
 
-    assert response.status_code == 400
-    assert "パスが長すぎます" in str(response.json())
+    assert response.status_code == 201
+    assert RegisteredDrawing.objects.get().source_path == sample_registration_payload["sourcePath"]
 
 
 @pytest.mark.django_db
@@ -265,7 +268,7 @@ def test_handoff_summary_api_explains_path_length_failure(sample_registration_pa
     assert response.status_code == 200
     reextract_condition = response.json()["recentFailedJobs"][0]["reextractCondition"]
     assert "パス長制限" in reextract_condition
-    assert "短い作業フォルダ" in reextract_condition
+    assert "短い一時パス" in reextract_condition
 
 
 @pytest.mark.django_db
@@ -595,7 +598,7 @@ def test_registration_extract_enqueue_accepts_condition_profile(sample_registrat
 
 
 @pytest.mark.django_db
-def test_registration_extract_rejects_too_long_registered_path(sample_registration_payload):
+def test_registration_extract_queues_too_long_registered_path(sample_registration_payload):
     long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
@@ -611,10 +614,9 @@ def test_registration_extract_rejects_too_long_registered_path(sample_registrati
         format="json",
     )
 
-    assert response.status_code == 400
-    assert response.json()["error"]["code"] == "icad_path_constraint"
-    assert "パスが長すぎます" in response.json()["error"]["message"]
-    assert DrawingMetadataExtractionJob.objects.count() == 0
+    assert response.status_code == 202
+    assert response.json()["status"] == DrawingMetadataExtractionJob.STATUS_QUEUED
+    assert DrawingMetadataExtractionJob.objects.count() == 1
 
 
 @pytest.mark.django_db
@@ -854,10 +856,32 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
             "revision": "R1",
             "designer": "設計者A",
             "equipment_category": "ロボット",
+            "material": "SUS304",
+            "revision_note_candidates": [
+                {
+                    "value": "A 寸法変更",
+                    "confidence": "medium",
+                    "inside_print_area": True,
+                }
+            ],
         },
         derived_tags_json=[
-            {"tag": "材質:SUS304", "manual_flag": True},
-            {"tag": "材質:SUS304", "manual_flag": True},
+            {
+                "tag": "材質:SUS304",
+                "manual_flag": True,
+                "source": "manual_override",
+                "evidence": "test",
+                "confidence": "high",
+                "reason": "テスト",
+            },
+            {
+                "tag": "材質:SUS304",
+                "manual_flag": True,
+                "source": "manual_override",
+                "evidence": "test",
+                "confidence": "high",
+                "reason": "テスト",
+            },
         ],
     )
 
@@ -881,6 +905,15 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
     assert bootstrap["metadata"]["tagAttributes"]["reviewRequired"] is True
     assert bootstrap["metadata"]["extractionDiagnostics"]["status"] == "partial"
     assert bootstrap["metadata"]["extractionDiagnostics"]["missingModes"] == ["3d"]
+    knowledge_detail = bootstrap["metadata"]["knowledgeDetail"]
+    assert knowledge_detail["schemaVersion"] == "viewer_knowledge_detail.v1"
+    assert {"label": "材質", "value": "SUS304"} in knowledge_detail["attributes"]
+    assert knowledge_detail["revisionHistory"][0]["summary"] == "A 寸法変更"
+    assert knowledge_detail["revisionHistory"][0]["status"] == "印刷枠内 / 信頼度:medium"
+    assert knowledge_detail["relatedTabs"]
+    assert knowledge_detail["changeHistory"][0]["summary"] == "2D snapshotを更新"
+    assert knowledge_detail["tagAttributeTargets"]
+    assert knowledge_detail["tagAttributeReviewRequired"] is True
     target_by_key = {
         target["targetKey"]: target
         for target in bootstrap["metadata"]["tagAttributes"]["targets"]

@@ -14,7 +14,7 @@ flowchart LR
     api --> resolver["PdmDrawingResolver"]
     resolver --> pdmApi["PDM API\n図面メタ情報 + source URL 解決"]
 
-    ui --> mockDetail["drawingKnowledge mock\n補助セクションを構成"]
+    bootstrap --> knowledgeDetail["metadata.knowledgeDetail\n補助セクション実データ"]
     ui --> open2d["POST /api/v1/drawings/{drawingId}/viewer2d/open"]
     ui --> open3d["POST /api/v1/drawings/{drawingId}/viewer3d/open"]
     open2d --> api
@@ -39,7 +39,7 @@ flowchart LR
     ui --> poll["GET /viewer3d/jobs/{id} を poll"]
     poll --> job3d
     model3d --> ui
-    mockDetail --> ui
+    knowledgeDetail --> ui
     ui --> sandbox["DrawingEntryPanel\n開発用入口 / ローカルファイル起動"]
 ```
 
@@ -67,9 +67,9 @@ flowchart TD
     bootstrap --> apiBootstrap["GET /api/v1/drawings/{drawingId}/bootstrap"]
     apiBootstrap --> resolve2d["PdmDrawingResolver"]
 
-    bootstrap --> mock2d["buildDrawingKnowledgeMock"]
-    mock2d --> overview2d["DrawingOverviewPanel"]
-    mock2d --> supplement2d["DrawingSupplementPanels"]
+    bootstrap --> knowledge2d["buildDrawingKnowledgeDetail"]
+    knowledge2d --> overview2d["DrawingOverviewPanel"]
+    knowledge2d --> supplement2d["DrawingSupplementPanels"]
     entry2d["DrawingEntryPanel"] --> page2d
 
     app --> page2d["Viewer2DPage"]
@@ -108,7 +108,7 @@ flowchart TD
 1. PDM 画面上で viewer が `/drawing/{drawingId}` として開く
 2. フロントエンドが `drawingId` を解析し、`GET /api/v1/drawings/{drawingId}/bootstrap` を呼ぶ
 3. バックエンドが PDM API を呼んで図面メタ情報と 2D availability を解決する
-4. フロントエンドが bootstrap から基本情報を描き、不足する補助セクションは mock detail で構成する
+4. フロントエンドが bootstrap から基本情報と `metadata.knowledgeDetail` を描く
 5. 開発画面では `DrawingEntryPanel` からローカルファイルを選び、拡張子で 2D/3D を自動判定して詳細画面へ入る
 6. フロントエンドが `POST /api/v1/drawings/{drawingId}/viewer2d/open` または `POST /api/v1/viewer2d/upload` を呼ぶ
 7. バックエンドが 2D ソースまたは upload ファイルを形式判定し、`Viewer2DSession` を作成する
@@ -128,9 +128,9 @@ flowchart TD
     bootstrap --> apiBootstrap["GET /api/v1/drawings/{drawingId}/bootstrap"]
     apiBootstrap --> resolve3d["PdmDrawingResolver"]
 
-    bootstrap --> mock3d["buildDrawingKnowledgeMock"]
-    mock3d --> overview3d["DrawingOverviewPanel"]
-    mock3d --> supplement3d["DrawingSupplementPanels"]
+    bootstrap --> knowledge3d["buildDrawingKnowledgeDetail"]
+    knowledge3d --> overview3d["DrawingOverviewPanel"]
+    knowledge3d --> supplement3d["DrawingSupplementPanels"]
     entry3d["DrawingEntryPanel"] --> page3d
 
     app --> page3d["Viewer3DPage"]
@@ -166,7 +166,7 @@ flowchart TD
 ## 3D の流れ
 
 1. フロントエンドが bootstrap で 3D availability を確認する
-2. フロントエンドが bootstrap から基本情報を描き、不足する補助セクションは mock detail で構成する
+2. フロントエンドが bootstrap から基本情報と `metadata.knowledgeDetail` を描く
 3. 開発画面では `DrawingEntryPanel` からローカルファイルを選び、拡張子で 2D/3D を自動判定して詳細画面へ入る
 4. 3D タブを開いたタイミングで `POST /api/v1/drawings/{drawingId}/viewer3d/open` または `POST /api/v1/viewer3d/upload` を呼ぶ
 5. バックエンドが解決済み 3D URL または upload ファイルを形式判定し、`Viewer3DJob` を作成する
@@ -181,7 +181,7 @@ flowchart TD
 - 開発用入口: `frontend/src/shared/components/DrawingEntryPanel.tsx`
 - drawingId 解析: `frontend/src/shared/drawingRoute.ts`
 - bootstrap 読み込み: `frontend/src/shared/hooks/useDrawingBootstrap.ts`
-- mock detail 構成: `frontend/src/shared/mock/drawingKnowledge.ts`
+- 補助セクション正規化: `frontend/src/shared/knowledge/drawingKnowledge.ts`
 - 基本情報カード: `frontend/src/shared/components/DrawingOverviewPanel.tsx`
 - 補助セクション: `frontend/src/shared/components/DrawingSupplementPanels.tsx`
 - 操作アイコン: `frontend/src/shared/components/IconToolbarButton.tsx`
@@ -230,6 +230,6 @@ flowchart LR
 
 - PDM 側の変更を `drawingId を渡す` だけに抑えるため
 - PDM API 解決の責務を backend へ閉じ込め、frontend を描画に集中させるため
-- 既存ナレッジ画面に近い見た目を、実データと mock detail を分けて保守しやすくするため
+- 既存ナレッジ画面に近い見た目を、bootstrap基本情報と `metadata.knowledgeDetail` に分けて保守しやすくするため
 - TIFF と STEP の特殊処理を viewer ごとの service / adapter に閉じ込め、公開 API を薄く保つため
 - API と画面の責務境界を人力で追いやすくするため

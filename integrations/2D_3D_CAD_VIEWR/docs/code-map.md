@@ -161,8 +161,8 @@
   - ローディング状態表示
 - `frontend/src/shared/components/LicensePanel.tsx`
   - ヘッダー上の折りたたみ式ライセンス導線 UI
-- `frontend/src/shared/mock/drawingKnowledge.ts`
-  - bootstrap をもとに補助セクション用の mock detail を構成する
+- `frontend/src/shared/knowledge/drawingKnowledge.ts`
+  - `viewerBootstrap.metadata.knowledgeDetail` を補助セクション表示用に正規化する
 - `frontend/src/shared/env.ts`
   - フラグ系環境変数の解釈
 

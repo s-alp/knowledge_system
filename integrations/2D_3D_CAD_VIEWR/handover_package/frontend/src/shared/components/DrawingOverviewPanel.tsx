@@ -1,7 +1,7 @@
 import { IconPencil, IconStarFilled, IconTrash } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
-import type { DrawingField } from "../mock/drawingKnowledge";
+import type { DrawingField } from "../knowledge/drawingKnowledge";
 
 interface DrawingOverviewPanelProps {
   version?: string | null;

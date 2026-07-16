@@ -47,6 +47,7 @@
 - JSON 出力は `SnakeCaseNamingStrategy` で統一
 - `input_path` と `source_file.full_path` は原本ICADパスを保持する
 - SXNETへ渡すパスは `source_file.sx_net_input_path` に保持する
+- Django側の登録・起票では原本パス全体が長いことだけを理由に拒否しない。長パスは抽出Runnerで短いSXNET入力へ退避し、原本パスは検索・追跡用属性として残す
 - 長パスなどでSXNETが開けない可能性がある場合、Runnerは `windows_short_path` を優先し、それでも短くならない場合だけ `temporary_copy` を使う
 - ブラウザアップロード由来のICADは、保存先パスが深くなりSXNETの開けない条件に寄りやすいため、Djangoから `temporary_copy_forced` を指定して短い一時パスで開く
 - `temporary_copy` は外部参照解決に影響し得るため、`warnings[].code=sxnet_input_path_staged` を出す

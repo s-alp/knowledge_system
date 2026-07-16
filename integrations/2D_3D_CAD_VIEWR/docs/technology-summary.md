@@ -71,7 +71,7 @@
 - STL はそのまま表示する
 - STEP は既定で STL に変換してから表示する
 - 断面キャップは閉じた STL メッシュを対象とする
-- 改訂履歴、関連情報、変更履歴、属性情報、備考は現時点では frontend の mock detail で構成している
+- 改訂履歴、関連情報、変更履歴、属性情報、備考は `viewerBootstrap.metadata.knowledgeDetail` の実データで構成している
 
 ## 参考資料
 

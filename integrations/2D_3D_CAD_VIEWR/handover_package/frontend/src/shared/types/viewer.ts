@@ -5,11 +5,16 @@ export interface Open2DResponse {
   // sourceUrl は元ファイル取得用、pageImageUrls は TIFF の各ページ画像取得用。
   sessionId: string;
   filename: string;
-  extension: "pdf" | "jpeg" | "tiff";
+  extension: "pdf" | "jpeg" | "tiff" | "svg";
   mimeType: string;
   sourceUrl: string;
   pageCount: number;
   pageImageUrls: string[];
+  diagnostics?: {
+    source?: string | null;
+    previewKind?: string | null;
+    note?: string | null;
+  };
 }
 
 export interface DrawingBootstrapResponse {
@@ -30,7 +35,111 @@ export interface DrawingBootstrapResponse {
     owner?: string | null;
     designPurpose?: string | null;
     tags?: string[];
+    tagAttributes?: DrawingTagAttributes;
+    knowledgeDetail?: DrawingKnowledgeDetail;
+    extractionDiagnostics?: DrawingExtractionDiagnostics;
   };
+}
+
+export interface DrawingField {
+  label: string;
+  value: string;
+}
+
+export interface DrawingRevisionItem {
+  version: string;
+  updatedAt: string;
+  updatedBy: string;
+  summary: string;
+  status: string;
+}
+
+export interface DrawingRelatedItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  chips: string[];
+}
+
+export interface DrawingRelatedTab {
+  id: string;
+  label: string;
+  items: DrawingRelatedItem[];
+}
+
+export interface DrawingChangeItem {
+  version: string;
+  changedAt: string;
+  changedBy: string;
+  summary: string;
+}
+
+export interface DrawingTagAttribute {
+  name?: string | null;
+  value?: string | null;
+  sourcePath?: string | null;
+  entityHint?: string | null;
+  bindingStatus?: string | null;
+}
+
+export interface DrawingTagAttributeTarget {
+  targetKey?: string | null;
+  label?: string | null;
+  existingReception?: string | null;
+  tagApiStatus?: string | null;
+  writePolicy?: string | null;
+  tags?: string[];
+  attributes?: DrawingTagAttribute[];
+  reviewRequired?: boolean;
+  notes?: string[];
+}
+
+export interface DrawingKnowledgeTagAttributeItem {
+  name: string;
+  value: string;
+  sourcePath: string;
+  entityHint: string;
+  bindingStatus: string;
+}
+
+export interface DrawingKnowledgeTagAttributeTarget {
+  targetKey: string;
+  label: string;
+  tagApiStatus: string;
+  writePolicy: string;
+  reviewRequired: boolean;
+  tags: string[];
+  attributes: DrawingKnowledgeTagAttributeItem[];
+  notes: string[];
+}
+
+export interface DrawingKnowledgeDetail {
+  schemaVersion?: string | null;
+  attributes: DrawingField[];
+  remarks: string;
+  revisionHistory: DrawingRevisionItem[];
+  relatedTabs: DrawingRelatedTab[];
+  changeHistory: DrawingChangeItem[];
+  tagAttributeTargets: DrawingKnowledgeTagAttributeTarget[];
+  tagAttributePolicy: string;
+  tagAttributeReviewRequired: boolean;
+}
+
+export interface DrawingTagAttributes {
+  schemaVersion?: string | null;
+  sourceSchemaVersion?: string | null;
+  displayPolicy?: string | null;
+  targets?: DrawingTagAttributeTarget[];
+  targetCount?: number;
+  reviewRequired?: boolean;
+}
+
+export interface DrawingExtractionDiagnostics {
+  schemaVersion?: string | null;
+  status?: string | null;
+  missingModes?: string[];
+  policy?: string | null;
 }
 
 export interface Open3DResponse {
@@ -42,6 +151,11 @@ export interface Open3DResponse {
   status: Viewer3DStatus;
   modelUrl: string;
   error: string;
+  diagnostics?: {
+    source?: string | null;
+    previewKind?: string | null;
+    note?: string | null;
+  };
 }
 
 export interface ApiErrorPayload {
