@@ -367,8 +367,39 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
         }
 
 
+class KnowledgeEntityBusinessFieldsSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    partNumber = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    category = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    entityKind = serializers.ChoiceField(choices=("assembly", "subassembly", "part"), required=False)
+    phase = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    status = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    owner = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    supplier = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    unitPrice = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    unit = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    remarks = serializers.CharField(required=False, allow_blank=True, max_length=2000)
+
+    def to_internal_value(self, data):
+        if not isinstance(data, dict):
+            raise serializers.ValidationError("businessFields はオブジェクトで指定してください。")
+        unknown_fields = sorted(set(data) - set(self.fields))
+        if unknown_fields:
+            raise serializers.ValidationError(
+                {"unknownFields": f"未対応の業務項目です: {', '.join(unknown_fields)}"}
+            )
+        return super().to_internal_value(data)
+
+
 class ManualOverrideSerializer(serializers.Serializer):
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
     canonicalAttributes = serializers.JSONField(required=False)
     derivedTags = serializers.JSONField(required=False)
+    businessFields = KnowledgeEntityBusinessFieldsSerializer(required=False)
+    relatedDrawingIds = serializers.ListField(child=serializers.UUIDField(), required=False)
+    knowledgeEntityTarget = serializers.ChoiceField(choices=("product", "part"), required=False)
+    knowledgeEntityKind = serializers.ChoiceField(
+        choices=("assembly", "subassembly", "part"),
+        required=False,
+    )
     reason = serializers.CharField(required=False, allow_blank=True)

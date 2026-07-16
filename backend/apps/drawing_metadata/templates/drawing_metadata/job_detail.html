@@ -5,7 +5,7 @@
     <h2>ジョブ詳細</h2>
     <div class="grid">
       <div><strong>ジョブID</strong><div>{{ job.id }}</div></div>
-      <div><strong>図面</strong><div><a href="/drawing-metadata/{{ job.drawing.id }}/">{{ job.drawing.filename }}</a></div></div>
+      <div><strong>図面</strong><div><a href="/internal/drawing-metadata/{{ job.drawing.id }}/">{{ job.drawing.filename }}</a></div></div>
       <div><strong>mode</strong><div>{{ job.extraction_mode }}</div></div>
       <div><strong>状態</strong><div>{{ job.status }}</div></div>
       <div><strong>Worker</strong><div>{{ job.worker_name }}</div></div>

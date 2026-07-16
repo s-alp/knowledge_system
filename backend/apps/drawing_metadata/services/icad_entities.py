@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import PureWindowsPath
+import re
 from typing import Iterable
 import uuid
 
@@ -15,6 +16,7 @@ TARGET_PART = "part"
 
 PART_FOLDER_HINTS = {"部品", "部品図", "parts", "part"}
 ASSEMBLY_NAME_HINTS = {"組立", "組図", "assembly", "assy", "unit", "ユニット"}
+STANDARD_GRAVITY = 9.80665
 
 
 def _has_value(value) -> bool:
@@ -134,7 +136,16 @@ def _classify_icd(drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot,
     }
 
 
-def _attribute(*, key: str, label: str, value, source: str, confidence: str, evidence: str) -> dict | None:
+def _attribute(
+    *,
+    key: str,
+    label: str,
+    value,
+    source: str,
+    confidence: str,
+    evidence: str,
+    reason: str = "",
+) -> dict | None:
     if not _has_value(value):
         return None
     if isinstance(value, (list, tuple, set)):
@@ -154,6 +165,7 @@ def _attribute(*, key: str, label: str, value, source: str, confidence: str, evi
         "source": source,
         "confidence": confidence,
         "evidence": evidence,
+        "reason": reason or _attribute_reason(label, source),
     }
 
 
@@ -208,15 +220,127 @@ def _snapshot_tags(drawing: RegisteredDrawing) -> list[dict]:
             if not value or value in seen:
                 continue
             seen.add(value)
+            source = str(tag.get("source") or f"{snapshot.extraction_mode}_snapshot")
             tags.append(
                 {
                     "value": value,
-                    "source": str(tag.get("source") or f"{snapshot.extraction_mode}_snapshot"),
+                    "source": source,
                     "confidence": str(tag.get("confidence") or "medium"),
                     "evidence": f"snapshotsByMode.{snapshot.extraction_mode}.derivedTags",
+                    "reason": str(tag.get("reason") or _tag_reason(source)),
+                    "manualFlag": bool(tag.get("manual_flag")),
+                    "ruleVersion": str(tag.get("tag_rule_version") or ""),
                 }
             )
     return tags
+
+
+def _attribute_reason(label: str, source: str) -> str:
+    if source == "3d_mass_properties":
+        return f"{label}として3D質量情報からkg単位に正規化できたため採用しています。"
+    if source == "2d_title_block":
+        return f"{label}として2D図枠から抽出でき、図面管理の検索・確認に使えるため採用しています。"
+    if source == "3d_part_material":
+        return f"{label}として3D部品材質情報から抽出でき、部品検索に使えるため採用しています。"
+    if source == "3d_part_tree":
+        return f"{label}として3D部品構成から算出でき、製品・装置・ユニット／部品の判定に使えるため採用しています。"
+    if source == "3d_part_extended_info":
+        return f"{label}としてパーツ付加情報から確認でき、客先別の追加属性確認に使えるため採用しています。"
+    if source == "file":
+        return f"{label}として登録ファイル情報から取得でき、ICD単位の追跡に使えるため採用しています。"
+    if source in {"manual_override", "manual_entity_target"}:
+        return f"{label}として利用者が手動確定した値のため採用しています。"
+    return f"{label}として抽出・正規化できたため採用しています。"
+
+
+def _tag_reason(source: str) -> str:
+    reasons = {
+        "customer_name": "客先名として正規化でき、案件横断検索に使えるため採用しています。",
+        "project_name": "案件名として正規化でき、案件単位の検索に使えるため採用しています。",
+        "equipment_category": "装置カテゴリとして正規化でき、分類検索に使えるため採用しています。",
+        "maker_keywords": "メーカー名として抽出でき、購入品や構成部品の検索に使えるため採用しています。",
+        "material_keywords": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
+        "unresolved_material_keywords": "材質らしい値ですが正式材質と確定できないため、要確認タグとして分離しています。",
+        "spec_tokens": "規格識別子として抽出でき、規格・社内標準の検索に使えるため採用しています。",
+        "title_block_fields.material": "2D図枠の材質欄から抽出でき、図面起点の材質検索に使えるため採用しています。",
+        "title_block_fields.surface_treatment": "2D図枠の表面処理欄から抽出でき、加工・処理条件の検索に使えるため採用しています。",
+        "title_block_fields.coating_instruction": "2D図枠の塗装指示欄から抽出でき、塗装条件の検索に使えるため採用しています。",
+        "title_block_fields.prfx": "2D図枠のPRFX欄から抽出でき、客先・案件別の識別に使えるため採用しています。",
+        "title_block_fields.unit_number": "2D図枠のユニット番号欄から抽出でき、ユニット単位の検索に使えるため採用しています。",
+        "manual_override": "利用者が手動で追加したタグのため採用しています。",
+        "composed_metadata": "2D/3D統合結果から検索・分類に使えるタグとして整理できたため採用しています。",
+    }
+    return reasons.get(source, "タグ化対象として正規化でき、検索・分類に使えるため採用しています。")
+
+
+def _number(value) -> float | None:
+    if isinstance(value, dict):
+        value = value.get("value")
+    if isinstance(value, (int, float)):
+        return float(value)
+    if not isinstance(value, str):
+        return None
+    match = re.search(r"[-+]?\d+(?:\.\d+)?", value.replace(",", ""))
+    return float(match.group(0)) if match else None
+
+
+def _mass_in_kg(canonical: dict) -> tuple[str | None, str | None]:
+    mass_value = _number(canonical.get("mass_value"))
+    if mass_value is not None:
+        return f"{mass_value:.2f} kg", "canonicalAttributes.mass_value"
+    raw_weight = canonical.get("weight_value")
+    weight_value = _number(raw_weight)
+    if weight_value is not None:
+        if isinstance(raw_weight, str) and re.search(r"(?:kg|ｋｇ)", raw_weight, re.IGNORECASE):
+            return f"{weight_value:.2f} kg", "canonicalAttributes.weight_value (kg)"
+        return f"{weight_value / STANDARD_GRAVITY:.2f} kg", "canonicalAttributes.weight_value / 9.80665"
+    return None, None
+
+
+def _business_fields(
+    *,
+    target_key: str,
+    entity_kind: str,
+    name: str,
+    part_number: str,
+    comment: str | None,
+    canonical: dict,
+    overrides: dict,
+) -> tuple[dict, dict]:
+    extracted = {
+        "name": name,
+        "partNumber": part_number if target_key == TARGET_PART else "",
+        "category": _string_value(canonical.get("equipment_category")) or "",
+        "entityKind": entity_kind,
+        "phase": _string_value(canonical.get("phase")) or "",
+        "status": _string_value(canonical.get("business_status")) or "",
+        "owner": _string_value(canonical.get("person_in_charge"))
+        or _string_value(canonical.get("designer"))
+        or "",
+        "supplier": _string_value(canonical.get("supplier")) or "",
+        "unitPrice": _string_value(canonical.get("unit_price")) or "",
+        "unit": _string_value(canonical.get("unit")) or "",
+        "remarks": comment or "",
+    }
+    manual = overrides.get("businessFields") if isinstance(overrides.get("businessFields"), dict) else {}
+    fields = {key: str(manual.get(key, value) or "") for key, value in extracted.items()}
+    sources = {
+        key: {
+            "source": "manual_override" if key in manual else "icad_extraction",
+            "evidence": f"manualOverrides.businessFields.{key}" if key in manual else f"canonicalAttributes.{key}",
+        }
+        for key in fields
+    }
+    sources["name"]["evidence"] = (
+        "manualOverrides.businessFields.name" if "name" in manual else "titleBlock/topPart/filename"
+    )
+    if target_key == TARGET_PART:
+        sources["partNumber"]["evidence"] = (
+            "manualOverrides.businessFields.partNumber"
+            if "partNumber" in manual
+            else "canonicalAttributes.drawing_number/filename"
+        )
+    return fields, sources
 
 
 def _build_record(
@@ -243,6 +367,18 @@ def _build_record(
         {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
     )
     materials = _material_values(parts)
+    overrides = snapshot.manual_overrides_json or {}
+    business_fields, business_field_sources = _business_fields(
+        target_key=classification["targetKey"],
+        entity_kind=classification["entityKind"],
+        name=name,
+        part_number=part_number,
+        comment=_string_value(top_part.get("comment")),
+        canonical=canonical,
+        overrides=overrides,
+    )
+    name = business_fields["name"] or name
+    part_number = business_fields["partNumber"] or part_number
 
     attributes: list[dict] = []
     _append_attribute(
@@ -261,14 +397,14 @@ def _build_record(
     _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded")
     _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields")
     _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials")
+    _append_attribute(attributes, key="material_2d", label="材質 (2D図枠)", value=canonical.get("material"), source="2d_title_block", confidence="medium", evidence="canonicalAttributes.title_block_fields.material")
+    mass_kg, mass_evidence = _mass_in_kg(canonical)
     for key, label in (
         ("customer_name", "客先"),
         ("project_name", "案件"),
         ("equipment_category", "装置カテゴリ"),
         ("drawing_number", "図番"),
         ("drawing_name", "図面名"),
-        ("mass_value", "質量"),
-        ("weight_value", "重量"),
         ("surface_treatment", "表面処理"),
         ("paint", "塗装"),
         ("scale", "尺度"),
@@ -277,6 +413,24 @@ def _build_record(
         ("unit_number", "ユニット番号"),
     ):
         _append_attribute(attributes, key=key, label=label, value=canonical.get(key), source="composed_2d_3d", confidence="medium", evidence=f"canonicalAttributes.{key}")
+    _append_attribute(
+        attributes,
+        key="mass_value",
+        label="質量",
+        value=mass_kg,
+        source="3d_mass_properties",
+        confidence="high",
+        evidence=mass_evidence or "canonicalAttributes.mass_value",
+    )
+    _append_attribute(
+        attributes,
+        key="weight_value",
+        label="重量",
+        value=mass_kg,
+        source="3d_mass_properties",
+        confidence="high",
+        evidence=f"{mass_evidence or 'canonicalAttributes.mass_value'} (kg表示へ統一)",
+    )
 
     tags = [
         {
@@ -284,6 +438,9 @@ def _build_record(
             "source": str(tag.get("source") or "composed_metadata"),
             "confidence": str(tag.get("confidence") or "medium"),
             "evidence": "composedMetadata.derivedTags",
+            "reason": str(tag.get("reason") or _tag_reason(str(tag.get("source") or "composed_metadata"))),
+            "manualFlag": bool(tag.get("manual_flag")),
+            "ruleVersion": str(tag.get("tag_rule_version") or ""),
         }
         for tag in ((composed or {}).get("derivedTags") or [])
         if isinstance(tag, dict) and _has_value(tag.get("tag"))
@@ -308,7 +465,7 @@ def _build_record(
         "classificationReason": classification["reason"],
         "name": name,
         "partNumber": part_number if classification["targetKey"] == TARGET_PART else None,
-        "comment": _string_value(top_part.get("comment")),
+        "comment": business_fields["remarks"] or None,
         "treePath": [name],
         "depth": 0,
         "parentEntityId": None,
@@ -321,9 +478,22 @@ def _build_record(
         "sourcePath": drawing.source_path,
         "attributes": attributes,
         "tags": tags,
+        "businessFields": business_fields,
+        "businessFieldSources": business_field_sources,
         "conflicts": conflicts,
         "reviewStatus": snapshot.review_status,
         "reviewRequired": snapshot.review_status != DrawingMetadataSnapshot.REVIEW_CONFIRMED or bool(conflicts) or classification["confidence"] != "high",
+        "extractionReview": {
+            "status": snapshot.review_status,
+            "required": snapshot.review_status != DrawingMetadataSnapshot.REVIEW_CONFIRMED
+            or bool(conflicts)
+            or classification["confidence"] != "high",
+            "label": {
+                DrawingMetadataSnapshot.REVIEW_CONFIRMED: "確認済み",
+                DrawingMetadataSnapshot.REVIEW_NEEDS_CORRECTION: "要手直し",
+            }.get(snapshot.review_status, "未確認"),
+            "description": "ICAD自動抽出結果の確認状態です。製品・部品の業務ステータスとは別に管理します。",
+        },
         "evidence": [
             {
                 "source": "icd_file",
@@ -433,8 +603,40 @@ def find_icad_entity(drawings: Iterable[RegisteredDrawing], entity_id: str) -> d
         if candidate["entityId"] != record["entityId"]
         and PureWindowsPath(candidate["drawingFilename"]).stem.lower() in referenced_names
     ]
+    linked_ids = {
+        str(item)
+        for item in ((snapshot.manual_overrides_json or {}).get("relatedDrawingIds") or [])
+    }
+    related_drawings = [
+        {
+            "drawingId": record["drawingId"],
+            "filename": record["drawingFilename"],
+            "sourcePath": record["sourcePath"],
+            "relationship": "source",
+        }
+    ]
+    linked_drawings = RegisteredDrawing.objects.filter(id__in=linked_ids).order_by("filename", "id")
+    related_drawings.extend(
+        {
+            "drawingId": str(candidate.id),
+            "filename": candidate.filename,
+            "sourcePath": candidate.source_path,
+            "relationship": "linked",
+        }
+        for candidate in linked_drawings
+        if str(candidate.id) in linked_ids and str(candidate.id) != record["drawingId"]
+    )
+    provenance = [
+        {"kind": "attribute", "name": item["label"], **item}
+        for item in record["attributes"]
+    ] + [
+        {"kind": "tag", "name": item["value"], **item}
+        for item in record["tags"]
+    ]
     return {
         **record,
         "relatedEntities": related,
         "relatedDrawing": {"drawingId": record["drawingId"], "filename": record["drawingFilename"]},
+        "relatedDrawings": related_drawings,
+        "provenance": provenance,
     }

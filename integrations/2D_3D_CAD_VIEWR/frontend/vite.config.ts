@@ -11,10 +11,6 @@ export default defineConfig({
         target: DEV_PROXY_TARGET,
         changeOrigin: false,
       },
-      "/drawing-metadata": {
-        target: DEV_PROXY_TARGET,
-        changeOrigin: false,
-      },
     },
   },
   build: {

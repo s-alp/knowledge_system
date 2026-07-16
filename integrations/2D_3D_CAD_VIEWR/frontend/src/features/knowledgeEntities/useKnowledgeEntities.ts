@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   getKnowledgeEntities,
@@ -47,40 +47,42 @@ export function useKnowledgeEntityDetail(entityId: string | null, drawingId: str
   const [record, setRecord] = useState<KnowledgeEntityRecord | null>(null);
   const [loading, setLoading] = useState(Boolean(entityId));
   const [error, setError] = useState<string | null>(null);
+  const requestIdRef = useRef(0);
 
-  useEffect(() => {
-    let active = true;
+  const load = useCallback(async () => {
+    const requestId = requestIdRef.current + 1;
+    requestIdRef.current = requestId;
     if (!entityId) {
       setRecord(null);
       setLoading(false);
       setError("対象のICAD構成IDが指定されていません。");
-      return () => {
-        active = false;
-      };
+      return;
     }
 
     setLoading(true);
     setError(null);
-    getKnowledgeEntity(entityId, drawingId ?? undefined)
-      .then((payload) => {
-        if (active) {
-          setRecord(payload);
-        }
-      })
-      .catch((reason: unknown) => {
-        if (active) {
-          setError(reason instanceof Error ? reason.message : "ICAD構成詳細を取得できませんでした。");
-        }
-      })
-      .finally(() => {
-        if (active) {
-          setLoading(false);
-        }
-      });
-    return () => {
-      active = false;
-    };
+    try {
+      const payload = await getKnowledgeEntity(entityId, drawingId ?? undefined);
+      if (requestId === requestIdRef.current) {
+        setRecord(payload);
+      }
+    } catch (reason: unknown) {
+      if (requestId === requestIdRef.current) {
+        setError(reason instanceof Error ? reason.message : "ICAD構成詳細を取得できませんでした。");
+      }
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+      }
+    }
   }, [drawingId, entityId]);
 
-  return { record, loading, error };
+  useEffect(() => {
+    void load();
+    return () => {
+      requestIdRef.current += 1;
+    };
+  }, [load]);
+
+  return { record, loading, error, refresh: load };
 }

@@ -13,14 +13,14 @@ def build_tag_automation_settings_payload() -> dict:
             {
                 "key": "icad-extraction-management",
                 "label": "ICAD抽出管理",
-                "description": "登録済みICD、2D/3D抽出状態、ジョブ履歴を管理者向けに確認します。",
-                "url": "/drawing-metadata/",
+                "description": "図面管理のICAD取込・抽出レビュー画面を開きます。",
+                "action": "open_icad_extraction_review",
             },
             {
                 "key": "integration-data-review",
-                "label": "内部連携データ確認",
-                "description": "タグ・属性候補と連携payloadを読み取り専用で確認します。",
-                "url": "/drawing-metadata/handoff/",
+                "label": "API仕様・引継ぎ資料",
+                "description": "API仕様・引継ぎ資料で確認します。通常ユーザー画面には表示しません。",
+                "action": "show_handoff_note",
             },
         ],
         "runtimeRows": [
@@ -54,7 +54,7 @@ def build_tag_automation_settings_payload() -> dict:
             },
             {
                 "area": "連携",
-                "screen": "内部連携データ確認",
+                "screen": "API仕様・引継ぎ資料",
                 "role": "埋め込み先に渡せる形で対象、属性、タグ、根拠を出力する。",
                 "writePolicy": "読み取り確認とfixture/API出力まで。",
             },

@@ -20,6 +20,14 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 CASSETTE_SAMPLE_PATH = REPO_ROOT / "output" / "live_extracts" / "9NK452RS60-03-CASSETTE-A0-3D-01.json"
 
 
+def test_backend_root_is_api_status(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert response.json()["role"] == "api-only"
+    assert response.json()["frontend"] == "http://127.0.0.1:5173/"
+
+
 def test_build_composed_display_payload_hides_noisy_keys():
     payload = build_composed_display_payload(
         {
@@ -328,7 +336,7 @@ def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_con
         api_links={
             "detail_api": "http://testserver/api/v1/drawing-metadata/registrations/1/",
             "rag_payload_api": "http://testserver/api/v1/drawing-metadata/registrations/1/rag-payload/",
-            "tag_review_page": "http://testserver/drawing-metadata/1/tags/",
+            "tag_review_page": "http://testserver/internal/drawing-metadata/1/tags/",
         },
     )
 
@@ -681,7 +689,7 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
         derived_tags_json=[],
     )
 
-    response = client.get(f"/drawing-metadata/{drawing.id}/")
+    response = client.get(f"/internal/drawing-metadata/{drawing.id}/")
 
     assert response.status_code == 200
     assert response.context["composed_display"]["hiddenKeys"] == ["text_tokens", "spec_tokens", "part_keywords"]
@@ -699,9 +707,9 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert response.context["handoff_display"]["knowledgePayloadTargetRows"][0]["reviewRequired"] == "あり"
     assert "2D/3D 照合結果" in response.content.decode("utf-8")
     detail_content = response.content.decode("utf-8")
-    assert f"/drawing-metadata/{drawing.id}/" in detail_content
-    assert f"/drawing-metadata/{drawing.id}/product-unit/" in detail_content
-    assert f"/drawing-metadata/{drawing.id}/parts/" in detail_content
+    assert f"/internal/drawing-metadata/{drawing.id}/" in detail_content
+    assert f"/internal/drawing-metadata/{drawing.id}/product-unit/" in detail_content
+    assert f"/internal/drawing-metadata/{drawing.id}/parts/" in detail_content
     assert "図面管理" in detail_content
     assert "製品・装置・ユニット" in detail_content
     assert "部品" in detail_content
@@ -736,7 +744,7 @@ def test_tag_review_page_renders_composed_tag_candidates(client, sample_registra
         derived_tags_json=[],
     )
 
-    response = client.get(f"/drawing-metadata/{drawing.id}/tags/")
+    response = client.get(f"/internal/drawing-metadata/{drawing.id}/tags/")
 
     assert response.status_code == 200
     content = response.content.decode("utf-8")
@@ -793,8 +801,8 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
         derived_tags_json=[],
     )
 
-    product_response = client.get(f"/drawing-metadata/{drawing.id}/product-unit/")
-    part_response = client.get(f"/drawing-metadata/{drawing.id}/parts/")
+    product_response = client.get(f"/internal/drawing-metadata/{drawing.id}/product-unit/")
+    part_response = client.get(f"/internal/drawing-metadata/{drawing.id}/parts/")
 
     assert product_response.status_code == 200
     product_content = product_response.content.decode("utf-8")
@@ -802,9 +810,9 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
     assert "装置:供給台" in product_content
     assert "PRFX" in product_content
     assert "タグAPI状態" in product_content
-    assert f"/drawing-metadata/{drawing.id}/" in product_content
-    assert f"/drawing-metadata/{drawing.id}/product-unit/" in product_content
-    assert f"/drawing-metadata/{drawing.id}/parts/" in product_content
+    assert f"/internal/drawing-metadata/{drawing.id}/" in product_content
+    assert f"/internal/drawing-metadata/{drawing.id}/product-unit/" in product_content
+    assert f"/internal/drawing-metadata/{drawing.id}/parts/" in product_content
     assert "図面管理" in product_content
     assert "製品・装置・ユニット" in product_content
     assert "部品" in product_content
@@ -820,9 +828,9 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
     assert "材質:SUS304" in part_content
     assert "TOP.BRACKET" in part_content
     assert "needs_part_record_and_attribute_master_binding" in part_content
-    assert f"/drawing-metadata/{drawing.id}/" in part_content
-    assert f"/drawing-metadata/{drawing.id}/product-unit/" in part_content
-    assert f"/drawing-metadata/{drawing.id}/parts/" in part_content
+    assert f"/internal/drawing-metadata/{drawing.id}/" in part_content
+    assert f"/internal/drawing-metadata/{drawing.id}/product-unit/" in part_content
+    assert f"/internal/drawing-metadata/{drawing.id}/parts/" in part_content
     assert "図面管理" in part_content
     assert "製品・装置・ユニット" in part_content
     assert "部品" in part_content
@@ -841,7 +849,7 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     settings.GEMINI_TEMPERATURE = 0.0
     settings.DRAWING_METADATA_TAG_RULE_VERSION = "1.0.0"
 
-    response = client.get("/drawing-metadata/system/tag-automation/")
+    response = client.get("/internal/drawing-metadata/system/tag-automation/")
 
     assert response.status_code == 200
     content = response.content.decode("utf-8")
@@ -857,10 +865,11 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert "確認・再抽出・手直し" in content
     assert "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細" in content
     assert "本番ナレッジシステムへの登録・変更・削除は行いません" in content
-    assert 'href="/drawing-metadata/"' in content
-    assert 'href="/drawing-metadata/handoff/"' in content
+    assert 'href="/drawing-metadata/"' not in content
+    assert "open_icad_extraction_review" in content
+    assert "show_handoff_note" in content
     assert "ICAD抽出管理" in content
-    assert "内部連携データ確認" in content
+    assert "API仕様・引継ぎ資料" in content
 
 
 @pytest.mark.django_db
@@ -899,7 +908,7 @@ def test_handoff_dashboard_page_summarizes_fixture_readiness(client, sample_regi
     )
 
     dashboard = build_handoff_dashboard_payload([drawing])
-    response = client.get("/drawing-metadata/handoff/")
+    response = client.get("/internal/drawing-metadata/handoff/")
 
     assert dashboard["summaryCards"][0]["value"] == 1
     assert dashboard["summaryCards"][2]["value"] == 1
@@ -926,7 +935,7 @@ def test_handoff_dashboard_marks_registration_without_snapshots_as_unextracted(c
     )
 
     dashboard = build_handoff_dashboard_payload([drawing])
-    response = client.get("/drawing-metadata/handoff/")
+    response = client.get("/internal/drawing-metadata/handoff/")
 
     assert dashboard["summaryCards"][1]["value"] == 0
     assert dashboard["rows"][0]["has2d"] is False

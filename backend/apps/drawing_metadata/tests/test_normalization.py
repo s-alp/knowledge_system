@@ -165,6 +165,7 @@ def test_normalize_2d_raw_extract():
     assert canonical["equipment_category"] == "ロボット"
     assert "SES" in canonical["spec_tokens"]
     assert canonical["title_block_fields"]["material"] == "SUS304"
+    assert canonical["material"] == "SUS304"
     assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
     assert canonical["title_block_fields"]["prfx"] == "RAA4844"
     assert canonical["title_block_fields"]["unit_number"] == "U01"
@@ -176,7 +177,7 @@ def test_normalize_2d_raw_extract():
     assert canonical["revision_note_count"] == 1
     assert canonical["revision_note_candidates"][0]["value"] == "A 寸法変更"
     assert canonical["revision_note_candidates"][0]["confidence"] == "medium"
-    assert any(tag["tag"] == "改訂情報あり" for tag in tags)
+    assert all(tag["tag"] != "改訂情報あり" for tag in tags)
     assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
     assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
     assert any(tag["tag"] == "ユニット:U01" for tag in tags)
@@ -185,7 +186,7 @@ def test_normalize_2d_raw_extract():
     assert "図面特徴:切断線" in feature_tags
     assert "形状候補:長穴" in feature_tags
     assert "形状候補:穴" in feature_tags
-    assert any(tag["tag"] == "加工指示:表面粗さ" for tag in tags)
+    assert all(tag["source"] != "geometry_feature_candidates" for tag in tags)
     assert canonical["surface_roughness_count"] == 1
     assert canonical["surface_roughness_values"] == ["Ra 6.3"]
     assert canonical["section_feature_count"] == 2
@@ -205,6 +206,32 @@ def test_normalize_2d_raw_extract():
     assert sections_by_key["manufacturing_symbols"]["trusted_count"] >= 4
 
 
+def test_title_block_fields_reject_reference_and_calculation_false_positives():
+    payload = {
+        "source_kind": "2d",
+        "source_file": {"full_path": r"J:\sample.icd", "file_name": "sample.icd"},
+        "raw_extract": {
+            "texts": [
+                {"text_lines": ["重量：0.4932kg"], "inside_print_area": True},
+                {"text_lines": ["ワーク重量より12.4倍の吸引力がある"], "inside_print_area": True},
+                {"text_lines": ["材質：丸棒 φ90"], "inside_print_area": True},
+                {"text_lines": ["図番：参考：M24A88810"], "inside_print_area": True},
+                {"text_lines": ["図番：P-100"], "inside_print_area": True},
+                {"text_lines": ["塗装", "仕上げ面不可"], "inside_print_area": True},
+            ],
+            "print_frames": [{"frame_no": 1}],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["title_block_fields"]["weight"] == "0.4932kg"
+    assert canonical["weight_value"] == "0.4932kg"
+    assert canonical["title_block_fields"]["drawing_number"] == "P-100"
+    assert "material" not in canonical["title_block_fields"]
+    assert "coating_instruction" not in canonical["title_block_fields"]
+    assert all(candidate.get("value") != "参考：M24A88810" for candidate in canonical["title_block_candidates"])
+    assert all("吸引力" not in str(candidate.get("value")) for candidate in canonical["title_block_candidates"])
 def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     payload = {
         "source_format": "icad",

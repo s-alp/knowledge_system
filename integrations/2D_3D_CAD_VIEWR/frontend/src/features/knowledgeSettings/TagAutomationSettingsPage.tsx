@@ -6,10 +6,14 @@ import {
   type TagAutomationSettingsResponse,
 } from "../../shared/api/client";
 
+interface TagAutomationSettingsPageProps {
+  onOpenIcadExtractionReview: () => void;
+}
 
-export function TagAutomationSettingsPage() {
+export function TagAutomationSettingsPage({ onOpenIcadExtractionReview }: TagAutomationSettingsPageProps) {
   const [settingsPayload, setSettingsPayload] = useState<TagAutomationSettingsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -45,8 +49,15 @@ export function TagAutomationSettingsPage() {
         <div className="settings-management-list">
           {settingsPayload.managementLinks.map((link) => {
             const LinkIcon = link.key === "integration-data-review" ? IconTransfer : IconDatabase;
+            const handleClick = () => {
+              if (link.action === "open_icad_extraction_review") {
+                onOpenIcadExtractionReview();
+                return;
+              }
+              setNotice("移植用のAPI仕様と引継ぎ資料は通常画面へ出さず、資料側で確認します。");
+            };
             return (
-              <a key={link.key} className="settings-management-link" href={link.url}>
+              <button key={link.key} className="settings-management-link" type="button" onClick={handleClick}>
                 <span className="settings-management-icon" aria-hidden="true">
                   <LinkIcon size={21} stroke={1.8} />
                 </span>
@@ -55,10 +66,11 @@ export function TagAutomationSettingsPage() {
                   <span>{link.description}</span>
                 </span>
                 <IconChevronRight className="settings-management-chevron" size={20} aria-hidden="true" />
-              </a>
+              </button>
             );
           })}
         </div>
+        {notice ? <p className="production-section-note settings-management-notice">{notice}</p> : null}
       </section>
 
       <section className="production-section production-basic-section">

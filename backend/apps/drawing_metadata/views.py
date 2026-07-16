@@ -94,7 +94,7 @@ class RegistrationDetailPageView(View):
             "rag_payload_api": request.build_absolute_uri(
                 f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/"
             ),
-            "tag_review_page": request.build_absolute_uri(f"/drawing-metadata/{drawing.id}/tags/"),
+            "tag_review_page": request.build_absolute_uri(f"/internal/drawing-metadata/{drawing.id}/tags/"),
         }
 
         return render(

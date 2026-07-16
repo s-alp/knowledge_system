@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <title>Drawing Metadata</title>
+    <title>ICAD抽出内部確認</title>
     <style>
       body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f7f8fa; }
       h1 { margin: 0; padding: 18px 24px; background: #fff; border-bottom: 1px solid #ddd; font-size: 22px; }
@@ -73,28 +73,28 @@
     </style>
   </head>
   <body>
-    <h1><a href="/drawing-metadata/">Drawing Metadata</a></h1>
+    <h1><a href="/internal/drawing-metadata/">ICAD抽出内部確認</a></h1>
     <div class="app-shell">
       <aside class="side-nav">
         <div class="side-nav-section">
           <div class="side-nav-title">メイン</div>
           {% if drawing %}
-            <a href="/drawing-metadata/{{ drawing.id }}/">図面管理</a>
-            <a href="/drawing-metadata/{{ drawing.id }}/product-unit/">製品・装置・ユニット</a>
-            <a href="/drawing-metadata/{{ drawing.id }}/parts/">部品</a>
+            <a href="/internal/drawing-metadata/{{ drawing.id }}/">図面管理</a>
+            <a href="/internal/drawing-metadata/{{ drawing.id }}/product-unit/">製品・装置・ユニット</a>
+            <a href="/internal/drawing-metadata/{{ drawing.id }}/parts/">部品</a>
           {% else %}
-            <a href="/drawing-metadata/">図面管理</a>
+            <a href="/internal/drawing-metadata/">図面管理</a>
           {% endif %}
         </div>
         {% if drawing %}
           <div class="side-nav-section">
             <div class="side-nav-title">確認</div>
-            <a href="/drawing-metadata/{{ drawing.id }}/tags/">タグ候補レビュー</a>
+            <a href="/internal/drawing-metadata/{{ drawing.id }}/tags/">タグ候補レビュー</a>
           </div>
         {% endif %}
         <div class="side-nav-section">
           <div class="side-nav-title">管理</div>
-          <a href="/drawing-metadata/system/tag-automation/">システム設定</a>
+          <a href="/internal/drawing-metadata/system/tag-automation/">システム設定</a>
         </div>
       </aside>
       <main class="main-content">

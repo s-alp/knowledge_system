@@ -68,6 +68,10 @@ def test_classify_title_block_candidates_posts_json_and_filters_response(setting
     body = json.loads(req.data.decode("utf-8"))
     assert body["generationConfig"]["temperature"] == 0.0
     assert body["generationConfig"]["responseMimeType"] == "application/json"
+    prompt = body["contents"][0]["parts"][0]["text"]
+    assert "candidate.value is null or empty" in prompt
+    assert "参考図番" in prompt
+    assert "Stock shape or dimensions" in prompt
 
 
 def test_classify_title_block_candidates_reports_http_error_body(settings):

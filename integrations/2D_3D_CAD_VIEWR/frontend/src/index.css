@@ -774,13 +774,23 @@ p {
   gap: 12px;
   min-height: 72px;
   padding: 10px 4px;
+  border: 0;
   border-bottom: 1px solid rgba(224, 224, 224, 0.95);
+  background: transparent;
   color: var(--text-color-strong);
+  cursor: pointer;
+  font: inherit;
   text-decoration: none;
+  text-align: left;
+  width: 100%;
 }
 
 .settings-management-link:hover {
   background: rgba(25, 118, 210, 0.05);
+}
+
+.settings-management-notice {
+  margin-top: 12px;
 }
 
 .settings-management-icon {
@@ -844,6 +854,34 @@ p {
   padding: 0 0 16px;
 }
 
+.production-attribute-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.production-compact-button {
+  min-height: 30px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+}
+
+.production-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.production-tag-list span {
+  padding: 3px 8px;
+  border: 1px solid #c7d1dc;
+  border-radius: 3px;
+  background: #f7f9fb;
+  color: var(--text-color-strong);
+  font-size: 0.82rem;
+}
+
 .production-attribute-block .production-table th {
   width: 180px;
   color: var(--text-color-soft);
@@ -893,6 +931,149 @@ p {
   font-weight: 600;
 }
 
+.production-link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.production-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.production-modal {
+  width: min(900px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 18px 20px;
+  border: 1px solid var(--surface-border-strong);
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+}
+
+.production-modal-header,
+.production-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.production-modal-header h2 {
+  font-size: 1.05rem;
+}
+
+.production-modal-actions {
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.production-modal-note {
+  margin: 14px 0;
+  color: var(--text-color-soft);
+  line-height: 1.6;
+}
+
+.production-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  padding-top: 16px;
+}
+
+.production-form-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.production-form-field > span,
+.production-link-search span {
+  color: var(--text-color-soft);
+  font-size: 0.82rem;
+}
+
+.production-form-field input,
+.production-form-field select,
+.production-form-field textarea,
+.production-link-search input {
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 1px solid var(--surface-border-strong);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--text-color-strong);
+  font: inherit;
+}
+
+.production-form-field textarea {
+  min-height: 82px;
+  resize: vertical;
+}
+
+.production-form-field small {
+  color: var(--text-color-soft);
+}
+
+.production-form-field-wide {
+  grid-column: 1 / -1;
+}
+
+.production-link-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.production-link-search label {
+  display: grid;
+  gap: 6px;
+}
+
+.production-link-table,
+.production-provenance-table {
+  max-height: 430px;
+  overflow: auto;
+}
+
+.production-link-table td:last-child,
+.production-provenance-table td:last-child {
+  overflow-wrap: anywhere;
+}
+
+.production-provenance-table th,
+.production-provenance-table td {
+  vertical-align: top;
+}
+
+.production-provenance-table td:nth-child(7) {
+  min-width: 260px;
+}
+
+.production-extraction-review {
+  display: grid;
+  gap: 5px;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-left: 3px solid #1976d2;
+  background: #f7f9fb;
+}
+
+.production-extraction-review p {
+  color: var(--text-color-soft);
+  line-height: 1.5;
+}
+
 @media (max-width: 980px) {
   .production-search-grid,
   .production-detail-grid {
@@ -901,6 +1082,11 @@ p {
 
   .production-basic-section {
     width: 100%;
+  }
+
+  .production-edit-grid,
+  .production-link-search {
+    grid-template-columns: 1fr;
   }
 }
 

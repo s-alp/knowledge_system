@@ -418,6 +418,41 @@ def test_export_drawing_metadata_fixtures_filters_by_manifest_source_path(tmp_pa
 
 
 @pytest.mark.django_db
+def test_renormalize_snapshots_applies_current_quality_rules_and_keeps_manual_values():
+    drawing = RegisteredDrawing.objects.create(
+        filename="quality.icd",
+        source_path=r"J:\quality.icd",
+        source_format="icad",
+    )
+    snapshot = DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={
+            "_source_file": {"full_path": drawing.source_path, "file_name": drawing.filename},
+            "texts": [
+                {"text_lines": ["重量：0.4932kg"], "inside_print_area": True},
+                {"text_lines": ["ワーク重量より12.4倍の吸引力がある"], "inside_print_area": True},
+                {"text_lines": ["図番：参考：M24A88810"], "inside_print_area": True},
+            ],
+            "print_frames": [{"frame_no": 1}],
+        },
+        canonical_attributes_json={"title_block_fields": {"weight": "誤った旧値"}},
+        derived_tags_json=[
+            {"tag": "加工指示:表面粗さ", "source": "geometry_feature_candidates", "manual_flag": False},
+            {"tag": "利用者タグ", "source": "manual_override", "manual_flag": True},
+        ],
+        manual_overrides_json={"canonicalAttributes": {"drawing_name": "手動図面名"}},
+    )
+
+    call_command("renormalize_drawing_metadata_snapshots")
+
+    snapshot.refresh_from_db()
+    assert snapshot.canonical_attributes_json["title_block_fields"]["weight"] == "0.4932kg"
+    assert snapshot.canonical_attributes_json["drawing_name"] == "手動図面名"
+    assert [tag["tag"] for tag in snapshot.derived_tags_json] == ["利用者タグ"]
+
+
+@pytest.mark.django_db
 def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="queue-missing",

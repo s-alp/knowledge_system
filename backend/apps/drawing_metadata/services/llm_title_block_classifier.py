@@ -208,7 +208,10 @@ def _build_request_payload(candidates: list[dict], temperature: float) -> dict:
             "Return JSON only.",
             "Do not invent values.",
             "Use only the candidate index and allowed field names.",
+            "If candidate.value is null or empty, use field=null and confidence='low'.",
             "If a candidate is only a label or is ambiguous, use field=null and confidence='low'.",
+            "Reference or source drawing numbers such as 参考図番 or 元図 are not the current drawing_number.",
+            "Stock shape or dimensions without a material grade are not a material value.",
         ],
         "allowed_fields": sorted(TITLE_BLOCK_FIELD_RULES.keys()),
         "candidates": [

@@ -15,6 +15,7 @@ backend/.env
 # Local verification artifacts
 output/live_extracts/
 output/knowledge_ui_screenshots_*/
+output/entity_ui_*/
 output/icad_extraction_probe_2026-07-15/
 output/souya_handoff/*_probe_*.json
 output/souya_handoff/*_trial_*.json

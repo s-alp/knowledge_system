@@ -2,6 +2,8 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  applyDrawingMetadataOverrides,
+  getDrawingOptions,
   getKnowledgeEntities,
   getKnowledgeEntity,
   type KnowledgeEntityCatalogResponse,
@@ -11,6 +13,8 @@ import { IcadEntityDetailPage, IcadEntityListPage } from "./IcadEntityPages";
 
 
 vi.mock("../../shared/api/client", () => ({
+  applyDrawingMetadataOverrides: vi.fn(),
+  getDrawingOptions: vi.fn(),
   getKnowledgeEntities: vi.fn(),
   getKnowledgeEntity: vi.fn(),
 }));
@@ -42,6 +46,7 @@ const partRecord: KnowledgeEntityRecord = {
       source: "3d_part_material",
       confidence: "high",
       evidence: "snapshotsByMode.3d.rawExtract.parts[2].materials",
+      reason: "材質として3D部品材質情報から抽出でき、部品検索に使えるため採用しています。",
     },
   ],
   tags: [
@@ -50,11 +55,34 @@ const partRecord: KnowledgeEntityRecord = {
       source: "3d_part_material",
       confidence: "high",
       evidence: "snapshotsByMode.3d.rawExtract.parts[2].materials",
+      reason: "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
     },
   ],
+  businessFields: {
+    name: "BRACKET-A",
+    partNumber: "CAA5012-02434006P1R1",
+    category: "ブラケット",
+    entityKind: "part",
+    phase: "",
+    status: "完了",
+    owner: "設計担当者",
+    supplier: "",
+    unitPrice: "",
+    unit: "個",
+    remarks: "供給台ブラケット",
+  },
+  businessFieldSources: {
+    name: { source: "icad_extraction", evidence: "topPart" },
+  },
   conflicts: [],
   reviewStatus: "confirmed",
   reviewRequired: false,
+  extractionReview: {
+    status: "confirmed",
+    required: false,
+    label: "確認済み",
+    description: "ICAD自動抽出結果の確認状態です。",
+  },
   evidence: [],
   history: [],
   updatedAt: "2026-07-15T12:00:00+09:00",
@@ -72,6 +100,27 @@ const partRecord: KnowledgeEntityRecord = {
     drawingId: "33333333-3333-4333-8333-333333333333",
     filename: "CAA5012-02434006P1R1.icd",
   },
+  relatedDrawings: [
+    {
+      drawingId: "33333333-3333-4333-8333-333333333333",
+      filename: "CAA5012-02434006P1R1.icd",
+      sourcePath: "J:\\ライズ\\CAA5012-02434006P1R1.icd",
+      relationship: "source",
+    },
+  ],
+  provenance: [
+    {
+      kind: "attribute",
+      name: "材質",
+      key: "materials",
+      label: "材質",
+      value: "SS400",
+      source: "3d_part_material",
+      confidence: "high",
+      evidence: "rawExtract.parts[2].materials",
+      reason: "材質として3D部品材質情報から抽出でき、部品検索に使えるため採用しています。",
+    },
+  ],
 };
 
 const catalog: KnowledgeEntityCatalogResponse = {
@@ -109,16 +158,23 @@ describe("ICAD knowledge entity pages", () => {
     expect(onOpenDetail).toHaveBeenCalledWith(partRecord.entityId, partRecord.drawingId);
   });
 
-  it("shows node-specific attributes, tags, evidence confidence, and relationships", async () => {
+  it("shows Souya-style business fields, tags, provenance, and relationships", async () => {
     vi.mocked(getKnowledgeEntity).mockResolvedValue(partRecord);
+    vi.mocked(getDrawingOptions).mockResolvedValue({ items: [], totalCount: 0 });
+    vi.mocked(applyDrawingMetadataOverrides).mockResolvedValue({
+      drawingId: partRecord.drawingId,
+      extractionMode: "3d",
+      manualOverrides: {},
+      canonicalAttributes: {},
+      derivedTags: [],
+    });
     const onNavigate = vi.fn();
 
     render(<IcadEntityDetailPage entityId={partRecord.entityId} drawingId={partRecord.drawingId} onNavigate={onNavigate} />);
 
     expect(await screen.findByText("材質:SS400")).toBeInTheDocument();
-    expect(screen.getByText("高")).toBeInTheDocument();
-    expect(screen.getByText("3D材質")).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "親製品・装置・ユニット" })).toBeInTheDocument();
+    expect(screen.getAllByText("完了").length).toBeGreaterThan(0);
+    expect(screen.getByRole("tab", { name: "製品・装置・ユニット" })).toBeInTheDocument();
     fireEvent.click(screen.getByText("FEEDER"));
     await waitFor(() => {
       expect(onNavigate).toHaveBeenCalledWith(
@@ -127,5 +183,11 @@ describe("ICAD knowledge entity pages", () => {
         partRecord.drawingId,
       );
     });
+    fireEvent.click(screen.getByRole("button", { name: "取得根拠を見る" }));
+    expect(screen.getByRole("dialog", { name: "取得元・採用根拠" })).toBeInTheDocument();
+    expect(screen.getByText("3D材質API")).toBeInTheDocument();
+    expect(screen.getByText("信頼度")).toBeInTheDocument();
+    expect(screen.getByText("採用理由")).toBeInTheDocument();
+    expect(screen.getByText("材質として3D部品材質情報から抽出でき、部品検索に使えるため採用しています。")).toBeInTheDocument();
   });
 });

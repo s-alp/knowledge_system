@@ -42,6 +42,7 @@ export interface KnowledgeEntityAttribute {
   source: string;
   confidence: "high" | "medium" | "low" | string;
   evidence: string;
+  reason: string;
 }
 
 export interface KnowledgeEntityTag {
@@ -49,6 +50,21 @@ export interface KnowledgeEntityTag {
   source: string;
   confidence: "high" | "medium" | "low" | string;
   evidence: string;
+  reason: string;
+  manualFlag?: boolean;
+  ruleVersion?: string;
+}
+
+export interface KnowledgeEntityProvenance {
+  kind: "attribute" | "tag";
+  name: string;
+  key?: string;
+  label?: string;
+  value: string;
+  source: string;
+  confidence: "high" | "medium" | "low" | string;
+  evidence: string;
+  reason: string;
 }
 
 export interface KnowledgeEntityRelatedItem {
@@ -81,6 +97,8 @@ export interface KnowledgeEntityRecord {
   sourcePath: string;
   attributes: KnowledgeEntityAttribute[];
   tags: KnowledgeEntityTag[];
+  businessFields: Record<string, string>;
+  businessFieldSources: Record<string, { source: string; evidence: string }>;
   conflicts: Array<Record<string, unknown>>;
   reviewStatus: "pending" | "confirmed" | "needs_correction";
   reviewRequired: boolean;
@@ -95,6 +113,25 @@ export interface KnowledgeEntityRecord {
   updatedAt: string;
   relatedEntities?: KnowledgeEntityRelatedItem[];
   relatedDrawing?: { drawingId: string; filename: string };
+  relatedDrawings?: Array<{
+    drawingId: string;
+    filename: string;
+    sourcePath: string;
+    relationship: "source" | "linked";
+  }>;
+  provenance?: KnowledgeEntityProvenance[];
+  extractionReview: {
+    status: "pending" | "confirmed" | "needs_correction";
+    required: boolean;
+    label: string;
+    description: string;
+  };
+}
+
+export interface DrawingOption {
+  drawingId: string;
+  filename: string;
+  sourcePath: string;
 }
 
 export interface KnowledgeEntityCatalogResponse {
@@ -117,7 +154,7 @@ export interface TagAutomationSettingsResponse {
     key: string;
     label: string;
     description: string;
-    url: string;
+    action: "open_icad_extraction_review" | "show_handoff_note" | string;
   }>;
   runtimeRows: Array<{ label: string; value: string }>;
   operationRows: Array<{ area: string; screen: string; role: string; writePolicy: string }>;
@@ -193,6 +230,14 @@ export function getKnowledgeEntity(entityId: string, drawingId?: string): Promis
   return requestJson<KnowledgeEntityRecord>(`/knowledge-entities/${entityId}${search}`);
 }
 
+export function getDrawingOptions(query = "", limit = 100): Promise<{ items: DrawingOption[]; totalCount: number }> {
+  const search = new URLSearchParams({ limit: String(limit) });
+  if (query.trim()) {
+    search.set("q", query.trim());
+  }
+  return requestJson(`/drawing-options?${search.toString()}`);
+}
+
 export function getTagAutomationSettings(): Promise<TagAutomationSettingsResponse> {
   return requestJson<TagAutomationSettingsResponse>("/drawing-metadata/settings/tag-automation");
 }
@@ -240,6 +285,13 @@ export function applyDrawingMetadataOverrides(
   extractionMode: DrawingMetadataExtractionMode,
   canonicalAttributes: Record<string, unknown>,
   reason: string,
+  options: {
+    businessFields?: Record<string, string>;
+    relatedDrawingIds?: string[];
+    knowledgeEntityTarget?: KnowledgeEntityTargetKey;
+    knowledgeEntityKind?: KnowledgeEntityKind;
+    derivedTags?: { added: string[]; removed: string[] };
+  } = {},
 ): Promise<{
   drawingId: string;
   extractionMode: DrawingMetadataExtractionMode;
@@ -249,7 +301,7 @@ export function applyDrawingMetadataOverrides(
 }> {
   return requestJson(`/drawing-metadata/registrations/${drawingId}/overrides`, {
     method: "PATCH",
-    body: JSON.stringify({ extractionMode, canonicalAttributes, reason }),
+    body: JSON.stringify({ extractionMode, canonicalAttributes, reason, ...options }),
   });
 }
 

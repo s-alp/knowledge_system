@@ -81,14 +81,14 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
         {
             "key": "icad-extraction-management",
             "label": "ICAD抽出管理",
-            "description": "登録済みICD、2D/3D抽出状態、ジョブ履歴を管理者向けに確認します。",
-            "url": "/drawing-metadata/",
+            "description": "図面管理のICAD取込・抽出レビュー画面を開きます。",
+            "action": "open_icad_extraction_review",
         },
         {
             "key": "integration-data-review",
-            "label": "内部連携データ確認",
-            "description": "タグ・属性候補と連携payloadを読み取り専用で確認します。",
-            "url": "/drawing-metadata/handoff/",
+            "label": "API仕様・引継ぎ資料",
+            "description": "API仕様・引継ぎ資料で確認します。通常ユーザー画面には表示しません。",
+            "action": "show_handoff_note",
         },
     ]
     assert "secret-value-must-not-be-returned" not in response.content.decode("utf-8")
@@ -155,6 +155,8 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
         canonical_attributes_json={
             "customer_name": "ライズ",
             "drawing_number": "CAA5012-02434006P1R1",
+            "mass_value": 12.3456,
+            "weight_value": 121.068,
             "part_names": ["MACHINE", "FEEDER", "BRACKET-A", "COVER-B"],
         },
         derived_tags_json=[],
@@ -180,6 +182,13 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
     assert detail_response.status_code == 200
     assert detail_response.json()["treePath"] == ["MACHINE"]
     assert detail_response.json()["classificationEvidence"] == "filename"
+    assert detail_response.json()["businessFields"]["status"] == ""
+    assert detail_response.json()["extractionReview"]["label"] == "未確認"
+    assert next(item for item in detail_response.json()["attributes"] if item["key"] == "mass_value")["value"] == "12.35 kg"
+    assert next(item for item in detail_response.json()["attributes"] if item["key"] == "weight_value")["value"] == "12.35 kg"
+    assert all(item["reason"] for item in detail_response.json()["attributes"])
+    assert all(item["reason"] for item in detail_response.json()["tags"])
+    assert all(item["reason"] and item["confidence"] for item in detail_response.json()["provenance"])
 
 
 @pytest.mark.django_db
@@ -210,6 +219,40 @@ def test_icad_entity_api_does_not_expand_legacy_tree_paths(sample_registration_p
     assert payload["items"][0]["entityKind"] == "part"
     assert payload["items"][0]["treePath"] == ["legacy-sample"]
     assert payload["items"][0]["drawingId"] == str(drawing.id)
+
+
+@pytest.mark.django_db
+def test_icad_entity_api_classifies_external_reference_as_assembly(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="external-reference-drawing",
+        filename="external-reference.icd",
+        source_path=r"C:\temp\external-reference.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "parts": [
+                {"tree_path": ["ROOT"], "name": "ROOT", "depth": 0, "child_count": 1},
+                {
+                    "tree_path": ["ROOT", "SUB"],
+                    "name": "SUB",
+                    "depth": 1,
+                    "child_count": 0,
+                    "is_external": True,
+                },
+            ]
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["count"] == 1
+    assert payload["items"][0]["entityKind"] == "assembly"
+    assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
 
 
 @pytest.mark.django_db
@@ -296,6 +339,88 @@ def test_override_patch(sample_registration_payload):
     assert payload["extractionMode"] == "3d"
     assert payload["canonicalAttributes"]["equipment_category"] == "ガントリー"
     assert payload["derivedTags"][0]["tag"] == "装置:ガントリー"
+
+
+@pytest.mark.django_db
+def test_entity_business_edit_and_drawing_link_are_persisted(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="",
+        filename="entity-part.icd",
+        source_path=r"J:\parts\entity-part.icd",
+        source_format="icad",
+    )
+    linked = RegisteredDrawing.objects.create(
+        host_drawing_id="",
+        filename="related-drawing.icd",
+        source_path=r"J:\drawings\related-drawing.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={"top_part": {"name": "PART-A"}, "parts": []},
+        canonical_attributes_json={"drawing_number": "P-001"},
+    )
+    client = APIClient()
+    catalog = client.get(f"/api/v1/knowledge-entities?target=part&drawingId={drawing.id}").json()
+    entity_id = catalog["items"][0]["entityId"]
+
+    response = client.patch(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/overrides",
+        {
+            "extractionMode": "3d",
+            "businessFields": {
+                "name": "編集後部品名",
+                "partNumber": "P-001-R1",
+                "category": "ブラケット",
+                "status": "完了",
+                "owner": "設計担当者",
+                "remarks": "確認済み",
+            },
+            "relatedDrawingIds": [str(linked.id)],
+            "knowledgeEntityTarget": "part",
+            "knowledgeEntityKind": "part",
+            "reason": "登録情報と関連図面を更新",
+        },
+        format="json",
+    )
+    assert response.status_code == 200
+
+    detail = client.get(f"/api/v1/knowledge-entities/{entity_id}?drawingId={drawing.id}").json()
+    assert detail["name"] == "編集後部品名"
+    assert detail["partNumber"] == "P-001-R1"
+    assert detail["businessFields"]["status"] == "完了"
+    assert detail["businessFieldSources"]["status"]["source"] == "manual_override"
+    assert [item["relationship"] for item in detail["relatedDrawings"]] == ["source", "linked"]
+    assert detail["relatedDrawings"][1]["drawingId"] == str(linked.id)
+    assert any(item["action"] == "override" for item in detail["history"])
+
+    options = client.get("/api/v1/drawing-options?q=related-drawing").json()
+    assert options["totalCount"] == 1
+    assert options["items"][0]["drawingId"] == str(linked.id)
+
+
+@pytest.mark.django_db
+def test_entity_business_edit_rejects_unknown_fields(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="",
+        filename="invalid-business-field.icd",
+        source_path=r"J:\parts\invalid-business-field.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(drawing=drawing, extraction_mode="3d")
+
+    response = APIClient().patch(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/overrides",
+        {
+            "extractionMode": "3d",
+            "businessFields": {"unknown": "value"},
+        },
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "unknownFields" in response.json()["businessFields"]
 
 
 @pytest.mark.django_db

@@ -162,6 +162,39 @@ class IcadEntityDetailApiView(APIView):
         return Response(entity)
 
 
+class DrawingOptionListApiView(APIView):
+    def get(self, request):
+        query = request.query_params.get("q", "").strip()
+        try:
+            limit = int(request.query_params.get("limit", "100"))
+        except ValueError:
+            return Response(
+                {"error": {"code": "drawing_option_limit", "message": "limit は整数で指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not 1 <= limit <= 250:
+            return Response(
+                {"error": {"code": "drawing_option_limit", "message": "limit は1～250で指定してください。"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        drawings = RegisteredDrawing.objects.order_by("filename", "id")
+        if query:
+            from django.db.models import Q
+
+            drawings = drawings.filter(Q(filename__icontains=query) | Q(source_path__icontains=query))
+        total_count = drawings.count()
+        items = [
+            {
+                "drawingId": str(drawing.id),
+                "filename": drawing.filename,
+                "sourcePath": drawing.source_path,
+            }
+            for drawing in drawings[:limit]
+        ]
+        return Response({"items": items, "totalCount": total_count})
+
+
 class TagAutomationSettingsApiView(APIView):
     def get(self, request):
         return Response(build_tag_automation_settings_payload())

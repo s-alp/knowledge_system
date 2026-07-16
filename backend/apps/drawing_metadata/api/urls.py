@@ -16,6 +16,8 @@ urlpatterns = [
     ),
     path("knowledge-entities", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list"),
     path("knowledge-entities/", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list-slash"),
+    path("drawing-options", views.DrawingOptionListApiView.as_view(), name="drawing-option-list"),
+    path("drawing-options/", views.DrawingOptionListApiView.as_view(), name="drawing-option-list-slash"),
     path(
         "knowledge-entities/<uuid:entity_id>",
         views.IcadEntityDetailApiView.as_view(),

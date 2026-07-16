@@ -3,6 +3,7 @@
 - 作成日: 2026-07-14
 - 対象: ICAD 2D/3D 抽出結果、タグ候補、属性候補を本番ナレッジシステムへ連携するための受け渡し整理
 - 前提: 本番ナレッジシステムへの登録、更新、削除は創屋側で実装する。こちらは抽出、正規化、候補生成、fixture/API契約案を提供する。
+- 2026-07-16の編集・紐づけ・根拠・タグ品質・39件監査は `docs/icad_entity_operations_and_quality_handoff_2026-07-16.md` を正とする。
 
 ## 1. 本番実画面の確認結果
 
@@ -223,9 +224,10 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
   - `474300AC219.icd`: 図面 attrs=5/tags=20、製品 attrs=1、部品 attrs=38/tags=20、プロジェクト attrs=1
   - `CAA5012-02434000K1R1.icd`: 図面 attrs=5/tags=9、製品 attrs=1、部品 attrs=27/tags=9、プロジェクト attrs=1
 
-同日にローカルDjangoを `http://127.0.0.1:8001` で起動し、実HTTPでも確認した。
+同日にローカルDjangoを `http://127.0.0.1:8001` で起動し、実HTTPでも確認した。なお、2026-07-16 時点ではユーザーが触る画面は `http://127.0.0.1:5173/` の2D・3Dビューワー統合フロントへ統一し、Django HTML は `/internal/drawing-metadata/` の内部確認画面へ退避している。
 
-- `GET /drawing-metadata/`: HTTP 200
+- `GET /internal/drawing-metadata/`: HTTP 200
+- `GET /drawing-metadata/`: 現行通常導線では使用しない
 - `GET /api/v1/drawing-metadata/registrations/`: 11件取得
 - `GET /api/v1/drawing-metadata/registrations/{drawingId}/`: `viewerBootstrap` あり
 - `GET /api/v1/drawing-metadata/registrations/{drawingId}/rag-payload/`: `schemaVersion=drawing_metadata_rag_payload.v1`
@@ -242,15 +244,15 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
 
 同欄へ `本番タグ・属性 payload プレビュー` を追加した。図面、製品・装置・ユニット、部品、プロジェクトの各対象について、既存受け口、タグAPI状態、タグ候補、属性候補数、payloadキー、候補endpointを表示する。`attribute` / `attribute_option` は本番マスタIDが必要なため、プレビューでは `null` とし、`bindingStatus=needs_attribute_master_binding` として創屋確認待ちを明示する。
 
-同じ検証用画面群の入口として、`GET /drawing-metadata/handoff/` を追加した。これは本番ナレッジシステムへ組み込む完成UIではなく、こちら側で抽出・正規化・タグ生成・payload受け渡しを横断確認するためのローカル検証画面である。登録済み図面数、抽出済み図面数、2D/3D両方あり、payload候補あり、レビュー競合、診断差分を集計し、図面別に詳細画面、タグレビュー、viewer bootstrap API、RAG payload APIへ遷移できる。
+同じ検証用画面群の入口として、現行では `GET /internal/drawing-metadata/handoff/` を使う。これは本番ナレッジシステムへ組み込む完成UIではなく、こちら側で抽出・正規化・タグ生成・payload受け渡しを横断確認するためのローカル検証画面である。登録済み図面数、抽出済み図面数、2D/3D両方あり、payload候補あり、レビュー競合、診断差分を集計し、図面別に詳細画面、タグレビュー、viewer bootstrap API、RAG payload APIへ遷移できる。
 
-- ローカル確認URL: `http://127.0.0.1:8001/drawing-metadata/7d47aa93-de58-467d-a145-4a584cd6c52b/`
+- ローカル確認URL: `http://127.0.0.1:8001/internal/drawing-metadata/7d47aa93-de58-467d-a145-4a584cd6c52b/`
 - 画面確認画像: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-metadata-handoff-viewport.png`
 - DOM確認: `創屋連携・viewer/RAG 受け渡し確認`, `詳細API`, `RAG投入payload API`, `viewer 初期化情報`, `RAG 事前フィルタ`, `RAG ランキング信号`, `投入前レビュー`, `本番タグ・属性 payload プレビュー` が表示されることを確認
 
 manifest取込後の代表図面として、2D/3D両方があり、かつpayload候補が多い `CAA5012-02434000K1R1.icd` をローカル詳細画面で見た目確認した。
 
-- ローカル確認URL: `http://127.0.0.1:8001/drawing-metadata/0e04246b-e8a2-4b46-a485-9312f6112d33/`
+- ローカル確認URL: `http://127.0.0.1:8001/internal/drawing-metadata/0e04246b-e8a2-4b46-a485-9312f6112d33/`
 - 画面上部: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-top-caa5012.png`
 - payloadプレビュー: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-payload-preview-caa5012.png`
 - DOM/寸法確認: `output\knowledge_ui_screenshots_2026-07-15\local-drawing-detail-payload-preview-caa5012.metrics.json`
@@ -509,9 +511,9 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 
 | API | 用途 |
 | --- | --- |
-| `PATCH /drawing-metadata/registrations/{drawingId}/review` | 2Dまたは3D候補を確定／要手直しへ変更 |
-| `GET /drawing-metadata/settings/tag-automation` | AI、抽出対象、採用ルールの管理設定を取得 |
-| `PUT /drawing-metadata/settings/tag-automation` | ローカル管理設定を更新 |
+| `PATCH /api/v1/drawing-metadata/registrations/{drawingId}/review` | 2Dまたは3D候補を確定／要手直しへ変更 |
+| `GET /api/v1/drawing-metadata/settings/tag-automation` | AI、抽出対象、採用ルールの管理設定を取得 |
+| `PUT /api/v1/drawing-metadata/settings/tag-automation` | ローカル管理設定を更新 |
 
 Gemini APIキーは設定値そのものを返さず、設定済みかどうかだけを返す。本番DB向けendpointは実装せず、創屋へはfixtureとAPI契約を渡す。
 

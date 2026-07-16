@@ -212,7 +212,15 @@ export default function App() {
       }
 
       if (activePage === "system") {
-        return <TagAutomationSettingsPage />;
+        return (
+          <TagAutomationSettingsPage
+            onOpenIcadExtractionReview={() => {
+              setIcadExtractionFile(null);
+              setShowIcadExtractionReview(false);
+              openKnowledgePage("drawing");
+            }}
+          />
+        );
       }
 
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;

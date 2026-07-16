@@ -172,6 +172,33 @@ def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> 
     )
 
 
+def _is_field_value_usable(field: str, value: str | None, evidence_text: str) -> bool:
+    if not _is_title_block_value_usable(
+        value,
+        max_length=int(TITLE_BLOCK_FIELD_RULES.get(field, {}).get("max_value_length", 80)),
+    ):
+        return False
+    normalized_value = unicodedata.normalize("NFKC", str(value)).strip()
+    normalized_evidence = unicodedata.normalize("NFKC", evidence_text).strip()
+
+    if field == "drawing_number" and any(token in normalized_evidence for token in ("参考", "元図")):
+        return False
+    if field == "material":
+        classification = _classify_material_value(normalized_value, allow_unknown=False)
+        if classification["status"] == "unresolved":
+            return False
+        if re.search(r"(?:丸棒|角棒|パイプ|板厚|φ\s*\d)", normalized_value, re.IGNORECASE) and not MATERIAL_VALUE_PATTERN.search(normalized_value.upper()):
+            return False
+    if field == "weight":
+        if not re.search(r"[-+]?\d+(?:\.\d+)?\s*(?:kg|g|t|ｋｇ|ｇ)\b", normalized_value, re.IGNORECASE):
+            return False
+        if any(token in normalized_evidence for token in ("吸引力", "倍", "÷")):
+            return False
+    if field == "coating_instruction" and "仕上げ面不可" in normalized_value:
+        return False
+    return True
+
+
 def _has_print_frames(raw_extract: dict) -> bool:
     print_frames = raw_extract.get("print_frames") or []
     return isinstance(print_frames, list) and bool(print_frames)
@@ -454,12 +481,12 @@ def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool =
                         continue
 
                     value = _strip_label_value(line, str(keyword))
-                    confidence = "medium" if _is_title_block_value_usable(value, max_length=max_value_length) else "low"
+                    confidence = "medium" if _is_field_value_usable(field, value, line) else "low"
                     if confidence == "low":
                         value = None
                     if not value and line_index + 1 < len(lines):
                         next_value = lines[line_index + 1].strip()
-                        if _is_title_block_value_usable(next_value, max_length=max_value_length):
+                        if _is_field_value_usable(field, next_value, line):
                             value = next_value
                             confidence = "medium"
 
@@ -549,7 +576,7 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
         field = candidate.get("field")
         rule = TITLE_BLOCK_FIELD_RULES.get(field, {})
         max_value_length = int(rule.get("max_value_length", 80))
-        if not _is_title_block_value_usable(value, max_length=max_value_length):
+        if not _is_field_value_usable(field, value, str(candidate.get("evidence_text") or "")):
             continue
         if field and field not in selected:
             selected[field] = value
@@ -858,6 +885,17 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "drawing_number": None,
         "drawing_name": None,
         "revision": None,
+        "material": None,
+        "surface_treatment": None,
+        "paint": None,
+        "scale": None,
+        "drawing_size": None,
+        "designer": None,
+        "checker": None,
+        "approver": None,
+        "drawing_date": None,
+        "prfx": None,
+        "unit_number": None,
         "source_format": raw_payload.get("source_format", "icad"),
         "source_kind": source_kind,
         "document_kind": None,
@@ -1071,6 +1109,33 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
         canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
+        title_fields = canonical["title_block_fields"]
+        for source_key, canonical_key in {
+            "drawing_number": "drawing_number",
+            "drawing_name": "drawing_name",
+            "material": "material",
+            "weight": "weight_value",
+            "surface_treatment": "surface_treatment",
+            "coating_instruction": "paint",
+            "scale": "scale",
+            "designer": "designer",
+            "checker": "checker",
+            "approver": "approver",
+            "date": "drawing_date",
+            "revision": "revision",
+            "prfx": "prfx",
+            "unit_number": "unit_number",
+        }.items():
+            if title_fields.get(source_key):
+                canonical[canonical_key] = title_fields[source_key]
+        if title_fields.get("material"):
+            formal_materials, unresolved_materials = _split_material_keywords([title_fields["material"]])
+            canonical["material_keywords"] = _merge_unique(canonical["material_keywords"] + formal_materials)
+            canonical["unresolved_material_keywords"] = _merge_unique(
+                canonical["unresolved_material_keywords"] + unresolved_materials
+            )
+        if title_fields.get("surface_treatment"):
+            canonical["surface_treatment_tokens"] = [title_fields["surface_treatment"]]
         canonical["revision_note_candidates"] = _build_revision_note_candidates(texts, has_print_frames=has_print_frames)
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)

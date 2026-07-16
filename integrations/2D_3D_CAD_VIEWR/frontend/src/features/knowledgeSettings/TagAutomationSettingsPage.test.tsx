@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -20,13 +20,13 @@ const settings: TagAutomationSettingsResponse = {
       key: "icad-extraction-management",
       label: "ICAD抽出管理",
       description: "登録済みICDと抽出状態を確認します。",
-      url: "/drawing-metadata/",
+      action: "open_icad_extraction_review",
     },
     {
       key: "integration-data-review",
-      label: "内部連携データ確認",
-      description: "連携payloadを確認します。",
-      url: "/drawing-metadata/handoff/",
+      label: "API仕様・引継ぎ資料",
+      description: "API仕様と移植用資料で確認します。",
+      action: "show_handoff_note",
     },
   ],
   runtimeRows: [
@@ -62,18 +62,19 @@ describe("TagAutomationSettingsPage", () => {
 
   it("shows the runtime settings returned by the backend without exposing a secret", async () => {
     vi.mocked(getTagAutomationSettings).mockResolvedValue(settings);
+    const onOpenIcadExtractionReview = vi.fn();
 
-    render(<TagAutomationSettingsPage />);
+    render(<TagAutomationSettingsPage onOpenIcadExtractionReview={onOpenIcadExtractionReview} />);
 
     expect(await screen.findByText("タグ・属性自動取得設定")).toBeInTheDocument();
     expect(screen.getByText("設定済み")).toBeInTheDocument();
     expect(screen.getByText("0.1")).toBeInTheDocument();
     expect(screen.getByText("ローカルDBのみ")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /ICAD抽出管理/ })).toHaveAttribute("href", "/drawing-metadata/");
-    expect(screen.getByRole("link", { name: /内部連携データ確認/ })).toHaveAttribute(
-      "href",
-      "/drawing-metadata/handoff/",
-    );
+    fireEvent.click(screen.getByRole("button", { name: /ICAD抽出管理/ }));
+    expect(onOpenIcadExtractionReview).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: /API仕様・引継ぎ資料/ }));
+    expect(screen.getByText("移植用のAPI仕様と引継ぎ資料は通常画面へ出さず、資料側で確認します。")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /ICAD抽出管理/ })).not.toBeInTheDocument();
     expect(screen.queryByText(/AIza/i)).not.toBeInTheDocument();
   });
 });

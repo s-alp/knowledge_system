@@ -112,7 +112,8 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [manualMode, setManualMode] = useState<DrawingMetadataExtractionMode>("2d");
-  const [manualJson, setManualJson] = useState("{\n  \"material\": \"\",\n  \"surface_treatment\": \"\"\n}");
+  const [manualFields, setManualFields] = useState<Record<string, string>>({});
+  const [manualTags, setManualTags] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -148,6 +149,22 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
   }, [file]);
 
   const candidateTags = useMemo(() => collectCandidateTags(registration), [registration]);
+  const activeSnapshot = registration?.snapshotsByMode[manualMode];
+  const activeTagValues = useMemo(
+    () => (activeSnapshot?.derivedTags ?? [])
+      .map((item) => typeof item === "object" && item !== null && "tag" in item ? String((item as { tag: unknown }).tag) : "")
+      .filter(Boolean),
+    [activeSnapshot],
+  );
+
+  useEffect(() => {
+    const canonical = activeSnapshot?.canonicalAttributes ?? {};
+    setManualFields(Object.fromEntries(
+      ["drawing_number", "drawing_name", "material", "surface_treatment", "paint", "mass_value", "weight_value", "scale", "drawing_size", "prfx", "unit_number"]
+        .map((key) => [key, canonical[key] == null ? "" : String(canonical[key])]),
+    ));
+    setManualTags(activeTagValues.join("、"));
+  }, [activeSnapshot, activeTagValues, manualMode]);
   const activeJobIds = jobs
     .filter((job) => job.status === "queued" || job.status === "processing")
     .map((job) => job.jobId)
@@ -229,22 +246,21 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
       return;
     }
 
-    let canonicalAttributes: Record<string, unknown>;
-    try {
-      canonicalAttributes = JSON.parse(manualJson) as Record<string, unknown>;
-    } catch {
-      setError("手直しJSONの形式が不正です。");
-      return;
-    }
-
     setPhase("saving");
     setError(null);
     try {
       await applyDrawingMetadataOverrides(
         registration.drawingId,
         manualMode,
-        canonicalAttributes,
+        manualFields,
         "図面管理からの手直し",
+        {
+          derivedTags: {
+            added: [...new Set(manualTags.split(/[、,\n]/).map((value) => value.trim()).filter(Boolean))]
+              .filter((value) => !activeTagValues.includes(value)),
+            removed: activeTagValues.filter((value) => !manualTags.split(/[、,\n]/).map((item) => item.trim()).includes(value)),
+          },
+        },
       );
       await refreshRegistration();
       setPhase("ready");
@@ -464,12 +480,17 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
             手直しを保存
           </button>
         </div>
-        <textarea
-          className="manual-json-editor"
-          value={manualJson}
-          onChange={(event) => setManualJson(event.target.value)}
-          aria-label="手直しJSON"
-        />
+        <div className="production-edit-grid drawing-metadata-edit-grid">
+          {[
+            ["drawing_number", "図番"], ["drawing_name", "図面名"], ["material", "材質"],
+            ["surface_treatment", "表面処理"], ["paint", "塗装"], ["mass_value", "質量 (kg)"],
+            ["weight_value", "重量 (kg)"], ["scale", "尺度"], ["drawing_size", "図面サイズ"],
+            ["prfx", "PRFX"], ["unit_number", "ユニット番号"],
+          ].map(([key, label]) => (
+            <label key={key} className="production-form-field"><span>{label}</span><input value={manualFields[key] ?? ""} onChange={(event) => setManualFields((current) => ({ ...current, [key]: event.target.value }))} /></label>
+          ))}
+          <label className="production-form-field production-form-field-wide"><span>タグ</span><textarea value={manualTags} onChange={(event) => setManualTags(event.target.value)} /><small>読点または改行で区切ります。</small></label>
+        </div>
       </section>
 
       {jobs.length > 0 ? (

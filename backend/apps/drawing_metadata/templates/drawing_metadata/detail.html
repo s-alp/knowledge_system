@@ -393,7 +393,7 @@
     <h2>2D 抽出</h2>
     {% if snapshot_2d %}
       {% if snapshot_2d.latest_job %}
-        <p><a href="/drawing-metadata/jobs/{{ snapshot_2d.latest_job.id }}/">最新 2D ジョブを見る</a></p>
+        <p><a href="/internal/drawing-metadata/jobs/{{ snapshot_2d.latest_job.id }}/">最新 2D ジョブを見る</a></p>
       {% endif %}
       <p class="muted">2D 図面から取れたビュー、印刷枠、レイヤー、文字、寸法の確認用サマリです。生 JSON を読む前に、図面内のどこから情報が取れているかを確認します。</p>
 
@@ -1030,7 +1030,7 @@
       {% endif %}
 
       {% if snapshot_3d.latest_job %}
-        <p><a href="/drawing-metadata/jobs/{{ snapshot_3d.latest_job.id }}/">最新 3D ジョブを見る</a></p>
+        <p><a href="/internal/drawing-metadata/jobs/{{ snapshot_3d.latest_job.id }}/">最新 3D ジョブを見る</a></p>
       {% endif %}
       <h3>正規化属性</h3>
       <pre>{{ snapshot_3d.canonical_attributes_json|pprint }}</pre>
@@ -1073,7 +1073,7 @@
       <tbody>
         {% for job in jobs %}
           <tr>
-            <td><a href="/drawing-metadata/jobs/{{ job.id }}/">{{ job.id }}</a></td>
+            <td><a href="/internal/drawing-metadata/jobs/{{ job.id }}/">{{ job.id }}</a></td>
             <td>{{ job.extraction_mode }}</td>
             <td>{{ job.status }}</td>
             <td>{{ job.worker_name }}</td>

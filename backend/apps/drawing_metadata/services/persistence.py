@@ -121,12 +121,21 @@ def apply_manual_overrides(
         }
 
         manual_overrides = deepcopy(snapshot.manual_overrides_json or {})
-        manual_overrides.update(
-            {
-                "canonicalAttributes": payload.get("canonicalAttributes", manual_overrides.get("canonicalAttributes", {})),
-                "derivedTags": payload.get("derivedTags", manual_overrides.get("derivedTags", {})),
-            }
+        manual_overrides["canonicalAttributes"] = payload.get(
+            "canonicalAttributes",
+            manual_overrides.get("canonicalAttributes", {}),
         )
+        manual_overrides["derivedTags"] = payload.get(
+            "derivedTags",
+            manual_overrides.get("derivedTags", {}),
+        )
+        if "businessFields" in payload:
+            manual_overrides["businessFields"] = payload["businessFields"]
+        if "relatedDrawingIds" in payload:
+            manual_overrides["relatedDrawingIds"] = [str(item) for item in payload["relatedDrawingIds"]]
+        for key in ("knowledgeEntityTarget", "knowledgeEntityKind"):
+            if key in payload:
+                manual_overrides[key] = payload[key]
         snapshot.manual_overrides_json = manual_overrides
 
         canonical_attributes = deepcopy(snapshot.canonical_attributes_json or {})
@@ -145,6 +154,7 @@ def apply_manual_overrides(
                     "tag": tag_value,
                     "source": "manual_override",
                     "confidence": "high",
+                    "reason": reason or "利用者が手動で追加したタグのため採用しています。",
                     "manual_flag": True,
                     "tag_rule_version": settings.DRAWING_METADATA_TAG_RULE_VERSION,
                 }

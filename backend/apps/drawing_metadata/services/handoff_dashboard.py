@@ -104,8 +104,8 @@ def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
                 "reviewConflictCount": len(conflicts),
                 "diagnosticConflictCount": len(diagnostic_conflicts),
                 "payloadTargets": target_rows,
-                "detailUrl": f"/drawing-metadata/{drawing.id}/",
-                "tagReviewUrl": f"/drawing-metadata/{drawing.id}/tags/",
+                "detailUrl": f"/internal/drawing-metadata/{drawing.id}/",
+                "tagReviewUrl": f"/internal/drawing-metadata/{drawing.id}/tags/",
                 "bootstrapApiUrl": f"/api/v1/drawings/{drawing.id}/bootstrap",
                 "ragPayloadApiUrl": f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload",
             }
