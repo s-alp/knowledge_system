@@ -423,6 +423,7 @@ def _build_record(
     part_number = _string_value(canonical.get("drawing_number")) or PureWindowsPath(drawing.filename).stem
     if parts:
         external_count = sum(_has_external_reference(part) for part in parts)
+        child_external_reference_count = sum(part.get("_depth", 0) > 0 and _has_external_reference(part) for part in parts)
         unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
         extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
         unique_part_names = sorted(
@@ -430,8 +431,8 @@ def _build_record(
         )
         materials = _material_values(parts)
         component_count = len(parts)
-        child_assembly_count = sum(part.get("_child_count", 0) > 0 and _has_external_reference(part) for part in parts)
-        child_part_count = sum(part.get("_child_count", 0) == 0 for part in parts)
+        child_assembly_count = child_external_reference_count
+        child_part_count = sum(part.get("_child_count", 0) == 0 and not _has_external_reference(part) for part in parts)
     else:
         unique_part_names = _canonical_list_values(canonical, "part_names", "part_keywords")
         materials = _canonical_list_values(canonical, "material_keywords", "material_names", "material_ids")

@@ -147,8 +147,8 @@ const partRecord: KnowledgeEntityRecord = {
 const catalog: KnowledgeEntityCatalogResponse = {
   schemaVersion: "icad_knowledge_entities.v1",
   definitions: {
-    product: "ICAD 3D構成で子ノードを持つアセンブリ／サブアセンブリ",
-    part: "ICAD 3D構成で子ノードを持たない末端パーツ",
+    product: "1つのICD全体をアセンブリ／サブアセンブリとして登録",
+    part: "1つのICD全体を1部品として登録",
   },
   targetKey: "part",
   count: 1,

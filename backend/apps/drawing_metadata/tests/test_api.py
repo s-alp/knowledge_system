@@ -484,6 +484,8 @@ def test_icad_entity_api_classifies_external_reference_as_assembly(sample_regist
     assert payload["count"] == 1
     assert payload["items"][0]["entityKind"] == "assembly"
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
+    assert payload["items"][0]["childAssemblyCount"] == 1
+    assert payload["items"][0]["childPartCount"] == 0
 
 
 @pytest.mark.django_db
