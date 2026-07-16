@@ -45,6 +45,9 @@ PART_ATTRIBUTE_SPECS = (
     ("unresolved_material_keywords", "要確認材質"),
     ("maker_keywords", "メーカー候補"),
     ("part_ex_info_tokens", "パーツ付加情報トークン"),
+    ("referenced_2d_part_names", "2D実像部品名"),
+    ("referenced_2d_part3d_names", "2D参照3D部品名"),
+    ("referenced_2d_ref_model_names", "2D参照モデル名"),
 )
 
 PROJECT_ATTRIBUTE_SPECS = (

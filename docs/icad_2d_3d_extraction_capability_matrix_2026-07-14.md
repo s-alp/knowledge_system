@@ -105,8 +105,8 @@
 | 仕上げ記号 | A | `SxGeomFinishMark` | 未実装 | 仕上げ工程タグ |
 | バルーン | A | `SxGeomBalloon` | summaryのみ | `txt1`, `txt2`, `num_use`, `lead_line` 等は構造化未実装 |
 | シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線特徴候補実装済み | 断面図/詳細図/矢視判定は未実装 |
-| 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 未実装 | `name`, `part3d_name`, `ref_model_name`, `ref_vs_name` |
-| レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 未実装 | 参照先図面名、参照VS名、配置スケール |
+| 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_part_names`, `referenced_2d_part3d_names`, `referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。印刷枠がある場合は枠内要素だけ検索候補へ採用 |
+| レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。配置スケール、角度、ミラー/空参照もrawに保持 |
 | 図面名 | A/B | `SxInfModel.name`、図枠文字 | 候補実装済み | `title_block_candidates` / `title_block_fields`。2D/3D両方で照合対象 |
 | 担当者 / 設計者 / 検図者 / 承認者 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠解析 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。作成/検図/承認分類は辞書拡充が必要 |
 | 日付 / 作成日 / 改訂日 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠/改訂表解析 | 候補実装済み | 作成日/改訂日/承認日の分類は未実装 |

@@ -980,6 +980,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "part_ex_info_tokens": [],
         "ref_model_names": [],
         "ref_model_paths": [],
+        "referenced_2d_part_count": 0,
+        "referenced_2d_trusted_part_count": 0,
+        "referenced_2d_part_names": [],
+        "referenced_2d_part3d_names": [],
+        "referenced_2d_ref_model_names": [],
+        "referenced_2d_ref_vs_names": [],
         "external_part_exists": False,
         "mirror_part_exists": False,
         "unresolved_part_exists": False,
@@ -1106,12 +1112,14 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         weld_notes = raw_extract.get("weld_notes", [])
         balloons = raw_extract.get("balloons", [])
         tolerances = raw_extract.get("tolerances", [])
+        referenced_parts = raw_extract.get("referenced_parts", [])
         has_print_frames = _has_print_frames(raw_extract)
         trusted_texts = _trusted_print_area_items(texts, has_print_frames=has_print_frames)
         trusted_dimensions = _trusted_print_area_items(dimensions, has_print_frames=has_print_frames)
         trusted_weld_notes = _trusted_print_area_items(weld_notes, has_print_frames=has_print_frames)
         trusted_balloons = _trusted_print_area_items(balloons, has_print_frames=has_print_frames)
         trusted_tolerances = _trusted_print_area_items(tolerances, has_print_frames=has_print_frames)
+        trusted_referenced_parts = _trusted_print_area_items(referenced_parts, has_print_frames=has_print_frames)
         trusted_text_tokens = _flatten_strings(
             text_line
             for text in trusted_texts
@@ -1145,6 +1153,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["weld_note_texts"] = _flatten_strings(note.get("text") for note in weld_notes)
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
+        canonical["referenced_2d_part_count"] = len(referenced_parts)
+        canonical["referenced_2d_trusted_part_count"] = len(trusted_referenced_parts)
+        canonical["referenced_2d_part_names"] = _flatten_strings(part.get("name") for part in trusted_referenced_parts)
+        canonical["referenced_2d_part3d_names"] = _flatten_strings(part.get("part3d_name") for part in trusted_referenced_parts)
+        canonical["referenced_2d_ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in trusted_referenced_parts)
+        canonical["referenced_2d_ref_vs_names"] = _flatten_strings(part.get("ref_vs_name") for part in trusted_referenced_parts)
         canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
         canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
@@ -1202,6 +1216,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             + trusted_weld_note_texts
             + trusted_balloon_keys
             + trusted_tolerance_texts
+            + canonical["referenced_2d_part_names"]
+            + canonical["referenced_2d_part3d_names"]
+            + canonical["referenced_2d_ref_model_names"]
+            + canonical["referenced_2d_ref_vs_names"]
         )
         canonical["part_keywords"] = search_tokens
 

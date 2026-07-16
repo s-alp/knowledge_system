@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IcadExtraction.Contracts;
 
@@ -97,6 +98,12 @@ namespace IcadExtraction.SxNet
                             Text = ReflectionHelpers.BuildSummaryText(geometry),
                         });
                         break;
+                    case "SxEntRPart":
+                        payload.ReferencedParts.Add(MapRealPartReference(geometry, viewName, sourceItem.LayerNo));
+                        break;
+                    case "SxEntRefer":
+                        payload.ReferencedParts.Add(MapPlacedReference(geometry, viewName, sourceItem.LayerNo));
+                        break;
                     default:
                         warnings.Add(new WarningPayload
                         {
@@ -147,6 +154,56 @@ namespace IcadExtraction.SxNet
                 Mark3 = ReflectionHelpers.GetString(dimensionInfo, "mark_3"),
                 Summary = ReflectionHelpers.BuildSummaryText(dimensionInfo),
             };
+        }
+
+        private static Referenced2DPartPayload MapRealPartReference(object entity, string? viewName, int? layerNo)
+        {
+            var info = TryGetDetailInfo(entity) ?? entity;
+            return new Referenced2DPartPayload
+            {
+                EntityType = "rpart",
+                ViewName = viewName,
+                LayerNo = layerNo,
+                PositionX = GetPositionX(info, "pos"),
+                PositionY = GetPositionY(info, "pos"),
+                PositionZ = GetPositionZ(info, "pos"),
+                Name = ReflectionHelpers.GetString(info, "name"),
+                Comment = ReflectionHelpers.GetString(info, "comment"),
+                Part3DName = ReflectionHelpers.GetString(info, "part3d_name"),
+                RefModelName = ReflectionHelpers.GetString(info, "ref_model_name"),
+                RefVsName = ReflectionHelpers.GetString(info, "ref_vs_name"),
+                IsMirror = ReflectionHelpers.GetBool(info, "is_mirror"),
+                Angle = ReflectionHelpers.GetDouble(info, "angle"),
+                Summary = ReflectionHelpers.BuildSummaryText(info),
+            };
+        }
+
+        private static Referenced2DPartPayload MapPlacedReference(object entity, string? viewName, int? layerNo)
+        {
+            var info = TryGetDetailInfo(entity) ?? entity;
+            return new Referenced2DPartPayload
+            {
+                EntityType = "refer",
+                ViewName = viewName,
+                LayerNo = layerNo,
+                PositionX = GetPositionX(info, "pos"),
+                PositionY = GetPositionY(info, "pos"),
+                PositionZ = GetPositionZ(info, "pos"),
+                RefModelName = ReflectionHelpers.GetString(info, "ref_model_name"),
+                RefVsName = ReflectionHelpers.GetString(info, "ref_vs_name"),
+                Kind = ReflectionHelpers.GetInt(info, "kind"),
+                IsEmpty = ReflectionHelpers.GetBool(info, "is_empty"),
+                IsMirror = ReflectionHelpers.GetBool(info, "is_mirror"),
+                Scale = ReflectionHelpers.GetDouble(info, "scale"),
+                Angle = ReflectionHelpers.GetDouble(info, "angle"),
+                Summary = ReflectionHelpers.BuildSummaryText(info),
+            };
+        }
+
+        private static object? TryGetDetailInfo(object entity)
+        {
+            var method = entity.GetType().GetMethod("getInfDetail", Type.EmptyTypes);
+            return method?.Invoke(entity, null);
         }
 
         private static GeometryPrimitivePayload MapPrimitive(object geometry, string? viewName, int? layerNo)

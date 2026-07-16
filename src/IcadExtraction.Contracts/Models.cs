@@ -211,6 +211,29 @@ namespace IcadExtraction.Contracts
         public string Text { get; set; } = string.Empty;
     }
 
+    public sealed class Referenced2DPartPayload
+    {
+        public string EntityType { get; set; } = string.Empty;
+        public string? ViewName { get; set; }
+        public int? LayerNo { get; set; }
+        public double? PositionX { get; set; }
+        public double? PositionY { get; set; }
+        public double? PositionZ { get; set; }
+        public bool? InsidePrintArea { get; set; }
+        public int? PrintFrameNo { get; set; }
+        public string? Name { get; set; }
+        public string? Comment { get; set; }
+        public string? Part3DName { get; set; }
+        public string? RefModelName { get; set; }
+        public string? RefVsName { get; set; }
+        public int? Kind { get; set; }
+        public bool? IsEmpty { get; set; }
+        public bool? IsMirror { get; set; }
+        public double? Scale { get; set; }
+        public double? Angle { get; set; }
+        public string Summary { get; set; } = string.Empty;
+    }
+
     public sealed class GeometryPrimitivePayload
     {
         public string? ViewName { get; set; }
@@ -282,6 +305,7 @@ namespace IcadExtraction.Contracts
         public List<WeldNotePayload> WeldNotes { get; set; } = new List<WeldNotePayload>();
         public List<BalloonPayload> Balloons { get; set; } = new List<BalloonPayload>();
         public List<TolerancePayload> Tolerances { get; set; } = new List<TolerancePayload>();
+        public List<Referenced2DPartPayload> ReferencedParts { get; set; } = new List<Referenced2DPartPayload>();
     }
 
     public sealed class SourceFilePayload

@@ -163,6 +163,27 @@
     {
       "text": "string|null"
     }
+  ],
+  "referenced_parts": [
+    {
+      "entity_type": "rpart|refer",
+      "view_name": "string|null",
+      "layer_no": 0,
+      "position_x": 0,
+      "position_y": 0,
+      "inside_print_area": true,
+      "name": "string|null",
+      "comment": "string|null",
+      "part3d_name": "string|null",
+      "ref_model_name": "string|null",
+      "ref_vs_name": "string|null",
+      "kind": 0,
+      "is_empty": false,
+      "is_mirror": false,
+      "scale": 1.0,
+      "angle": 0.0,
+      "summary": "string"
+    }
   ]
 }
 ```

@@ -178,6 +178,22 @@ def test_normalize_2d_raw_extract():
             "weld_notes": [{"text": "WELD A"}],
             "balloons": [{"text": "B1"}],
             "tolerances": [{"text": "±0.1"}],
+            "referenced_parts": [
+                {
+                    "entity_type": "rpart",
+                    "name": "BASE-PLATE",
+                    "part3d_name": "BASE-3D",
+                    "ref_model_name": "BASE_MODEL",
+                    "ref_vs_name": "VS-A",
+                    "inside_print_area": True,
+                },
+                {
+                    "entity_type": "refer",
+                    "ref_model_name": "OUTSIDE_MODEL",
+                    "ref_vs_name": "VS-OUT",
+                    "inside_print_area": False,
+                },
+            ],
         },
     }
 
@@ -219,6 +235,14 @@ def test_normalize_2d_raw_extract():
     assert all(tag["source"] != "geometry_feature_candidates" for tag in tags)
     assert canonical["surface_roughness_count"] == 1
     assert canonical["surface_roughness_values"] == ["Ra 6.3"]
+    assert canonical["referenced_2d_part_count"] == 2
+    assert canonical["referenced_2d_trusted_part_count"] == 1
+    assert canonical["referenced_2d_part_names"] == ["BASE-PLATE"]
+    assert canonical["referenced_2d_part3d_names"] == ["BASE-3D"]
+    assert canonical["referenced_2d_ref_model_names"] == ["BASE_MODEL"]
+    assert canonical["referenced_2d_ref_vs_names"] == ["VS-A"]
+    assert "BASE_MODEL" in canonical["part_keywords"]
+    assert "OUTSIDE_MODEL" not in canonical["part_keywords"]
     assert canonical["section_feature_count"] == 2
     assert canonical["cut_line_count"] == 1
     assert canonical["hatch_or_section_count"] == 1

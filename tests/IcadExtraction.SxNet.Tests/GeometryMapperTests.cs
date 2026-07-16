@@ -25,6 +25,34 @@ namespace IcadExtraction.SxNet.Tests
                 new SxGeomWeld { atr_weld = "WELD-A" },
                 new SxGeomBalloon { txt = "B1" },
                 new SxGeomTol { atr_geotol = "±0.1" },
+                new SxEntRPart
+                {
+                    Detail = new InfRPart
+                    {
+                        name = "BASE-PLATE",
+                        comment = "実像部品",
+                        part3d_name = "BASE-3D",
+                        ref_model_name = "BASE_MODEL",
+                        ref_vs_name = "VS-A",
+                        is_mirror = true,
+                        angle = 90.0,
+                        pos = new SxPos { x = 40.0, y = 41.0, z = 0.0 },
+                    },
+                },
+                new SxEntRefer
+                {
+                    Detail = new InfRefer
+                    {
+                        kind = 1,
+                        is_empty = false,
+                        is_mirror = false,
+                        ref_model_name = "CHILD_MODEL",
+                        ref_vs_name = "VS-B",
+                        scale = 0.5,
+                        angle = 15.0,
+                        pos = new SxPos { x = 50.0, y = 51.0, z = 0.0 },
+                    },
+                },
                 new UnknownGeometry(),
             };
 
@@ -35,6 +63,7 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Single(payload.WeldNotes);
             Assert.Single(payload.Balloons);
             Assert.Single(payload.Tolerances);
+            Assert.Equal(2, payload.ReferencedParts.Count);
             Assert.Single(warnings);
             Assert.Equal(10.5, payload.Texts[0].PositionX);
             Assert.Equal(20.25, payload.Texts[0].PositionY);
@@ -49,6 +78,17 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(11.0, payload.GeometryPrimitives[3].Radius1);
             Assert.Equal(9.0, payload.GeometryPrimitives[4].PositionX);
             Assert.Equal(3.0, payload.GeometryPrimitives[5].EndX);
+            Assert.Equal("rpart", payload.ReferencedParts[0].EntityType);
+            Assert.Equal("BASE-PLATE", payload.ReferencedParts[0].Name);
+            Assert.Equal("BASE-3D", payload.ReferencedParts[0].Part3DName);
+            Assert.Equal("BASE_MODEL", payload.ReferencedParts[0].RefModelName);
+            Assert.True(payload.ReferencedParts[0].IsMirror);
+            Assert.Equal(40.0, payload.ReferencedParts[0].PositionX);
+            Assert.Equal("refer", payload.ReferencedParts[1].EntityType);
+            Assert.Equal(1, payload.ReferencedParts[1].Kind);
+            Assert.Equal("CHILD_MODEL", payload.ReferencedParts[1].RefModelName);
+            Assert.Equal(0.5, payload.ReferencedParts[1].Scale);
+            Assert.Equal(51.0, payload.ReferencedParts[1].PositionY);
         }
 
         public sealed class SxPos
@@ -140,6 +180,50 @@ namespace IcadExtraction.SxNet.Tests
         public sealed class SxGeomTol
         {
             public string? atr_geotol;
+        }
+
+        public sealed class SxEntRPart
+        {
+            public InfRPart? Detail { get; set; }
+
+            public InfRPart? getInfDetail()
+            {
+                return Detail;
+            }
+        }
+
+        public sealed class InfRPart
+        {
+            public string? name;
+            public string? comment;
+            public string? part3d_name;
+            public string? ref_model_name;
+            public string? ref_vs_name;
+            public bool is_mirror;
+            public double angle;
+            public SxPos? pos;
+        }
+
+        public sealed class SxEntRefer
+        {
+            public InfRefer? Detail { get; set; }
+
+            public InfRefer? getInfDetail()
+            {
+                return Detail;
+            }
+        }
+
+        public sealed class InfRefer
+        {
+            public int kind;
+            public bool is_empty;
+            public bool is_mirror;
+            public string? ref_model_name;
+            public string? ref_vs_name;
+            public double scale;
+            public double angle;
+            public SxPos? pos;
         }
 
         public sealed class UnknownGeometry

@@ -95,6 +95,7 @@ namespace IcadExtraction.SxNet
                 ["textCount"] = rawExtract.Texts.Count,
                 ["dimensionCount"] = rawExtract.Dimensions.Count,
                 ["geometryPrimitiveCount"] = rawExtract.GeometryPrimitives.Count,
+                ["referencedPartCount"] = rawExtract.ReferencedParts.Count,
             };
         }
 
@@ -111,6 +112,7 @@ namespace IcadExtraction.SxNet
             rawExtract.WeldNotes = rawExtract.WeldNotes.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
             rawExtract.Balloons = rawExtract.Balloons.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
             rawExtract.Tolerances = rawExtract.Tolerances.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
+            rawExtract.ReferencedParts = rawExtract.ReferencedParts.Where(item => KeepPrintAreaItem(item.InsidePrintArea, options)).ToList();
         }
 
         private static bool KeepPrintAreaItem(bool? insidePrintArea, ExtractionConditionOptions options)
@@ -170,6 +172,13 @@ namespace IcadExtraction.SxNet
                 var classification = PrintAreaClassifier.Resolve(rawExtract.PrintFrames, tolerance.PositionX, tolerance.PositionY);
                 tolerance.InsidePrintArea = classification.InsidePrintArea;
                 tolerance.PrintFrameNo = classification.PrintFrameNo;
+            }
+
+            foreach (var referencedPart in rawExtract.ReferencedParts)
+            {
+                var classification = PrintAreaClassifier.Resolve(rawExtract.PrintFrames, referencedPart.PositionX, referencedPart.PositionY);
+                referencedPart.InsidePrintArea = classification.InsidePrintArea;
+                referencedPart.PrintFrameNo = classification.PrintFrameNo;
             }
         }
 
