@@ -344,7 +344,10 @@ function ProvenanceDialog({ record, onClose }: { record: KnowledgeEntityRecord; 
           {(record.provenance ?? []).map((item, index) => <tr key={`${item.kind}-${item.name}-${index}`}><td>{item.kind === "tag" ? "タグ" : "属性"}</td><td>{item.name}</td><td>{item.value}</td><td>{sourceLabel(item.source)}</td><td>{confidenceLabel(item.confidence)}</td><td>{item.evidence}</td><td>{item.reason}</td></tr>)}
         </tbody></table>
       </div>
-      <div className="production-extraction-review"><strong>抽出結果: {record.extractionReview.label}</strong><p>{record.extractionReview.description}</p></div>
+      <div className="production-extraction-review">
+        <strong>ICAD抽出根拠</strong>
+        <p>抽出レビュー状態は図面管理側で扱い、この画面では採用済みの取得元・信頼度・採用理由だけを確認します。</p>
+      </div>
     </ModalShell>
   );
 }

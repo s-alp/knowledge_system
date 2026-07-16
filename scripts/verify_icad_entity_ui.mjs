@@ -88,6 +88,10 @@ try {
   await page.getByRole("dialog", { name: "取得元・採用根拠" }).waitFor();
   await page.getByRole("columnheader", { name: "信頼度" }).waitFor();
   await page.getByRole("columnheader", { name: "採用理由" }).waitFor();
+  const provenanceDialog = page.getByRole("dialog", { name: "取得元・採用根拠" });
+  if ((await provenanceDialog.getByText(/抽出結果:|確認待ち|未確認|レビュー待ち|手直し待ち/).count()) > 0) {
+    throw new Error("取得根拠ダイアログに抽出レビューの内部状態が表示されています。");
+  }
   await page.screenshot({ path: `${outputDirectory}/product-provenance.png`, fullPage: true });
   await page.getByRole("button", { name: "閉じる" }).click();
 
@@ -116,6 +120,13 @@ try {
   for (const tab of ["製品・装置・ユニット", "図面", "文書", "会話ログ"]) {
     await page.getByRole("tab", { name: tab, exact: true }).waitFor();
   }
+  await page.getByRole("button", { name: "取得根拠を見る" }).click();
+  await page.getByRole("dialog", { name: "取得元・採用根拠" }).waitFor();
+  const partProvenanceDialog = page.getByRole("dialog", { name: "取得元・採用根拠" });
+  if ((await partProvenanceDialog.getByText(/抽出結果:|確認待ち|未確認|レビュー待ち|手直し待ち/).count()) > 0) {
+    throw new Error("部品の取得根拠ダイアログに抽出レビューの内部状態が表示されています。");
+  }
+  await page.getByRole("button", { name: "閉じる" }).click();
   await page.getByRole("button", { name: "編集" }).click();
   await page.getByRole("dialog", { name: "登録情報を編集" }).waitFor();
   await page.getByLabel("部品番号").waitFor();

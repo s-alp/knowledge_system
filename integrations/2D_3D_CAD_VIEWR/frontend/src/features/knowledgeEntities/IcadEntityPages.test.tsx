@@ -214,5 +214,7 @@ describe("ICAD knowledge entity pages", () => {
     expect(screen.getByText("信頼度")).toBeInTheDocument();
     expect(screen.getByText("採用理由")).toBeInTheDocument();
     expect(screen.getByText("材質として3D部品材質情報から抽出でき、部品検索に使えるため採用しています。")).toBeInTheDocument();
+    expect(screen.getByText("ICAD抽出根拠")).toBeInTheDocument();
+    expect(screen.queryByText(/抽出結果:/)).not.toBeInTheDocument();
   });
 });
