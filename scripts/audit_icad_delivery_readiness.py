@@ -29,6 +29,7 @@ BACKEND_DIR = ROOT / "backend"
 BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
 FRONTEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend"
 VIEWER_BACKEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "backend"
+HANDOFF_DOC_MAX_BYTES = 20_000
 
 ACTIVE_HANDOFF_DOCS = [
     ROOT / "tasklist.md",
@@ -37,6 +38,11 @@ ACTIVE_HANDOFF_DOCS = [
     ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14.md",
     ROOT / "docs" / "icad_tag_selection_and_viewer_ui_spec_2026-07-15.md",
     ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "tasklist.md",
+]
+
+HANDOFF_DOC_SIZE_PATHS = [
+    ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14.md",
+    ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14_parts",
 ]
 
 ACTIVE_SOURCE_TEXT_PATHS = [
@@ -167,6 +173,44 @@ def _scan_stale_docs(paths: Iterable[Path]) -> dict:
     }
 
 
+def _iter_markdown_files(paths: Iterable[Path]) -> Iterable[Path]:
+    for path in paths:
+        if path.is_file() and path.suffix == ".md":
+            yield path
+            continue
+        if not path.is_dir():
+            continue
+        for child in path.rglob("*.md"):
+            if child.is_file():
+                yield child
+
+
+def _scan_handoff_doc_size_guardrails(paths: Iterable[Path], *, max_bytes: int = HANDOFF_DOC_MAX_BYTES) -> dict:
+    findings: list[dict] = []
+    checked_files: list[dict] = []
+    for path in _iter_markdown_files(paths):
+        size_bytes = path.stat().st_size
+        checked_files.append({"file": str(path), "sizeBytes": size_bytes})
+        if size_bytes > max_bytes:
+            findings.append(
+                {
+                    "file": str(path),
+                    "sizeBytes": size_bytes,
+                    "maxBytes": max_bytes,
+                    "reason": "ファイル長制限で開けなくなることを避けるため、分冊または要約化が必要です。",
+                }
+            )
+    return {
+        "name": "handoff_doc_size_guardrails",
+        "passed": not findings,
+        "maxBytes": max_bytes,
+        "checkedFileCount": len(checked_files),
+        "findingCount": len(findings),
+        "findings": findings,
+        "largestFiles": sorted(checked_files, key=lambda item: item["sizeBytes"], reverse=True)[:10],
+    }
+
+
 def _iter_source_files(paths: Iterable[Path]) -> Iterable[Path]:
     for path in paths:
         if path.is_file():
@@ -282,6 +326,7 @@ def main() -> int:
         ),
     ]
     gates.append(_scan_stale_docs(ACTIVE_HANDOFF_DOCS))
+    gates.append(_scan_handoff_doc_size_guardrails(HANDOFF_DOC_SIZE_PATHS))
     gates.append(_scan_source_text_guardrails(ACTIVE_SOURCE_TEXT_PATHS))
     gates.append(_git_status_gate(args.require_clean))
 
