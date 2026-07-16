@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": "icad_entity_classification_analysis.v2",
+  "registrationPolicy": {
+    "unit": "icd_file",
+    "candidateCount": 40,
+    "rule": "製品・装置・ユニットと部品の登録候補合計はICDファイル数と一致させる。"
+  },
+  "internalStructureDiagnostics": {
+    "notice": "以下はICD内部ツリーの診断値であり、ナレッジシステムへの登録件数ではない。",
+    "totalPartOccurrences": 4052,
+    "rawEntityKindCounts": {
+      "missing": 4052
+    },
+    "depthCounts": {
+      "0": 40,
+      "1": 315,
+      "2": 2786,
+      "3": 862,
+      "4": 49
+    },
+    "assemblyCandidateCounts": {
+      "top_level_assembly": 21,
+      "internal_grouping_with_children": 156,
+      "referenced_assembly": 92
+    },
+    "uniqueUnitIdentityCount": 74,
+    "uniqueLeafIdentityCount": 560,
+    "duplicateLeafIdentityCount": 332,
+    "duplicateLeafOccurrenceCount": 3223,
+    "examples": {
+      "topLevel": [
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "CAA5012-02434000K1R1",
+          "depth": 0,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:caa5012-02434000k1r1"
+        },
+        {
+          "drawing": "23022-007_231218.icd",
+          "name": "23022-007_231218",
+          "depth": 0,
+          "childCount": 6,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:23022-007_231218"
+        },
+        {
+          "drawing": "23022-013_231218.icd",
+          "name": "23022-013_231218",
+          "depth": 0,
+          "childCount": 36,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:23022-013_231218"
+        },
+        {
+          "drawing": "PSG011-PA13002.icd",
+          "name": "PSG011-PA13002",
+          "depth": 0,
+          "childCount": 12,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-pa13002"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "47323200X40c",
+          "depth": 0,
+          "childCount": 47,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:47323200x40c"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-PA0500_コラム",
+          "depth": 0,
+          "childCount": 26,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-pa0500_コラム"
+        },
+        {
+          "drawing": "PSG011-PA1100_クリーニング駆動.icd",
+          "name": "PSG011-PA1100_クリーニング駆動",
+          "depth": 0,
+          "childCount": 24,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-pa1100_クリーニング駆動"
+        },
+        {
+          "drawing": "TR1D9Q00027.icd",
+          "name": "TR1D9Q000270",
+          "depth": 0,
+          "childCount": 32,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:tr1d9q000270"
+        },
+        {
+          "drawing": "PSG011-P05008.icd",
+          "name": "PSG011-P05008",
+          "depth": 0,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-p05008"
+        },
+        {
+          "drawing": "PSG011-P05010.icd",
+          "name": "PSG011-P05010",
+          "depth": 0,
+          "childCount": 18,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-p05010"
+        },
+        {
+          "drawing": "18T5-10BF(8).icd",
+          "name": "18T5-10BF(8)",
+          "depth": 0,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:18t5-10bf(8)"
+        },
+        {
+          "drawing": "G1630-S3000-502_A3a1.icd",
+          "name": "G1630-S3000-502_A3a1",
+          "depth": 0,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:g1630-s3000-502_a3a1"
+        },
+        {
+          "drawing": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
+          "name": "XH30-A08001-R03-JP_ロードカップ部改造",
+          "depth": 0,
+          "childCount": 5,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:xh30-a08001-r03-jp_ロードカップ部改造"
+        },
+        {
+          "drawing": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+          "name": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS,XS)",
+          "depth": 0,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:03_20k03379p00_ｼｭｰﾄﾍﾞｰｽ(no.2ffs,xs)"
+        },
+        {
+          "drawing": "PSG011-PA1300_ベース.icd",
+          "name": "PSG011-PA1300_ベース",
+          "depth": 0,
+          "childCount": 26,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:psg011-pa1300_ベース"
+        },
+        {
+          "drawing": "U8718-S71-002_A3.icd",
+          "name": "U8718-S71-002_A3",
+          "depth": 0,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:u8718-s71-002_a3"
+        },
+        {
+          "drawing": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+          "name": "9NK5E51B70-00-BRACKET-A0-3D-01",
+          "depth": 0,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:9nk5e51b70-00-bracket-a0-3d-01"
+        },
+        {
+          "drawing": "36555211A01.icd",
+          "name": "36555211A010",
+          "depth": 0,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:36555211a010"
+        },
+        {
+          "drawing": "U8718-S71-149_A4.icd",
+          "name": "U8718-S71-149_A4",
+          "depth": 0,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:u8718-s71-149_a4"
+        },
+        {
+          "drawing": "G1630-S3000-039_A0a1.icd",
+          "name": "G1630-S3000-039_A0a1",
+          "depth": 0,
+          "childCount": 42,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:g1630-s3000-039_a0a1"
+        }
+      ],
+      "referencedAssembly": [
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "47323211X400",
+          "depth": 1,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": "47323211X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": true,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323211x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "溶接",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "47323211X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": false,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323211x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "溶接",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "47323211X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": false,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323211x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "溶接",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "47323211X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": false,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323211x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "溶接",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "47323211X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": false,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323211x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "47323215X400",
+          "depth": 1,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "47323215X40",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": true,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323215x40"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "473232287481",
+          "depth": 1,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": "47323228748",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": true,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323228748"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "溶接",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": "47323228748",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": false,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/47323228748"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "4811505110M0",
+          "depth": 1,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": "4811505110M",
+          "refModelPath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様",
+          "isExternal": true,
+          "identity": "ref:\\\\honsya-file01\\data_cad3d\\sby\\cap\\260527_aam6351_アイリスオーヤマ_宮本様/4811505110m"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05010",
+          "depth": 2,
+          "childCount": 18,
+          "partNumber": "",
+          "refModelName": "PSG011-P05010",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05010"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05011",
+          "depth": 2,
+          "childCount": 17,
+          "partNumber": "",
+          "refModelName": "PSG011-P05011",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05011"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05012",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05012",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05012"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05013",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05013",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05013"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05025",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05025",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05025"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05025",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05025",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05025"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05025",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05025",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05025"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05025",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05025",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05025"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05008",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "PSG011-P05008",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05008"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05009",
+          "depth": 2,
+          "childCount": 3,
+          "partNumber": "",
+          "refModelName": "PSG011-P05009",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05009"
+        },
+        {
+          "drawing": "PSG011-PA0500_コラム.icd",
+          "name": "PSG011-P05026",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": "PSG011-P05026",
+          "refModelPath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品",
+          "isExternal": true,
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05026"
+        }
+      ],
+      "internalGrouping": [
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "加工品",
+          "depth": 1,
+          "childCount": 26,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:加工品"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "購入品",
+          "depth": 1,
+          "childCount": 76,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:購入品"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "ANBN5-25",
+          "depth": 2,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:anbn5-25"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "CDQSB20M-40DM-M9NW",
+          "depth": 2,
+          "childCount": 5,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:cdqsb20m-40dm-m9nw"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "CS-KSHC4X4",
+          "depth": 2,
+          "childCount": 6,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:cs-kshc4x4"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "8x3-2001-076_002_3d_cs-kshc4__4-b_p01",
+          "depth": 3,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:8x3-2001-076_002_3d_cs-kshc4__4-b_p01"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "8x3-2001-076_002_3d_cs-kshc4__4-b_p03",
+          "depth": 3,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:8x3-2001-076_002_3d_cs-kshc4__4-b_p03"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "CS-KSHC4X4",
+          "depth": 2,
+          "childCount": 6,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:cs-kshc4x4"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "8x3-2001-076_002_3d_cs-kshc4__4-b_p01",
+          "depth": 3,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:8x3-2001-076_002_3d_cs-kshc4__4-b_p01"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "8x3-2001-076_002_3d_cs-kshc4__4-b_p03",
+          "depth": 3,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:8x3-2001-076_002_3d_cs-kshc4__4-b_p03"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "CS-KSHC6x8-EF",
+          "depth": 2,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:cs-kshc6x8-ef"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "RCP6-SA8C-WA-56SP-20-800-P4-P-CJL",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:rcp6-sa8c-wa-56sp-20-800-p4-p-cjl"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "SANB5-25",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:sanb5-25"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "SANB5-25",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:sanb5-25"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "SRS15NUU+110LM+N-ANT",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:srs15nuu+110lm+n-ant"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "SRS15NUU+110LM+N-ANT",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:srs15nuu+110lm+n-ant"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "TKP35H22-30W50R75+21L-FO-MI",
+          "depth": 2,
+          "childCount": 5,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:tkp35h22-30w50r75+21l-fo-mi"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "参考",
+          "depth": 1,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:参考"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "*ワーク",
+          "depth": 2,
+          "childCount": 8,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:*ワーク"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "TKP35H22-30W50R75",
+          "depth": 2,
+          "childCount": 5,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:tkp35h22-30w50r75"
+        },
+        {
+          "drawing": "CAA5012-02434000K1R1.icd",
+          "name": "汎用品",
+          "depth": 1,
+          "childCount": 202,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:汎用品"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "47123600B420",
+          "depth": 1,
+          "childCount": 83,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:47123600b420"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "4662106F",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:4662106f"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "471236119072",
+          "depth": 2,
+          "childCount": 20,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:471236119072"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "47123614A350",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:47123614a350"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "471236375351",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:471236375351"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "471236478971",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:471236478971"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "73523101:1",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:73523101:1"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "73523102:1",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:73523102:1"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "ＢＯＬＴ",
+          "depth": 2,
+          "childCount": 131,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:ｂｏｌｔ"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "E32-T51F-1 5M",
+          "depth": 2,
+          "childCount": 2,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:e32-t51f-1 5m"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "MQMLB20H-12D-X130",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:mqmlb20h-12d-x130"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "PFA4-3",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:pfa4-3"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "PUWH-9-52C",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:puwh-9-52c"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "PUWH-9-52C",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:puwh-9-52c"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "PUWH-9-52C",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:puwh-9-52c"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "PUWH-9-52C",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:puwh-9-52c"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "ﾏﾙ6-35-T1",
+          "depth": 2,
+          "childCount": 1,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:ﾏﾙ6-35-t1"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "ﾏﾙ9-52-T1--4M-",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:ﾏﾙ9-52-t1--4m-"
+        },
+        {
+          "drawing": "47323200X40c.icd",
+          "name": "ﾏﾙ9-52-T1--4M-",
+          "depth": 2,
+          "childCount": 4,
+          "partNumber": "",
+          "refModelName": null,
+          "refModelPath": null,
+          "isExternal": false,
+          "identity": "name:ﾏﾙ9-52-t1--4m-"
+        }
+      ],
+      "duplicateLeaf": [
+        {
+          "identity": "name:ばね座金-sus-m6",
+          "occurrences": 300
+        },
+        {
+          "identity": "name:六角ナット-sus-m6",
+          "occurrences": 187
+        },
+        {
+          "identity": "name:spacer",
+          "occurrences": 144
+        },
+        {
+          "identity": "name:ばね座金-sus-m5",
+          "occurrences": 96
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11002",
+          "occurrences": 96
+        },
+        {
+          "identity": "name:六角ボルト-sus-m5*12",
+          "occurrences": 72
+        },
+        {
+          "identity": "name:六角ボルト-sus-m6*35",
+          "occurrences": 66
+        },
+        {
+          "identity": "name:平ワッシャ-sus-m6",
+          "occurrences": 58
+        },
+        {
+          "identity": "name:スプリングワッシャ-2号-sus-m6",
+          "occurrences": 52
+        },
+        {
+          "identity": "name:六角ボルト-sus-m6*20",
+          "occurrences": 48
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m8*20",
+          "occurrences": 46
+        },
+        {
+          "identity": "name:溶接",
+          "occurrences": 44
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m5*12",
+          "occurrences": 43
+        },
+        {
+          "identity": "name:ばね座金-cs用-sus-m5",
+          "occurrences": 40
+        },
+        {
+          "identity": "name:六角ナット-sus-m5",
+          "occurrences": 40
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11007",
+          "occurrences": 40
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11008",
+          "occurrences": 40
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\13_ベース\\部品/psg011-pa13005",
+          "occurrences": 40
+        },
+        {
+          "identity": "name:等辺山形鋼_40*40*5",
+          "occurrences": 37
+        },
+        {
+          "identity": "name:平ワッシャ-sus-m5",
+          "occurrences": 36
+        },
+        {
+          "identity": "name:ばね座金-sus-m8",
+          "occurrences": 34
+        },
+        {
+          "identity": "name:平座金-並丸a_4",
+          "occurrences": 32
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m4*16",
+          "occurrences": 32
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m6*20",
+          "occurrences": 32
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m6*12",
+          "occurrences": 31
+        },
+        {
+          "identity": "name:m6*55-ﾊﾝﾈｼﾞ-sus-6b",
+          "occurrences": 24
+        },
+        {
+          "identity": "name:六角ナット-sus-m8",
+          "occurrences": 24
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11012",
+          "occurrences": 24
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11011",
+          "occurrences": 24
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m4*15",
+          "occurrences": 23
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m8*30",
+          "occurrences": 22
+        },
+        {
+          "identity": "name:ﾊﾞﾈ座金-2号_m5",
+          "occurrences": 21
+        },
+        {
+          "identity": "name:ﾊﾞﾈ座金-2号_m6",
+          "occurrences": 20
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m3*10",
+          "occurrences": 20
+        },
+        {
+          "identity": "name:471236216640",
+          "occurrences": 20
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11009",
+          "occurrences": 20
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11010",
+          "occurrences": 20
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11005",
+          "occurrences": 20
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\11_クリーニング駆動\\部品/psg011-p11006",
+          "occurrences": 20
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m5*16",
+          "occurrences": 20
+        },
+        {
+          "identity": "name:六角穴付ﾎﾞﾙﾄ_m8*25",
+          "occurrences": 20
+        },
+        {
+          "identity": "name:m5*12-ｾﾞﾝﾈｼﾞ-sus-6b",
+          "occurrences": 18
+        },
+        {
+          "identity": "name:六角ボルト-sus-m6*25",
+          "occurrences": 18
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05010",
+          "occurrences": 18
+        },
+        {
+          "identity": "name:メイルコネクタ(lqh21-m_smc)",
+          "occurrences": 18
+        },
+        {
+          "identity": "name:473241401602",
+          "occurrences": 18
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05011",
+          "occurrences": 17
+        },
+        {
+          "identity": "ref:j:\\ラップマスターウォルターズジャパン\\plpg1000_260201\\作業\\05_コラム\\部品/psg011-p05001",
+          "occurrences": 16
+        },
+        {
+          "identity": "name:極低頭六角穴付きボルト(cbsts5-16_ミスミ)",
+          "occurrences": 16
+        },
+        {
+          "identity": "ref:j:\\zcset\\300p_210312\\作業\\2_ロードカップ部/xh3001-m08061-00",
+          "occurrences": 16
+        }
+      ]
+    }
+  }
+}

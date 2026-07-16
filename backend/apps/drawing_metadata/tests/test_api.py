@@ -81,7 +81,7 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
 
 
 @pytest.mark.django_db
-def test_icad_entity_api_classifies_assemblies_and_leaf_parts(sample_registration_payload):
+def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
         filename="assembly-sample.icd",
@@ -154,22 +154,22 @@ def test_icad_entity_api_classifies_assemblies_and_leaf_parts(sample_registratio
     assert part_response.status_code == 200
     products = product_response.json()["items"]
     parts = part_response.json()["items"]
-    assert [item["entityKind"] for item in products] == ["assembly", "subassembly"]
-    assert {item["name"] for item in parts} == {"BRACKET-A", "COVER-B"}
-    bracket = next(item for item in parts if item["name"] == "BRACKET-A")
-    assert bracket["partNumber"] == "CAA5012-02434006P1R1"
-    assert any(tag["value"] == "材質:SS400" for tag in bracket["tags"])
-    assert any(tag["value"] == "表面処理:黒染め" for tag in bracket["tags"])
-    assert bracket["parentEntityId"] == next(item["entityId"] for item in products if item["name"] == "FEEDER")
+    assert len(products) == 1
+    assert products[0]["entityKind"] == "assembly"
+    assert products[0]["drawingId"] == str(drawing.id)
+    assert products[0]["treePath"] == ["MACHINE"]
+    assert products[0]["parentEntityId"] is None
+    assert parts == []
+    assert any(attribute["key"] == "materials" for attribute in products[0]["attributes"])
 
-    detail_response = client.get(f"/api/v1/knowledge-entities/{bracket['entityId']}")
+    detail_response = client.get(f"/api/v1/knowledge-entities/{products[0]['entityId']}")
     assert detail_response.status_code == 200
-    assert detail_response.json()["treePath"] == ["MACHINE", "FEEDER", "BRACKET-A"]
-    assert detail_response.json()["classificationEvidence"] == "sxnet_node_fields"
+    assert detail_response.json()["treePath"] == ["MACHINE"]
+    assert detail_response.json()["classificationEvidence"] == "filename"
 
 
 @pytest.mark.django_db
-def test_icad_entity_api_supports_legacy_tree_paths(sample_registration_payload):
+def test_icad_entity_api_does_not_expand_legacy_tree_paths(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
         filename="legacy-sample.icd",
@@ -192,8 +192,10 @@ def test_icad_entity_api_supports_legacy_tree_paths(sample_registration_payload)
 
     assert response.status_code == 200
     payload = response.json()
-    assert [item["entityKind"] for item in payload["items"]] == ["assembly", "subassembly", "part"]
-    assert all(item["classificationEvidence"] == "legacy_tree_path_inference" for item in payload["items"])
+    assert payload["count"] == 1
+    assert payload["items"][0]["entityKind"] == "part"
+    assert payload["items"][0]["treePath"] == ["legacy-sample"]
+    assert payload["items"][0]["drawingId"] == str(drawing.id)
 
 
 @pytest.mark.django_db

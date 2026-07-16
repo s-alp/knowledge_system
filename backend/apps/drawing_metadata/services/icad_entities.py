@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from collections import Counter, defaultdict
-from dataclasses import dataclass
+from collections import Counter
+from pathlib import PureWindowsPath
 from typing import Iterable
 import uuid
 
@@ -9,52 +9,12 @@ from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDraw
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 
 
-SCHEMA_VERSION = "icad_knowledge_entities.v1"
-ENTITY_KIND_ASSEMBLY = "assembly"
-ENTITY_KIND_SUBASSEMBLY = "subassembly"
-ENTITY_KIND_PART = "part"
+SCHEMA_VERSION = "icad_knowledge_entities.v2"
+TARGET_PRODUCT = "product"
+TARGET_PART = "part"
 
-PART_NUMBER_KEYS = {
-    "partno",
-    "partnumber",
-    "品番",
-    "部品番号",
-    "図番",
-    "drawingno",
-}
-
-EX_INFO_TAG_FIELDS = {
-    "材質": "材質",
-    "材料": "材質",
-    "material": "材質",
-    "matl": "材質",
-    "表面処理": "表面処理",
-    "表処": "表面処理",
-    "surface": "表面処理",
-    "塗装": "塗装",
-    "paint": "塗装",
-    "メーカー": "メーカー",
-    "maker": "メーカー",
-    "prfx": "PRFX",
-    "prefix": "PRFX",
-    "ユニット": "ユニット",
-    "unit": "ユニット",
-}
-
-
-@dataclass
-class _Node:
-    raw: dict
-    raw_index: int
-    node_id: str
-    source_node_id: str | None
-    source_parent_node_id: str | None
-    path: tuple[str, ...]
-    depth: int
-    child_count: int
-    entity_kind: str
-    parent_id: str | None = None
-    child_ids: list[str] | None = None
+PART_FOLDER_HINTS = {"部品", "部品図", "parts", "part"}
+ASSEMBLY_NAME_HINTS = {"組立", "組図", "assembly", "assy", "unit", "ユニット"}
 
 
 def _has_value(value) -> bool:
@@ -68,113 +28,110 @@ def _has_value(value) -> bool:
 
 
 def _string_value(value) -> str | None:
-    if not _has_value(value):
-        return None
-    return str(value).strip()
+    return str(value).strip() if _has_value(value) else None
 
 
-def _normalized_key(value: object) -> str:
-    return "".join(str(value).lower().replace("_", " ").replace("-", " ").split())
-
-
-def _stable_entity_id(drawing_id, source_key: str) -> str:
-    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"icad-entity:{drawing_id}:{source_key}"))
+def _stable_entity_id(drawing_id) -> str:
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"icad-file-entity:{drawing_id}"))
 
 
 def _snapshot_3d(drawing: RegisteredDrawing) -> DrawingMetadataSnapshot | None:
+    prefetched = getattr(drawing, "knowledge_3d_snapshots", None)
+    if prefetched is not None:
+        return prefetched[0] if prefetched else None
     return next((snapshot for snapshot in drawing.snapshots.all() if snapshot.extraction_mode == "3d"), None)
 
 
-def _path_from_part(part: dict, index: int) -> tuple[str, ...]:
-    path = tuple(str(item).strip() for item in (part.get("tree_path") or []) if str(item).strip())
-    if path:
-        return path
-    name = _string_value(part.get("name"))
-    return (name or f"名称未取得-{index + 1}",)
-
-
-def _entity_kind(raw_kind: str | None, *, depth: int, child_count: int) -> str:
-    normalized = (raw_kind or "").strip().lower()
-    if normalized in {ENTITY_KIND_ASSEMBLY, ENTITY_KIND_SUBASSEMBLY, ENTITY_KIND_PART}:
-        return normalized
-    if child_count <= 0:
-        return ENTITY_KIND_PART
-    return ENTITY_KIND_ASSEMBLY if depth == 0 else ENTITY_KIND_SUBASSEMBLY
-
-
-def _prepare_nodes(drawing: RegisteredDrawing, raw_extract: dict) -> list[_Node]:
-    parts = [part for part in (raw_extract.get("parts") or []) if isinstance(part, dict)]
-    if not parts:
-        top_part = raw_extract.get("top_part") or {}
-        if isinstance(top_part, dict) and _has_value(top_part.get("name")):
-            parts = [{**top_part, "tree_path": [top_part["name"]]}]
-
-    path_occurrences: Counter[tuple[str, ...]] = Counter()
-    prepared: list[tuple[dict, int, tuple[str, ...], int, str, str | None, str | None]] = []
-    for index, part in enumerate(parts):
-        path = _path_from_part(part, index)
-        occurrence = path_occurrences[path]
-        path_occurrences[path] += 1
-        source_node_id = _string_value(part.get("node_id"))
-        source_key = source_node_id or f"{'/'.join(path)}#{occurrence}"
-        node_id = _stable_entity_id(drawing.id, source_key)
-        depth_value = part.get("depth")
-        depth = int(depth_value) if isinstance(depth_value, int) and depth_value >= 0 else max(len(path) - 1, 0)
-        prepared.append(
-            (
-                part,
-                index,
-                path,
-                depth,
-                node_id,
-                source_node_id,
-                _string_value(part.get("parent_node_id")),
-            )
-        )
-
-    source_id_to_entity_id = {source_node_id: node_id for _, _, _, _, node_id, source_node_id, _ in prepared if source_node_id}
-    path_to_entity_ids: dict[tuple[str, ...], list[str]] = defaultdict(list)
-    for _, _, path, _, node_id, _, _ in prepared:
-        path_to_entity_ids[path].append(node_id)
-
-    nodes: list[_Node] = []
-    for part, index, path, depth, node_id, source_node_id, source_parent_node_id in prepared:
+def _part_rows(snapshot: DrawingMetadataSnapshot) -> list[dict]:
+    parts = [part for part in (snapshot.raw_extract_json or {}).get("parts", []) if isinstance(part, dict)]
+    path_counts = Counter(
+        tuple(str(item).strip() for item in (part.get("tree_path") or []) if str(item).strip())
+        for part in parts
+    )
+    inferred_child_counts: Counter[tuple[str, ...]] = Counter()
+    for path, count in path_counts.items():
+        if len(path) > 1:
+            inferred_child_counts[path[:-1]] += count
+    rows: list[dict] = []
+    for part in parts:
+        row = dict(part)
+        path = tuple(str(item).strip() for item in (part.get("tree_path") or []) if str(item).strip())
+        explicit_depth = part.get("depth")
         explicit_child_count = part.get("child_count")
-        if isinstance(explicit_child_count, int) and explicit_child_count >= 0:
-            child_count = explicit_child_count
-        else:
-            child_count = sum(
-                len(entity_ids)
-                for candidate_path, entity_ids in path_to_entity_ids.items()
-                if len(candidate_path) == len(path) + 1 and candidate_path[:-1] == path
-            )
-
-        parent_id = source_id_to_entity_id.get(source_parent_node_id or "")
-        if parent_id is None and len(path) > 1:
-            parent_candidates = path_to_entity_ids.get(path[:-1], [])
-            parent_id = parent_candidates[0] if parent_candidates else None
-
-        nodes.append(
-            _Node(
-                raw=part,
-                raw_index=index,
-                node_id=node_id,
-                source_node_id=source_node_id,
-                source_parent_node_id=source_parent_node_id,
-                path=path,
-                depth=depth,
-                child_count=child_count,
-                entity_kind=_entity_kind(_string_value(part.get("entity_kind")), depth=depth, child_count=child_count),
-                parent_id=parent_id,
-                child_ids=[],
-            )
+        row["_path"] = path
+        row["_depth"] = (
+            explicit_depth
+            if isinstance(explicit_depth, int) and explicit_depth >= 0
+            else max(len(path) - 1, 0)
         )
+        row["_child_count"] = (
+            explicit_child_count
+            if isinstance(explicit_child_count, int) and explicit_child_count >= 0
+            else inferred_child_counts[path]
+        )
+        rows.append(row)
+    return rows
 
-    node_by_id = {node.node_id: node for node in nodes}
-    for node in nodes:
-        if node.parent_id and node.parent_id in node_by_id:
-            node_by_id[node.parent_id].child_ids.append(node.node_id)
-    return nodes
+
+def _manual_classification(snapshot: DrawingMetadataSnapshot) -> tuple[str, str] | None:
+    overrides = snapshot.manual_overrides_json or {}
+    target = _string_value(overrides.get("knowledgeEntityTarget"))
+    kind = _string_value(overrides.get("knowledgeEntityKind"))
+    if target not in {TARGET_PRODUCT, TARGET_PART}:
+        return None
+    if target == TARGET_PART:
+        return target, "part"
+    return target, kind if kind in {"assembly", "subassembly"} else "assembly"
+
+
+def _classify_icd(drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot, parts: list[dict]) -> dict:
+    manual = _manual_classification(snapshot)
+    if manual:
+        return {
+            "targetKey": manual[0],
+            "entityKind": manual[1],
+            "evidence": "manual_override",
+            "confidence": "high",
+            "reason": "図面管理でICD単位の登録先が手動確定されています。",
+        }
+
+    path_parts = [part.lower() for part in PureWindowsPath(drawing.source_path).parts]
+    filename = drawing.filename.lower()
+    if any(any(hint in path_part for hint in PART_FOLDER_HINTS) for path_part in path_parts[1:]):
+        return {
+            "targetKey": TARGET_PART,
+            "entityKind": "part",
+            "evidence": "source_folder",
+            "confidence": "high",
+            "reason": "保存パスに部品／部品図フォルダがあるため、ICD全体を部品として扱います。",
+        }
+
+    if any(hint in filename for hint in ASSEMBLY_NAME_HINTS):
+        return {
+            "targetKey": TARGET_PRODUCT,
+            "entityKind": "assembly",
+            "evidence": "filename",
+            "confidence": "high",
+            "reason": "ファイル名に組立・ユニットを示す語があるため、ICD全体を製品・装置・ユニットとして扱います。",
+        }
+
+    external_parts = [part for part in parts if part.get("_depth", 0) > 0 and bool(part.get("is_external"))]
+    if external_parts:
+        return {
+            "targetKey": TARGET_PRODUCT,
+            "entityKind": "assembly",
+            "evidence": "sxnet_external_parts",
+            "confidence": "high",
+            "reason": f"SXNETで外部パーツを{len(external_parts)}件含むため、ICD全体をアセンブリとして扱います。",
+        }
+
+    return {
+        "targetKey": TARGET_PART,
+        "entityKind": "part",
+        "evidence": "no_external_parts",
+        "confidence": "medium",
+        "reason": "外部パーツ構成を確認できないため、ICD全体を部品候補として扱います。必要なら図面管理で登録先を確定します。",
+    }
 
 
 def _attribute(*, key: str, label: str, value, source: str, confidence: str, evidence: str) -> dict | None:
@@ -183,7 +140,9 @@ def _attribute(*, key: str, label: str, value, source: str, confidence: str, evi
     if isinstance(value, (list, tuple, set)):
         display_value = ", ".join(str(item) for item in value if _has_value(item))
     elif isinstance(value, dict):
-        display_value = ", ".join(f"{item_key}={item_value}" for item_key, item_value in value.items() if _has_value(item_value))
+        display_value = ", ".join(
+            f"{item_key}={item_value}" for item_key, item_value in value.items() if _has_value(item_value)
+        )
     else:
         display_value = str(value)
     if not display_value:
@@ -200,147 +159,135 @@ def _attribute(*, key: str, label: str, value, source: str, confidence: str, evi
 
 def _append_attribute(attributes: list[dict], **kwargs) -> None:
     item = _attribute(**kwargs)
-    if item and not any(existing["key"] == item["key"] and existing["value"] == item["value"] for existing in attributes):
+    if item and not any(existing["key"] == item["key"] for existing in attributes):
         attributes.append(item)
 
 
-def _tag(*, value: str, source: str, confidence: str, evidence: str) -> dict:
-    return {"value": value, "source": source, "confidence": confidence, "evidence": evidence}
-
-
-def _append_tag(tags: list[dict], **kwargs) -> None:
-    item = _tag(**kwargs)
-    if item["value"] and not any(existing["value"] == item["value"] for existing in tags):
-        tags.append(item)
-
-
-def _part_number(node: _Node) -> str:
-    ex_info_fields = node.raw.get("ex_info_fields") or {}
-    for key, value in ex_info_fields.items():
-        if _normalized_key(key) in PART_NUMBER_KEYS and _has_value(value):
-            return str(value).strip()
-    return _string_value(node.raw.get("name")) or node.path[-1]
-
-
-def _material_values(node: _Node) -> list[str]:
+def _material_values(parts: list[dict]) -> list[str]:
     values: list[str] = []
-    for material in node.raw.get("materials") or []:
-        if not isinstance(material, dict):
-            continue
-        value = _string_value(material.get("mat_id")) or _string_value(material.get("name"))
-        if value and value not in values:
-            values.append(value)
+    for part in parts:
+        for material in part.get("materials") or []:
+            if not isinstance(material, dict):
+                continue
+            value = _string_value(material.get("mat_id")) or _string_value(material.get("name"))
+            if value and value not in values:
+                values.append(value)
     return values
 
 
-def _global_tags_for_node(node: _Node, composed_metadata: dict, *, node_count: int) -> list[dict]:
-    allowed_prefixes = ("客先:", "装置:", "PRFX:", "ユニット:") if node.entity_kind != ENTITY_KIND_PART else (
-        "メーカー:",
-        "規格:",
+def _snapshot_canonical(drawing: RegisteredDrawing, snapshot_3d: DrawingMetadataSnapshot) -> dict:
+    canonical: dict = {}
+    prefetched = getattr(drawing, "knowledge_2d_snapshots", None)
+    snapshot_2d = (
+        prefetched[0]
+        if prefetched
+        else next(
+            (snapshot for snapshot in drawing.snapshots.all() if snapshot.extraction_mode == "2d"),
+            None,
+        )
     )
-    if node.depth != 0 and not (node.entity_kind == ENTITY_KIND_PART and node_count == 1):
-        return []
-    return [
-        tag
-        for tag in (composed_metadata.get("derivedTags") or [])
-        if isinstance(tag, dict) and str(tag.get("tag") or "").startswith(allowed_prefixes)
-    ]
+    if snapshot_2d:
+        canonical.update(snapshot_2d.canonical_attributes_json or {})
+    canonical.update(snapshot_3d.canonical_attributes_json or {})
+    return canonical
 
 
-def _build_entity_record(
-    *,
+def _snapshot_tags(drawing: RegisteredDrawing) -> list[dict]:
+    tags: list[dict] = []
+    seen: set[str] = set()
+    prefetched_2d = getattr(drawing, "knowledge_2d_snapshots", None)
+    prefetched_3d = getattr(drawing, "knowledge_3d_snapshots", None)
+    snapshots = (
+        [*(prefetched_2d or []), *(prefetched_3d or [])]
+        if prefetched_2d is not None and prefetched_3d is not None
+        else drawing.snapshots.all()
+    )
+    for snapshot in snapshots:
+        for tag in snapshot.derived_tags_json or []:
+            value = _string_value(tag.get("tag")) if isinstance(tag, dict) else None
+            if not value or value in seen:
+                continue
+            seen.add(value)
+            tags.append(
+                {
+                    "value": value,
+                    "source": str(tag.get("source") or f"{snapshot.extraction_mode}_snapshot"),
+                    "confidence": str(tag.get("confidence") or "medium"),
+                    "evidence": f"snapshotsByMode.{snapshot.extraction_mode}.derivedTags",
+                }
+            )
+    return tags
+
+
+def _build_record(
     drawing: RegisteredDrawing,
     snapshot: DrawingMetadataSnapshot,
-    node: _Node,
-    node_by_id: dict[str, _Node],
-    composed_metadata: dict,
-    node_count: int,
+    *,
+    include_details: bool,
 ) -> dict:
-    raw = node.raw
-    name = _string_value(raw.get("name")) or node.path[-1]
-    ex_info_fields = raw.get("ex_info_fields") or {}
-    materials = _material_values(node)
-    attributes: list[dict] = []
-    evidence_base = f"snapshotsByMode.3d.rawExtract.parts[{node.raw_index}]"
+    parts = _part_rows(snapshot)
+    composed = compose_drawing_metadata(drawing) if include_details else None
+    canonical = (composed or {}).get("canonicalAttributes") or _snapshot_canonical(drawing, snapshot)
+    classification = _classify_icd(drawing, snapshot, parts)
+    top_part = (snapshot.raw_extract_json or {}).get("top_part") or {}
+    name = (
+        _string_value(canonical.get("drawing_name"))
+        or _string_value(top_part.get("name"))
+        or PureWindowsPath(drawing.filename).stem
+    )
+    part_number = _string_value(canonical.get("drawing_number")) or PureWindowsPath(drawing.filename).stem
+    external_count = sum(bool(part.get("is_external")) for part in parts)
+    unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
+    extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
+    unique_part_names = sorted(
+        {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
+    )
+    materials = _material_values(parts)
 
+    attributes: list[dict] = []
     _append_attribute(
         attributes,
-        key="entity_kind",
-        label="構成種別",
-        value={ENTITY_KIND_ASSEMBLY: "アセンブリ", ENTITY_KIND_SUBASSEMBLY: "サブアセンブリ", ENTITY_KIND_PART: "部品"}[node.entity_kind],
-        source="3d_part_tree",
-        confidence="high" if node.source_node_id else "medium",
-        evidence=f"{evidence_base}.tree_path",
+        key="classification_reason",
+        label="登録先判定根拠",
+        value=classification["reason"],
+        source=classification["evidence"],
+        confidence=classification["confidence"],
+        evidence="ICDファイル全体",
     )
-    _append_attribute(attributes, key="tree_path", label="構成パス", value=" > ".join(node.path), source="3d_part_tree", confidence="high", evidence=f"{evidence_base}.tree_path")
-    _append_attribute(attributes, key="comment", label="コメント", value=raw.get("comment"), source="3d_part_tree", confidence="high", evidence=f"{evidence_base}.comment")
-    _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence=f"{evidence_base}.materials")
-    _append_attribute(attributes, key="ref_model_name", label="参照モデル名", value=raw.get("ref_model_name"), source="3d_part_tree", confidence="high", evidence=f"{evidence_base}.ref_model_name")
-    _append_attribute(attributes, key="ref_model_path", label="参照モデルパス", value=raw.get("ref_model_path"), source="3d_part_tree", confidence="high", evidence=f"{evidence_base}.ref_model_path")
-    _append_attribute(attributes, key="external_reference", label="外部参照", value="あり" if raw.get("is_external") else None, source="3d_part_tree", confidence="high", evidence=f"{evidence_base}.is_external")
+    _append_attribute(attributes, key="source_path", label="保存先", value=drawing.source_path, source="file", confidence="high", evidence="registeredDrawing.sourcePath")
+    _append_attribute(attributes, key="component_occurrence_count", label="内部パーツ使用数", value=len(parts), source="3d_part_tree", confidence="high", evidence="rawExtract.parts")
+    _append_attribute(attributes, key="unique_component_name_count", label="内部パーツ名称数", value=len(unique_part_names), source="3d_part_tree", confidence="medium", evidence="rawExtract.parts[].name")
+    _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external")
+    _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded")
+    _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields")
+    _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials")
+    for key, label in (
+        ("customer_name", "客先"),
+        ("project_name", "案件"),
+        ("equipment_category", "装置カテゴリ"),
+        ("drawing_number", "図番"),
+        ("drawing_name", "図面名"),
+        ("mass_value", "質量"),
+        ("weight_value", "重量"),
+        ("surface_treatment", "表面処理"),
+        ("paint", "塗装"),
+        ("scale", "尺度"),
+        ("drawing_size", "図面サイズ"),
+        ("prfx", "PRFX"),
+        ("unit_number", "ユニット番号"),
+    ):
+        _append_attribute(attributes, key=key, label=label, value=canonical.get(key), source="composed_2d_3d", confidence="medium", evidence=f"canonicalAttributes.{key}")
 
-    for key, value in ex_info_fields.items():
-        _append_attribute(
-            attributes,
-            key=f"part_ex_info.{key}",
-            label=f"パーツ付加情報：{key}",
-            value=value,
-            source="3d_part_extended_info",
-            confidence="high",
-            evidence=f"{evidence_base}.ex_info_fields.{key}",
-        )
-
-    canonical = composed_metadata.get("canonicalAttributes") or {}
-    if node.depth == 0:
-        for key, label in (
-            ("customer_name", "客先"),
-            ("project_name", "案件"),
-            ("equipment_category", "装置カテゴリ"),
-            ("drawing_number", "図番"),
-            ("drawing_name", "図面名"),
-            ("mass_value", "質量"),
-            ("weight_value", "重量"),
-        ):
-            _append_attribute(
-                attributes,
-                key=key,
-                label=label,
-                value=canonical.get(key),
-                source="composed_2d_3d",
-                confidence="medium",
-                evidence=f"composedMetadata.canonicalAttributes.{key}",
-            )
-
-    tags: list[dict] = []
-    for material in materials:
-        _append_tag(tags, value=f"材質:{material}", source="3d_part_material", confidence="high", evidence=f"{evidence_base}.materials")
-    for field_key, field_value in ex_info_fields.items():
-        normalized = _normalized_key(field_key)
-        prefix = next((tag_prefix for key_hint, tag_prefix in EX_INFO_TAG_FIELDS.items() if _normalized_key(key_hint) in normalized), None)
-        value = _string_value(field_value)
-        if prefix and value:
-            _append_tag(tags, value=f"{prefix}:{value}", source="3d_part_extended_info", confidence="high", evidence=f"{evidence_base}.ex_info_fields.{field_key}")
-    for global_tag in _global_tags_for_node(node, composed_metadata, node_count=node_count):
-        tag_value = _string_value(global_tag.get("tag"))
-        if tag_value:
-            _append_tag(
-                tags,
-                value=tag_value,
-                source=_string_value(global_tag.get("source")) or "composed_metadata",
-                confidence=_string_value(global_tag.get("confidence")) or "medium",
-                evidence=f"composedMetadata.derivedTags[{tag_value}]",
-            )
-
-    child_nodes = [node_by_id[child_id] for child_id in (node.child_ids or []) if child_id in node_by_id]
-    child_assembly_count = sum(child.entity_kind != ENTITY_KIND_PART for child in child_nodes)
-    child_part_count = sum(child.entity_kind == ENTITY_KIND_PART for child in child_nodes)
-    descendant_part_count = sum(
-        candidate.entity_kind == ENTITY_KIND_PART
-        and len(candidate.path) > len(node.path)
-        and candidate.path[: len(node.path)] == node.path
-        for candidate in node_by_id.values()
-    )
-
+    tags = [
+        {
+            "value": str(tag.get("tag")),
+            "source": str(tag.get("source") or "composed_metadata"),
+            "confidence": str(tag.get("confidence") or "medium"),
+            "evidence": "composedMetadata.derivedTags",
+        }
+        for tag in ((composed or {}).get("derivedTags") or [])
+        if isinstance(tag, dict) and _has_value(tag.get("tag"))
+    ] if composed else _snapshot_tags(drawing)
     history = [
         {
             "action": audit.action_type,
@@ -350,25 +297,25 @@ def _build_entity_record(
             "executedAt": audit.executed_at.isoformat(),
         }
         for audit in drawing.audit_logs.all()
-    ]
-    conflicts = composed_metadata.get("conflicts") or [] if node.depth == 0 else []
-
+    ] if include_details else []
+    conflicts = (composed or {}).get("conflicts") or []
     return {
-        "entityId": node.node_id,
-        "targetKey": "part" if node.entity_kind == ENTITY_KIND_PART else "product",
-        "entityKind": node.entity_kind,
-        "classificationEvidence": "sxnet_node_fields" if node.source_node_id else "legacy_tree_path_inference",
-        "classificationConfidence": "high" if node.source_node_id else "medium",
+        "entityId": _stable_entity_id(drawing.id),
+        "targetKey": classification["targetKey"],
+        "entityKind": classification["entityKind"],
+        "classificationEvidence": classification["evidence"],
+        "classificationConfidence": classification["confidence"],
+        "classificationReason": classification["reason"],
         "name": name,
-        "partNumber": _part_number(node) if node.entity_kind == ENTITY_KIND_PART else None,
-        "comment": _string_value(raw.get("comment")),
-        "treePath": list(node.path),
-        "depth": node.depth,
-        "parentEntityId": node.parent_id,
-        "childEntityIds": node.child_ids or [],
-        "childAssemblyCount": child_assembly_count,
-        "childPartCount": child_part_count,
-        "descendantPartCount": descendant_part_count,
+        "partNumber": part_number if classification["targetKey"] == TARGET_PART else None,
+        "comment": _string_value(top_part.get("comment")),
+        "treePath": [name],
+        "depth": 0,
+        "parentEntityId": None,
+        "childEntityIds": [],
+        "childAssemblyCount": sum(part.get("_child_count", 0) > 0 and bool(part.get("is_external")) for part in parts),
+        "childPartCount": sum(part.get("_child_count", 0) == 0 for part in parts),
+        "descendantPartCount": len(parts),
         "drawingId": str(drawing.id),
         "drawingFilename": drawing.filename,
         "sourcePath": drawing.source_path,
@@ -376,21 +323,34 @@ def _build_entity_record(
         "tags": tags,
         "conflicts": conflicts,
         "reviewStatus": snapshot.review_status,
-        "reviewRequired": (
-            snapshot.review_status != DrawingMetadataSnapshot.REVIEW_CONFIRMED
-            or bool(conflicts)
-            or any(tag["confidence"] == "low" for tag in tags)
-        ),
+        "reviewRequired": snapshot.review_status != DrawingMetadataSnapshot.REVIEW_CONFIRMED or bool(conflicts) or classification["confidence"] != "high",
         "evidence": [
             {
-                "source": "3d_part_tree",
-                "path": evidence_base,
+                "source": "icd_file",
+                "path": drawing.source_path,
                 "snapshotUpdatedAt": snapshot.updated_at.isoformat(),
             }
         ],
         "history": history,
         "updatedAt": snapshot.updated_at.isoformat(),
     }
+
+
+def _records(
+    drawings: Iterable[RegisteredDrawing],
+    *,
+    include_details: bool = False,
+) -> tuple[list[dict], list[dict]]:
+    records: list[dict] = []
+    skipped: list[dict] = []
+    for drawing in drawings:
+        snapshot = _snapshot_3d(drawing)
+        if snapshot is None:
+            skipped.append({"drawingId": str(drawing.id), "filename": drawing.filename, "reason": "3d_snapshot_missing"})
+            continue
+        records.append(_build_record(drawing, snapshot, include_details=include_details))
+    records.sort(key=lambda record: (record["name"].lower(), record["drawingFilename"].lower()))
+    return records, skipped
 
 
 def build_icad_entity_catalog(
@@ -401,52 +361,13 @@ def build_icad_entity_catalog(
     offset: int = 0,
     limit: int | None = None,
 ) -> dict:
-    if target_key not in {None, "product", "part"}:
+    if target_key not in {None, TARGET_PRODUCT, TARGET_PART}:
         raise ValueError(f"unsupported target_key: {target_key}")
-
-    prepared_entries: list[tuple[RegisteredDrawing, DrawingMetadataSnapshot, _Node, dict[str, _Node], int]] = []
-    skipped_drawings: list[dict] = []
-    for drawing in drawings:
-        snapshot = _snapshot_3d(drawing)
-        if snapshot is None:
-            skipped_drawings.append({"drawingId": str(drawing.id), "filename": drawing.filename, "reason": "3d_snapshot_missing"})
-            continue
-        nodes = _prepare_nodes(drawing, snapshot.raw_extract_json or {})
-        if not nodes:
-            skipped_drawings.append({"drawingId": str(drawing.id), "filename": drawing.filename, "reason": "3d_part_tree_empty"})
-            continue
-        node_by_id = {node.node_id: node for node in nodes}
-        prepared_entries.extend(
-            (drawing, snapshot, node, node_by_id, len(nodes))
-            for node in nodes
-            if target_key is None
-            or (target_key == "part" and node.entity_kind == ENTITY_KIND_PART)
-            or (target_key == "product" and node.entity_kind != ENTITY_KIND_PART)
-        )
-
-    prepared_entries.sort(
-        key=lambda entry: (entry[0].filename.lower(), entry[2].path, entry[2].node_id)
-    )
-
-    composed_by_drawing_id: dict[str, dict] = {}
-
-    def build_record(entry) -> dict:
-        drawing, snapshot, node, node_by_id, node_count = entry
-        drawing_key = str(drawing.id)
-        if drawing_key not in composed_by_drawing_id:
-            composed_by_drawing_id[drawing_key] = compose_drawing_metadata(drawing)
-        return _build_entity_record(
-            drawing=drawing,
-            snapshot=snapshot,
-            node=node,
-            node_by_id=node_by_id,
-            composed_metadata=composed_by_drawing_id[drawing_key],
-            node_count=node_count,
-        )
-
+    records, skipped = _records(drawings, include_details=False)
+    if target_key:
+        records = [record for record in records if record["targetKey"] == target_key]
     normalized_query = query.strip().lower()
     if normalized_query:
-        records = [build_record(entry) for entry in prepared_entries]
         records = [
             record
             for record in records
@@ -462,69 +383,58 @@ def build_icad_entity_catalog(
                 ]
             ).lower()
         ]
-        total_count = len(records)
-        returned_records = records[offset : offset + limit] if limit is not None else records[offset:]
-    else:
-        total_count = len(prepared_entries)
-        selected_entries = prepared_entries[offset : offset + limit] if limit is not None else prepared_entries[offset:]
-        returned_records = [build_record(entry) for entry in selected_entries]
-
+    total_count = len(records)
+    returned = records[offset : offset + limit] if limit is not None else records[offset:]
     return {
         "schemaVersion": SCHEMA_VERSION,
         "definitions": {
-            "product": "ICAD 3D構成で子ノードを持つアセンブリ／サブアセンブリ",
-            "part": "ICAD 3D構成で子ノードを持たない末端パーツ",
+            TARGET_PRODUCT: "1つのICD全体をアセンブリ／サブアセンブリとして登録",
+            TARGET_PART: "1つのICD全体を1部品として登録",
         },
         "targetKey": target_key,
         "count": total_count,
         "totalCount": total_count,
-        "returnedCount": len(returned_records),
+        "returnedCount": len(returned),
         "offset": offset,
         "limit": limit,
-        "items": returned_records,
-        "skippedDrawings": skipped_drawings,
+        "items": returned,
+        "skippedDrawings": skipped,
     }
 
 
 def find_icad_entity(drawings: Iterable[RegisteredDrawing], entity_id: str) -> dict | None:
-    catalog = build_icad_entity_catalog(drawings)
-    record = next((item for item in catalog["items"] if item["entityId"] == str(entity_id)), None)
-    if record is None:
+    drawing_list = list(drawings)
+    selected_drawing = next(
+        (drawing for drawing in drawing_list if _stable_entity_id(drawing.id) == str(entity_id)),
+        None,
+    )
+    if selected_drawing is None:
         return None
-
-    record_by_id = {item["entityId"]: item for item in catalog["items"]}
-    related_entities: list[dict] = []
-    if record.get("parentEntityId") in record_by_id:
-        parent = record_by_id[record["parentEntityId"]]
-        related_entities.append(
-            {
-                "relationship": "parent",
-                "entityId": parent["entityId"],
-                "targetKey": parent["targetKey"],
-                "entityKind": parent["entityKind"],
-                "name": parent["name"],
-                "partNumber": parent.get("partNumber"),
-            }
-        )
-    for child_id in record.get("childEntityIds") or []:
-        child = record_by_id.get(child_id)
-        if child is None:
-            continue
-        related_entities.append(
-            {
-                "relationship": "child",
-                "entityId": child["entityId"],
-                "targetKey": child["targetKey"],
-                "entityKind": child["entityKind"],
-                "name": child["name"],
-                "partNumber": child.get("partNumber"),
-            }
-        )
+    snapshot = _snapshot_3d(selected_drawing)
+    if snapshot is None:
+        return None
+    record = _build_record(selected_drawing, snapshot, include_details=True)
+    referenced_names = {
+        str(part.get("ref_model_name") or "").strip().lower()
+        for part in (snapshot.raw_extract_json or {}).get("parts", [])
+        if isinstance(part, dict) and str(part.get("ref_model_name") or "").strip()
+    }
+    records, _ = _records(drawing_list, include_details=False)
+    related = [
+        {
+            "relationship": "child",
+            "entityId": candidate["entityId"],
+            "targetKey": candidate["targetKey"],
+            "entityKind": candidate["entityKind"],
+            "name": candidate["name"],
+            "partNumber": candidate.get("partNumber"),
+        }
+        for candidate in records
+        if candidate["entityId"] != record["entityId"]
+        and PureWindowsPath(candidate["drawingFilename"]).stem.lower() in referenced_names
+    ]
     return {
         **record,
-        "relatedEntities": related_entities,
-        "relatedDrawing": {
-            "drawingId": record["drawingId"],
-            "filename": record["drawingFilename"],
-        },
+        "relatedEntities": related,
+        "relatedDrawing": {"drawingId": record["drawingId"], "filename": record["drawingFilename"]},
     }

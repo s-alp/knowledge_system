@@ -53,10 +53,47 @@ class RegistrationListApiView(APIView):
         return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)
 
 
-def _icad_entity_drawings_queryset():
-    return RegisteredDrawing.objects.prefetch_related(
-        Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
-        "audit_logs",
+def _icad_entity_drawings_queryset(*, include_details: bool = False):
+    drawings = RegisteredDrawing.objects.filter(snapshots__extraction_mode="3d").distinct()
+    if include_details:
+        return drawings.prefetch_related(
+            Prefetch(
+                "snapshots",
+                queryset=DrawingMetadataSnapshot.objects.filter(extraction_mode__in=("2d", "3d")).select_related(
+                    "latest_job"
+                ),
+            ),
+            "audit_logs",
+        )
+
+    snapshot_fields = (
+        "id",
+        "drawing_id",
+        "extraction_mode",
+        "raw_extract_json",
+        "canonical_attributes_json",
+        "manual_overrides_json",
+        "derived_tags_json",
+        "review_status",
+        "updated_at",
+    )
+    return drawings.prefetch_related(
+        Prefetch(
+            "snapshots",
+            queryset=DrawingMetadataSnapshot.objects.filter(extraction_mode="3d").only(*snapshot_fields),
+            to_attr="knowledge_3d_snapshots",
+        ),
+        Prefetch(
+            "snapshots",
+            queryset=DrawingMetadataSnapshot.objects.filter(extraction_mode="2d").only(
+                "id",
+                "drawing_id",
+                "extraction_mode",
+                "canonical_attributes_json",
+                "derived_tags_json",
+            ),
+            to_attr="knowledge_2d_snapshots",
+        ),
     )
 
 
@@ -108,7 +145,7 @@ class IcadEntityListApiView(APIView):
 
 class IcadEntityDetailApiView(APIView):
     def get(self, request, entity_id):
-        drawings = _icad_entity_drawings_queryset()
+        drawings = _icad_entity_drawings_queryset(include_details=True)
         drawing_id = request.query_params.get("drawingId")
         if drawing_id:
             try:
