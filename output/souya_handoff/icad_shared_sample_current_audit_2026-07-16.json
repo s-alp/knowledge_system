@@ -37,10 +37,10 @@
   "partExtendedInfoDrawingCount": 19,
   "materialCandidateDrawingCount": 29,
   "massAvailableDrawingCount": 38,
-  "sourceNotAccessibleCount": 1,
+  "sourceNotAccessibleCount": 0,
   "blockingIssueCount": 0,
   "warningIssueCount": 0,
-  "knownConditionCount": 5,
+  "knownConditionCount": 4,
   "gatePassed": true,
   "blockingIssues": [],
   "warningIssues": [],
@@ -72,13 +72,6 @@
       "code": "2d_print_frame_not_defined_by_sxnet",
       "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
       "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
-    },
-    {
-      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\18T5-10BF(8).icd",
-      "severity": "known_condition",
-      "code": "source_not_accessible_current_environment",
-      "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
-      "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
     }
   ],
   "unresolved": [],
@@ -567,9 +560,9 @@
       "issues": []
     },
     {
-      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\18T5-10BF(8).icd",
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
       "filename": "18T5-10BF(8).icd",
-      "sourceAccessStatus": "not_accessible",
+      "sourceAccessStatus": "exists",
       "registered": true,
       "has2dSnapshot": true,
       "has3dSnapshot": true,
@@ -601,9 +594,9 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.359865+00:00",
-          "startedAt": "2026-07-15T13:03:04.359865+00:00",
-          "finishedAt": "2026-07-15T13:03:04.359865+00:00",
+          "createdAt": "2026-07-16T20:04:35.600724+00:00",
+          "startedAt": "2026-07-16T20:04:35.600257+00:00",
+          "finishedAt": "2026-07-16T20:04:35.600257+00:00",
           "errorMessage": "",
           "errorMessageLength": 0,
           "errorMessageTruncated": false,
@@ -633,14 +626,7 @@
         "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
         "3dMass": "canonicalAttributes.mass_value"
       },
-      "issues": [
-        {
-          "severity": "known_condition",
-          "code": "source_not_accessible_current_environment",
-          "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
-          "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
-        }
-      ]
+      "issues": []
     }
   ],
   "knownDataConditions": [
@@ -3386,9 +3372,9 @@
       ]
     },
     {
-      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\18T5-10BF(8).icd",
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
       "filename": "18T5-10BF(8).icd",
-      "sourceAccessStatus": "not_accessible",
+      "sourceAccessStatus": "exists",
       "registered": true,
       "has2dSnapshot": true,
       "has3dSnapshot": true,
@@ -3420,9 +3406,9 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.359865+00:00",
-          "startedAt": "2026-07-15T13:03:04.359865+00:00",
-          "finishedAt": "2026-07-15T13:03:04.359865+00:00",
+          "createdAt": "2026-07-16T20:04:35.600724+00:00",
+          "startedAt": "2026-07-16T20:04:35.600257+00:00",
+          "finishedAt": "2026-07-16T20:04:35.600257+00:00",
           "errorMessage": "",
           "errorMessageLength": 0,
           "errorMessageTruncated": false,
@@ -3452,14 +3438,7 @@
         "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
         "3dMass": "canonicalAttributes.mass_value"
       },
-      "issues": [
-        {
-          "severity": "known_condition",
-          "code": "source_not_accessible_current_environment",
-          "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
-          "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
-        }
-      ]
+      "issues": []
     }
   ]
 }
