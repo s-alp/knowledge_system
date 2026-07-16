@@ -4,7 +4,7 @@
 - 目的: ICAD 2D/3D から抽出したタグ・属性を、ナレッジシステムの `図面管理` を正本として活用するための事実整理を行う。
 - 対象範囲:
   - `knowledge_system` 内の既存整理資料
-  - `2D_3D_CAD_VIEWR` の現行 viewer 契約と mock detail
+  - `2D_3D_CAD_VIEWR` の現行 viewer 契約と旧検証用 detail
   - `sxnet` HTML リファレンス
   - `http://210.165.3.139/web/drawing` の確認可能範囲
 
@@ -15,10 +15,10 @@
 | `C:\Users\s-iwata\Desktop\knowledge_system\AGENTS.md` | 本プロジェクトの前提、RAG 課題、図面管理/タグ自動取得の位置づけ |
 | `C:\Users\s-iwata\Desktop\knowledge_system\docs\PDMナレッジシステム見積調査まとめ_2026-04-27.md` | 図面登録画面の想定、タグ自動取得の課題、CAD 連携の担当境界、開発先確認事項 |
 | `C:\Users\s-iwata\Desktop\knowledge_system\docs\RAGチャット改善確認_2026-05-20.md` | 現行 RAG の失敗傾向 |
-| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\viewer-specification.md` | viewer bootstrap metadata の現行契約、mock detail の扱い |
+| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\viewer-specification.md` | viewer bootstrap metadata の現行契約、旧検証用 detail の扱い |
 | `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\integration-manual.md` | viewer の PDM 組み込み前提と責務分離 |
 | `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\types\viewer.ts` | frontend 側の bootstrap metadata 型 |
-| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\mock\drawingKnowledge.ts` | 図面詳細で見せたい属性情報/備考/関連情報の mock 構造 |
+| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\knowledge\drawingKnowledge.ts` | 図面詳細で見せたい属性情報/備考/関連情報の旧検証用構造 |
 | `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\components\DrawingOverviewPanel.tsx` | 属性情報/備考 UI の受け皿 |
 | `C:\Users\s-iwata\Desktop\knowledge_system\sxnet\sxnet\*.html` | `sxnet` で利用できる 2D/3D 抽出 API の確認 |
 | `http://210.165.3.139/web/drawing` | 画面 URL 到達可否、静的 HTML で確認できる範囲 |
@@ -39,7 +39,7 @@
 
 - 既存整理資料では、図面登録画面に対応形式として `.png`, `.jpg`, `.jpeg`, `.tiff`, `.pdf`, `.icad`, `.step`, `.stp` が表示されていたと記録されている。
 - 同じ資料には「タグは登録後に図面から自動で抽出されます。手動で追加・削除も可能です。」という文言が記録されている。
-- 一方で、この表示は「予定仕様またはモック表示として扱うべき」と明記されており、本番実装済みの証拠にはなっていない。
+- 一方で、この表示は「予定仕様または画面試作表示として扱うべき」と明記されており、本番実装済みの証拠にはなっていない。
 - `http://210.165.3.139/web/drawing` への到達自体は確認できたが、静的 HTML では SPA の殻と JavaScript 資産参照しか取得できず、実際のデータ契約や項目構造は確認できていない。
 
 ### 2.3 `2D_3D_CAD_VIEWR` の viewer は属性の消費先であり、現時点で正本ではない
@@ -54,7 +54,7 @@
   - `owner`
   - `designPurpose`
   - `tags`
-- viewer の補助セクションである `属性情報`、`備考`、`改訂履歴`、`関連情報`、`変更履歴` は、現在 `drawingKnowledge.ts` の mock detail で補完している。
+- viewer の補助セクションである `属性情報`、`備考`、`改訂履歴`、`関連情報`、`変更履歴` は、当時 `drawingKnowledge.ts` の旧検証用 detail で補完していた。
 - したがって viewer は、タグ・属性の正本保存先ではなく、図面管理または関連 API から受け取った情報の表示先として扱うのが自然である。
 
 ### 2.4 `sxnet` の 3D 側では、部品階層と部品詳細がかなり深く取れそうである
@@ -151,7 +151,7 @@
 ### 4.2 viewer のギャップ
 
 - bootstrap metadata は軽量で、図面詳細に見せたい属性群を保持していない。
-- 補助セクションは mock のため、実データに差し替える別 API または bootstrap 拡張が必要である。
+- 補助セクションは旧検証用データだったため、実データに差し替える別 API または bootstrap 拡張が必要である。
 - viewer は表示先としては十分な受け皿があるが、保存責務は持っていない。
 
 ### 4.3 RAG のギャップ

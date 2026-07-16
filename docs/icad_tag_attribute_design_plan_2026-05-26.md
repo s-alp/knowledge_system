@@ -11,9 +11,9 @@
 | `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_investigation_2026-05-26.md` | 調査結果の事実、推測、未確認事項 |
 | `C:\Users\s-iwata\Desktop\knowledge_system\AGENTS.md` | プロジェクト前提、RAG 課題、作業制約 |
 | `C:\Users\s-iwata\Desktop\knowledge_system\docs\PDMナレッジシステム見積調査まとめ_2026-04-27.md` | 図面登録/タグ自動取得/CAD 連携の想定 |
-| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\viewer-specification.md` | viewer bootstrap metadata と mock detail の現状 |
+| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\docs\viewer-specification.md` | viewer bootstrap metadata と旧検証用 detail の現状 |
 | `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\types\viewer.ts` | 現行 API 型 |
-| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\mock\drawingKnowledge.ts` | viewer に見せたい詳細情報の形 |
+| `C:\Users\s-iwata\Desktop\2D_3D_CAD_VIEWR\frontend\src\shared\knowledge\drawingKnowledge.ts` | viewer に見せたい詳細情報の形 |
 
 ## 2. 抽出内容
 
@@ -351,7 +351,7 @@ detail API で返したい最小単位:
 ### 9.2 viewer detail API 契約
 
 - bootstrap と別に定義する。
-- mock detail を置き換える単位で返す。
+- 旧検証用 detail を置き換える単位で返す。
 
 ### 9.3 抽出結果 JSON 契約
 
@@ -398,7 +398,7 @@ PoC で先に固定したい最小形:
 
 - bootstrap 拡張範囲決定
 - detail API 定義
-- mock detail 差し替え
+- 旧検証用 detail 差し替え
 
 ### Phase 4: RAG 連携
 
@@ -420,7 +420,7 @@ PoC で先に固定したい最小形:
 - [ ] `図面管理`, viewer, RAG の役割を分けている
 - [ ] `3D ICAD`, `2D ICAD`, `STEP`, `PDF`, `画像/OCR` を分けている
 - [ ] 属性を正本、タグを派生物として整理している
-- [ ] viewer の mock detail 差し替え方針がある
+- [ ] viewer の旧検証用 detail 差し替え方針がある
 - [ ] RAG の事前フィルタと再ランキングで使う属性が分かれている
 - [ ] 開発先確認事項が独立している
 

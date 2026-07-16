@@ -439,14 +439,14 @@
           <h3>役割分担</h3>
           <ul class="bullet-list">
             <li><strong>図面管理</strong>: タグ・属性の正本。登録、抽出結果確認、手動補正、一覧絞り込み、詳細参照。</li>
-            <li><strong>viewer</strong>: 図面詳細の表示先。現状は軽量 metadata と mock detail を持つ。</li>
+            <li><strong>viewer</strong>: 図面詳細の表示先。当時は軽量 metadata と旧検証用 detail を持つ。</li>
             <li><strong>RAG</strong>: 図面管理に保存された canonical attribute を検索前フィルタと再ランキングに使う。</li>
           </ul>
         </article>
         <article class="panel">
           <h3>現状のギャップ</h3>
           <div class="tag">図面管理の保存モデル未確認</div>
-          <div class="tag">viewer 詳細は mock</div>
+          <div class="tag">viewer 詳細は旧検証用</div>
           <div class="tag">Python 側は Django 前提で設計必要</div>
           <div class="tag warn">RAG は案件/客先/カテゴリ混線</div>
           <div class="tag warn">BOM から案件名へ上がれない</div>
@@ -482,7 +482,7 @@
         <article class="fact-block">
           <h3>viewer 現状</h3>
           <ul>
-            <li>bootstrap metadata は軽量項目のみで、属性情報・備考はまだ mock 補完。</li>
+            <li>bootstrap metadata は軽量項目のみで、属性情報・備考は当時まだ旧検証用補完。</li>
             <li>図面詳細の UI 受け皿はすでにあり、実データ API へ差し替える余地が大きい。</li>
           </ul>
         </article>
@@ -826,7 +826,7 @@
           <div class="phase">Phase 3</div>
           <div>
             <strong>viewer 詳細連携</strong>
-            <p>mock detail を置き換える detail API を定義し、図面詳細へ実データを流し込む。</p>
+            <p>旧検証用 detail を置き換える detail API を定義し、図面詳細へ実データを流し込む。</p>
           </div>
         </div>
         <div class="timeline-item">

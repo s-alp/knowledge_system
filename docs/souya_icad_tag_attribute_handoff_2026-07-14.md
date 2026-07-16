@@ -189,7 +189,7 @@ python backend\manage.py export_drawing_metadata_fixtures --output output\souya_
 python backend\manage.py export_drawing_metadata_fixtures --profile review-summary --output output\souya_handoff\drawing_metadata_fixture_review_summary.json
 ```
 
-`full` profile の fixture には、図面詳細API相当の `detailApiPayload`、2D/3Dビューワー初期表示用の `viewerBootstrap`、RAG投入用の `ragPayload`、本番タグ・属性連携候補の `knowledgeSystemPayloadPreview` を同梱する。登録、変更、削除は行わない読み取り専用の受け渡しJSONである。`viewerBootstrap.metadata.knowledgeDetail` には、固定モックではなく、ICAD抽出snapshot、訂正候補、監査ログ、創屋連携payload候補から作った補助セクション用データを含める。
+`full` profile の fixture には、図面詳細API相当の `detailApiPayload`、2D/3Dビューワー初期表示用の `viewerBootstrap`、RAG投入用の `ragPayload`、本番タグ・属性連携候補の `knowledgeSystemPayloadPreview` を同梱する。登録、変更、削除は行わない読み取り専用の受け渡しJSONである。`viewerBootstrap.metadata.knowledgeDetail` には、固定サンプルではなく、ICAD抽出snapshot、訂正候補、監査ログ、創屋連携payload候補から作った補助セクション用データを含める。
 
 ただし `full` profile は raw/detail を含むため大きくなり、人がレビューで開くファイルとして扱わない。仕様確認、創屋説明、差分レビューでは `review-summary` profile を使い、完全fixtureは必要時だけローカル生成する。
 

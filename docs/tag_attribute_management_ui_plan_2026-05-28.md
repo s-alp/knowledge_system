@@ -202,7 +202,7 @@ viewer の `DrawingOverviewPanel` を参考に、以下を表示する。
 
 ### そのまま持ち込まない
 
-- mock の改訂履歴や関連情報
+- 旧検証用の改訂履歴や関連情報
 - viewer の操作ボタン群
 - 表示専用前提の軽量 metadata 契約
 

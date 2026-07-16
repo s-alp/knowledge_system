@@ -39,7 +39,7 @@
 
 - `metadata.tags`: 既存ビューワーでも表示できる単純なタグ名配列。
 - `metadata.tagAttributes`: タグ・属性補助パネル用の追加payload。既存ビューワーが未知キーを無視しても、2D/3D表示は壊れない。
-- `metadata.knowledgeDetail`: 改訂履歴、関連情報、変更履歴、属性情報、備考を表示する補助セクション用payload。固定モックではなく、ICAD抽出snapshot、訂正候補、監査ログ、創屋連携payload候補から作る。
+- `metadata.knowledgeDetail`: 改訂履歴、関連情報、変更履歴、属性情報、備考を表示する補助セクション用payload。固定サンプルではなく、ICAD抽出snapshot、訂正候補、監査ログ、創屋連携payload候補から作る。
 - `metadata.extractionDiagnostics`: 未抽出・部分抽出を放置しないための診断payload。ビュー差、レイヤー差、印刷枠差、パーツ付加情報差を再試行条件として明示する。
 
 `metadata.tagAttributes` の形:
@@ -278,7 +278,7 @@
 - プロジェクト詳細のタグ/属性受け口は未確認。
 - 製品・装置・ユニット、部品のタグ保存口は未確認。属性情報欄は確認済み。
 - 2D/3Dビューワーfrontendには、図面向けタグ・属性パネル、ICAD登録・抽出・再抽出・手直し・候補確定画面を実装済み。
-- 製品・装置・ユニット一覧/詳細と部品一覧/詳細は固定モックではなく、ICAD 3D構成から生成した実データを表示する。ただし、子ノードありだけではサブアセンブリと判定しない。`subassembly` は外部参照、参照モデル名/パス、または手動確定がある場合だけ扱う。
+- 製品・装置・ユニット一覧/詳細と部品一覧/詳細は固定サンプルではなく、ICAD 3D構成から生成した実データを表示する。ただし、子ノードありだけではサブアセンブリと判定しない。`subassembly` は外部参照、参照モデル名/パス、または手動確定がある場合だけ扱う。
 - `GET /api/v1/knowledge-entities?target=product|part` と `GET /api/v1/knowledge-entities/{entityId}` を読み取りAPIとして使用する。
 - レビュー状態は2D/3D snapshotごとに `pending` / `confirmed` / `needs_correction` を保持する。再抽出または手直し後は `pending` へ戻す。
 - `viewerBootstrap.availability.has2d/has3d` はviewer表示可否であり、ICADの実体検出結果ではない。この区別をAPI資料に明記する必要がある。
