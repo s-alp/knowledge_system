@@ -61,6 +61,8 @@ namespace IcadExtraction.SxNet
                     case "SxGeomHatch":
                     case "SxGeomSmark":
                     case "SxGeomCutLine":
+                    case "SxGeomSymbol":
+                    case "SxGeomArrowView":
                     case "SxGeomDelta":
                     case "SxGeomTolDatum":
                     case "SxGeomFinishMark":

@@ -318,6 +318,59 @@ def _structured_2d_symbol_candidates(items: Iterable[dict], *, value_key: str, s
     return candidates
 
 
+VIEW_REFERENCE_GEOMETRY_TYPES = {
+    "SxGeomArrowView": {"kind": "arrow_view", "label": "矢視候補"},
+    "SxGeomCutLine": {"kind": "cut_line", "label": "切断線候補"},
+    "SxGeomSymbol": {"kind": "symbol", "label": "図面シンボル候補"},
+}
+
+
+def _build_view_reference_candidates(primitives: Iterable[dict], *, has_print_frames: bool = False) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, str | None, int | None, float | None, float | None, str | None]] = set()
+    for primitive in primitives:
+        if not isinstance(primitive, dict) or not _is_usable_print_area_item(primitive, has_print_frames=has_print_frames):
+            continue
+        geometry_type = primitive.get("geometry_type")
+        definition = VIEW_REFERENCE_GEOMETRY_TYPES.get(str(geometry_type))
+        if not definition:
+            continue
+        evidence_text = str(primitive.get("summary") or geometry_type or "").strip()
+        key = (
+            str(geometry_type),
+            primitive.get("view_name"),
+            primitive.get("layer_no"),
+            primitive.get("position_x"),
+            primitive.get("position_y"),
+            evidence_text,
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append(
+            {
+                "kind": definition["kind"],
+                "label": definition["label"],
+                "geometry_type": geometry_type,
+                "evidence_text": evidence_text,
+                "view_name": primitive.get("view_name"),
+                "layer_no": primitive.get("layer_no"),
+                "position_x": primitive.get("position_x"),
+                "position_y": primitive.get("position_y"),
+                "position_z": primitive.get("position_z"),
+                "end_x": primitive.get("end_x"),
+                "end_y": primitive.get("end_y"),
+                "end_z": primitive.get("end_z"),
+                "inside_print_area": primitive.get("inside_print_area"),
+                "print_frame_no": primitive.get("print_frame_no"),
+                "source": "2d_view_reference_geometry",
+                "confidence": "medium",
+                "reason": "2D図面の矢視・切断線・シンボル要素から、別ビューや詳細図へつながる可能性があるためレビュー用候補として保持します。",
+            }
+        )
+    return candidates
+
+
 def _first_present(*values):
     for value in values:
         if value is not None:
@@ -1350,6 +1403,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)
         canonical.update(_build_geometry_attribute_summary(primitives, has_print_frames=has_print_frames))
+        canonical["view_reference_candidates"] = _build_view_reference_candidates(primitives, has_print_frames=has_print_frames)
+        canonical["view_reference_candidate_count"] = len(canonical["view_reference_candidates"])
         canonical["raw_2d_sections"] = _build_2d_sections(
             raw_extract=raw_extract,
             canonical=canonical,

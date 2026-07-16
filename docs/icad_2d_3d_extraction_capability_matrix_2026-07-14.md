@@ -104,7 +104,7 @@
 | 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | `weld_note_texts[]`, `weld_note_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用属性候補として保持。溶接種別、開先、仕上げ等の細分類は要レビュー |
 | 仕上げ記号 | A | `SxGeomFinishMark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=仕上げ記号あり`, `searchable_tag=false` として保持。`mark_type`, `side_leng`, `width`, `color` は raw に保持 |
 | バルーン | A | `SxGeomBalloon` | `balloon_keys[]`, `balloon_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用属性候補として保持。部品番号への確定紐付けは要レビュー |
-| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線特徴候補実装済み | 断面図/詳細図/矢視判定は未実装 |
+| シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | `view_reference_candidates[]` 実装済み | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用候補として保持。断面図/詳細図/矢視の確定紐づけは要レビュー |
 | 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_part_names`, `referenced_2d_part3d_names`, `referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。印刷枠がある場合は枠内要素だけ検索候補へ採用 |
 | レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。配置スケール、角度、ミラー/空参照もrawに保持 |
 | 図面名 | A/B | `SxInfModel.name`、図枠文字 | 候補実装済み | `title_block_candidates` / `title_block_fields`。2D/3D両方で照合対象 |

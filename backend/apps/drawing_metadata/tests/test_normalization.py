@@ -181,6 +181,8 @@ def test_normalize_2d_raw_extract():
                 {"geometry_type": "SxGeomSmark", "summary": "val1=Ra 6.3", "inside_print_area": True},
                 {"geometry_type": "SxGeomHatch", "summary": "hatch", "inside_print_area": True},
                 {"geometry_type": "SxGeomCutLine", "summary": "cut line", "inside_print_area": True},
+                {"geometry_type": "SxGeomArrowView", "summary": "arrow view A", "inside_print_area": True, "view_name": "SHEET1", "layer_no": 2, "position_x": 21.0, "position_y": 22.0},
+                {"geometry_type": "SxGeomSymbol", "summary": "detail symbol B", "inside_print_area": True, "view_name": "SHEET1", "layer_no": 2, "position_x": 23.0, "position_y": 24.0},
                 {"geometry_type": "SxGeomFinishMark", "summary": "finish mark", "inside_print_area": True, "mark_type": 3},
                 {
                     "geometry_type": "SxGeomElparc2D",
@@ -278,6 +280,11 @@ def test_normalize_2d_raw_extract():
     assert all(tag["source"] != "weld_note_candidates" for tag in tags)
     assert all(tag["source"] != "balloon_candidates" for tag in tags)
     assert all(tag["source"] != "tolerance_candidates" for tag in tags)
+    assert canonical["view_reference_candidate_count"] == 3
+    view_reference_kinds = {candidate["kind"] for candidate in canonical["view_reference_candidates"]}
+    assert view_reference_kinds == {"arrow_view", "cut_line", "symbol"}
+    assert all(candidate["source"] == "2d_view_reference_geometry" for candidate in canonical["view_reference_candidates"])
+    assert all(tag["source"] != "view_reference_candidates" for tag in tags)
     assert canonical["referenced_2d_part_count"] == 2
     assert canonical["referenced_2d_trusted_part_count"] == 1
     assert canonical["referenced_2d_part_names"] == ["BASE-PLATE"]
@@ -355,6 +362,7 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
                 {"geometry_type": "SxGeomHatch", "summary": "unknown hatch", "inside_print_area": None},
                 {"geometry_type": "SxGeomCircle2D", "summary": "unknown circle", "inside_print_area": None, "radius": 3.0},
                 {"geometry_type": "SxGeomCutLine", "summary": "inside cut line", "inside_print_area": True},
+                {"geometry_type": "SxGeomArrowView", "summary": "unknown arrow", "inside_print_area": None},
             ],
         },
     }
@@ -373,6 +381,8 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     assert canonical["balloon_candidate_count"] == 1
     assert canonical["balloon_candidates"][0]["value"] == "枠内バルーン"
     assert canonical["balloon_candidates"][0]["inside_print_area"] is True
+    assert canonical["view_reference_candidate_count"] == 1
+    assert canonical["view_reference_candidates"][0]["kind"] == "cut_line"
     assert "枠不明溶接" not in canonical["part_keywords"]
     assert "枠内バルーン" in canonical["part_keywords"]
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])

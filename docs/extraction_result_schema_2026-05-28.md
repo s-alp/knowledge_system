@@ -277,6 +277,28 @@
   "balloon_candidates": [],
   "balloon_candidate_count": 0,
   "surface_treatment_tokens": [],
+  "view_reference_candidates": [
+    {
+      "kind": "arrow_view",
+      "label": "矢視候補",
+      "geometry_type": "SxGeomArrowView",
+      "evidence_text": "A矢視",
+      "view_name": "SHEET1",
+      "layer_no": 2,
+      "position_x": 21.0,
+      "position_y": 22.0,
+      "position_z": 0.0,
+      "end_x": null,
+      "end_y": null,
+      "end_z": null,
+      "inside_print_area": true,
+      "print_frame_no": 1,
+      "source": "2d_view_reference_geometry",
+      "confidence": "medium",
+      "reason": "2D図面の矢視・切断線・シンボル要素から、別ビューや詳細図へつながる可能性があるためレビュー用候補として保持します。"
+    }
+  ],
+  "view_reference_candidate_count": 1,
   "spec_tokens": [],
   "part_keywords": [],
   "material_keywords": [],

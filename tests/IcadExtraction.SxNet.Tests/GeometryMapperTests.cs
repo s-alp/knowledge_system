@@ -22,6 +22,8 @@ namespace IcadExtraction.SxNet.Tests
                 new SxGeomElparc2D { cp = new SxPos { x = 7.0, y = 8.0, z = 0.0 }, radius1 = 11.0, radius2 = 4.0, sang = 10.0, eang = 90.0 },
                 new SxGeomSmark { pnt = new SxPos { x = 9.0, y = 10.0, z = 0.0 }, val1 = "Ra 6.3" },
                 new SxGeomCutLine { pnt1 = new SxPos { x = 1.0, y = 2.0, z = 0.0 }, pnt2 = new SxPos { x = 3.0, y = 4.0, z = 0.0 } },
+                new SxGeomSymbol { pnt = new SxPos { x = 14.0, y = 15.0, z = 0.0 }, name = "DETAIL-A" },
+                new SxGeomArrowView { pnt = new SxPos { x = 16.0, y = 17.0, z = 0.0 }, name = "A" },
                 new SxGeomFinishMark { pnt = new SxPos { x = 12.0, y = 13.0, z = 0.0 }, mark_type = 3, side_leng = 4.5, width = 2, color = 7 },
                 new SxGeomWeld { atr_weld = "WELD-A" },
                 new SxGeomBalloon { txt = "B1" },
@@ -60,7 +62,7 @@ namespace IcadExtraction.SxNet.Tests
             var payload = new GeometryMapper().Map(geometries, warnings);
             Assert.Equal(2, payload.Texts.Count);
             Assert.Single(payload.Dimensions);
-            Assert.Equal(7, payload.GeometryPrimitives.Count);
+            Assert.Equal(9, payload.GeometryPrimitives.Count);
             Assert.Single(payload.WeldNotes);
             Assert.Single(payload.Balloons);
             Assert.Single(payload.Tolerances);
@@ -79,11 +81,15 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(11.0, payload.GeometryPrimitives[3].Radius1);
             Assert.Equal(9.0, payload.GeometryPrimitives[4].PositionX);
             Assert.Equal(3.0, payload.GeometryPrimitives[5].EndX);
-            Assert.Equal("SxGeomFinishMark", payload.GeometryPrimitives[6].GeometryType);
-            Assert.Equal(3, payload.GeometryPrimitives[6].MarkType);
-            Assert.Equal(4.5, payload.GeometryPrimitives[6].SideLength);
-            Assert.Equal(2, payload.GeometryPrimitives[6].Width);
-            Assert.Equal(7, payload.GeometryPrimitives[6].Color);
+            Assert.Equal("SxGeomSymbol", payload.GeometryPrimitives[6].GeometryType);
+            Assert.Equal(14.0, payload.GeometryPrimitives[6].PositionX);
+            Assert.Equal("SxGeomArrowView", payload.GeometryPrimitives[7].GeometryType);
+            Assert.Equal(17.0, payload.GeometryPrimitives[7].PositionY);
+            Assert.Equal("SxGeomFinishMark", payload.GeometryPrimitives[8].GeometryType);
+            Assert.Equal(3, payload.GeometryPrimitives[8].MarkType);
+            Assert.Equal(4.5, payload.GeometryPrimitives[8].SideLength);
+            Assert.Equal(2, payload.GeometryPrimitives[8].Width);
+            Assert.Equal(7, payload.GeometryPrimitives[8].Color);
             Assert.Equal("rpart", payload.ReferencedParts[0].EntityType);
             Assert.Equal("BASE-PLATE", payload.ReferencedParts[0].Name);
             Assert.Equal("BASE-3D", payload.ReferencedParts[0].Part3DName);
@@ -176,6 +182,18 @@ namespace IcadExtraction.SxNet.Tests
         {
             public SxPos? pnt1;
             public SxPos? pnt2;
+        }
+
+        public sealed class SxGeomSymbol
+        {
+            public SxPos? pnt;
+            public string? name;
+        }
+
+        public sealed class SxGeomArrowView
+        {
+            public SxPos? pnt;
+            public string? name;
         }
 
         public sealed class SxGeomFinishMark
