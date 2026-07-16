@@ -185,8 +185,12 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
     row_by_key = {row["key"]: row["displayValue"] for row in payload["massPropertyRows"]}
     assert row_by_key["mass_probe_status"] == "available"
     assert row_by_key["mass_unit_name"] == "mm-kg"
-    assert row_by_key["mass_value"] == "0.02220905"
+    assert row_by_key["mass_value"] == "0.02 kg"
+    assert row_by_key["weight_value"] == "0.02 kg"
     assert row_by_key["center_of_gravity"] == "1.0, 2.0, 3.0"
+    summary_row_by_key = {row["key"]: row["displayValue"] for row in payload["summaryRows"]}
+    assert summary_row_by_key["mass_value"] == "0.02 kg"
+    assert summary_row_by_key["weight_value"] == "0.02 kg"
     material_row_by_key = {row["key"]: row["displayValue"] for row in payload["materialRows"]}
     assert payload["hasMaterials"] is True
     assert material_row_by_key["material_probe_status"] == "available"

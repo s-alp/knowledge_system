@@ -4,6 +4,7 @@ from collections import Counter
 import json
 import os
 from pathlib import Path
+import re
 import sys
 
 
@@ -19,6 +20,7 @@ from apps.drawing_metadata.models import RegisteredDrawing
 
 
 STANDARD_GRAVITY = 9.80665
+KG_TWO_DECIMAL_PATTERN = re.compile(r"^-?\d+\.\d{2} kg$")
 
 
 def _path_key(value: str) -> str:
@@ -94,7 +96,10 @@ def _mass_kg(canonical: dict) -> tuple[str | None, str]:
     if isinstance(weight_value, (int, float)):
         return f"{weight_value / STANDARD_GRAVITY:.2f} kg", "canonicalAttributes.weight_value / 9.80665"
     if isinstance(weight_value, str) and weight_value.strip():
-        return weight_value, "canonicalAttributes.weight_value"
+        normalized = weight_value.strip()
+        if KG_TWO_DECIMAL_PATTERN.match(normalized):
+            return normalized, "canonicalAttributes.weight_value"
+        return None, "canonicalAttributes.weight_value (not normalized to kg 2 decimals)"
     return None, ""
 
 

@@ -64,6 +64,7 @@
 - 表示単位はkgへ統一する。
 - 小数点以下2桁で表示する。
 - SXNETの質量と重量値、2D図枠のkg表記を区別して正規化する。
+- `scripts/audit_mass_weight_format.py` で、DB内の図枠重量・文字列重量が `0.49 kg` 形式に正規化済みか監査する。
 - 共有39件中38件は質量取得あり。`DFR-CM1-AA0305300011.icd` は3D質量を取得できず、値を捏造せず `massAvailable=false` とする。
 
 ## 7. Gemini実API評価

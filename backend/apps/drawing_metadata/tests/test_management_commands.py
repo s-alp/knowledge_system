@@ -468,7 +468,7 @@ def test_renormalize_snapshots_applies_current_quality_rules_and_keeps_manual_va
     call_command("renormalize_drawing_metadata_snapshots")
 
     snapshot.refresh_from_db()
-    assert snapshot.canonical_attributes_json["title_block_fields"]["weight"] == "0.4932kg"
+    assert snapshot.canonical_attributes_json["title_block_fields"]["weight"] == "0.49 kg"
     assert snapshot.canonical_attributes_json["drawing_name"] == "手動図面名"
     assert [tag["tag"] for tag in snapshot.derived_tags_json] == ["利用者タグ"]
 

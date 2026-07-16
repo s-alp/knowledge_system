@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import re
+
+
+STANDARD_GRAVITY = 9.80665
 
 NOISY_COMPOSED_KEYS = (
     "text_tokens",
@@ -135,6 +139,41 @@ def _make_display_row(key: str, label: str, value, display_value: str) -> dict:
         "displayValue": display_value,
         "hasValue": _has_value(value),
     }
+
+
+def _first_present(*values):
+    for value in values:
+        if value is not None:
+            return value
+    return None
+
+
+def _number(value) -> float | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        match = re.search(r"[-+]?\d+(?:\.\d+)?", value.replace(",", ""))
+        if match:
+            return float(match.group(0))
+    return None
+
+
+def _format_kg(value) -> str:
+    number = _number(value)
+    if number is None:
+        return _display_value(value)
+    return f"{number:.2f} kg"
+
+
+def _format_weight_as_kg(value) -> str:
+    number = _number(value)
+    if number is None:
+        return _display_value(value)
+    if isinstance(value, str) and re.search(r"(?:kg|ｋｇ)", value, re.IGNORECASE):
+        return f"{number:.2f} kg"
+    return f"{number / STANDARD_GRAVITY:.2f} kg"
 
 
 def _raw_2d_section_rows(raw_2d_sections: dict | None) -> list[dict]:
@@ -609,15 +648,17 @@ def _part_ex_info_preview_items(raw_parts: list[dict], limit: int = 8) -> list[d
 
 def _mass_property_rows(raw_extract: dict, canonical_attributes: dict) -> list[dict]:
     mass_properties = raw_extract.get("mass_properties", {}) or {}
+    mass_value = _first_present(canonical_attributes.get("mass_value"), mass_properties.get("mass"))
+    weight_value = _first_present(canonical_attributes.get("weight_value"), mass_properties.get("weight"))
     return [
         _make_row("mass_probe_status", "取得状態", canonical_attributes.get("mass_probe_status") or raw_extract.get("mass_probe_status")),
-        _make_row("mass_element_count", "計算対象要素数", canonical_attributes.get("mass_element_count") or mass_properties.get("element_count")),
-        _make_row("mass_unit_name", "単位", canonical_attributes.get("mass_unit_name") or mass_properties.get("unit_name")),
-        _make_row("mass_value", "質量", canonical_attributes.get("mass_value") or mass_properties.get("mass")),
-        _make_row("weight_value", "重量", canonical_attributes.get("weight_value") or mass_properties.get("weight")),
-        _make_row("volume_value", "体積", canonical_attributes.get("volume_value") or mass_properties.get("volume")),
-        _make_row("area_value", "面積", canonical_attributes.get("area_value") or mass_properties.get("area")),
-        _make_row("density_value", "密度", canonical_attributes.get("density_value") or mass_properties.get("density")),
+        _make_row("mass_element_count", "計算対象要素数", _first_present(canonical_attributes.get("mass_element_count"), mass_properties.get("element_count"))),
+        _make_row("mass_unit_name", "単位", _first_present(canonical_attributes.get("mass_unit_name"), mass_properties.get("unit_name"))),
+        _make_display_row("mass_value", "質量", mass_value, _format_kg(mass_value)),
+        _make_display_row("weight_value", "重量", weight_value, _format_weight_as_kg(weight_value)),
+        _make_row("volume_value", "体積", _first_present(canonical_attributes.get("volume_value"), mass_properties.get("volume"))),
+        _make_row("area_value", "面積", _first_present(canonical_attributes.get("area_value"), mass_properties.get("area"))),
+        _make_row("density_value", "密度", _first_present(canonical_attributes.get("density_value"), mass_properties.get("density"))),
         _make_row("center_of_gravity", "重心", canonical_attributes.get("center_of_gravity") or _mass_center_label(mass_properties)),
     ]
 
@@ -1054,14 +1095,17 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     part_tree_paths = _string_values(canonical_attributes.get("part_tree_paths")) or _raw_part_tree_paths(raw_extract)
     ref_model_names = _string_values(canonical_attributes.get("ref_model_names"))
     raw_parts = raw_extract.get("parts", []) or []
+    mass_properties = raw_extract.get("mass_properties", {}) or {}
+    mass_value = _first_present(canonical_attributes.get("mass_value"), mass_properties.get("mass"))
+    weight_value = _first_present(canonical_attributes.get("weight_value"), mass_properties.get("weight"))
     part_count = len(raw_parts) if raw_parts else len(_string_values(canonical_attributes.get("part_names")))
 
     summary_rows = [
         _make_row("top_part_name", "最上位パーツ名", canonical_attributes.get("top_part_name")),
         _make_row("part_count", "抽出パーツ数", part_count),
         _make_row("mass_probe_status", "3D重量取得状態", canonical_attributes.get("mass_probe_status") or raw_extract.get("mass_probe_status")),
-        _make_row("mass_value", "3D質量", canonical_attributes.get("mass_value")),
-        _make_row("weight_value", "3D重量", canonical_attributes.get("weight_value")),
+        _make_display_row("mass_value", "3D質量", mass_value, _format_kg(mass_value)),
+        _make_display_row("weight_value", "3D重量", weight_value, _format_weight_as_kg(weight_value)),
         _make_row("volume_value", "3D体積", canonical_attributes.get("volume_value")),
         _make_row("material_probe_status", "3D材質取得状態", canonical_attributes.get("material_probe_status") or raw_extract.get("material_probe_status")),
         _make_row("part_material_candidate_count", "部品材質候補数", canonical_attributes.get("part_material_candidate_count")),

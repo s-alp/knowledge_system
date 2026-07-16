@@ -741,6 +741,22 @@ def _looks_like_weight_text(value: str | None) -> bool:
     return bool(re.search(r"(KG|ＫＧ|G|Ｇ)$", normalized) and re.search(r"\d", normalized))
 
 
+def _normalize_weight_to_kg_text(value: str | None) -> str | None:
+    if not value:
+        return None
+    normalized = unicodedata.normalize("NFKC", value).replace(",", "").strip()
+    match = re.search(r"([-+]?\d+(?:\.\d+)?)\s*(kg|g|t)\b", normalized, re.IGNORECASE)
+    if not match:
+        return value.strip()
+    number = float(match.group(1))
+    unit = match.group(2).lower()
+    if unit == "g":
+        number = number / 1000
+    elif unit == "t":
+        number = number * 1000
+    return f"{number:.2f} kg"
+
+
 def _classify_material_value(value: str | None, *, allow_unknown: bool = True) -> dict[str, str | None]:
     normalized = _material_lookup_key(value)
     if not normalized:
@@ -1117,6 +1133,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
         title_fields = canonical["title_block_fields"]
+        if title_fields.get("weight"):
+            title_fields["weight"] = _normalize_weight_to_kg_text(title_fields["weight"])
         for source_key, canonical_key in {
             "drawing_number": "drawing_number",
             "drawing_name": "drawing_name",

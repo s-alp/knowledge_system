@@ -227,8 +227,8 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
 
     canonical = normalize_raw_extract(payload)
 
-    assert canonical["title_block_fields"]["weight"] == "0.4932kg"
-    assert canonical["weight_value"] == "0.4932kg"
+    assert canonical["title_block_fields"]["weight"] == "0.49 kg"
+    assert canonical["weight_value"] == "0.49 kg"
     assert canonical["title_block_fields"]["drawing_number"] == "P-100"
     assert "material" not in canonical["title_block_fields"]
     assert "coating_instruction" not in canonical["title_block_fields"]
