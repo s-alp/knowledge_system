@@ -11,6 +11,9 @@ namespace IcadExtraction.Runner
 {
     public static class Program
     {
+        private const int WindowsFilenameLimit = 255;
+        private const int WindowsLegacyPathLimit = 259;
+
         public static int Main(string[] args)
         {
             try
@@ -61,6 +64,7 @@ namespace IcadExtraction.Runner
         private static int RunExtract(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
+            ValidateIcadInputPathForSxNet(inputPath);
             var sourceKind = RequireOption(command, "source-kind");
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
@@ -161,6 +165,7 @@ namespace IcadExtraction.Runner
         private static int RunDetect(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
+            ValidateIcadInputPathForSxNet(inputPath);
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
@@ -199,6 +204,7 @@ namespace IcadExtraction.Runner
         private static int RunProbe2DPrint(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
+            ValidateIcadInputPathForSxNet(inputPath);
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
@@ -244,6 +250,26 @@ namespace IcadExtraction.Runner
                 FileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath),
                 Extension = Path.GetExtension(inputPath),
             };
+        }
+
+        private static void ValidateIcadInputPathForSxNet(string inputPath)
+        {
+            var fileName = Path.GetFileName(inputPath);
+            if (fileName.Length > WindowsFilenameLimit)
+            {
+                throw new ArgumentException(
+                    $"ICADファイル名が長すぎます。SXNETへ渡すファイル名は{WindowsFilenameLimit}文字以下にしてください。" +
+                    $"現在の文字数: {fileName.Length}"
+                );
+            }
+
+            if (inputPath.Length > WindowsLegacyPathLimit)
+            {
+                throw new ArgumentException(
+                    $"ICADファイルのパスが長すぎます。SXNETへ渡すパスは{WindowsLegacyPathLimit}文字以下にしてください。" +
+                    $"現在の文字数: {inputPath.Length}。SXNETで開く前に中断しています。短い作業フォルダへコピーして再登録してください。"
+                );
+            }
         }
 
         private static PreviewAssetOptions BuildPreviewAssetOptions(CliCommand command)

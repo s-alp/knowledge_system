@@ -240,6 +240,8 @@ def _reextract_condition_for_error(error_message: str) -> str:
     normalized = (error_message or "").lower()
     if not normalized:
         return "失敗理由が記録されていません。workerログとICAD起動状態を確認してください。"
+    if "パスが長すぎます" in error_message or "ファイル名が長すぎます" in error_message:
+        return "SXNETのパス長制限に当たっています。短い作業フォルダへICADをコピーするか、短いファイル名へ変更して再登録します。"
     if "timed out" in normalized or "timeout" in normalized:
         return "ICAD起動待ちまたは抽出時間が不足しています。ICAD起動状態とタイムアウト秒数を確認して再抽出します。"
     if "not drawing file" in normalized or "図面ファイル" in error_message:

@@ -246,6 +246,29 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
 
 
 @pytest.mark.django_db
+def test_handoff_summary_api_explains_path_length_failure(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="too-long-path.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        error_message="ICADファイルのパスが長すぎます。SXNETへ渡すパスは259文字以下にしてください。",
+    )
+
+    response = APIClient().get("/api/v1/drawing-metadata/handoff-summary")
+
+    assert response.status_code == 200
+    reextract_condition = response.json()["recentFailedJobs"][0]["reextractCondition"]
+    assert "パス長制限" in reextract_condition
+    assert "短い作業フォルダ" in reextract_condition
+
+
+@pytest.mark.django_db
 def test_handoff_and_registration_list_follow_manifest_scope(settings, tmp_path, sample_registration_payload):
     included = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
