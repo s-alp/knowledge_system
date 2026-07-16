@@ -81,5 +81,30 @@ namespace IcadExtraction.Runner.Tests
                 File.Delete(tempPath);
             }
         }
+
+        [Fact]
+        public void SxNetInputFileLease_ReportsTooLongStagedPathBeforeOpeningSxNet()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");
+            var originalTemporaryRoot = Environment.GetEnvironmentVariable(SxNetInputFileLease.TemporaryRootEnvironmentVariable);
+            File.WriteAllText(tempPath, "dummy");
+            try
+            {
+                var tooLongTemporaryRoot = Path.Combine(Path.GetTempPath(), new string('a', 240));
+                Environment.SetEnvironmentVariable(SxNetInputFileLease.TemporaryRootEnvironmentVariable, tooLongTemporaryRoot);
+
+                var exception = Assert.Throws<InvalidOperationException>(
+                    () => SxNetInputFileLease.Create(tempPath, forceTemporaryCopy: true)
+                );
+
+                Assert.Contains("SXNETへ渡すICADパスが長すぎます", exception.Message);
+                Assert.Contains(SxNetInputFileLease.TemporaryRootEnvironmentVariable, exception.Message);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable(SxNetInputFileLease.TemporaryRootEnvironmentVariable, originalTemporaryRoot);
+                File.Delete(tempPath);
+            }
+        }
     }
 }

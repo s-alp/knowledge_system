@@ -7,6 +7,7 @@ namespace IcadExtraction.Runner
 {
     public sealed class SxNetInputFileLease : IDisposable
     {
+        public const string TemporaryRootEnvironmentVariable = "ICAD_SXNET_TEMP_ROOT";
         public const int WindowsFilenameLimit = 255;
         public const int WindowsLegacyPathLimit = 259;
 
@@ -62,12 +63,14 @@ namespace IcadExtraction.Runner
 
             if (!RequiresAlternatePathForSxNet(originalPath))
             {
+                EnsureSxNetInputPathIsUsable(originalPath, originalPath);
                 return new SxNetInputFileLease(originalPath, originalPath, "original", null, null, null);
             }
 
             var shortPath = TryGetWindowsShortPath(originalPath);
             if (shortPath != null && !RequiresAlternatePathForSxNet(shortPath))
             {
+                EnsureSxNetInputPathIsUsable(shortPath, originalPath);
                 return new SxNetInputFileLease(
                     originalPath,
                     shortPath,
@@ -149,10 +152,11 @@ namespace IcadExtraction.Runner
             string warningMessage
         )
         {
-            var temporaryDirectory = Path.Combine(Path.GetTempPath(), "icad-sxnet", Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(temporaryDirectory);
+            var temporaryDirectory = Path.Combine(ResolveTemporaryRoot(), Guid.NewGuid().ToString("N"));
             var extension = Path.GetExtension(originalPath);
             var stagedPath = Path.Combine(temporaryDirectory, string.IsNullOrWhiteSpace(extension) ? "input.icd" : "input" + extension);
+            EnsureSxNetInputPathIsUsable(stagedPath, originalPath);
+            Directory.CreateDirectory(temporaryDirectory);
             File.Copy(ToExtendedWindowsPath(originalPath), stagedPath, overwrite: false);
 
             return new SxNetInputFileLease(
@@ -163,6 +167,38 @@ namespace IcadExtraction.Runner
                 "sxnet_input_path_staged",
                 warningMessage
             );
+        }
+
+        private static string ResolveTemporaryRoot()
+        {
+            var configuredRoot = Environment.GetEnvironmentVariable(TemporaryRootEnvironmentVariable);
+            if (!string.IsNullOrWhiteSpace(configuredRoot))
+            {
+                return Path.GetFullPath(configuredRoot);
+            }
+
+            return Path.Combine(Path.GetTempPath(), "icad-sxnet");
+        }
+
+        private static void EnsureSxNetInputPathIsUsable(string sxNetInputPath, string originalPath)
+        {
+            var fileName = Path.GetFileName(sxNetInputPath);
+            if (fileName.Length > WindowsFilenameLimit)
+            {
+                throw new InvalidOperationException(
+                    $"SXNETへ渡すICADファイル名が長すぎます。上限={WindowsFilenameLimit}文字、"
+                    + $"現在={fileName.Length}文字、SXNET入力={sxNetInputPath}、原本={originalPath}。"
+                );
+            }
+
+            if (sxNetInputPath.Length > WindowsLegacyPathLimit)
+            {
+                throw new InvalidOperationException(
+                    $"SXNETへ渡すICADパスが長すぎます。上限={WindowsLegacyPathLimit}文字、"
+                    + $"現在={sxNetInputPath.Length}文字、SXNET入力={sxNetInputPath}、原本={originalPath}。"
+                    + $"{TemporaryRootEnvironmentVariable} に短い作業フォルダを指定してください。"
+                );
+            }
         }
 
         private static string ToExtendedWindowsPath(string path)
