@@ -22,7 +22,7 @@ DEFAULT_LLM_PROBE = (
     / "output"
     / "live_extracts"
     / "title_block_llm_probe_2026-07-14"
-    / "gemini_probe_after_parse_fallback_2026-07-15.json"
+    / "gemini_probe_current_normalization_2026-07-17.json"
 )
 BACKEND_DIR = ROOT / "backend"
 BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
@@ -40,7 +40,9 @@ STALE_DOC_PATTERNS = [
     for pattern in (
         r"API_KEY_INVALID",
         r"採用率未確認",
-        r"classification positive recall\s*\|\s*1\.0000",
+        r"gemini_probe_after_parse_fallback_2026-07-15",
+        r"positive recall\s*0\.5000",
+        r"classification positive recall\s*\|\s*0\.5000",
         r"2026-07-16に共有抽出から10ファイル",
         r"創屋連携データ確認",
         r"ユーザー画面には表示しません",

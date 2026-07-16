@@ -155,7 +155,9 @@ def main() -> int:
             "probe_errors"
             if gemini_errors and not args.allow_gemini_errors
             else "unsafe"
-            if guardrail_false_positives or accepted_wrong_fields
+            if guardrail_false_positives or accepted_wrong_fields or classification_false_positives or classification_wrong_fields
+            else "incomplete_classification"
+            if classification_missed_positives
             else "measured_safe_uplift"
             if accepted_uplift_count
             else "safe_but_no_accepted_uplift"
@@ -167,7 +169,15 @@ def main() -> int:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(text + "\n", encoding="utf-8")
     print(text)
-    return 1 if (gemini_errors and not args.allow_gemini_errors) or guardrail_false_positives or accepted_wrong_fields else 0
+    has_blocking_issue = (
+        (gemini_errors and not args.allow_gemini_errors)
+        or guardrail_false_positives
+        or accepted_wrong_fields
+        or classification_false_positives
+        or classification_wrong_fields
+        or classification_missed_positives
+    )
+    return 1 if has_blocking_issue else 0
 
 
 if __name__ == "__main__":

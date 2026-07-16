@@ -212,7 +212,7 @@
 | 2D/3D属性照合 | 基本形実装済み | `reconciledAttributes` に一致、片側のみ、統合、手動上書き、競合、採用値、理由を保持。詳細画面にもレビュー行を表示 |
 | 2D形状・記号属性 | 実装済み | 表面粗さ記号数/値、断面・切断表現数、長穴/楕円候補数、穴/円候補数、候補径を canonical attributes と詳細画面へ表示 |
 | 3D部品材質候補 | 実装済み | `SxInfPartTree.entpart` から `SxEntPart.getInfMaterialList()` を呼び、部品別材質は高信頼候補として保持。単一パーツ/単一全体材質とパーツ付加情報は補助候補として保持 |
-| Gemini図枠分類補助 | 実装済み | 2D抽出ジョブで `title_block_candidates` を低温度JSON分類し、`title_block_llm_classifications` と候補行の `llm_*` に保持。APIキー未設定時はスキップ、API失敗時は warning に記録。実API評価は `gemini_probe_after_parse_fallback_2026-07-15.json` と評価JSONで確認済み。classification precision 1.0000、positive recall 0.5000、guardrail safety 1.0000、accepted uplift 0 |
+| Gemini図枠分類補助 | 実装済み | 2D抽出ジョブで `title_block_candidates` を低温度JSON分類し、`title_block_llm_classifications` と候補行の `llm_*` に保持。APIキー未設定時はスキップ、API失敗時は warning に記録。現行正規化後の実API評価は `gemini_probe_current_normalization_2026-07-17.json` で確認済み。classification precision 1.0000、positive recall 1.0000、誤分類0、誤採用0、accepted uplift 0 |
 | 図枠欄名断片の誤採用抑止 | 実装済み | `製図者` など欄名だけの文字から `者` を値として採用しない。候補行は残し、採用値からは除外 |
 | 2D訂正内容候補 | 実装済み | `訂正内容`, `改訂内容`, `変更`, `修正`, `REV` 系の文字を `revision_note_candidates` に保持。詳細画面にも根拠文字、座標、印刷枠内外を表示 |
 

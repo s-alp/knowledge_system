@@ -1,0 +1,212 @@
+{
+  "root": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14",
+  "json_file_count": 69,
+  "candidate_file_count": 7,
+  "candidate_sample_count": 5,
+  "selected_file_count": 5,
+  "classified": true,
+  "runtime": {
+    "llmProvider": "gemini",
+    "geminiApiKeyConfigured": true,
+    "geminiModel": "gemini-flash-latest",
+    "geminiFallbackModels": [
+      "gemini-3.1-flash-lite",
+      "gemini-3.5-flash"
+    ],
+    "geminiTemperature": 0.0,
+    "purpose": "title_block_candidate_field_classification_only"
+  },
+  "files": [
+    {
+      "file": "TR1D9K99027_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\TR1D9K99027_2d.json",
+      "candidate_count": 10,
+      "llm_candidate_count": 0,
+      "skipped_replacement_character_count": 0,
+      "skipped_unusable_value_count": 10,
+      "selected_fields": {},
+      "candidate_preview": [],
+      "gemini": {
+        "classifications": [],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": []
+      }
+    },
+    {
+      "file": "U8105111315_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\U8105111315_2d.json",
+      "candidate_count": 9,
+      "llm_candidate_count": 0,
+      "skipped_replacement_character_count": 0,
+      "skipped_unusable_value_count": 9,
+      "selected_fields": {},
+      "candidate_preview": [],
+      "gemini": {
+        "classifications": [],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": []
+      }
+    },
+    {
+      "file": "03_20K03379P00_shoot_base_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\03_20K03379P00_shoot_base_2d.json",
+      "candidate_count": 3,
+      "llm_candidate_count": 3,
+      "skipped_replacement_character_count": 0,
+      "skipped_unusable_value_count": 0,
+      "selected_fields": {
+        "coating_instruction": "ﾊ仕様書ﾆﾖﾙ"
+      },
+      "candidate_preview": [
+        {
+          "field": "coating_instruction",
+          "value": "ﾊ仕様書ﾆﾖﾙ",
+          "confidence": "medium",
+          "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "coating_instruction",
+          "value": "色ﾊ仕様書ﾆﾖﾙ",
+          "confidence": "medium",
+          "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        },
+        {
+          "field": "coating_instruction",
+          "value": "手摺部:Y22-80X(黄",
+          "confidence": "medium",
+          "evidence_text": "塗装色 手摺部:Y22-80X(黄)",
+          "view_name": null,
+          "layer_no": null,
+          "inside_print_area": null
+        }
+      ],
+      "gemini": {
+        "classifications": [
+          {
+            "index": 0,
+            "field": "coating_instruction",
+            "confidence": "high",
+            "reason": "Value specifies coating according to specifications.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 1,
+            "field": "coating_instruction",
+            "confidence": "high",
+            "reason": "Value specifies coating color according to specifications.",
+            "source": "gemini_title_block_classifier"
+          },
+          {
+            "index": 2,
+            "field": "coating_instruction",
+            "confidence": "high",
+            "reason": "Value specifies a specific color code for a component.",
+            "source": "gemini_title_block_classifier"
+          }
+        ],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {
+          "coating_instruction": "ﾊ仕様書ﾆﾖﾙ"
+        },
+        "candidates_after_llm": [
+          {
+            "field": "coating_instruction",
+            "label": "塗装指示",
+            "value": "ﾊ仕様書ﾆﾖﾙ",
+            "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+            "confidence": "medium",
+            "view_name": null,
+            "layer_no": null,
+            "position_x": null,
+            "position_y": null,
+            "inside_print_area": null,
+            "source": "2d_text",
+            "llm_field": "coating_instruction",
+            "llm_confidence": "high",
+            "llm_reason": "Value specifies coating according to specifications.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "coating_instruction",
+            "label": "塗装指示",
+            "value": "色ﾊ仕様書ﾆﾖﾙ",
+            "evidence_text": "塗装色ﾊ仕様書ﾆﾖﾙ",
+            "confidence": "medium",
+            "view_name": null,
+            "layer_no": null,
+            "position_x": null,
+            "position_y": null,
+            "inside_print_area": null,
+            "source": "2d_text",
+            "llm_field": "coating_instruction",
+            "llm_confidence": "high",
+            "llm_reason": "Value specifies coating color according to specifications.",
+            "llm_source": "gemini_title_block_classifier"
+          },
+          {
+            "field": "coating_instruction",
+            "label": "塗装指示",
+            "value": "手摺部:Y22-80X(黄",
+            "evidence_text": "塗装色 手摺部:Y22-80X(黄)",
+            "confidence": "medium",
+            "view_name": null,
+            "layer_no": null,
+            "position_x": null,
+            "position_y": null,
+            "inside_print_area": null,
+            "source": "2d_text",
+            "llm_field": "coating_instruction",
+            "llm_confidence": "high",
+            "llm_reason": "Value specifies a specific color code for a component.",
+            "llm_source": "gemini_title_block_classifier"
+          }
+        ]
+      }
+    },
+    {
+      "file": "DFR-CM1-AA0305300011_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\DFR-CM1-AA0305300011_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 0,
+      "skipped_replacement_character_count": 0,
+      "skipped_unusable_value_count": 2,
+      "selected_fields": {},
+      "candidate_preview": [],
+      "gemini": {
+        "classifications": [],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": []
+      }
+    },
+    {
+      "file": "M26A07720_2d.json",
+      "path": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\M26A07720_2d.json",
+      "candidate_count": 2,
+      "llm_candidate_count": 0,
+      "skipped_replacement_character_count": 0,
+      "skipped_unusable_value_count": 2,
+      "selected_fields": {},
+      "candidate_preview": [],
+      "gemini": {
+        "classifications": [],
+        "accepted_count": 0,
+        "accepted": [],
+        "fields_after_llm": {},
+        "candidates_after_llm": []
+      }
+    }
+  ]
+}

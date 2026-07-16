@@ -13,7 +13,7 @@
 - [x] 質量・重量をkg、小数点以下2桁で表示
 - [x] 低価値の形状・存在フラグタグを除外し、DB監査で禁止タグ0件・取得元欠落0件を確認
 - [x] タグJSONに `source` / `evidence` / `confidence` / `reason` を必須化。既存82 snapshotを再正規化し、DB監査で禁止タグ0件、source/evidence/confidence/reason欠落0件を確認。全共有39件fixture検証にもタグ根拠必須チェックを追加し、issue 0件を確認
-- [x] Gemini実APIを17ファイル・60候補で評価し、分類precision/recall 1.0、誤採用0を確認
+- [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
 - [x] Geminiの追加採用値0件を明記し、任意補助から正本へ格上げしない
 - [x] Django 71件、フロント58件、C# 14件、system check、migration差分、本番ビルドを確認
 - [x] Chromeで詳細・編集・根拠・図面紐づけ候補38件を確認し、ブラウザエラー0件。APIの図面候補は固定manifest対象39件、紐づけ画面では現在詳細中の図面を候補から除外。検証アップロードや重複登録は固定manifest対象外として分離
