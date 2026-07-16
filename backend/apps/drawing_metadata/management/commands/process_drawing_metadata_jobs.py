@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from apps.drawing_metadata.tasks.extraction_tasks import claim_next_job, process_job
+from apps.drawing_metadata.services.worker_status import write_worker_heartbeat
 
 
 class Command(BaseCommand):
@@ -29,20 +30,29 @@ class Command(BaseCommand):
 
         worker_name = options["worker_name"]
         mode = options["mode"]
+        write_worker_heartbeat(worker_name=worker_name, mode=mode, state="starting")
 
         if options["once"]:
+            write_worker_heartbeat(worker_name=worker_name, mode=mode, state="claiming")
             job = claim_next_job(worker_name=worker_name, mode=mode)
             if not job:
+                write_worker_heartbeat(worker_name=worker_name, mode=mode, state="idle")
                 self.stdout.write("queued job is not found")
                 return
+            write_worker_heartbeat(worker_name=worker_name, mode=mode, state="processing", job_id=str(job.id))
             process_job(job.id)
+            write_worker_heartbeat(worker_name=worker_name, mode=mode, state="idle")
             self.stdout.write(f"processed {job.id}")
             return
 
         while True:
+            write_worker_heartbeat(worker_name=worker_name, mode=mode, state="claiming")
             job = claim_next_job(worker_name=worker_name, mode=mode)
             if job:
+                write_worker_heartbeat(worker_name=worker_name, mode=mode, state="processing", job_id=str(job.id))
                 process_job(job.id)
+                write_worker_heartbeat(worker_name=worker_name, mode=mode, state="idle")
                 self.stdout.write(f"processed {job.id}")
                 continue
+            write_worker_heartbeat(worker_name=worker_name, mode=mode, state="idle")
             time.sleep(options["sleep_seconds"])

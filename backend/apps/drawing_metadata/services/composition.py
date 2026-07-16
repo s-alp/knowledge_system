@@ -67,6 +67,16 @@ def _merge_unique(items: Iterable) -> list:
     return merged
 
 
+def _normalize_manual_tag(tag: dict) -> dict:
+    normalized = deepcopy(tag)
+    normalized.setdefault("source", "manual_override")
+    normalized.setdefault("evidence", "drawingMetadata.snapshot.derivedTags")
+    normalized.setdefault("confidence", "high")
+    normalized.setdefault("reason", "利用者が手動で追加したタグのため採用しています。")
+    normalized.setdefault("manual_flag", True)
+    return normalized
+
+
 def _as_list(value) -> list:
     if isinstance(value, list):
         return value
@@ -341,7 +351,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     for snapshot in snapshots.values():
         for tag in snapshot.derived_tags_json or []:
             if tag.get("manual_flag"):
-                manual_tags.append(tag)
+                manual_tags.append(_normalize_manual_tag(tag))
     composed_tags = _merge_unique(manual_tags + build_derived_tags(composed_canonical, excluded_sources=conflicted_keys))
 
     return {

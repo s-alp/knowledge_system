@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   applyDrawingMetadataReview,
   enqueueDrawingMetadataExtraction,
+  getDrawingMetadataJob,
   uploadIcadDrawingMetadata,
   type DrawingMetadataRegistrationResponse,
 } from "../../shared/api/client";
@@ -52,6 +53,7 @@ const registration: DrawingMetadataRegistrationResponse = {
   sourcePath: "C:\\tmp\\sample.icd",
   sourceFormat: "icad",
   snapshotsByMode: {},
+  latestJobsByMode: {},
   viewerBootstrap: {
     drawingId: "drawing-1",
     title: "sample.icd",
@@ -90,6 +92,42 @@ describe("IcadExtractionReviewPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "2D/3Dを抽出" }));
     await waitFor(() => expect(enqueueDrawingMetadataExtraction).toHaveBeenCalled());
+  });
+
+  it("restores the latest queued job after registration reload and prevents duplicate extraction", async () => {
+    vi.mocked(getDrawingMetadataJob).mockResolvedValue({
+      jobId: "job-existing-3d",
+      drawingId: "drawing-1",
+      extractionMode: "3d",
+      status: "queued",
+      extractionProfile: "3d_model_part_attributes",
+      extractionOptions: {},
+      errorMessage: "",
+    });
+    vi.mocked(uploadIcadDrawingMetadata).mockResolvedValue({
+      ...registration,
+      latestJobsByMode: {
+        "3d": {
+          jobId: "job-existing-3d",
+          drawingId: "drawing-1",
+          extractionMode: "3d",
+          status: "queued",
+          extractionProfile: "3d_model_part_attributes",
+          extractionOptions: {},
+          errorMessage: "",
+        },
+      },
+    });
+    const file = new File(["icad"], "sample.icd", { type: "application/octet-stream" });
+
+    render(<IcadExtractionReviewPage file={file} onBack={vi.fn()} />);
+
+    expect(await screen.findByText("job-existing-3d")).toBeInTheDocument();
+    expect(screen.getByText("待機中")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "2D/3Dを抽出" })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole("button", { name: "3D条件で再抽出" }));
+    expect(enqueueDrawingMetadataExtraction).not.toHaveBeenCalled();
   });
 
   it("confirms an extracted candidate from the dedicated review screen", async () => {

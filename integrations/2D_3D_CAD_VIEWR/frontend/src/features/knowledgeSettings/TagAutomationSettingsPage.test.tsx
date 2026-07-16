@@ -59,6 +59,38 @@ const settings: TagAutomationSettingsResponse = {
 };
 
 const handoffSummary: HandoffSummaryResponse = {
+  workerStatus: {
+    schemaVersion: "drawing_metadata_worker_heartbeat.v1",
+    status: "running",
+    label: "稼働中",
+    message: "抽出workerは起動済みで、次のジョブを待機しています。",
+    workerName: "codex-local-worker",
+    mode: "all",
+    state: "idle",
+    jobId: "",
+    updatedAt: "2026-07-16T00:00:00Z",
+    ageSeconds: 2,
+    staleAfterSeconds: 30,
+  },
+  jobStatusCounts: {
+    queued: 1,
+    processing: 0,
+    succeeded: 10,
+    failed: 1,
+  },
+  recentFailedJobs: [
+    {
+      jobId: "job-failed-1",
+      drawingId: "drawing-1",
+      filename: "sample.icd",
+      extractionMode: "3d",
+      status: "failed",
+      workerName: "codex-local-worker",
+      errorMessage: "sxnet.SxException: 指定したファイルは図面ファイルではありません。",
+      reextractCondition: "ICAD/SXNETが図面ファイルとして開けていません。ファイル種別、パス、アクセス権、ICAD対応版を確認して再抽出します。",
+      updatedAt: "2026-07-16T00:00:00Z",
+    },
+  ],
   scope: {
     mode: "manifest",
     manifestPath: "C:\\manifest\\shared.json",
@@ -128,6 +160,9 @@ describe("TagAutomationSettingsPage", () => {
         sourceFormat: "icad",
         snapshotModes: ["2d", "3d"],
         latestJobStatusByMode: { "2d": "succeeded", "3d": "queued" },
+        latestJobIdByMode: { "2d": "job-2d", "3d": "job-3d" },
+        latestJobErrorByMode: { "2d": "", "3d": "sxnet.SxException: 指定したファイルは図面ファイルではありません。" },
+        latestJobUpdatedAtByMode: { "2d": "2026-07-16T00:00:00Z", "3d": "2026-07-16T00:00:00Z" },
         createdAt: "2026-07-16T00:00:00Z",
         updatedAt: "2026-07-16T00:00:00Z",
       },
@@ -145,9 +180,14 @@ describe("TagAutomationSettingsPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /ICAD抽出管理/ }));
     expect(screen.getByRole("heading", { name: "ICAD抽出管理" })).toBeInTheDocument();
-    expect(await screen.findByText("sample.icd")).toBeInTheDocument();
+    expect(getDrawingMetadataRegistrations).toHaveBeenCalledWith({ includeAll: true });
+    expect((await screen.findAllByText("sample.icd")).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText("2D / 3D")).toBeInTheDocument();
     expect(screen.getByText("待機中")).toBeInTheDocument();
+    expect(screen.getByText("稼働中")).toBeInTheDocument();
+    expect(screen.getAllByText("codex-local-worker").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("1 / 0 / 10 / 1")).toBeInTheDocument();
+    expect(screen.getByText(/図面ファイルとして開けていません/)).toBeInTheDocument();
     expect(screen.getByText("対象範囲: 固定manifest 39件 / 全登録 68件")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /API仕様・引継ぎ資料/ }));

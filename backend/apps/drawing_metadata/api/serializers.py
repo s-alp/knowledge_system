@@ -129,6 +129,9 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
     sourceFormat = serializers.CharField(source="source_format")
     snapshotModes = serializers.SerializerMethodField()
     latestJobStatusByMode = serializers.SerializerMethodField()
+    latestJobIdByMode = serializers.SerializerMethodField()
+    latestJobErrorByMode = serializers.SerializerMethodField()
+    latestJobUpdatedAtByMode = serializers.SerializerMethodField()
     createdAt = serializers.DateTimeField(source="created_at")
     updatedAt = serializers.DateTimeField(source="updated_at")
 
@@ -142,6 +145,9 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
             "sourceFormat",
             "snapshotModes",
             "latestJobStatusByMode",
+            "latestJobIdByMode",
+            "latestJobErrorByMode",
+            "latestJobUpdatedAtByMode",
             "createdAt",
             "updatedAt",
         )
@@ -150,12 +156,35 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
         return sorted(snapshot.extraction_mode for snapshot in obj.snapshots.all())
 
     def get_latestJobStatusByMode(self, obj: RegisteredDrawing) -> dict[str, str | None]:
-        statuses: dict[str, str | None] = {}
+        return {
+            mode: job.status if job else None
+            for mode, job in self._latest_jobs_by_mode(obj).items()
+        }
+
+    def get_latestJobIdByMode(self, obj: RegisteredDrawing) -> dict[str, str | None]:
+        return {
+            mode: str(job.id) if job else None
+            for mode, job in self._latest_jobs_by_mode(obj).items()
+        }
+
+    def get_latestJobErrorByMode(self, obj: RegisteredDrawing) -> dict[str, str]:
+        return {
+            mode: job.error_message if job and job.status == DrawingMetadataExtractionJob.STATUS_FAILED else ""
+            for mode, job in self._latest_jobs_by_mode(obj).items()
+        }
+
+    def get_latestJobUpdatedAtByMode(self, obj: RegisteredDrawing) -> dict[str, str | None]:
+        return {
+            mode: job.updated_at.isoformat() if job else None
+            for mode, job in self._latest_jobs_by_mode(obj).items()
+        }
+
+    def _latest_jobs_by_mode(self, obj: RegisteredDrawing) -> dict[str, DrawingMetadataExtractionJob | None]:
+        latest_by_mode: dict[str, DrawingMetadataExtractionJob | None] = {"2d": None, "3d": None}
         prefetched_jobs = list(obj.jobs.all())
         for mode in ("2d", "3d"):
-            latest_job = next((job for job in prefetched_jobs if job.extraction_mode == mode), None)
-            statuses[mode] = latest_job.status if latest_job else None
-        return statuses
+            latest_by_mode[mode] = next((job for job in prefetched_jobs if job.extraction_mode == mode), None)
+        return latest_by_mode
 
 
 def _has_value(value) -> bool:
@@ -287,6 +316,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
     sourcePath = serializers.CharField(source="source_path")
     sourceFormat = serializers.CharField(source="source_format")
     snapshotsByMode = serializers.SerializerMethodField()
+    latestJobsByMode = serializers.SerializerMethodField()
     composedMetadata = serializers.SerializerMethodField()
     viewerBootstrap = serializers.SerializerMethodField()
     knowledgeSystemPayloadPreview = serializers.SerializerMethodField()
@@ -302,6 +332,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
             "sourcePath",
             "sourceFormat",
             "snapshotsByMode",
+            "latestJobsByMode",
             "composedMetadata",
             "viewerBootstrap",
             "knowledgeSystemPayloadPreview",
@@ -314,6 +345,13 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
         for snapshot in obj.snapshots.all():
             snapshots_by_mode[snapshot.extraction_mode] = SnapshotSerializer(snapshot).data
         return snapshots_by_mode
+
+    def get_latestJobsByMode(self, obj: RegisteredDrawing) -> dict[str, dict | None]:
+        latest_by_mode: dict[str, dict | None] = {"2d": None, "3d": None}
+        for job in obj.jobs.all():
+            if job.extraction_mode in latest_by_mode and latest_by_mode[job.extraction_mode] is None:
+                latest_by_mode[job.extraction_mode] = DrawingMetadataExtractionJobSerializer(job).data
+        return latest_by_mode
 
     def get_composedMetadata(self, obj: RegisteredDrawing) -> dict:
         return compose_drawing_metadata(obj)

@@ -37,6 +37,8 @@ def main() -> int:
         or str(tag.get("tag") or "").startswith(FORBIDDEN_PREFIXES)
     ]
     missing_source = [tag for tag in tags if not str(tag.get("source") or "").strip()]
+    missing_evidence = [tag for tag in tags if not str(tag.get("evidence") or "").strip()]
+    missing_confidence = [tag for tag in tags if str(tag.get("confidence") or "").strip() not in {"high", "medium", "low"}]
     missing_reason = [tag for tag in tags if not str(tag.get("reason") or "").strip()]
     result = {
         "snapshotCount": len(snapshots),
@@ -44,11 +46,13 @@ def main() -> int:
         "forbiddenTagCount": len(forbidden),
         "forbiddenTags": sorted(set(forbidden)),
         "missingSourceCount": len(missing_source),
+        "missingEvidenceCount": len(missing_evidence),
+        "missingConfidenceCount": len(missing_confidence),
         "missingReasonCount": len(missing_reason),
         "sourceCounts": dict(sorted(Counter(str(tag.get("source")) for tag in tags).items())),
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 1 if forbidden or missing_source or missing_reason else 0
+    return 1 if forbidden or missing_source or missing_evidence or missing_confidence or missing_reason else 0
 
 
 if __name__ == "__main__":

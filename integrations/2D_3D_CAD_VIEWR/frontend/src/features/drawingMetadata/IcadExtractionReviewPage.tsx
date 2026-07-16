@@ -105,6 +105,35 @@ function formatJobStatus(status: string) {
   }[status] ?? status;
 }
 
+function isActiveJob(job: DrawingMetadataJobResponse) {
+  return job.status === "queued" || job.status === "processing";
+}
+
+function collectLatestJobs(registration: DrawingMetadataRegistrationResponse | null): DrawingMetadataJobResponse[] {
+  if (!registration) {
+    return [];
+  }
+  return (["2d", "3d"] as DrawingMetadataExtractionMode[])
+    .map((mode) => registration.latestJobsByMode?.[mode] ?? registration.snapshotsByMode[mode]?.latestJob ?? null)
+    .filter((job): job is DrawingMetadataJobResponse => Boolean(job));
+}
+
+function mergeJobs(
+  currentJobs: DrawingMetadataJobResponse[],
+  incomingJobs: DrawingMetadataJobResponse[],
+): DrawingMetadataJobResponse[] {
+  const nextJobs = [...currentJobs];
+  for (const incomingJob of incomingJobs) {
+    const existingIndex = nextJobs.findIndex((job) => job.jobId === incomingJob.jobId);
+    if (existingIndex >= 0) {
+      nextJobs[existingIndex] = incomingJob;
+    } else {
+      nextJobs.unshift(incomingJob);
+    }
+  }
+  return nextJobs;
+}
+
 export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewPageProps) {
   const [registration, setRegistration] = useState<DrawingMetadataRegistrationResponse | null>(null);
   const [jobs, setJobs] = useState<DrawingMetadataJobResponse[]>([]);
@@ -150,6 +179,10 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
 
   const candidateTags = useMemo(() => collectCandidateTags(registration), [registration]);
   const activeSnapshot = registration?.snapshotsByMode[manualMode];
+  const activeJobs = useMemo(() => jobs.filter(isActiveJob), [jobs]);
+  const isRegisteringOrQueueing = phase === "uploading" || phase === "extracting";
+  const hasActiveJobForMode = (mode: DrawingMetadataExtractionMode) =>
+    activeJobs.some((job) => job.extractionMode === mode);
   const activeTagValues = useMemo(
     () => (activeSnapshot?.derivedTags ?? [])
       .map((item) => typeof item === "object" && item !== null && "tag" in item ? String((item as { tag: unknown }).tag) : "")
@@ -165,8 +198,16 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
     ));
     setManualTags(activeTagValues.join("、"));
   }, [activeSnapshot, activeTagValues, manualMode]);
+
+  useEffect(() => {
+    const latestJobs = collectLatestJobs(registration);
+    if (latestJobs.length) {
+      setJobs((currentJobs) => mergeJobs(currentJobs, latestJobs));
+    }
+  }, [registration]);
+
   const activeJobIds = jobs
-    .filter((job) => job.status === "queued" || job.status === "processing")
+    .filter(isActiveJob)
     .map((job) => job.jobId)
     .join(",");
 
@@ -181,13 +222,19 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
         if (cancelled) {
           return;
         }
-        setJobs(nextJobs);
-        if (!nextJobs.some((job) => job.status === "queued" || job.status === "processing")) {
+        setJobs((currentJobs) => mergeJobs(currentJobs, nextJobs));
+        if (!nextJobs.some(isActiveJob)) {
           const nextRegistration = await getDrawingMetadataRegistration(registration.drawingId);
           if (!cancelled) {
+            const failedJob = nextJobs.find((job) => job.status === "failed");
             setRegistration(nextRegistration);
             setPhase("ready");
-            setMessage("抽出が完了しました。候補内容を確認してください。");
+            if (failedJob) {
+              setMessage("抽出が失敗しました。エラー内容を確認して条件を変えて再抽出してください。");
+              setError(failedJob.errorMessage || "抽出ジョブが失敗しました。");
+            } else {
+              setMessage("抽出が完了しました。候補内容を確認してください。");
+            }
           }
         }
       } catch (nextError) {
@@ -217,13 +264,17 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
       setError("ICADファイルの登録後に抽出できます。");
       return;
     }
+    if (phase === "extracting" || hasActiveJobForMode(mode)) {
+      setError(`${mode.toUpperCase()} 抽出ジョブはすでに起票済みです。現在の状態を確認してください。`);
+      return;
+    }
 
     setPhase("extracting");
     setError(null);
     setMessage(`${mode.toUpperCase()} 抽出ジョブを起票しています。`);
     try {
       const job = await enqueueDrawingMetadataExtraction(registration.drawingId, mode, profile, options);
-      setJobs((current) => [job, ...current]);
+      setJobs((currentJobs) => mergeJobs(currentJobs, [job]));
       await refreshRegistration();
       setPhase("ready");
       setMessage(`${mode.toUpperCase()} 抽出ジョブを起票しました。`);
@@ -329,6 +380,10 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
             <span>状態</span>
             <p>{message || phase}</p>
           </div>
+          <div className="production-detail-field">
+            <span>更新後の確認先</span>
+            <p>この画面のジョブ履歴 / システム設定のICAD抽出管理</p>
+          </div>
         </div>
         {error ? <p className="error-text">{error}</p> : null}
       </section>
@@ -344,7 +399,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
           <button
             className="primary-button"
             type="button"
-            disabled={!registration || phase === "extracting" || phase === "uploading"}
+            disabled={!registration || isRegisteringOrQueueing || hasActiveJobForMode("2d") || hasActiveJobForMode("3d")}
             onClick={enqueueAllExtractions}
           >
             2D/3Dを抽出
@@ -372,7 +427,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                       <button
                         className="secondary-button"
                         type="button"
-                        disabled={!registration || phase === "extracting" || phase === "uploading"}
+                        disabled={!registration || isRegisteringOrQueueing || hasActiveJobForMode("3d")}
                         onClick={() => enqueueExtraction("3d", row.retryProfile, row.retryOptions)}
                       >
                         3D条件で再抽出
@@ -381,7 +436,11 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                       <button
                         className="secondary-button"
                         type="button"
-                        disabled={!registration || phase === "extracting" || phase === "uploading"}
+                        disabled={
+                          !registration ||
+                          isRegisteringOrQueueing ||
+                          hasActiveJobForMode(row.mode as DrawingMetadataExtractionMode)
+                        }
                         onClick={() =>
                           enqueueExtraction(row.mode as DrawingMetadataExtractionMode, row.retryProfile, row.retryOptions)
                         }
@@ -504,6 +563,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                 <th>対象</th>
                 <th>状態</th>
                 <th>条件</th>
+                <th>失敗理由</th>
               </tr>
             </thead>
             <tbody>
@@ -513,6 +573,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                   <td>{job.extractionMode.toUpperCase()}</td>
                   <td>{formatJobStatus(job.status)}</td>
                   <td>{job.extractionProfile}</td>
+                  <td>{job.errorMessage || "-"}</td>
                 </tr>
               ))}
             </tbody>

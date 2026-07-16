@@ -29,6 +29,7 @@ export interface DrawingMetadataRegistrationResponse {
   sourcePath: string;
   sourceFormat: string;
   snapshotsByMode: Partial<Record<DrawingMetadataExtractionMode, DrawingMetadataSnapshotResponse>>;
+  latestJobsByMode?: Partial<Record<DrawingMetadataExtractionMode, DrawingMetadataJobResponse | null>>;
   viewerBootstrap: DrawingBootstrapResponse;
 }
 
@@ -40,11 +41,39 @@ export interface DrawingMetadataRegistrationListItem {
   sourceFormat: string;
   snapshotModes: DrawingMetadataExtractionMode[];
   latestJobStatusByMode: Partial<Record<DrawingMetadataExtractionMode, string | null>>;
+  latestJobIdByMode: Partial<Record<DrawingMetadataExtractionMode, string | null>>;
+  latestJobErrorByMode: Partial<Record<DrawingMetadataExtractionMode, string>>;
+  latestJobUpdatedAtByMode: Partial<Record<DrawingMetadataExtractionMode, string | null>>;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface HandoffSummaryResponse {
+  workerStatus?: {
+    schemaVersion: string;
+    status: string;
+    label: string;
+    message: string;
+    workerName: string;
+    mode: string;
+    state: string;
+    jobId: string;
+    updatedAt: string;
+    ageSeconds: number | null;
+    staleAfterSeconds: number;
+  };
+  jobStatusCounts?: Record<string, number>;
+  recentFailedJobs?: Array<{
+    jobId: string;
+    drawingId: string;
+    filename: string;
+    extractionMode: DrawingMetadataExtractionMode;
+    status: string;
+    workerName: string;
+    errorMessage: string;
+    reextractCondition: string;
+    updatedAt: string;
+  }>;
   scope?: {
     mode: string;
     manifestPath: string;
@@ -277,8 +306,13 @@ export function getDrawingMetadataRegistration(drawingId: string): Promise<Drawi
   return requestJson<DrawingMetadataRegistrationResponse>(`/drawing-metadata/registrations/${drawingId}`);
 }
 
-export function getDrawingMetadataRegistrations(): Promise<DrawingMetadataRegistrationListItem[]> {
-  return requestJson<DrawingMetadataRegistrationListItem[]>("/drawing-metadata/registrations");
+export function getDrawingMetadataRegistrations(options: { includeAll?: boolean } = {}): Promise<DrawingMetadataRegistrationListItem[]> {
+  const search = new URLSearchParams();
+  if (options.includeAll) {
+    search.set("includeAll", "true");
+  }
+  const suffix = search.size ? `?${search.toString()}` : "";
+  return requestJson<DrawingMetadataRegistrationListItem[]>(`/drawing-metadata/registrations${suffix}`);
 }
 
 export function getKnowledgeEntities(

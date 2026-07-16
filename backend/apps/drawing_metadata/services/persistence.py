@@ -153,6 +153,7 @@ def apply_manual_overrides(
                 {
                     "tag": tag_value,
                     "source": "manual_override",
+                    "evidence": "drawingMetadata.manualOverrides.derivedTags.added",
                     "confidence": "high",
                     "reason": reason or "利用者が手動で追加したタグのため採用しています。",
                     "manual_flag": True,

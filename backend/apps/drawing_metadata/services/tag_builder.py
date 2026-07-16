@@ -7,13 +7,14 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
     excluded_sources = excluded_sources or set()
     tags: list[dict] = []
 
-    def add_tag(tag: str, source: str, confidence: str = "high", reason: str = "") -> None:
+    def add_tag(tag: str, source: str, confidence: str = "high", reason: str = "", evidence: str = "") -> None:
         if any(item["tag"] == tag for item in tags):
             return
         tags.append(
             {
                 "tag": tag,
                 "source": source,
+                "evidence": evidence or _tag_evidence(source),
                 "confidence": confidence,
                 "reason": reason or _tag_reason(source),
                 "manual_flag": False,
@@ -53,6 +54,24 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
         if title_block_fields.get("unit_number"):
             add_tag(f"ユニット:{title_block_fields['unit_number']}", "title_block_fields.unit_number", confidence="medium")
     return tags
+
+
+def _tag_evidence(source: str) -> str:
+    evidence = {
+        "customer_name": "composedMetadata.canonicalAttributes.customer_name",
+        "project_name": "composedMetadata.canonicalAttributes.project_name",
+        "equipment_category": "composedMetadata.canonicalAttributes.equipment_category",
+        "maker_keywords": "composedMetadata.canonicalAttributes.maker_keywords",
+        "material_keywords": "composedMetadata.canonicalAttributes.material_keywords",
+        "unresolved_material_keywords": "composedMetadata.canonicalAttributes.unresolved_material_keywords",
+        "spec_tokens": "composedMetadata.canonicalAttributes.spec_tokens",
+        "title_block_fields.material": "composedMetadata.canonicalAttributes.title_block_fields.material",
+        "title_block_fields.surface_treatment": "composedMetadata.canonicalAttributes.title_block_fields.surface_treatment",
+        "title_block_fields.coating_instruction": "composedMetadata.canonicalAttributes.title_block_fields.coating_instruction",
+        "title_block_fields.prfx": "composedMetadata.canonicalAttributes.title_block_fields.prfx",
+        "title_block_fields.unit_number": "composedMetadata.canonicalAttributes.title_block_fields.unit_number",
+    }
+    return evidence.get(source, f"composedMetadata.canonicalAttributes.{source}")
 
 
 def _tag_reason(source: str) -> str:

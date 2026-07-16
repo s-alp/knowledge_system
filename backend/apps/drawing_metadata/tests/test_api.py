@@ -109,6 +109,13 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
         canonical_attributes_json={"material_keywords": ["SUS304"]},
         derived_tags_json=[],
     )
+    DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        worker_name="test-worker",
+        error_message="sxnet.SxException: 指定したファイルは図面ファイルではありません。",
+    )
 
     response = APIClient().get("/api/v1/drawing-metadata/handoff-summary")
 
@@ -120,6 +127,10 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
     assert any(row["path"] == "/api/v1/drawing-metadata/handoff-summary" for row in payload["apiRows"])
     assert payload["rows"][0]["filename"] == "handoff-api.icd"
     assert payload["rows"][0]["snapshotStateLabel"] == "3Dのみ抽出済み"
+    assert payload["workerStatus"]["status"] in {"missing", "running", "stale", "unreadable"}
+    assert payload["jobStatusCounts"]["failed"] == 1
+    assert payload["recentFailedJobs"][0]["filename"] == "handoff-api.icd"
+    assert "図面ファイルとして開けていません" in payload["recentFailedJobs"][0]["reextractCondition"]
 
 
 @pytest.mark.django_db
@@ -592,6 +603,40 @@ def test_detail_returns_snapshots_by_mode(sample_registration_payload):
     assert payload["snapshotsByMode"]["2d"]["extractionMode"] == "2d"
     assert payload["snapshotsByMode"]["3d"]["extractionMode"] == "3d"
     assert payload["composedMetadata"]["canonicalAttributes"]["equipment_category"] == "ガントリー"
+
+
+@pytest.mark.django_db
+def test_detail_returns_latest_jobs_by_mode_even_without_snapshots(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="failed-before-snapshot.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    two_d_job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        extraction_profile="2d_all_views_layers_print_frame",
+        error_message="sxnet.SxException: 指定したファイルは図面ファイルではありません。",
+    )
+    three_d_job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_QUEUED,
+        extraction_profile="3d_model_part_attributes",
+    )
+
+    response = APIClient().get(f"/api/v1/drawing-metadata/registrations/{drawing.id}")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["snapshotsByMode"] == {}
+    assert payload["latestJobsByMode"]["2d"]["jobId"] == str(two_d_job.id)
+    assert payload["latestJobsByMode"]["2d"]["status"] == "failed"
+    assert payload["latestJobsByMode"]["2d"]["errorMessage"] == "sxnet.SxException: 指定したファイルは図面ファイルではありません。"
+    assert payload["latestJobsByMode"]["3d"]["jobId"] == str(three_d_job.id)
+    assert payload["latestJobsByMode"]["3d"]["status"] == "queued"
 
 
 @pytest.mark.django_db

@@ -4,6 +4,7 @@ import uuid
 from pathlib import Path
 
 from django.conf import settings
+from django.db.models import Count
 from django.db.models import Prefetch
 from django.http import FileResponse, Http404
 from django.http import HttpResponse
@@ -29,6 +30,7 @@ from apps.drawing_metadata.services.icad_entities import build_icad_entity_catal
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
+from apps.drawing_metadata.services.worker_status import build_worker_status_payload
 from apps.drawing_metadata.services.viewer_preview import (
     build_2d_preview_svg,
     build_3d_preview_stl,
@@ -57,7 +59,9 @@ class RegistrationListApiView(APIView):
                         "drawing_id",
                         "extraction_mode",
                         "status",
+                        "error_message",
                         "created_at",
+                        "updated_at",
                     ),
                 ),
             )
@@ -224,6 +228,21 @@ class TagAutomationSettingsApiView(APIView):
         return Response(build_tag_automation_settings_payload())
 
 
+def _reextract_condition_for_error(error_message: str) -> str:
+    normalized = (error_message or "").lower()
+    if not normalized:
+        return "失敗理由が記録されていません。workerログとICAD起動状態を確認してください。"
+    if "timed out" in normalized or "timeout" in normalized:
+        return "ICAD起動待ちまたは抽出時間が不足しています。ICAD起動状態とタイムアウト秒数を確認して再抽出します。"
+    if "not drawing file" in normalized or "図面ファイル" in error_message:
+        return "ICAD/SXNETが図面ファイルとして開けていません。ファイル種別、パス、アクセス権、ICAD対応版を確認して再抽出します。"
+    if "sxexception" in normalized or "sxnet" in normalized:
+        return "SXNETでICADファイルを開けていません。ICADの起動状態、対象ファイル、起動済みダイアログを確認して再抽出します。"
+    if "file" in normalized and ("not found" in normalized or "could not find" in normalized):
+        return "元ICADファイルにアクセスできません。保存パスとネットワークドライブ接続を確認して再抽出します。"
+    return "失敗理由を確認し、対象ファイル・ICAD起動状態・抽出条件を修正して再抽出します。"
+
+
 class HandoffSummaryApiView(APIView):
     def get(self, request):
         queryset = (
@@ -249,7 +268,9 @@ class HandoffSummaryApiView(APIView):
                         "drawing_id",
                         "extraction_mode",
                         "status",
+                        "error_message",
                         "created_at",
+                        "updated_at",
                     ),
                 ),
             )
@@ -258,12 +279,33 @@ class HandoffSummaryApiView(APIView):
         total_count = queryset.count()
         scoped_queryset, scope = apply_active_drawing_scope(queryset)
         scoped_count = scoped_queryset.count()
-        payload = build_handoff_dashboard_payload(list(scoped_queryset))
+        scoped_drawings = list(scoped_queryset)
+        payload = build_handoff_dashboard_payload(scoped_drawings)
         payload["scope"] = build_scope_payload(
             scope=scope,
             total_registration_count=total_count,
             scoped_registration_count=scoped_count,
         )
+        all_jobs = DrawingMetadataExtractionJob.objects.select_related("drawing")
+        payload["workerStatus"] = build_worker_status_payload()
+        payload["jobStatusCounts"] = {
+            row["status"]: row["count"]
+            for row in all_jobs.values("status").annotate(count=Count("id")).order_by("status")
+        }
+        payload["recentFailedJobs"] = [
+            {
+                "jobId": str(job.id),
+                "drawingId": str(job.drawing_id),
+                "filename": job.drawing.filename,
+                "extractionMode": job.extraction_mode,
+                "status": job.status,
+                "workerName": job.worker_name,
+                "errorMessage": job.error_message,
+                "reextractCondition": _reextract_condition_for_error(job.error_message),
+                "updatedAt": job.updated_at.isoformat(),
+            }
+            for job in all_jobs.filter(status=DrawingMetadataExtractionJob.STATUS_FAILED).order_by("-updated_at")[:10]
+        ]
         return Response(payload)
 
 

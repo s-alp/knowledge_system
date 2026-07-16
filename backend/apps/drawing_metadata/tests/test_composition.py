@@ -71,6 +71,41 @@ def test_compose_drawing_metadata_keeps_manual_tags():
 
     payload = compose_drawing_metadata(drawing)
     assert any(tag["tag"] == "手動:優先" for tag in payload["derivedTags"])
+    manual_tag = next(tag for tag in payload["derivedTags"] if tag["tag"] == "手動:優先")
+    assert manual_tag["source"] == "manual_override"
+    assert manual_tag["evidence"] == "drawingMetadata.snapshot.derivedTags"
+    assert manual_tag["confidence"] == "high"
+    assert manual_tag["reason"] == "利用者が手動で追加したタグのため採用しています。"
+
+
+@pytest.mark.django_db
+def test_compose_drawing_metadata_generated_tags_include_traceability_fields():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-generated-tags",
+        filename="generated-tags.icd",
+        source_path=r"C:\temp\generated-tags.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "customer_name": "澁谷工業",
+            "material_keywords": ["SUS304"],
+            "title_block_fields": {"surface_treatment": "黒染め"},
+        },
+        derived_tags_json=[],
+    )
+
+    payload = compose_drawing_metadata(drawing)
+
+    generated_tags = [tag for tag in payload["derivedTags"] if not tag.get("manual_flag")]
+    assert generated_tags
+    for tag in generated_tags:
+        assert tag["source"]
+        assert tag["evidence"].startswith("composedMetadata.canonicalAttributes")
+        assert tag["confidence"] in {"high", "medium", "low"}
+        assert tag["reason"]
 
 
 @pytest.mark.django_db

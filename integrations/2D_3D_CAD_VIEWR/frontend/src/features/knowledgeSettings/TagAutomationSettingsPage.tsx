@@ -35,6 +35,28 @@ function formatJobStatus(status: string | null | undefined) {
   }[status] ?? status;
 }
 
+function formatJobCount(summary: HandoffSummaryResponse | null, status: string) {
+  return summary?.jobStatusCounts?.[status] ?? 0;
+}
+
+function shortError(value: string | null | undefined) {
+  if (!value) {
+    return "-";
+  }
+  const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
+  return firstLine.length > 96 ? `${firstLine.slice(0, 96)}...` : firstLine;
+}
+
+function latestFailureText(item: DrawingMetadataRegistrationListItem) {
+  const messages = (["2d", "3d"] as const)
+    .map((mode) => {
+      const error = item.latestJobErrorByMode?.[mode];
+      return error ? `${mode.toUpperCase()}: ${shortError(error)}` : "";
+    })
+    .filter(Boolean);
+  return messages.length ? messages.join(" / ") : "-";
+}
+
 function panelForAction(action: string): SettingsPanelKey {
   if (action === "open_icad_extraction_review") {
     return "icad-extraction";
@@ -104,7 +126,7 @@ export function TagAutomationSettingsPage() {
     const request =
       activePanel === "icad-extraction"
         ? Promise.all([
-            cachedRegistrations ? Promise.resolve(cachedRegistrations) : getDrawingMetadataRegistrations(),
+            cachedRegistrations ? Promise.resolve(cachedRegistrations) : getDrawingMetadataRegistrations({ includeAll: true }),
             cachedHandoffSummary ? Promise.resolve(cachedHandoffSummary) : getDrawingMetadataHandoffSummary(),
           ])
             .then(([registrationItems, summary]) => {
@@ -188,7 +210,7 @@ export function TagAutomationSettingsPage() {
             <div>
               <h2>ICAD抽出管理</h2>
               <p className="production-section-note">
-                登録済みICD単位で、2D/3D snapshot、最新ジョブ状態、保存先を確認します。
+                登録済みICD単位で、2D/3D snapshot、起票後の待機・抽出中・完了・失敗、worker状態、保存先を確認します。
               </p>
               <p className="production-section-note">{scopeLabel(handoffSummary)}</p>
             </div>
@@ -197,6 +219,22 @@ export function TagAutomationSettingsPage() {
           {panelLoading ? <p className="production-section-note">抽出管理情報を読み込んでいます。</p> : null}
           {handoffSummary ? (
             <div className="production-detail-grid">
+              <div className="production-detail-field">
+                <span>worker状態</span>
+                <p>{handoffSummary.workerStatus?.label ?? "未確認"}</p>
+              </div>
+              <div className="production-detail-field">
+                <span>worker</span>
+                <p>{handoffSummary.workerStatus?.workerName || "-"}</p>
+              </div>
+              <div className="production-detail-field">
+                <span>worker詳細</span>
+                <p>{handoffSummary.workerStatus?.message ?? "worker状態を取得できません。"}</p>
+              </div>
+              <div className="production-detail-field">
+                <span>待機中/抽出中/完了/失敗</span>
+                <p>{formatJobCount(handoffSummary, "queued")} / {formatJobCount(handoffSummary, "processing")} / {formatJobCount(handoffSummary, "succeeded")} / {formatJobCount(handoffSummary, "failed")}</p>
+              </div>
               {handoffSummary.summaryCards.map((card) => (
                 <div key={card.label} className="production-detail-field">
                   <span>{card.label}</span>
@@ -213,13 +251,14 @@ export function TagAutomationSettingsPage() {
                   <th>snapshot</th>
                   <th>2Dジョブ</th>
                   <th>3Dジョブ</th>
+                  <th>失敗理由</th>
                   <th>保存先</th>
                 </tr>
               </thead>
               <tbody>
                 {panelLoading && !registrations.length ? (
                   <tr>
-                    <td colSpan={5}>抽出管理情報を読み込んでいます。</td>
+                    <td colSpan={6}>抽出管理情報を読み込んでいます。</td>
                   </tr>
                 ) : registrations.length ? registrations.map((item) => (
                   <tr key={item.drawingId}>
@@ -227,16 +266,43 @@ export function TagAutomationSettingsPage() {
                     <td>{formatSnapshotModes(item)}</td>
                     <td>{formatJobStatus(item.latestJobStatusByMode["2d"])}</td>
                     <td>{formatJobStatus(item.latestJobStatusByMode["3d"])}</td>
+                    <td title={latestFailureText(item)}>{latestFailureText(item)}</td>
                     <td>{item.sourcePath}</td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={5}>登録済みICADはありません。</td>
+                    <td colSpan={6}>登録済みICADはありません。</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
+          {handoffSummary?.recentFailedJobs?.length ? (
+            <div className="production-table-shell">
+              <table className="production-table">
+                <thead>
+                  <tr>
+                    <th>直近失敗ICAD</th>
+                    <th>mode</th>
+                    <th>worker</th>
+                    <th>失敗理由</th>
+                    <th>再抽出条件</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {handoffSummary.recentFailedJobs.map((job) => (
+                    <tr key={job.jobId}>
+                      <th>{job.filename}</th>
+                      <td>{job.extractionMode.toUpperCase()}</td>
+                      <td>{job.workerName || "-"}</td>
+                      <td title={job.errorMessage}>{shortError(job.errorMessage)}</td>
+                      <td>{job.reextractCondition}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
         </section>
       ) : null}
 

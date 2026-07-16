@@ -27,6 +27,7 @@ EXPECTED_2D_SECTION_KEYS = {
     "manufacturing_symbols",
 }
 NON_REVIEW_CONFLICT_KEYS = {"source_kind", "confidence_summary"}
+EXPECTED_TAG_CONFIDENCE = {"high", "medium", "low"}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -51,8 +52,11 @@ def _validate_snapshot(snapshot: dict[str, Any], *, path: str, expected_mode: st
         _add_issue(issues, f"{path}.canonicalAttributes", "must be an object")
     elif expected_mode == "2d":
         _validate_2d_sections(canonical_attributes, path=f"{path}.canonicalAttributes.raw_2d_sections", issues=issues)
-    if not isinstance(snapshot.get("derivedTags"), list):
+    derived_tags = snapshot.get("derivedTags")
+    if not isinstance(derived_tags, list):
         _add_issue(issues, f"{path}.derivedTags", "must be a list")
+    else:
+        _validate_tags(derived_tags, path=f"{path}.derivedTags", issues=issues)
     latest_job = snapshot.get("latestJob")
     if not isinstance(latest_job, dict):
         _add_issue(issues, f"{path}.latestJob", "must be an object")
@@ -99,6 +103,21 @@ def _validate_2d_sections(canonical_attributes: dict[str, Any], *, path: str, is
                 _add_issue(issues, f"{section_path}.{key}", "must be an integer")
         if not isinstance(section.get("samples"), list):
             _add_issue(issues, f"{section_path}.samples", "must be a list")
+
+
+def _validate_tags(tags: list[Any], *, path: str, issues: list[dict[str, Any]]) -> None:
+    for index, tag in enumerate(tags):
+        tag_path = f"{path}[{index}]"
+        if not isinstance(tag, dict):
+            _add_issue(issues, tag_path, "must be an object")
+            continue
+        for key in ("tag", "source", "evidence", "reason"):
+            if not _is_non_empty_string(tag.get(key)):
+                _add_issue(issues, f"{tag_path}.{key}", "must be a non-empty string")
+        if tag.get("confidence") not in EXPECTED_TAG_CONFIDENCE:
+            _add_issue(issues, f"{tag_path}.confidence", "must be high, medium, or low")
+        if "manual_flag" in tag and not isinstance(tag.get("manual_flag"), bool):
+            _add_issue(issues, f"{tag_path}.manual_flag", "must be boolean when present")
 
 
 def _validate_attribute(attribute: dict[str, Any], *, path: str, issues: list[dict[str, Any]]) -> None:
@@ -154,8 +173,11 @@ def _is_diagnostic_conflict_key(attribute: str) -> bool:
 def _validate_composed_metadata(composed: dict[str, Any], *, path: str, issues: list[dict[str, Any]]) -> None:
     if not isinstance(composed.get("canonicalAttributes"), dict):
         _add_issue(issues, f"{path}.canonicalAttributes", "must be an object")
-    if not isinstance(composed.get("derivedTags"), list):
+    composed_tags = composed.get("derivedTags")
+    if not isinstance(composed_tags, list):
         _add_issue(issues, f"{path}.derivedTags", "must be a list")
+    else:
+        _validate_tags(composed_tags, path=f"{path}.derivedTags", issues=issues)
     reconciled = composed.get("reconciledAttributes")
     if not isinstance(reconciled, list):
         _add_issue(issues, f"{path}.reconciledAttributes", "must be a list")
