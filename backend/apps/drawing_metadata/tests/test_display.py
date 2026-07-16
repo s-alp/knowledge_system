@@ -860,7 +860,7 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert 'href="/drawing-metadata/"' in content
     assert 'href="/drawing-metadata/handoff/"' in content
     assert "ICAD抽出管理" in content
-    assert "創屋連携データ確認" in content
+    assert "内部連携データ確認" in content
 
 
 @pytest.mark.django_db

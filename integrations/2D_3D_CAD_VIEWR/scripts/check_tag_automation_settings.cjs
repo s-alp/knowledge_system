@@ -58,7 +58,7 @@ async function main() {
     await page.getByText("Gemini APIキー").waitFor();
     await page.getByText("設定済み", { exact: true }).waitFor();
     const extractionManagementLink = page.getByRole("link", { name: /ICAD抽出管理/ });
-    const handoffLink = page.getByRole("link", { name: /創屋連携データ確認/ });
+    const handoffLink = page.getByRole("link", { name: /内部連携データ確認/ });
     const extractionManagementHref = await extractionManagementLink.getAttribute("href");
     const handoffHref = await handoffLink.getAttribute("href");
 

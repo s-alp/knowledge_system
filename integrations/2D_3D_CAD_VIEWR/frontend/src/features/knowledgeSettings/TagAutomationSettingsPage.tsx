@@ -44,7 +44,7 @@ export function TagAutomationSettingsPage() {
         <div className="production-section-divider" />
         <div className="settings-management-list">
           {settingsPayload.managementLinks.map((link) => {
-            const LinkIcon = link.key === "souya-handoff" ? IconTransfer : IconDatabase;
+            const LinkIcon = link.key === "integration-data-review" ? IconTransfer : IconDatabase;
             return (
               <a key={link.key} className="settings-management-link" href={link.url}>
                 <span className="settings-management-icon" aria-hidden="true">

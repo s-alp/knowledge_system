@@ -23,8 +23,8 @@ const settings: TagAutomationSettingsResponse = {
       url: "/drawing-metadata/",
     },
     {
-      key: "souya-handoff",
-      label: "創屋連携データ確認",
+      key: "integration-data-review",
+      label: "内部連携データ確認",
       description: "連携payloadを確認します。",
       url: "/drawing-metadata/handoff/",
     },
@@ -70,7 +70,7 @@ describe("TagAutomationSettingsPage", () => {
     expect(screen.getByText("0.1")).toBeInTheDocument();
     expect(screen.getByText("ローカルDBのみ")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /ICAD抽出管理/ })).toHaveAttribute("href", "/drawing-metadata/");
-    expect(screen.getByRole("link", { name: /創屋連携データ確認/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /内部連携データ確認/ })).toHaveAttribute(
       "href",
       "/drawing-metadata/handoff/",
     );

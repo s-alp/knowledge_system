@@ -17,9 +17,9 @@ def build_tag_automation_settings_payload() -> dict:
                 "url": "/drawing-metadata/",
             },
             {
-                "key": "souya-handoff",
-                "label": "創屋連携データ確認",
-                "description": "創屋へ渡すタグ・属性候補と連携payloadを読み取り専用で確認します。",
+                "key": "integration-data-review",
+                "label": "内部連携データ確認",
+                "description": "タグ・属性候補と連携payloadを読み取り専用で確認します。",
                 "url": "/drawing-metadata/handoff/",
             },
         ],
