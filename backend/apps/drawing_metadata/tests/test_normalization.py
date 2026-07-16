@@ -181,11 +181,13 @@ def test_normalize_2d_raw_extract():
     assert any(tag["tag"] == "塗装:マンセル 5Y7/1" for tag in tags)
     assert any(tag["tag"] == "PRFX:RAA4844" for tag in tags)
     assert any(tag["tag"] == "ユニット:U01" for tag in tags)
-    feature_tags = {candidate["tag"] for candidate in canonical["geometry_feature_candidates"]}
-    assert "加工指示:表面粗さ" in feature_tags
-    assert "図面特徴:切断線" in feature_tags
-    assert "形状候補:長穴" in feature_tags
-    assert "形状候補:穴" in feature_tags
+    feature_labels = {candidate["classification_label"] for candidate in canonical["geometry_feature_candidates"]}
+    assert "表面粗さ記号あり" in feature_labels
+    assert "切断線あり" in feature_labels
+    assert "長穴/楕円弧候補" in feature_labels
+    assert "穴/円候補" in feature_labels
+    assert all(candidate["searchable_tag"] is False for candidate in canonical["geometry_feature_candidates"])
+    assert all("tag" not in candidate for candidate in canonical["geometry_feature_candidates"])
     assert all(tag["source"] != "geometry_feature_candidates" for tag in tags)
     assert canonical["surface_roughness_count"] == 1
     assert canonical["surface_roughness_values"] == ["Ra 6.3"]
@@ -269,10 +271,11 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     assert "枠内バルーン" in canonical["part_keywords"]
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
     assert canonical["revision_note_count"] == 0
-    feature_tags = {candidate["tag"] for candidate in canonical["geometry_feature_candidates"]}
-    assert "図面特徴:ハッチング" not in feature_tags
-    assert "形状候補:穴" not in feature_tags
-    assert "図面特徴:切断線" in feature_tags
+    feature_labels = {candidate["classification_label"] for candidate in canonical["geometry_feature_candidates"]}
+    assert "ハッチング/断面候補" not in feature_labels
+    assert "穴/円候補" not in feature_labels
+    assert "切断線あり" in feature_labels
+    assert all("tag" not in candidate for candidate in canonical["geometry_feature_candidates"])
     assert canonical["hatch_or_section_count"] == 0
     assert canonical["hole_candidate_count"] == 0
     assert canonical["cut_line_count"] == 1

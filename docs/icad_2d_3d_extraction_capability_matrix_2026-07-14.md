@@ -100,7 +100,7 @@
 | 円弧長寸法 | A | `SxGeomArcLengDim` | 実装入口あり | 曲げ/円弧特徴 |
 | 寸法値詳細 | A | `SxDimValueAtr` | 実装入口あり | 実寸/擬寸、前置/後置/上下文字、公差、φ/R/M/□ |
 | 幾何公差 | A | `SxGeomTol` | summaryのみ | 構造化未実装 |
-| 表面粗さ | A | `SxGeomSmark` | 特徴候補実装済み | `geometry_feature_candidates` で `加工指示:表面粗さ` を保持。指示値の正規化は未実装 |
+| 表面粗さ | A | `SxGeomSmark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=表面粗さ記号あり`, `searchable_tag=false` として保持。表面粗さ記号の存在だけでは自動タグに採用しない |
 | 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | summaryのみ | 溶接種別、開先、仕上げ等は構造化未実装 |
 | 仕上げ記号 | A | `SxGeomFinishMark` | 未実装 | 仕上げ工程タグ |
 | バルーン | A | `SxGeomBalloon` | summaryのみ | `txt1`, `txt2`, `num_use`, `lead_line` 等は構造化未実装 |

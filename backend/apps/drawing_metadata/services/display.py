@@ -403,7 +403,10 @@ def _geometry_feature_candidate_items(candidates: list[dict], limit: int = 10) -
         previews.append(
             {
                 "label": _display_value(candidate.get("label")),
-                "tag": _display_value(candidate.get("tag")),
+                "classificationLabel": _display_value(candidate.get("classification_label") or candidate.get("tag")),
+                "searchableTag": _display_value(candidate.get("searchable_tag", False)),
+                "tagAdoptionStatus": _display_value(candidate.get("tag_adoption_status") or "excluded"),
+                "tagAdoptionReason": _display_value(candidate.get("tag_adoption_reason")),
                 "confidence": _display_value(candidate.get("confidence")),
                 "geometryType": _display_value(candidate.get("geometry_type")),
                 "count": _display_value(candidate.get("count")),

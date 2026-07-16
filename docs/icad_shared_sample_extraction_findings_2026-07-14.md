@@ -395,18 +395,18 @@ Django正規化層で、2D文字から図枠欄候補を作る初期辞書を追
 
 ### 12.8 2D形状・記号特徴候補の初期実装
 
-2D primitive から、検索やレビューに使える特徴候補を集計する初期ルールを追加した。これは確定判定ではなく、CAD内に存在する primitive を根拠にした候補である。
+2D primitive から、レビューに使える特徴証拠候補を集計する初期ルールを追加した。これは確定判定ではなく、CAD内に存在する primitive を根拠にした候補である。表面粗さ、データム、穴候補などの存在だけでは検索・分類タグとして粗いため、`searchable_tag=false` と `tag_adoption_status=excluded` を付けて自動タグから除外する。
 
 初期対象:
 
-- `SxGeomHatch`: `図面特徴:ハッチング`
-- `SxGeomSmark`: `加工指示:表面粗さ`
-- `SxGeomCutLine`: `図面特徴:切断線`
-- `SxGeomTolDatum`: `幾何公差:データム`
-- `SxGeomTol`: `幾何公差`
-- `SxGeomFinishMark`: `加工指示:仕上げ記号`
-- `SxGeomElparc2D`: `形状候補:長穴`
-- `SxGeomCircle2D`: `形状候補:穴`
+- `SxGeomHatch`: `classification_label=ハッチング/断面候補`
+- `SxGeomSmark`: `classification_label=表面粗さ記号あり`
+- `SxGeomCutLine`: `classification_label=切断線あり`
+- `SxGeomTolDatum`: `classification_label=データム記号あり`
+- `SxGeomTol`: `classification_label=幾何公差記号あり`
+- `SxGeomFinishMark`: `classification_label=仕上げ記号あり`
+- `SxGeomElparc2D`: `classification_label=長穴/楕円弧候補`
+- `SxGeomCircle2D`: `classification_label=穴/円候補`
 
 `inside_print_area=false` の primitive は候補から外す。長穴や穴は形状確定ではなく低信頼の候補として保持する。
 
@@ -414,8 +414,8 @@ Django正規化層で、2D文字から図枠欄候補を作る初期辞書を追
 
 | ファイル | 特徴候補 | 所見 |
 | --- | --- | --- |
-| `TR1D9K99027_allviews_2d.json` | `形状候補:穴` 2件 | 円 primitive 由来の低信頼候補 |
-| `CAA5012-02430002P1R1_primitives_2d.json` | `図面特徴:ハッチング` 8件、`加工指示:表面粗さ` 2件、`形状候補:長穴` 17件 | ハッチングと表面粗さは中信頼、長穴は低信頼候補 |
+| `TR1D9K99027_allviews_2d.json` | `穴/円候補` 2件 | 円 primitive 由来の低信頼証拠候補。自動タグには採用しない |
+| `CAA5012-02430002P1R1_primitives_2d.json` | `ハッチング/断面候補` 8件、`表面粗さ記号あり` 2件、`長穴/楕円弧候補` 17件 | 証拠候補として保持。自動タグには採用しない |
 | `DFR-CM1-AA0305300011_2d.json` | なし | 対象 primitive なし |
 
 ### 12.9 Gemini 低温度JSON分類の入口

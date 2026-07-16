@@ -528,7 +528,10 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
                 {
                     "feature": "surface_roughness",
                     "label": "表面粗さ",
-                    "tag": "加工指示:表面粗さ",
+                    "classification_label": "表面粗さ記号あり",
+                    "searchable_tag": False,
+                    "tag_adoption_status": "excluded",
+                    "tag_adoption_reason": "製造記号や形状候補の存在だけでは検索・分類タグとして粗いため、図面証拠として保持し、自動タグには採用しません。",
                     "confidence": "medium",
                     "geometry_type": "SxGeomSmark",
                     "count": 2,
@@ -619,7 +622,10 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert payload["geometryPrimitiveSamples"][0]["position"] == "1.0, 2.0"
     assert payload["geometryPrimitiveSamples"][0]["insidePrintArea"] == "inside"
     assert payload["geometryFeatureCandidates"][0]["label"] == "表面粗さ"
-    assert payload["geometryFeatureCandidates"][0]["tag"] == "加工指示:表面粗さ"
+    assert payload["geometryFeatureCandidates"][0]["classificationLabel"] == "表面粗さ記号あり"
+    assert payload["geometryFeatureCandidates"][0]["searchableTag"] == "なし"
+    assert payload["geometryFeatureCandidates"][0]["tagAdoptionStatus"] == "excluded"
+    assert "自動タグには採用しません" in payload["geometryFeatureCandidates"][0]["tagAdoptionReason"]
     assert payload["geometryFeatureCandidates"][0]["count"] == "2"
     assert row_by_key["surface_roughness_count"] == "2"
     assert row_by_key["section_feature_count"] == "1"

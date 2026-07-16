@@ -459,7 +459,7 @@ def test_renormalize_snapshots_applies_current_quality_rules_and_keeps_manual_va
         },
         canonical_attributes_json={"title_block_fields": {"weight": "誤った旧値"}},
         derived_tags_json=[
-            {"tag": "加工指示:表面粗さ", "source": "geometry_feature_candidates", "manual_flag": False},
+            {"tag": "図面特徴旧タグ", "source": "geometry_feature_candidates", "manual_flag": False},
             {"tag": "利用者タグ", "source": "manual_override", "manual_flag": True},
         ],
         manual_overrides_json={"canonicalAttributes": {"drawing_name": "手動図面名"}},

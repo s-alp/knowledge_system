@@ -32,16 +32,20 @@ TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "unit_number": {"label": "ユニット番号", "keywords": ["ユニット", "unit", "unit no"], "max_value_length": 40},
 }
 
-GEOMETRY_FEATURE_RULES: dict[str, dict[str, str]] = {
-    "SxGeomHatch": {"feature": "hatch_or_section", "label": "ハッチング/断面候補", "tag": "図面特徴:ハッチング", "confidence": "medium"},
-    "SxGeomSmark": {"feature": "surface_roughness", "label": "表面粗さ", "tag": "加工指示:表面粗さ", "confidence": "medium"},
-    "SxGeomCutLine": {"feature": "cut_line", "label": "切断線", "tag": "図面特徴:切断線", "confidence": "medium"},
-    "SxGeomTolDatum": {"feature": "datum", "label": "データム", "tag": "幾何公差:データム", "confidence": "medium"},
-    "SxGeomTol": {"feature": "geometric_tolerance", "label": "幾何公差", "tag": "幾何公差", "confidence": "medium"},
-    "SxGeomFinishMark": {"feature": "finish_mark", "label": "仕上げ記号", "tag": "加工指示:仕上げ記号", "confidence": "medium"},
-    "SxGeomElparc2D": {"feature": "slot_candidate", "label": "長穴/楕円弧候補", "tag": "形状候補:長穴", "confidence": "low"},
-    "SxGeomCircle2D": {"feature": "hole_candidate", "label": "穴/円候補", "tag": "形状候補:穴", "confidence": "low"},
+GEOMETRY_FEATURE_RULES: dict[str, dict[str, object]] = {
+    "SxGeomHatch": {"feature": "hatch_or_section", "label": "ハッチング/断面候補", "classification_label": "ハッチング/断面候補", "confidence": "medium"},
+    "SxGeomSmark": {"feature": "surface_roughness", "label": "表面粗さ", "classification_label": "表面粗さ記号あり", "confidence": "medium"},
+    "SxGeomCutLine": {"feature": "cut_line", "label": "切断線", "classification_label": "切断線あり", "confidence": "medium"},
+    "SxGeomTolDatum": {"feature": "datum", "label": "データム", "classification_label": "データム記号あり", "confidence": "medium"},
+    "SxGeomTol": {"feature": "geometric_tolerance", "label": "幾何公差", "classification_label": "幾何公差記号あり", "confidence": "medium"},
+    "SxGeomFinishMark": {"feature": "finish_mark", "label": "仕上げ記号", "classification_label": "仕上げ記号あり", "confidence": "medium"},
+    "SxGeomElparc2D": {"feature": "slot_candidate", "label": "長穴/楕円弧候補", "classification_label": "長穴/楕円弧候補", "confidence": "low"},
+    "SxGeomCircle2D": {"feature": "hole_candidate", "label": "穴/円候補", "classification_label": "穴/円候補", "confidence": "low"},
 }
+GEOMETRY_FEATURE_TAG_EXCLUSION_REASON = (
+    "製造記号や形状候補の存在だけでは検索・分類タグとして粗いため、"
+    "図面証拠として保持し、自動タグには採用しません。"
+)
 
 TWO_D_SECTION_DEFINITIONS: tuple[tuple[str, str, str], ...] = (
     ("title_block", "図枠", "図番、材質、担当者、改訂などの図枠欄候補です。"),
@@ -599,7 +603,10 @@ def _build_geometry_feature_candidates(primitives: list[dict], *, has_print_fram
             {
                 "feature": feature,
                 "label": rule["label"],
-                "tag": rule["tag"],
+                "classification_label": rule["classification_label"],
+                "searchable_tag": False,
+                "tag_adoption_status": "excluded",
+                "tag_adoption_reason": GEOMETRY_FEATURE_TAG_EXCLUSION_REASON,
                 "confidence": rule["confidence"],
                 "geometry_type": geometry_type,
                 "count": 0,
