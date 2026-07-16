@@ -86,6 +86,33 @@ def _attribute_value(value) -> str:
     return str(value)
 
 
+def _attribute_confidence(canonical_attributes: dict, source_path: str) -> str:
+    if source_path.startswith("title_block_fields."):
+        field = source_path.split(".", 1)[1]
+        for candidate in canonical_attributes.get("title_block_candidates") or []:
+            if candidate.get("field") == field and _has_value(candidate.get("value")):
+                confidence = candidate.get("llm_confidence") or candidate.get("confidence")
+                if confidence in {"high", "medium", "low"}:
+                    return confidence
+        return "medium"
+    confidence = canonical_attributes.get("confidence_summary")
+    return confidence if confidence in {"high", "medium", "low"} else "medium"
+
+
+def _attribute_evidence(source_path: str, value: str) -> str:
+    return f"canonicalAttributes.{source_path}={value}"
+
+
+def _attribute_reason(attribute_name: str, source_path: str) -> str:
+    if source_path.startswith("title_block_fields."):
+        return f"2D図枠候補から{attribute_name}として正規化できるため、属性候補として提示します。"
+    if source_path in {"mass_value", "weight_value"}:
+        return f"抽出結果をkg・小数点以下2桁へ正規化できるため、{attribute_name}属性候補として提示します。"
+    if "material" in source_path:
+        return f"材質分類に使える値として正規化できるため、{attribute_name}属性候補として提示します。"
+    return f"canonicalAttributes.{source_path} から業務項目 {attribute_name} として提示できるため、属性候補に含めます。"
+
+
 def _attribute_items(canonical_attributes: dict, specs: tuple[tuple[str, str], ...]) -> list[dict]:
     items: list[dict] = []
     for source_path, attribute_name in specs:
@@ -93,6 +120,7 @@ def _attribute_items(canonical_attributes: dict, specs: tuple[tuple[str, str], .
         if not _has_value(value):
             continue
         attribute_value = _attribute_value(value)
+        evidence = _attribute_evidence(source_path, attribute_value)
         items.append(
             {
                 "sourcePath": f"canonicalAttributes.{source_path}",
@@ -100,6 +128,9 @@ def _attribute_items(canonical_attributes: dict, specs: tuple[tuple[str, str], .
                 "attribute": None,
                 "attributeOption": None,
                 "attributeValue": attribute_value,
+                "evidence": evidence,
+                "confidence": _attribute_confidence(canonical_attributes, source_path),
+                "reason": _attribute_reason(attribute_name, source_path),
                 "payloadShape": {
                     "attribute": None,
                     "attribute_option": None,
@@ -151,6 +182,9 @@ def _tag_fallback_attributes(tags: list[str]) -> list[dict]:
             "attribute": None,
             "attributeOption": None,
             "attributeValue": tag,
+            "evidence": f"composedMetadata.derivedTags contains {tag}",
+            "confidence": "medium",
+            "reason": "対象ページにタグ専用の保存口が未確認のため、検索に使える自動タグ候補を属性値としても提示します。",
             "payloadShape": {
                 "attribute": None,
                 "attribute_option": None,
@@ -177,6 +211,12 @@ def _part_material_attributes(canonical_attributes: dict) -> list[dict]:
                 "attribute": None,
                 "attributeOption": None,
                 "attributeValue": str(value),
+                "evidence": candidate.get("evidence")
+                or candidate.get("material_name")
+                or "canonicalAttributes.part_material_candidates",
+                "confidence": candidate.get("confidence") if candidate.get("confidence") in {"high", "medium", "low"} else "medium",
+                "reason": candidate.get("reason")
+                or "3Dパーツ材質候補またはパーツ付加情報から材質として正規化できるため、部品属性候補として提示します。",
                 "payloadShape": {
                     "attribute": None,
                     "attribute_option": None,

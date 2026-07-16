@@ -173,6 +173,10 @@ def main() -> int:
         _run_gate("shared_icad_completion", [python, str(ROOT / "scripts" / "audit_shared_icad_completion.py")]),
         _run_gate("drawing_metadata_job_state", [python, str(ROOT / "scripts" / "audit_drawing_metadata_job_state.py")]),
         _run_gate("tag_quality", [python, str(ROOT / "scripts" / "audit_tag_quality.py")]),
+        _run_gate(
+            "knowledge_payload_attribute_quality",
+            [python, str(ROOT / "scripts" / "audit_knowledge_payload_attribute_quality.py")],
+        ),
         _run_gate("mass_weight_format", [python, str(ROOT / "scripts" / "audit_mass_weight_format.py")]),
         _run_gate("llm_title_block_guardrails", [python, str(ROOT / "scripts" / "audit_llm_title_block_guardrails.py")]),
         _run_gate(

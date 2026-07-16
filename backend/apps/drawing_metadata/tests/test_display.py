@@ -423,10 +423,27 @@ def test_build_knowledge_system_payload_preview_maps_targets_without_production_
         "PRFX:RAA4844",
         "ユニット:U01",
     ]
-    assert any(item["attributeName"] == "材質" and item["attributeValue"] == "SUS304" for item in targets["drawing"]["attributes"])
+    drawing_material = next(
+        item
+        for item in targets["drawing"]["attributes"]
+        if item["attributeName"] == "材質" and item["attributeValue"] == "SUS304"
+    )
+    assert drawing_material["sourcePath"] == "canonicalAttributes.title_block_fields.material"
+    assert drawing_material["evidence"] == "canonicalAttributes.title_block_fields.material=SUS304"
+    assert drawing_material["confidence"] in {"high", "medium", "low"}
+    assert "属性候補" in drawing_material["reason"]
     assert targets["product"]["tagApiStatus"] == "not_found_use_attribute_fallback"
-    assert any(item["attributeName"] == "自動タグ候補" and item["attributeValue"] == "PRFX:RAA4844" for item in targets["product"]["attributes"])
-    assert any(item.get("entityHint") == "TOP > BRACKET" for item in targets["part"]["attributes"])
+    product_tag_fallback = next(
+        item
+        for item in targets["product"]["attributes"]
+        if item["attributeName"] == "自動タグ候補" and item["attributeValue"] == "PRFX:RAA4844"
+    )
+    assert product_tag_fallback["evidence"] == "composedMetadata.derivedTags contains PRFX:RAA4844"
+    assert product_tag_fallback["confidence"] == "medium"
+    assert "タグ専用の保存口" in product_tag_fallback["reason"]
+    part_material = next(item for item in targets["part"]["attributes"] if item.get("entityHint") == "TOP > BRACKET")
+    assert part_material["confidence"] == "medium"
+    assert part_material["reason"]
     assert targets["part"]["attributes"][-1]["bindingStatus"] == "needs_attribute_master_binding"
     assert targets["project"]["candidateEndpoint"] is None
 
