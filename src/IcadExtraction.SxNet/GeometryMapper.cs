@@ -53,6 +53,7 @@ namespace IcadExtraction.SxNet
                         payload.Dimensions.Add(MapDimension(geometry, viewName, sourceItem.LayerNo));
                         break;
                     case "SxGeomLine2D":
+                    case "SxGeomPoint2D":
                     case "SxGeomArc2D":
                     case "SxGeomCircle2D":
                     case "SxGeomSpline2D":
@@ -62,7 +63,9 @@ namespace IcadExtraction.SxNet
                     case "SxGeomSmark":
                     case "SxGeomCutLine":
                     case "SxGeomSymbol":
+                    case "SxGeomArrow":
                     case "SxGeomArrowView":
+                    case "SxGeomOtherDraft":
                     case "SxGeomDelta":
                     case "SxGeomTolDatum":
                     case "SxGeomFinishMark":

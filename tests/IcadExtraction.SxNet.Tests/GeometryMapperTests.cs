@@ -18,12 +18,15 @@ namespace IcadExtraction.SxNet.Tests
                 new SxGeomLengthDim { diminfo = new DimInfo { value_1 = "100", mark_2 = "M5" }, pnt1 = new SxPos { x = -1.0, y = 2.0, z = 0.0 } },
                 new SxGeomLine2D { x1 = 0.0, y1 = 1.0, x2 = 2.0, y2 = 3.0 },
                 new SxGeomLine2D { pnt1 = new SxPos { x = 30.0, y = 31.0, z = 0.0 }, pnt2 = new SxPos { x = 32.0, y = 33.0, z = 0.0 } },
+                new SxGeomPoint2D { pnt = new SxPos { x = 34.0, y = 35.0, z = 0.0 } },
                 new SxGeomSpline2D { pos = new SxPos { x = 5.0, y = 6.0, z = 0.0 }, vec_list = new[] { new SxVec(), new SxVec() } },
                 new SxGeomElparc2D { cp = new SxPos { x = 7.0, y = 8.0, z = 0.0 }, radius1 = 11.0, radius2 = 4.0, sang = 10.0, eang = 90.0 },
                 new SxGeomSmark { pnt = new SxPos { x = 9.0, y = 10.0, z = 0.0 }, val1 = "Ra 6.3" },
                 new SxGeomCutLine { pnt1 = new SxPos { x = 1.0, y = 2.0, z = 0.0 }, pnt2 = new SxPos { x = 3.0, y = 4.0, z = 0.0 } },
                 new SxGeomSymbol { pnt = new SxPos { x = 14.0, y = 15.0, z = 0.0 }, name = "DETAIL-A" },
+                new SxGeomArrow { pnt = new SxPos { x = 15.0, y = 16.0, z = 0.0 }, name = "矢印" },
                 new SxGeomArrowView { pnt = new SxPos { x = 16.0, y = 17.0, z = 0.0 }, name = "A" },
+                new SxGeomOtherDraft { pnt = new SxPos { x = 18.0, y = 19.0, z = 0.0 }, name = "補助図形" },
                 new SxGeomFinishMark { pnt = new SxPos { x = 12.0, y = 13.0, z = 0.0 }, mark_type = 3, side_leng = 4.5, width = 2, color = 7 },
                 new SxGeomWeld { atr_weld = "WELD-A" },
                 new SxGeomBalloon { txt = "B1" },
@@ -62,7 +65,7 @@ namespace IcadExtraction.SxNet.Tests
             var payload = new GeometryMapper().Map(geometries, warnings);
             Assert.Equal(2, payload.Texts.Count);
             Assert.Single(payload.Dimensions);
-            Assert.Equal(9, payload.GeometryPrimitives.Count);
+            Assert.Equal(12, payload.GeometryPrimitives.Count);
             Assert.Single(payload.WeldNotes);
             Assert.Single(payload.Balloons);
             Assert.Single(payload.Tolerances);
@@ -75,21 +78,27 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(2.0, payload.GeometryPrimitives[0].EndX);
             Assert.Equal(30.0, payload.GeometryPrimitives[1].PositionX);
             Assert.Equal(33.0, payload.GeometryPrimitives[1].EndY);
-            Assert.Equal(5.0, payload.GeometryPrimitives[2].PositionX);
-            Assert.Equal(3, payload.GeometryPrimitives[2].PointCount);
-            Assert.Equal(7.0, payload.GeometryPrimitives[3].CenterX);
-            Assert.Equal(11.0, payload.GeometryPrimitives[3].Radius1);
-            Assert.Equal(9.0, payload.GeometryPrimitives[4].PositionX);
-            Assert.Equal(3.0, payload.GeometryPrimitives[5].EndX);
-            Assert.Equal("SxGeomSymbol", payload.GeometryPrimitives[6].GeometryType);
-            Assert.Equal(14.0, payload.GeometryPrimitives[6].PositionX);
-            Assert.Equal("SxGeomArrowView", payload.GeometryPrimitives[7].GeometryType);
-            Assert.Equal(17.0, payload.GeometryPrimitives[7].PositionY);
-            Assert.Equal("SxGeomFinishMark", payload.GeometryPrimitives[8].GeometryType);
-            Assert.Equal(3, payload.GeometryPrimitives[8].MarkType);
-            Assert.Equal(4.5, payload.GeometryPrimitives[8].SideLength);
-            Assert.Equal(2, payload.GeometryPrimitives[8].Width);
-            Assert.Equal(7, payload.GeometryPrimitives[8].Color);
+            Assert.Equal("SxGeomPoint2D", payload.GeometryPrimitives[2].GeometryType);
+            Assert.Equal(34.0, payload.GeometryPrimitives[2].PositionX);
+            Assert.Equal(5.0, payload.GeometryPrimitives[3].PositionX);
+            Assert.Equal(3, payload.GeometryPrimitives[3].PointCount);
+            Assert.Equal(7.0, payload.GeometryPrimitives[4].CenterX);
+            Assert.Equal(11.0, payload.GeometryPrimitives[4].Radius1);
+            Assert.Equal(9.0, payload.GeometryPrimitives[5].PositionX);
+            Assert.Equal(3.0, payload.GeometryPrimitives[6].EndX);
+            Assert.Equal("SxGeomSymbol", payload.GeometryPrimitives[7].GeometryType);
+            Assert.Equal(14.0, payload.GeometryPrimitives[7].PositionX);
+            Assert.Equal("SxGeomArrow", payload.GeometryPrimitives[8].GeometryType);
+            Assert.Equal(16.0, payload.GeometryPrimitives[8].PositionY);
+            Assert.Equal("SxGeomArrowView", payload.GeometryPrimitives[9].GeometryType);
+            Assert.Equal(17.0, payload.GeometryPrimitives[9].PositionY);
+            Assert.Equal("SxGeomOtherDraft", payload.GeometryPrimitives[10].GeometryType);
+            Assert.Equal(19.0, payload.GeometryPrimitives[10].PositionY);
+            Assert.Equal("SxGeomFinishMark", payload.GeometryPrimitives[11].GeometryType);
+            Assert.Equal(3, payload.GeometryPrimitives[11].MarkType);
+            Assert.Equal(4.5, payload.GeometryPrimitives[11].SideLength);
+            Assert.Equal(2, payload.GeometryPrimitives[11].Width);
+            Assert.Equal(7, payload.GeometryPrimitives[11].Color);
             Assert.Equal("rpart", payload.ReferencedParts[0].EntityType);
             Assert.Equal("BASE-PLATE", payload.ReferencedParts[0].Name);
             Assert.Equal("BASE-3D", payload.ReferencedParts[0].Part3DName);
@@ -163,6 +172,11 @@ namespace IcadExtraction.SxNet.Tests
             public SxVec[]? vec_list;
         }
 
+        public sealed class SxGeomPoint2D
+        {
+            public SxPos? pnt;
+        }
+
         public sealed class SxGeomElparc2D
         {
             public SxPos? cp;
@@ -191,6 +205,18 @@ namespace IcadExtraction.SxNet.Tests
         }
 
         public sealed class SxGeomArrowView
+        {
+            public SxPos? pnt;
+            public string? name;
+        }
+
+        public sealed class SxGeomArrow
+        {
+            public SxPos? pnt;
+            public string? name;
+        }
+
+        public sealed class SxGeomOtherDraft
         {
             public SxPos? pnt;
             public string? name;

@@ -18,8 +18,21 @@
       <div><strong>Schema</strong><div>{{ job.schema_version }}</div></div>
     </div>
     <h3>Warnings</h3>
-    <pre>{{ job.warnings_json|pprint }}</pre>
+    <p class="muted">
+      記録件数: {{ warnings_count }}
+      {% if warnings_truncated %} / 画面では先頭50件のみ表示しています。{% endif %}
+    </p>
+    <pre>{{ warnings_display|pprint }}</pre>
     <h3>Error</h3>
-    <pre>{{ job.error_message }}</pre>
+    {% if error_message_summary %}
+      <p><strong>要約</strong>: {{ error_message_summary }}</p>
+    {% endif %}
+    {% if error_message_length %}
+      <p class="muted">
+        記録文字数: {{ error_message_length }}
+        {% if error_message_truncated %} / 画面では先頭部分のみ表示しています。{% endif %}
+      </p>
+    {% endif %}
+    <pre>{{ error_message_display }}</pre>
   </div>
 {% endblock %}

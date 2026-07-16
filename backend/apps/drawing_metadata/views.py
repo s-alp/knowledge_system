@@ -19,11 +19,14 @@ from apps.drawing_metadata.services.display import (
     build_tag_review_display_payload,
     build_viewer_tag_panel_display_payload,
 )
+from apps.drawing_metadata.services.failure_diagnostics import summarize_error_message, truncate_error_message_for_api
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
+
+JOB_DETAIL_WARNING_DISPLAY_LIMIT = 50
 
 
 class HandoffDashboardPageView(View):
@@ -250,7 +253,23 @@ class JobDetailPageView(View):
 
     def get(self, request: HttpRequest, job_id) -> HttpResponse:
         job = get_object_or_404(DrawingMetadataExtractionJob.objects.select_related("drawing"), pk=job_id)
-        return render(request, self.template_name, {"job": job})
+        raw_error_message = job.error_message or ""
+        error_message_display = truncate_error_message_for_api(raw_error_message)
+        warnings = job.warnings_json or []
+        return render(
+            request,
+            self.template_name,
+            {
+                "job": job,
+                "warnings_display": warnings[:JOB_DETAIL_WARNING_DISPLAY_LIMIT],
+                "warnings_count": len(warnings),
+                "warnings_truncated": len(warnings) > JOB_DETAIL_WARNING_DISPLAY_LIMIT,
+                "error_message_summary": summarize_error_message(raw_error_message),
+                "error_message_display": error_message_display,
+                "error_message_length": len(raw_error_message),
+                "error_message_truncated": raw_error_message != error_message_display,
+            },
+        )
 
 
 def _target_payload_or_404(knowledge_payload_preview: dict, target_key: str) -> dict:

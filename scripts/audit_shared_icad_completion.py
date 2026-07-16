@@ -21,6 +21,8 @@ from apps.drawing_metadata.models import RegisteredDrawing
 
 STANDARD_GRAVITY = 9.80665
 KG_TWO_DECIMAL_PATTERN = re.compile(r"^-?\d+\.\d{2} kg$")
+ERROR_MESSAGE_OUTPUT_LIMIT = 1200
+WARNING_SAMPLE_LIMIT = 20
 
 
 def _path_key(value: str) -> str:
@@ -65,6 +67,32 @@ def _inside_print_area_counts(raw: dict) -> dict[str, int]:
     return {"inside": counts["inside"], "outside": counts["outside"], "unknown": counts["unknown"]}
 
 
+def _truncate_text(value: str, limit: int = ERROR_MESSAGE_OUTPUT_LIMIT) -> str:
+    if len(value) <= limit:
+        return value
+    omitted = len(value) - limit
+    return f"{value[:limit]}\n...（監査JSONでは先頭{limit}文字のみ出力。{omitted}文字を省略。）"
+
+
+def _warning_type(message: str) -> str:
+    return message.split(":", 1)[-1].strip() if ":" in message else message.strip()
+
+
+def _warning_summary(warnings: list) -> dict:
+    counter = Counter()
+    for warning in warnings:
+        if not isinstance(warning, dict):
+            counter["non_object_warning"] += 1
+            continue
+        code = str(warning.get("code") or "unknown_warning")
+        message = str(warning.get("message") or "")
+        if code == "unsupported_geometry":
+            counter[f"{code}:{_warning_type(message)}"] += 1
+        else:
+            counter[code] += 1
+    return dict(counter)
+
+
 def _latest_job(snapshot) -> dict:
     job = getattr(snapshot, "latest_job", None) if snapshot else None
     if job is None:
@@ -75,16 +103,29 @@ def _latest_job(snapshot) -> dict:
             "startedAt": None,
             "finishedAt": None,
             "errorMessage": "",
+            "errorMessageLength": 0,
+            "errorMessageTruncated": False,
             "warnings": [],
+            "warningCount": 0,
+            "warningTruncated": False,
+            "warningTypeCounts": {},
         }
+    error_message = job.error_message or ""
+    warnings = job.warnings_json or []
+    error_message_display = _truncate_text(error_message)
     return {
         "status": job.status,
         "profile": job.extraction_profile,
         "createdAt": job.created_at.isoformat() if job.created_at else None,
         "startedAt": job.started_at.isoformat() if job.started_at else None,
         "finishedAt": job.finished_at.isoformat() if job.finished_at else None,
-        "errorMessage": job.error_message,
-        "warnings": job.warnings_json or [],
+        "errorMessage": error_message_display,
+        "errorMessageLength": len(error_message),
+        "errorMessageTruncated": error_message_display != error_message,
+        "warnings": warnings[:WARNING_SAMPLE_LIMIT],
+        "warningCount": len(warnings),
+        "warningTruncated": len(warnings) > WARNING_SAMPLE_LIMIT,
+        "warningTypeCounts": _warning_summary(warnings),
     }
 
 
