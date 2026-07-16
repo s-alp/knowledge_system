@@ -24,6 +24,7 @@ output/icad_extraction_probe_2026-07-15/
 output/souya_handoff/*_probe_*.json
 output/souya_handoff/*_trial_*.json
 output/souya_handoff/*_subset_*.json
+output/souya_handoff/icad_delivery_readiness_*.json
 output/souya_handoff/drawing_metadata_fixture_[0-9]*.json
 output/souya_handoff/drawing_metadata_fixture_reextract_[0-9]*.json
 output/souya_handoff/drawing_metadata_fixture_all_shared_[0-9]*.json

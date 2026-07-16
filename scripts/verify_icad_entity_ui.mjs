@@ -9,6 +9,7 @@ await fs.mkdir(outputDirectory, { recursive: true });
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const page = await browser.newPage({ viewport: { width: 1708, height: 920 } });
 page.setDefaultTimeout(30000);
+page.setDefaultNavigationTimeout(120000);
 const browserErrors = [];
 page.on("console", (message) => {
   if (message.type() === "error" && !message.text().includes("Failed to load resource")) {
@@ -63,7 +64,7 @@ async function verifyDrawingManagementEntry() {
 }
 
 try {
-  await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
+  await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 120000 });
   await verifyDrawingManagementEntry();
 
   await page.locator(".sidebar-link", { hasText: "プロジェクト" }).click();
