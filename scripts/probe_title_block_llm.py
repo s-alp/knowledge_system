@@ -36,18 +36,19 @@ def _is_2d_payload(path: Path, payload: dict) -> bool:
 
 
 def _candidate_summary(path: Path, payload: dict) -> dict:
-    from apps.drawing_metadata.services.llm_title_block_classifier import filter_classifiable_title_block_candidates
+    from apps.drawing_metadata.services.llm_title_block_classifier import filter_classifiable_title_block_candidates_with_stats
     from apps.drawing_metadata.services.normalization import normalize_raw_extract
 
     canonical = normalize_raw_extract(payload)
     candidates = canonical.get("title_block_candidates") or []
-    llm_candidates, _ = filter_classifiable_title_block_candidates(candidates)
+    llm_candidates, _original_indexes, skip_stats = filter_classifiable_title_block_candidates_with_stats(candidates)
     return {
         "path": str(path),
         "file": path.name,
         "candidate_count": len(candidates),
         "llm_candidate_count": len(llm_candidates),
-        "skipped_replacement_character_count": len(candidates) - len(llm_candidates),
+        "skipped_replacement_character_count": int(skip_stats.get("replacement_character") or 0),
+        "skipped_unusable_value_count": int(skip_stats.get("unusable_value") or 0),
         "selected_fields": canonical.get("title_block_fields") or {},
         "candidates": candidates,
         "llm_candidates": llm_candidates,
@@ -111,6 +112,7 @@ def main() -> int:
     args = parser.parse_args()
 
     _setup_django()
+    from django.conf import settings
 
     root = Path(args.root)
     summaries = []
@@ -140,6 +142,14 @@ def main() -> int:
         "candidate_sample_count": len(deduped),
         "selected_file_count": len(selected),
         "classified": bool(args.classify),
+        "runtime": {
+            "llmProvider": getattr(settings, "DRAWING_METADATA_LLM_PROVIDER", ""),
+            "geminiApiKeyConfigured": bool(getattr(settings, "GEMINI_API_KEY", "")),
+            "geminiModel": getattr(settings, "GEMINI_MODEL", ""),
+            "geminiFallbackModels": list(getattr(settings, "GEMINI_FALLBACK_MODELS", []) or []),
+            "geminiTemperature": getattr(settings, "GEMINI_TEMPERATURE", None),
+            "purpose": "title_block_candidate_field_classification_only",
+        },
         "files": [],
     }
 
@@ -150,6 +160,7 @@ def main() -> int:
             "candidate_count": summary["candidate_count"],
             "llm_candidate_count": summary["llm_candidate_count"],
             "skipped_replacement_character_count": summary["skipped_replacement_character_count"],
+            "skipped_unusable_value_count": summary["skipped_unusable_value_count"],
             "selected_fields": summary["selected_fields"],
             "candidate_preview": [
                 {

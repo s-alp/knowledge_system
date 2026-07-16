@@ -35,16 +35,37 @@ def has_replacement_character(candidate: dict) -> bool:
 
 def filter_classifiable_title_block_candidates(candidates: list[dict]) -> tuple[list[dict], list[int]]:
     """Filter LLM inputs while keeping a map back to the original candidate list."""
+    classifiable, original_indexes, _stats = filter_classifiable_title_block_candidates_with_stats(candidates)
+    return classifiable, original_indexes
+
+
+def filter_classifiable_title_block_candidates_with_stats(candidates: list[dict]) -> tuple[list[dict], list[int], dict]:
+    """Filter LLM inputs while reporting why unsafe or unhelpful candidates were skipped."""
     classifiable: list[dict] = []
     original_indexes: list[int] = []
+    stats = {
+        "replacement_character": 0,
+        "unusable_value": 0,
+    }
     for index, candidate in enumerate(candidates):
         if not isinstance(candidate, dict):
             continue
         if has_replacement_character(candidate):
+            stats["replacement_character"] += 1
+            continue
+        if not _is_candidate_value_classifiable(candidate):
+            stats["unusable_value"] += 1
             continue
         classifiable.append(candidate)
         original_indexes.append(index)
-    return classifiable, original_indexes
+    return classifiable, original_indexes, stats
+
+
+def _is_candidate_value_classifiable(candidate: dict) -> bool:
+    field = candidate.get("field")
+    rule = TITLE_BLOCK_FIELD_RULES.get(str(field), {}) if field else {}
+    max_value_length = int(rule.get("max_value_length", 80))
+    return _is_title_block_value_usable(candidate.get("value"), max_length=max_value_length)
 
 
 def remap_title_block_classification_indexes(classifications: list[dict], original_indexes: list[int]) -> list[dict]:

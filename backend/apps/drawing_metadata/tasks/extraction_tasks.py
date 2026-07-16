@@ -19,7 +19,7 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiResponseError,
     apply_title_block_classifications,
     classify_title_block_candidates,
-    filter_classifiable_title_block_candidates,
+    filter_classifiable_title_block_candidates_with_stats,
     remap_title_block_classification_indexes,
 )
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
@@ -103,15 +103,25 @@ def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: li
     if not candidates:
         return
 
-    classifiable_candidates, original_indexes = filter_classifiable_title_block_candidates(candidates)
-    skipped_count = len(candidates) - len(classifiable_candidates)
-    if skipped_count:
+    classifiable_candidates, original_indexes, skip_stats = filter_classifiable_title_block_candidates_with_stats(candidates)
+    replacement_count = int(skip_stats.get("replacement_character") or 0)
+    if replacement_count:
         warnings.append(
             {
                 "code": "title_block_llm_skipped_replacement_characters",
-                "message": f"Replacement-character title-block candidates were skipped before Gemini classification: {skipped_count}",
+                "message": f"Replacement-character title-block candidates were skipped before Gemini classification: {replacement_count}",
                 "source": "gemini_title_block_classifier",
-                "count": skipped_count,
+                "count": replacement_count,
+            }
+        )
+    unusable_count = int(skip_stats.get("unusable_value") or 0)
+    if unusable_count:
+        warnings.append(
+            {
+                "code": "title_block_llm_skipped_unusable_values",
+                "message": f"Value-less or unusable title-block candidates were skipped before Gemini classification: {unusable_count}",
+                "source": "gemini_title_block_classifier",
+                "count": unusable_count,
             }
         )
     if not classifiable_candidates:

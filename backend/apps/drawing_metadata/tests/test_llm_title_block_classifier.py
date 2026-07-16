@@ -10,6 +10,7 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
     apply_title_block_classifications,
     classify_title_block_candidates,
     filter_classifiable_title_block_candidates,
+    filter_classifiable_title_block_candidates_with_stats,
     remap_title_block_classification_indexes,
 )
 
@@ -173,6 +174,21 @@ def test_filter_classifiable_candidates_keeps_original_index_map():
     assert filtered == [candidates[1]]
     assert original_indexes == [1]
     assert remapped == [{"index": 1, "field": "material", "confidence": "high", "reason": "材質欄"}]
+
+
+def test_filter_classifiable_candidates_skips_value_less_or_label_only_candidates():
+    candidates = [
+        {"field": "material", "value": None, "evidence_text": "材質"},
+        {"field": "material", "value": "材質", "evidence_text": "材質"},
+        {"field": "material", "value": "SUS304", "evidence_text": "材質 SUS304"},
+    ]
+
+    filtered, original_indexes, stats = filter_classifiable_title_block_candidates_with_stats(candidates)
+
+    assert filtered == [candidates[2]]
+    assert original_indexes == [2]
+    assert stats["unusable_value"] == 2
+    assert stats["replacement_character"] == 0
 
 
 def test_apply_title_block_classifications_adds_missing_field_without_overwrite():
