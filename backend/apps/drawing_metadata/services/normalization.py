@@ -28,8 +28,8 @@ TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "approver": {"label": "承認者", "keywords": ["承認", "認可", "approved"], "max_value_length": 40},
     "date": {"label": "日付", "keywords": ["日付", "年月日", "date"], "max_value_length": 40},
     "revision": {"label": "改訂", "keywords": ["改訂", "訂正", "rev", "revision"], "max_value_length": 40},
-    "prfx": {"label": "PRFX", "keywords": ["prfx", "p/rfx", "prefix"], "max_value_length": 40},
-    "unit_number": {"label": "ユニット番号", "keywords": ["ユニット", "unit", "unit no"], "max_value_length": 40},
+    "prfx": {"label": "PRFX", "keywords": ["prfx", "p/rfx", "prefix", "pfx"], "max_value_length": 40},
+    "unit_number": {"label": "ユニット番号", "keywords": ["ユニット", "unit no", "unit_no", "unitno", "unit number"], "max_value_length": 40},
 }
 
 GEOMETRY_FEATURE_RULES: dict[str, dict[str, object]] = {
@@ -141,6 +141,39 @@ def _text_lines_from_payload(text: dict) -> list[str]:
     if joined_text and joined_text not in lines:
         lines.append(joined_text)
     return lines
+
+
+def _extract_labeled_field_candidates(field: str, texts: Iterable[str | None]) -> list[str]:
+    rule = TITLE_BLOCK_FIELD_RULES[field]
+    candidates: list[str] = []
+    for text in _flatten_strings(texts):
+        normalized_text = unicodedata.normalize("NFKC", text)
+        for keyword in rule["keywords"]:
+            value = _strip_label_value(normalized_text, str(keyword))
+            if _is_field_value_usable(field, value, normalized_text):
+                candidates.append(str(value).strip())
+    return _merge_unique(candidates)
+
+
+def _extract_identity_candidates_from_part_ex_info(parts: Iterable[dict], field: str) -> list[str]:
+    rule = TITLE_BLOCK_FIELD_RULES[field]
+    candidates: list[str] = []
+    for part in parts:
+        if not isinstance(part, dict):
+            continue
+        fields = part.get("ex_info_fields") or {}
+        if not isinstance(fields, dict):
+            continue
+        for key, value in fields.items():
+            key_text = unicodedata.normalize("NFKC", str(key))
+            value_text = unicodedata.normalize("NFKC", str(value))
+            evidence_text = f"{key_text} {value_text}".strip()
+            key_matches_field = any(_normalize_for_match(str(keyword)) in _normalize_for_match(key_text) for keyword in rule["keywords"])
+            if key_matches_field and _is_field_value_usable(field, value_text, evidence_text):
+                candidates.append(value_text.strip())
+                continue
+            candidates.extend(_extract_labeled_field_candidates(field, [evidence_text, value_text]))
+    return _merge_unique(candidates)
 
 
 def _looks_like_title_block_label(value: str) -> bool:
@@ -983,6 +1016,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "material_specific_gravities": [],
         "part_material_candidates": [],
         "part_material_candidate_count": 0,
+        "prfx_candidates": [],
+        "unit_number_candidates": [],
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -1084,6 +1119,26 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             for part in parts
             for value in [part.get("ex_info"), *(part.get("ex_info_fields", {}) or {}).values()]
         )
+        canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
+        canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)
+        identity_tokens = _flatten_strings(
+            [
+                top_part.get("name"),
+                top_part.get("comment"),
+                top_part.get("ex_info"),
+                *canonical["part_names"],
+                *canonical["part_ex_info_tokens"],
+                *canonical["ref_model_names"],
+            ]
+        )
+        canonical["prfx_candidates"] = _merge_unique(
+            _extract_identity_candidates_from_part_ex_info(parts, "prfx")
+            + _extract_labeled_field_candidates("prfx", identity_tokens)
+        )
+        canonical["unit_number_candidates"] = _merge_unique(
+            _extract_identity_candidates_from_part_ex_info(parts, "unit_number")
+            + _extract_labeled_field_candidates("unit_number", identity_tokens)
+        )
         canonical["part_material_candidates"] = _build_part_material_candidates(parts, materials)
         canonical["part_material_candidate_count"] = len(canonical["part_material_candidates"])
         part_material_keywords, part_unresolved_material_keywords = _split_material_keywords(
@@ -1095,8 +1150,6 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["unresolved_material_keywords"] = _merge_unique(
             canonical["unresolved_material_keywords"] + part_unresolved_material_keywords
         )
-        canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
-        canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)
         canonical["external_part_exists"] = any(part.get("is_external") for part in parts)
         canonical["mirror_part_exists"] = any(part.get("is_mirror") for part in parts)
         canonical["unresolved_part_exists"] = any(part.get("is_unloaded") for part in parts)
@@ -1177,6 +1230,14 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         title_fields = canonical["title_block_fields"]
         if title_fields.get("weight"):
             title_fields["weight"] = _normalize_weight_to_kg_text(title_fields["weight"])
+        canonical["prfx_candidates"] = _merge_unique(
+            _flatten_strings([title_fields.get("prfx")])
+            + _extract_labeled_field_candidates("prfx", trusted_text_tokens)
+        )
+        canonical["unit_number_candidates"] = _merge_unique(
+            _flatten_strings([title_fields.get("unit_number")])
+            + _extract_labeled_field_candidates("unit_number", trusted_text_tokens)
+        )
         for source_key, canonical_key in {
             "drawing_number": "drawing_number",
             "drawing_name": "drawing_name",

@@ -67,7 +67,19 @@ def test_normalize_3d_raw_extract():
                     "ex_info_fields": {
                         "User_WBZAI1": "ＲＭ",
                         "User_WCMNA": "ＳＵＳ",
+                        "User_PRFX": "CAA5012",
+                        "User_UNIT_NO": "34000",
                     },
+                },
+                {
+                    "tree_path": ["Top", "UnitA", "Child"],
+                    "name": "UnitA",
+                    "comment": "ユニット名を含むが番号ラベルではない",
+                    "is_external": False,
+                    "is_mirror": False,
+                    "is_read_only": False,
+                    "is_unloaded": False,
+                    "materials": [],
                 }
             ],
         },
@@ -116,8 +128,12 @@ def test_normalize_3d_raw_extract():
     assert "S45C" in canonical["material_keywords"]
     assert canonical["unresolved_material_keywords"] == ["75", "ZZZ"]
     assert "SMC" in canonical["maker_keywords"]
+    assert canonical["prfx_candidates"] == ["CAA5012"]
+    assert canonical["unit_number_candidates"] == ["34000"]
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)
+    assert any(tag["tag"] == "PRFX:CAA5012" for tag in tags)
+    assert any(tag["tag"] == "ユニット:34000" for tag in tags)
     assert not any(tag["tag"] == "材質:ZZZ" for tag in tags)
     assert any(tag["tag"] == "材質要確認:ZZZ" for tag in tags)
 
@@ -214,6 +230,8 @@ def test_normalize_2d_raw_extract():
     assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
     assert canonical["title_block_fields"]["prfx"] == "RAA4844"
     assert canonical["title_block_fields"]["unit_number"] == "U01"
+    assert canonical["prfx_candidates"] == ["RAA4844"]
+    assert canonical["unit_number_candidates"] == ["U01"]
     assert "designer" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "１．使用" for candidate in canonical["title_block_candidates"])
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
