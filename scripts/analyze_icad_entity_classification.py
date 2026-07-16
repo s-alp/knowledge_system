@@ -18,6 +18,7 @@ import django  # noqa: E402
 django.setup()
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot  # noqa: E402
+from apps.drawing_metadata.services.drawing_scope import get_active_drawing_scope  # noqa: E402
 
 
 PART_NUMBER_KEYS = {"partno", "partnumber", "品番", "部品番号", "図番", "drawingno"}
@@ -46,9 +47,18 @@ def identity_key(part: dict) -> str:
     return f"name:{name}"
 
 
+def has_external_reference(part: dict) -> bool:
+    return bool(part.get("is_external")) or bool(str(part.get("ref_model_name") or "").strip()) or bool(str(part.get("ref_model_path") or "").strip())
+
+
 def build_report() -> dict:
+    scope = get_active_drawing_scope()
     snapshots = DrawingMetadataSnapshot.objects.filter(extraction_mode="3d").select_related("drawing")
+    if scope.source_paths is not None:
+        snapshots = snapshots.filter(drawing__source_path__in=scope.source_paths)
     kind_counts: Counter[str] = Counter()
+    corrected_kind_counts: Counter[str] = Counter()
+    raw_subassembly_without_external = 0
     depth_counts: Counter[int] = Counter()
     candidate_counts: Counter[str] = Counter()
     leaf_identities: Counter[str] = Counter()
@@ -83,6 +93,16 @@ def build_report() -> dict:
                 else inferred_child_counts[path]
             )
             kind_counts[str(part.get("entity_kind") or "missing")] += 1
+            corrected_kind = (
+                "part"
+                if child_count <= 0
+                else "assembly"
+                if depth == 0 or not has_external_reference(part)
+                else "subassembly"
+            )
+            corrected_kind_counts[corrected_kind] += 1
+            if str(part.get("entity_kind") or "") == "subassembly" and corrected_kind != "subassembly":
+                raw_subassembly_without_external += 1
             depth_counts[depth] += 1
             identity = identity_key(part)
             row = {
@@ -105,7 +125,7 @@ def build_report() -> dict:
                 unit_identities[identity] += 1
                 if len(examples["topLevel"]) < 20:
                     examples["topLevel"].append(row)
-            elif part.get("ref_model_path") or part.get("ref_model_name") or part.get("is_external"):
+            elif has_external_reference(part):
                 candidate_counts["referenced_assembly"] += 1
                 unit_identities[identity] += 1
                 if len(examples["referencedAssembly"]) < 20:
@@ -127,11 +147,16 @@ def build_report() -> dict:
             "unit": "icd_file",
             "candidateCount": snapshots.count(),
             "rule": "製品・装置・ユニットと部品の登録候補合計はICDファイル数と一致させる。",
+            "scopeMode": scope.mode,
+            "scopeManifest": scope.manifest_path,
         },
         "internalStructureDiagnostics": {
             "notice": "以下はICD内部ツリーの診断値であり、ナレッジシステムへの登録件数ではない。",
             "totalPartOccurrences": total_parts,
             "rawEntityKindCounts": dict(kind_counts),
+            "correctedEntityKindCounts": dict(corrected_kind_counts),
+            "rawSubassemblyWithoutExternalReference": raw_subassembly_without_external,
+            "entityKindPolicy": "子階層があるだけではsubassemblyにしない。depth>0 かつ is_external/ref_model が確認できる中間ノードだけをsubassembly候補にする。",
             "depthCounts": {str(key): value for key, value in sorted(depth_counts.items())},
             "assemblyCandidateCounts": dict(candidate_counts),
             "uniqueUnitIdentityCount": len(unit_identities),

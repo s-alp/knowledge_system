@@ -3,11 +3,7 @@ import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { DrawingSupplementPanels } from "./shared/components/DrawingSupplementPanels";
 import { DrawingEntryPanel } from "./shared/components/DrawingEntryPanel";
 import { LicensePanel } from "./shared/components/LicensePanel";
-import {
-  EntityDetailPage,
-  PlaceholderKnowledgePage,
-  type DetailPageKey,
-} from "./features/knowledgeEntities/EntityPages";
+import { PlaceholderKnowledgePage, type DetailPageKey } from "./features/knowledgeEntities/EntityPages";
 import { IcadEntityDetailPage, IcadEntityListPage } from "./features/knowledgeEntities/IcadEntityPages";
 import { IcadExtractionReviewPage } from "./features/drawingMetadata/IcadExtractionReviewPage";
 import type { KnowledgePageKey } from "./features/knowledgeEntities/types";
@@ -15,7 +11,7 @@ import { TagAutomationSettingsPage } from "./features/knowledgeSettings/TagAutom
 import { resolveDrawingIdFromLocation, resolveViewerModeFromSearch } from "./shared/drawingRoute";
 import { isViewerDebugInputsEnabled } from "./shared/env";
 import { useDrawingBootstrap } from "./shared/hooks/useDrawingBootstrap";
-import { buildDrawingKnowledgeMock } from "./shared/mock/drawingKnowledge";
+import { buildDrawingKnowledgeDetail } from "./shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse } from "./shared/types/viewer";
 
 const Viewer2DPage = lazy(() =>
@@ -118,7 +114,7 @@ export default function App() {
   const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
   const [selectedEntity, setSelectedEntity] = useState<{ entityId: string; drawingId: string } | null>(null);
   const detailMock = useMemo(
-    () => (bootstrap ? buildDrawingKnowledgeMock(bootstrap) : null),
+    () => (bootstrap ? buildDrawingKnowledgeDetail(bootstrap) : null),
     [bootstrap],
   );
   const [mode, setMode] = useState<ViewMode>("2d");
@@ -140,7 +136,7 @@ export default function App() {
     };
   }, [localLaunch]);
   const localDetailMock = useMemo(
-    () => (localBootstrap ? buildDrawingKnowledgeMock(localBootstrap) : null),
+    () => (localBootstrap ? buildDrawingKnowledgeDetail(localBootstrap) : null),
     [localBootstrap],
   );
   const activeBootstrap = localBootstrap ?? bootstrap;
@@ -150,7 +146,7 @@ export default function App() {
 
   function openKnowledgePage(page: KnowledgePageKey, openDetail = false, entityId?: string, entityDrawingId?: string) {
     setActivePage(page);
-    setDetailPage(openDetail && (page === "project" || page === "product" || page === "part") ? page : null);
+    setDetailPage(openDetail && (page === "product" || page === "part") ? page : null);
     setSelectedEntity(
       openDetail && (page === "product" || page === "part") && entityId && entityDrawingId
         ? { entityId, drawingId: entityDrawingId }
@@ -201,26 +197,8 @@ export default function App() {
         );
       }
 
-      if (activePage === "project") {
-        return (
-          <EntityDetailPage
-            pageKey={activePage}
-            detail={activeDetailMock}
-            onNavigate={(nextPage) => openKnowledgePage(nextPage, true)}
-          />
-        );
-      }
-
       if (activePage === "system") {
-        return (
-          <TagAutomationSettingsPage
-            onOpenIcadExtractionReview={() => {
-              setIcadExtractionFile(null);
-              setShowIcadExtractionReview(false);
-              openKnowledgePage("drawing");
-            }}
-          />
-        );
+        return <TagAutomationSettingsPage />;
       }
 
       return <PlaceholderKnowledgePage title={pageTitles[activePage]} />;

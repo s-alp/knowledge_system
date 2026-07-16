@@ -425,7 +425,7 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
       "chosenValue": 2.08,
       "chosenMode": "3d",
       "status": "conflict",
-      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。"
+      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を採用候補として示し、確定値にはしません。"
     }
   ],
   "conflicts": [
@@ -435,7 +435,7 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
       "mode3dValue": 2.08,
       "chosenValue": 2.08,
       "chosenMode": "3d",
-      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。"
+      "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を採用候補として示し、確定値にはしません。"
     }
   ],
   "diagnosticConflicts": [
@@ -495,7 +495,7 @@ SXNET の `SxGeomHatch` 公開フィールドは `pattern`、`angle`、`dist`、
 
 ### 10.2 3D構成からの実エンティティ生成
 
-3D構成ノードに `nodeId`、`parentNodeId`、`depth`、`childCount`、`entityKind` を付けた。子を持つノードはアセンブリ／サブアセンブリとして「製品・装置・ユニット」、末端ノードは「部品」に分類する。39件取込後のローカルAPIでは、製品・装置・ユニット269件、部品3,783件を実データとして確認した。
+3D構成ノードに `nodeId`、`parentNodeId`、`depth`、`childCount`、`entityKind` を付ける。ただし、子を持つだけではサブアセンブリとは判定しない。`subassembly` は `is_external`、`ref_model_name`、`ref_model_path` など外部参照の根拠がある中間ノード、または手動確定がある場合だけ扱う。末端ノードは内部構成診断上の部品として集計するが、ナレッジシステムへの登録単位は1 ICD = 1件である。
 
 | API | 用途 |
 | --- | --- |

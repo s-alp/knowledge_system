@@ -2,9 +2,9 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { DrawingSupplementPanels } from "./DrawingSupplementPanels";
-import type { DrawingKnowledgeMock } from "../mock/drawingKnowledge";
+import type { DrawingKnowledgeDetail } from "../knowledge/drawingKnowledge";
 
-const detail: DrawingKnowledgeMock = {
+const detail: DrawingKnowledgeDetail = {
   attributes: [],
   remarks: "-",
   revisionHistory: [],

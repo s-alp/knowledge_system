@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { DrawingKnowledgeMock } from "../../../shared/mock/drawingKnowledge";
+import type { DrawingKnowledgeDetail } from "../../../shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse } from "../../../shared/types/viewer";
 import { Viewer2DPage } from "./Viewer2DPage";
 
@@ -36,9 +36,9 @@ vi.mock("../../../shared/loadingMessages", () => ({
   getViewer2DLoadingMessage: () => null,
 }));
 
-vi.mock("../../../shared/mock/drawingKnowledge", async () => {
-  const actual = await vi.importActual<typeof import("../../../shared/mock/drawingKnowledge")>(
-    "../../../shared/mock/drawingKnowledge",
+vi.mock("../../../shared/knowledge/drawingKnowledge", async () => {
+  const actual = await vi.importActual<typeof import("../../../shared/knowledge/drawingKnowledge")>(
+    "../../../shared/knowledge/drawingKnowledge",
   );
   return {
     ...actual,
@@ -94,7 +94,7 @@ const bootstrap: DrawingBootstrapResponse = {
   metadata: {},
 };
 
-const knowledgeMock: DrawingKnowledgeMock = {
+const knowledgeMock: DrawingKnowledgeDetail = {
   attributes: [],
   remarks: "-",
   revisionHistory: [],

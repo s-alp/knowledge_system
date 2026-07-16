@@ -14,6 +14,16 @@ urlpatterns = [
         views.TagAutomationSettingsApiView.as_view(),
         name="drawing-metadata-tag-automation-settings-slash",
     ),
+    path(
+        "drawing-metadata/handoff-summary",
+        views.HandoffSummaryApiView.as_view(),
+        name="drawing-metadata-handoff-summary",
+    ),
+    path(
+        "drawing-metadata/handoff-summary/",
+        views.HandoffSummaryApiView.as_view(),
+        name="drawing-metadata-handoff-summary-slash",
+    ),
     path("knowledge-entities", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list"),
     path("knowledge-entities/", views.IcadEntityListApiView.as_view(), name="icad-knowledge-entity-list-slash"),
     path("drawing-options", views.DrawingOptionListApiView.as_view(), name="drawing-option-list"),

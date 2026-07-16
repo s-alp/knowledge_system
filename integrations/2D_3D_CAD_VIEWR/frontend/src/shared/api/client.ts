@@ -32,6 +32,71 @@ export interface DrawingMetadataRegistrationResponse {
   viewerBootstrap: DrawingBootstrapResponse;
 }
 
+export interface DrawingMetadataRegistrationListItem {
+  drawingId: string;
+  hostDrawingId: string;
+  filename: string;
+  sourcePath: string;
+  sourceFormat: string;
+  snapshotModes: DrawingMetadataExtractionMode[];
+  latestJobStatusByMode: Partial<Record<DrawingMetadataExtractionMode, string | null>>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HandoffSummaryResponse {
+  scope?: {
+    mode: string;
+    manifestPath: string;
+    manifestSourceCount: number;
+    totalRegistrationCount: number;
+    scopedRegistrationCount: number;
+    excludedRegistrationCount: number;
+  };
+  apiRows: Array<{
+    area: string;
+    method: string;
+    path: string;
+    purpose: string;
+  }>;
+  summaryCards: Array<{ label: string; value: number }>;
+  targetTotals: Array<{
+    targetKey: string;
+    targetLabel: string;
+    drawingCount: number;
+    attributeCount: number;
+    tagCount: number;
+  }>;
+  rows: Array<{
+    drawingId: string;
+    filename: string;
+    sourcePath: string;
+    has2d: boolean;
+    has3d: boolean;
+    has2dLabel: string;
+    has3dLabel: string;
+    snapshotStateLabel: string;
+    defaultMode: string;
+    canonicalAttributeCount: number;
+    tagCount: number;
+    reviewConflictCount: number;
+    diagnosticConflictCount: number;
+    payloadTargets: Array<{
+      targetKey: string;
+      targetLabel: string;
+      attributeCount: number;
+      tagCount: number;
+      tagApiStatus: string;
+      candidateEndpoint: string;
+      payloadKeys: string;
+    }>;
+    detailUrl: string;
+    tagReviewUrl: string;
+    bootstrapApiUrl: string;
+    ragPayloadApiUrl: string;
+  }>;
+}
+
 export type KnowledgeEntityTargetKey = "product" | "part";
 export type KnowledgeEntityKind = "assembly" | "subassembly" | "part";
 
@@ -212,6 +277,10 @@ export function getDrawingMetadataRegistration(drawingId: string): Promise<Drawi
   return requestJson<DrawingMetadataRegistrationResponse>(`/drawing-metadata/registrations/${drawingId}`);
 }
 
+export function getDrawingMetadataRegistrations(): Promise<DrawingMetadataRegistrationListItem[]> {
+  return requestJson<DrawingMetadataRegistrationListItem[]>("/drawing-metadata/registrations");
+}
+
 export function getKnowledgeEntities(
   targetKey: KnowledgeEntityTargetKey,
   query = "",
@@ -240,6 +309,10 @@ export function getDrawingOptions(query = "", limit = 100): Promise<{ items: Dra
 
 export function getTagAutomationSettings(): Promise<TagAutomationSettingsResponse> {
   return requestJson<TagAutomationSettingsResponse>("/drawing-metadata/settings/tag-automation");
+}
+
+export function getDrawingMetadataHandoffSummary(): Promise<HandoffSummaryResponse> {
+  return requestJson<HandoffSummaryResponse>("/drawing-metadata/handoff-summary");
 }
 
 export function uploadIcadDrawingMetadata(file: File): Promise<DrawingMetadataRegistrationResponse> {

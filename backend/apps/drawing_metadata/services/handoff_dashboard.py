@@ -38,6 +38,71 @@ def _snapshot_state_label(has_2d: bool, has_3d: bool) -> str:
     return "未抽出"
 
 
+def _api_rows() -> list[dict]:
+    return [
+        {
+            "area": "図面管理 viewer",
+            "method": "GET",
+            "path": "/api/v1/drawings/{drawing_id}/bootstrap",
+            "purpose": "2D/3D viewer が図面名、タグ、属性、関連情報を読み込む。",
+        },
+        {
+            "area": "ICAD抽出登録",
+            "method": "GET",
+            "path": "/api/v1/drawing-metadata/registrations",
+            "purpose": "登録済みICD単位の抽出状態、snapshot有無、最新ジョブ状態を確認する。",
+        },
+        {
+            "area": "ICAD抽出登録",
+            "method": "GET",
+            "path": "/api/v1/drawing-metadata/registrations/{drawing_id}",
+            "purpose": "1件の2D/3D snapshot、属性、タグ、手直し値、viewer bootstrap候補を確認する。",
+        },
+        {
+            "area": "タグ候補レビュー",
+            "method": "POST",
+            "path": "/api/v1/drawing-metadata/registrations/{drawing_id}/review",
+            "purpose": "レビュー状態、確認者、確認日時をローカル検証DBへ記録する。",
+        },
+        {
+            "area": "手直し",
+            "method": "POST",
+            "path": "/api/v1/drawing-metadata/registrations/{drawing_id}/overrides",
+            "purpose": "抽出値を直接JSON編集させず、画面項目単位の補正値として保存する。",
+        },
+        {
+            "area": "RAG/創屋連携",
+            "method": "GET",
+            "path": "/api/v1/drawing-metadata/registrations/{drawing_id}/rag-payload",
+            "purpose": "RAG投入候補、タグ、属性、根拠、競合を読み取り用payloadとして出力する。",
+        },
+        {
+            "area": "製品・装置・ユニット/部品",
+            "method": "GET",
+            "path": "/api/v1/knowledge-entities?target=product|part",
+            "purpose": "ICD単位で製品・装置・ユニット候補または部品候補を一覧表示する。",
+        },
+        {
+            "area": "紐づけ",
+            "method": "GET",
+            "path": "/api/v1/drawing-options",
+            "purpose": "製品・装置・ユニット/部品詳細から紐づけ可能な図面候補を取得する。",
+        },
+        {
+            "area": "システム設定",
+            "method": "GET",
+            "path": "/api/v1/drawing-metadata/settings/tag-automation",
+            "purpose": "タグ自動取得の実行時設定、運用項目、採用ルールを確認する。",
+        },
+        {
+            "area": "システム設定",
+            "method": "GET",
+            "path": "/api/v1/drawing-metadata/handoff-summary",
+            "purpose": "抽出管理、API仕様、対象別payload集計をシステム設定内に表示する。",
+        },
+    ]
+
+
 def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
     rows: list[dict] = []
     target_totals: dict[str, dict] = {}
@@ -112,6 +177,7 @@ def build_handoff_dashboard_payload(drawings: list[RegisteredDrawing]) -> dict:
         )
 
     return {
+        "apiRows": _api_rows(),
         "summaryCards": [
             {"label": "登録図面", "value": len(drawings)},
             {"label": "抽出済み図面", "value": extracted_count},

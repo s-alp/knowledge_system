@@ -789,6 +789,11 @@ p {
   background: rgba(25, 118, 210, 0.05);
 }
 
+.settings-management-link.active {
+  border-left: 3px solid #1976d2;
+  background: rgba(25, 118, 210, 0.08);
+}
+
 .settings-management-notice {
   margin-top: 12px;
 }

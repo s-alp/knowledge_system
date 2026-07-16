@@ -151,8 +151,9 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
 
     def get_latestJobStatusByMode(self, obj: RegisteredDrawing) -> dict[str, str | None]:
         statuses: dict[str, str | None] = {}
+        prefetched_jobs = list(obj.jobs.all())
         for mode in ("2d", "3d"):
-            latest_job = obj.jobs.filter(extraction_mode=mode).first()
+            latest_job = next((job for job in prefetched_jobs if job.extraction_mode == mode), None)
             statuses[mode] = latest_job.status if latest_job else None
         return statuses
 

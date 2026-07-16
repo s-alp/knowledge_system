@@ -86,7 +86,22 @@ def _manual_classification(snapshot: DrawingMetadataSnapshot) -> tuple[str, str]
     return target, kind if kind in {"assembly", "subassembly"} else "assembly"
 
 
-def _classify_icd(drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot, parts: list[dict]) -> dict:
+def _as_list(value) -> list:
+    if isinstance(value, list):
+        return value
+    if isinstance(value, tuple):
+        return list(value)
+    if _has_value(value):
+        return [value]
+    return []
+
+
+def _classify_icd(
+    drawing: RegisteredDrawing,
+    snapshot: DrawingMetadataSnapshot,
+    parts: list[dict],
+    canonical: dict | None = None,
+) -> dict:
     manual = _manual_classification(snapshot)
     if manual:
         return {
@@ -117,14 +132,22 @@ def _classify_icd(drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot,
             "reason": "ファイル名に組立・ユニットを示す語があるため、ICD全体を製品・装置・ユニットとして扱います。",
         }
 
-    external_parts = [part for part in parts if part.get("_depth", 0) > 0 and bool(part.get("is_external"))]
-    if external_parts:
+    if parts:
+        external_count = sum(part.get("_depth", 0) > 0 and _has_external_reference(part) for part in parts)
+    else:
+        canonical = canonical or {}
+        external_count = max(
+            len(_as_list(canonical.get("ref_model_names"))),
+            len(_as_list(canonical.get("ref_model_paths"))),
+            1 if canonical.get("external_part_exists") else 0,
+        )
+    if external_count:
         return {
             "targetKey": TARGET_PRODUCT,
             "entityKind": "assembly",
             "evidence": "sxnet_external_parts",
             "confidence": "high",
-            "reason": f"SXNETで外部パーツを{len(external_parts)}件含むため、ICD全体をアセンブリとして扱います。",
+            "reason": f"SXNETで外部参照パーツを{external_count}件確認できるため、ICD全体をアセンブリとして扱います。",
         }
 
     return {
@@ -134,6 +157,10 @@ def _classify_icd(drawing: RegisteredDrawing, snapshot: DrawingMetadataSnapshot,
         "confidence": "medium",
         "reason": "外部パーツ構成を確認できないため、ICD全体を部品候補として扱います。必要なら図面管理で登録先を確定します。",
     }
+
+
+def _has_external_reference(part: dict) -> bool:
+    return bool(part.get("is_external")) or _has_value(part.get("ref_model_name")) or _has_value(part.get("ref_model_path"))
 
 
 def _attribute(
@@ -185,6 +212,37 @@ def _material_values(parts: list[dict]) -> list[str]:
             if value and value not in values:
                 values.append(value)
     return values
+
+
+def _canonical_list_values(canonical: dict, *keys: str) -> list[str]:
+    values: list[str] = []
+    for key in keys:
+        for item in _as_list(canonical.get(key)):
+            value = _string_value(item)
+            if value and value not in values:
+                values.append(value)
+    return values
+
+
+def _has_lightweight_part_summary(canonical: dict) -> bool:
+    has_part_summary = any(
+        _has_value(canonical.get(key))
+        for key in (
+            "top_part_name",
+            "part_names",
+            "part_tree_paths",
+            "ref_model_names",
+            "ref_model_paths",
+            "external_part_exists",
+            "material_keywords",
+            "material_names",
+            "material_ids",
+        )
+    )
+    has_material_summary = any(
+        _has_value(canonical.get(key)) for key in ("material_keywords", "material_names", "material_ids")
+    )
+    return has_part_summary and has_material_summary
 
 
 def _snapshot_canonical(drawing: RegisteredDrawing, snapshot_3d: DrawingMetadataSnapshot) -> dict:
@@ -349,31 +407,51 @@ def _build_record(
     *,
     include_details: bool,
 ) -> dict:
-    parts = _part_rows(snapshot)
     composed = compose_drawing_metadata(drawing) if include_details else None
     canonical = (composed or {}).get("canonicalAttributes") or _snapshot_canonical(drawing, snapshot)
-    classification = _classify_icd(drawing, snapshot, parts)
-    top_part = (snapshot.raw_extract_json or {}).get("top_part") or {}
+    parts = _part_rows(snapshot) if include_details or not _has_lightweight_part_summary(canonical) else []
+    classification = _classify_icd(drawing, snapshot, parts, canonical=canonical)
+    top_part = ((snapshot.raw_extract_json or {}).get("top_part") or {}) if include_details or parts else {}
+    canonical_part_names = _canonical_list_values(canonical, "part_names")
     name = (
         _string_value(canonical.get("drawing_name"))
+        or _string_value(canonical.get("top_part_name"))
+        or (canonical_part_names[0] if canonical_part_names else None)
         or _string_value(top_part.get("name"))
         or PureWindowsPath(drawing.filename).stem
     )
     part_number = _string_value(canonical.get("drawing_number")) or PureWindowsPath(drawing.filename).stem
-    external_count = sum(bool(part.get("is_external")) for part in parts)
-    unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
-    extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
-    unique_part_names = sorted(
-        {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
-    )
-    materials = _material_values(parts)
+    if parts:
+        external_count = sum(_has_external_reference(part) for part in parts)
+        unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
+        extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
+        unique_part_names = sorted(
+            {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
+        )
+        materials = _material_values(parts)
+        component_count = len(parts)
+        child_assembly_count = sum(part.get("_child_count", 0) > 0 and _has_external_reference(part) for part in parts)
+        child_part_count = sum(part.get("_child_count", 0) == 0 for part in parts)
+    else:
+        unique_part_names = _canonical_list_values(canonical, "part_names", "part_keywords")
+        materials = _canonical_list_values(canonical, "material_keywords", "material_names", "material_ids")
+        external_count = max(
+            len(_as_list(canonical.get("ref_model_names"))),
+            len(_as_list(canonical.get("ref_model_paths"))),
+            1 if canonical.get("external_part_exists") else 0,
+        )
+        unloaded_count = 1 if canonical.get("unresolved_part_exists") else 0
+        extended_info_count = 1 if _has_value(canonical.get("part_ex_info_fields")) else 0
+        component_count = len(_as_list(canonical.get("part_tree_paths"))) or len(unique_part_names)
+        child_assembly_count = external_count
+        child_part_count = component_count
     overrides = snapshot.manual_overrides_json or {}
     business_fields, business_field_sources = _business_fields(
         target_key=classification["targetKey"],
         entity_kind=classification["entityKind"],
         name=name,
         part_number=part_number,
-        comment=_string_value(top_part.get("comment")),
+        comment=_string_value(top_part.get("comment")) or _string_value(canonical.get("top_part_comment")),
         canonical=canonical,
         overrides=overrides,
     )
@@ -391,12 +469,12 @@ def _build_record(
         evidence="ICDファイル全体",
     )
     _append_attribute(attributes, key="source_path", label="保存先", value=drawing.source_path, source="file", confidence="high", evidence="registeredDrawing.sourcePath")
-    _append_attribute(attributes, key="component_occurrence_count", label="内部パーツ使用数", value=len(parts), source="3d_part_tree", confidence="high", evidence="rawExtract.parts")
-    _append_attribute(attributes, key="unique_component_name_count", label="内部パーツ名称数", value=len(unique_part_names), source="3d_part_tree", confidence="medium", evidence="rawExtract.parts[].name")
-    _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external")
-    _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded")
-    _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields")
-    _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials")
+    _append_attribute(attributes, key="component_occurrence_count", label="内部パーツ使用数", value=component_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts / canonicalAttributes.part_tree_paths")
+    _append_attribute(attributes, key="unique_component_name_count", label="内部パーツ名称数", value=len(unique_part_names), source="3d_part_tree", confidence="medium", evidence="rawExtract.parts[].name / canonicalAttributes.part_names")
+    _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external / canonicalAttributes.ref_model_names")
+    _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded / canonicalAttributes.unresolved_part_exists")
+    _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields / canonicalAttributes.part_ex_info_fields")
+    _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials / canonicalAttributes.material_keywords")
     _append_attribute(attributes, key="material_2d", label="材質 (2D図枠)", value=canonical.get("material"), source="2d_title_block", confidence="medium", evidence="canonicalAttributes.title_block_fields.material")
     mass_kg, mass_evidence = _mass_in_kg(canonical)
     for key, label in (
@@ -470,9 +548,9 @@ def _build_record(
         "depth": 0,
         "parentEntityId": None,
         "childEntityIds": [],
-        "childAssemblyCount": sum(part.get("_child_count", 0) > 0 and bool(part.get("is_external")) for part in parts),
-        "childPartCount": sum(part.get("_child_count", 0) == 0 for part in parts),
-        "descendantPartCount": len(parts),
+        "childAssemblyCount": child_assembly_count,
+        "childPartCount": child_part_count,
+        "descendantPartCount": component_count,
         "drawingId": str(drawing.id),
         "drawingFilename": drawing.filename,
         "sourcePath": drawing.source_path,

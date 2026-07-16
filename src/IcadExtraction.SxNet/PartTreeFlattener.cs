@@ -59,21 +59,25 @@ namespace IcadExtraction.SxNet
             if (info != null)
             {
                 var exInfo = scanPartExtendedInfo ? ReflectionHelpers.GetString(node, "ex_inf") : null;
+                var refModelName = ReflectionHelpers.GetString(info, "ref_model_name");
+                var refModelPath = ReflectionHelpers.GetString(info, "path");
+                var isExternal = ReflectionHelpers.GetBool(info, "is_external");
+                var hasExternalReference = isExternal || !string.IsNullOrWhiteSpace(refModelName) || !string.IsNullOrWhiteSpace(refModelPath);
                 output.Add(new PartPayload
                 {
                     NodeId = nodeId,
                     ParentNodeId = parentNodeId,
                     Depth = ancestorPath.Count,
                     ChildCount = children.Count,
-                    EntityKind = children.Count == 0 ? "part" : ancestorPath.Count == 0 ? "assembly" : "subassembly",
+                    EntityKind = ResolveEntityKind(children.Count, ancestorPath.Count, hasExternalReference),
                     TreePath = currentPath,
                     Name = name,
                     Comment = ReflectionHelpers.GetString(info, "comment"),
                     ExInfo = exInfo,
                     ExInfoFields = ParseExInfoFields(exInfo),
-                    RefModelName = ReflectionHelpers.GetString(info, "ref_model_name"),
-                    RefModelPath = ReflectionHelpers.GetString(info, "path"),
-                    IsExternal = ReflectionHelpers.GetBool(info, "is_external"),
+                    RefModelName = refModelName,
+                    RefModelPath = refModelPath,
+                    IsExternal = isExternal,
                     IsMirror = ReflectionHelpers.GetBool(info, "is_mirror"),
                     IsReadOnly = ReflectionHelpers.GetBool(info, "is_read_only"),
                     IsUnloaded = ReflectionHelpers.GetBool(info, "is_unloaded"),
@@ -94,6 +98,19 @@ namespace IcadExtraction.SxNet
                     ref sequence
                 );
             }
+        }
+
+        private static string ResolveEntityKind(int childCount, int depth, bool hasExternalReference)
+        {
+            if (childCount == 0)
+            {
+                return "part";
+            }
+            if (depth == 0)
+            {
+                return "assembly";
+            }
+            return hasExternalReference ? "subassembly" : "assembly";
         }
 
         private static Dictionary<string, string> ParseExInfoFields(string? exInfo)

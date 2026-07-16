@@ -1,4 +1,5 @@
 import tempfile
+import json
 from pathlib import Path
 from uuid import uuid4
 
@@ -81,17 +82,81 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
         {
             "key": "icad-extraction-management",
             "label": "ICAD抽出管理",
-            "description": "図面管理のICAD取込・抽出レビュー画面を開きます。",
+            "description": "登録済みICAD、抽出snapshot、2D/3Dジョブ、保存元パスをシステム設定内で確認します。",
             "action": "open_icad_extraction_review",
         },
         {
             "key": "integration-data-review",
             "label": "API仕様・引継ぎ資料",
-            "description": "API仕様・引継ぎ資料で確認します。通常ユーザー画面には表示しません。",
+            "description": "移植用API、対象別payload、viewer/RAG連携の集計を確認します。",
             "action": "show_handoff_note",
         },
     ]
     assert "secret-value-must-not-be-returned" not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_handoff_summary_api_returns_dashboard_payload(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="handoff-api.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={"material_keywords": ["SUS304"]},
+        derived_tags_json=[],
+    )
+
+    response = APIClient().get("/api/v1/drawing-metadata/handoff-summary")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["summaryCards"][0]["label"] == "登録図面"
+    assert payload["summaryCards"][0]["value"] == 1
+    assert payload["apiRows"][0]["path"] == "/api/v1/drawings/{drawing_id}/bootstrap"
+    assert any(row["path"] == "/api/v1/drawing-metadata/handoff-summary" for row in payload["apiRows"])
+    assert payload["rows"][0]["filename"] == "handoff-api.icd"
+    assert payload["rows"][0]["snapshotStateLabel"] == "3Dのみ抽出済み"
+
+
+@pytest.mark.django_db
+def test_handoff_and_registration_list_follow_manifest_scope(settings, tmp_path, sample_registration_payload):
+    included = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="included.icd",
+        source_path=r"J:\sample\included.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    excluded = RegisteredDrawing.objects.create(
+        host_drawing_id="probe",
+        filename="browser_icad_probe.icd",
+        source_path=r"C:\Users\s-iwata\Desktop\knowledge_system\backend\var\drawing_metadata\uploads\probe.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(drawing=included, extraction_mode="2d")
+    DrawingMetadataSnapshot.objects.create(drawing=included, extraction_mode="3d")
+    DrawingMetadataSnapshot.objects.create(drawing=excluded, extraction_mode="3d")
+    manifest_path = tmp_path / "shared_manifest.json"
+    manifest_path.write_text(
+        json.dumps({"entries": [{"sourcePath": included.source_path}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    settings.DRAWING_METADATA_HANDOFF_MANIFEST = str(manifest_path)
+
+    list_payload = APIClient().get("/api/v1/drawing-metadata/registrations").json()
+    assert [item["filename"] for item in list_payload] == ["included.icd"]
+
+    summary_payload = APIClient().get("/api/v1/drawing-metadata/handoff-summary").json()
+    assert summary_payload["summaryCards"][0]["value"] == 1
+    assert summary_payload["rows"][0]["filename"] == "included.icd"
+    assert summary_payload["scope"]["mode"] == "manifest"
+    assert summary_payload["scope"]["manifestSourceCount"] == 1
+    assert summary_payload["scope"]["totalRegistrationCount"] == 2
+    assert summary_payload["scope"]["scopedRegistrationCount"] == 1
+    assert summary_payload["scope"]["excludedRegistrationCount"] == 1
 
 
 @pytest.mark.django_db
@@ -253,6 +318,42 @@ def test_icad_entity_api_classifies_external_reference_as_assembly(sample_regist
     assert payload["count"] == 1
     assert payload["items"][0]["entityKind"] == "assembly"
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
+
+
+@pytest.mark.django_db
+def test_icad_entity_api_treats_ref_model_name_as_external_reference(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="ref-model-name-drawing",
+        filename="ref-model-name.icd",
+        source_path=r"C:\temp\ref-model-name.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "parts": [
+                {"tree_path": ["ROOT"], "name": "ROOT", "depth": 0, "child_count": 1},
+                {
+                    "tree_path": ["ROOT", "SUB"],
+                    "name": "SUB",
+                    "depth": 1,
+                    "child_count": 1,
+                    "is_external": False,
+                    "ref_model_name": "SUB-REF",
+                },
+                {"tree_path": ["ROOT", "SUB", "LEAF"], "name": "LEAF", "depth": 2, "child_count": 0},
+            ]
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["count"] == 1
+    assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
+    assert payload["items"][0]["childAssemblyCount"] == 1
 
 
 @pytest.mark.django_db

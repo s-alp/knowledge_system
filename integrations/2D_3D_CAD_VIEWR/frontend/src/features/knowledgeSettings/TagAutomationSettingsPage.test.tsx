@@ -1,20 +1,24 @@
-import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import {
+  getDrawingMetadataHandoffSummary,
+  getDrawingMetadataRegistrations,
   getTagAutomationSettings,
+  type HandoffSummaryResponse,
   type TagAutomationSettingsResponse,
 } from "../../shared/api/client";
 import { TagAutomationSettingsPage } from "./TagAutomationSettingsPage";
 
-
 vi.mock("../../shared/api/client", () => ({
+  getDrawingMetadataHandoffSummary: vi.fn(),
+  getDrawingMetadataRegistrations: vi.fn(),
   getTagAutomationSettings: vi.fn(),
 }));
 
 const settings: TagAutomationSettingsResponse = {
   title: "タグ・属性自動取得設定",
-  summary: "抽出と採用判断に使用する現在の設定です。",
+  summary: "ICAD抽出結果からタグ・属性候補を作ります。",
   managementLinks: [
     {
       key: "icad-extraction-management",
@@ -54,26 +58,107 @@ const settings: TagAutomationSettingsResponse = {
   ],
 };
 
+const handoffSummary: HandoffSummaryResponse = {
+  scope: {
+    mode: "manifest",
+    manifestPath: "C:\\manifest\\shared.json",
+    manifestSourceCount: 39,
+    totalRegistrationCount: 68,
+    scopedRegistrationCount: 39,
+    excludedRegistrationCount: 29,
+  },
+  apiRows: [
+    {
+      area: "システム設定",
+      method: "GET",
+      path: "/api/v1/drawing-metadata/handoff-summary",
+      purpose: "抽出管理、API仕様、対象別payload集計をシステム設定内に表示する。",
+    },
+    {
+      area: "ICAD抽出登録",
+      method: "GET",
+      path: "/api/v1/drawing-metadata/registrations",
+      purpose: "登録済みICD単位の抽出状態を確認する。",
+    },
+  ],
+  summaryCards: [
+    { label: "登録図面", value: 39 },
+    { label: "2D/3D両snapshotあり", value: 39 },
+  ],
+  targetTotals: [
+    { targetKey: "drawing", targetLabel: "図面", drawingCount: 39, attributeCount: 200, tagCount: 120 },
+  ],
+  rows: [
+    {
+      drawingId: "drawing-1",
+      filename: "sample.icd",
+      sourcePath: "J:\\SAMPLE\\sample.icd",
+      has2d: true,
+      has3d: true,
+      has2dLabel: "あり",
+      has3dLabel: "あり",
+      snapshotStateLabel: "2D/3D抽出済み",
+      defaultMode: "2d",
+      canonicalAttributeCount: 10,
+      tagCount: 3,
+      reviewConflictCount: 0,
+      diagnosticConflictCount: 1,
+      payloadTargets: [],
+      detailUrl: "/internal/drawing-metadata/drawing-1/",
+      tagReviewUrl: "/internal/drawing-metadata/drawing-1/tags/",
+      bootstrapApiUrl: "/api/v1/drawings/drawing-1/bootstrap",
+      ragPayloadApiUrl: "/api/v1/drawing-metadata/registrations/drawing-1/rag-payload",
+    },
+  ],
+};
 
 describe("TagAutomationSettingsPage", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("shows the runtime settings returned by the backend without exposing a secret", async () => {
+  it("shows extraction management and handoff data inside system settings", async () => {
     vi.mocked(getTagAutomationSettings).mockResolvedValue(settings);
-    const onOpenIcadExtractionReview = vi.fn();
+    vi.mocked(getDrawingMetadataRegistrations).mockResolvedValue([
+      {
+        drawingId: "drawing-1",
+        hostDrawingId: "",
+        filename: "sample.icd",
+        sourcePath: "J:\\SAMPLE\\sample.icd",
+        sourceFormat: "icad",
+        snapshotModes: ["2d", "3d"],
+        latestJobStatusByMode: { "2d": "succeeded", "3d": "queued" },
+        createdAt: "2026-07-16T00:00:00Z",
+        updatedAt: "2026-07-16T00:00:00Z",
+      },
+    ]);
+    vi.mocked(getDrawingMetadataHandoffSummary).mockResolvedValue(handoffSummary);
 
-    render(<TagAutomationSettingsPage onOpenIcadExtractionReview={onOpenIcadExtractionReview} />);
+    render(<TagAutomationSettingsPage />);
 
     expect(await screen.findByText("タグ・属性自動取得設定")).toBeInTheDocument();
+    expect(getDrawingMetadataRegistrations).not.toHaveBeenCalled();
+    expect(getDrawingMetadataHandoffSummary).not.toHaveBeenCalled();
     expect(screen.getByText("設定済み")).toBeInTheDocument();
     expect(screen.getByText("0.1")).toBeInTheDocument();
     expect(screen.getByText("ローカルDBのみ")).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("button", { name: /ICAD抽出管理/ }));
-    expect(onOpenIcadExtractionReview).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("heading", { name: "ICAD抽出管理" })).toBeInTheDocument();
+    expect(await screen.findByText("sample.icd")).toBeInTheDocument();
+    expect(screen.getByText("2D / 3D")).toBeInTheDocument();
+    expect(screen.getByText("待機中")).toBeInTheDocument();
+    expect(screen.getByText("対象範囲: 固定manifest 39件 / 全登録 68件")).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("button", { name: /API仕様・引継ぎ資料/ }));
-    expect(screen.getByText("移植用のAPI仕様と引継ぎ資料は通常画面へ出さず、資料側で確認します。")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "API仕様・引継ぎ資料" })).toBeInTheDocument();
+    expect(screen.getByText("登録図面")).toBeInTheDocument();
+    expect(screen.getByText("集計対象外")).toBeInTheDocument();
+    expect(screen.getByText("C:\\manifest\\shared.json")).toBeInTheDocument();
+    expect(screen.getByText("/api/v1/drawing-metadata/handoff-summary")).toBeInTheDocument();
+    expect(screen.getByText("抽出管理、API仕様、対象別payload集計をシステム設定内に表示する。")).toBeInTheDocument();
+    expect(screen.getByText("/api/v1/drawings/drawing-1/bootstrap")).toBeInTheDocument();
+    expect(screen.queryByText(/通常画面へ出さず/)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /ICAD抽出管理/ })).not.toBeInTheDocument();
     expect(screen.queryByText(/AIza/i)).not.toBeInTheDocument();
   });

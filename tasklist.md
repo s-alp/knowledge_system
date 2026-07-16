@@ -15,7 +15,8 @@
 - [x] Gemini実APIを17ファイル・60候補で評価し、分類precision/recall 1.0、誤採用0を確認
 - [x] Geminiの追加採用値0件を明記し、任意補助から正本へ格上げしない
 - [x] Django 71件、フロント58件、C# 14件、system check、migration差分、本番ビルドを確認
-- [x] Chromeで詳細・編集・根拠・図面紐づけ候補67件を確認し、ブラウザエラー0件
+- [x] Chromeで詳細・編集・根拠・図面紐づけ候補38件を確認し、ブラウザエラー0件。APIの図面候補は固定manifest対象39件、紐づけ画面では現在詳細中の図面を候補から除外。検証アップロードや重複登録は固定manifest対象外として分離
+- [x] 製品・装置・ユニット／部品一覧とシステム設定に再表示キャッシュを追加し、API実測で設定初期6ms、部品一覧455ms、製品一覧962ms、登録一覧176ms、引継ぎ集計1215msを確認。引継ぎ集計は初期表示から外し、該当パネル選択時だけ取得
 - [x] 創屋本番DBへ登録・変更・削除を行わず、移植用API・データ契約・引継ぎ資料を更新
 - [x] 全差分・未追跡ファイル・起動中サーバーを最終監査し、未追跡0件、5173/8001起動中、検証通過を確認
 
@@ -253,7 +254,11 @@
 - [x] 既存3Dビューワーで複数STL表示を確認。`PSG011-PA1100_クリーニング駆動.icd` は 70,249,978 bytes のSTLをDjangoジョブ経由で生成し約6秒で表示中、`CAA5012-02434000K1R1.icd` は 38,479,119 bytes のSTLを約5.5秒で表示中。どちらもエラーなし、初期カメラ収まり、タグ・属性候補、関連情報の表示をPlaywrightとスクリーンショットで確認
 - [x] 大型3Dモデルで部品カードが縦長になりすぎる問題へ対応。長い属性値は160文字プレビューと `details` 展開にし、7件目以降は「ほか n 属性」として表示。70MB級 `PSG011-PA1100` で折りたたみ2件、ほか6属性、表示中、エラーなしをPlaywrightとスクリーンショットで確認
 - [x] コピー済み2D/3Dビューワーのフロント構成を確認し、`features/viewer2d` と `features/viewer3d` はビュワー専用、`features/knowledgeEntities` は製品・装置・ユニット/部品/プロジェクトの対象物画面専用として分離。`App.tsx` は画面切替とビュワー起動の統括に戻し、タグ自動取得本体はバックエンド/抽出器側の責務として混在させない方針を明記
-- [x] タグ自動取得の配置方針を画面へ反映。フロントの `システム設定` に `タグ自動取得設定` を追加し、設定値、Gemini低温度JSON分類、対象別マッピング、2D/3D採用ルールを表示。Djangoローカル確認画面は `/internal/drawing-metadata/system/tag-automation/` へ退避し、5173側のシステム設定から旧Django画面へ遷移しないよう修正
+- [x] タグ自動取得の配置方針を画面へ反映。フロントの `システム設定` に `タグ自動取得設定` を追加し、設定値、Gemini低温度JSON分類、対象別マッピング、2D/3D採用ルールを表示。`ICAD抽出管理` と `API仕様・引継ぎ資料` は同じシステム設定内の管理パネルで開き、登録済みICAD、snapshot、ジョブ、保存元パス、対象別payload/APIリンクを確認できる。Djangoローカル確認画面は `/internal/drawing-metadata/system/tag-automation/` へ退避し、5173側のシステム設定から旧Django画面や図面管理へ遷移しないよう修正
+- [x] システム設定の `ICAD抽出管理` クリック時に図面管理へ戻らないことをPlaywrightで再確認。`API仕様・引継ぎ資料` にはバックエンド集計API由来のAPI一覧10件、対象範囲、対象別payload件数、ICD別抽出状態を表示し、旧説明文言「ユーザー画面には表示しません」「通常画面へ出さず」が出ないことを確認
+- [x] 製品・装置・ユニット/部品一覧とシステム設定の読み込み遅延を改善。製品/部品一覧はraw 3Dパーツ全量ではなくcanonical要約で初期表示し、rawのみデータはフォールバック。登録一覧と引継ぎ集計は巨大raw JSONを読まないquerysetへ変更。システム設定は初期表示で設定APIのみ読み、ICAD抽出管理/API仕様はクリック時に遅延取得。実測で製品一覧20,058ms→1,676ms、部品一覧9,261ms→768ms、登録一覧9,596ms→281ms、引継ぎ14,797ms→906ms、設定API99ms→22ms
+- [x] 図面管理補助パネルと旧プロジェクト仮画面から `PRJ-OP30` / `OP30 カセット` / 架空担当者・日付などの固定サンプル表示を撤去。実bootstrapにあるタグ・属性候補だけ表示し、プロジェクトは受け口未確認のプレースホルダーに戻す。Playwrightで旧固定サンプル非表示を確認
+- [x] 2D/3Dビューワー統合フロントの production 側から `shared/mock/drawingKnowledge` / `DrawingKnowledgeMock` / `buildDrawingKnowledgeMock` の命名を撤去し、実bootstrap由来の補助情報として `shared/knowledge/drawingKnowledge` / `DrawingKnowledgeDetail` / `buildDrawingKnowledgeDetail` へリネーム。固定モックではなく実データ表示用モジュールであることをコード上も明確化
 
 ## 創屋との接続時に確認する
 
@@ -270,5 +275,6 @@
 
 - `backend/` / `src/` / `tests/` の差分が大きいので、別会話で再開するときは最初に `git status` を見ること
 - ユーザーが触るメイン画面は `http://127.0.0.1:5173/` の2D・3Dビューワー統合フロント。`http://127.0.0.1:8001/` はAPI専用ステータス、`/drawing-metadata/` は通常画面として使わない
-- Django HTMLの横断確認画面は開発用に `/internal/drawing-metadata/` へ退避。システム設定から旧Django画面へ遷移しないことをChrome検証済み
+- Django HTMLの横断確認画面は開発用に `/internal/drawing-metadata/` へ退避。システム設定から旧Django画面や図面管理へ遷移せず、`ICAD抽出管理` / `API仕様・引継ぎ資料` を設定画面内で表示することをChrome検証済み
+- 固定manifest `output\souya_handoff\icad_extract_import_manifest_all_shared_2026-07-15.json` をシステム設定・製品/部品・図面候補・引継ぎ集計の標準スコープに設定。全登録68件のうち共有対象39件だけを表示し、対象39件は2D/3D snapshotあり39件、未抽出0件。対象外29件は検証アップロード、重複、途中検証用 `cad_data` として `scripts\audit_registered_drawings.py` で確認
 - `runserver` はローカルで `8001`、Viteは `5173` に上げている

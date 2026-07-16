@@ -177,7 +177,7 @@ def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> 
                 chosen_value=candidate_3d,
                 chosen_mode="3d",
                 status="conflict",
-                reason="2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を仮採用しています。",
+                reason="2Dと3Dの抽出値が異なるためレビュー対象です。表示上は3D値を採用候補として示し、確定値にはしません。",
             )
         if _has_value(candidate_3d):
             return candidate_3d, _reconciliation_record(

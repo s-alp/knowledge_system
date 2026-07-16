@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildDrawingInfoFields, buildDrawingKnowledgeMock } from "./drawingKnowledge";
+import { buildDrawingInfoFields, buildDrawingKnowledgeDetail } from "./drawingKnowledge";
 import type { DrawingBootstrapResponse } from "../types/viewer";
 
 const bootstrap: DrawingBootstrapResponse = {
@@ -62,8 +62,8 @@ describe("drawingKnowledge", () => {
     ]);
   });
 
-  it("builds deterministic mock detail sections", () => {
-    const detail = buildDrawingKnowledgeMock(bootstrap);
+  it("builds drawing supplement sections from bootstrap metadata only", () => {
+    const detail = buildDrawingKnowledgeDetail(bootstrap);
 
     expect(detail.attributes).toHaveLength(2);
     expect(detail.remarks).toBe("加工確認");
@@ -79,21 +79,19 @@ describe("drawingKnowledge", () => {
       value: "SUS304",
       bindingStatus: "needs_attribute_master_binding",
     });
-    expect(detail.revisionHistory[0]).toMatchObject({
-      version: "ver.2",
-      updatedBy: "創屋 太郎",
-    });
+    expect(detail.revisionHistory).toEqual([]);
     expect(detail.relatedTabs.map((tab) => tab.label)).toEqual([
       "プロジェクト",
       "製品・装置・ユニット",
       "部品",
       "会話ログ",
     ]);
-    expect(detail.changeHistory).toHaveLength(3);
+    expect(detail.relatedTabs.every((tab) => tab.items.length === 0)).toBe(true);
+    expect(detail.changeHistory).toEqual([]);
   });
 
   it("keeps local sandbox metadata empty when no bootstrap fields exist", () => {
-    const localDetail = buildDrawingKnowledgeMock({
+    const localDetail = buildDrawingKnowledgeDetail({
       ...bootstrap,
       title: "",
       version: null,

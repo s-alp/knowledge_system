@@ -6,7 +6,7 @@ import { LoadingNotice } from "../../../shared/components/LoadingNotice";
 import { MetadataBar } from "../../../shared/components/MetadataBar";
 import { ViewerSourcePanel } from "../../../shared/components/ViewerSourcePanel";
 import { getViewer3DLoadingMessage } from "../../../shared/loadingMessages";
-import { buildDrawingInfoFields, type DrawingKnowledgeMock } from "../../../shared/mock/drawingKnowledge";
+import { buildDrawingInfoFields, type DrawingKnowledgeDetail } from "../../../shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse, Open3DResponse } from "../../../shared/types/viewer";
 import { useViewerSourceLoader } from "../../../shared/hooks/useViewerSourceLoader";
 import { Viewer3DSectionControls } from "../controls/Viewer3DSectionControls";
@@ -21,7 +21,7 @@ const ThreeDViewerScene = lazy(() =>
 interface Viewer3DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeMock;
+  knowledgeMock: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;

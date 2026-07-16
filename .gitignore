@@ -7,6 +7,9 @@ backend/**/*.pyc
 scripts/__pycache__/
 backend/.venv/
 backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/db.sqlite3-shm
+backend/db.sqlite3-wal
 backend/var/
 backend/.env
 **/bin/
@@ -16,6 +19,7 @@ backend/.env
 output/live_extracts/
 output/knowledge_ui_screenshots_*/
 output/entity_ui_*/
+output/runtime/
 output/icad_extraction_probe_2026-07-15/
 output/souya_handoff/*_probe_*.json
 output/souya_handoff/*_trial_*.json

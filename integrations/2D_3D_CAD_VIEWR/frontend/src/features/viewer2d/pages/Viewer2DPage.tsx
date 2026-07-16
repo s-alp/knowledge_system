@@ -6,7 +6,7 @@ import { ViewerSourcePanel } from "../../../shared/components/ViewerSourcePanel"
 import { getViewer2DLoadingMessage } from "../../../shared/loadingMessages";
 import { LoadingNotice } from "../../../shared/components/LoadingNotice";
 import { MetadataBar } from "../../../shared/components/MetadataBar";
-import { buildDrawingInfoFields, type DrawingKnowledgeMock } from "../../../shared/mock/drawingKnowledge";
+import { buildDrawingInfoFields, type DrawingKnowledgeDetail } from "../../../shared/knowledge/drawingKnowledge";
 import type { DrawingBootstrapResponse, Open2DResponse } from "../../../shared/types/viewer";
 import { useViewerSourceLoader } from "../../../shared/hooks/useViewerSourceLoader";
 import { Viewer2DPreviewPane } from "../components/Viewer2DPreviewPane";
@@ -15,7 +15,7 @@ import { useViewer2DDocument } from "../hooks/useViewer2DDocument";
 interface Viewer2DPageProps {
   drawingId: string;
   bootstrap: DrawingBootstrapResponse;
-  knowledgeMock: DrawingKnowledgeMock;
+  knowledgeMock: DrawingKnowledgeDetail;
   debugInputsEnabled: boolean;
   autoOpenDrawingSource?: boolean;
   initialLocalFile?: File | null;

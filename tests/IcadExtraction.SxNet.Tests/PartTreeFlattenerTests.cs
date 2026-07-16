@@ -56,6 +56,76 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(2, payload.Parts[1].Materials[0].ElementCount);
             Assert.Empty(payload.Parts[2].Materials);
             Assert.Equal(new List<string> { "Top", "ChildA", "Leaf" }, payload.Parts[2].TreePath);
+            Assert.Equal("assembly", payload.Parts[0].EntityKind);
+            Assert.Equal("subassembly", payload.Parts[1].EntityKind);
+            Assert.Equal("part", payload.Parts[2].EntityKind);
+        }
+
+        [Fact]
+        public void Flatten_DoesNotTreatInternalChildContainerAsSubassembly()
+        {
+            var root = new FakePartTree
+            {
+                inf = new FakePartInfo { name = "Top" },
+                child_list = new[]
+                {
+                    new FakePartTree
+                    {
+                        inf = new FakePartInfo
+                        {
+                            name = "InternalContainer",
+                            is_external = false,
+                        },
+                        child_list = new[]
+                        {
+                            new FakePartTree
+                            {
+                                inf = new FakePartInfo { name = "Leaf" },
+                            }
+                        }
+                    }
+                }
+            };
+
+            var payload = new PartTreeFlattener().Flatten(root, null);
+
+            Assert.Equal(3, payload.Parts.Count);
+            Assert.Equal("assembly", payload.Parts[0].EntityKind);
+            Assert.Equal("assembly", payload.Parts[1].EntityKind);
+            Assert.Equal("part", payload.Parts[2].EntityKind);
+        }
+
+        [Fact]
+        public void Flatten_TreatsReferencedChildContainerAsSubassemblyEvenWhenExternalFlagIsFalse()
+        {
+            var root = new FakePartTree
+            {
+                inf = new FakePartInfo { name = "Top" },
+                child_list = new[]
+                {
+                    new FakePartTree
+                    {
+                        inf = new FakePartInfo
+                        {
+                            name = "ReferencedContainer",
+                            ref_model_name = "REF-001",
+                            path = @"J:\ref\REF-001.icd",
+                            is_external = false,
+                        },
+                        child_list = new[]
+                        {
+                            new FakePartTree
+                            {
+                                inf = new FakePartInfo { name = "Leaf" },
+                            }
+                        }
+                    }
+                }
+            };
+
+            var payload = new PartTreeFlattener().Flatten(root, null);
+
+            Assert.Equal("subassembly", payload.Parts[1].EntityKind);
         }
 
         [Fact]

@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import type { DrawingKnowledgeMock } from "../mock/drawingKnowledge";
+import type { DrawingKnowledgeDetail } from "../knowledge/drawingKnowledge";
 
 interface DrawingSupplementPanelsProps {
-  detail: DrawingKnowledgeMock;
+  detail: DrawingKnowledgeDetail;
 }
 
 const ATTRIBUTE_VALUE_PREVIEW_LENGTH = 160;

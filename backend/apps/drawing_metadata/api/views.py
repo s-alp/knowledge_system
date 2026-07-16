@@ -23,6 +23,8 @@ from apps.drawing_metadata.api.serializers import (
     ReviewDecisionSerializer,
 )
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_scope, build_scope_payload
+from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
@@ -37,13 +39,34 @@ from apps.drawing_metadata.services.viewer_preview import (
 
 class RegistrationListApiView(APIView):
     def get(self, request):
-        drawings = (
+        queryset = (
             RegisteredDrawing.objects.prefetch_related(
-                Prefetch("snapshots", queryset=DrawingMetadataSnapshot.objects.select_related("latest_job")),
-                "jobs",
+                Prefetch(
+                    "snapshots",
+                    queryset=DrawingMetadataSnapshot.objects.only(
+                        "id",
+                        "drawing_id",
+                        "extraction_mode",
+                        "latest_job_id",
+                    ).select_related("latest_job"),
+                ),
+                Prefetch(
+                    "jobs",
+                    queryset=DrawingMetadataExtractionJob.objects.only(
+                        "id",
+                        "drawing_id",
+                        "extraction_mode",
+                        "status",
+                        "created_at",
+                    ),
+                ),
             )
             .all()
         )
+        if request.query_params.get("includeAll") == "true":
+            drawings = queryset
+        else:
+            drawings, _scope = apply_active_drawing_scope(queryset)
         return Response(RegisteredDrawingListSerializer(drawings, many=True).data)
 
     def post(self, request):
@@ -54,7 +77,9 @@ class RegistrationListApiView(APIView):
 
 
 def _icad_entity_drawings_queryset(*, include_details: bool = False):
-    drawings = RegisteredDrawing.objects.filter(snapshots__extraction_mode="3d").distinct()
+    drawings, _scope = apply_active_drawing_scope(
+        RegisteredDrawing.objects.filter(snapshots__extraction_mode="3d").distinct()
+    )
     if include_details:
         return drawings.prefetch_related(
             Prefetch(
@@ -70,7 +95,6 @@ def _icad_entity_drawings_queryset(*, include_details: bool = False):
         "id",
         "drawing_id",
         "extraction_mode",
-        "raw_extract_json",
         "canonical_attributes_json",
         "manual_overrides_json",
         "derived_tags_json",
@@ -178,7 +202,7 @@ class DrawingOptionListApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        drawings = RegisteredDrawing.objects.order_by("filename", "id")
+        drawings, _scope = apply_active_drawing_scope(RegisteredDrawing.objects.order_by("filename", "id"))
         if query:
             from django.db.models import Q
 
@@ -198,6 +222,49 @@ class DrawingOptionListApiView(APIView):
 class TagAutomationSettingsApiView(APIView):
     def get(self, request):
         return Response(build_tag_automation_settings_payload())
+
+
+class HandoffSummaryApiView(APIView):
+    def get(self, request):
+        queryset = (
+            RegisteredDrawing.objects.prefetch_related(
+                Prefetch(
+                    "snapshots",
+                    queryset=DrawingMetadataSnapshot.objects.only(
+                        "id",
+                        "drawing_id",
+                        "extraction_mode",
+                        "canonical_attributes_json",
+                        "derived_tags_json",
+                        "manual_overrides_json",
+                        "review_status",
+                        "updated_at",
+                        "latest_job_id",
+                    ).select_related("latest_job"),
+                ),
+                Prefetch(
+                    "jobs",
+                    queryset=DrawingMetadataExtractionJob.objects.only(
+                        "id",
+                        "drawing_id",
+                        "extraction_mode",
+                        "status",
+                        "created_at",
+                    ),
+                ),
+            )
+            .all()
+        )
+        total_count = queryset.count()
+        scoped_queryset, scope = apply_active_drawing_scope(queryset)
+        scoped_count = scoped_queryset.count()
+        payload = build_handoff_dashboard_payload(list(scoped_queryset))
+        payload["scope"] = build_scope_payload(
+            scope=scope,
+            total_registration_count=total_count,
+            scoped_registration_count=scoped_count,
+        )
+        return Response(payload)
 
 
 class RegistrationUploadApiView(APIView):

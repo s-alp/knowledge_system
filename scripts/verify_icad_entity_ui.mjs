@@ -35,6 +35,12 @@ async function openFirstDetail(menuLabel, expectedTitle, screenshotName) {
 
 try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
+  await page.locator(".sidebar-link", { hasText: "プロジェクト" }).click();
+  await page.getByRole("heading", { name: "プロジェクト詳細", level: 1 }).waitFor();
+  if ((await page.getByText(/PRJ-OP30|OP30 カセット|TR1D9K99027 ブラケット/).count()) > 0) {
+    throw new Error("プロジェクト画面に旧固定サンプルデータが表示されています。");
+  }
+
   await openFirstDetail("製品・装置・ユニット", "製品・装置・ユニット", "product-detail.png");
 
   if ((await page.getByText("確認待ち", { exact: true }).count()) > 0) {
@@ -82,19 +88,29 @@ try {
   await page.locator(".sidebar-link", { hasText: "システム設定" }).click();
   await page.getByRole("heading", { name: "ICADタグ・属性管理" }).waitFor();
   await page.getByRole("button", { name: /API仕様・引継ぎ資料/ }).click();
-  await page.getByText("移植用のAPI仕様と引継ぎ資料は通常画面へ出さず、資料側で確認します。").waitFor();
+  await page.getByRole("heading", { name: "API仕様・引継ぎ資料" }).waitFor();
+  await page.getByText(/対象範囲: 固定manifest/).waitFor();
+  await page.getByText("登録図面").waitFor();
+  await page.getByText("/api/v1/drawing-metadata/handoff-summary").waitFor();
+  await page.getByText(/\/api\/v1\/drawings\//).first().waitFor();
+  if ((await page.getByText(/ユーザー画面には表示しません|通常画面へ出さず/).count()) > 0) {
+    throw new Error("システム設定に旧説明文言が表示されています。");
+  }
   if (page.url().includes("/drawing-metadata/")) {
     throw new Error(`システム設定から旧Django画面へ遷移しています: ${page.url()}`);
   }
   await page.screenshot({ path: `${outputDirectory}/system-settings.png`, fullPage: true });
   await page.getByRole("button", { name: /ICAD抽出管理/ }).click();
-  await page.getByRole("heading", { name: "ICADからタグ・属性を取得" }).waitFor();
+  await page.getByRole("heading", { name: "ICAD抽出管理" }).waitFor();
+  await page.getByRole("columnheader", { name: "ICADファイル" }).waitFor();
+  await page.getByRole("columnheader", { name: "snapshot" }).waitFor();
   if (page.url().includes("/drawing-metadata/")) {
     throw new Error(`ICAD抽出管理から旧Django画面へ遷移しています: ${page.url()}`);
   }
 
   const result = {
     baseUrl,
+    projectPlaceholderVerified: true,
     productAndPartDetailsVerified: true,
     provenanceVerified: true,
     drawingLinkScreenVerified: true,
@@ -113,3 +129,4 @@ try {
     new Promise((resolve) => setTimeout(resolve, 3000)),
   ]);
 }
+process.exit(0);

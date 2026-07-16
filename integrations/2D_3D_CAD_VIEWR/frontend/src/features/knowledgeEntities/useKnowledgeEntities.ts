@@ -8,18 +8,29 @@ import {
   type KnowledgeEntityTargetKey,
 } from "../../shared/api/client";
 
+const entityListCache = new Map<string, KnowledgeEntityCatalogResponse>();
+
+function cacheKey(targetKey: KnowledgeEntityTargetKey, query: string, page: number, pageSize: number) {
+  return `${targetKey}:${query.trim()}:${page}:${pageSize}`;
+}
 
 export function useKnowledgeEntityList(targetKey: KnowledgeEntityTargetKey, query: string, page: number, pageSize = 50) {
-  const [catalog, setCatalog] = useState<KnowledgeEntityCatalogResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const key = cacheKey(targetKey, query, page, pageSize);
+  const [catalog, setCatalog] = useState<KnowledgeEntityCatalogResponse | null>(() => entityListCache.get(key) ?? null);
+  const [loading, setLoading] = useState(() => !entityListCache.has(key));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
+    const cached = entityListCache.get(key);
+    if (cached) {
+      setCatalog(cached);
+    }
+    setLoading(!cached);
     setError(null);
     getKnowledgeEntities(targetKey, query, page * pageSize, pageSize)
       .then((payload) => {
+        entityListCache.set(key, payload);
         if (active) {
           setCatalog(payload);
         }
@@ -37,7 +48,7 @@ export function useKnowledgeEntityList(targetKey: KnowledgeEntityTargetKey, quer
     return () => {
       active = false;
     };
-  }, [page, pageSize, query, targetKey]);
+  }, [key, page, pageSize, query, targetKey]);
 
   return { catalog, loading, error };
 }
