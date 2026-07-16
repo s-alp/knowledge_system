@@ -558,14 +558,20 @@ class RegistrationExtractApiView(APIView):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
         serializer = ExtractRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        job = enqueue_extraction_job(
-            drawing=drawing,
-            extraction_mode=serializer.validated_data["extractionMode"],
-            reason="API requested re-extract",
-            executed_by="api",
-            extraction_profile=serializer.validated_data.get("extractionProfile") or "default",
-            extraction_options=serializer.validated_data.get("extractionOptions") or {},
-        )
+        try:
+            job = enqueue_extraction_job(
+                drawing=drawing,
+                extraction_mode=serializer.validated_data["extractionMode"],
+                reason="API requested re-extract",
+                executed_by="api",
+                extraction_profile=serializer.validated_data.get("extractionProfile") or "default",
+                extraction_options=serializer.validated_data.get("extractionOptions") or {},
+            )
+        except ValueError as exc:
+            return Response(
+                {"error": {"code": "icad_path_constraint", "message": str(exc)}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         return Response(DrawingMetadataExtractionJobSerializer(job).data, status=status.HTTP_202_ACCEPTED)
 
 

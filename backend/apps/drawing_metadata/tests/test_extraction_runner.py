@@ -35,6 +35,25 @@ def test_run_extractor_wraps_timeout(monkeypatch, settings):
 
 
 @pytest.mark.django_db
+def test_build_extractor_command_rejects_too_long_path_before_sxnet(settings):
+    long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-long-path",
+        filename="sample.icd",
+        source_path=long_source_path,
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    with pytest.raises(ExtractionRunnerError, match="パスが長すぎます"):
+        build_extractor_command(
+            drawing=drawing,
+            extraction_mode="3d",
+            output_path=Path(r"C:\temp\out.json"),
+        )
+
+
+@pytest.mark.django_db
 def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_assets(settings):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="sample-command",

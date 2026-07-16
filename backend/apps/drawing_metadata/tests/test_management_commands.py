@@ -4,6 +4,7 @@ import json
 import pytest
 from django.core.management import call_command
 
+from apps.drawing_metadata.management.commands import register_cad_drawings
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 
 
@@ -49,6 +50,26 @@ def test_register_cad_drawings_registers_icd_files_idempotently(tmp_path):
     assert "created=0" in stdout_second.getvalue()
     assert "updated=0" in stdout_second.getvalue()
     assert "skipped=2" in stdout_second.getvalue()
+
+
+@pytest.mark.django_db
+def test_register_cad_drawings_skips_path_constraint_error(monkeypatch, tmp_path):
+    cad_root = tmp_path / "cad_data"
+    cad_root.mkdir()
+    drawing = cad_root / "too-long.icd"
+    drawing.write_text("", encoding="utf-8")
+
+    def reject_path(_path):
+        raise ValueError("ICADファイルのパスが長すぎます。")
+
+    monkeypatch.setattr(register_cad_drawings, "validate_icad_path_length", reject_path)
+    stdout = StringIO()
+
+    call_command("register_cad_drawings", cad_root=str(cad_root), stdout=stdout)
+
+    assert RegisteredDrawing.objects.count() == 0
+    assert "SKIPPED path limit" in stdout.getvalue()
+    assert "skipped=1" in stdout.getvalue()
 
 
 @pytest.mark.django_db

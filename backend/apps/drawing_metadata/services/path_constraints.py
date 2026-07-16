@@ -11,13 +11,16 @@ def filename_length_error(filename: str) -> str:
     return (
         f"ICADファイル名が長すぎます。SXNETへ渡すファイル名は"
         f"{WINDOWS_FILENAME_LIMIT}文字以下にしてください。"
+        f"現在の文字数: {len(filename)}"
     )
 
 
 def path_length_error(path: str | Path) -> str:
+    path_text = str(path)
     return (
         f"ICADファイルのパスが長すぎます。SXNETへ渡すパスは"
         f"{WINDOWS_LEGACY_PATH_LIMIT}文字以下にしてください。"
+        f"現在の文字数: {len(path_text)}"
     )
 
 

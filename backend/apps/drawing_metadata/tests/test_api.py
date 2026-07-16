@@ -545,6 +545,29 @@ def test_registration_extract_enqueue_accepts_condition_profile(sample_registrat
 
 
 @pytest.mark.django_db
+def test_registration_extract_rejects_too_long_registered_path(sample_registration_payload):
+    long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="sample.icd",
+        source_path=long_source_path,
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    client = APIClient()
+
+    response = client.post(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/extract",
+        {"extractionMode": "3d"},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "icad_path_constraint"
+    assert "パスが長すぎます" in response.json()["error"]["message"]
+    assert DrawingMetadataExtractionJob.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_override_patch(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],

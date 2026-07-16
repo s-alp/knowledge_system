@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.drawing_metadata.models import RegisteredDrawing
+from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length, validate_icad_path_length
 
 
 class Command(BaseCommand):
@@ -36,6 +37,14 @@ class Command(BaseCommand):
             return
 
         for input_path in icd_paths:
+            try:
+                validate_icad_filename_length(input_path.name)
+                validate_icad_path_length(input_path)
+            except ValueError as exc:
+                skipped += 1
+                self.stdout.write(self.style.WARNING(f"SKIPPED path limit: {input_path} ({exc})"))
+                continue
+
             existing = RegisteredDrawing.objects.filter(source_path=str(input_path)).order_by("created_at").first()
             if existing is None:
                 RegisteredDrawing.objects.create(
