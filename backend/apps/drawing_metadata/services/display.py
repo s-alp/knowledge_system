@@ -224,6 +224,7 @@ def _reconciliation_row(item: dict) -> dict:
         "chosenValueDisplay": _display_value(item.get("chosenValue")),
         "chosenMode": item.get("chosenMode"),
         "reason": item.get("reason"),
+        "sourceByMode": item.get("sourceByMode") or {},
     }
 
 

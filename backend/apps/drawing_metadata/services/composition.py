@@ -105,6 +105,22 @@ def _manual_override_value(snapshot: DrawingMetadataSnapshot | None, key: str):
     return item
 
 
+def _snapshot_trace(snapshot: DrawingMetadataSnapshot | None) -> dict | None:
+    if not snapshot:
+        return None
+    latest_job = snapshot.latest_job
+    return {
+        "snapshotId": snapshot.pk,
+        "extractionMode": snapshot.extraction_mode,
+        "latestJobId": str(latest_job.id) if latest_job else None,
+        "latestJobStatus": latest_job.status if latest_job else None,
+        "latestJobCreatedAt": latest_job.created_at.isoformat() if latest_job and latest_job.created_at else None,
+        "latestJobFinishedAt": latest_job.finished_at.isoformat() if latest_job and latest_job.finished_at else None,
+        "snapshotUpdatedAt": snapshot.updated_at.isoformat() if snapshot.updated_at else None,
+        "reviewStatus": snapshot.review_status,
+    }
+
+
 def _snapshot_by_mode(drawing: RegisteredDrawing) -> dict[str, DrawingMetadataSnapshot]:
     return {snapshot.extraction_mode: snapshot for snapshot in drawing.snapshots.all()}
 
@@ -307,6 +323,10 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     snapshots = _snapshot_by_mode(drawing)
     snapshot_2d = snapshots.get("2d")
     snapshot_3d = snapshots.get("3d")
+    source_by_mode = {
+        "2d": _snapshot_trace(snapshot_2d),
+        "3d": _snapshot_trace(snapshot_3d),
+    }
 
     canonical_keys: set[str] = set()
     for snapshot in snapshots.values():
@@ -325,6 +345,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         manual_3d = deepcopy(_manual_override_value(snapshot_3d, key))
 
         chosen_value, reconciled = _reconcile_attribute(key, value_2d, value_3d, manual_2d, manual_3d)
+        reconciled["sourceByMode"] = source_by_mode
         composed_canonical[key] = chosen_value
         reconciled_attributes.append(reconciled)
         if reconciled["status"] == "conflict":
@@ -335,6 +356,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
                 "chosenMode": reconciled["chosenMode"],
                 "chosenValue": reconciled["chosenValue"],
                 "reason": reconciled["reason"],
+                "sourceByMode": source_by_mode,
             }
             if _is_reviewable_conflict_attribute(key):
                 conflicts.append(conflict_record)

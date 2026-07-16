@@ -1,6 +1,6 @@
 import pytest
 
-from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 
 
@@ -12,9 +12,20 @@ def test_compose_drawing_metadata_prefers_3d_scalar_and_unions_lists():
         source_path=r"C:\temp\compose.icd",
         source_format="icad",
     )
+    job_2d = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_SUCCEEDED,
+    )
+    job_3d = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_SUCCEEDED,
+    )
     DrawingMetadataSnapshot.objects.create(
         drawing=drawing,
         extraction_mode="2d",
+        latest_job=job_2d,
         canonical_attributes_json={
             "customer_name": "澁谷工業",
             "confidence_summary": "medium",
@@ -26,6 +37,7 @@ def test_compose_drawing_metadata_prefers_3d_scalar_and_unions_lists():
     DrawingMetadataSnapshot.objects.create(
         drawing=drawing,
         extraction_mode="3d",
+        latest_job=job_3d,
         canonical_attributes_json={
             "customer_name": "コマツ小山",
             "confidence_summary": "high",
@@ -40,7 +52,9 @@ def test_compose_drawing_metadata_prefers_3d_scalar_and_unions_lists():
     assert payload["canonicalAttributes"]["customer_name"] == "コマツ小山"
     assert payload["canonicalAttributes"]["equipment_category"] == "ガントリー"
     assert payload["canonicalAttributes"]["dimension_values"] == ["100", "200"]
-    assert any(conflict["attribute"] == "customer_name" for conflict in payload["conflicts"])
+    customer_conflict = next(conflict for conflict in payload["conflicts"] if conflict["attribute"] == "customer_name")
+    assert customer_conflict["sourceByMode"]["2d"]["latestJobId"] == str(job_2d.id)
+    assert customer_conflict["sourceByMode"]["3d"]["latestJobId"] == str(job_3d.id)
     assert not any(conflict["attribute"] == "confidence_summary" for conflict in payload["conflicts"])
     assert any(conflict["attribute"] == "confidence_summary" for conflict in payload["diagnosticConflicts"])
     reconciled_by_attribute = {item["attribute"]: item for item in payload["reconciledAttributes"]}
@@ -48,6 +62,8 @@ def test_compose_drawing_metadata_prefers_3d_scalar_and_unions_lists():
     assert reconciled_by_attribute["customer_name"]["value2d"] == "澁谷工業"
     assert reconciled_by_attribute["customer_name"]["value3d"] == "コマツ小山"
     assert reconciled_by_attribute["customer_name"]["chosenValue"] == "コマツ小山"
+    assert reconciled_by_attribute["customer_name"]["sourceByMode"]["2d"]["latestJobStatus"] == "succeeded"
+    assert reconciled_by_attribute["customer_name"]["sourceByMode"]["3d"]["extractionMode"] == "3d"
     assert reconciled_by_attribute["confidence_summary"]["status"] == "conflict"
     assert reconciled_by_attribute["equipment_category"]["status"] == "conflict"
     assert reconciled_by_attribute["dimension_values"]["status"] == "merged"

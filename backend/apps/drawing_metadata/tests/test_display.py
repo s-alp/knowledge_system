@@ -64,6 +64,10 @@ def test_build_composed_display_payload_hides_noisy_keys():
                     "chosenMode": "3d",
                     "status": "conflict",
                     "reason": "2Dと3Dの抽出値が異なるためレビュー対象です。",
+                    "sourceByMode": {
+                        "2d": {"latestJobId": "job-2d", "latestJobStatus": "succeeded"},
+                        "3d": {"latestJobId": "job-3d", "latestJobStatus": "succeeded"},
+                    },
                 },
                 {
                     "attribute": "part_names",
@@ -87,6 +91,7 @@ def test_build_composed_display_payload_hides_noisy_keys():
     assert payload["conflicts"][0]["chosenMode"] == "3d"
     assert payload["reconciliationReviewRows"][0]["statusLabel"] == "競合"
     assert payload["reconciliationReviewRows"][0]["chosenValueDisplay"] == "コマツ小山"
+    assert payload["reconciliationReviewRows"][0]["sourceByMode"]["2d"]["latestJobId"] == "job-2d"
     assert payload["reconciliationReviewRows"][1]["value3dDisplay"] == "2"
 
 
