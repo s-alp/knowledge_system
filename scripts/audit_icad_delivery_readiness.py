@@ -315,6 +315,10 @@ def main() -> int:
             [python, str(ROOT / "scripts" / "audit_knowledge_payload_attribute_quality.py")],
         ),
         _run_gate(
+            "two_d_view_layer_print_frame_coverage",
+            [python, str(ROOT / "scripts" / "audit_2d_view_layer_print_frame_coverage.py")],
+        ),
+        _run_gate(
             "handoff_review_summary",
             [python, str(ROOT / "scripts" / "validate_drawing_handoff_review_summary.py"), str(DEFAULT_REVIEW_SUMMARY)],
         ),

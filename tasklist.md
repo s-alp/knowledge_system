@@ -17,6 +17,7 @@
 - [x] 図面管理の2D/3Dビューワー補助パネルでもタグ根拠を表示し、図面側のタグ・属性候補から取得元・信頼度・採用理由を確認できるようにした
 - [x] 創屋向けICADタグ・属性連携項目表を分冊化。入口ファイルは約3KBの目次にし、詳細は `docs\souya_icad_tag_attribute_handoff_2026-07-14_parts\` 配下へ章別に分割。最大分冊は約13.7KBに抑え、ファイル長制限で開けない状態を避ける
 - [x] 納品監査へ創屋向け連携項目表のファイルサイズゲートを追加。`scripts\audit_icad_delivery_readiness.py` は本体・分冊の各Markdownが20KBを超えたら失敗し、最終監査は `--include-tests --include-ui --require-clean` で自動テスト、Chrome実操作、作業ツリーcleanを同時確認する
+- [x] 納品監査へ2Dビュー・レイヤー・印刷枠カバレッジゲートを追加。`scripts\audit_2d_view_layer_print_frame_coverage.py` は共有39件のDB snapshotを固定manifestスコープで確認し、2D要素ありでビュー未付与、レイヤー未対応、印刷枠ありなのに枠内外判定なしを失敗にする。印刷枠未定義や座標欠落による判定不明は既知条件として理由付きで残す
 - [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
 - [x] Geminiの追加採用値0件を明記し、任意補助から正本へ格上げしない
 - [x] Django drawing_metadata 104件、フロント62件、C# 20件、system check、migration差分、本番ビルドを確認
