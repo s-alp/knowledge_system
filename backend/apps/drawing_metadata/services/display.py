@@ -1045,6 +1045,9 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("outside_print_area_count", "印刷枠外要素数", print_area_counts["outside"]),
         _make_row("unknown_print_area_count", "印刷枠判定不明要素数", print_area_counts["unknown"]),
         _make_row("surface_roughness_count", "表面粗さ記号数", canonical_attributes.get("surface_roughness_count")),
+        _make_row("weld_note_candidate_count", "溶接注記候補数", canonical_attributes.get("weld_note_candidate_count")),
+        _make_row("balloon_candidate_count", "バルーン候補数", canonical_attributes.get("balloon_candidate_count")),
+        _make_row("tolerance_candidate_count", "幾何公差候補数", canonical_attributes.get("tolerance_candidate_count")),
         _make_row("section_feature_count", "断面/切断表現数", canonical_attributes.get("section_feature_count")),
         _make_row("slot_candidate_count", "長穴/楕円候補数", canonical_attributes.get("slot_candidate_count")),
         _make_row("hole_candidate_count", "穴/円候補数", canonical_attributes.get("hole_candidate_count")),
@@ -1067,6 +1070,24 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
             "長穴/楕円候補寸法",
             canonical_attributes.get("slot_candidate_dimensions", []),
             str(len(canonical_attributes.get("slot_candidate_dimensions", []) or [])),
+        ),
+        _make_display_row(
+            "weld_note_candidates",
+            "溶接注記候補",
+            canonical_attributes.get("weld_note_candidates", []),
+            str(len(canonical_attributes.get("weld_note_candidates", []) or [])),
+        ),
+        _make_display_row(
+            "balloon_candidates",
+            "バルーン候補",
+            canonical_attributes.get("balloon_candidates", []),
+            str(len(canonical_attributes.get("balloon_candidates", []) or [])),
+        ),
+        _make_display_row(
+            "tolerance_candidates",
+            "幾何公差候補",
+            canonical_attributes.get("tolerance_candidates", []),
+            str(len(canonical_attributes.get("tolerance_candidates", []) or [])),
         ),
     ]
 

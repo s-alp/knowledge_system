@@ -286,6 +286,38 @@ def _print_area_count_summary(items: Iterable[dict]) -> dict[str, int]:
     return counts
 
 
+def _structured_2d_symbol_candidates(items: Iterable[dict], *, value_key: str, source: str) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, str | None, int | None, float | None, float | None]] = set()
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        value = item.get(value_key)
+        if not isinstance(value, str) or not value.strip() or _contains_replacement_character(value):
+            continue
+        key = (value.strip(), item.get("view_name"), item.get("layer_no"), item.get("position_x"), item.get("position_y"))
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append(
+            {
+                "value": value.strip(),
+                "evidence_text": value.strip(),
+                "view_name": item.get("view_name"),
+                "layer_no": item.get("layer_no"),
+                "position_x": item.get("position_x"),
+                "position_y": item.get("position_y"),
+                "position_z": item.get("position_z"),
+                "inside_print_area": item.get("inside_print_area"),
+                "print_frame_no": item.get("print_frame_no"),
+                "source": source,
+                "confidence": "medium",
+                "reason": "2D図面要素から値と位置情報を取得できたため、検索タグではなく図面レビュー用の属性候補として保持します。",
+            }
+        )
+    return candidates
+
+
 def _first_present(*values):
     for value in values:
         if value is not None:
@@ -1066,8 +1098,14 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "dimension_values": [],
         "dimension_symbols": [],
         "tolerance_texts": [],
+        "tolerance_candidates": [],
+        "tolerance_candidate_count": 0,
         "weld_note_texts": [],
+        "weld_note_candidates": [],
+        "weld_note_candidate_count": 0,
         "balloon_keys": [],
+        "balloon_candidates": [],
+        "balloon_candidate_count": 0,
         "surface_treatment_tokens": [],
         "geometry_feature_candidates": [],
         "surface_roughness_count": 0,
@@ -1240,6 +1278,24 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["weld_note_texts"] = _flatten_strings(note.get("text") for note in weld_notes)
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
+        canonical["weld_note_candidates"] = _structured_2d_symbol_candidates(
+            trusted_weld_notes,
+            value_key="text",
+            source="2d_weld_note",
+        )
+        canonical["weld_note_candidate_count"] = len(canonical["weld_note_candidates"])
+        canonical["balloon_candidates"] = _structured_2d_symbol_candidates(
+            trusted_balloons,
+            value_key="text",
+            source="2d_balloon",
+        )
+        canonical["balloon_candidate_count"] = len(canonical["balloon_candidates"])
+        canonical["tolerance_candidates"] = _structured_2d_symbol_candidates(
+            trusted_tolerances,
+            value_key="text",
+            source="2d_tolerance",
+        )
+        canonical["tolerance_candidate_count"] = len(canonical["tolerance_candidates"])
         canonical["referenced_2d_part_count"] = len(referenced_parts)
         canonical["referenced_2d_trusted_part_count"] = len(trusted_referenced_parts)
         canonical["referenced_2d_part_names"] = _flatten_strings(part.get("name") for part in trusted_referenced_parts)

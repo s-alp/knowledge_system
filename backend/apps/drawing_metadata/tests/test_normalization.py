@@ -266,6 +266,18 @@ def test_normalize_2d_raw_extract():
     assert all(tag["source"] != "geometry_feature_candidates" for tag in tags)
     assert canonical["surface_roughness_count"] == 1
     assert canonical["surface_roughness_values"] == ["Ra 6.3"]
+    assert canonical["weld_note_candidate_count"] == 1
+    assert canonical["weld_note_candidates"][0]["value"] == "WELD A"
+    assert canonical["weld_note_candidates"][0]["source"] == "2d_weld_note"
+    assert canonical["balloon_candidate_count"] == 1
+    assert canonical["balloon_candidates"][0]["value"] == "B1"
+    assert canonical["balloon_candidates"][0]["source"] == "2d_balloon"
+    assert canonical["tolerance_candidate_count"] == 1
+    assert canonical["tolerance_candidates"][0]["value"] == "±0.1"
+    assert canonical["tolerance_candidates"][0]["source"] == "2d_tolerance"
+    assert all(tag["source"] != "weld_note_candidates" for tag in tags)
+    assert all(tag["source"] != "balloon_candidates" for tag in tags)
+    assert all(tag["source"] != "tolerance_candidates" for tag in tags)
     assert canonical["referenced_2d_part_count"] == 2
     assert canonical["referenced_2d_trusted_part_count"] == 1
     assert canonical["referenced_2d_part_names"] == ["BASE-PLATE"]
@@ -356,6 +368,11 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     assert "SMC" not in canonical["maker_keywords"]
     assert "SES" not in canonical["spec_tokens"]
     assert "枠不明溶接" in canonical["weld_note_texts"]
+    assert canonical["weld_note_candidate_count"] == 0
+    assert canonical["tolerance_candidate_count"] == 0
+    assert canonical["balloon_candidate_count"] == 1
+    assert canonical["balloon_candidates"][0]["value"] == "枠内バルーン"
+    assert canonical["balloon_candidates"][0]["inside_print_area"] is True
     assert "枠不明溶接" not in canonical["part_keywords"]
     assert "枠内バルーン" in canonical["part_keywords"]
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
