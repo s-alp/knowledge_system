@@ -33,8 +33,39 @@ async function openFirstDetail(menuLabel, expectedTitle, screenshotName) {
   await page.screenshot({ path: `${outputDirectory}/${screenshotName}`, fullPage: true });
 }
 
+async function assertBusinessDetailSignals(expectedTitle, tagScreenshotName) {
+  const tagItems = page.locator(".production-tag-list span");
+  const tagCount = await tagItems.count();
+  if (tagCount === 0) {
+    throw new Error(`${expectedTitle}詳細に検索・分類用タグが表示されていません。`);
+  }
+  await page.getByRole("heading", { name: "変更履歴" }).waitFor();
+  const historyRows = page.locator(".production-history-section tbody tr");
+  await historyRows.first().waitFor();
+  const historyText = await historyRows.first().innerText();
+  if (!/\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}/.test(historyText)) {
+    throw new Error(`${expectedTitle}詳細の変更履歴に日時が表示されていません: ${historyText}`);
+  }
+  await page.screenshot({ path: `${outputDirectory}/${tagScreenshotName}`, fullPage: true });
+}
+
+async function verifyDrawingManagementEntry() {
+  await page.locator(".sidebar-link", { hasText: "図面管理" }).click();
+  await page.getByRole("heading", { name: "図面管理" }).waitFor();
+  await page.getByRole("heading", { name: "ICADからタグ・属性を取得" }).waitFor();
+  await page.getByLabel("ICAD原本パス").waitFor();
+  const proceedButton = page.getByRole("button", { name: "タグ・属性取得へ進む" });
+  await proceedButton.waitFor();
+  if (!(await proceedButton.isDisabled())) {
+    throw new Error("ICAD未選択の状態でタグ・属性取得へ進むボタンが有効になっています。");
+  }
+  await page.screenshot({ path: `${outputDirectory}/drawing-management-icad-entry.png`, fullPage: true });
+}
+
 try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
+  await verifyDrawingManagementEntry();
+
   await page.locator(".sidebar-link", { hasText: "プロジェクト" }).click();
   await page.getByRole("heading", { name: "プロジェクト詳細", level: 1 }).waitFor();
   if ((await page.getByText(/PRJ-OP30|OP30 カセット|TR1D9K99027 ブラケット/).count()) > 0) {
@@ -42,6 +73,7 @@ try {
   }
 
   await openFirstDetail("製品・装置・ユニット", "製品・装置・ユニット", "product-detail.png");
+  await assertBusinessDetailSignals("製品・装置・ユニット", "product-tags-history.png");
   await page.getByRole("heading", { name: "2D/3D照合" }).waitFor();
   await page.getByRole("columnheader", { name: "採用候補" }).waitFor();
 
@@ -78,6 +110,7 @@ try {
   await page.getByRole("button", { name: "閉じる" }).click();
 
   await openFirstDetail("部品", "部品", "part-detail.png");
+  await assertBusinessDetailSignals("部品", "part-tags-history.png");
   await page.getByRole("heading", { name: "2D/3D照合" }).waitFor();
   await page.getByRole("columnheader", { name: "採用候補" }).waitFor();
   for (const tab of ["製品・装置・ユニット", "図面", "文書", "会話ログ"]) {
@@ -121,6 +154,9 @@ try {
     drawingLinkScreenVerified: true,
     drawingLinkOptionCount: drawingOptionCount,
     editFormsVerified: true,
+    drawingManagementIcadEntryVerified: true,
+    businessTagsVerified: true,
+    historyTimestampVerified: true,
     systemSettingsVerified: true,
     extractionReviewHiddenFromBusinessStatus: true,
     browserErrors,
