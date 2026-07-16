@@ -28,6 +28,7 @@ DEFAULT_REVIEW_SUMMARY = ROOT / "output" / "souya_handoff" / "drawing_metadata_f
 BACKEND_DIR = ROOT / "backend"
 BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
 FRONTEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend"
+VIEWER_BACKEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "backend"
 
 ACTIVE_HANDOFF_DOCS = [
     ROOT / "docs" / "icad_2d_3d_extraction_capability_matrix_2026-07-14.md",
@@ -238,6 +239,7 @@ def _test_gates(python: str) -> list[dict]:
         ),
         _run_gate("dotnet_build", ["dotnet", "build", str(ROOT / "IcadExtraction.sln"), "-c", "Debug"], cwd=ROOT),
         _run_gate("dotnet_test", ["dotnet", "test", str(ROOT / "IcadExtraction.sln"), "-c", "Debug", "--no-build"], cwd=ROOT),
+        _run_gate("viewer_backend_pytest", [python, "-m", "pytest", "tests"], cwd=VIEWER_BACKEND_DIR),
         _run_gate("frontend_vitest", _npm_run_command("test"), cwd=FRONTEND_DIR),
         _run_gate("frontend_build", _npm_run_command("build"), cwd=FRONTEND_DIR),
     ]
