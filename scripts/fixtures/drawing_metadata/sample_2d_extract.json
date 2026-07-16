@@ -5,12 +5,7 @@
   "extractor_name": "icad-csharp-extractor",
   "extractor_version": "1.0.0",
   "elapsed_ms": 35,
-  "warnings": [
-    {
-      "code": "unsupported_geometry",
-      "message": "Unhandled geometry type: SxGeomFoo"
-    }
-  ],
+  "warnings": [],
   "raw_extract": {
     "texts": [
       {
@@ -37,6 +32,15 @@
         "mark_2": "M5",
         "mark_3": null,
         "summary": "value_1=100; mark_2=M5"
+      }
+    ],
+    "geometry_primitives": [
+      {
+        "geometry_type": "SxGeomPoint2D",
+        "position_x": 34.0,
+        "position_y": 35.0,
+        "position_z": 0.0,
+        "summary": "pnt=(34,35,0)"
       }
     ],
     "weld_notes": [

@@ -56,8 +56,8 @@
 ```json
 [
   {
-    "code": "unsupported_geometry",
-    "message": "Unhandled geometry type: SxGeomFoo"
+    "code": "geometry_layer_count_mismatch",
+    "message": "2D geometry count and layer count did not match in a view. Layer numbers were omitted for this view."
   }
 ]
 ```

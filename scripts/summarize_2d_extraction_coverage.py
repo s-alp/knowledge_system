@@ -15,6 +15,7 @@ INSPECTABLE_KEYS = (
     "balloons",
     "tolerances",
 )
+WARNING_SAMPLE_LIMIT = 20
 
 
 def _load_json(path: Path) -> dict[str, Any] | None:
@@ -64,6 +65,35 @@ def _inside_counts(items: list[dict[str, Any]]) -> Counter:
     return counter
 
 
+def _warning_type(message: str) -> str:
+    return message.split(":", 1)[-1].strip() if ":" in message else message.strip()
+
+
+def _warning_summary(warnings: list[Any]) -> dict[str, Any]:
+    counter: Counter = Counter()
+    samples: list[Any] = []
+    for warning in warnings:
+        if not isinstance(warning, dict):
+            counter["non_object_warning"] += 1
+            if len(samples) < WARNING_SAMPLE_LIMIT:
+                samples.append(warning)
+            continue
+        code = str(warning.get("code") or "unknown_warning")
+        message = str(warning.get("message") or "")
+        if code == "unsupported_geometry":
+            counter[f"{code}:{_warning_type(message)}"] += 1
+        else:
+            counter[code] += 1
+        if len(samples) < WARNING_SAMPLE_LIMIT:
+            samples.append(warning)
+    return {
+        "warningCount": len(warnings),
+        "warningTypeCounts": dict(counter),
+        "warningSamples": samples,
+        "warningSamplesTruncated": len(warnings) > WARNING_SAMPLE_LIMIT,
+    }
+
+
 def _file_summary(path: Path, payload: dict[str, Any], raw_extract: dict[str, Any]) -> dict[str, Any]:
     view_sheets = raw_extract.get("view_sheets", []) or []
     print_frames = raw_extract.get("print_frames", []) or []
@@ -75,6 +105,7 @@ def _file_summary(path: Path, payload: dict[str, Any], raw_extract: dict[str, An
     layer_numbers = {item.get("no") for item in layers if isinstance(item, dict) and item.get("no") is not None}
     item_layers = {item.get("layer_no") for item in items if item.get("layer_no") is not None}
     inside_counts = _inside_counts(items)
+    warnings = payload.get("warnings") or raw_extract.get("warnings") or []
 
     source_counts = Counter(item.get("_coverage_source") for item in items)
     return {
@@ -96,7 +127,7 @@ def _file_summary(path: Path, payload: dict[str, Any], raw_extract: dict[str, An
         "insidePrintAreaCount": inside_counts["inside"],
         "outsidePrintAreaCount": inside_counts["outside"],
         "unknownPrintAreaCount": inside_counts["unknown"],
-        "warnings": payload.get("warnings") or raw_extract.get("warnings") or [],
+        **_warning_summary(warnings),
     }
 
 

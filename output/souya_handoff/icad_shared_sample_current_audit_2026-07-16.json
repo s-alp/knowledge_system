@@ -118,11 +118,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.541638+00:00",
-          "startedAt": "2026-07-15T13:03:04.541638+00:00",
-          "finishedAt": "2026-07-15T13:03:04.541638+00:00",
+          "createdAt": "2026-07-16T19:49:42.613530+00:00",
+          "startedAt": "2026-07-16T19:49:42.613530+00:00",
+          "finishedAt": "2026-07-16T19:49:42.613530+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -131,7 +136,12 @@
           "startedAt": "2026-07-15T13:03:06.467088+00:00",
           "finishedAt": "2026-07-15T13:03:06.467088+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -177,11 +187,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.473430+00:00",
-          "startedAt": "2026-07-15T13:03:04.472942+00:00",
-          "finishedAt": "2026-07-15T13:03:04.472942+00:00",
+          "createdAt": "2026-07-16T19:49:42.552961+00:00",
+          "startedAt": "2026-07-16T19:49:42.552961+00:00",
+          "finishedAt": "2026-07-16T19:49:42.552961+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -190,7 +205,12 @@
           "startedAt": "2026-07-15T13:03:06.315860+00:00",
           "finishedAt": "2026-07-15T13:03:06.315860+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -236,11 +256,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.807576+00:00",
-          "startedAt": "2026-07-15T13:03:05.807077+00:00",
-          "finishedAt": "2026-07-15T13:03:05.807077+00:00",
+          "createdAt": "2026-07-16T19:49:44.609627+00:00",
+          "startedAt": "2026-07-16T19:49:44.609129+00:00",
+          "finishedAt": "2026-07-16T19:49:44.609129+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -249,7 +274,12 @@
           "startedAt": "2026-07-15T13:03:07.288211+00:00",
           "finishedAt": "2026-07-15T13:03:07.288211+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -295,11 +325,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.455443+00:00",
-          "startedAt": "2026-07-15T13:03:04.455443+00:00",
-          "finishedAt": "2026-07-15T13:03:04.455443+00:00",
+          "createdAt": "2026-07-16T19:49:42.538400+00:00",
+          "startedAt": "2026-07-16T19:49:42.538400+00:00",
+          "finishedAt": "2026-07-16T19:49:42.538400+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -308,7 +343,12 @@
           "startedAt": "2026-07-15T13:03:06.295734+00:00",
           "finishedAt": "2026-07-15T13:03:06.295734+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -354,11 +394,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.603740+00:00",
-          "startedAt": "2026-07-15T13:03:04.603740+00:00",
-          "finishedAt": "2026-07-15T13:03:04.603740+00:00",
+          "createdAt": "2026-07-16T19:49:42.661138+00:00",
+          "startedAt": "2026-07-16T19:49:42.661138+00:00",
+          "finishedAt": "2026-07-16T19:49:42.661138+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -367,7 +412,12 @@
           "startedAt": "2026-07-15T13:03:06.707866+00:00",
           "finishedAt": "2026-07-15T13:03:06.707866+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -413,11 +463,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.582163+00:00",
-          "startedAt": "2026-07-15T13:03:04.581664+00:00",
-          "finishedAt": "2026-07-15T13:03:04.581664+00:00",
+          "createdAt": "2026-07-16T19:49:42.646111+00:00",
+          "startedAt": "2026-07-16T19:49:42.646111+00:00",
+          "finishedAt": "2026-07-16T19:49:42.646111+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -426,7 +481,12 @@
           "startedAt": "2026-07-15T13:03:06.687817+00:00",
           "finishedAt": "2026-07-15T13:03:06.687817+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -472,11 +532,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.562139+00:00",
-          "startedAt": "2026-07-15T13:03:04.562139+00:00",
-          "finishedAt": "2026-07-15T13:03:04.562139+00:00",
+          "createdAt": "2026-07-16T19:49:42.630558+00:00",
+          "startedAt": "2026-07-16T19:49:42.630558+00:00",
+          "finishedAt": "2026-07-16T19:49:42.630558+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -485,7 +550,12 @@
           "startedAt": "2026-07-15T13:03:06.669306+00:00",
           "finishedAt": "2026-07-15T13:03:06.669306+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -535,7 +605,12 @@
           "startedAt": "2026-07-15T13:03:04.359865+00:00",
           "finishedAt": "2026-07-15T13:03:04.359865+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -544,7 +619,12 @@
           "startedAt": "2026-07-15T13:03:06.224212+00:00",
           "finishedAt": "2026-07-15T13:03:06.224212+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -595,7 +675,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 616,
+      "twoDContentCount": 620,
       "viewSheetCount": 12,
       "viewCount": 9,
       "layerDefinitionCount": 255,
@@ -605,7 +685,7 @@
       "insidePrintArea": {
         "inside": 121,
         "outside": 432,
-        "unknown": 63
+        "unknown": 67
       },
       "partOccurrenceCount": 360,
       "partExtendedInfoStatus": "present",
@@ -621,36 +701,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.862527+00:00",
-          "startedAt": "2026-07-15T13:03:04.862028+00:00",
-          "finishedAt": "2026-07-15T13:03:04.862028+00:00",
+          "createdAt": "2026-07-16T19:49:42.948649+00:00",
+          "startedAt": "2026-07-16T19:49:42.948649+00:00",
+          "finishedAt": "2026-07-16T19:49:42.948649+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
-            {
-              "code": "set_dim_skipped",
-              "message": "2D window setDim(false) was skipped: 呼び出しのターゲットが例外をスローしました。"
-            },
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (67) and layer count (69) did not match in view '!YZ'. Layer numbers were omitted for this view."
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -659,7 +726,12 @@
           "startedAt": "2026-07-15T13:03:06.850614+00:00",
           "finishedAt": "2026-07-15T13:03:06.850614+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -705,16 +777,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.758451+00:00",
-          "startedAt": "2026-07-15T13:03:05.757951+00:00",
-          "finishedAt": "2026-07-15T13:03:05.757951+00:00",
+          "createdAt": "2026-07-16T19:49:44.476715+00:00",
+          "startedAt": "2026-07-16T19:49:44.476715+00:00",
+          "finishedAt": "2026-07-16T19:49:44.476715+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (342) and layer count (356) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -723,7 +802,12 @@
           "startedAt": "2026-07-15T13:03:07.261280+00:00",
           "finishedAt": "2026-07-15T13:03:07.261280+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -769,11 +853,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.187459+00:00",
-          "startedAt": "2026-07-15T13:03:05.186958+00:00",
-          "finishedAt": "2026-07-15T13:03:05.186958+00:00",
+          "createdAt": "2026-07-16T19:49:43.323123+00:00",
+          "startedAt": "2026-07-16T19:49:43.323123+00:00",
+          "finishedAt": "2026-07-16T19:49:43.323123+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -782,7 +871,12 @@
           "startedAt": "2026-07-15T13:03:07.112535+00:00",
           "finishedAt": "2026-07-15T13:03:07.112535+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -802,7 +896,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 351,
+      "twoDContentCount": 353,
       "viewSheetCount": 3,
       "viewCount": 3,
       "layerDefinitionCount": 255,
@@ -812,7 +906,7 @@
       "insidePrintArea": {
         "inside": 299,
         "outside": 51,
-        "unknown": 1
+        "unknown": 3
       },
       "partOccurrenceCount": 1,
       "partExtendedInfoStatus": "present",
@@ -828,24 +922,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.831160+00:00",
-          "startedAt": "2026-07-15T13:03:05.830662+00:00",
-          "finishedAt": "2026-07-15T13:03:05.830662+00:00",
+          "createdAt": "2026-07-16T19:49:44.637184+00:00",
+          "startedAt": "2026-07-16T19:49:44.636683+00:00",
+          "finishedAt": "2026-07-16T19:49:44.636683+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (293) and layer count (307) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrow"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrow"
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -854,7 +947,12 @@
           "startedAt": "2026-07-15T13:03:07.321283+00:00",
           "finishedAt": "2026-07-15T13:03:07.321283+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -900,11 +998,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.380374+00:00",
-          "startedAt": "2026-07-15T13:03:04.380374+00:00",
-          "finishedAt": "2026-07-15T13:03:04.380374+00:00",
+          "createdAt": "2026-07-16T19:49:42.468872+00:00",
+          "startedAt": "2026-07-16T19:49:42.468371+00:00",
+          "finishedAt": "2026-07-16T19:49:42.468371+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -913,7 +1016,12 @@
           "startedAt": "2026-07-15T13:03:06.242735+00:00",
           "finishedAt": "2026-07-15T13:03:06.242735+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -959,11 +1067,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.929310+00:00",
-          "startedAt": "2026-07-15T13:03:05.929310+00:00",
-          "finishedAt": "2026-07-15T13:03:05.929310+00:00",
+          "createdAt": "2026-07-16T19:49:44.833122+00:00",
+          "startedAt": "2026-07-16T19:49:44.832623+00:00",
+          "finishedAt": "2026-07-16T19:49:44.832623+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -972,7 +1085,12 @@
           "startedAt": "2026-07-15T13:03:07.394819+00:00",
           "finishedAt": "2026-07-15T13:03:07.394819+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1018,11 +1136,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.429940+00:00",
-          "startedAt": "2026-07-15T13:03:04.429940+00:00",
-          "finishedAt": "2026-07-15T13:03:04.429940+00:00",
+          "createdAt": "2026-07-16T19:49:42.517873+00:00",
+          "startedAt": "2026-07-16T19:49:42.517873+00:00",
+          "finishedAt": "2026-07-16T19:49:42.517873+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1031,7 +1154,12 @@
           "startedAt": "2026-07-15T13:03:06.278724+00:00",
           "finishedAt": "2026-07-15T13:03:06.278724+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1051,7 +1179,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 100,
+      "twoDContentCount": 101,
       "viewSheetCount": 4,
       "viewCount": 4,
       "layerDefinitionCount": 255,
@@ -1061,7 +1189,7 @@
       "insidePrintArea": {
         "inside": 29,
         "outside": 63,
-        "unknown": 8
+        "unknown": 9
       },
       "partOccurrenceCount": 9,
       "partExtendedInfoStatus": "not_provided",
@@ -1077,20 +1205,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.334862+00:00",
-          "startedAt": "2026-07-15T13:03:04.334363+00:00",
-          "finishedAt": "2026-07-15T13:03:04.334363+00:00",
+          "createdAt": "2026-07-16T19:49:42.443318+00:00",
+          "startedAt": "2026-07-16T19:49:42.442793+00:00",
+          "finishedAt": "2026-07-16T19:49:42.442793+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (40) and layer count (42) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -1099,7 +1230,12 @@
           "startedAt": "2026-07-15T13:03:06.192571+00:00",
           "finishedAt": "2026-07-15T13:03:06.192571+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1121,7 +1257,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 154,
+      "twoDContentCount": 167,
       "viewSheetCount": 2,
       "viewCount": 2,
       "layerDefinitionCount": 255,
@@ -1131,7 +1267,7 @@
       "insidePrintArea": {
         "inside": 42,
         "outside": 110,
-        "unknown": 2
+        "unknown": 15
       },
       "partOccurrenceCount": 1,
       "partExtendedInfoStatus": "not_provided",
@@ -1147,64 +1283,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.950670+00:00",
-          "startedAt": "2026-07-15T13:03:04.950151+00:00",
-          "finishedAt": "2026-07-15T13:03:04.950151+00:00",
+          "createdAt": "2026-07-16T19:49:43.027787+00:00",
+          "startedAt": "2026-07-16T19:49:43.027787+00:00",
+          "finishedAt": "2026-07-16T19:49:43.027787+00:00",
           "errorMessage": "",
-          "warnings": [
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            }
-          ]
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1213,6 +1301,8 @@
           "startedAt": "2026-07-16T11:13:07.365893+00:00",
           "finishedAt": "2026-07-16T11:13:07.365893+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "mass_probe_no_entities",
@@ -1222,7 +1312,13 @@
               "code": "material_probe_no_entities",
               "message": "SxWF.getEntList returned no searchable 3D elements for material extraction."
             }
-          ]
+          ],
+          "warningCount": 2,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "mass_probe_no_entities": 1,
+            "material_probe_no_entities": 1
+          }
         }
       },
       "canonicalSourceEvidence": {
@@ -1249,7 +1345,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 72,
+      "twoDContentCount": 73,
       "viewSheetCount": 4,
       "viewCount": 4,
       "layerDefinitionCount": 255,
@@ -1259,7 +1355,7 @@
       "insidePrintArea": {
         "inside": 36,
         "outside": 35,
-        "unknown": 1
+        "unknown": 2
       },
       "partOccurrenceCount": 1,
       "partExtendedInfoStatus": "not_provided",
@@ -1275,16 +1371,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.052300+00:00",
-          "startedAt": "2026-07-15T13:03:05.052300+00:00",
-          "finishedAt": "2026-07-15T13:03:05.052300+00:00",
+          "createdAt": "2026-07-16T19:49:43.141730+00:00",
+          "startedAt": "2026-07-16T19:49:43.141730+00:00",
+          "finishedAt": "2026-07-16T19:49:43.141730+00:00",
           "errorMessage": "",
-          "warnings": [
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            }
-          ]
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1293,7 +1389,12 @@
           "startedAt": "2026-07-15T13:03:06.983762+00:00",
           "finishedAt": "2026-07-15T13:03:06.983762+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1339,11 +1440,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.541638+00:00",
-          "startedAt": "2026-07-15T13:03:04.541638+00:00",
-          "finishedAt": "2026-07-15T13:03:04.541638+00:00",
+          "createdAt": "2026-07-16T19:49:42.613530+00:00",
+          "startedAt": "2026-07-16T19:49:42.613530+00:00",
+          "finishedAt": "2026-07-16T19:49:42.613530+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1352,7 +1458,12 @@
           "startedAt": "2026-07-15T13:03:06.467088+00:00",
           "finishedAt": "2026-07-15T13:03:06.467088+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1398,11 +1509,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.473430+00:00",
-          "startedAt": "2026-07-15T13:03:04.472942+00:00",
-          "finishedAt": "2026-07-15T13:03:04.472942+00:00",
+          "createdAt": "2026-07-16T19:49:42.552961+00:00",
+          "startedAt": "2026-07-16T19:49:42.552961+00:00",
+          "finishedAt": "2026-07-16T19:49:42.552961+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1411,7 +1527,12 @@
           "startedAt": "2026-07-15T13:03:06.315860+00:00",
           "finishedAt": "2026-07-15T13:03:06.315860+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1457,11 +1578,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.028800+00:00",
-          "startedAt": "2026-07-15T13:03:05.028287+00:00",
-          "finishedAt": "2026-07-15T13:03:05.028287+00:00",
+          "createdAt": "2026-07-16T19:49:43.117229+00:00",
+          "startedAt": "2026-07-16T19:49:43.117229+00:00",
+          "finishedAt": "2026-07-16T19:49:43.117229+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1470,7 +1596,12 @@
           "startedAt": "2026-07-15T13:03:06.962258+00:00",
           "finishedAt": "2026-07-15T13:03:06.962258+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1490,7 +1621,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 1970,
+      "twoDContentCount": 1995,
       "viewSheetCount": 10,
       "viewCount": 10,
       "layerDefinitionCount": 255,
@@ -1500,7 +1631,7 @@
       "insidePrintArea": {
         "inside": 660,
         "outside": 1292,
-        "unknown": 18
+        "unknown": 43
       },
       "partOccurrenceCount": 2,
       "partExtendedInfoStatus": "not_provided",
@@ -1516,116 +1647,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.631757+00:00",
-          "startedAt": "2026-07-15T13:03:04.631757+00:00",
-          "finishedAt": "2026-07-15T13:03:04.631757+00:00",
+          "createdAt": "2026-07-16T19:49:42.686678+00:00",
+          "startedAt": "2026-07-16T19:49:42.686678+00:00",
+          "finishedAt": "2026-07-16T19:49:42.686678+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (141) and layer count (145) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomOtherDraft"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomOtherDraft"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomPoint2D"
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -1634,7 +1672,12 @@
           "startedAt": "2026-07-15T13:03:06.733899+00:00",
           "finishedAt": "2026-07-15T13:03:06.733899+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1680,11 +1723,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.862199+00:00",
-          "startedAt": "2026-07-15T13:03:05.862199+00:00",
-          "finishedAt": "2026-07-15T13:03:05.862199+00:00",
+          "createdAt": "2026-07-16T19:49:44.692224+00:00",
+          "startedAt": "2026-07-16T19:49:44.692224+00:00",
+          "finishedAt": "2026-07-16T19:49:44.692224+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1693,7 +1741,12 @@
           "startedAt": "2026-07-15T13:03:07.342307+00:00",
           "finishedAt": "2026-07-15T13:03:07.342307+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1746,11 +1799,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.807576+00:00",
-          "startedAt": "2026-07-15T13:03:05.807077+00:00",
-          "finishedAt": "2026-07-15T13:03:05.807077+00:00",
+          "createdAt": "2026-07-16T19:49:44.609627+00:00",
+          "startedAt": "2026-07-16T19:49:44.609129+00:00",
+          "finishedAt": "2026-07-16T19:49:44.609129+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1759,7 +1817,12 @@
           "startedAt": "2026-07-15T13:03:07.288211+00:00",
           "finishedAt": "2026-07-15T13:03:07.288211+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1805,11 +1868,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.806616+00:00",
-          "startedAt": "2026-07-15T13:03:04.806616+00:00",
-          "finishedAt": "2026-07-15T13:03:04.806616+00:00",
+          "createdAt": "2026-07-16T19:49:42.897570+00:00",
+          "startedAt": "2026-07-16T19:49:42.897570+00:00",
+          "finishedAt": "2026-07-16T19:49:42.897570+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1818,7 +1886,12 @@
           "startedAt": "2026-07-15T13:03:06.812974+00:00",
           "finishedAt": "2026-07-15T13:03:06.812974+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1864,11 +1937,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.900666+00:00",
-          "startedAt": "2026-07-15T13:03:04.900666+00:00",
-          "finishedAt": "2026-07-15T13:03:04.900666+00:00",
+          "createdAt": "2026-07-16T19:49:42.989242+00:00",
+          "startedAt": "2026-07-16T19:49:42.989242+00:00",
+          "finishedAt": "2026-07-16T19:49:42.989242+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1877,7 +1955,12 @@
           "startedAt": "2026-07-15T13:03:06.890174+00:00",
           "finishedAt": "2026-07-15T13:03:06.890174+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1923,11 +2006,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.924169+00:00",
-          "startedAt": "2026-07-15T13:03:04.924169+00:00",
-          "finishedAt": "2026-07-15T13:03:04.924169+00:00",
+          "createdAt": "2026-07-16T19:49:43.009276+00:00",
+          "startedAt": "2026-07-16T19:49:43.009276+00:00",
+          "finishedAt": "2026-07-16T19:49:43.009276+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1936,7 +2024,12 @@
           "startedAt": "2026-07-15T13:03:06.911718+00:00",
           "finishedAt": "2026-07-15T13:03:06.911718+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -1982,11 +2075,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.835026+00:00",
-          "startedAt": "2026-07-15T13:03:04.835026+00:00",
-          "finishedAt": "2026-07-15T13:03:04.835026+00:00",
+          "createdAt": "2026-07-16T19:49:42.927598+00:00",
+          "startedAt": "2026-07-16T19:49:42.927598+00:00",
+          "finishedAt": "2026-07-16T19:49:42.927598+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -1995,7 +2093,12 @@
           "startedAt": "2026-07-15T13:03:06.832560+00:00",
           "finishedAt": "2026-07-15T13:03:06.832560+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2041,11 +2144,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.269124+00:00",
-          "startedAt": "2026-07-15T13:03:05.268623+00:00",
-          "finishedAt": "2026-07-15T13:03:05.268623+00:00",
+          "createdAt": "2026-07-16T19:49:43.426136+00:00",
+          "startedAt": "2026-07-16T19:49:43.425625+00:00",
+          "finishedAt": "2026-07-16T19:49:43.425625+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2054,7 +2162,12 @@
           "startedAt": "2026-07-15T13:03:07.169598+00:00",
           "finishedAt": "2026-07-15T13:03:07.169598+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2100,11 +2213,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.106431+00:00",
-          "startedAt": "2026-07-15T13:03:05.106431+00:00",
-          "finishedAt": "2026-07-15T13:03:05.106431+00:00",
+          "createdAt": "2026-07-16T19:49:43.209337+00:00",
+          "startedAt": "2026-07-16T19:49:43.208859+00:00",
+          "finishedAt": "2026-07-16T19:49:43.208859+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2113,7 +2231,12 @@
           "startedAt": "2026-07-15T13:03:07.028412+00:00",
           "finishedAt": "2026-07-15T13:03:07.028412+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2159,11 +2282,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.160449+00:00",
-          "startedAt": "2026-07-15T13:03:05.160449+00:00",
-          "finishedAt": "2026-07-15T13:03:05.160449+00:00",
+          "createdAt": "2026-07-16T19:49:43.296057+00:00",
+          "startedAt": "2026-07-16T19:49:43.295552+00:00",
+          "finishedAt": "2026-07-16T19:49:43.295552+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2172,7 +2300,12 @@
           "startedAt": "2026-07-15T13:03:07.060426+00:00",
           "finishedAt": "2026-07-15T13:03:07.060426+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2218,11 +2351,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.729573+00:00",
-          "startedAt": "2026-07-15T13:03:05.729573+00:00",
-          "finishedAt": "2026-07-15T13:03:05.729573+00:00",
+          "createdAt": "2026-07-16T19:49:44.433005+00:00",
+          "startedAt": "2026-07-16T19:49:44.432520+00:00",
+          "finishedAt": "2026-07-16T19:49:44.432520+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2231,7 +2369,12 @@
           "startedAt": "2026-07-15T13:03:07.223776+00:00",
           "finishedAt": "2026-07-15T13:03:07.223776+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2277,11 +2420,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.076301+00:00",
-          "startedAt": "2026-07-15T13:03:05.076301+00:00",
-          "finishedAt": "2026-07-15T13:03:05.076301+00:00",
+          "createdAt": "2026-07-16T19:49:43.167257+00:00",
+          "startedAt": "2026-07-16T19:49:43.167257+00:00",
+          "finishedAt": "2026-07-16T19:49:43.167257+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2290,7 +2438,12 @@
           "startedAt": "2026-07-15T13:03:07.006881+00:00",
           "finishedAt": "2026-07-15T13:03:07.006881+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2336,11 +2489,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.405939+00:00",
-          "startedAt": "2026-07-15T13:03:04.405939+00:00",
-          "finishedAt": "2026-07-15T13:03:04.405939+00:00",
+          "createdAt": "2026-07-16T19:49:42.493871+00:00",
+          "startedAt": "2026-07-16T19:49:42.493871+00:00",
+          "finishedAt": "2026-07-16T19:49:42.493871+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2349,7 +2507,12 @@
           "startedAt": "2026-07-15T13:03:06.261235+00:00",
           "finishedAt": "2026-07-15T13:03:06.261235+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2395,11 +2558,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:06.144843+00:00",
-          "startedAt": "2026-07-15T13:03:06.144338+00:00",
-          "finishedAt": "2026-07-15T13:03:06.144338+00:00",
+          "createdAt": "2026-07-16T19:49:45.379846+00:00",
+          "startedAt": "2026-07-16T19:49:45.379345+00:00",
+          "finishedAt": "2026-07-16T19:49:45.379345+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2408,7 +2576,12 @@
           "startedAt": "2026-07-15T13:03:07.463857+00:00",
           "finishedAt": "2026-07-15T13:03:07.463857+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2463,11 +2636,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.685109+00:00",
-          "startedAt": "2026-07-15T13:03:05.685109+00:00",
-          "finishedAt": "2026-07-15T13:03:05.685109+00:00",
+          "createdAt": "2026-07-16T19:49:44.359448+00:00",
+          "startedAt": "2026-07-16T19:49:44.358931+00:00",
+          "finishedAt": "2026-07-16T19:49:44.358931+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2476,7 +2654,12 @@
           "startedAt": "2026-07-15T13:03:07.192124+00:00",
           "finishedAt": "2026-07-15T13:03:07.192124+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2496,7 +2679,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 187,
+      "twoDContentCount": 188,
       "viewSheetCount": 6,
       "viewCount": 5,
       "layerDefinitionCount": 255,
@@ -2506,7 +2689,7 @@
       "insidePrintArea": {
         "inside": 53,
         "outside": 128,
-        "unknown": 6
+        "unknown": 7
       },
       "partOccurrenceCount": 436,
       "partExtendedInfoStatus": "present",
@@ -2522,16 +2705,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.516634+00:00",
-          "startedAt": "2026-07-15T13:03:04.516634+00:00",
-          "finishedAt": "2026-07-15T13:03:04.516634+00:00",
+          "createdAt": "2026-07-16T19:49:42.592530+00:00",
+          "startedAt": "2026-07-16T19:49:42.592530+00:00",
+          "finishedAt": "2026-07-16T19:49:42.592530+00:00",
           "errorMessage": "",
-          "warnings": [
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrow"
-            }
-          ]
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2540,7 +2723,12 @@
           "startedAt": "2026-07-15T13:03:06.357838+00:00",
           "finishedAt": "2026-07-15T13:03:06.357838+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2586,11 +2774,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.455443+00:00",
-          "startedAt": "2026-07-15T13:03:04.455443+00:00",
-          "finishedAt": "2026-07-15T13:03:04.455443+00:00",
+          "createdAt": "2026-07-16T19:49:42.538400+00:00",
+          "startedAt": "2026-07-16T19:49:42.538400+00:00",
+          "finishedAt": "2026-07-16T19:49:42.538400+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2599,7 +2792,12 @@
           "startedAt": "2026-07-15T13:03:06.295734+00:00",
           "finishedAt": "2026-07-15T13:03:06.295734+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2645,11 +2843,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.603740+00:00",
-          "startedAt": "2026-07-15T13:03:04.603740+00:00",
-          "finishedAt": "2026-07-15T13:03:04.603740+00:00",
+          "createdAt": "2026-07-16T19:49:42.661138+00:00",
+          "startedAt": "2026-07-16T19:49:42.661138+00:00",
+          "finishedAt": "2026-07-16T19:49:42.661138+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2658,7 +2861,12 @@
           "startedAt": "2026-07-15T13:03:06.707866+00:00",
           "finishedAt": "2026-07-15T13:03:06.707866+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2704,11 +2912,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.582163+00:00",
-          "startedAt": "2026-07-15T13:03:04.581664+00:00",
-          "finishedAt": "2026-07-15T13:03:04.581664+00:00",
+          "createdAt": "2026-07-16T19:49:42.646111+00:00",
+          "startedAt": "2026-07-16T19:49:42.646111+00:00",
+          "finishedAt": "2026-07-16T19:49:42.646111+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2717,7 +2930,12 @@
           "startedAt": "2026-07-15T13:03:06.687817+00:00",
           "finishedAt": "2026-07-15T13:03:06.687817+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2763,11 +2981,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.562139+00:00",
-          "startedAt": "2026-07-15T13:03:04.562139+00:00",
-          "finishedAt": "2026-07-15T13:03:04.562139+00:00",
+          "createdAt": "2026-07-16T19:49:42.630558+00:00",
+          "startedAt": "2026-07-16T19:49:42.630558+00:00",
+          "finishedAt": "2026-07-16T19:49:42.630558+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2776,7 +2999,12 @@
           "startedAt": "2026-07-15T13:03:06.669306+00:00",
           "finishedAt": "2026-07-15T13:03:06.669306+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2822,11 +3050,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.492471+00:00",
-          "startedAt": "2026-07-15T13:03:04.492471+00:00",
-          "finishedAt": "2026-07-15T13:03:04.492471+00:00",
+          "createdAt": "2026-07-16T19:49:42.569531+00:00",
+          "startedAt": "2026-07-16T19:49:42.569531+00:00",
+          "finishedAt": "2026-07-16T19:49:42.569531+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2835,7 +3068,12 @@
           "startedAt": "2026-07-15T13:03:06.334362+00:00",
           "finishedAt": "2026-07-15T13:03:06.334362+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2883,11 +3121,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.980700+00:00",
-          "startedAt": "2026-07-15T13:03:04.980700+00:00",
-          "finishedAt": "2026-07-15T13:03:04.980700+00:00",
+          "createdAt": "2026-07-16T19:49:43.057400+00:00",
+          "startedAt": "2026-07-16T19:49:43.057400+00:00",
+          "finishedAt": "2026-07-16T19:49:43.057400+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -2896,7 +3139,12 @@
           "startedAt": "2026-07-15T13:03:06.934272+00:00",
           "finishedAt": "2026-07-15T13:03:06.934272+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2944,16 +3192,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.706916+00:00",
-          "startedAt": "2026-07-15T13:03:04.706916+00:00",
-          "finishedAt": "2026-07-15T13:03:04.706916+00:00",
+          "createdAt": "2026-07-16T19:49:42.781843+00:00",
+          "startedAt": "2026-07-16T19:49:42.781342+00:00",
+          "finishedAt": "2026-07-16T19:49:42.781342+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (125) and layer count (129) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -2962,7 +3217,12 @@
           "startedAt": "2026-07-15T13:03:06.757898+00:00",
           "finishedAt": "2026-07-15T13:03:06.757898+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -2982,7 +3242,7 @@
       "has3dSnapshot": true,
       "twoDContentStatus": "content",
       "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
-      "twoDContentCount": 1557,
+      "twoDContentCount": 1560,
       "viewSheetCount": 12,
       "viewCount": 12,
       "layerDefinitionCount": 255,
@@ -2992,7 +3252,7 @@
       "insidePrintArea": {
         "inside": 210,
         "outside": 1333,
-        "unknown": 14
+        "unknown": 17
       },
       "partOccurrenceCount": 1,
       "partExtendedInfoStatus": "not_provided",
@@ -3008,28 +3268,23 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:04.740465+00:00",
-          "startedAt": "2026-07-15T13:03:04.740465+00:00",
-          "finishedAt": "2026-07-15T13:03:04.740465+00:00",
+          "createdAt": "2026-07-16T19:49:42.819449+00:00",
+          "startedAt": "2026-07-16T19:49:42.819449+00:00",
+          "finishedAt": "2026-07-16T19:49:42.819449+00:00",
           "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
           "warnings": [
             {
               "code": "geometry_layer_count_mismatch",
               "message": "2D geometry count (160) and layer count (164) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomArrowView"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomOtherDraft"
-            },
-            {
-              "code": "unsupported_geometry",
-              "message": "Unhandled geometry type: SxGeomOtherDraft"
             }
-          ]
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
         },
         "3d": {
           "status": "succeeded",
@@ -3038,7 +3293,12 @@
           "startedAt": "2026-07-15T13:03:06.786928+00:00",
           "finishedAt": "2026-07-15T13:03:06.786928+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -3084,11 +3344,16 @@
         "2d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:05.882199+00:00",
-          "startedAt": "2026-07-15T13:03:05.881698+00:00",
-          "finishedAt": "2026-07-15T13:03:05.881698+00:00",
+          "createdAt": "2026-07-16T19:49:44.720266+00:00",
+          "startedAt": "2026-07-16T19:49:44.720266+00:00",
+          "finishedAt": "2026-07-16T19:49:44.720266+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -3097,7 +3362,12 @@
           "startedAt": "2026-07-15T13:03:07.367291+00:00",
           "finishedAt": "2026-07-15T13:03:07.367291+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
@@ -3154,7 +3424,12 @@
           "startedAt": "2026-07-15T13:03:04.359865+00:00",
           "finishedAt": "2026-07-15T13:03:04.359865+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         },
         "3d": {
           "status": "succeeded",
@@ -3163,7 +3438,12 @@
           "startedAt": "2026-07-15T13:03:06.224212+00:00",
           "finishedAt": "2026-07-15T13:03:06.224212+00:00",
           "errorMessage": "",
-          "warnings": []
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
         }
       },
       "canonicalSourceEvidence": {
