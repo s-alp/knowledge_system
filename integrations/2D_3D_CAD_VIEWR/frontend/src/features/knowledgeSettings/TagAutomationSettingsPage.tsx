@@ -146,7 +146,7 @@ export function TagAutomationSettingsPage() {
     const request =
       activePanel === "icad-extraction"
         ? Promise.all([
-            cachedRegistrations ? Promise.resolve(cachedRegistrations) : getDrawingMetadataRegistrations({ includeAll: true }),
+            cachedRegistrations ? Promise.resolve(cachedRegistrations) : getDrawingMetadataRegistrations(),
             getDrawingMetadataHandoffSummary(),
           ])
             .then(([registrationItems, summary]) => {

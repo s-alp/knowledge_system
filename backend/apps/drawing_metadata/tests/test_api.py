@@ -32,6 +32,23 @@ def test_registration_create_and_list(sample_registration_payload, tmp_path):
 
 
 @pytest.mark.django_db
+def test_registration_create_returns_existing_for_same_source_path(sample_registration_payload, tmp_path):
+    client = APIClient()
+    source_file = tmp_path / "same_source.icd"
+    source_file.write_bytes(b"icad-data")
+    sample_registration_payload["sourcePath"] = str(source_file)
+    sample_registration_payload["filename"] = "same_source.icd"
+
+    first_response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+    second_response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 200
+    assert second_response.json()["drawingId"] == first_response.json()["drawingId"]
+    assert RegisteredDrawing.objects.count() == 1
+
+
+@pytest.mark.django_db
 def test_registration_upload_icad_file(settings, tmp_path):
     settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
     client = APIClient()
@@ -50,6 +67,30 @@ def test_registration_upload_icad_file(settings, tmp_path):
     assert stored_path.name == "sample.icd"
     assert stored_path.exists()
     assert stored_path.read_bytes() == b"icad-data"
+    assert RegisteredDrawing.objects.get().source_content_sha256
+
+
+@pytest.mark.django_db
+def test_registration_upload_returns_existing_for_same_content(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
+    client = APIClient()
+
+    first_response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile("sample.icd", b"same-icad-data")},
+        format="multipart",
+    )
+    second_response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile("renamed_sample.icd", b"same-icad-data")},
+        format="multipart",
+    )
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 200
+    assert second_response.json()["drawingId"] == first_response.json()["drawingId"]
+    assert RegisteredDrawing.objects.count() == 1
+    assert len(list((tmp_path / "uploads").glob("*/*.icd"))) == 1
 
 
 @pytest.mark.django_db

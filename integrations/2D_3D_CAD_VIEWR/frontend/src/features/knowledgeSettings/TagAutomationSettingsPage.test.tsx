@@ -180,7 +180,7 @@ describe("TagAutomationSettingsPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /ICAD抽出管理/ }));
     expect(screen.getByRole("heading", { name: "ICAD抽出管理" })).toBeInTheDocument();
-    expect(getDrawingMetadataRegistrations).toHaveBeenCalledWith({ includeAll: true });
+    expect(getDrawingMetadataRegistrations).toHaveBeenCalledWith();
     expect((await screen.findAllByText("sample.icd")).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText("2D / 3D")).toBeInTheDocument();
     expect(screen.getByText("待機中")).toBeInTheDocument();

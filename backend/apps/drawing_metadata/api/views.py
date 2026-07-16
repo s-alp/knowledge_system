@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import uuid
 from pathlib import Path
 
@@ -80,6 +81,9 @@ class RegistrationListApiView(APIView):
     def post(self, request):
         serializer = RegisteredDrawingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        existing = RegisteredDrawing.objects.filter(source_path=serializer.validated_data["source_path"]).first()
+        if existing is not None:
+            return Response(RegisteredDrawingDetailSerializer(existing).data, status=status.HTTP_200_OK)
         drawing = serializer.save()
         return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)
 
@@ -350,14 +354,32 @@ class RegistrationUploadApiView(APIView):
         upload_root.mkdir(parents=True, exist_ok=True)
         stored_directory.mkdir(parents=True, exist_ok=True)
 
+        digest = hashlib.sha256()
         with stored_path.open("wb") as destination:
             for chunk in uploaded_file.chunks():
+                digest.update(chunk)
                 destination.write(chunk)
+        content_hash = digest.hexdigest()
+
+        existing = (
+            RegisteredDrawing.objects.filter(source_format="icad", source_content_sha256=content_hash)
+            .exclude(source_content_sha256="")
+            .order_by("-updated_at")
+            .first()
+        )
+        if existing is not None:
+            stored_path.unlink(missing_ok=True)
+            try:
+                stored_directory.rmdir()
+            except OSError:
+                pass
+            return Response(RegisteredDrawingDetailSerializer(existing).data, status=status.HTTP_200_OK)
 
         drawing = RegisteredDrawing.objects.create(
             host_drawing_id="",
-            filename=uploaded_file.name,
+            filename=original_name,
             source_path=str(stored_path),
+            source_content_sha256=content_hash,
             source_format="icad",
         )
         return Response(RegisteredDrawingDetailSerializer(drawing).data, status=status.HTTP_201_CREATED)

@@ -18,6 +18,7 @@ class RegisteredDrawing(models.Model):
     host_drawing_id = models.CharField(max_length=255, blank=True)
     filename = models.CharField(max_length=255)
     source_path = models.CharField(max_length=1024)
+    source_content_sha256 = models.CharField(max_length=64, blank=True, db_index=True)
     source_format = models.CharField(max_length=64, default="icad")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
