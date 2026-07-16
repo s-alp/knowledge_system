@@ -77,6 +77,22 @@ function latestJobUpdatedText(item: DrawingMetadataRegistrationListItem) {
   return formatDateTime(values[values.length - 1]);
 }
 
+function formatCheck(value: boolean | null | undefined) {
+  if (value == null) {
+    return "-";
+  }
+  return value ? "はい" : "いいえ";
+}
+
+function formatSourcePreflight(job: NonNullable<HandoffSummaryResponse["recentFailedJobs"]>[number]) {
+  const preflight = job.sourcePreflight;
+  if (!preflight) {
+    return "-";
+  }
+  const pathLength = preflight.sourcePathLength != null ? `${preflight.sourcePathLength}文字` : "-";
+  return `原本:${formatCheck(preflight.sourceExistsFromCurrentMachine)} / 長パス退避:${formatCheck(preflight.requiresSxnetStagedInput)} / パス長:${pathLength}`;
+}
+
 function panelForAction(action: string): SettingsPanelKey {
   if (action === "open_icad_extraction_review") {
     return "icad-extraction";
@@ -341,6 +357,8 @@ export function TagAutomationSettingsPage() {
                   <tr>
                     <th>直近失敗ICAD</th>
                     <th>mode</th>
+                    <th>分類</th>
+                    <th>事前診断</th>
                     <th>worker</th>
                     <th>失敗日時</th>
                     <th>失敗理由</th>
@@ -352,6 +370,8 @@ export function TagAutomationSettingsPage() {
                     <tr key={job.jobId}>
                       <th>{job.filename}</th>
                       <td>{job.extractionMode.toUpperCase()}</td>
+                      <td>{job.errorClass || "-"}</td>
+                      <td>{formatSourcePreflight(job)}</td>
                       <td>{job.workerName || "-"}</td>
                       <td>{formatDateTime(job.updatedAt)}</td>
                       <td title={job.errorMessage}>{shortError(job.errorMessage)}</td>

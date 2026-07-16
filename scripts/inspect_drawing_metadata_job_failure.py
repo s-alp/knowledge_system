@@ -11,60 +11,39 @@ ROOT = Path(__file__).resolve().parents[1]
 BACKEND = ROOT / "backend"
 sys.path.insert(0, str(BACKEND))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "knowledge_system_backend.settings")
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 import django
 
 django.setup()
 
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob
-from apps.drawing_metadata.services.path_constraints import WINDOWS_FILENAME_LIMIT, WINDOWS_LEGACY_PATH_LIMIT
-
-
-def _exists(path_text: str) -> bool:
-    try:
-        return Path(path_text).is_file()
-    except OSError:
-        return False
-
-
-def _classify_error(status: str, message: str) -> str:
-    if status == "succeeded":
-        return "none"
-    if not message:
-        return "missing_error_message"
-    if "パスが長すぎます" in message:
-        return "path_length_limit"
-    if "ファイル名が長すぎます" in message:
-        return "filename_length_limit"
-    if "図面ファイルではありません" in message:
-        return "sxnet_rejected_as_not_drawing_file"
-    if "見つかりません" in message or "not found" in message.lower():
-        return "source_file_not_found"
-    if "timed out" in message.lower() or "timeout" in message.lower():
-        return "extractor_timeout"
-    if "sxnet" in message.lower() or "sxexception" in message.lower():
-        return "sxnet_open_failure"
-    return "other"
+from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics
 
 
 def _inspect_job(job: DrawingMetadataExtractionJob) -> dict:
     drawing = job.drawing
-    path_text = drawing.source_path
-    filename = drawing.filename
+    failure = build_job_failure_diagnostics(job)
+    preflight = failure["sourcePreflight"]
     return {
         "jobId": str(job.id),
         "drawingId": str(drawing.id),
         "mode": job.extraction_mode,
         "profile": job.extraction_profile,
         "status": job.status,
-        "filename": filename,
-        "sourcePath": path_text,
-        "sourcePathLength": len(path_text),
-        "sourcePathWithinSxnetLegacyLimit": len(path_text) <= WINDOWS_LEGACY_PATH_LIMIT,
-        "filenameLength": len(filename),
-        "filenameWithinWindowsLimit": len(filename) <= WINDOWS_FILENAME_LIMIT,
-        "sourceExistsFromCurrentMachine": _exists(path_text),
-        "errorClass": _classify_error(job.status, job.error_message or ""),
+        "filename": preflight["filename"],
+        "sourcePath": preflight["sourcePath"],
+        "sourcePathLength": preflight["sourcePathLength"],
+        "sourcePathWithinSxnetLegacyLimit": preflight["sourcePathWithinSxnetLegacyLimit"],
+        "requiresSxnetStagedInput": preflight["requiresSxnetStagedInput"],
+        "filenameLength": preflight["filenameLength"],
+        "filenameWithinWindowsLimit": preflight["filenameWithinWindowsLimit"],
+        "extensionIsIcd": preflight["extensionIsIcd"],
+        "sourceExistsFromCurrentMachine": preflight["sourceExistsFromCurrentMachine"],
+        "errorClass": failure["errorClass"],
+        "reextractCondition": failure["reextractCondition"],
+        "recordedFailureDiagnostics": (job.diagnostics_json or {}).get("failure"),
         "errorMessage": job.error_message or "",
         "createdAt": job.created_at.isoformat() if job.created_at else None,
         "startedAt": job.started_at.isoformat() if job.started_at else None,

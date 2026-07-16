@@ -211,11 +211,13 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
 
 
 @pytest.mark.django_db
-def test_handoff_summary_api_returns_dashboard_payload(sample_registration_payload):
+def test_handoff_summary_api_returns_dashboard_payload(sample_registration_payload, tmp_path):
+    source_file = tmp_path / "handoff-api.icd"
+    source_file.write_bytes(b"icad-data")
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
         filename="handoff-api.icd",
-        source_path=sample_registration_payload["sourcePath"],
+        source_path=str(source_file),
         source_format=sample_registration_payload["sourceFormat"],
     )
     DrawingMetadataSnapshot.objects.create(
@@ -245,7 +247,9 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
     assert payload["workerStatus"]["status"] in {"missing", "running", "stale", "unreadable"}
     assert payload["jobStatusCounts"]["failed"] == 1
     assert payload["recentFailedJobs"][0]["filename"] == "handoff-api.icd"
-    assert "図面モデルとして開けていません" in payload["recentFailedJobs"][0]["reextractCondition"]
+    assert payload["recentFailedJobs"][0]["errorClass"] == "sxnet_rejected_as_not_drawing_file"
+    assert payload["recentFailedJobs"][0]["sourcePreflight"]["sourceExistsFromCurrentMachine"] is True
+    assert "SXNETが図面モデルとして開けていません" in payload["recentFailedJobs"][0]["reextractCondition"]
 
 
 @pytest.mark.django_db
@@ -266,9 +270,10 @@ def test_handoff_summary_api_explains_path_length_failure(sample_registration_pa
     response = APIClient().get("/api/v1/drawing-metadata/handoff-summary")
 
     assert response.status_code == 200
-    reextract_condition = response.json()["recentFailedJobs"][0]["reextractCondition"]
-    assert "パス長制限" in reextract_condition
-    assert "短い一時パス" in reextract_condition
+    failed_job = response.json()["recentFailedJobs"][0]
+    assert failed_job["errorClass"] == "path_length_limit"
+    assert failed_job["sourcePreflight"]["sourcePathWithinSxnetLegacyLimit"] is True
+    assert "一時パス" in failed_job["reextractCondition"]
 
 
 @pytest.mark.django_db

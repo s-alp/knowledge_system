@@ -75,6 +75,16 @@ export interface HandoffSummaryResponse {
     status: string;
     workerName: string;
     errorMessage: string;
+    errorClass?: string;
+    sourcePreflight?: {
+      sourcePathLength?: number;
+      sourcePathWithinSxnetLegacyLimit?: boolean;
+      requiresSxnetStagedInput?: boolean;
+      filenameLength?: number;
+      filenameWithinWindowsLimit?: boolean;
+      extensionIsIcd?: boolean;
+      sourceExistsFromCurrentMachine?: boolean;
+    };
     reextractCondition: string;
     updatedAt: string;
   }>;

@@ -87,6 +87,16 @@ const handoffSummary: HandoffSummaryResponse = {
       status: "failed",
       workerName: "codex-local-worker",
       errorMessage: "sxnet.SxException: 指定したファイルは図面ファイルではありません。",
+      errorClass: "sxnet_rejected_as_not_drawing_file",
+      sourcePreflight: {
+        sourcePathLength: 280,
+        sourcePathWithinSxnetLegacyLimit: false,
+        requiresSxnetStagedInput: true,
+        filenameLength: 10,
+        filenameWithinWindowsLimit: true,
+        extensionIsIcd: true,
+        sourceExistsFromCurrentMachine: true,
+      },
       reextractCondition: "ICAD/SXNETが図面ファイルとして開けていません。ファイル種別、パス、アクセス権、ICAD対応版を確認して再抽出します。",
       updatedAt: "2026-07-16T00:00:00Z",
     },
@@ -191,6 +201,8 @@ describe("TagAutomationSettingsPage", () => {
     expect(screen.getByText("1 / 0 / 10 / 1")).toBeInTheDocument();
     expect(screen.getByText("最終ジョブ更新")).toBeInTheDocument();
     expect(screen.getByText("失敗日時")).toBeInTheDocument();
+    expect(screen.getByText("sxnet_rejected_as_not_drawing_file")).toBeInTheDocument();
+    expect(screen.getByText("原本:はい / 長パス退避:はい / パス長:280文字")).toBeInTheDocument();
     expect(screen.getByText(/図面ファイルとして開けていません/)).toBeInTheDocument();
     expect(screen.getByText("対象範囲: 固定manifest 39件 / 全登録 68件")).toBeInTheDocument();
 

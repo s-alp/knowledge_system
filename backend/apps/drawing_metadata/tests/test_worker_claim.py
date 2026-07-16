@@ -4,7 +4,7 @@ import pytest
 from django.utils import timezone
 
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
-from apps.drawing_metadata.services.extraction_runner import ExtractionRunResult
+from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, ExtractionRunResult
 from apps.drawing_metadata.services.llm_title_block_classifier import GeminiResponseError
 from apps.drawing_metadata.tasks import extraction_tasks
 from apps.drawing_metadata.tasks.extraction_tasks import claim_next_job
@@ -99,6 +99,37 @@ def test_process_job_refreshes_lease_for_extractor_timeout(monkeypatch, settings
     assert processed.diagnostics_json["activeExtractionProfile"] == "default"
     assert processed.diagnostics_json["activeExtractionOptions"] == {}
     assert processed.diagnostics_json["resultWarningCount"] == 0
+
+
+@pytest.mark.django_db
+def test_process_job_records_failure_diagnostics_for_sxnet_open_error(monkeypatch):
+    long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-failure-diagnostics",
+        filename="sample.icd",
+        source_path=long_source_path,
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_PROCESSING,
+        worker_name="test-worker",
+    )
+
+    def fake_run_extractor(*, drawing, extraction_mode, job_id, extraction_profile, extraction_options):
+        raise ExtractionRunnerError("sxnet.SxException: 指定したファイルは図面ファイルではありません。")
+
+    monkeypatch.setattr(extraction_tasks, "run_extractor", fake_run_extractor)
+
+    processed = extraction_tasks.process_job(job.id)
+
+    failure = processed.diagnostics_json["failure"]
+    assert processed.status == DrawingMetadataExtractionJob.STATUS_FAILED
+    assert failure["errorClass"] == "sxnet_rejected_as_not_drawing_file"
+    assert failure["sourcePreflight"]["requiresSxnetStagedInput"] is True
+    assert failure["sourcePreflight"]["sourcePathWithinSxnetLegacyLimit"] is False
+    assert "短い一時パス" in failure["reextractCondition"]
 
 
 @pytest.mark.django_db

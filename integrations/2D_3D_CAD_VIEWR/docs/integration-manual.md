@@ -81,6 +81,7 @@ docker compose -f docker-compose.dev.yml up --build
 8. `PDM_API_BASE_URL` と `PDM_DRAWING_RESOLVE_PATH_TEMPLATE` を相手先環境へ合わせる
 9. 補助セクションは `viewerBootstrap.metadata.knowledgeDetail` の実データであることを受け取り側へ明示する
 10. 社内 URL を直接開く場合は internal URL allowlist を設定する
+11. システム設定の ICAD抽出管理では `recentFailedJobs[].errorClass`、`sourcePreflight`、`reextractCondition` を表示し、SXNETの生エラーだけで再抽出可否を判断しない
 
 ### API 接続
 

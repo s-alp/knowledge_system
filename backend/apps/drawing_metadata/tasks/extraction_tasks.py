@@ -14,6 +14,7 @@ from apps.drawing_metadata.models import (
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor
+from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics, build_source_preflight
 from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiConfigurationError,
     GeminiResponseError,
@@ -151,6 +152,7 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
         diagnostics = dict(job.diagnostics_json or {})
         diagnostics["activeExtractionProfile"] = job.extraction_profile or "default"
         diagnostics["activeExtractionOptions"] = job.extraction_options_json or {}
+        diagnostics["sourcePreflight"] = build_source_preflight(job.drawing)
         job.diagnostics_json = diagnostics
         job.save(update_fields=["diagnostics_json", "updated_at"])
         result = run_extractor(
@@ -209,5 +211,17 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
         job.finished_at = timezone.now()
         job.error_message = str(exc)
         job.lease_expires_at = None
-        job.save(update_fields=["status", "finished_at", "error_message", "lease_expires_at", "updated_at"])
+        diagnostics = dict(job.diagnostics_json or {})
+        diagnostics["failure"] = build_job_failure_diagnostics(job)
+        job.diagnostics_json = diagnostics
+        job.save(
+            update_fields=[
+                "status",
+                "finished_at",
+                "error_message",
+                "diagnostics_json",
+                "lease_expires_at",
+                "updated_at",
+            ]
+        )
     return job

@@ -98,6 +98,21 @@
 | `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
 | `derived_tags` | `tag`, `source`, `confidence`, `manual_flag`, `tag_rule_version` | 自動タグ候補 | 採用前にレビュー可能 |
+
+### 2.1 抽出失敗診断
+
+`GET /api/v1/drawing-metadata/handoff-summary` の `recentFailedJobs[]` は、SXNETの生エラーだけでなく以下を返す。
+
+| 項目 | 内容 |
+| --- | --- |
+| `errorClass` | `sxnet_rejected_as_not_drawing_file`, `path_length_limit`, `source_file_not_found`, `extractor_timeout`, `sxnet_open_failure` などの分類 |
+| `sourcePreflight.sourcePathLength` | 登録されている原本ICADパスの文字数 |
+| `sourcePreflight.sourcePathWithinSxnetLegacyLimit` | SXNETへ直接渡すには安全な長さか |
+| `sourcePreflight.requiresSxnetStagedInput` | 抽出時に短い一時パスへ退避すべきか |
+| `sourcePreflight.sourceExistsFromCurrentMachine` | 現在のworker実行環境から原本ICADへアクセスできるか |
+| `reextractCondition` | 再抽出前に確認する条件。長パス退避、ICAD対応版、外部参照不足、ファイル破損、ネットワークパス未接続などを切り分ける |
+
+SXNETの `指定したファイルは図面ファイルではありません。` は、ICD拡張子そのものを否定する意味に固定しない。原本パス、長パス退避、ICAD/SXNET対応版、外部参照不足、2D/3Dデータ有無を分けて確認する。
 | `reconciledAttributes` | `attribute`, `value2d`, `value3d`, `chosenValue`, `chosenMode`, `status`, `reason` | 2D/3D照合結果 | 一致、片側のみ、統合、手動上書き、競合を全属性単位で保持 |
 | `conflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 2D/3D差異のうち設計レビュー対象だけ | 材質、重量、図番、図面名など、採用値を人が見るべき差異に限定する |
 | `diagnosticConflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 内部品質・件数・抽出元などの診断差分 | `source_kind`、`confidence_summary`、`*_count`、`*_exists` など。JSON証跡には残すがRAG投入前レビュー対象からは外す |

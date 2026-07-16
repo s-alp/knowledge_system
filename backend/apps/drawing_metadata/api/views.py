@@ -26,6 +26,7 @@ from apps.drawing_metadata.api.serializers import (
 )
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_scope, build_scope_payload
+from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
@@ -235,21 +236,21 @@ class TagAutomationSettingsApiView(APIView):
         return Response(build_tag_automation_settings_payload())
 
 
-def _reextract_condition_for_error(error_message: str) -> str:
-    normalized = (error_message or "").lower()
-    if not normalized:
-        return "失敗理由が記録されていません。workerログとICAD起動状態を確認してください。"
-    if "パスが長すぎます" in error_message or "ファイル名が長すぎます" in error_message:
-        return "SXNETのパス長制限に当たっています。現行抽出では短い一時パスへ退避して再抽出します。ファイル名自体が長すぎる場合だけ短い名前で再登録します。"
-    if "timed out" in normalized or "timeout" in normalized:
-        return "ICAD起動待ちまたは抽出時間が不足しています。ICAD起動状態とタイムアウト秒数を確認して再抽出します。"
-    if "not drawing file" in normalized or "図面ファイル" in error_message:
-        return "ICDファイルですが、このICAD/SXNET環境では図面モデルとして開けていません。原本パス、外部参照、ICAD対応版を確認して再抽出します。"
-    if "sxexception" in normalized or "sxnet" in normalized:
-        return "SXNETでICADファイルを開けていません。ICADの起動状態、対象ファイル、起動済みダイアログを確認して再抽出します。"
-    if "file" in normalized and ("not found" in normalized or "could not find" in normalized):
-        return "元ICADファイルにアクセスできません。保存パスとネットワークドライブ接続を確認して再抽出します。"
-    return "失敗理由を確認し、対象ファイル・ICAD起動状態・抽出条件を修正して再抽出します。"
+def _failed_job_payload(job: DrawingMetadataExtractionJob) -> dict:
+    failure = build_job_failure_diagnostics(job)
+    return {
+        "jobId": str(job.id),
+        "drawingId": str(job.drawing_id),
+        "filename": job.drawing.filename,
+        "extractionMode": job.extraction_mode,
+        "status": job.status,
+        "workerName": job.worker_name,
+        "errorMessage": job.error_message,
+        "errorClass": failure["errorClass"],
+        "sourcePreflight": failure["sourcePreflight"],
+        "reextractCondition": failure["reextractCondition"],
+        "updatedAt": job.updated_at.isoformat(),
+    }
 
 
 class HandoffSummaryApiView(APIView):
@@ -302,17 +303,7 @@ class HandoffSummaryApiView(APIView):
             for row in all_jobs.values("status").annotate(count=Count("id")).order_by("status")
         }
         payload["recentFailedJobs"] = [
-            {
-                "jobId": str(job.id),
-                "drawingId": str(job.drawing_id),
-                "filename": job.drawing.filename,
-                "extractionMode": job.extraction_mode,
-                "status": job.status,
-                "workerName": job.worker_name,
-                "errorMessage": job.error_message,
-                "reextractCondition": _reextract_condition_for_error(job.error_message),
-                "updatedAt": job.updated_at.isoformat(),
-            }
+            _failed_job_payload(job)
             for job in all_jobs.filter(status=DrawingMetadataExtractionJob.STATUS_FAILED).order_by("-updated_at")[:10]
         ]
         return Response(payload)
