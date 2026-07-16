@@ -44,9 +44,9 @@
 
 | 項目 | 判定 | SXNET根拠 | 現行PoC | 補足 |
 | --- | --- | --- | --- | --- |
-| 図面名 / モデル名 | A | `SxModel.getInf()` -> `SxInfModel.name` | 未実装 | `SxInfModel` は `name`, `comment`, `is_read_only`, `nvs`, `nwf`, `path` を持つ |
-| 格納フォルダ | A | `SxInfModel.path` | 未実装 | ファイルパスとの照合に使える |
-| モデルコメント | A | `SxInfModel.comment` | 未実装 | 図面メタ候補 |
+| 図面名 / モデル名 | A | `SxModel.getInf()` -> `SxInfModel.name` | 実装済み | `raw_extract.model_info.name` と `canonicalAttributes.model_name` に保持。2D/3D共通 |
+| 格納フォルダ | A | `SxInfModel.path` | 実装済み | `raw_extract.model_info.path` と `canonicalAttributes.model_path` に保持。ファイルパスとの照合に使える |
+| モデルコメント | A | `SxInfModel.comment` | 実装済み | `raw_extract.model_info.comment` と `canonicalAttributes.model_comment` に保持。図面メタ候補 |
 | 3DグローバルWF | A | `SxModel.getGlobalWF()` | 実装済み | `"3DGLOBAL"` WFを取得 |
 | パーツ階層 | A | `SxWF.getInfPartTree()` | 実装済み | 実サンプルで `parts=149` の抽出実績あり |
 | トップパーツ任意情報 | A | `SxWF.getInfExTopPart()`, `SxInfPartTree.ex_inf` | 実装済み | PRFX/ユニット番号等が入る可能性はあるが、実データ確認が必要 |
@@ -169,8 +169,8 @@
 
 完全把握へ近づけるには、代表CADを複数用意して、下記を機械的に確認する必要がある。
 
-1. `SxModel.getInf()` と `SxModel.getInfPrintList()` を現行抽出に追加し、図面名、VS数、WF数、出図範囲、用紙サイズ、作画スケールを出す。
-2. `SxVS.getInf()` を追加し、VS名、尺度、ビュー種別を出す。
+1. `SxModel.getInf()` と `SxModel.getInfPrintList()` は実装済み。新規抽出ではモデル名、モデルコメント、モデル格納パス、VS数、WF数、出図範囲、用紙サイズ、作画スケールを出す。既存snapshotへ反映するには再抽出または再インポートが必要。
+2. `SxVS.getInf()` は実装済み。VS名、尺度、ビュー種別を出す。
 3. `SxEnt.getInfList()` と `SxEnt.getInfMaterialList()` を2D/3Dそれぞれで出す。
 4. 3Dマスプロパティは実装済み。今後は部品単位/グループ単位の粒度と、例外条件のサンプル数を増やす。
 5. `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomElparc2D`, `SxGeomCircle2D` は特徴候補化済み。`SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomFinishMark`, `SxGeomSymbol`, `SxGeomArrowView` は追加構造化を続ける。
@@ -205,6 +205,7 @@
 | 出図範囲枠 | 実装済み | `SxModel.getInfPrintList()` の結果を `print_frames` として保持。2D文字・寸法・記号系には `inside_print_area` と所属枠 `print_frame_no` を保持 |
 | レイヤー情報 | 実装済み | レイヤー一覧と、取得可能な2D要素の `layer_no` を保持 |
 | 保存フォルダ/ファイル名 | 実装済み | runner の `source_file` と Django canonical attributes に保持 |
+| ICADモデル情報 | 実装済み | `SxModel.getInf()` の `name`, `comment`, `path`, `is_read_only`, `nvs`, `nwf` を `model_info` と canonical attributes に保持 |
 | パーツ付加情報 | 実装済み | `ex_inf` を `ex_info_fields` として展開。澁谷工業系サンプルで取得確認済み |
 | 本番ナレッジ連携受け口 | 読み取り確認済み | 図面/製品/部品属性 API はフロント資産で参照あり。プロジェクト属性 API は未確認 |
 | 未対応2Dジオメトリ | primitive実装済み | `SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomElparc2D`, `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomDelta`, `SxGeomTolDatum` を warning ではなく raw evidence として保持 |

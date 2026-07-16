@@ -415,6 +415,24 @@
         </tbody>
       </table>
 
+      <h3>ICADモデル情報</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_2d_display.modelInfoRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
       <h3>確認サマリ</h3>
       <table>
         <thead>
@@ -872,6 +890,24 @@
         </thead>
         <tbody>
           {% for row in snapshot_3d_display.sourceFileRows %}
+            <tr>
+              <th>{{ row.label }}</th>
+              <td>{{ row.displayValue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>ICADモデル情報</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in snapshot_3d_display.modelInfoRows %}
             <tr>
               <th>{{ row.label }}</th>
               <td>{{ row.displayValue }}</td>

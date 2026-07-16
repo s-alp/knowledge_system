@@ -29,7 +29,11 @@ namespace IcadExtraction.SxNet
                 var globalWf = context.GetGlobalWf();
                 var getInfPartTreeMethod = globalWf.GetType().GetMethod("getInfPartTree", Type.EmptyTypes);
                 var getInfExTopPartMethod = globalWf.GetType().GetMethod("getInfExTopPart", Type.EmptyTypes);
-                var rawExtract = new RawExtract3DPayload();
+                var modelInfo = context.GetModelInfo();
+                var rawExtract = new RawExtract3DPayload
+                {
+                    ModelInfo = modelInfo,
+                };
                 if (options.ScanPartTree)
                 {
                     if (getInfPartTreeMethod == null)
@@ -51,6 +55,7 @@ namespace IcadExtraction.SxNet
                         scanPartMaterials: options.ScanPartMaterials,
                         scanPartExtendedInfo: options.ScanPartExtendedInfo
                     );
+                    rawExtract.ModelInfo = modelInfo;
                 }
                 if (options.ScanMassProperties)
                 {

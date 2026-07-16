@@ -32,6 +32,7 @@ COMPOSED_SUMMARY_FIELDS = (
     ("document_kind", "文書種別"),
     ("drawing_number", "図番"),
     ("drawing_name", "図面名"),
+    ("model_name", "モデル名"),
     ("revision", "リビジョン"),
     ("module_name", "モジュール"),
     ("source_format", "形式"),
@@ -55,6 +56,15 @@ SOURCE_FILE_FIELDS = (
     ("source_extension", "拡張子"),
     ("source_directory_path", "保存フォルダ"),
     ("source_full_path", "フルパス"),
+)
+
+MODEL_INFO_FIELDS = (
+    ("model_name", "モデル名"),
+    ("model_comment", "モデルコメント"),
+    ("model_path", "モデル格納パス"),
+    ("model_view_sheet_count", "モデルVS数"),
+    ("model_work_plane_count", "モデルWF数"),
+    ("model_is_read_only", "読み取り専用"),
 )
 
 RAG_PRE_FILTER_FIELDS = (
@@ -338,6 +348,11 @@ def _payload_tag_review_rows(knowledge_payload_preview: dict | None) -> list[dic
 def _source_file_rows(canonical_attributes: dict | None) -> list[dict]:
     canonical_attributes = canonical_attributes or {}
     return [_make_row(key, label, canonical_attributes.get(key)) for key, label in SOURCE_FILE_FIELDS]
+
+
+def _model_info_rows(canonical_attributes: dict | None) -> list[dict]:
+    canonical_attributes = canonical_attributes or {}
+    return [_make_row(key, label, canonical_attributes.get(key)) for key, label in MODEL_INFO_FIELDS]
 
 
 def _text_preview_items(texts: list[dict], limit: int = 8) -> list[dict]:
@@ -1057,6 +1072,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     return {
         "summaryRows": summary_rows,
         "sourceFileRows": _source_file_rows(canonical_attributes),
+        "modelInfoRows": _model_info_rows(canonical_attributes),
         "sectionSchemaVersion": raw_2d_sections.get("schema_version"),
         "sectionPrintAreaPolicy": raw_2d_sections.get("print_area_policy"),
         "sectionRows": _raw_2d_section_rows(raw_2d_sections),
@@ -1118,6 +1134,7 @@ def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     return {
         "topPartName": canonical_attributes.get("top_part_name"),
         "sourceFileRows": _source_file_rows(canonical_attributes),
+        "modelInfoRows": _model_info_rows(canonical_attributes),
         "partCount": part_count,
         "partTreePaths": _preview_items(part_tree_paths),
         "partTreePathTotal": len(part_tree_paths),

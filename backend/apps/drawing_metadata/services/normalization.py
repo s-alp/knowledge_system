@@ -903,6 +903,14 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             source_file.get("file_name_without_extension"),
         ]
     )
+    model_info = raw_extract.get("model_info", {}) or {}
+    model_info_tokens = _flatten_strings(
+        [
+            model_info.get("name"),
+            model_info.get("comment"),
+            model_info.get("path"),
+        ]
+    )
 
     canonical = {
         "drawing_number": None,
@@ -940,6 +948,13 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "source_file_stem": source_file.get("file_name_without_extension"),
         "source_extension": source_file.get("extension"),
         "source_path_tokens": source_path_tokens,
+        "model_name": model_info.get("name"),
+        "model_comment": model_info.get("comment"),
+        "model_path": model_info.get("path"),
+        "model_is_read_only": model_info.get("is_read_only"),
+        "model_view_sheet_count": model_info.get("view_sheet_count"),
+        "model_work_plane_count": model_info.get("work_plane_count"),
+        "model_info_tokens": model_info_tokens,
         "top_part_name": None,
         "top_part_comment": None,
         "top_part_ex_info": None,
@@ -1071,6 +1086,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         search_tokens = _flatten_strings(
             [
                 *source_path_tokens,
+                *model_info_tokens,
                 top_part.get("name"),
                 top_part.get("comment"),
                 top_part.get("ex_info"),
@@ -1178,6 +1194,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
 
         search_tokens = (
             source_path_tokens
+            + model_info_tokens
             + trusted_text_tokens
             + _flatten_strings(str(value) for value in canonical["title_block_fields"].values())
             + _flatten_strings(candidate.get("value") for candidate in canonical["revision_note_candidates"])

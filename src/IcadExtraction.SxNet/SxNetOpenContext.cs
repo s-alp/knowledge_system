@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
@@ -17,6 +18,20 @@ namespace IcadExtraction.SxNet
         public Assembly Assembly { get; }
 
         public object OpenedModel => _model;
+
+        public ModelInfoPayload GetModelInfo()
+        {
+            var info = InvokeModelMethod("getInf");
+            return new ModelInfoPayload
+            {
+                Name = ReflectionHelpers.GetString(info, "name"),
+                Comment = ReflectionHelpers.GetString(info, "comment"),
+                Path = ReflectionHelpers.GetString(info, "path"),
+                IsReadOnly = ReflectionHelpers.GetBool(info, "is_read_only"),
+                ViewSheetCount = ReflectionHelpers.GetInt(info, "nvs"),
+                WorkPlaneCount = ReflectionHelpers.GetInt(info, "nwf"),
+            };
+        }
 
         public static SxNetOpenContext OpenReadOnly(string sxnetDllPath, string inputPath)
         {

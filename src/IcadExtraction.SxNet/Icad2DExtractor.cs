@@ -29,7 +29,10 @@ namespace IcadExtraction.SxNet
             {
                 var globalVs = context.GetGlobalVs();
                 Ensure2DWindow(globalVs, warnings);
-                var rawExtract = new RawExtract2DPayload();
+                var rawExtract = new RawExtract2DPayload
+                {
+                    ModelInfo = context.GetModelInfo(),
+                };
                 foreach (var viewGeometry in TryResolveAllViewGeometries(context, warnings, options))
                 {
                     rawExtract.ViewSheets.Add(viewGeometry.ViewSheet);

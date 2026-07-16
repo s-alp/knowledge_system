@@ -14,6 +14,14 @@ def test_normalize_3d_raw_extract():
             "extension": ".icd",
         },
         "raw_extract": {
+            "model_info": {
+                "name": "KO小山ガントリーモデル",
+                "comment": "モデルコメント",
+                "path": r"J:\KO小山",
+                "is_read_only": True,
+                "view_sheet_count": 2,
+                "work_plane_count": 3,
+            },
             "mass_probe_status": "available",
             "mass_properties": {
                 "element_count": 17,
@@ -69,6 +77,13 @@ def test_normalize_3d_raw_extract():
     tags = build_derived_tags(canonical)
     assert canonical["source_file_name"] == "KO小山ガントリー.icd"
     assert canonical["source_directory_path"] == r"J:\KO小山"
+    assert canonical["model_name"] == "KO小山ガントリーモデル"
+    assert canonical["model_comment"] == "モデルコメント"
+    assert canonical["model_path"] == r"J:\KO小山"
+    assert canonical["model_is_read_only"] is True
+    assert canonical["model_view_sheet_count"] == 2
+    assert canonical["model_work_plane_count"] == 3
+    assert "KO小山ガントリーモデル" in canonical["part_keywords"]
     assert canonical["customer_name"] == "コマツ小山"
     assert canonical["equipment_category"] == "ガントリー"
     assert canonical["mass_probe_status"] == "available"
@@ -119,6 +134,14 @@ def test_normalize_2d_raw_extract():
             "extension": ".icd",
         },
         "raw_extract": {
+            "model_info": {
+                "name": "澁谷2Dモデル",
+                "comment": "図面側コメント",
+                "path": r"J:\澁谷工業",
+                "is_read_only": False,
+                "view_sheet_count": 5,
+                "work_plane_count": 0,
+            },
             "texts": [
                 {"text_lines": ["澁谷工業", "SES"], "source_type": "text"},
                 {"text_lines": ["ロボット"], "source_type": "label", "joined_text": "ロボット"},
@@ -161,6 +184,11 @@ def test_normalize_2d_raw_extract():
     canonical = normalize_raw_extract(payload)
     tags = build_derived_tags(canonical)
     assert canonical["source_full_path"] == r"J:\澁谷工業\sample.icd"
+    assert canonical["model_name"] == "澁谷2Dモデル"
+    assert canonical["model_comment"] == "図面側コメント"
+    assert canonical["model_path"] == r"J:\澁谷工業"
+    assert canonical["model_view_sheet_count"] == 5
+    assert "澁谷2Dモデル" in canonical["part_keywords"]
     assert canonical["customer_name"] == "澁谷工業"
     assert canonical["equipment_category"] == "ロボット"
     assert "SES" in canonical["spec_tokens"]

@@ -77,6 +77,7 @@ namespace IcadExtraction.Contracts
 
     public sealed class RawExtract3DPayload
     {
+        public ModelInfoPayload ModelInfo { get; set; } = new ModelInfoPayload();
         public TopPartPayload TopPart { get; set; } = new TopPartPayload();
         public List<PartPayload> Parts { get; set; } = new List<PartPayload>();
         public Dictionary<string, List<ViewerAssetPayload>> ViewerAssets { get; set; } = new Dictionary<string, List<ViewerAssetPayload>>();
@@ -94,6 +95,16 @@ namespace IcadExtraction.Contracts
         public double? SpecificGravity { get; set; }
         public int ElementCount { get; set; }
         public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
+    }
+
+    public sealed class ModelInfoPayload
+    {
+        public string? Name { get; set; }
+        public string? Comment { get; set; }
+        public string? Path { get; set; }
+        public bool IsReadOnly { get; set; }
+        public int ViewSheetCount { get; set; }
+        public int WorkPlaneCount { get; set; }
     }
 
     public sealed class MassPropertyPayload
@@ -259,6 +270,7 @@ namespace IcadExtraction.Contracts
 
     public sealed class RawExtract2DPayload
     {
+        public ModelInfoPayload ModelInfo { get; set; } = new ModelInfoPayload();
         public Dictionary<string, object> ConditionDiagnostics { get; set; } = new Dictionary<string, object>();
         public Dictionary<string, List<ViewerAssetPayload>> ViewerAssets { get; set; } = new Dictionary<string, List<ViewerAssetPayload>>();
         public List<ViewSheetPayload> ViewSheets { get; set; } = new List<ViewSheetPayload>();
