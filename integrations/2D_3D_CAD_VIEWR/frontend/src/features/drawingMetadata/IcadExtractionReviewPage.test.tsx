@@ -157,6 +157,21 @@ describe("IcadExtractionReviewPage", () => {
           startedAt: "2026-07-16T09:07:10Z",
           finishedAt: "2026-07-16T09:07:40Z",
           updatedAt: "2026-07-16T09:07:40Z",
+          diagnostics: {
+            failure: {
+              errorClass: "sxnet_rejected_as_not_drawing_file",
+              sourcePreflight: {
+                sourcePathLength: 312,
+                sourcePathWithinSxnetLegacyLimit: false,
+                requiresSxnetStagedInput: true,
+                filenameLength: 10,
+                filenameWithinWindowsLimit: true,
+                extensionIsIcd: true,
+                sourceExistsFromCurrentMachine: true,
+              },
+              reextractCondition: "長い原本パスは短い一時パスへ退避済み/退避対象です。",
+            },
+          },
         },
       },
     });
@@ -166,6 +181,7 @@ describe("IcadExtractionReviewPage", () => {
 
     expect(await screen.findByText("job-failed-2d")).toBeInTheDocument();
     expect(screen.getByText("ICDファイルですが、ICAD/SXNETが図面モデルとして開けません。原本パス、外部参照、ICAD対応版を確認してください。")).toBeInTheDocument();
+    expect(screen.getByText("原本:可 / 長パス退避:可 / パス長:312 / 上限超過 / ファイル名長:10")).toBeInTheDocument();
     expect(screen.getByText(/SxNetOpenContext.OpenReadOnly/)).toBeInTheDocument();
   });
 

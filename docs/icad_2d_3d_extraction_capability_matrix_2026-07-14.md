@@ -89,9 +89,9 @@
 | 文字 | A | `SxGeomText.txt`, `text_line_num`, `pnt`, `atr_word` | 実装済み | 図枠・注記・表内文字の材料 |
 | 注記 | A | `SxGeomLabel.txt`, `lead_line`, `underline` | 実装済み | 材質、表面処理、塗装、規格、担当者等の抽出元 |
 | 線 / 円 / 円弧 | A | `SxGeomLine2D`, `SxGeomCircle2D`, `SxGeomArc2D` | 実装済み | 図枠・中央図面・表罫線の解析元 |
-| スプライン | A | `SxGeomSpline2D` | primitive実装済み | 開始座標、点数、角度候補を保持。形状特徴タグ化は未実装 |
+| スプライン | A | `SxGeomSpline2D` | `curve_section_candidates[]` 実装済み | 開始座標、点数、ビュー、レイヤー、印刷枠判定をレビュー候補として保持。形状特徴だけでは自動タグに採用しない |
 | 楕円 / 楕円弧 | A | `SxGeomEllipse2D`, `SxGeomElparc2D` | primitive実装済み | 中心、半径、角度候補を保持 |
-| ハッチング | A | `SxGeomHatch` | primitive実装済み | パターン等は summary 保持。断面/材質表現としての意味付けは未実装 |
+| ハッチング | A | `SxGeomHatch` | `curve_section_candidates[]` 実装済み | summary、ビュー、レイヤー、印刷枠判定をレビュー候補として保持。断面/材質表現の確定はレビュー対象で、自動タグに採用しない |
 | 長さ寸法 | A | `SxGeomLengthDim`, `SxDimValueAtr`, `SxDimLineAtr` | 実装入口あり | 現行マッピングはフィールド名要再確認 |
 | 角度寸法 | A | `SxGeomAngDim` | 実装入口あり | 同上 |
 | 径寸法 | A | `SxGeomDiaDim` | 実装入口あり | φ/R等のタグ候補 |
@@ -137,7 +137,7 @@
 | `9NK452RS60-03-CASSETTE-A0-3D-01.json` | 3D | `parts=149` を抽出 |
 | `9NK452WX90-00-LINER-A3-2D-01.json` | 2D | `texts=159`, `geometry_primitives=596`, `warnings=68` |
 
-2Dサンプルでは `SxGeomSpline2D` が未対応 warning として多数出ている。したがって、中央図面の曲線・外形特徴を実用的に扱うには、現行 `GeometryMapper` の拡張が必要。
+2Dサンプルでは `SxGeomSpline2D` が多く出ているため、中央図面の曲線・外形特徴は raw primitive と `curve_section_candidates[]` のレビュー候補として保持する。形状だけでは検索タグへ昇格しない。
 
 また、同サンプルでは現行PoC上 `dimensions=0`, `balloons=0`, `tolerances=0`, `weld_notes=0` だった。これは対象図面に存在しない可能性もあるが、検索条件・ジオメトリ対応・寸法マッピングの検証が必要。
 
@@ -173,7 +173,7 @@
 2. `SxVS.getInf()` は実装済み。VS名、尺度、ビュー種別を出す。
 3. `SxEnt.getInfList()` と `SxEnt.getInfMaterialList()` を2D/3Dそれぞれで出す。
 4. 3Dマスプロパティは実装済み。今後は部品単位/グループ単位の粒度と、例外条件のサンプル数を増やす。
-5. `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomFinishMark`, `SxGeomElparc2D`, `SxGeomCircle2D` は特徴候補化済み。`SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomSymbol`, `SxGeomArrowView` は追加構造化を続ける。
+5. `SxGeomHatch`, `SxGeomSpline2D`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomFinishMark`, `SxGeomElparc2D`, `SxGeomEllipse2D`, `SxGeomCircle2D`, `SxGeomSymbol`, `SxGeomArrowView` は raw evidence とレビュー候補として保持する。形状候補だけでは自動タグに採用しない。
 6. 2D文字を座標付きで保持し、図枠領域と中央図面領域に分類する。初期実装済みで、今後は中央図面/図枠の領域分類を精密化する。
 7. 図枠欄名辞書は初期実装済み。担当者、承認者、日付、材質、重量、表面処理、塗装指示、PRFX、ユニット番号の候補を実サンプルで拡充する。
 8. 2D/3D照合表を作り、同一属性の一致・不一致・片側欠落を記録する。

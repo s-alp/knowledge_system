@@ -591,6 +591,21 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
             "hole_candidate_count": 3,
             "hole_candidate_diameters": [6.0, 8.0],
             "slot_candidate_dimensions": [{"major_diameter": 22.0, "minor_diameter": 8.0}],
+            "curve_section_candidate_count": 1,
+            "curve_section_candidates": [
+                {
+                    "kind": "spline_curve",
+                    "label": "スプライン曲線候補",
+                    "geometry_type": "SxGeomSpline2D",
+                    "evidence_text": "spline",
+                    "view_name": "!XY",
+                    "layer_no": 1,
+                    "position_x": 1.0,
+                    "position_y": 2.0,
+                    "point_count": 4,
+                    "searchable_tag": False,
+                }
+            ],
             "raw_2d_sections": {
                 "schema_version": "raw_2d_sections.v1",
                 "print_area_policy": "inside_only_when_print_frames_exist",
@@ -677,10 +692,12 @@ def test_build_2d_snapshot_display_summarizes_views_frames_layers_and_samples():
     assert row_by_key["section_feature_count"] == "1"
     assert row_by_key["slot_candidate_count"] == "1"
     assert row_by_key["hole_candidate_count"] == "3"
+    assert row_by_key["curve_section_candidate_count"] == "1"
     geometry_attribute_by_key = {row["key"]: row["displayValue"] for row in payload["geometryAttributeRows"]}
     assert geometry_attribute_by_key["surface_roughness_values"] == "Ra 6.3"
     assert geometry_attribute_by_key["hole_candidate_diameters"] == "6.0, 8.0"
     assert geometry_attribute_by_key["slot_candidate_dimensions"] == "1"
+    assert geometry_attribute_by_key["curve_section_candidates"] == "1"
 
 
 @pytest.mark.django_db

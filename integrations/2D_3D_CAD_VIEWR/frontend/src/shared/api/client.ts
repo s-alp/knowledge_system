@@ -14,6 +14,30 @@ export interface DrawingMetadataJobResponse {
   finishedAt?: string | null;
   createdAt?: string;
   updatedAt?: string;
+  diagnostics?: {
+    failure?: {
+      errorClass?: string;
+      sourcePreflight?: {
+        sourcePathLength?: number;
+        sourcePathWithinSxnetLegacyLimit?: boolean;
+        requiresSxnetStagedInput?: boolean;
+        filenameLength?: number;
+        filenameWithinWindowsLimit?: boolean;
+        extensionIsIcd?: boolean;
+        sourceExistsFromCurrentMachine?: boolean;
+      };
+      reextractCondition?: string;
+    };
+    sourcePreflight?: {
+      sourcePathLength?: number;
+      sourcePathWithinSxnetLegacyLimit?: boolean;
+      requiresSxnetStagedInput?: boolean;
+      filenameLength?: number;
+      filenameWithinWindowsLimit?: boolean;
+      extensionIsIcd?: boolean;
+      sourceExistsFromCurrentMachine?: boolean;
+    };
+  };
 }
 
 export interface DrawingMetadataSnapshotResponse {

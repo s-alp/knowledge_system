@@ -1069,6 +1069,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
         _make_row("balloon_candidate_count", "バルーン候補数", canonical_attributes.get("balloon_candidate_count")),
         _make_row("tolerance_candidate_count", "幾何公差候補数", canonical_attributes.get("tolerance_candidate_count")),
         _make_row("view_reference_candidate_count", "矢視/切断線/シンボル候補数", canonical_attributes.get("view_reference_candidate_count")),
+        _make_row("curve_section_candidate_count", "曲線/ハッチング候補数", canonical_attributes.get("curve_section_candidate_count")),
         _make_row("section_feature_count", "断面/切断表現数", canonical_attributes.get("section_feature_count")),
         _make_row("slot_candidate_count", "長穴/楕円候補数", canonical_attributes.get("slot_candidate_count")),
         _make_row("hole_candidate_count", "穴/円候補数", canonical_attributes.get("hole_candidate_count")),
@@ -1115,6 +1116,12 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
             "矢視/切断線/シンボル候補",
             canonical_attributes.get("view_reference_candidates", []),
             str(len(canonical_attributes.get("view_reference_candidates", []) or [])),
+        ),
+        _make_display_row(
+            "curve_section_candidates",
+            "曲線/ハッチング候補",
+            canonical_attributes.get("curve_section_candidates", []),
+            str(len(canonical_attributes.get("curve_section_candidates", []) or [])),
         ),
     ]
 

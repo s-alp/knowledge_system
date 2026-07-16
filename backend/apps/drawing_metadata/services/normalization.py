@@ -371,6 +371,66 @@ def _build_view_reference_candidates(primitives: Iterable[dict], *, has_print_fr
     return candidates
 
 
+def _build_curve_section_candidates(primitives: Iterable[dict], *, has_print_frames: bool = False) -> list[dict]:
+    candidates: list[dict] = []
+    seen: set[tuple[str, str | None, int | None, float | None, float | None, str | None]] = set()
+    for primitive in primitives:
+        if not isinstance(primitive, dict) or not _is_usable_print_area_item(primitive, has_print_frames=has_print_frames):
+            continue
+        geometry_type = primitive.get("geometry_type")
+        if geometry_type == "SxGeomSpline2D":
+            kind = "spline_curve"
+            label = "スプライン曲線候補"
+            source = "2d_spline_geometry"
+            reason = "2D図形のスプライン要素から曲線外形の可能性を確認できるため、検索タグではなく図面レビュー用候補として保持します。"
+        elif geometry_type == "SxGeomHatch":
+            kind = "hatch_section"
+            label = "ハッチング/断面候補"
+            source = "2d_hatch_geometry"
+            reason = "2D図形のハッチング要素から断面表現または材質表現の可能性を確認できるため、検索タグではなく図面レビュー用候補として保持します。"
+        else:
+            continue
+
+        evidence_text = str(primitive.get("summary") or geometry_type or "").strip()
+        key = (
+            str(geometry_type),
+            primitive.get("view_name"),
+            primitive.get("layer_no"),
+            primitive.get("position_x"),
+            primitive.get("position_y"),
+            evidence_text,
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append(
+            {
+                "kind": kind,
+                "label": label,
+                "geometry_type": geometry_type,
+                "evidence_text": evidence_text,
+                "view_name": primitive.get("view_name"),
+                "layer_no": primitive.get("layer_no"),
+                "position_x": primitive.get("position_x"),
+                "position_y": primitive.get("position_y"),
+                "position_z": primitive.get("position_z"),
+                "center_x": primitive.get("center_x"),
+                "center_y": primitive.get("center_y"),
+                "center_z": primitive.get("center_z"),
+                "point_count": primitive.get("point_count"),
+                "inside_print_area": primitive.get("inside_print_area"),
+                "print_frame_no": primitive.get("print_frame_no"),
+                "source": source,
+                "confidence": "medium",
+                "searchable_tag": False,
+                "tag_adoption_status": "excluded",
+                "tag_adoption_reason": GEOMETRY_FEATURE_TAG_EXCLUSION_REASON,
+                "reason": reason,
+            }
+        )
+    return candidates
+
+
 INERTIA_MOMENT_DEFINITIONS = {
     "global_moment": {"kind": "global", "label": "全体座標系慣性モーメント"},
     "gravity_moment": {"kind": "gravity", "label": "重心座標系慣性モーメント"},
@@ -1200,6 +1260,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "balloon_candidate_count": 0,
         "surface_treatment_tokens": [],
         "geometry_feature_candidates": [],
+        "view_reference_candidates": [],
+        "view_reference_candidate_count": 0,
+        "curve_section_candidates": [],
+        "curve_section_candidate_count": 0,
         "surface_roughness_count": 0,
         "surface_roughness_values": [],
         "section_feature_count": 0,
@@ -1449,6 +1513,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical.update(_build_geometry_attribute_summary(primitives, has_print_frames=has_print_frames))
         canonical["view_reference_candidates"] = _build_view_reference_candidates(primitives, has_print_frames=has_print_frames)
         canonical["view_reference_candidate_count"] = len(canonical["view_reference_candidates"])
+        canonical["curve_section_candidates"] = _build_curve_section_candidates(primitives, has_print_frames=has_print_frames)
+        canonical["curve_section_candidate_count"] = len(canonical["curve_section_candidates"])
         canonical["raw_2d_sections"] = _build_2d_sections(
             raw_extract=raw_extract,
             canonical=canonical,

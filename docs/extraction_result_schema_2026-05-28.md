@@ -314,6 +314,28 @@
     }
   ],
   "view_reference_candidate_count": 1,
+  "curve_section_candidates": [
+    {
+      "kind": "spline_curve",
+      "label": "スプライン曲線候補",
+      "geometry_type": "SxGeomSpline2D",
+      "evidence_text": "spline outer curve",
+      "view_name": "SHEET1",
+      "layer_no": 3,
+      "position_x": 31.0,
+      "position_y": 32.0,
+      "position_z": 0.0,
+      "point_count": 4,
+      "inside_print_area": true,
+      "print_frame_no": 1,
+      "source": "2d_spline_geometry",
+      "confidence": "medium",
+      "searchable_tag": false,
+      "tag_adoption_status": "excluded",
+      "reason": "2D図形のスプライン要素から曲線外形の可能性を確認できるため、検索タグではなく図面レビュー用候補として保持します。"
+    }
+  ],
+  "curve_section_candidate_count": 1,
   "spec_tokens": [],
   "part_keywords": [],
   "material_keywords": [],

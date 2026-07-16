@@ -128,6 +128,12 @@ function summarizeJobError(value: string | null | undefined) {
   if (!value) {
     return "-";
   }
+  if (value.includes("パスが長すぎます")) {
+    return "ICAD原本パスが長すぎます。短い一時パスへ退避して再抽出する必要があります。";
+  }
+  if (value.includes("ファイル名が長すぎます")) {
+    return "ICADファイル名が長すぎます。短いファイル名へ変更してから再登録してください。";
+  }
   if (value.includes("指定したファイルは図面ファイルではありません")) {
     return "ICDファイルですが、ICAD/SXNETが図面モデルとして開けません。原本パス、外部参照、ICAD対応版を確認してください。";
   }
@@ -139,6 +145,35 @@ function summarizeJobError(value: string | null | undefined) {
   }
   const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
   return firstLine.length > 120 ? `${firstLine.slice(0, 120)}...` : firstLine;
+}
+
+function formatCheck(value: boolean | null | undefined) {
+  if (value === true) {
+    return "可";
+  }
+  if (value === false) {
+    return "不可";
+  }
+  return "未確認";
+}
+
+function formatInputDiagnostics(job: DrawingMetadataJobResponse) {
+  const preflight = job.diagnostics?.failure?.sourcePreflight ?? job.diagnostics?.sourcePreflight;
+  if (!preflight) {
+    return "-";
+  }
+  const pathLength = preflight.sourcePathLength == null
+    ? "パス長:未確認"
+    : `パス長:${preflight.sourcePathLength}${preflight.sourcePathWithinSxnetLegacyLimit === false ? " / 上限超過" : ""}`;
+  const filenameLength = preflight.filenameLength == null
+    ? "ファイル名長:未確認"
+    : `ファイル名長:${preflight.filenameLength}${preflight.filenameWithinWindowsLimit === false ? " / 上限超過" : ""}`;
+  return [
+    `原本:${formatCheck(preflight.sourceExistsFromCurrentMachine)}`,
+    `長パス退避:${formatCheck(preflight.requiresSxnetStagedInput)}`,
+    pathLength,
+    filenameLength,
+  ].join(" / ");
 }
 
 function isActiveJob(job: DrawingMetadataJobResponse) {
@@ -607,6 +642,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
                 <th>起票日時</th>
                 <th>開始日時</th>
                 <th>完了日時</th>
+                <th>入力診断</th>
                 <th>失敗理由</th>
               </tr>
             </thead>
@@ -620,6 +656,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
                   <td>{formatDateTime(job.createdAt)}</td>
                   <td>{formatDateTime(job.startedAt)}</td>
                   <td>{formatDateTime(job.finishedAt ?? job.updatedAt)}</td>
+                  <td>{formatInputDiagnostics(job)}</td>
                   <td>
                     {job.errorMessage ? (
                       <details>
