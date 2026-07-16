@@ -62,12 +62,12 @@ namespace IcadExtraction.SxNet
                         new ViewerAssetPayload
                         {
                             Mode = "2d",
-                            Status = "unsupported",
-                            Source = "sxnet_print",
+                            Status = "delegated",
+                            Source = "django_metadata_svg",
                             Message = message,
                         },
                     };
-                    warnings.Add(new WarningPayload { Code = "viewer_2d_asset_export_unsupported", Message = message });
+                    warnings.Add(new WarningPayload { Code = "viewer_2d_asset_export_delegated", Message = message });
                 }
                 rawExtract.ConditionDiagnostics = BuildConditionDiagnostics(rawExtract, options);
                 return new ExtractionEnvelope
