@@ -7,6 +7,7 @@ from apps.drawing_metadata.models import RegisteredDrawing
 from apps.drawing_metadata.services.extraction_runner import (
     ExtractionRunnerError,
     build_extractor_command,
+    _decode_runner_output,
     run_extractor,
 )
 
@@ -32,6 +33,38 @@ def test_run_extractor_wraps_timeout(monkeypatch, settings):
         run_extractor(drawing=drawing, extraction_mode="3d", job_id="timeout-job")
 
     assert "timed out" in str(exc_info.value)
+
+
+@pytest.mark.django_db
+def test_run_extractor_decodes_runner_stderr(monkeypatch, settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-runner-error",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 3
+
+    def fake_run(*args, **kwargs):
+        return subprocess.CompletedProcess(
+            args=kwargs.get("args", args[0]),
+            returncode=1,
+            stderr="指定したファイルは図面ファイルではありません。".encode("utf-8"),
+            stdout=b"",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    with pytest.raises(ExtractionRunnerError, match="図面ファイルではありません"):
+        run_extractor(drawing=drawing, extraction_mode="3d", job_id="runner-error-job")
+
+
+def test_decode_runner_output_accepts_cp932_stderr():
+    assert _decode_runner_output("指定したファイルは図面ファイルではありません。".encode("cp932")) == (
+        "指定したファイルは図面ファイルではありません。"
+    )
 
 
 @pytest.mark.django_db

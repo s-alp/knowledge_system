@@ -28,32 +28,49 @@ def enqueue_extraction_job(
     validate_icad_filename_length(drawing.filename)
     validate_icad_path_length(drawing.source_path)
 
-    job = DrawingMetadataExtractionJob.objects.create(
-        drawing=drawing,
-        extraction_mode=extraction_mode,
-        status=DrawingMetadataExtractionJob.STATUS_QUEUED,
-        extraction_profile=extraction_profile or "default",
-        extraction_options_json=extraction_options or {},
-        diagnostics_json=diagnostics or {},
-        schema_version=settings.DRAWING_METADATA_SCHEMA_VERSION,
-    )
-    DrawingMetadataAuditLog.objects.create(
-        drawing=drawing,
-        extraction_mode=extraction_mode,
-        action_type=DrawingMetadataAuditLog.ACTION_REQUEUE,
-        reason=reason,
-        before_json={},
-        after_json={
-            "job_id": str(job.id),
-            "status": job.status,
-            "extraction_mode": extraction_mode,
-            "extraction_profile": job.extraction_profile,
-            "extraction_options": job.extraction_options_json,
-            "diagnostics": job.diagnostics_json,
-        },
-        executed_by=executed_by,
-    )
-    return job
+    with transaction.atomic():
+        active_job = (
+            DrawingMetadataExtractionJob.objects.select_for_update()
+            .filter(
+                drawing=drawing,
+                extraction_mode=extraction_mode,
+                status__in=[
+                    DrawingMetadataExtractionJob.STATUS_QUEUED,
+                    DrawingMetadataExtractionJob.STATUS_PROCESSING,
+                ],
+            )
+            .order_by("created_at")
+            .first()
+        )
+        if active_job is not None:
+            return active_job
+
+        job = DrawingMetadataExtractionJob.objects.create(
+            drawing=drawing,
+            extraction_mode=extraction_mode,
+            status=DrawingMetadataExtractionJob.STATUS_QUEUED,
+            extraction_profile=extraction_profile or "default",
+            extraction_options_json=extraction_options or {},
+            diagnostics_json=diagnostics or {},
+            schema_version=settings.DRAWING_METADATA_SCHEMA_VERSION,
+        )
+        DrawingMetadataAuditLog.objects.create(
+            drawing=drawing,
+            extraction_mode=extraction_mode,
+            action_type=DrawingMetadataAuditLog.ACTION_REQUEUE,
+            reason=reason,
+            before_json={},
+            after_json={
+                "job_id": str(job.id),
+                "status": job.status,
+                "extraction_mode": extraction_mode,
+                "extraction_profile": job.extraction_profile,
+                "extraction_options": job.extraction_options_json,
+                "diagnostics": job.diagnostics_json,
+            },
+            executed_by=executed_by,
+        )
+        return job
 
 
 def save_extraction_snapshot(

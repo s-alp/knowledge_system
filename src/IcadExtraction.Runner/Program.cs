@@ -254,7 +254,8 @@ namespace IcadExtraction.Runner
 
         private static void ValidateIcadInputPathForSxNet(string inputPath)
         {
-            var fileName = Path.GetFileName(inputPath);
+            var fullPath = Path.GetFullPath(inputPath);
+            var fileName = Path.GetFileName(fullPath);
             if (fileName.Length > WindowsFilenameLimit)
             {
                 throw new ArgumentException(
@@ -263,12 +264,17 @@ namespace IcadExtraction.Runner
                 );
             }
 
-            if (inputPath.Length > WindowsLegacyPathLimit)
+            if (fullPath.Length > WindowsLegacyPathLimit)
             {
                 throw new ArgumentException(
                     $"ICADファイルのパスが長すぎます。SXNETへ渡すパスは{WindowsLegacyPathLimit}文字以下にしてください。" +
-                    $"現在の文字数: {inputPath.Length}。SXNETで開く前に中断しています。短い作業フォルダへコピーして再登録してください。"
+                    $"現在の文字数: {fullPath.Length}。SXNETで開く前に中断しています。短い作業フォルダへコピーして再登録してください。"
                 );
+            }
+
+            if (!File.Exists(fullPath))
+            {
+                throw new FileNotFoundException("指定されたICADファイルが見つかりません。原本パスとネットワークドライブ接続を確認してください。", fullPath);
             }
         }
 

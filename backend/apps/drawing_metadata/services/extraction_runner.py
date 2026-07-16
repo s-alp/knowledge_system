@@ -22,6 +22,19 @@ class ExtractionRunResult:
     output_path: Path
 
 
+def _decode_runner_output(output: bytes | str | None) -> str:
+    if output is None:
+        return ""
+    if isinstance(output, str):
+        return output
+    for encoding in ("utf-8", "cp932"):
+        try:
+            return output.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    return output.decode("utf-8", errors="replace")
+
+
 def build_extractor_command(
     *,
     drawing: RegisteredDrawing,
@@ -102,7 +115,6 @@ def run_extractor(
             command,
             check=False,
             capture_output=True,
-            text=True,
             timeout=settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired as exc:
@@ -110,8 +122,8 @@ def run_extractor(
             f"extractor timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds: {exc.cmd}"
         ) from exc
     if completed.returncode != 0:
-        stderr = completed.stderr.strip()
-        stdout = completed.stdout.strip()
+        stderr = _decode_runner_output(completed.stderr).strip()
+        stdout = _decode_runner_output(completed.stdout).strip()
         raise ExtractionRunnerError(stderr or stdout or f"extractor failed with exit code {completed.returncode}")
 
     if not output_path.exists():

@@ -535,6 +535,33 @@ def test_registration_extract_enqueue(sample_registration_payload):
 
 
 @pytest.mark.django_db
+def test_registration_extract_does_not_duplicate_active_job(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename=sample_registration_payload["filename"],
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    existing_job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_QUEUED,
+        extraction_profile="3d_model_part_attributes",
+    )
+    client = APIClient()
+
+    response = client.post(
+        f"/api/v1/drawing-metadata/registrations/{drawing.id}/extract",
+        {"extractionMode": "3d"},
+        format="json",
+    )
+
+    assert response.status_code == 202
+    assert response.json()["jobId"] == str(existing_job.id)
+    assert DrawingMetadataExtractionJob.objects.filter(drawing=drawing, extraction_mode="3d").count() == 1
+
+
+@pytest.mark.django_db
 def test_registration_extract_enqueue_accepts_condition_profile(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
