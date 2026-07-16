@@ -113,6 +113,8 @@
 | `reextractCondition` | 再抽出前に確認する条件。長パス退避、ICAD対応版、外部参照不足、ファイル破損、ネットワークパス未接続などを切り分ける |
 
 SXNETの `指定したファイルは図面ファイルではありません。` は、ICD拡張子そのものを否定する意味に固定しない。原本パス、長パス退避、ICAD/SXNET対応版、外部参照不足、2D/3Dデータ有無を分けて確認する。
+
+既存DBに失敗ジョブが残っている場合は、`python manage.py backfill_drawing_metadata_failure_diagnostics` で過去分の `diagnostics_json.failure` を補完する。事前確認だけ行う場合は `--dry-run` を付ける。納品監査では `scripts/audit_drawing_metadata_job_state.py` が失敗ジョブの `failure diagnostics` 欠落をブロックする。
 | `reconciledAttributes` | `attribute`, `value2d`, `value3d`, `chosenValue`, `chosenMode`, `status`, `reason` | 2D/3D照合結果 | 一致、片側のみ、統合、手動上書き、競合を全属性単位で保持 |
 | `conflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 2D/3D差異のうち設計レビュー対象だけ | 材質、重量、図番、図面名など、採用値を人が見るべき差異に限定する |
 | `diagnosticConflicts` | `attribute`, `mode2dValue`, `mode3dValue`, `chosenValue`, `chosenMode`, `reason` | 内部品質・件数・抽出元などの診断差分 | `source_kind`、`confidence_summary`、`*_count`、`*_exists` など。JSON証跡には残すがRAG投入前レビュー対象からは外す |

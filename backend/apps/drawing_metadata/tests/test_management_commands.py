@@ -500,3 +500,52 @@ def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
         "partAttributes",
         "massProperties",
     ]
+
+
+@pytest.mark.django_db
+def test_backfill_drawing_metadata_failure_diagnostics_updates_failed_jobs(tmp_path):
+    source_file = tmp_path / "failed.icd"
+    source_file.write_bytes(b"icad-data")
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="failed-diagnostics",
+        filename="failed.icd",
+        source_path=str(source_file),
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        error_message="sxnet.SxException: 指定したファイルは図面ファイルではありません。",
+    )
+    stdout = StringIO()
+
+    call_command("backfill_drawing_metadata_failure_diagnostics", stdout=stdout)
+
+    job.refresh_from_db()
+    assert job.diagnostics_json["failure"]["errorClass"] == "sxnet_rejected_as_not_drawing_file"
+    assert job.diagnostics_json["failure"]["sourcePreflight"]["sourceExistsFromCurrentMachine"] is True
+    assert "updated=1" in stdout.getvalue()
+
+
+@pytest.mark.django_db
+def test_backfill_drawing_metadata_failure_diagnostics_dry_run_does_not_update():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="failed-diagnostics-dry-run",
+        filename="failed-dry-run.icd",
+        source_path=r"C:\missing\failed-dry-run.icd",
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        error_message="missing",
+    )
+    stdout = StringIO()
+
+    call_command("backfill_drawing_metadata_failure_diagnostics", dry_run=True, stdout=stdout)
+
+    job.refresh_from_db()
+    assert job.diagnostics_json == {}
+    assert "would_update=1" in stdout.getvalue()

@@ -20,6 +20,7 @@ django.setup()
 
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, RegisteredDrawing
 from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_scope, build_scope_payload
+from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics
 
 
 REQUIRED_MODES = ("2d", "3d")
@@ -55,8 +56,31 @@ def main() -> int:
     job_status_counts = Counter(
         DrawingMetadataExtractionJob.objects.filter(drawing_id__in=drawing_ids).values_list("status", flat=True)
     )
+    failed_jobs = list(
+        DrawingMetadataExtractionJob.objects.select_related("drawing")
+        .filter(drawing_id__in=drawing_ids, status=DrawingMetadataExtractionJob.STATUS_FAILED)
+        .order_by("-updated_at")
+    )
+    failed_jobs_missing_diagnostics = [
+        job for job in failed_jobs if not (job.diagnostics_json or {}).get("failure")
+    ]
     blocking_issues: list[dict] = []
     drawing_rows: list[dict] = []
+
+    for job in failed_jobs_missing_diagnostics:
+        failure = build_job_failure_diagnostics(job)
+        blocking_issues.append(
+            {
+                "sourcePath": job.drawing.source_path,
+                "filename": job.drawing.filename,
+                "code": "failed_job_missing_failure_diagnostics",
+                "message": "失敗済み抽出ジョブに failure diagnostics が記録されていません。",
+                "modes": [job.extraction_mode],
+                "jobId": str(job.id),
+                "errorClass": failure["errorClass"],
+                "reextractCondition": failure["reextractCondition"],
+            }
+        )
 
     for drawing in drawings:
         snapshot_modes = {snapshot.extraction_mode for snapshot in drawing.snapshots.all()}
@@ -123,6 +147,8 @@ def main() -> int:
         "drawingCount": len(drawings),
         "jobStatusCounts": dict(sorted(job_status_counts.items())),
         "activeJobCount": sum(job_status_counts.get(status, 0) for status in ACTIVE_STATUSES),
+        "failedJobCount": len(failed_jobs),
+        "failedJobMissingFailureDiagnosticsCount": len(failed_jobs_missing_diagnostics),
         "blockingIssueCount": len(blocking_issues),
         "gatePassed": not blocking_issues,
         "blockingIssues": blocking_issues,
