@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import pytest
+from django.contrib.messages import get_messages
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.display import (
@@ -784,6 +785,28 @@ def test_detail_page_context_contains_display_summaries(client, sample_registrat
     assert "紐づき確認" in detail_content
     assert "関連情報" in detail_content
     assert '<button type="button">製品・装置・ユニット</button>' not in detail_content
+
+
+@pytest.mark.django_db
+def test_detail_page_unknown_post_action_explains_supported_actions(client, sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename=sample_registration_payload["filename"],
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+
+    response = client.post(
+        f"/internal/drawing-metadata/{drawing.id}/",
+        {"action": "unknown", "extraction_mode": "2d"},
+        follow=True,
+    )
+
+    messages = [str(message) for message in get_messages(response.wsgi_request)]
+    assert response.status_code == 200
+    assert "操作を実行できません。対応している操作は「再抽出」と「手動補正の保存」です。" in messages
+    legacy_message = "未対応" + "の操作です。"
+    assert legacy_message not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

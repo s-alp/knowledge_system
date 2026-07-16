@@ -172,7 +172,7 @@ class RegistrationDetailPageView(View):
             messages.success(request, f"{extraction_mode} 手動補正を保存しました。")
             return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
 
-        messages.error(request, "未対応の操作です。")
+        messages.error(request, "操作を実行できません。対応している操作は「再抽出」と「手動補正の保存」です。")
         return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
 
 
