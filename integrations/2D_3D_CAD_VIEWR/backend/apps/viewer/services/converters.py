@@ -6,8 +6,8 @@ The rest of the app talks only to the abstract backend so STEP conversion can
 be swapped later without changing API or page code.
 """
 
-from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
 
 from django.conf import settings
 
@@ -15,15 +15,12 @@ from apps.viewer.domain.types import ConversionResult, StoredArtifact
 from apps.viewer.services.errors import ConversionError
 
 
-@dataclass(slots=True)
-class ThreeDConversionBackend:
+class ThreeDConversionBackend(Protocol):
     """Minimal interface for "source file -> display artifact" conversion."""
 
-    def convert(self, source_path: Path, source_extension: str, output_artifact: StoredArtifact) -> ConversionResult:
-        raise NotImplementedError
+    def convert(self, source_path: Path, source_extension: str, output_artifact: StoredArtifact) -> ConversionResult: ...
 
 
-@dataclass(slots=True)
 class CadQueryOcctBackend(ThreeDConversionBackend):
     def convert(self, source_path: Path, source_extension: str, output_artifact: StoredArtifact) -> ConversionResult:
         if not settings.VIEWER_STEP_ENABLED:

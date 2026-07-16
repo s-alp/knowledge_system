@@ -44,7 +44,9 @@ ACTIVE_SOURCE_TEXT_PATHS = [
     ROOT / "backend" / "apps" / "drawing_metadata" / "services",
     ROOT / "backend" / "apps" / "drawing_metadata" / "templates",
     ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend" / "src",
+    ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "backend" / "apps" / "viewer",
     ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "handover_package" / "frontend" / "src",
+    ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "handover_package" / "backend" / "apps" / "viewer",
 ]
 
 STALE_DOC_PATTERNS = [
@@ -75,6 +77,7 @@ SOURCE_GUARDRAIL_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in (
         r"not implemented yet",
+        r"NotImplementedError",
         r"\bTODO\b",
         r"\bFIXME\b",
         r"未実装",
