@@ -147,8 +147,8 @@ def _attribute_items(canonical_attributes: dict, specs: tuple[tuple[str, str], .
     return items
 
 
-def _tag_values(tags: list[dict]) -> list[str]:
-    values: list[str] = []
+def _tag_items(tags: list[dict]) -> list[dict]:
+    items: list[dict] = []
     seen: set[str] = set()
     for tag in tags or []:
         if not isinstance(tag, dict):
@@ -156,47 +156,63 @@ def _tag_values(tags: list[dict]) -> list[str]:
         value = str(tag.get("tag") or "").strip()
         if value and value not in seen:
             seen.add(value)
-            values.append(value)
-    return values
+            confidence = tag.get("confidence")
+            items.append(
+                {
+                    "tag": value,
+                    "source": tag.get("source") or "composedMetadata.derivedTags",
+                    "evidence": tag.get("evidence") or f"composedMetadata.derivedTags contains {value}",
+                    "confidence": confidence if confidence in {"high", "medium", "low"} else "medium",
+                    "reason": tag.get("reason") or "検索・分類に使える自動タグ候補として提示します。",
+                    "manualFlag": bool(tag.get("manual_flag")),
+                    "tagRuleVersion": tag.get("tag_rule_version"),
+                }
+            )
+    return items
 
 
-def _tags_for_target(tags: list[str], target_key: str) -> list[str]:
-    selected: list[str] = []
-    for tag in tags:
+def _tags_for_target(tags: list[dict], target_key: str) -> list[dict]:
+    selected: list[dict] = []
+    for item in tags:
+        tag = item["tag"]
         if target_key == "drawing":
-            selected.append(tag)
+            selected.append(item)
         elif target_key == "project" and (tag.startswith("客先:") or tag.startswith("装置:")):
-            selected.append(tag)
+            selected.append(item)
         elif target_key == "product" and (tag.startswith("客先:") or tag.startswith("装置:") or tag.startswith("PRFX:") or tag.startswith("ユニット:")):
-            selected.append(tag)
+            selected.append(item)
         elif target_key == "part" and (
             tag.startswith("材質:")
             or tag.startswith("メーカー:")
             or tag.startswith("規格:")
         ):
-            selected.append(tag)
+            selected.append(item)
     return selected
 
 
-def _tag_fallback_attributes(tags: list[str]) -> list[dict]:
+def _tag_values(tags: list[dict]) -> list[str]:
+    return [item["tag"] for item in tags]
+
+
+def _tag_fallback_attributes(tags: list[dict]) -> list[dict]:
     return [
         {
             "sourcePath": "composedMetadata.derivedTags",
             "attributeName": "自動タグ候補",
             "attribute": None,
             "attributeOption": None,
-            "attributeValue": tag,
-            "evidence": f"composedMetadata.derivedTags contains {tag}",
-            "confidence": "medium",
-            "reason": "対象ページにタグ専用の保存口が未確認のため、検索に使える自動タグ候補を属性値としても提示します。",
+            "attributeValue": item["tag"],
+            "evidence": item["evidence"],
+            "confidence": item["confidence"],
+            "reason": f"対象ページにタグ専用の保存口が未確認のため、{item['reason']}",
             "payloadShape": {
                 "attribute": None,
                 "attribute_option": None,
-                "attribute_value": tag,
+                "attribute_value": item["tag"],
             },
             "bindingStatus": "needs_attribute_master_binding",
         }
-        for tag in tags
+        for item in tags
     ]
 
 
@@ -239,14 +255,15 @@ def _target_payload(
     existing_reception: str,
     candidate_endpoint: str | None,
     attributes: list[dict],
-    tags: list[str],
+    tags: list[dict],
     tag_api_status: str,
     notes: list[str],
 ) -> dict:
     attribute_payloads = [item["payloadShape"] for item in attributes]
+    tag_values = _tag_values(tags)
     payload_preview: dict = {"attributes": attribute_payloads}
-    if tags and tag_api_status == "candidate_existing":
-        payload_preview["tags"] = tags
+    if tag_values and tag_api_status == "candidate_existing":
+        payload_preview["tags"] = tag_values
 
     return {
         "targetKey": target_key,
@@ -255,7 +272,8 @@ def _target_payload(
         "candidateEndpoint": candidate_endpoint,
         "writePolicy": "preview_only_no_production_write",
         "tagApiStatus": tag_api_status,
-        "tags": tags,
+        "tags": tag_values,
+        "tagEvidence": tags,
         "attributes": attributes,
         "payloadPreview": payload_preview,
         "attributePayloadKeys": list(ATTRIBUTE_VALUE_KEYS),
@@ -266,7 +284,7 @@ def _target_payload(
 
 def build_knowledge_system_payload_preview(*, drawing: RegisteredDrawing, composed_metadata: dict) -> dict:
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
-    tags = _tag_values(composed_metadata.get("derivedTags", []) or [])
+    tags = _tag_items(composed_metadata.get("derivedTags", []) or [])
 
     drawing_tags = _tags_for_target(tags, "drawing")
     product_tags = _tags_for_target(tags, "product")

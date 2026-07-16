@@ -39,6 +39,30 @@ def _attribute_issues(drawing: RegisteredDrawing, target: dict) -> list[dict]:
     return issues
 
 
+def _tag_issues(drawing: RegisteredDrawing, target: dict) -> list[dict]:
+    issues: list[dict] = []
+    tags = [str(tag) for tag in target.get("tags") or [] if str(tag).strip()]
+    tag_evidence = [item for item in target.get("tagEvidence") or [] if isinstance(item, dict)]
+    evidence_by_tag = {str(item.get("tag") or ""): item for item in tag_evidence}
+    for index, tag in enumerate(tags):
+        item = evidence_by_tag.get(tag)
+        if item is None:
+            issues.append(_tag_issue(drawing, target, index, "tag_evidence_missing", {"tag": tag}))
+            continue
+        if not str(item.get("source") or "").strip():
+            issues.append(_tag_issue(drawing, target, index, "tag_source_missing", item))
+        if not str(item.get("evidence") or "").strip():
+            issues.append(_tag_issue(drawing, target, index, "tag_evidence_text_missing", item))
+        if str(item.get("confidence") or "").strip() not in VALID_CONFIDENCES:
+            issues.append(_tag_issue(drawing, target, index, "tag_confidence_invalid", item))
+        if not str(item.get("reason") or "").strip():
+            issues.append(_tag_issue(drawing, target, index, "tag_reason_missing", item))
+    extra_evidence = sorted(set(evidence_by_tag) - set(tags))
+    for tag in extra_evidence:
+        issues.append(_tag_issue(drawing, target, -1, "tag_evidence_without_target_tag", evidence_by_tag[tag]))
+    return issues
+
+
 def _issue(drawing: RegisteredDrawing, target: dict, index: int, code: str, attribute: dict) -> dict:
     return {
         "drawingId": str(drawing.id),
@@ -52,6 +76,18 @@ def _issue(drawing: RegisteredDrawing, target: dict, index: int, code: str, attr
     }
 
 
+def _tag_issue(drawing: RegisteredDrawing, target: dict, index: int, code: str, tag: dict) -> dict:
+    return {
+        "drawingId": str(drawing.id),
+        "filename": drawing.filename,
+        "targetKey": target.get("targetKey"),
+        "tagIndex": index,
+        "code": code,
+        "tag": tag.get("tag"),
+        "source": tag.get("source"),
+    }
+
+
 def main() -> int:
     base_queryset = RegisteredDrawing.objects.prefetch_related("snapshots", "jobs").order_by("filename", "id")
     total_registration_count = base_queryset.count()
@@ -59,6 +95,7 @@ def main() -> int:
     drawings = list(scoped_queryset)
     issues: list[dict] = []
     attribute_count = 0
+    tag_count = 0
 
     for drawing in drawings:
         if not any(snapshot.raw_extract_json for snapshot in drawing.snapshots.all()):
@@ -68,7 +105,9 @@ def main() -> int:
         for target in payload.get("targets") or []:
             attributes = target.get("attributes") or []
             attribute_count += len(attributes)
+            tag_count += len(target.get("tags") or [])
             issues.extend(_attribute_issues(drawing, target))
+            issues.extend(_tag_issues(drawing, target))
 
     result = {
         "schemaVersion": "knowledge_payload_attribute_quality_audit.v1",
@@ -80,6 +119,7 @@ def main() -> int:
         "drawingCount": len(drawings),
         "snapshotCount": DrawingMetadataSnapshot.objects.filter(drawing__in=drawings).count(),
         "attributeCount": attribute_count,
+        "tagCount": tag_count,
         "issueCount": len(issues),
         "gatePassed": not issues,
         "issues": issues[:100],

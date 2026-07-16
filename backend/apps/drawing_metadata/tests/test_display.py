@@ -448,6 +448,10 @@ def test_build_knowledge_system_payload_preview_maps_targets_without_production_
         "PRFX:RAA4844",
         "ユニット:U01",
     ]
+    assert targets["drawing"]["tagEvidence"][0]["tag"] == "客先:澁谷工業"
+    assert targets["drawing"]["tagEvidence"][0]["evidence"] == "composedMetadata.derivedTags contains 客先:澁谷工業"
+    assert targets["drawing"]["tagEvidence"][0]["confidence"] == "medium"
+    assert targets["drawing"]["tagEvidence"][0]["reason"]
     drawing_material = next(
         item
         for item in targets["drawing"]["attributes"]

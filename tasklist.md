@@ -13,9 +13,10 @@
 - [x] 質量・重量をkg、小数点以下2桁で表示
 - [x] 低価値の形状・存在フラグタグを除外し、DB監査で禁止タグ0件・取得元欠落0件を確認
 - [x] タグJSONに `source` / `evidence` / `confidence` / `reason` を必須化。既存82 snapshotを再正規化し、DB監査で禁止タグ0件、source/evidence/confidence/reason欠落0件を確認。全共有39件fixture検証にもタグ根拠必須チェックを追加し、issue 0件を確認
+- [x] ナレッジ連携payloadにも `tagEvidence` を追加し、互換用の `tags` 文字列配列とは別に、対象別タグの取得元・根拠・信頼度・採用理由を監査できるようにした。共有39件で属性607件、対象別タグ227件、issue 0件を確認
 - [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
 - [x] Geminiの追加採用値0件を明記し、任意補助から正本へ格上げしない
-- [x] Django drawing_metadata 102件、フロント62件、C# 20件、system check、migration差分、本番ビルドを確認
+- [x] Django drawing_metadata 104件、フロント62件、C# 20件、system check、migration差分、本番ビルドを確認
 - [x] Chromeで詳細・編集・根拠・図面紐づけ候補38件を確認し、ブラウザエラー0件。APIの図面候補は固定manifest対象39件、紐づけ画面では現在詳細中の図面を候補から除外。検証アップロードや重複登録は固定manifest対象外として分離
 - [x] 製品・装置・ユニット／部品一覧とシステム設定に再表示キャッシュを追加し、API実測で設定初期6ms、部品一覧455ms、製品一覧962ms、登録一覧176ms、引継ぎ集計1215msを確認。引継ぎ集計は初期表示から外し、該当パネル選択時だけ取得
 - [x] 抽出worker heartbeat、ジョブ状態集計、直近失敗ジョブ、失敗理由、再抽出条件を `システム設定 > ICAD抽出管理` に追加。ページ更新・移動後も、起票済み/待機中/抽出中/完了/失敗とworker稼働状態を同じ画面で確認できるようにした

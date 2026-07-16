@@ -20,6 +20,7 @@ function resolveTagAttributeTargets(bootstrap: DrawingBootstrapResponse): Drawin
         writePolicy: resolveDisplayValue(target.writePolicy),
         reviewRequired: Boolean(target.reviewRequired),
         tags: target.tags?.filter((tag) => tag.trim().length > 0) ?? [],
+        tagEvidence: target.tagEvidence?.filter((item) => item.tag.trim().length > 0) ?? [],
         attributes:
           target.attributes
             ?.map((attribute) => ({
@@ -70,6 +71,7 @@ export function buildDrawingKnowledgeDetail(bootstrap: DrawingBootstrapResponse)
         writePolicy: resolveDisplayValue(target.writePolicy),
         reviewRequired: Boolean(target.reviewRequired),
         tags: target.tags?.filter((tag) => tag.trim().length > 0) ?? [],
+        tagEvidence: target.tagEvidence?.filter((item) => item.tag.trim().length > 0) ?? [],
         attributes:
           target.attributes
             ?.map((attribute) => ({
