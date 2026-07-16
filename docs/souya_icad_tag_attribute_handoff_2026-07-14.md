@@ -109,6 +109,7 @@
 | `sourcePreflight.sourcePathLength` | 登録されている原本ICADパスの文字数 |
 | `sourcePreflight.sourcePathWithinSxnetLegacyLimit` | SXNETへ直接渡すには安全な長さか |
 | `sourcePreflight.requiresSxnetStagedInput` | 抽出時に短い一時パスへ退避すべきか |
+| `sourcePreflight.sxnetStagingReasons` | 短い一時パスへ退避する理由。`path_length` / `filename_length` を保持 |
 | `sourcePreflight.sourceExistsFromCurrentMachine` | 現在のworker実行環境から原本ICADへアクセスできるか |
 | `reextractCondition` | 再抽出前に確認する条件。長パス退避、ICAD対応版、外部参照不足、ファイル破損、ネットワークパス未接続などを切り分ける |
 

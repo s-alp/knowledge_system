@@ -12,7 +12,7 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
-from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length
+from apps.drawing_metadata.services.path_constraints import sxnet_staging_reasons, validate_icad_filename_length
 
 
 @pytest.mark.django_db
@@ -129,6 +129,15 @@ def test_registration_upload_accepts_django_normalized_long_filename(settings, t
 def test_icad_filename_constraint_rejects_component_over_windows_limit():
     with pytest.raises(ValueError, match="ファイル名が長すぎます"):
         validate_icad_filename_length(f"{'A' * 256}.icd")
+
+
+def test_sxnet_staging_reasons_explain_path_and_filename_limits():
+    long_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
+    long_filename = f"{'A' * 256}.icd"
+
+    assert sxnet_staging_reasons(long_path, filename="sample.icd") == ["path_length"]
+    assert sxnet_staging_reasons(r"C:\temp\sample.icd", filename=long_filename) == ["filename_length"]
+    assert sxnet_staging_reasons(long_path, filename=long_filename) == ["path_length", "filename_length"]
 
 
 @pytest.mark.django_db
@@ -254,10 +263,11 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
 
 @pytest.mark.django_db
 def test_handoff_summary_api_explains_path_length_failure(sample_registration_payload):
+    long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\too-long-path.icd"
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],
         filename="too-long-path.icd",
-        source_path=sample_registration_payload["sourcePath"],
+        source_path=long_source_path,
         source_format=sample_registration_payload["sourceFormat"],
     )
     DrawingMetadataExtractionJob.objects.create(
@@ -272,7 +282,9 @@ def test_handoff_summary_api_explains_path_length_failure(sample_registration_pa
     assert response.status_code == 200
     failed_job = response.json()["recentFailedJobs"][0]
     assert failed_job["errorClass"] == "path_length_limit"
-    assert failed_job["sourcePreflight"]["sourcePathWithinSxnetLegacyLimit"] is True
+    assert failed_job["sourcePreflight"]["sourcePathWithinSxnetLegacyLimit"] is False
+    assert failed_job["sourcePreflight"]["requiresSxnetStagedInput"] is True
+    assert failed_job["sourcePreflight"]["sxnetStagingReasons"] == ["path_length"]
     assert "一時パス" in failed_job["reextractCondition"]
 
 

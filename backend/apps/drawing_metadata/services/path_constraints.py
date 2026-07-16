@@ -37,9 +37,19 @@ def validate_icad_filename_length(filename: str) -> None:
         raise ValueError(filename_length_error(filename))
 
 
-def requires_sxnet_staged_input(path: str | Path) -> bool:
+def sxnet_staging_reasons(path: str | Path, *, filename: str = "") -> list[str]:
+    """SXNETへ直接渡すには危険な理由を、後から説明できる形で返す。"""
+    reasons: list[str] = []
+    if len(str(path)) > WINDOWS_LEGACY_PATH_LIMIT:
+        reasons.append("path_length")
+    if filename and len(filename) > WINDOWS_FILENAME_LIMIT:
+        reasons.append("filename_length")
+    return reasons
+
+
+def requires_sxnet_staged_input(path: str | Path, *, filename: str = "") -> bool:
     """SXNETへ直接渡すには危険な長さなら、短い一時パスへの退避を要求する。"""
-    return len(str(path)) > WINDOWS_LEGACY_PATH_LIMIT
+    return bool(sxnet_staging_reasons(path, filename=filename))
 
 
 def icad_source_path_exists(path: str | Path) -> bool:

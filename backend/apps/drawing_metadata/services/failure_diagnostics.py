@@ -5,7 +5,7 @@ from apps.drawing_metadata.services.path_constraints import (
     WINDOWS_FILENAME_LIMIT,
     WINDOWS_LEGACY_PATH_LIMIT,
     icad_source_path_exists,
-    requires_sxnet_staged_input,
+    sxnet_staging_reasons,
 )
 
 ERROR_MESSAGE_DETAIL_LIMIT = 1200
@@ -66,12 +66,14 @@ def build_source_preflight(drawing: RegisteredDrawing) -> dict:
     path_text = drawing.source_path or ""
     filename = drawing.filename or ""
     extension = "." + filename.rsplit(".", 1)[-1] if "." in filename else ""
+    staging_reasons = sxnet_staging_reasons(path_text, filename=filename)
     return {
         "filename": filename,
         "sourcePath": path_text,
         "sourcePathLength": len(path_text),
         "sourcePathWithinSxnetLegacyLimit": len(path_text) <= WINDOWS_LEGACY_PATH_LIMIT,
-        "requiresSxnetStagedInput": requires_sxnet_staged_input(path_text),
+        "requiresSxnetStagedInput": bool(staging_reasons),
+        "sxnetStagingReasons": staging_reasons,
         "filenameLength": len(filename),
         "filenameWithinWindowsLimit": len(filename) <= WINDOWS_FILENAME_LIMIT,
         "extension": extension.lower(),

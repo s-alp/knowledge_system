@@ -80,7 +80,10 @@ def build_extractor_command(
                 "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
             ]
         )
-    if _is_uploaded_icad_source(drawing.source_path) or requires_sxnet_staged_input(drawing.source_path):
+    if _is_uploaded_icad_source(drawing.source_path) or requires_sxnet_staged_input(
+        drawing.source_path,
+        filename=drawing.filename,
+    ):
         command.extend(["--force-sxnet-staged-input", "true"])
     if job_id is not None:
         preview_output_dir = settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT / str(job_id)
