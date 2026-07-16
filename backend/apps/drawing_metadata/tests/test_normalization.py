@@ -161,6 +161,7 @@ def test_normalize_2d_raw_extract():
                 {"geometry_type": "SxGeomSmark", "summary": "val1=Ra 6.3", "inside_print_area": True},
                 {"geometry_type": "SxGeomHatch", "summary": "hatch", "inside_print_area": True},
                 {"geometry_type": "SxGeomCutLine", "summary": "cut line", "inside_print_area": True},
+                {"geometry_type": "SxGeomFinishMark", "summary": "finish mark", "inside_print_area": True, "mark_type": 3},
                 {
                     "geometry_type": "SxGeomElparc2D",
                     "summary": "ellipse arc",
@@ -228,6 +229,7 @@ def test_normalize_2d_raw_extract():
     feature_labels = {candidate["classification_label"] for candidate in canonical["geometry_feature_candidates"]}
     assert "表面粗さ記号あり" in feature_labels
     assert "切断線あり" in feature_labels
+    assert "仕上げ記号あり" in feature_labels
     assert "長穴/楕円弧候補" in feature_labels
     assert "穴/円候補" in feature_labels
     assert all(candidate["searchable_tag"] is False for candidate in canonical["geometry_feature_candidates"])
@@ -246,6 +248,8 @@ def test_normalize_2d_raw_extract():
     assert canonical["section_feature_count"] == 2
     assert canonical["cut_line_count"] == 1
     assert canonical["hatch_or_section_count"] == 1
+    assert canonical["finish_mark_count"] == 1
+    assert canonical["finish_mark_types"] == [3]
     assert canonical["slot_candidate_count"] == 1
     assert canonical["slot_candidate_dimensions"][0]["major_diameter"] == 22.0
     assert canonical["slot_candidate_dimensions"][0]["minor_diameter"] == 8.0

@@ -154,6 +154,19 @@
       "text": "string"
     }
   ],
+  "geometry_primitives": [
+    {
+      "geometry_type": "SxGeomFinishMark",
+      "position_x": 0,
+      "position_y": 0,
+      "inside_print_area": true,
+      "mark_type": 0,
+      "side_length": 0,
+      "width": 0,
+      "color": 0,
+      "summary": "string"
+    }
+  ],
   "weld_notes": [
     {
       "text": "string"

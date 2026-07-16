@@ -663,6 +663,8 @@ def _build_geometry_attribute_summary(primitives: list[dict], *, has_print_frame
         "section_feature_count": 0,
         "cut_line_count": 0,
         "hatch_or_section_count": 0,
+        "finish_mark_count": 0,
+        "finish_mark_types": [],
         "slot_candidate_count": 0,
         "slot_candidate_dimensions": [],
         "hole_candidate_count": 0,
@@ -670,6 +672,7 @@ def _build_geometry_attribute_summary(primitives: list[dict], *, has_print_frame
     }
 
     roughness_values: list[str] = []
+    finish_mark_types: list[int] = []
     hole_diameters: list[float] = []
     slot_dimensions: list[dict] = []
 
@@ -688,6 +691,12 @@ def _build_geometry_attribute_summary(primitives: list[dict], *, has_print_frame
         if geometry_type == "SxGeomHatch":
             summary["hatch_or_section_count"] += 1
             summary["section_feature_count"] += 1
+            continue
+        if geometry_type == "SxGeomFinishMark":
+            summary["finish_mark_count"] += 1
+            mark_type = primitive.get("mark_type")
+            if mark_type is not None:
+                finish_mark_types.append(mark_type)
             continue
         if geometry_type == "SxGeomCircle2D":
             summary["hole_candidate_count"] += 1
@@ -713,6 +722,7 @@ def _build_geometry_attribute_summary(primitives: list[dict], *, has_print_frame
             )
 
     summary["surface_roughness_values"] = _merge_unique(roughness_values)
+    summary["finish_mark_types"] = _merge_unique(finish_mark_types)
     summary["hole_candidate_diameters"] = _merge_unique(hole_diameters)
     summary["slot_candidate_dimensions"] = slot_dimensions
     return summary
@@ -1008,6 +1018,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "section_feature_count": 0,
         "cut_line_count": 0,
         "hatch_or_section_count": 0,
+        "finish_mark_count": 0,
+        "finish_mark_types": [],
         "slot_candidate_count": 0,
         "slot_candidate_dimensions": [],
         "hole_candidate_count": 0,

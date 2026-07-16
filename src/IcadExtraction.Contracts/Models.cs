@@ -254,6 +254,10 @@ namespace IcadExtraction.Contracts
         public double? StartAngle { get; set; }
         public double? EndAngle { get; set; }
         public int? PointCount { get; set; }
+        public int? MarkType { get; set; }
+        public double? SideLength { get; set; }
+        public int? Width { get; set; }
+        public int? Color { get; set; }
         public bool? InsidePrintArea { get; set; }
         public int? PrintFrameNo { get; set; }
         public string Summary { get; set; } = string.Empty;

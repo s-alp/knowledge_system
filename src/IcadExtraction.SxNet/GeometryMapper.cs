@@ -63,6 +63,7 @@ namespace IcadExtraction.SxNet
                     case "SxGeomCutLine":
                     case "SxGeomDelta":
                     case "SxGeomTolDatum":
+                    case "SxGeomFinishMark":
                         payload.GeometryPrimitives.Add(MapPrimitive(geometry, viewName, sourceItem.LayerNo));
                         break;
                     case "SxGeomWeld":
@@ -229,6 +230,10 @@ namespace IcadExtraction.SxNet
                 StartAngle = ReflectionHelpers.GetDouble(geometry, "sang"),
                 EndAngle = ReflectionHelpers.GetDouble(geometry, "eang"),
                 PointCount = ResolvePointCount(geometry, geometryType),
+                MarkType = ReflectionHelpers.GetInt(geometry, "mark_type"),
+                SideLength = ReflectionHelpers.GetDouble(geometry, "side_leng"),
+                Width = ReflectionHelpers.GetInt(geometry, "width"),
+                Color = ReflectionHelpers.GetInt(geometry, "color"),
                 Summary = ReflectionHelpers.BuildSummaryText(geometry),
             };
         }

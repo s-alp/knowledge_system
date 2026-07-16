@@ -102,7 +102,7 @@
 | 幾何公差 | A | `SxGeomTol` | summaryのみ | 構造化未実装 |
 | 表面粗さ | A | `SxGeomSmark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=表面粗さ記号あり`, `searchable_tag=false` として保持。表面粗さ記号の存在だけでは自動タグに採用しない |
 | 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | summaryのみ | 溶接種別、開先、仕上げ等は構造化未実装 |
-| 仕上げ記号 | A | `SxGeomFinishMark` | 未実装 | 仕上げ工程タグ |
+| 仕上げ記号 | A | `SxGeomFinishMark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=仕上げ記号あり`, `searchable_tag=false` として保持。`mark_type`, `side_leng`, `width`, `color` は raw に保持 |
 | バルーン | A | `SxGeomBalloon` | summaryのみ | `txt1`, `txt2`, `num_use`, `lead_line` 等は構造化未実装 |
 | シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | 切断線特徴候補実装済み | 断面図/詳細図/矢視判定は未実装 |
 | 2D実像部品 | A | `SxEntRPart.getInfDetail()` -> `SxInfRPart` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_part_names`, `referenced_2d_part3d_names`, `referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。印刷枠がある場合は枠内要素だけ検索候補へ採用 |
@@ -173,7 +173,7 @@
 2. `SxVS.getInf()` は実装済み。VS名、尺度、ビュー種別を出す。
 3. `SxEnt.getInfList()` と `SxEnt.getInfMaterialList()` を2D/3Dそれぞれで出す。
 4. 3Dマスプロパティは実装済み。今後は部品単位/グループ単位の粒度と、例外条件のサンプル数を増やす。
-5. `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomElparc2D`, `SxGeomCircle2D` は特徴候補化済み。`SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomFinishMark`, `SxGeomSymbol`, `SxGeomArrowView` は追加構造化を続ける。
+5. `SxGeomHatch`, `SxGeomSmark`, `SxGeomCutLine`, `SxGeomTolDatum`, `SxGeomFinishMark`, `SxGeomElparc2D`, `SxGeomCircle2D` は特徴候補化済み。`SxGeomSpline2D`, `SxGeomEllipse2D`, `SxGeomSymbol`, `SxGeomArrowView` は追加構造化を続ける。
 6. 2D文字を座標付きで保持し、図枠領域と中央図面領域に分類する。初期実装済みで、今後は中央図面/図枠の領域分類を精密化する。
 7. 図枠欄名辞書は初期実装済み。担当者、承認者、日付、材質、重量、表面処理、塗装指示、PRFX、ユニット番号の候補を実サンプルで拡充する。
 8. 2D/3D照合表を作り、同一属性の一致・不一致・片側欠落を記録する。

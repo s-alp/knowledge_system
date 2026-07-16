@@ -93,7 +93,7 @@
 | 提供単位 | 主なキー | 内容 | 備考 |
 | --- | --- | --- | --- |
 | `source_file` | `full_path`, `directory_path`, `file_name`, `extension`, `sx_net_input_path`, `sx_net_input_strategy`, `used_sx_net_alternate_path` | 保存フォルダ、ファイル名、拡張子、SXNETへ実際に渡したパス | 原本パスは検索・追跡用属性として保持。SXNETの長パス制限を避けるため短縮パスまたは一時コピーを使った場合も診断できるようにする |
-| `raw_extract_2d` | `view_sheets`, `print_frames`, `layers`, `texts`, `dimensions`, `geometry_primitives` | SXNETから取得した2D証拠 | 図枠外/印刷枠外は削除せず `inside_print_area` で判定 |
+| `raw_extract_2d` | `view_sheets`, `print_frames`, `layers`, `texts`, `dimensions`, `geometry_primitives`, `referenced_parts` | SXNETから取得した2D証拠 | 図枠外/印刷枠外は削除せず `inside_print_area` で判定 |
 | `raw_2d_sections` | `title_block`, `drawing_body`, `dimensions`, `notes`, `balloons`, `manufacturing_symbols` | 2D証拠を画面/fixture向けに6区画へ整理した要約 | `raw_2d_sections.v1`。印刷枠がある図面では `inside_print_area=true` の要素だけを自動利用数へ含める |
 | `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
 | `canonical_attributes` | 下表参照 | 2D/3D横断の正規化属性 | 本番DB/APIへ渡す属性候補 |
@@ -116,7 +116,7 @@
 | 2D図枠AI補助分類 | 曖昧な図枠候補の欄名 | `title_block_llm_classifications`, `title_block_candidates[].llm_*` | 図面属性候補の補助 | Gemini低温度JSON分類。既存候補値だけを分類し、CADに無い値は生成しない |
 | 2D訂正内容 | 訂正、改訂、変更、修正、REV系の注記/表文字 | `revision_note_candidates`, `revision_note_count` | 図面属性、改訂履歴確認 | 改訂番号とは別に、根拠文字・座標・印刷枠内外を保持。本文や存在フラグはタグ化しない |
 | 2D特徴 | ハッチング、表面粗さ、切断線、データム、幾何公差、長穴候補、穴候補 | `geometry_feature_candidates` | 図面証拠候補 | 自動タグには採用しない。根拠ジオメトリ、件数、概要、採用除外理由を保持 |
-| 2D形状・記号属性 | 表面粗さ記号数/値、断面・切断表現数、長穴/楕円候補数、穴/円候補数、候補径 | `surface_roughness_*`, `section_feature_count`, `slot_candidate_*`, `hole_candidate_*` | 図面属性、類似検索フィルター補助 | 印刷枠外は除外。円や楕円は形状候補として保持し、用途断定はしない |
+| 2D形状・記号属性 | 表面粗さ記号数/値、断面・切断表現数、仕上げ記号数/種別、長穴/楕円候補数、穴/円候補数、候補径 | `surface_roughness_*`, `section_feature_count`, `finish_mark_*`, `slot_candidate_*`, `hole_candidate_*` | 図面属性、類似検索フィルター補助 | 印刷枠外は除外。記号や円/楕円は形状候補として保持し、用途断定はしない |
 | 3D構成 | 最上位パーツ名、部品数、外部参照、ミラー、未解決参照 | `top_part`, `parts` | 図面属性、タグ候補 | 高 |
 | 3D重量 | 質量、重量、体積、面積、密度、重心、単位、計算対象要素数 | `mass_properties` | 図面属性 | 中から高。`mass_probe_status` と warning を併記 |
 | 3D材質 | 材質ID、材質名、比重、対象要素数 | `materials` | 図面属性、材質タグ候補 | 中。日本語材質名は文字コード揺れがあるため材質IDを主キー寄りに扱う |
