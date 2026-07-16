@@ -10,6 +10,11 @@ import sys
 from typing import Iterable
 
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_UI_OUTPUT = ROOT / "output" / "entity_ui_delivery_readiness"
 DEFAULT_LLM_PROBE = (
@@ -19,6 +24,9 @@ DEFAULT_LLM_PROBE = (
     / "title_block_llm_probe_2026-07-14"
     / "gemini_probe_after_parse_fallback_2026-07-15.json"
 )
+BACKEND_DIR = ROOT / "backend"
+BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
+FRONTEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend"
 
 ACTIVE_HANDOFF_DOCS = [
     ROOT / "docs" / "icad_2d_3d_extraction_capability_matrix_2026-07-14.md",
@@ -47,16 +55,32 @@ def _command_env() -> dict[str, str]:
     return env
 
 
+def _python_executable() -> str:
+    if BACKEND_VENV_PYTHON.is_file():
+        return str(BACKEND_VENV_PYTHON)
+    return sys.executable
+
+
 def _run_gate(name: str, command: list[str], *, cwd: Path = ROOT) -> dict:
-    completed = subprocess.run(
-        command,
-        cwd=cwd,
-        env=_command_env(),
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-    )
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=cwd,
+            env=_command_env(),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except FileNotFoundError as exc:
+        return {
+            "name": name,
+            "command": command,
+            "returnCode": None,
+            "passed": False,
+            "stdoutTail": "",
+            "stderrTail": f"command not found: {exc.filename}",
+        }
     return {
         "name": name,
         "command": command,
@@ -113,16 +137,38 @@ def _git_status_gate(require_clean: bool) -> dict:
     }
 
 
+def _npm_run_command(script_name: str) -> list[str]:
+    if os.name == "nt":
+        return ["pwsh", "-NoLogo", "-NoProfile", "-Command", f"npm run {script_name}"]
+    return ["npm", "run", script_name]
+
+
+def _test_gates(python: str) -> list[dict]:
+    return [
+        _run_gate("backend_django_check", [python, "manage.py", "check"], cwd=BACKEND_DIR),
+        _run_gate(
+            "backend_drawing_metadata_pytest",
+            [python, "-m", "pytest", "apps/drawing_metadata/tests"],
+            cwd=BACKEND_DIR,
+        ),
+        _run_gate("dotnet_build", ["dotnet", "build", str(ROOT / "IcadExtraction.sln"), "-c", "Debug"], cwd=ROOT),
+        _run_gate("dotnet_test", ["dotnet", "test", str(ROOT / "IcadExtraction.sln"), "-c", "Debug", "--no-build"], cwd=ROOT),
+        _run_gate("frontend_vitest", _npm_run_command("test"), cwd=FRONTEND_DIR),
+        _run_gate("frontend_build", _npm_run_command("build"), cwd=FRONTEND_DIR),
+    ]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run ICAD delivery readiness gates for the current workspace.")
     parser.add_argument("--include-ui", action="store_true", help="Run Playwright UI verification against an already running app.")
+    parser.add_argument("--include-tests", action="store_true", help="Run backend, C# and frontend automated test/build gates.")
     parser.add_argument("--base-url", default="http://127.0.0.1:5173/", help="Frontend URL for --include-ui.")
     parser.add_argument("--ui-output-dir", default=str(DEFAULT_UI_OUTPUT), help="Screenshot/output directory for --include-ui.")
     parser.add_argument("--require-clean", action="store_true", help="Fail when git status --short is not clean.")
     parser.add_argument("--output", help="Optional JSON path for the readiness result.")
     args = parser.parse_args()
 
-    python = sys.executable
+    python = _python_executable()
     gates = [
         _run_gate("shared_icad_completion", [python, str(ROOT / "scripts" / "audit_shared_icad_completion.py")]),
         _run_gate("drawing_metadata_job_state", [python, str(ROOT / "scripts" / "audit_drawing_metadata_job_state.py")]),
@@ -136,6 +182,9 @@ def main() -> int:
     ]
     gates.append(_scan_stale_docs(ACTIVE_HANDOFF_DOCS))
     gates.append(_git_status_gate(args.require_clean))
+
+    if args.include_tests:
+        gates.extend(_test_gates(python))
 
     if args.include_ui:
         gates.append(

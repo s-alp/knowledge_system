@@ -83,7 +83,7 @@
       "passed": true,
       "required": false,
       "dirty": true,
-      "stdout": "?? output/souya_handoff/icad_delivery_readiness_2026-07-16.json\n?? scripts/audit_icad_delivery_readiness.py",
+      "stdout": "M scripts/audit_icad_delivery_readiness.py\n?? output/souya_handoff/icad_delivery_readiness_with_tests_2026-07-16.json\n?? output/souya_handoff/job_failure_inspection_2026-07-16.json\n?? output/souya_handoff/job_reprocess_success_inspection_2026-07-16.json\n?? scripts/inspect_drawing_metadata_job_failure.py\n?? scripts/requeue_drawing_metadata_extractions.py",
       "stderr": ""
     },
     {
