@@ -1232,7 +1232,7 @@ def test_rag_payload_returns_filters_and_ranking_signals(sample_registration_pay
     assert payload["rankingSignals"]["unresolvedMaterialKeywords"] == ["ZZZ"]
     assert payload["partMaterialCandidates"][0]["part_path"] == "Top.BRACKET-A"
     assert "材質:SUS304" in payload["rankingSignals"]["tags"]
-    assert "材質要確認:ZZZ" in payload["rankingSignals"]["tags"]
+    assert "材質要確認:ZZZ" not in payload["rankingSignals"]["tags"]
     assert payload["reconciliation"]["requiresReview"] is True
     assert payload["reconciliation"]["reviewFlags"][0]["code"] == "unresolved_material"
 

@@ -213,7 +213,7 @@
 - [x] 抽出済みJSONを2D/3D snapshotとしてDBへ再投入する管理コマンドを追加し、代表3図面でfixture候補数が増えることを確認
 - [x] 共有済み抽出JSONの中から各客先代表を選び、重複/旧形式を避けた取込manifestを作成
 - [x] manifest経由で代表24図面を取り込み、登録35図面 / 抽出済み25図面 / 2D3D両方あり20図面まで拡張
-- [x] 再抽出manifestをDBへ取り込み、snapshotなし10図面を除外した創屋連携fixture 25図面を `drawing_metadata_fixture_reextract_2026-07-15.json` として再生成
+- [x] 再抽出manifestをDBへ取り込み、snapshotなし10図面を除外した創屋連携fixtureを作成。その後、共有39件の確認用正本は `drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json` へ統合。完全fixtureは大容量になるため、必要時のみ `export_drawing_metadata_fixtures --profile full` で生成する
 - [x] `SxGeomLine2D` の座標取得を scalar `x1/y1/x2/y2` だけでなく `pnt1/pnt2` 系へ拡張し、代表2D 19件で印刷枠判定不明を `488` まで低減
 - [x] `analyze_2d_print_area_unknowns.py` を追加し、印刷枠判定不明の理由を座標欠落/座標あり判定失敗/primitive型別に分解して確認
 - [x] SXNETの `SxGeomHatch` は直接座標/外接矩形を確認できないため座標を捏造せず、raw証跡として残す方針を資料化

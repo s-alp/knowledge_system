@@ -132,8 +132,10 @@ def test_export_drawing_metadata_fixtures_skips_empty_snapshots_by_default(tmp_p
     assert payload["sourceDrawingCount"] == 1
     assert payload["skippedEmptySnapshotCount"] == 1
     assert payload["exportPolicy"] == {
+        "profile": "full",
         "includeEmptySnapshots": False,
         "emptySnapshotHandling": "skipped",
+        "fileSizePolicy": "machine_handoff_full_payload",
     }
 
 
@@ -159,10 +161,53 @@ def test_export_drawing_metadata_fixtures_can_include_empty_snapshots_for_debug(
     assert payload["sourceDrawingCount"] == 1
     assert payload["skippedEmptySnapshotCount"] == 0
     assert payload["exportPolicy"] == {
+        "profile": "full",
         "includeEmptySnapshots": True,
         "emptySnapshotHandling": "included",
+        "fileSizePolicy": "machine_handoff_full_payload",
     }
     assert payload["items"][0]["detailApiPayload"]["snapshotsByMode"] == {}
+
+
+@pytest.mark.django_db
+def test_export_drawing_metadata_fixtures_review_summary_omits_heavy_payloads(tmp_path):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="host-summary",
+        filename="summary.icd",
+        source_path=r"C:\cad\summary.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={"texts": [{"joined_text": "材質 SUS304"}]},
+        canonical_attributes_json={
+            "drawing_name": "サマリ図面",
+            "material_keywords": ["SUS304"],
+            "unresolved_material_keywords": ["ZZZ"],
+        },
+        derived_tags_json=[{"tag": "材質:SUS304", "source": "material_keywords", "confidence": "high"}],
+    )
+    output_path = tmp_path / "souya_fixture_review_summary.json"
+
+    call_command(
+        "export_drawing_metadata_fixtures",
+        drawing_id=[str(drawing.id)],
+        profile="review-summary",
+        output=str(output_path),
+    )
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["schemaVersion"] == "drawing_metadata_handoff_review_summary.v1"
+    assert payload["exportPolicy"]["fileSizePolicy"] == "human_review_compact_no_raw_extract"
+    item = payload["items"][0]
+    assert "detailApiPayload" not in item
+    assert "viewerBootstrap" not in item
+    assert "ragPayload" not in item
+    assert item["snapshotSummary"]["2d"]["rawExtractKeys"] == ["texts"]
+    assert item["selectedAttributes"]["material_keywords"]["values"] == ["SUS304"]
+    assert item["selectedAttributes"]["unresolved_material_keywords"]["values"] == ["ZZZ"]
+    assert item["derivedTags"]["values"] == ["材質:SUS304"]
 
 
 @pytest.mark.django_db

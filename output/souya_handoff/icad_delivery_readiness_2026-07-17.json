@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "icad_delivery_readiness_audit.v1",
+  "gateCount": 10,
+  "failedGateCount": 0,
+  "gatePassed": true,
+  "gates": [
+    {
+      "name": "shared_icad_completion",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_shared_icad_completion.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "      \"massEvidence\": \"canonicalAttributes.mass_value\",\n      \"massProbeStatus\": \"available\",\n      \"materialProbeStatus\": \"no_materials\",\n      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-15T13:03:04.359865+00:00\",\n          \"startedAt\": \"2026-07-15T13:03:04.359865+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:04.359865+00:00\",\n          \"errorMessage\": \"\",\n          \"warnings\": []\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"startedAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"errorMessage\": \"\",\n          \"warnings\": []\n        }\n      },\n      \"canonicalSourceEvidence\": {\n        \"2dTitleBlockFields\": [],\n        \"3dPartExtendedInfo\": \"rawExtract.parts[].ex_info_fields\",\n        \"3dMaterialCandidates\": \"canonicalAttributes.part_material_candidates\",\n        \"3dMass\": \"canonicalAttributes.mass_value\"\n      },\n      \"issues\": [\n        {\n          \"severity\": \"known_condition\",\n          \"code\": \"source_not_accessible_current_environment\",\n          \"message\": \"現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。\",\n          \"reextractCondition\": \"再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。\"\n        }\n      ]\n    }\n  ]\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "drawing_metadata_job_state",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_drawing_metadata_job_state.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "          \"finishedAt\": \"2026-07-15T13:03:05.929310+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"1ba71493-e46f-464f-b4d8-f5a8c73dc9ab\",\n          \"createdAt\": \"2026-07-15T13:03:07.398806+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:07.394819+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 66\n    },\n    {\n      \"sourcePath\": \"J:\\\\ZCSET\\\\300P_210312\\\\作業\\\\2_ロードカップ部\\\\XH3001-M08007-01.icd\",\n      \"filename\": \"XH3001-M08007-01.icd\",\n      \"snapshotModes\": [\n        \"2d\",\n        \"3d\"\n      ],\n      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"093d62e2-3371-4014-a439-e16427ee40be\",\n          \"createdAt\": \"2026-07-15T13:03:06.144843+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:06.144338+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"4691236e-ac00-4664-9b80-dc513c4baa37\",\n          \"createdAt\": \"2026-07-15T13:03:07.464370+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:07.463857+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 54\n    }\n  ]\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "tag_quality",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_tag_quality.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"snapshotCount\": 84,\n  \"tagCount\": 118,\n  \"forbiddenTagCount\": 0,\n  \"forbiddenTags\": [],\n  \"missingSourceCount\": 0,\n  \"missingEvidenceCount\": 0,\n  \"missingConfidenceCount\": 0,\n  \"missingReasonCount\": 0,\n  \"sourceCounts\": {\n    \"customer_name\": 1,\n    \"equipment_category\": 1,\n    \"maker_keywords\": 4,\n    \"material_keywords\": 106,\n    \"spec_tokens\": 2,\n    \"surface_treatment_tokens\": 2,\n    \"title_block_fields.coating_instruction\": 2\n  }\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "knowledge_payload_attribute_quality",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_knowledge_payload_attribute_quality.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"schemaVersion\": \"knowledge_payload_attribute_quality_audit.v1\",\n  \"scope\": {\n    \"mode\": \"manifest\",\n    \"manifestPath\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\icad_extract_import_manifest_all_shared_2026-07-15.json\",\n    \"manifestSourceCount\": 39,\n    \"totalRegistrationCount\": 79,\n    \"scopedRegistrationCount\": 39,\n    \"excludedRegistrationCount\": 40\n  },\n  \"drawingCount\": 39,\n  \"snapshotCount\": 78,\n  \"attributeCount\": 607,\n  \"issueCount\": 0,\n  \"gatePassed\": true,\n  \"issues\": []\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "handoff_review_summary",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\validate_drawing_handoff_review_summary.py",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\souya_handoff\\drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"valid\": true,\n  \"schemaVersion\": \"drawing_metadata_handoff_review_summary.v1\",\n  \"file\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json\",\n  \"sizeBytes\": 261590,\n  \"maxBytes\": 1000000,\n  \"itemCount\": 39,\n  \"issueCount\": 0,\n  \"issues\": []\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "mass_weight_format",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_mass_weight_format.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"snapshotCount\": 84,\n  \"invalidWeightStringCount\": 0,\n  \"invalidWeightStringSamples\": []\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "llm_title_block_guardrails",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_llm_title_block_guardrails.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"schemaVersion\": \"llm_title_block_guardrail_audit.v1\",\n  \"scope\": {\n    \"mode\": \"manifest\",\n    \"manifestPath\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\icad_extract_import_manifest_all_shared_2026-07-15.json\",\n    \"manifestSourceCount\": 39,\n    \"totalRegistrationCount\": 79,\n    \"scopedRegistrationCount\": 39,\n    \"excludedRegistrationCount\": 40\n  },\n  \"snapshotCount\": 39,\n  \"llmClassificationCount\": 0,\n  \"blockingIssueCount\": 0,\n  \"gatePassed\": true,\n  \"blockingIssues\": []\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "llm_probe_evaluation",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\evaluate_title_block_llm_probe.py",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\title_block_llm_probe_2026-07-14\\gemini_probe_current_normalization_2026-07-17.json"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"probeFile\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\live_extracts\\\\title_block_llm_probe_2026-07-14\\\\gemini_probe_current_normalization_2026-07-17.json\",\n  \"referenceDefinition\": \"A candidate with an existing non-empty value is a positive label. A label-only or value-less candidate is a negative label.\",\n  \"fileCount\": 5,\n  \"classified\": true,\n  \"geminiErrorCount\": 0,\n  \"positiveLabelCount\": 3,\n  \"negativeLabelCount\": 0,\n  \"classificationTruePositiveCount\": 3,\n  \"classificationFalsePositiveCount\": 0,\n  \"classificationWrongFieldCount\": 0,\n  \"classificationMissedPositiveCount\": 0,\n  \"classificationPrecision\": 1.0,\n  \"classificationPositiveRecall\": 1.0,\n  \"guardrailFalsePositiveCount\": 0,\n  \"guardrailWrongFieldCount\": 0,\n  \"guardrailSafetyRate\": null,\n  \"acceptedUpliftCount\": 0,\n  \"classificationFalsePositives\": [],\n  \"classificationWrongFields\": [],\n  \"classificationMissedPositives\": [],\n  \"geminiErrors\": [],\n  \"guardrailFalsePositives\": [],\n  \"acceptedWrongFields\": [],\n  \"assessment\": \"safe_but_no_accepted_uplift\"\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "stale_handoff_doc_search",
+      "passed": true,
+      "findingCount": 0,
+      "findings": []
+    },
+    {
+      "name": "git_worktree_clean",
+      "returnCode": 0,
+      "passed": true,
+      "required": true,
+      "dirty": false,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

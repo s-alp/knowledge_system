@@ -19,7 +19,8 @@ from apps.drawing_metadata.models import DrawingMetadataSnapshot
 
 
 FORBIDDEN_EXACT = {"改訂情報あり"}
-FORBIDDEN_PREFIXES = ("加工指示:", "幾何公差:", "図面特徴:", "形状候補:")
+FORBIDDEN_PREFIXES = ("加工指示:", "幾何公差:", "図面特徴:", "形状候補:", "材質要確認:")
+FORBIDDEN_SOURCES = {"unresolved_material_keywords"}
 
 
 def main() -> int:
@@ -35,6 +36,7 @@ def main() -> int:
         for tag in tags
         if str(tag.get("tag") or "") in FORBIDDEN_EXACT
         or str(tag.get("tag") or "").startswith(FORBIDDEN_PREFIXES)
+        or str(tag.get("source") or "") in FORBIDDEN_SOURCES
     ]
     missing_source = [tag for tag in tags if not str(tag.get("source") or "").strip()]
     missing_evidence = [tag for tag in tags if not str(tag.get("evidence") or "").strip()]

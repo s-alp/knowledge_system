@@ -9,7 +9,163 @@ from django.utils import timezone
 
 from apps.drawing_metadata.api.serializers import RegisteredDrawingDetailSerializer
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+
+
+REVIEW_SUMMARY_SCHEMA_VERSION = "drawing_metadata_handoff_review_summary.v1"
+
+
+def _source_folder(source_path: str) -> str:
+    if not source_path:
+        return ""
+    return str(Path(source_path).parent)
+
+
+def _has_value(value) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, (list, dict, tuple, set)):
+        return len(value) > 0
+    return True
+
+
+def _limit_list(values, *, max_items: int = 12) -> dict:
+    if not isinstance(values, list):
+        values = [values] if _has_value(values) else []
+    compact_values = [value for value in values if _has_value(value)]
+    return {
+        "values": compact_values[:max_items],
+        "count": len(compact_values),
+        "truncated": len(compact_values) > max_items,
+    }
+
+
+def _tag_names(tags) -> list[str]:
+    names: list[str] = []
+    seen: set[str] = set()
+    for tag in tags or []:
+        name = tag.get("tag") if isinstance(tag, dict) else tag
+        if not _has_value(name):
+            continue
+        name_text = str(name)
+        if name_text in seen:
+            continue
+        seen.add(name_text)
+        names.append(name_text)
+    return names
+
+
+def _selected_attributes(canonical: dict) -> dict:
+    selected_keys = (
+        "customer_name",
+        "project_name",
+        "equipment_name",
+        "equipment_category",
+        "module_name",
+        "drawing_number",
+        "drawing_name",
+        "part_number",
+        "paper_size",
+        "drawing_size",
+        "scale",
+        "mass_value",
+        "weight_value",
+        "material_keywords",
+        "unresolved_material_keywords",
+        "surface_treatment_tokens",
+        "heat_treatment_keywords",
+        "part_names",
+        "part_attributes",
+    )
+    summary = {}
+    for key in selected_keys:
+        value = canonical.get(key)
+        if not _has_value(value):
+            continue
+        summary[key] = _limit_list(value) if isinstance(value, list) else value
+    return summary
+
+
+def _snapshot_summary(drawing: RegisteredDrawing) -> dict:
+    snapshots = {}
+    for snapshot in drawing.snapshots.all():
+        latest_job = snapshot.latest_job
+        job_summary = None
+        if latest_job:
+            job_summary = {
+                "jobId": str(latest_job.id),
+                "status": latest_job.status,
+                "profile": latest_job.extraction_profile,
+                "createdAt": latest_job.created_at.isoformat() if latest_job.created_at else None,
+                "startedAt": latest_job.started_at.isoformat() if latest_job.started_at else None,
+                "finishedAt": latest_job.finished_at.isoformat() if latest_job.finished_at else None,
+                "elapsedMs": latest_job.elapsed_ms,
+                "warningCount": len(latest_job.warnings_json or []),
+            }
+            if latest_job.error_message:
+                job_summary["errorMessage"] = latest_job.error_message[:500]
+        snapshots[snapshot.extraction_mode] = {
+            "reviewStatus": snapshot.review_status,
+            "normalizerVersion": snapshot.normalizer_version,
+            "tagRuleVersion": snapshot.tag_rule_version,
+            "updatedAt": snapshot.updated_at.isoformat() if snapshot.updated_at else None,
+            "rawExtractKeys": sorted((snapshot.raw_extract_json or {}).keys()),
+            "canonicalAttributeCount": len(snapshot.canonical_attributes_json or {}),
+            "derivedTagCount": len(snapshot.derived_tags_json or []),
+            "latestJob": job_summary,
+        }
+    return snapshots
+
+
+def _target_summary(target: dict) -> dict:
+    payload_preview = target.get("payloadPreview") or {}
+    return {
+        "targetKey": target.get("targetKey"),
+        "targetLabel": target.get("targetLabel"),
+        "writePolicy": target.get("writePolicy"),
+        "reviewRequired": target.get("reviewRequired"),
+        "existingReception": target.get("existingReception"),
+        "attributeCount": len(target.get("attributes") or []),
+        "payloadAttributeCount": len(payload_preview.get("attributes") or []),
+        "payloadTagCount": len(payload_preview.get("tags") or []),
+    }
+
+
+def _ranking_signal_summary(rag_payload: dict) -> dict:
+    ranking = rag_payload.get("rankingSignals") or {}
+    return {key: _limit_list(value) for key, value in ranking.items() if _has_value(value)}
+
+
+def _build_review_summary_item(drawing: RegisteredDrawing) -> dict:
+    composed = compose_drawing_metadata(drawing)
+    canonical = composed.get("canonicalAttributes", {}) or {}
+    knowledge_preview = build_knowledge_system_payload_preview(drawing=drawing, composed_metadata=composed)
+    rag_payload = build_rag_payload(drawing)
+    tags = _tag_names(composed.get("derivedTags", []) or [])
+    review_flags = rag_payload.get("reconciliation", {}).get("reviewFlags", []) or []
+    return {
+        "drawingId": str(drawing.id),
+        "hostDrawingId": drawing.host_drawing_id,
+        "filename": drawing.filename,
+        "sourcePath": drawing.source_path,
+        "sourceFolder": _source_folder(drawing.source_path),
+        "sourceFormat": drawing.source_format,
+        "snapshotSummary": _snapshot_summary(drawing),
+        "selectedAttributes": _selected_attributes(canonical),
+        "derivedTags": _limit_list(tags, max_items=30),
+        "knowledgeTargets": [_target_summary(target) for target in knowledge_preview.get("targets", [])],
+        "ragSummary": {
+            "preFilters": rag_payload.get("preFilters") or {},
+            "rankingSignals": _ranking_signal_summary(rag_payload),
+            "reviewFlags": review_flags[:20],
+            "reviewFlagCount": len(review_flags),
+            "reviewFlagsTruncated": len(review_flags) > 20,
+        },
+    }
 
 
 class Command(BaseCommand):
@@ -19,6 +175,14 @@ class Command(BaseCommand):
         parser.add_argument("--drawing-id", action="append", default=[], help="出力対象の drawing UUID。複数指定できます。")
         parser.add_argument("--manifest", help="ICAD抽出manifestの entries[].sourcePath に一致する図面だけを出力します。")
         parser.add_argument("--output", help="出力先 JSON。未指定の場合は標準出力へ出します。")
+        parser.add_argument(
+            "--profile",
+            choices=("full", "review-summary"),
+            default="full",
+            help=(
+                "full は機械連携用の完全JSON、review-summary は人が開いて確認するための短い要約JSONです。"
+            ),
+        )
         parser.add_argument(
             "--include-empty-snapshots",
             action="store_true",
@@ -66,11 +230,16 @@ class Command(BaseCommand):
         items = []
         skipped_empty_snapshot_count = 0
         include_empty_snapshots = bool(options["include_empty_snapshots"])
+        profile = options["profile"]
         for drawing in drawings:
-            detail_payload = RegisteredDrawingDetailSerializer(drawing).data
-            if not detail_payload.get("snapshotsByMode") and not include_empty_snapshots:
+            has_snapshots = drawing.snapshots.exists()
+            if not has_snapshots and not include_empty_snapshots:
                 skipped_empty_snapshot_count += 1
                 continue
+            if profile == "review-summary":
+                items.append(_build_review_summary_item(drawing))
+                continue
+            detail_payload = RegisteredDrawingDetailSerializer(drawing).data
             items.append(
                 {
                     "drawingId": str(drawing.id),
@@ -84,14 +253,24 @@ class Command(BaseCommand):
             )
 
         payload = {
-            "schemaVersion": "drawing_metadata_handoff_fixture.v1",
+            "schemaVersion": (
+                REVIEW_SUMMARY_SCHEMA_VERSION
+                if profile == "review-summary"
+                else "drawing_metadata_handoff_fixture.v1"
+            ),
             "generatedAt": timezone.now().isoformat(),
             "itemCount": len(items),
             "sourceDrawingCount": len(drawings),
             "skippedEmptySnapshotCount": skipped_empty_snapshot_count,
             "exportPolicy": {
+                "profile": profile,
                 "includeEmptySnapshots": include_empty_snapshots,
                 "emptySnapshotHandling": "included" if include_empty_snapshots else "skipped",
+                "fileSizePolicy": (
+                    "human_review_compact_no_raw_extract"
+                    if profile == "review-summary"
+                    else "machine_handoff_full_payload"
+                ),
             },
             "items": items,
         }

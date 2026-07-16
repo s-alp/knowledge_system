@@ -318,7 +318,7 @@ def _tag_reason(source: str) -> str:
         "equipment_category": "装置カテゴリとして正規化でき、分類検索に使えるため採用しています。",
         "maker_keywords": "メーカー名として抽出でき、購入品や構成部品の検索に使えるため採用しています。",
         "material_keywords": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
-        "unresolved_material_keywords": "材質らしい値ですが正式材質と確定できないため、要確認タグとして分離しています。",
+        "unresolved_material_keywords": "材質らしい値ですが正式材質と確定できないため、要確認属性として分離しています。",
         "spec_tokens": "規格識別子として抽出でき、規格・社内標準の検索に使えるため採用しています。",
         "title_block_fields.material": "2D図枠の材質欄から抽出でき、図面起点の材質検索に使えるため採用しています。",
         "title_block_fields.surface_treatment": "2D図枠の表面処理欄から抽出でき、加工・処理条件の検索に使えるため採用しています。",

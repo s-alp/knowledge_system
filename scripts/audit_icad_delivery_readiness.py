@@ -24,6 +24,7 @@ DEFAULT_LLM_PROBE = (
     / "title_block_llm_probe_2026-07-14"
     / "gemini_probe_current_normalization_2026-07-17.json"
 )
+DEFAULT_REVIEW_SUMMARY = ROOT / "output" / "souya_handoff" / "drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json"
 BACKEND_DIR = ROOT / "backend"
 BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
 FRONTEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend"
@@ -187,6 +188,10 @@ def main() -> int:
         _run_gate(
             "knowledge_payload_attribute_quality",
             [python, str(ROOT / "scripts" / "audit_knowledge_payload_attribute_quality.py")],
+        ),
+        _run_gate(
+            "handoff_review_summary",
+            [python, str(ROOT / "scripts" / "validate_drawing_handoff_review_summary.py"), str(DEFAULT_REVIEW_SUMMARY)],
         ),
         _run_gate("mass_weight_format", [python, str(ROOT / "scripts" / "audit_mass_weight_format.py")]),
         _run_gate("llm_title_block_guardrails", [python, str(ROOT / "scripts" / "audit_llm_title_block_guardrails.py")]),

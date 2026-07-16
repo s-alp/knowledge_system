@@ -144,7 +144,7 @@ def test_normalize_3d_raw_extract():
     assert any(tag["tag"] == "PRFX:CAA5012" for tag in tags)
     assert any(tag["tag"] == "ユニット:34000" for tag in tags)
     assert not any(tag["tag"] == "材質:ZZZ" for tag in tags)
-    assert any(tag["tag"] == "材質要確認:ZZZ" for tag in tags)
+    assert not any(tag["tag"] == "材質要確認:ZZZ" for tag in tags)
 
 
 def test_normalize_2d_raw_extract():

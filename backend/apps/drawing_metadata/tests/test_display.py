@@ -240,7 +240,6 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
                 {"tag": "客先:澁谷工業", "source": "customer_name", "confidence": "high", "manual_flag": False, "tag_rule_version": "1.0.0"},
                 {"tag": "装置:ロボット", "source": "equipment_category", "confidence": "high", "manual_flag": False, "tag_rule_version": "1.0.0"},
                 {"tag": "メーカー:SMC", "source": "maker_keywords", "confidence": "medium", "manual_flag": False, "tag_rule_version": "1.0.0"},
-                {"tag": "材質要確認:ZZZ", "source": "unresolved_material_keywords", "confidence": "low", "manual_flag": False, "tag_rule_version": "1.0.0"},
             ],
             "conflicts": [],
         },
@@ -271,7 +270,7 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
                     "existingReception": "部品詳細に属性情報あり",
                     "candidateEndpoint": "/parts/{id}/",
                     "tagApiStatus": "not_found_use_attribute_fallback",
-                    "tags": ["材質要確認:ZZZ"],
+                    "tags": [],
                     "attributes": [
                         {
                             "sourcePath": "canonicalAttributes.part_material_candidates",
@@ -289,14 +288,14 @@ def test_build_tag_review_display_maps_tags_to_target_candidates():
     )
 
     assert payload["title"] == "タグ候補レビュー"
+    assert len(payload["groups"][0]["tags"]) == 3
     assert payload["groups"][0]["tags"][0]["targetCandidates"] == ["プロジェクト", "製品・装置・ユニット", "図面"]
     assert payload["groups"][0]["tags"][2]["targetCandidates"] == ["部品", "図面", "製品・装置・ユニット"]
-    assert payload["groups"][0]["tags"][3]["targetCandidates"] == ["部品", "図面"]
     assert payload["evidenceRows"][5]["displayValue"] == "1"
     assert payload["payloadTargetRows"][0]["label"] == "図面"
     assert payload["payloadTargetRows"][0]["attributeCount"] == 1
     assert payload["payloadAttributeRows"][1]["entityHint"] == "TOP/PART-A"
-    assert payload["payloadTagRows"][2]["targetLabel"] == "部品"
+    assert all(row["targetLabel"] != "部品" for row in payload["payloadTagRows"])
 
 
 def test_build_integration_handoff_display_payload_summarizes_viewer_and_rag_contracts():

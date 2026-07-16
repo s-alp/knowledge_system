@@ -34,9 +34,6 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
     if "material_keywords" not in excluded_sources:
         for material in canonical_attributes.get("material_keywords", []):
             add_tag(f"材質:{material}", "material_keywords", confidence="medium")
-    if "unresolved_material_keywords" not in excluded_sources:
-        for material in canonical_attributes.get("unresolved_material_keywords", []):
-            add_tag(f"材質要確認:{material}", "unresolved_material_keywords", confidence="low")
     if "surface_treatment_tokens" not in excluded_sources:
         for treatment in canonical_attributes.get("surface_treatment_tokens", []):
             add_tag(f"表面処理:{treatment}", "surface_treatment_tokens", confidence="medium")
@@ -78,7 +75,6 @@ def _tag_evidence(source: str) -> str:
         "equipment_category": "composedMetadata.canonicalAttributes.equipment_category",
         "maker_keywords": "composedMetadata.canonicalAttributes.maker_keywords",
         "material_keywords": "composedMetadata.canonicalAttributes.material_keywords",
-        "unresolved_material_keywords": "composedMetadata.canonicalAttributes.unresolved_material_keywords",
         "surface_treatment_tokens": "composedMetadata.canonicalAttributes.surface_treatment_tokens",
         "paint_instruction_tokens": "composedMetadata.canonicalAttributes.paint_instruction_tokens",
         "heat_treatment_keywords": "composedMetadata.canonicalAttributes.heat_treatment_keywords",
@@ -101,7 +97,6 @@ def _tag_reason(source: str) -> str:
         "equipment_category": "装置カテゴリとして正規化でき、分類検索に使えるため採用しています。",
         "maker_keywords": "メーカー名として抽出でき、購入品や構成部品の検索に使えるため採用しています。",
         "material_keywords": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
-        "unresolved_material_keywords": "材質らしい値ですが正式材質と確定できないため、要確認タグとして分離しています。",
         "surface_treatment_tokens": "表面処理として抽出でき、加工・処理条件の検索に使えるため採用しています。",
         "paint_instruction_tokens": "塗装指示として抽出でき、塗装条件の検索に使えるため採用しています。",
         "heat_treatment_keywords": "熱処理指定として抽出でき、加工条件の検索に使えるため採用しています。",

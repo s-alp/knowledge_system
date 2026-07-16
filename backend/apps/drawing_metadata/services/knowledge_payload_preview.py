@@ -171,7 +171,6 @@ def _tags_for_target(tags: list[str], target_key: str) -> list[str]:
             selected.append(tag)
         elif target_key == "part" and (
             tag.startswith("材質:")
-            or tag.startswith("材質要確認:")
             or tag.startswith("メーカー:")
             or tag.startswith("規格:")
         ):
