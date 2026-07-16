@@ -132,7 +132,7 @@ describe("IcadExtractionReviewPage", () => {
     expect(enqueueDrawingMetadataExtraction).not.toHaveBeenCalled();
   });
 
-  it("shows a concise failure reason and keeps the raw stack trace inside details", async () => {
+  it("shows a concise failure reason and keeps long stack traces bounded", async () => {
     const rawError = [
       "error[0].type=System.Reflection.TargetInvocationException",
       "error[1].type=sxnet.SxException",
@@ -140,6 +140,8 @@ describe("IcadExtractionReviewPage", () => {
       "error.stack_trace_begin",
       "System.Reflection.TargetInvocationException: 呼び出しのターゲットが例外をスローしました。",
       "場所 IcadExtraction.SxNet.SxNetOpenContext.OpenReadOnly",
+      "A".repeat(1400),
+      "TAIL_SHOULD_NOT_RENDER",
       "error.stack_trace_end",
     ].join("\n");
     vi.mocked(uploadIcadDrawingMetadata).mockResolvedValue({
@@ -183,6 +185,8 @@ describe("IcadExtractionReviewPage", () => {
     expect(screen.getByText("ICDファイルですが、ICAD/SXNETが図面モデルとして開けません。原本パス、外部参照、ICAD対応版を確認してください。")).toBeInTheDocument();
     expect(screen.getByText("原本:可 / 長パス退避:可 / パス長:312 / 上限超過 / ファイル名長:10")).toBeInTheDocument();
     expect(screen.getByText(/SxNetOpenContext.OpenReadOnly/)).toBeInTheDocument();
+    expect(screen.getByText("全文は長すぎるため画面では省略しています。")).toBeInTheDocument();
+    expect(screen.queryByText(/TAIL_SHOULD_NOT_RENDER/)).not.toBeInTheDocument();
   });
 
   it("registers an original ICAD path without uploading a browser copy", async () => {

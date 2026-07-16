@@ -10,6 +10,9 @@ export interface DrawingMetadataJobResponse {
   extractionProfile: string;
   extractionOptions: Record<string, unknown>;
   errorMessage: string;
+  errorMessageSummary?: string;
+  errorMessageLength?: number;
+  errorMessageTruncated?: boolean;
   startedAt?: string | null;
   finishedAt?: string | null;
   createdAt?: string;
@@ -99,6 +102,9 @@ export interface HandoffSummaryResponse {
     status: string;
     workerName: string;
     errorMessage: string;
+    errorMessageSummary?: string;
+    errorMessageLength?: number;
+    errorMessageTruncated?: boolean;
     errorClass?: string;
     sourcePreflight?: {
       sourcePathLength?: number;

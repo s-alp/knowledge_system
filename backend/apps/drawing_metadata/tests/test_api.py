@@ -846,6 +846,42 @@ def test_detail_returns_latest_jobs_by_mode_even_without_snapshots(sample_regist
 
 
 @pytest.mark.django_db
+def test_detail_limits_long_job_error_message_for_api(sample_registration_payload):
+    long_error = "\n".join(
+        [
+            "error[0].type=System.Reflection.TargetInvocationException",
+            "error[1].message=指定したファイルは図面ファイルではありません。",
+            "A" * 1400,
+            "TAIL_SHOULD_NOT_LEAK",
+        ]
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id=sample_registration_payload["hostDrawingId"],
+        filename="long-error.icd",
+        source_path=sample_registration_payload["sourcePath"],
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_FAILED,
+        extraction_profile="2d_all_views_layers_print_frame",
+        error_message=long_error,
+    )
+
+    response = APIClient().get(f"/api/v1/drawing-metadata/registrations/{drawing.id}")
+
+    assert response.status_code == 200
+    job_payload = response.json()["latestJobsByMode"]["2d"]
+    assert job_payload["errorMessageSummary"] == "ICD拡張子ですが、ICAD/SXNETが図面モデルとして開けていません。"
+    assert job_payload["errorMessageLength"] == len(long_error)
+    assert job_payload["errorMessageTruncated"] is True
+    assert len(job_payload["errorMessage"]) < len(long_error)
+    assert "TAIL_SHOULD_NOT_LEAK" not in job_payload["errorMessage"]
+    assert "全文はworkerログまたは診断スクリプトで確認してください" in job_payload["errorMessage"]
+
+
+@pytest.mark.django_db
 def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id=sample_registration_payload["hostDrawingId"],

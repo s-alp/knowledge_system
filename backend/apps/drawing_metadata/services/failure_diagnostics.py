@@ -8,6 +8,38 @@ from apps.drawing_metadata.services.path_constraints import (
     requires_sxnet_staged_input,
 )
 
+ERROR_MESSAGE_DETAIL_LIMIT = 1200
+ERROR_MESSAGE_SUMMARY_LIMIT = 160
+
+
+def summarize_error_message(message: str, *, limit: int = ERROR_MESSAGE_SUMMARY_LIMIT) -> str:
+    if not message:
+        return ""
+    if "パスが長すぎます" in message:
+        return "ICAD原本パスが長すぎます。短い一時パスへ退避して再抽出します。"
+    if "ファイル名が長すぎます" in message:
+        return "ICADファイル名が長すぎます。短いファイル名へ変更してから再登録してください。"
+    if "図面ファイルではありません" in message:
+        return "ICD拡張子ですが、ICAD/SXNETが図面モデルとして開けていません。"
+    if "ICADSXはすでに起動されています" in message:
+        return "ICAD/SXの多重起動ダイアログが発生しています。既存ICADを閉じて再実行してください。"
+    normalized = message.lower()
+    if "filenotfound" in normalized or "ファイルが見つかりません" in message:
+        return "対象ファイルまたは参照ファイルが見つかりません。保存先パスと参照先を確認してください。"
+    first_line = next((line.strip() for line in message.splitlines() if line.strip()), message.strip())
+    return first_line if len(first_line) <= limit else f"{first_line[:limit]}..."
+
+
+def truncate_error_message_for_api(message: str, *, limit: int = ERROR_MESSAGE_DETAIL_LIMIT) -> str:
+    if not message or len(message) <= limit:
+        return message or ""
+    omitted = len(message) - limit
+    return (
+        f"{message[:limit]}\n"
+        f"...（失敗理由は全{len(message)}文字のため先頭{limit}文字のみ表示。"
+        f"{omitted}文字を省略。全文はworkerログまたは診断スクリプトで確認してください。）"
+    )
+
 
 def classify_extraction_failure(status: str, message: str) -> str:
     if status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED:

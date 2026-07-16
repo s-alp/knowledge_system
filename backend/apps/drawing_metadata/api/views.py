@@ -26,7 +26,11 @@ from apps.drawing_metadata.api.serializers import (
 )
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_scope, build_scope_payload
-from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics
+from apps.drawing_metadata.services.failure_diagnostics import (
+    build_job_failure_diagnostics,
+    summarize_error_message,
+    truncate_error_message_for_api,
+)
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
@@ -238,6 +242,8 @@ class TagAutomationSettingsApiView(APIView):
 
 def _failed_job_payload(job: DrawingMetadataExtractionJob) -> dict:
     failure = build_job_failure_diagnostics(job)
+    raw_error_message = job.error_message or ""
+    api_error_message = truncate_error_message_for_api(raw_error_message)
     return {
         "jobId": str(job.id),
         "drawingId": str(job.drawing_id),
@@ -245,7 +251,10 @@ def _failed_job_payload(job: DrawingMetadataExtractionJob) -> dict:
         "extractionMode": job.extraction_mode,
         "status": job.status,
         "workerName": job.worker_name,
-        "errorMessage": job.error_message,
+        "errorMessage": api_error_message,
+        "errorMessageSummary": summarize_error_message(raw_error_message),
+        "errorMessageLength": len(raw_error_message),
+        "errorMessageTruncated": raw_error_message != api_error_message,
         "errorClass": failure["errorClass"],
         "sourcePreflight": failure["sourcePreflight"],
         "reextractCondition": failure["reextractCondition"],

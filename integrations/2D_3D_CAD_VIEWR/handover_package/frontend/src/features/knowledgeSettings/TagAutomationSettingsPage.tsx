@@ -59,6 +59,10 @@ function shortError(value: string | null | undefined) {
   return firstLine.length > 96 ? `${firstLine.slice(0, 96)}...` : firstLine;
 }
 
+function failedJobErrorText(job: NonNullable<HandoffSummaryResponse["recentFailedJobs"]>[number]) {
+  return job.errorMessageSummary || shortError(job.errorMessage);
+}
+
 function latestFailureText(item: DrawingMetadataRegistrationListItem) {
   const messages = (["2d", "3d"] as const)
     .map((mode) => {
@@ -374,7 +378,7 @@ export function TagAutomationSettingsPage() {
                       <td>{formatSourcePreflight(job)}</td>
                       <td>{job.workerName || "-"}</td>
                       <td>{formatDateTime(job.updatedAt)}</td>
-                      <td title={job.errorMessage}>{shortError(job.errorMessage)}</td>
+                      <td>{failedJobErrorText(job)}</td>
                       <td>{job.reextractCondition}</td>
                     </tr>
                   ))}

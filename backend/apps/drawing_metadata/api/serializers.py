@@ -10,6 +10,10 @@ from apps.drawing_metadata.models import (
     EXTRACTION_MODE_CHOICES,
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.failure_diagnostics import (
+    summarize_error_message,
+    truncate_error_message_for_api,
+)
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.path_constraints import icad_source_path_exists
 
@@ -65,7 +69,10 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
     startedAt = serializers.DateTimeField(source="started_at", allow_null=True)
     finishedAt = serializers.DateTimeField(source="finished_at", allow_null=True)
     elapsedMs = serializers.IntegerField(source="elapsed_ms", allow_null=True)
-    errorMessage = serializers.CharField(source="error_message", allow_blank=True)
+    errorMessage = serializers.SerializerMethodField()
+    errorMessageSummary = serializers.SerializerMethodField()
+    errorMessageLength = serializers.SerializerMethodField()
+    errorMessageTruncated = serializers.SerializerMethodField()
     warnings = serializers.JSONField(source="warnings_json")
     extractionProfile = serializers.CharField(source="extraction_profile", allow_blank=True)
     extractionOptions = serializers.JSONField(source="extraction_options_json")
@@ -90,6 +97,9 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
             "finishedAt",
             "elapsedMs",
             "errorMessage",
+            "errorMessageSummary",
+            "errorMessageLength",
+            "errorMessageTruncated",
             "warnings",
             "extractionProfile",
             "extractionOptions",
@@ -100,6 +110,18 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
             "createdAt",
             "updatedAt",
         )
+
+    def get_errorMessage(self, obj: DrawingMetadataExtractionJob) -> str:
+        return truncate_error_message_for_api(obj.error_message or "")
+
+    def get_errorMessageSummary(self, obj: DrawingMetadataExtractionJob) -> str:
+        return summarize_error_message(obj.error_message or "")
+
+    def get_errorMessageLength(self, obj: DrawingMetadataExtractionJob) -> int:
+        return len(obj.error_message or "")
+
+    def get_errorMessageTruncated(self, obj: DrawingMetadataExtractionJob) -> bool:
+        return (obj.error_message or "") != self.get_errorMessage(obj)
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
@@ -184,7 +206,9 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
 
     def get_latestJobErrorByMode(self, obj: RegisteredDrawing) -> dict[str, str]:
         return {
-            mode: job.error_message if job and job.status == DrawingMetadataExtractionJob.STATUS_FAILED else ""
+            mode: summarize_error_message(job.error_message)
+            if job and job.status == DrawingMetadataExtractionJob.STATUS_FAILED
+            else ""
             for mode, job in self._latest_jobs_by_mode(obj).items()
         }
 

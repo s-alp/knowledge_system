@@ -63,6 +63,8 @@ const sourceRows: SourceRow[] = [
   },
 ];
 
+const jobErrorDetailLimit = 1200;
+
 function formatSnapshotStatus(registration: DrawingMetadataRegistrationResponse | null, mode: SourceRow["mode"]) {
   if (mode === "part") {
     const hasPartScan =
@@ -124,7 +126,10 @@ function formatDateTime(value: string | null | undefined) {
   });
 }
 
-function summarizeJobError(value: string | null | undefined) {
+function summarizeJobError(value: string | null | undefined, apiSummary?: string) {
+  if (apiSummary) {
+    return apiSummary;
+  }
   if (!value) {
     return "-";
   }
@@ -139,6 +144,18 @@ function summarizeJobError(value: string | null | undefined) {
   }
   const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
   return firstLine.length > 120 ? `${firstLine.slice(0, 120)}...` : firstLine;
+}
+
+function formatJobErrorDetail(job: DrawingMetadataJobResponse) {
+  const value = job.errorMessage;
+  if (!value) {
+    return "";
+  }
+  if (value.length <= jobErrorDetailLimit) {
+    return value;
+  }
+  const originalLength = job.errorMessageLength ?? value.length;
+  return `${value.slice(0, jobErrorDetailLimit)}\n...（失敗理由は全${originalLength}文字のため先頭${jobErrorDetailLimit}文字のみ表示。全文はworkerログまたは診断スクリプトで確認してください。）`;
 }
 
 function isActiveJob(job: DrawingMetadataJobResponse) {
@@ -623,8 +640,11 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
                   <td>
                     {job.errorMessage ? (
                       <details>
-                        <summary>{summarizeJobError(job.errorMessage)}</summary>
-                        <pre>{job.errorMessage}</pre>
+                        <summary>{summarizeJobError(job.errorMessage, job.errorMessageSummary)}</summary>
+                        <pre>{formatJobErrorDetail(job)}</pre>
+                        {job.errorMessageTruncated || job.errorMessage.length > jobErrorDetailLimit ? (
+                          <p className="production-section-note">全文は長すぎるため画面では省略しています。</p>
+                        ) : null}
                       </details>
                     ) : "-"}
                   </td>
