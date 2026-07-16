@@ -247,6 +247,21 @@
   "external_part_exists": false,
   "mirror_part_exists": false,
   "unresolved_part_exists": false,
+  "global_moment": { "x": 1.1, "y": 2.2, "z": 3.3 },
+  "gravity_moment": { "ix": 4.4, "iy": 5.5, "iz": 6.6 },
+  "main_moment": { "Ixx": 7.7, "Iyy": 8.8 },
+  "inertia_moment_candidates": [
+    {
+      "kind": "global",
+      "label": "全体座標系慣性モーメント",
+      "values": { "x": 1.1, "y": 2.2, "z": 3.3 },
+      "unit_name": "mm-kg",
+      "source": "3d_mass_properties.global_moment",
+      "confidence": "medium",
+      "reason": "SXNETのSxInfMassから慣性モーメント値を取得できたため、検索タグではなく3D解析属性として保持します。"
+    }
+  ],
+  "inertia_moment_candidate_count": 1,
   "text_tokens": [],
   "label_texts": [],
   "title_block_fields": {},

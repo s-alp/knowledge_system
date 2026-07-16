@@ -65,7 +65,7 @@
 | 面積 | A/C | `SxInfMass.area` | 実装済み | `mass_properties.area` に保持 |
 | 比重/密度 | A | `SxInfMaterial.spe_grav`, `SxInfMass.density`, `SxOptMass.density` | 実装済み | `SxInfMass.density` と、全体/部品材質API由来の `spe_grav` を保持 |
 | 重心 | A/C | `SxInfMass.pos` | 実装済み | `center_of_gravity_x/y/z` として保持 |
-| 慣性モーメント | A/C | `SxInfMass.inf_global_moment`, `inf_gravity_moment`, `inf_main_moment` | 未実装 | 検索タグより設計解析属性向け |
+| 慣性モーメント | A/C | `SxInfMass.inf_global_moment`, `inf_gravity_moment`, `inf_main_moment` | `global_moment`, `gravity_moment`, `main_moment`, `inertia_moment_candidates[]` 実装済み | 検索タグではなく3D解析属性として保持。座標系別の値、単位、根拠source、採用理由を保持 |
 | 図面サイズ | C | `SxInfPrint` または 2D出図範囲との照合 | 実装済み | 3D単独の固定属性としては未確認。モデル内の2D情報から取れる可能性が高い |
 | PRFX | B/D | パーツ付加情報、明示ラベル付きパーツ名、参照図面名、モデルコメント | 候補実装済み | SXNET固定フィールドとしてはヒットなし。明示ラベル付き値だけを `prfx_candidates` へ採用し、ファイル名構造からの推測は行わない |
 | ユニット番号 | B/D | パーツ付加情報、明示ラベル付きパーツ名、階層名、モデルコメント | 候補実装済み | SXNET固定フィールドとしてはヒットなし。明示ラベル付き値だけを `unit_number_candidates` へ採用し、ファイル名構造からの推測は行わない |

@@ -371,6 +371,40 @@ def _build_view_reference_candidates(primitives: Iterable[dict], *, has_print_fr
     return candidates
 
 
+INERTIA_MOMENT_DEFINITIONS = {
+    "global_moment": {"kind": "global", "label": "全体座標系慣性モーメント"},
+    "gravity_moment": {"kind": "gravity", "label": "重心座標系慣性モーメント"},
+    "main_moment": {"kind": "main", "label": "主慣性モーメント"},
+}
+
+
+def _build_inertia_moment_candidates(mass_properties: dict) -> list[dict]:
+    candidates: list[dict] = []
+    for key, definition in INERTIA_MOMENT_DEFINITIONS.items():
+        values = mass_properties.get(key)
+        if not isinstance(values, dict):
+            continue
+        numeric_values = {
+            str(name): value
+            for name, value in values.items()
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        }
+        if not numeric_values:
+            continue
+        candidates.append(
+            {
+                "kind": definition["kind"],
+                "label": definition["label"],
+                "values": numeric_values,
+                "unit_name": mass_properties.get("unit_name"),
+                "source": f"3d_mass_properties.{key}",
+                "confidence": "medium",
+                "reason": "SXNETのSxInfMassから慣性モーメント値を取得できたため、検索タグではなく3D解析属性として保持します。",
+            }
+        )
+    return candidates
+
+
 def _first_present(*values):
     for value in values:
         if value is not None:
@@ -1117,6 +1151,11 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "area_value": None,
         "density_value": None,
         "center_of_gravity": None,
+        "global_moment": {},
+        "gravity_moment": {},
+        "main_moment": {},
+        "inertia_moment_candidates": [],
+        "inertia_moment_candidate_count": 0,
         "material_probe_status": None,
         "material_ids": [],
         "material_names": [],
@@ -1201,6 +1240,11 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["volume_value"] = mass_properties.get("volume")
         canonical["area_value"] = mass_properties.get("area")
         canonical["density_value"] = mass_properties.get("density")
+        canonical["global_moment"] = mass_properties.get("global_moment") or {}
+        canonical["gravity_moment"] = mass_properties.get("gravity_moment") or {}
+        canonical["main_moment"] = mass_properties.get("main_moment") or {}
+        canonical["inertia_moment_candidates"] = _build_inertia_moment_candidates(mass_properties)
+        canonical["inertia_moment_candidate_count"] = len(canonical["inertia_moment_candidates"])
         if all(mass_properties.get(key) is not None for key in ("center_of_gravity_x", "center_of_gravity_y", "center_of_gravity_z")):
             canonical["center_of_gravity"] = (
                 f"{mass_properties.get('center_of_gravity_x')}, "

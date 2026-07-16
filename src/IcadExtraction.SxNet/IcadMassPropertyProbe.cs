@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using IcadExtraction.Contracts;
@@ -47,6 +48,9 @@ namespace IcadExtraction.SxNet
         {
             var unitType = ReflectionHelpers.GetInt(massInfo, "unit_type");
             var center = ReflectionHelpers.GetMemberValue(massInfo, "pos");
+            var globalMoment = ReflectionHelpers.GetMemberValue(massInfo, "inf_global_moment");
+            var gravityMoment = ReflectionHelpers.GetMemberValue(massInfo, "inf_gravity_moment");
+            var mainMoment = ReflectionHelpers.GetMemberValue(massInfo, "inf_main_moment");
 
             return new MassPropertyPayload
             {
@@ -63,8 +67,45 @@ namespace IcadExtraction.SxNet
                 CenterOfGravityX = ReflectionHelpers.GetDouble(center, "x"),
                 CenterOfGravityY = ReflectionHelpers.GetDouble(center, "y"),
                 CenterOfGravityZ = ReflectionHelpers.GetDouble(center, "z"),
+                GlobalMoment = MapMomentValues(globalMoment),
+                GravityMoment = MapMomentValues(gravityMoment),
+                MainMoment = MapMomentValues(mainMoment),
                 RawFields = ReflectionHelpers.FlattenScalarMembers(massInfo),
             };
+        }
+
+        private static Dictionary<string, double?> MapMomentValues(object? momentInfo)
+        {
+            var values = new Dictionary<string, double?>(StringComparer.OrdinalIgnoreCase);
+            if (momentInfo == null)
+            {
+                return values;
+            }
+
+            foreach (var key in new[] { "x", "y", "z", "xx", "yy", "zz", "xy", "yz", "zx", "ix", "iy", "iz", "i", "j", "k" })
+            {
+                var value = ReflectionHelpers.GetDouble(momentInfo, key);
+                if (value.HasValue)
+                {
+                    values[key] = value.Value;
+                }
+            }
+
+            if (values.Count > 0)
+            {
+                return values;
+            }
+
+            foreach (var item in ReflectionHelpers.FlattenScalarMembers(momentInfo))
+            {
+                if (double.TryParse(item.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed)
+                    || double.TryParse(item.Value, out parsed))
+                {
+                    values[item.Key] = parsed;
+                }
+            }
+
+            return values;
         }
 
         private static object InvokeRequired(object target, string methodName, Type[] parameterTypes, object[]? arguments)

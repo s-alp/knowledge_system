@@ -34,6 +34,9 @@ def test_normalize_3d_raw_extract():
                 "center_of_gravity_x": 10.0,
                 "center_of_gravity_y": 20.0,
                 "center_of_gravity_z": 30.0,
+                "global_moment": {"x": 1.1, "y": 2.2, "z": 3.3},
+                "gravity_moment": {"ix": 4.4, "iy": 5.5, "iz": 6.6},
+                "main_moment": {"Ixx": 7.7, "Iyy": 8.8},
             },
             "material_probe_status": "available",
             "materials": [
@@ -106,6 +109,12 @@ def test_normalize_3d_raw_extract():
     assert canonical["volume_value"] == 701.64779731
     assert canonical["area_value"] == 1858.76904715
     assert canonical["center_of_gravity"] == "10.0, 20.0, 30.0"
+    assert canonical["global_moment"] == {"x": 1.1, "y": 2.2, "z": 3.3}
+    assert canonical["gravity_moment"] == {"ix": 4.4, "iy": 5.5, "iz": 6.6}
+    assert canonical["main_moment"] == {"Ixx": 7.7, "Iyy": 8.8}
+    assert canonical["inertia_moment_candidate_count"] == 3
+    assert canonical["inertia_moment_candidates"][0]["source"] == "3d_mass_properties.global_moment"
+    assert all(tag["source"] != "inertia_moment_candidates" for tag in tags)
     assert canonical["material_probe_status"] == "available"
     assert canonical["material_ids"] == ["SUS304", "A5052", "75", "S45C_MISUMIFA", "03\ufffdX\ufffde"]
     assert canonical["material_names"] == ["SUS304", "AL", "75", "S45C相当", "03\ufffdX\ufffde"]

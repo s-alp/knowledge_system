@@ -131,6 +131,14 @@ def _display_list(values, *, limit: int = 6) -> str:
     return preview
 
 
+def _display_mapping(values: dict | None, *, limit: int = 6) -> str:
+    if not isinstance(values, dict) or not values:
+        return "未抽出"
+    items = [f"{key}={value}" for key, value in list(values.items())[:limit]]
+    suffix = f" ほか{len(values) - limit}件" if len(values) > limit else ""
+    return ", ".join(items) + suffix
+
+
 def _make_row(key: str, label: str, value) -> dict:
     return {
         "key": key,
@@ -666,6 +674,9 @@ def _mass_property_rows(raw_extract: dict, canonical_attributes: dict) -> list[d
     mass_properties = raw_extract.get("mass_properties", {}) or {}
     mass_value = _first_present(canonical_attributes.get("mass_value"), mass_properties.get("mass"))
     weight_value = _first_present(canonical_attributes.get("weight_value"), mass_properties.get("weight"))
+    global_moment = canonical_attributes.get("global_moment") or mass_properties.get("global_moment")
+    gravity_moment = canonical_attributes.get("gravity_moment") or mass_properties.get("gravity_moment")
+    main_moment = canonical_attributes.get("main_moment") or mass_properties.get("main_moment")
     return [
         _make_row("mass_probe_status", "取得状態", canonical_attributes.get("mass_probe_status") or raw_extract.get("mass_probe_status")),
         _make_row("mass_element_count", "計算対象要素数", _first_present(canonical_attributes.get("mass_element_count"), mass_properties.get("element_count"))),
@@ -676,6 +687,15 @@ def _mass_property_rows(raw_extract: dict, canonical_attributes: dict) -> list[d
         _make_row("area_value", "面積", _first_present(canonical_attributes.get("area_value"), mass_properties.get("area"))),
         _make_row("density_value", "密度", _first_present(canonical_attributes.get("density_value"), mass_properties.get("density"))),
         _make_row("center_of_gravity", "重心", canonical_attributes.get("center_of_gravity") or _mass_center_label(mass_properties)),
+        _make_display_row("global_moment", "全体座標系慣性モーメント", global_moment, _display_mapping(global_moment)),
+        _make_display_row("gravity_moment", "重心座標系慣性モーメント", gravity_moment, _display_mapping(gravity_moment)),
+        _make_display_row("main_moment", "主慣性モーメント", main_moment, _display_mapping(main_moment)),
+        _make_display_row(
+            "inertia_moment_candidates",
+            "慣性モーメント候補",
+            canonical_attributes.get("inertia_moment_candidates", []),
+            str(canonical_attributes.get("inertia_moment_candidate_count") or 0),
+        ),
     ]
 
 

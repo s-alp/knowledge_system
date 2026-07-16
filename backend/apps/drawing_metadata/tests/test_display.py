@@ -125,6 +125,9 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
                 "center_of_gravity_x": 1.0,
                 "center_of_gravity_y": 2.0,
                 "center_of_gravity_z": 3.0,
+                "global_moment": {"x": 1.1, "y": 2.2, "z": 3.3},
+                "gravity_moment": {"ix": 4.4, "iy": 5.5, "iz": 6.6},
+                "main_moment": {"Ixx": 7.7, "Iyy": 8.8},
             },
             "material_probe_status": "available",
             "materials": [
@@ -154,6 +157,19 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
             "area_value": 1024.0,
             "density_value": 1.0,
             "center_of_gravity": "1.0, 2.0, 3.0",
+            "global_moment": {"x": 1.1, "y": 2.2, "z": 3.3},
+            "gravity_moment": {"ix": 4.4, "iy": 5.5, "iz": 6.6},
+            "main_moment": {"Ixx": 7.7, "Iyy": 8.8},
+            "inertia_moment_candidate_count": 3,
+            "inertia_moment_candidates": [
+                {
+                    "kind": "global",
+                    "label": "全体座標系慣性モーメント",
+                    "values": {"x": 1.1, "y": 2.2, "z": 3.3},
+                    "source": "3d_mass_properties.global_moment",
+                    "confidence": "medium",
+                }
+            ],
             "material_probe_status": "available",
             "material_ids": ["SUS304"],
             "material_names": ["SUS304"],
@@ -193,6 +209,10 @@ def test_build_3d_snapshot_display_summarizes_part_ex_info_fields():
     assert row_by_key["mass_value"] == "0.02 kg"
     assert row_by_key["weight_value"] == "0.02 kg"
     assert row_by_key["center_of_gravity"] == "1.0, 2.0, 3.0"
+    assert row_by_key["global_moment"] == "x=1.1, y=2.2, z=3.3"
+    assert row_by_key["gravity_moment"] == "ix=4.4, iy=5.5, iz=6.6"
+    assert row_by_key["main_moment"] == "Ixx=7.7, Iyy=8.8"
+    assert row_by_key["inertia_moment_candidates"] == "3"
     summary_row_by_key = {row["key"]: row["displayValue"] for row in payload["summaryRows"]}
     assert summary_row_by_key["mass_value"] == "0.02 kg"
     assert summary_row_by_key["weight_value"] == "0.02 kg"

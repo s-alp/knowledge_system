@@ -36,6 +36,10 @@ REVIEWABLE_CONFLICT_ATTRIBUTES = {
     "area_value",
     "density_value",
     "center_of_gravity",
+    "global_moment",
+    "gravity_moment",
+    "main_moment",
+    "inertia_moment_candidates",
     "prfx_candidates",
     "unit_number_candidates",
 }

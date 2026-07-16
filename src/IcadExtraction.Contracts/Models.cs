@@ -122,6 +122,9 @@ namespace IcadExtraction.Contracts
         public double? CenterOfGravityX { get; set; }
         public double? CenterOfGravityY { get; set; }
         public double? CenterOfGravityZ { get; set; }
+        public Dictionary<string, double?> GlobalMoment { get; set; } = new Dictionary<string, double?>();
+        public Dictionary<string, double?> GravityMoment { get; set; } = new Dictionary<string, double?>();
+        public Dictionary<string, double?> MainMoment { get; set; } = new Dictionary<string, double?>();
         public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
     }
 
