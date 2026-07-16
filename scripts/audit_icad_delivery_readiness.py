@@ -36,6 +36,7 @@ ACTIVE_HANDOFF_DOCS = [
     ROOT / "docs" / "icad_2d_3d_extraction_capability_matrix_2026-07-14.md",
     ROOT / "docs" / "icad_entity_operations_and_quality_handoff_2026-07-16.md",
     ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14.md",
+    ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14_parts",
     ROOT / "docs" / "icad_tag_selection_and_viewer_ui_spec_2026-07-15.md",
     ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "tasklist.md",
 ]
@@ -69,6 +70,8 @@ STALE_DOC_PATTERNS = [
         r"2026-07-16に共有抽出から10ファイル",
         r"創屋連携データ確認",
         r"創屋確認待ち",
+        r"こちら側の残実装",
+        r"次に着手する場合",
         r"\bmo" r"ck\b",
         r"モ" r"ック",
         r"モ" r"ック\s*UI",
@@ -150,10 +153,11 @@ def _run_gate(name: str, command: list[str], *, cwd: Path = ROOT) -> dict:
 
 def _scan_stale_docs(paths: Iterable[Path]) -> dict:
     findings: list[dict] = []
-    for path in paths:
-        if not path.is_file():
-            findings.append({"file": str(path), "line": None, "pattern": "missing_file", "text": ""})
-            continue
+    markdown_files = list(_iter_markdown_files(paths))
+    missing_paths = [path for path in paths if not path.exists()]
+    for path in missing_paths:
+        findings.append({"file": str(path), "line": None, "pattern": "missing_file", "text": ""})
+    for path in markdown_files:
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             for pattern in STALE_DOC_PATTERNS:
                 if pattern.search(line):

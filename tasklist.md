@@ -17,6 +17,7 @@
 - [x] 図面管理の2D/3Dビューワー補助パネルでもタグ根拠を表示し、図面側のタグ・属性候補から取得元・信頼度・採用理由を確認できるようにした
 - [x] 創屋向けICADタグ・属性連携項目表を分冊化。入口ファイルは約3KBの目次にし、詳細は `docs\souya_icad_tag_attribute_handoff_2026-07-14_parts\` 配下へ章別に分割。最大分冊は約13.7KBに抑え、ファイル長制限で開けない状態を避ける
 - [x] 納品監査へ創屋向け連携項目表のファイルサイズゲートを追加。`scripts\audit_icad_delivery_readiness.py` は本体・分冊の各Markdownが20KBを超えたら失敗し、最終監査は `--include-tests --include-ui --require-clean` で自動テスト、Chrome実操作、作業ツリーcleanを同時確認する
+- [x] 納品監査の古い文言チェック対象を分冊資料まで拡大。完成資料として未完に見える旧見出し・旧予定表現が復活した場合は `stale_handoff_doc_search` で失敗させる
 - [x] 納品監査へ2Dビュー・レイヤー・印刷枠カバレッジゲートを追加。`scripts\audit_2d_view_layer_print_frame_coverage.py` は共有39件のDB snapshotを固定manifestスコープで確認し、2D要素ありでビュー未付与、レイヤー未対応、印刷枠ありなのに枠内外判定なしを失敗にする。印刷枠未定義や座標欠落による判定不明は既知条件として理由付きで残す
 - [x] 納品監査へ3D構成・材質・質量・パーツ付加情報カバレッジゲートを追加。`scripts\audit_3d_structure_material_mass_coverage.py` は共有39件の3D snapshot、parts配列、材質候補、kg小数点以下2桁の質量、パーツ付加情報を確認し、parts欠落や説明不能な質量欠落を失敗にする。パーツ付加情報なし、材質候補なし、検索対象実体なしの質量欠落は既知条件として理由付きで残す
 - [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
@@ -102,8 +103,8 @@
   - コピー済み既存ビューワー backend を確認。実変換は `viewer2d/open/upload` が PDF/JPEG/TIFF、`viewer3d/open/upload` が STL/STEP、PDM drawingId 経由が `source_2d_url` / `source_3d_url` 解決という契約。`.icd` ファイルそのものを直接2D/3D表示資産へ変換する口は既存backendにはない。
   - `DrawingMetadataSnapshot` の `canonical_attributes_json` / `raw_extract_json` に `viewer_assets` または `preview_assets` を入れる薄い契約を追加。2D は PDF/JPEG/TIFF URL、3D は STL URL があればメタデータプレビューより優先して既存ビューワーへ渡す。TIFF は既存ビューワー同様、`pageImageUrls` がある場合だけ直接扱う。
   - 2026-07-15 に本番ナレッジシステムの製品・装置・ユニット一覧/詳細、部品一覧/詳細をPlaywrightで読み取り確認。製品・部品一覧は `検索条件` と `検索結果` を白枠セクションで分け、結果はテーブル行クリックで詳細へ遷移する構成。詳細は `基本情報`、`属性情報`、`関連情報`、`変更履歴` を白枠セクションで表示する構成として、コピー済み2D/3Dビューワー側の製品・装置・ユニット/部品ページへ反映。図面管理は `図面を開く` 読み込み入口のまま維持していることをローカル5173で確認。
-- 次に着手する場合:
-  - 今回の SVG/STL は「抽出結果を既存ビューワー面で確認するためのメタデータプレビュー」であり、CAD形状そのものの変換ではない。次は ICAD 側で PDF/STL/STEP 等の実表示資産を生成するか、既存2D/3Dビューワーbackendの STEP->STL 変換APIへ接続し、`.icd` 由来の実図面画像/PDF相当と実3Dモデル相当を返す。
+- 表示資産の扱い:
+  - 今回の SVG/STL は「抽出結果を既存ビューワー面で確認するためのメタデータプレビュー」であり、CAD形状そのものの変換ではない。実図面画像/PDF相当と実3Dモデル相当を返す場合は、ICAD 側で PDF/STL/STEP 等の実表示資産を生成するか、既存2D/3Dビューワーbackendの STEP->STL 変換APIへ接続する。
   - `cross_source_reconciliation` として 2D 候補、3D 候補、採用値、差異、要確認理由を保持する。
   - Gemini API は曖昧分類の補助に限定し、CAD に存在しない値の推測採用は禁止する。
 

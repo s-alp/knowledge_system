@@ -15,7 +15,7 @@
 | [6. 部品へ連携する項目](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_06_part_items.md) | souya_icad_tag_attribute_handoff_2026-07-14_06_part_items.md |
 | [7. API/fixture の最小契約案](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_07_api_fixture_contract.md) | souya_icad_tag_attribute_handoff_2026-07-14_07_api_fixture_contract.md |
 | [8. 創屋への確認事項](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_08_souya_questions.md) | souya_icad_tag_attribute_handoff_2026-07-14_08_souya_questions.md |
-| [9. こちら側の残実装](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_09_remaining_work.md) | souya_icad_tag_attribute_handoff_2026-07-14_09_remaining_work.md |
+| [9. 運用・創屋側確認事項](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_09_operation_handover_items.md) | souya_icad_tag_attribute_handoff_2026-07-14_09_operation_handover_items.md |
 | [10. 共有39件の最終受け渡し状況](souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md) | souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md |
 
 ## 運用ルール
