@@ -95,7 +95,7 @@ function formatReviewStatus(status: string | undefined) {
   if (status === "needs_correction") {
     return "要手直し";
   }
-  return "確認待ち";
+  return "未レビュー";
 }
 
 function formatJobStatus(status: string) {
