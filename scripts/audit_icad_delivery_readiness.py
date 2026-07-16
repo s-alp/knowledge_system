@@ -62,6 +62,7 @@ STALE_DOC_PATTERNS = [
         r"classification positive recall\s*\|\s*0\.5000",
         r"2026-07-16に共有抽出から10ファイル",
         r"創屋連携データ確認",
+        r"創屋確認待ち",
         r"モック\s*UI",
         r"ユーザー画面には表示しません",
         r"通常画面へ出さず",

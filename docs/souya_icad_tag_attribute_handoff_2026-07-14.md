@@ -267,7 +267,7 @@ manifest経由でローカルDBへ取り込み、fixtureを再生成した。ロ
 
 2026-07-15 にローカル詳細画面へ `創屋連携・viewer/RAG 受け渡し確認` 欄を追加した。初心者でも確認できるよう、詳細API、RAG投入payload API、タグレビュー画面へのリンク、viewer初期化情報、RAG事前フィルタ、RAGランキング信号、投入前レビューを表形式で表示する。
 
-同欄へ `本番タグ・属性 payload プレビュー` を追加した。図面、製品・装置・ユニット、部品、プロジェクトの各対象について、既存受け口、タグAPI状態、タグ候補、属性候補数、payloadキー、候補endpointを表示する。`attribute` / `attribute_option` は本番マスタIDが必要なため、プレビューでは `null` とし、`bindingStatus=needs_attribute_master_binding` として創屋確認待ちを明示する。
+同欄へ `本番タグ・属性 payload プレビュー` を追加した。図面、製品・装置・ユニット、部品、プロジェクトの各対象について、既存受け口、タグAPI状態、タグ候補、属性候補数、payloadキー、候補endpointを表示する。`attribute` / `attribute_option` は本番マスタIDが必要なため、プレビューでは `null` とし、`bindingStatus=needs_attribute_master_binding` として創屋側確認事項を明示する。
 
 同じ検証用画面群の入口として、現行では `GET /internal/drawing-metadata/handoff/` を使う。これは本番ナレッジシステムへ組み込む完成UIではなく、こちら側で抽出・正規化・タグ生成・payload受け渡しを横断確認するためのローカル検証画面である。登録済み図面数、抽出済み図面数、2D/3D両方あり、payload候補あり、レビュー競合、診断差分を集計し、図面別に詳細画面、タグレビュー、viewer bootstrap API、RAG payload APIへ遷移できる。
 
