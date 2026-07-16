@@ -75,6 +75,27 @@ const partRecord: KnowledgeEntityRecord = {
     name: { source: "icad_extraction", evidence: "topPart" },
   },
   conflicts: [],
+  diagnosticConflicts: [],
+  reconciledAttributes: [
+    {
+      attribute: "material_keywords",
+      value2d: ["SS400"],
+      value3d: ["SS400"],
+      chosenValue: ["SS400"],
+      chosenMode: "merged",
+      status: "merged",
+      reason: "2Dと3Dの配列値を重複排除して統合しました。",
+    },
+    {
+      attribute: "mass_value",
+      value2d: null,
+      value3d: 12.3456,
+      chosenValue: 12.3456,
+      chosenMode: "3d",
+      status: "only_3d",
+      reason: "3D抽出にのみ値があるため採用しました。",
+    },
+  ],
   reviewStatus: "confirmed",
   reviewRequired: false,
   extractionReview: {
@@ -173,6 +194,10 @@ describe("ICAD knowledge entity pages", () => {
     render(<IcadEntityDetailPage entityId={partRecord.entityId} drawingId={partRecord.drawingId} onNavigate={onNavigate} />);
 
     expect(await screen.findByText("材質:SS400")).toBeInTheDocument();
+    expect(screen.getByText("2D/3D照合")).toBeInTheDocument();
+    expect(screen.getByText("material_keywords")).toBeInTheDocument();
+    expect(screen.getByText("統合")).toBeInTheDocument();
+    expect(screen.getByText("3D抽出にのみ値があるため採用しました。")).toBeInTheDocument();
     expect(screen.getAllByText("完了").length).toBeGreaterThan(0);
     expect(screen.getByRole("tab", { name: "製品・装置・ユニット" })).toBeInTheDocument();
     fireEvent.click(screen.getByText("FEEDER"));

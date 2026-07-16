@@ -349,6 +349,15 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
         },
         derived_tags_json=[],
     )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "material_keywords": ["SS400"],
+            "drawing_number": "CAA5012-02434006P1R1",
+        },
+        derived_tags_json=[],
+    )
 
     client = APIClient()
     product_response = client.get(f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}")
@@ -374,6 +383,9 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
     assert detail_response.json()["extractionReview"]["label"] == "未確認"
     assert next(item for item in detail_response.json()["attributes"] if item["key"] == "mass_value")["value"] == "12.35 kg"
     assert next(item for item in detail_response.json()["attributes"] if item["key"] == "weight_value")["value"] == "12.35 kg"
+    assert any(item["attribute"] == "drawing_number" and item["status"] == "matched" for item in detail_response.json()["reconciledAttributes"])
+    assert any(item["attribute"] == "material_keywords" and item["status"] == "only_2d" for item in detail_response.json()["reconciledAttributes"])
+    assert detail_response.json()["diagnosticConflicts"] == []
     assert all(item["reason"] for item in detail_response.json()["attributes"])
     assert all(item["reason"] for item in detail_response.json()["tags"])
     assert all(item["reason"] and item["confidence"] for item in detail_response.json()["provenance"])

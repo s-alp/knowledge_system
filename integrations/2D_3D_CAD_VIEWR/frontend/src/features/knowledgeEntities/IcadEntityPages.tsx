@@ -83,6 +83,27 @@ function confidenceLabel(value: string): string {
 }
 
 
+function compactValue(value: unknown): string {
+  if (value === null || value === undefined || value === "") return "-";
+  if (Array.isArray(value)) return value.length ? value.map((item) => compactValue(item)).join(", ") : "-";
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
+}
+
+
+function reconciliationStatusLabel(value: string): string {
+  return ({
+    matched: "一致",
+    conflict: "差異あり",
+    merged: "統合",
+    only_2d: "2Dのみ",
+    only_3d: "3Dのみ",
+    manual_override: "手動上書き",
+    empty: "空",
+  } as Record<string, string>)[value] ?? value;
+}
+
+
 function historyActorLabel(value: string): string {
   if (!value || value === "api") return "利用者";
   if (value.includes("import_") || value.includes("_2026_") || value === "worker") return "自動取得";
@@ -329,6 +350,36 @@ function ProvenanceDialog({ record, onClose }: { record: KnowledgeEntityRecord; 
 }
 
 
+function ReconciliationPanel({ record }: { record: KnowledgeEntityRecord }) {
+  const rows = (record.reconciledAttributes ?? []).filter((item) => item.status !== "empty").slice(0, 12);
+  if (!rows.length && !(record.diagnosticConflicts ?? []).length) return null;
+  return (
+    <section className="production-section production-reconciliation-section">
+      <h2>2D/3D照合</h2>
+      <div className="production-section-divider" />
+      <div className="production-table-shell">
+        <table className="production-table">
+          <thead><tr><th>項目</th><th>状態</th><th>2D</th><th>3D</th><th>採用候補</th><th>根拠</th></tr></thead>
+          <tbody>
+            {rows.map((item) => (
+              <tr key={item.attribute}>
+                <td>{item.attribute}</td>
+                <td>{reconciliationStatusLabel(item.status)}</td>
+                <td>{compactValue(item.value2d)}</td>
+                <td>{compactValue(item.value3d)}</td>
+                <td>{compactValue(item.chosenValue)}</td>
+                <td>{item.reason}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {(record.diagnosticConflicts ?? []).length ? <p className="production-section-note">診断差分: {(record.diagnosticConflicts ?? []).length}件。内部件数や抽出元差分のため、タグ確定前レビュー対象とは分けて扱います。</p> : null}
+    </section>
+  );
+}
+
+
 function DrawingLinkDialog({ record, onClose, onSaved }: { record: KnowledgeEntityRecord; onClose: () => void; onSaved: () => Promise<void> }) {
   const [query, setQuery] = useState("");
   const [options, setOptions] = useState<DrawingOption[]>([]);
@@ -423,6 +474,8 @@ export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { enti
         </tbody></table></div></div>
         <div className="production-detail-field"><span>備考</span><p>{businessValue(record, "remarks")}</p></div>
       </section>
+
+      <ReconciliationPanel record={record} />
 
       <section className="production-section production-related-section">
         <h2>関連情報</h2><div className="production-section-divider" />

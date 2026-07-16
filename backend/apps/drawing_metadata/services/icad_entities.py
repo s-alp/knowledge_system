@@ -534,6 +534,8 @@ def _build_record(
         for audit in drawing.audit_logs.all()
     ] if include_details else []
     conflicts = (composed or {}).get("conflicts") or []
+    diagnostic_conflicts = (composed or {}).get("diagnosticConflicts") or []
+    reconciled_attributes = (composed or {}).get("reconciledAttributes") or []
     return {
         "entityId": _stable_entity_id(drawing.id),
         "targetKey": classification["targetKey"],
@@ -559,6 +561,8 @@ def _build_record(
         "businessFields": business_fields,
         "businessFieldSources": business_field_sources,
         "conflicts": conflicts,
+        "diagnosticConflicts": diagnostic_conflicts,
+        "reconciledAttributes": reconciled_attributes,
         "reviewStatus": snapshot.review_status,
         "reviewRequired": snapshot.review_status != DrawingMetadataSnapshot.REVIEW_CONFIRMED or bool(conflicts) or classification["confidence"] != "high",
         "extractionReview": {

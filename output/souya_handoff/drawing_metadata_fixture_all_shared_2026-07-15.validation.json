@@ -1,0 +1,30 @@
+{
+  "valid": true,
+  "itemCount": 39,
+  "issueCount": 0,
+  "issues": [],
+  "summary": {
+    "modes": {
+      "2d": 39,
+      "3d": 39
+    },
+    "targets": {
+      "drawing": 39,
+      "part": 39,
+      "product": 39,
+      "project": 39
+    },
+    "attributeCounts": {
+      "drawing": 158,
+      "part": 369,
+      "product": 43,
+      "project": 43
+    },
+    "tagCounts": {
+      "drawing": 120,
+      "part": 115,
+      "product": 2,
+      "project": 2
+    }
+  }
+}

@@ -42,6 +42,8 @@ try {
   }
 
   await openFirstDetail("製品・装置・ユニット", "製品・装置・ユニット", "product-detail.png");
+  await page.getByRole("heading", { name: "2D/3D照合" }).waitFor();
+  await page.getByRole("columnheader", { name: "採用候補" }).waitFor();
 
   if ((await page.getByText("確認待ち", { exact: true }).count()) > 0) {
     throw new Error("利用者向け詳細に抽出状態『確認待ち』が表示されています。");
@@ -76,6 +78,8 @@ try {
   await page.getByRole("button", { name: "閉じる" }).click();
 
   await openFirstDetail("部品", "部品", "part-detail.png");
+  await page.getByRole("heading", { name: "2D/3D照合" }).waitFor();
+  await page.getByRole("columnheader", { name: "採用候補" }).waitFor();
   for (const tab of ["製品・装置・ユニット", "図面", "文書", "会話ログ"]) {
     await page.getByRole("tab", { name: tab, exact: true }).waitFor();
   }
@@ -113,6 +117,7 @@ try {
     projectPlaceholderVerified: true,
     productAndPartDetailsVerified: true,
     provenanceVerified: true,
+    reconciliationVerified: true,
     drawingLinkScreenVerified: true,
     drawingLinkOptionCount: drawingOptionCount,
     editFormsVerified: true,

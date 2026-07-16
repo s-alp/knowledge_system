@@ -165,6 +165,18 @@ export interface KnowledgeEntityProvenance {
   reason: string;
 }
 
+export interface KnowledgeEntityReconciledAttribute {
+  attribute: string;
+  value2d: unknown;
+  value3d: unknown;
+  manual2d?: unknown;
+  manual3d?: unknown;
+  chosenValue: unknown;
+  chosenMode: string;
+  status: string;
+  reason: string;
+}
+
 export interface KnowledgeEntityRelatedItem {
   relationship: "parent" | "child";
   entityId: string;
@@ -198,6 +210,8 @@ export interface KnowledgeEntityRecord {
   businessFields: Record<string, string>;
   businessFieldSources: Record<string, { source: string; evidence: string }>;
   conflicts: Array<Record<string, unknown>>;
+  diagnosticConflicts?: Array<Record<string, unknown>>;
+  reconciledAttributes?: KnowledgeEntityReconciledAttribute[];
   reviewStatus: "pending" | "confirmed" | "needs_correction";
   reviewRequired: boolean;
   evidence: Array<Record<string, unknown>>;
