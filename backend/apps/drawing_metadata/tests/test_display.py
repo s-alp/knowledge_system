@@ -857,6 +857,10 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert "確認・再抽出・手直し" in content
     assert "図面詳細 / 製品・装置・ユニット詳細 / 部品詳細" in content
     assert "本番ナレッジシステムへの登録・変更・削除は行いません" in content
+    assert 'href="/drawing-metadata/"' in content
+    assert 'href="/drawing-metadata/handoff/"' in content
+    assert "ICAD抽出管理" in content
+    assert "創屋連携データ確認" in content
 
 
 @pytest.mark.django_db

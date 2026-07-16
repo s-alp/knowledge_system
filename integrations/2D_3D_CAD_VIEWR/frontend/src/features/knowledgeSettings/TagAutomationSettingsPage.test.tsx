@@ -15,6 +15,20 @@ vi.mock("../../shared/api/client", () => ({
 const settings: TagAutomationSettingsResponse = {
   title: "タグ・属性自動取得設定",
   summary: "抽出と採用判断に使用する現在の設定です。",
+  managementLinks: [
+    {
+      key: "icad-extraction-management",
+      label: "ICAD抽出管理",
+      description: "登録済みICDと抽出状態を確認します。",
+      url: "/drawing-metadata/",
+    },
+    {
+      key: "souya-handoff",
+      label: "創屋連携データ確認",
+      description: "連携payloadを確認します。",
+      url: "/drawing-metadata/handoff/",
+    },
+  ],
   runtimeRows: [
     { label: "AI APIキー", value: "設定済み" },
     { label: "温度", value: "0.1" },
@@ -55,6 +69,11 @@ describe("TagAutomationSettingsPage", () => {
     expect(screen.getByText("設定済み")).toBeInTheDocument();
     expect(screen.getByText("0.1")).toBeInTheDocument();
     expect(screen.getByText("ローカルDBのみ")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /ICAD抽出管理/ })).toHaveAttribute("href", "/drawing-metadata/");
+    expect(screen.getByRole("link", { name: /創屋連携データ確認/ })).toHaveAttribute(
+      "href",
+      "/drawing-metadata/handoff/",
+    );
     expect(screen.queryByText(/AIza/i)).not.toBeInTheDocument();
   });
 });

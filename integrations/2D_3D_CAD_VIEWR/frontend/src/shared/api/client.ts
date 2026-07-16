@@ -113,6 +113,12 @@ export interface KnowledgeEntityCatalogResponse {
 export interface TagAutomationSettingsResponse {
   title: string;
   summary: string;
+  managementLinks: Array<{
+    key: string;
+    label: string;
+    description: string;
+    url: string;
+  }>;
   runtimeRows: Array<{ label: string; value: string }>;
   operationRows: Array<{ area: string; screen: string; role: string; writePolicy: string }>;
   targetRows: Array<{ target: string; displayPage: string; storedAs: string; reviewRoute: string }>;

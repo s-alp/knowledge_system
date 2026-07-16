@@ -57,6 +57,22 @@ async function main() {
     await page.getByRole("heading", { name: "タグ自動取得設定" }).waitFor();
     await page.getByText("Gemini APIキー").waitFor();
     await page.getByText("設定済み", { exact: true }).waitFor();
+    const extractionManagementLink = page.getByRole("link", { name: /ICAD抽出管理/ });
+    const handoffLink = page.getByRole("link", { name: /創屋連携データ確認/ });
+    const extractionManagementHref = await extractionManagementLink.getAttribute("href");
+    const handoffHref = await handoffLink.getAttribute("href");
+
+    const extractionManagementPage = await browser.newPage();
+    await extractionManagementPage.goto(new URL(extractionManagementHref, page.url()).toString(), {
+      waitUntil: "domcontentloaded",
+    });
+    await extractionManagementPage.getByRole("columnheader", { name: "図面ID" }).waitFor();
+
+    const handoffPage = await browser.newPage();
+    await handoffPage.goto(new URL(handoffHref, page.url()).toString(), {
+      waitUntil: "domcontentloaded",
+    });
+    await handoffPage.getByRole("heading", { name: "内部連携データ確認" }).waitFor();
 
     const body = await page.locator("body").innerText();
     const serializedResponse = JSON.stringify(apiResponse);
@@ -74,6 +90,11 @@ async function main() {
           hasConfiguredStatus: body.includes("設定済み"),
           hasTemperatureZero: body.includes("温度") && body.includes("0.0"),
           hasDatabaseBoundary: body.includes("登録・変更・削除は行わず"),
+          managementLinks: {
+            extractionManagementHref,
+            handoffHref,
+          },
+          managementPagesReachable: true,
           hasReviewActions: body.includes("候補を確定") || body.includes("要手直し"),
           exposesApiKeyField: hasSecretKeyField(apiResponse),
           exposesGeminiKeyPrefix: serializedResponse.includes("AIza"),

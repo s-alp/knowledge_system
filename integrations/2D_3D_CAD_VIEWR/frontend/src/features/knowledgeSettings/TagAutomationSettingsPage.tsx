@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IconChevronRight, IconDatabase, IconTransfer } from "@tabler/icons-react";
 
 import {
   getTagAutomationSettings,
@@ -37,6 +38,29 @@ export function TagAutomationSettingsPage() {
 
   return (
     <section className="knowledge-production-page entity-page">
+      <section className="production-section">
+        <h2>ICADタグ・属性管理</h2>
+        <p className="production-section-note">抽出運用と創屋連携データの確認は、システム設定から行います。</p>
+        <div className="production-section-divider" />
+        <div className="settings-management-list">
+          {settingsPayload.managementLinks.map((link) => {
+            const LinkIcon = link.key === "souya-handoff" ? IconTransfer : IconDatabase;
+            return (
+              <a key={link.key} className="settings-management-link" href={link.url}>
+                <span className="settings-management-icon" aria-hidden="true">
+                  <LinkIcon size={21} stroke={1.8} />
+                </span>
+                <span className="settings-management-copy">
+                  <strong>{link.label}</strong>
+                  <span>{link.description}</span>
+                </span>
+                <IconChevronRight className="settings-management-chevron" size={20} aria-hidden="true" />
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="production-section production-basic-section">
         <div className="production-section-header">
           <div>

@@ -77,6 +77,20 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
     assert runtime_by_label["Gemini APIキー"] == "設定済み"
     assert runtime_by_label["主モデル"] == "gemini-test-model"
     assert runtime_by_label["温度"] == "0.0"
+    assert payload["managementLinks"] == [
+        {
+            "key": "icad-extraction-management",
+            "label": "ICAD抽出管理",
+            "description": "登録済みICD、2D/3D抽出状態、ジョブ履歴を管理者向けに確認します。",
+            "url": "/drawing-metadata/",
+        },
+        {
+            "key": "souya-handoff",
+            "label": "創屋連携データ確認",
+            "description": "創屋へ渡すタグ・属性候補と連携payloadを読み取り専用で確認します。",
+            "url": "/drawing-metadata/handoff/",
+        },
+    ]
     assert "secret-value-must-not-be-returned" not in response.content.decode("utf-8")
 
 

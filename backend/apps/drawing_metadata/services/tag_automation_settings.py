@@ -9,6 +9,20 @@ def build_tag_automation_settings_payload() -> dict:
     return {
         "title": "タグ自動取得設定",
         "summary": "ICAD 2D/3D 抽出結果からタグ・属性候補を作るための運用設定です。",
+        "managementLinks": [
+            {
+                "key": "icad-extraction-management",
+                "label": "ICAD抽出管理",
+                "description": "登録済みICD、2D/3D抽出状態、ジョブ履歴を管理者向けに確認します。",
+                "url": "/drawing-metadata/",
+            },
+            {
+                "key": "souya-handoff",
+                "label": "創屋連携データ確認",
+                "description": "創屋へ渡すタグ・属性候補と連携payloadを読み取り専用で確認します。",
+                "url": "/drawing-metadata/handoff/",
+            },
+        ],
         "runtimeRows": [
             {"label": "設定配置", "value": "システム設定 > タグ自動取得設定"},
             {"label": "LLM provider", "value": getattr(settings, "DRAWING_METADATA_LLM_PROVIDER", "") or "-"},
