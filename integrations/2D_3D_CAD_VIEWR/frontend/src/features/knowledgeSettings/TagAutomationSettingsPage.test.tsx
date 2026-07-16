@@ -28,8 +28,8 @@ const settings: TagAutomationSettingsResponse = {
     },
     {
       key: "integration-data-review",
-      label: "API仕様・引継ぎ資料",
-      description: "API仕様と移植用資料で確認します。",
+      label: "API仕様・連携仕様",
+      description: "API仕様と連携仕様で確認します。",
       action: "show_handoff_note",
     },
   ],
@@ -185,13 +185,17 @@ describe("TagAutomationSettingsPage", () => {
     expect(screen.getByText("2D / 3D")).toBeInTheDocument();
     expect(screen.getByText("待機中")).toBeInTheDocument();
     expect(screen.getByText("稼働中")).toBeInTheDocument();
+    expect(screen.getByText("heartbeat更新")).toBeInTheDocument();
+    expect(screen.getByText("heartbeat経過")).toBeInTheDocument();
     expect(screen.getAllByText("codex-local-worker").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("1 / 0 / 10 / 1")).toBeInTheDocument();
+    expect(screen.getByText("最終ジョブ更新")).toBeInTheDocument();
+    expect(screen.getByText("失敗日時")).toBeInTheDocument();
     expect(screen.getByText(/図面ファイルとして開けていません/)).toBeInTheDocument();
     expect(screen.getByText("対象範囲: 固定manifest 39件 / 全登録 68件")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /API仕様・引継ぎ資料/ }));
-    expect(screen.getByRole("heading", { name: "API仕様・引継ぎ資料" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /API仕様・連携仕様/ }));
+    expect(screen.getByRole("heading", { name: "API仕様・連携仕様" })).toBeInTheDocument();
     expect(screen.getByText("登録図面")).toBeInTheDocument();
     expect(screen.getByText("集計対象外")).toBeInTheDocument();
     expect(screen.getByText("C:\\manifest\\shared.json")).toBeInTheDocument();

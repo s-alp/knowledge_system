@@ -37,6 +37,21 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
     if "unresolved_material_keywords" not in excluded_sources:
         for material in canonical_attributes.get("unresolved_material_keywords", []):
             add_tag(f"材質要確認:{material}", "unresolved_material_keywords", confidence="low")
+    if "surface_treatment_tokens" not in excluded_sources:
+        for treatment in canonical_attributes.get("surface_treatment_tokens", []):
+            add_tag(f"表面処理:{treatment}", "surface_treatment_tokens", confidence="medium")
+    if "paint_instruction_tokens" not in excluded_sources:
+        for paint in canonical_attributes.get("paint_instruction_tokens", []):
+            add_tag(f"塗装:{paint}", "paint_instruction_tokens", confidence="medium")
+    if "heat_treatment_keywords" not in excluded_sources:
+        for treatment in canonical_attributes.get("heat_treatment_keywords", []):
+            add_tag(f"熱処理:{treatment}", "heat_treatment_keywords", confidence="medium")
+    if "prfx_candidates" not in excluded_sources:
+        for prfx in canonical_attributes.get("prfx_candidates", []):
+            add_tag(f"PRFX:{prfx}", "prfx_candidates", confidence="medium")
+    if "unit_number_candidates" not in excluded_sources:
+        for unit_number in canonical_attributes.get("unit_number_candidates", []):
+            add_tag(f"ユニット:{unit_number}", "unit_number_candidates", confidence="medium")
     if "spec_tokens" not in excluded_sources:
         for spec in canonical_attributes.get("spec_tokens", []):
             if spec in {"SES"}:
@@ -64,6 +79,11 @@ def _tag_evidence(source: str) -> str:
         "maker_keywords": "composedMetadata.canonicalAttributes.maker_keywords",
         "material_keywords": "composedMetadata.canonicalAttributes.material_keywords",
         "unresolved_material_keywords": "composedMetadata.canonicalAttributes.unresolved_material_keywords",
+        "surface_treatment_tokens": "composedMetadata.canonicalAttributes.surface_treatment_tokens",
+        "paint_instruction_tokens": "composedMetadata.canonicalAttributes.paint_instruction_tokens",
+        "heat_treatment_keywords": "composedMetadata.canonicalAttributes.heat_treatment_keywords",
+        "prfx_candidates": "composedMetadata.canonicalAttributes.prfx_candidates",
+        "unit_number_candidates": "composedMetadata.canonicalAttributes.unit_number_candidates",
         "spec_tokens": "composedMetadata.canonicalAttributes.spec_tokens",
         "title_block_fields.material": "composedMetadata.canonicalAttributes.title_block_fields.material",
         "title_block_fields.surface_treatment": "composedMetadata.canonicalAttributes.title_block_fields.surface_treatment",
@@ -82,6 +102,11 @@ def _tag_reason(source: str) -> str:
         "maker_keywords": "メーカー名として抽出でき、購入品や構成部品の検索に使えるため採用しています。",
         "material_keywords": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
         "unresolved_material_keywords": "材質らしい値ですが正式材質と確定できないため、要確認タグとして分離しています。",
+        "surface_treatment_tokens": "表面処理として抽出でき、加工・処理条件の検索に使えるため採用しています。",
+        "paint_instruction_tokens": "塗装指示として抽出でき、塗装条件の検索に使えるため採用しています。",
+        "heat_treatment_keywords": "熱処理指定として抽出でき、加工条件の検索に使えるため採用しています。",
+        "prfx_candidates": "PRFXとして抽出でき、客先・案件別の識別に使えるため採用しています。",
+        "unit_number_candidates": "ユニット番号として抽出でき、ユニット単位の検索に使えるため採用しています。",
         "spec_tokens": "規格識別子として抽出でき、規格・社内標準の検索に使えるため採用しています。",
         "title_block_fields.material": "2D図枠の材質欄から抽出でき、図面起点の材質検索に使えるため採用しています。",
         "title_block_fields.surface_treatment": "2D図枠の表面処理欄から抽出でき、加工・処理条件の検索に使えるため採用しています。",

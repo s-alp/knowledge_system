@@ -8,7 +8,7 @@ interface DrawingEntryPanelProps {
   debugInputsEnabled: boolean;
   initialValue?: string;
   onLocalFileLaunch: (mode: LocalLaunchMode, file: File) => void;
-  onIcadMetadataLaunch: (file: File | null) => void;
+  onIcadMetadataLaunch: (source: { file: File | null; sourcePath: string }) => void;
 }
 
 const twoDFileExtensions = new Set(["pdf", "jpg", "jpeg", "tif", "tiff"]);
@@ -38,6 +38,7 @@ export function DrawingEntryPanel({
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [localStatus, setLocalStatus] = useState<string | null>(null);
   const [selectedIcadFile, setSelectedIcadFile] = useState<File | null>(null);
+  const [icadSourcePath, setIcadSourcePath] = useState("");
   const [icadStatus, setIcadStatus] = useState<string | null>(null);
 
   const handleOpen = () => {
@@ -162,12 +163,25 @@ export function DrawingEntryPanel({
             <div>
               <h2>ICADからタグ・属性を取得</h2>
               <p className="section-description">
-                ICADファイルを選択して、タグ・属性候補の取得を開始します。
+                原本のICADパスを登録して、タグ・属性候補の取得を開始します。
               </p>
             </div>
           </div>
           <label className="input-stack">
-            <span className="field-label">ICADファイル</span>
+            <span className="field-label">ICAD原本パス</span>
+            <input
+              type="text"
+              value={icadSourcePath}
+              onChange={(event) => {
+                setIcadSourcePath(event.target.value);
+                setSelectedIcadFile(null);
+                setIcadStatus("原本パスを登録対象にします。");
+              }}
+              placeholder="J:\\PROJECT\\PART.icd"
+            />
+          </label>
+          <label className="input-stack">
+            <span className="field-label">ICADファイルコピー登録</span>
             <div className="launcher-file-row">
               <input
                 type="text"
@@ -188,6 +202,7 @@ export function DrawingEntryPanel({
                 onChange={(event) => {
                   const file = event.target.files?.[0] ?? null;
                   setSelectedIcadFile(file);
+                  setIcadSourcePath("");
 
                   if (!file) {
                     setIcadStatus(null);
@@ -201,7 +216,7 @@ export function DrawingEntryPanel({
                   }
 
                   setError(null);
-                  setIcadStatus("ICAD抽出対象として選択しました。抽出・レビュー画面へ進めます。");
+                  setIcadStatus("コピー登録対象として選択しました。原本パス登録が使えない場合だけ使用してください。");
                 }}
               />
               <button
@@ -218,8 +233,16 @@ export function DrawingEntryPanel({
           <button
             className="secondary-button"
             type="button"
-            disabled={!selectedIcadFile}
-            onClick={() => onIcadMetadataLaunch(selectedIcadFile)}
+            disabled={!selectedIcadFile && !icadSourcePath.trim()}
+            onClick={() => {
+              const trimmedPath = icadSourcePath.trim();
+              if (trimmedPath && !trimmedPath.toLowerCase().endsWith(".icd")) {
+                setError("ICAD原本パスには .icd ファイルを指定してください。");
+                setIcadStatus("対応外のファイル形式です。");
+                return;
+              }
+              onIcadMetadataLaunch({ file: selectedIcadFile, sourcePath: trimmedPath });
+            }}
           >
             タグ・属性取得へ進む
           </button>

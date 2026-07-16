@@ -39,6 +39,18 @@ function formatJobCount(summary: HandoffSummaryResponse | null, status: string) 
   return summary?.jobStatusCounts?.[status] ?? 0;
 }
 
+function formatDateTime(value: string | null | undefined) {
+  if (!value) {
+    return "-";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  const pad = (number: number) => String(number).padStart(2, "0");
+  return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
 function shortError(value: string | null | undefined) {
   if (!value) {
     return "-";
@@ -55,6 +67,14 @@ function latestFailureText(item: DrawingMetadataRegistrationListItem) {
     })
     .filter(Boolean);
   return messages.length ? messages.join(" / ") : "-";
+}
+
+function latestJobUpdatedText(item: DrawingMetadataRegistrationListItem) {
+  const values = (["2d", "3d"] as const)
+    .map((mode) => item.latestJobUpdatedAtByMode?.[mode])
+    .filter((value): value is string => Boolean(value))
+    .sort();
+  return formatDateTime(values[values.length - 1]);
 }
 
 function panelForAction(action: string): SettingsPanelKey {
@@ -88,7 +108,7 @@ export function TagAutomationSettingsPage() {
   const [activePanel, setActivePanel] = useState<SettingsPanelKey>("overview");
   const [panelLoading, setPanelLoading] = useState(false);
   const [loadedPanels, setLoadedPanels] = useState<Partial<Record<SettingsPanelKey, boolean>>>(() => ({
-    "icad-extraction": Boolean(cachedRegistrations && cachedHandoffSummary),
+    "icad-extraction": false,
     handoff: Boolean(cachedHandoffSummary),
   }));
   const [error, setError] = useState<string | null>(null);
@@ -127,7 +147,7 @@ export function TagAutomationSettingsPage() {
       activePanel === "icad-extraction"
         ? Promise.all([
             cachedRegistrations ? Promise.resolve(cachedRegistrations) : getDrawingMetadataRegistrations({ includeAll: true }),
-            cachedHandoffSummary ? Promise.resolve(cachedHandoffSummary) : getDrawingMetadataHandoffSummary(),
+            getDrawingMetadataHandoffSummary(),
           ])
             .then(([registrationItems, summary]) => {
               cachedRegistrations = registrationItems;
@@ -165,6 +185,33 @@ export function TagAutomationSettingsPage() {
       active = false;
     };
   }, [activePanel, loadedPanels]);
+
+  useEffect(() => {
+    if (activePanel !== "icad-extraction") {
+      return;
+    }
+    let active = true;
+    const refresh = () => {
+      getDrawingMetadataHandoffSummary()
+        .then((summary) => {
+          cachedHandoffSummary = summary;
+          if (active) {
+            setHandoffSummary(summary);
+          }
+        })
+        .catch((reason: unknown) => {
+          if (active) {
+            setError(reason instanceof Error ? reason.message : "worker状態を更新できませんでした。");
+          }
+        });
+    };
+    refresh();
+    const timer = window.setInterval(refresh, 5000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, [activePanel]);
 
   if (error) {
     return <section className="production-section workspace-message error-panel">{error}</section>;
@@ -232,6 +279,14 @@ export function TagAutomationSettingsPage() {
                 <p>{handoffSummary.workerStatus?.message ?? "worker状態を取得できません。"}</p>
               </div>
               <div className="production-detail-field">
+                <span>heartbeat更新</span>
+                <p>{formatDateTime(handoffSummary.workerStatus?.updatedAt)}</p>
+              </div>
+              <div className="production-detail-field">
+                <span>heartbeat経過</span>
+                <p>{handoffSummary.workerStatus?.ageSeconds != null ? `${handoffSummary.workerStatus.ageSeconds}秒` : "-"}</p>
+              </div>
+              <div className="production-detail-field">
                 <span>待機中/抽出中/完了/失敗</span>
                 <p>{formatJobCount(handoffSummary, "queued")} / {formatJobCount(handoffSummary, "processing")} / {formatJobCount(handoffSummary, "succeeded")} / {formatJobCount(handoffSummary, "failed")}</p>
               </div>
@@ -251,6 +306,7 @@ export function TagAutomationSettingsPage() {
                   <th>snapshot</th>
                   <th>2Dジョブ</th>
                   <th>3Dジョブ</th>
+                  <th>最終ジョブ更新</th>
                   <th>失敗理由</th>
                   <th>保存先</th>
                 </tr>
@@ -258,7 +314,7 @@ export function TagAutomationSettingsPage() {
               <tbody>
                 {panelLoading && !registrations.length ? (
                   <tr>
-                    <td colSpan={6}>抽出管理情報を読み込んでいます。</td>
+                    <td colSpan={7}>抽出管理情報を読み込んでいます。</td>
                   </tr>
                 ) : registrations.length ? registrations.map((item) => (
                   <tr key={item.drawingId}>
@@ -266,12 +322,13 @@ export function TagAutomationSettingsPage() {
                     <td>{formatSnapshotModes(item)}</td>
                     <td>{formatJobStatus(item.latestJobStatusByMode["2d"])}</td>
                     <td>{formatJobStatus(item.latestJobStatusByMode["3d"])}</td>
+                    <td>{latestJobUpdatedText(item)}</td>
                     <td title={latestFailureText(item)}>{latestFailureText(item)}</td>
                     <td>{item.sourcePath}</td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={6}>登録済みICADはありません。</td>
+                    <td colSpan={7}>登録済みICADはありません。</td>
                   </tr>
                 )}
               </tbody>
@@ -285,6 +342,7 @@ export function TagAutomationSettingsPage() {
                     <th>直近失敗ICAD</th>
                     <th>mode</th>
                     <th>worker</th>
+                    <th>失敗日時</th>
                     <th>失敗理由</th>
                     <th>再抽出条件</th>
                   </tr>
@@ -295,6 +353,7 @@ export function TagAutomationSettingsPage() {
                       <th>{job.filename}</th>
                       <td>{job.extractionMode.toUpperCase()}</td>
                       <td>{job.workerName || "-"}</td>
+                      <td>{formatDateTime(job.updatedAt)}</td>
                       <td title={job.errorMessage}>{shortError(job.errorMessage)}</td>
                       <td>{job.reextractCondition}</td>
                     </tr>
@@ -310,7 +369,7 @@ export function TagAutomationSettingsPage() {
         <section className="production-section">
           <div className="production-section-header">
             <div>
-              <h2>API仕様・引継ぎ資料</h2>
+              <h2>API仕様・連携仕様</h2>
               <p className="production-section-note">
                 創屋へ渡す読み取りAPI、viewer/RAG連携、対象別payload候補の集計です。
               </p>
@@ -318,7 +377,7 @@ export function TagAutomationSettingsPage() {
             </div>
           </div>
           <div className="production-section-divider" />
-          {panelLoading ? <p className="production-section-note">API仕様・引継ぎ情報を読み込んでいます。</p> : null}
+          {panelLoading ? <p className="production-section-note">API仕様・連携情報を読み込んでいます。</p> : null}
           {handoffSummary?.scope ? (
             <div className="production-detail-grid">
               <div className="production-detail-field">
@@ -414,7 +473,7 @@ export function TagAutomationSettingsPage() {
                   </tr>
                 )) ?? (
                   <tr>
-                    <td colSpan={4}>API仕様・引継ぎ情報を読み込んでいます。</td>
+                    <td colSpan={4}>API仕様・連携情報を読み込んでいます。</td>
                   </tr>
                 )}
               </tbody>

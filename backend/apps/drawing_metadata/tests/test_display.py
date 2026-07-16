@@ -869,7 +869,7 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     assert "open_icad_extraction_review" in content
     assert "show_handoff_note" in content
     assert "ICAD抽出管理" in content
-    assert "API仕様・引継ぎ資料" in content
+    assert "API仕様・連携仕様" in content
 
 
 @pytest.mark.django_db

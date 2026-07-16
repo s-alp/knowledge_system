@@ -18,8 +18,8 @@ def build_tag_automation_settings_payload() -> dict:
             },
             {
                 "key": "integration-data-review",
-                "label": "API仕様・引継ぎ資料",
-                "description": "移植用API、対象別payload、viewer/RAG連携の集計を確認します。",
+                "label": "API仕様・連携仕様",
+                "description": "移植用API、対象別payload、viewer/RAG連携の仕様と集計を確認します。",
                 "action": "show_handoff_note",
             },
         ],
@@ -54,7 +54,7 @@ def build_tag_automation_settings_payload() -> dict:
             },
             {
                 "area": "連携",
-                "screen": "API仕様・引継ぎ資料",
+                "screen": "API仕様・連携仕様",
                 "role": "埋め込み先に渡せる形で対象、属性、タグ、根拠を出力する。",
                 "writePolicy": "読み取り確認とfixture/API出力まで。",
             },

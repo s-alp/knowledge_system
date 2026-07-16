@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from rest_framework import serializers
+from pathlib import Path
 
 from apps.drawing_metadata.models import (
     DrawingMetadataExtractionJob,
@@ -21,6 +22,19 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
         model = RegisteredDrawing
         fields = ("id", "hostDrawingId", "filename", "sourcePath", "sourceFormat")
         read_only_fields = ("id",)
+
+    def validate_sourcePath(self, value):
+        if not value.lower().endswith(".icd"):
+            raise serializers.ValidationError(".icd ファイルを指定してください。")
+        if not Path(value).exists():
+            raise serializers.ValidationError("指定されたICADファイルが見つかりません。原本パスを確認してください。")
+        return value
+
+    def validate(self, attrs):
+        source_path = attrs.get("source_path", "")
+        if source_path and not attrs.get("filename"):
+            attrs["filename"] = Path(source_path).name
+        return attrs
 
 
 class ExtractRequestSerializer(serializers.Serializer):

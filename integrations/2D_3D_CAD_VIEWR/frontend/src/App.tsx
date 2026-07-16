@@ -109,6 +109,7 @@ export default function App() {
   const { bootstrap, loading, error } = useDrawingBootstrap(drawingId);
   const [localLaunch, setLocalLaunch] = useState<LocalLaunchState | null>(null);
   const [icadExtractionFile, setIcadExtractionFile] = useState<File | null>(null);
+  const [icadExtractionSourcePath, setIcadExtractionSourcePath] = useState("");
   const [showIcadExtractionReview, setShowIcadExtractionReview] = useState(false);
   const [activePage, setActivePage] = useState<KnowledgePageKey>("drawing");
   const [detailPage, setDetailPage] = useState<DetailPageKey | null>(null);
@@ -241,6 +242,7 @@ export default function App() {
         return (
           <IcadExtractionReviewPage
             file={icadExtractionFile}
+            sourcePath={icadExtractionSourcePath}
             onBack={() => {
               setShowIcadExtractionReview(false);
             }}
@@ -252,8 +254,9 @@ export default function App() {
         <DrawingEntryPanel
           debugInputsEnabled={debugInputsEnabled}
           initialValue={window.location.href}
-          onIcadMetadataLaunch={(file) => {
-            setIcadExtractionFile(file);
+          onIcadMetadataLaunch={(source) => {
+            setIcadExtractionFile(source.file);
+            setIcadExtractionSourcePath(source.sourcePath);
             setShowIcadExtractionReview(true);
             openKnowledgePage("drawing");
           }}

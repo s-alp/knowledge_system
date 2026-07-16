@@ -15,8 +15,11 @@ from apps.drawing_metadata.models import (
 
 
 @pytest.mark.django_db
-def test_registration_create_and_list(sample_registration_payload):
+def test_registration_create_and_list(sample_registration_payload, tmp_path):
     client = APIClient()
+    source_file = tmp_path / "sample_3d.icd"
+    source_file.write_bytes(b"icad-data")
+    sample_registration_payload["sourcePath"] = str(source_file)
 
     create_response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
     assert create_response.status_code == 201
@@ -43,6 +46,7 @@ def test_registration_upload_icad_file(settings, tmp_path):
     assert payload["filename"] == "sample.icd"
     assert payload["sourceFormat"] == "icad"
     stored_path = Path(payload["sourcePath"])
+    assert stored_path.name == "sample.icd"
     assert stored_path.exists()
     assert stored_path.read_bytes() == b"icad-data"
 
@@ -60,6 +64,17 @@ def test_registration_upload_rejects_non_icad(settings, tmp_path):
 
     assert response.status_code == 400
     assert response.json()["error"]["code"] == "icad_file_extension"
+
+
+@pytest.mark.django_db
+def test_registration_create_rejects_missing_original_path(sample_registration_payload):
+    client = APIClient()
+    sample_registration_payload["sourcePath"] = r"C:\missing\sample_3d.icd"
+
+    response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+
+    assert response.status_code == 400
+    assert "指定されたICADファイルが見つかりません" in str(response.json())
 
 
 @pytest.mark.django_db
@@ -87,8 +102,8 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
         },
         {
             "key": "integration-data-review",
-            "label": "API仕様・引継ぎ資料",
-            "description": "移植用API、対象別payload、viewer/RAG連携の集計を確認します。",
+            "label": "API仕様・連携仕様",
+            "description": "移植用API、対象別payload、viewer/RAG連携の仕様と集計を確認します。",
             "action": "show_handoff_note",
         },
     ]
@@ -130,7 +145,7 @@ def test_handoff_summary_api_returns_dashboard_payload(sample_registration_paylo
     assert payload["workerStatus"]["status"] in {"missing", "running", "stale", "unreadable"}
     assert payload["jobStatusCounts"]["failed"] == 1
     assert payload["recentFailedJobs"][0]["filename"] == "handoff-api.icd"
-    assert "図面ファイルとして開けていません" in payload["recentFailedJobs"][0]["reextractCondition"]
+    assert "図面モデルとして開けていません" in payload["recentFailedJobs"][0]["reextractCondition"]
 
 
 @pytest.mark.django_db

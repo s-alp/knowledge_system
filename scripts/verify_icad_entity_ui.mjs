@@ -87,8 +87,8 @@ try {
 
   await page.locator(".sidebar-link", { hasText: "システム設定" }).click();
   await page.getByRole("heading", { name: "ICADタグ・属性管理" }).waitFor();
-  await page.getByRole("button", { name: /API仕様・引継ぎ資料/ }).click();
-  await page.getByRole("heading", { name: "API仕様・引継ぎ資料" }).waitFor();
+  await page.locator(".settings-management-link", { hasText: "API仕様・連携仕様" }).click();
+  await page.getByRole("heading", { name: "API仕様・連携仕様" }).waitFor();
   await page.getByText(/対象範囲: 固定manifest/).waitFor();
   await page.getByText("登録図面").waitFor();
   await page.getByText("/api/v1/drawing-metadata/handoff-summary").waitFor();
@@ -100,7 +100,7 @@ try {
     throw new Error(`システム設定から旧Django画面へ遷移しています: ${page.url()}`);
   }
   await page.screenshot({ path: `${outputDirectory}/system-settings.png`, fullPage: true });
-  await page.getByRole("button", { name: /ICAD抽出管理/ }).click();
+  await page.locator(".settings-management-link", { hasText: "ICAD抽出管理" }).click();
   await page.getByRole("heading", { name: "ICAD抽出管理" }).waitFor();
   await page.getByRole("columnheader", { name: "ICADファイル" }).waitFor();
   await page.getByRole("columnheader", { name: "snapshot" }).waitFor();

@@ -10,6 +10,10 @@ export interface DrawingMetadataJobResponse {
   extractionProfile: string;
   extractionOptions: Record<string, unknown>;
   errorMessage: string;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DrawingMetadataSnapshotResponse {
@@ -351,6 +355,20 @@ export function getDrawingMetadataHandoffSummary(): Promise<HandoffSummaryRespon
 
 export function uploadIcadDrawingMetadata(file: File): Promise<DrawingMetadataRegistrationResponse> {
   return uploadFile<DrawingMetadataRegistrationResponse>("/drawing-metadata/registrations/upload", file);
+}
+
+export function registerIcadDrawingMetadataPath(sourcePath: string): Promise<DrawingMetadataRegistrationResponse> {
+  const pathParts = sourcePath.split(/[\\/]/).filter(Boolean);
+  const filename = pathParts[pathParts.length - 1] ?? sourcePath;
+  return requestJson<DrawingMetadataRegistrationResponse>("/drawing-metadata/registrations", {
+    method: "POST",
+    body: JSON.stringify({
+      hostDrawingId: "",
+      filename,
+      sourcePath,
+      sourceFormat: "icad",
+    }),
+  });
 }
 
 export function enqueueDrawingMetadataExtraction(

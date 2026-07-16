@@ -6,6 +6,7 @@ import {
   enqueueDrawingMetadataExtraction,
   getDrawingMetadataRegistration,
   getDrawingMetadataJob,
+  registerIcadDrawingMetadataPath,
   uploadIcadDrawingMetadata,
   type DrawingMetadataExtractionMode,
   type DrawingMetadataJobResponse,
@@ -14,6 +15,7 @@ import {
 
 interface IcadExtractionReviewPageProps {
   file: File | null;
+  sourcePath?: string;
   onBack: () => void;
 }
 
@@ -105,6 +107,40 @@ function formatJobStatus(status: string) {
   }[status] ?? status;
 }
 
+function formatDateTime(value: string | null | undefined) {
+  if (!value) {
+    return "-";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  return date.toLocaleString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function summarizeJobError(value: string | null | undefined) {
+  if (!value) {
+    return "-";
+  }
+  if (value.includes("指定したファイルは図面ファイルではありません")) {
+    return "ICDファイルですが、ICAD/SXNETが図面モデルとして開けません。原本パス、外部参照、ICAD対応版を確認してください。";
+  }
+  if (value.includes("ICADSXはすでに起動されています")) {
+    return "ICAD/SXの多重起動ダイアログが発生しています。既存ICADを閉じて再実行してください。";
+  }
+  if (value.includes("FileNotFound") || value.includes("ファイルが見つかりません")) {
+    return "対象ファイルまたは参照ファイルが見つかりません。保存先パスと参照先を確認してください。";
+  }
+  const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
+  return firstLine.length > 120 ? `${firstLine.slice(0, 120)}...` : firstLine;
+}
+
 function isActiveJob(job: DrawingMetadataJobResponse) {
   return job.status === "queued" || job.status === "processing";
 }
@@ -134,7 +170,7 @@ function mergeJobs(
   return nextJobs;
 }
 
-export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewPageProps) {
+export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: IcadExtractionReviewPageProps) {
   const [registration, setRegistration] = useState<DrawingMetadataRegistrationResponse | null>(null);
   const [jobs, setJobs] = useState<DrawingMetadataJobResponse[]>([]);
   const [phase, setPhase] = useState<"idle" | "uploading" | "ready" | "extracting" | "saving">("idle");
@@ -143,19 +179,24 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
   const [manualMode, setManualMode] = useState<DrawingMetadataExtractionMode>("2d");
   const [manualFields, setManualFields] = useState<Record<string, string>>({});
   const [manualTags, setManualTags] = useState("");
+  const selectedSourceLabel = sourcePath.trim() || file?.name || "未選択";
 
   useEffect(() => {
     let cancelled = false;
-    if (!file) {
+    const trimmedSourcePath = sourcePath.trim();
+    if (!file && !trimmedSourcePath) {
       setPhase("idle");
-      setMessage("ICADファイルを選択してください。");
+      setMessage("ICAD原本パスを入力するか、ICADファイルを選択してください。");
       return;
     }
 
     setPhase("uploading");
     setMessage("ICADファイルを登録しています。");
     setError(null);
-    void uploadIcadDrawingMetadata(file)
+    const request = trimmedSourcePath
+      ? registerIcadDrawingMetadataPath(trimmedSourcePath)
+      : uploadIcadDrawingMetadata(file as File);
+    void request
       .then((nextRegistration) => {
         if (cancelled) {
           return;
@@ -175,7 +216,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
     return () => {
       cancelled = true;
     };
-  }, [file]);
+  }, [file, sourcePath]);
 
   const candidateTags = useMemo(() => collectCandidateTags(registration), [registration]);
   const activeSnapshot = registration?.snapshotsByMode[manualMode];
@@ -231,7 +272,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
             setPhase("ready");
             if (failedJob) {
               setMessage("抽出が失敗しました。エラー内容を確認して条件を変えて再抽出してください。");
-              setError(failedJob.errorMessage || "抽出ジョブが失敗しました。");
+              setError(summarizeJobError(failedJob.errorMessage || "抽出ジョブが失敗しました。"));
             } else {
               setMessage("抽出が完了しました。候補内容を確認してください。");
             }
@@ -366,7 +407,7 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
         <div className="production-detail-grid">
           <div className="production-detail-field">
             <span>選択ファイル</span>
-            <p>{file?.name ?? "未選択"}</p>
+            <p>{selectedSourceLabel}</p>
           </div>
           <div className="production-detail-field">
             <span>登録ID</span>
@@ -563,6 +604,9 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                 <th>対象</th>
                 <th>状態</th>
                 <th>条件</th>
+                <th>起票日時</th>
+                <th>開始日時</th>
+                <th>完了日時</th>
                 <th>失敗理由</th>
               </tr>
             </thead>
@@ -573,7 +617,17 @@ export function IcadExtractionReviewPage({ file, onBack }: IcadExtractionReviewP
                   <td>{job.extractionMode.toUpperCase()}</td>
                   <td>{formatJobStatus(job.status)}</td>
                   <td>{job.extractionProfile}</td>
-                  <td>{job.errorMessage || "-"}</td>
+                  <td>{formatDateTime(job.createdAt)}</td>
+                  <td>{formatDateTime(job.startedAt)}</td>
+                  <td>{formatDateTime(job.finishedAt ?? job.updatedAt)}</td>
+                  <td>
+                    {job.errorMessage ? (
+                      <details>
+                        <summary>{summarizeJobError(job.errorMessage)}</summary>
+                        <pre>{job.errorMessage}</pre>
+                      </details>
+                    ) : "-"}
+                  </td>
                 </tr>
               ))}
             </tbody>

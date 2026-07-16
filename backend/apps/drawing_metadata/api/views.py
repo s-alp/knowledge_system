@@ -235,7 +235,7 @@ def _reextract_condition_for_error(error_message: str) -> str:
     if "timed out" in normalized or "timeout" in normalized:
         return "ICAD起動待ちまたは抽出時間が不足しています。ICAD起動状態とタイムアウト秒数を確認して再抽出します。"
     if "not drawing file" in normalized or "図面ファイル" in error_message:
-        return "ICAD/SXNETが図面ファイルとして開けていません。ファイル種別、パス、アクセス権、ICAD対応版を確認して再抽出します。"
+        return "ICDファイルですが、このICAD/SXNET環境では図面モデルとして開けていません。原本パス、外部参照、ICAD対応版を確認して再抽出します。"
     if "sxexception" in normalized or "sxnet" in normalized:
         return "SXNETでICADファイルを開けていません。ICADの起動状態、対象ファイル、起動済みダイアログを確認して再抽出します。"
     if "file" in normalized and ("not found" in normalized or "could not find" in normalized):
@@ -327,8 +327,9 @@ class RegistrationUploadApiView(APIView):
 
         upload_root = settings.DRAWING_METADATA_STORAGE_ROOT / "uploads"
         upload_root.mkdir(parents=True, exist_ok=True)
-        stored_name = f"{uuid.uuid4()}_{original_name}"
-        stored_path = (upload_root / stored_name).resolve()
+        stored_directory = upload_root / str(uuid.uuid4())
+        stored_directory.mkdir(parents=True, exist_ok=True)
+        stored_path = (stored_directory / original_name).resolve()
 
         with stored_path.open("wb") as destination:
             for chunk in uploaded_file.chunks():
