@@ -18,6 +18,18 @@
 ```json
 {
   "input_path": "string",
+  "source_file": {
+    "full_path": "string",
+    "directory_path": "string|null",
+    "file_name": "string",
+    "file_name_without_extension": "string",
+    "extension": "string",
+    "sx_net_input_path": "string",
+    "sx_net_input_strategy": "original|windows_short_path|temporary_copy",
+    "used_sx_net_alternate_path": false,
+    "original_path_length": 0,
+    "sx_net_input_path_length": 0
+  },
   "source_format": "icad",
   "source_kind": "2d|3d",
   "extractor_name": "icad-csharp-extractor",
@@ -33,6 +45,10 @@
 - 実装では `extractor_name=icad-csharp-extractor`
 - `extractor_version=1.0.0`
 - JSON 出力は `SnakeCaseNamingStrategy` で統一
+- `input_path` と `source_file.full_path` は原本ICADパスを保持する
+- SXNETへ渡すパスは `source_file.sx_net_input_path` に保持する
+- 長パスなどでSXNETが開けない可能性がある場合、Runnerは `windows_short_path` を優先し、それでも短くならない場合だけ `temporary_copy` を使う
+- `temporary_copy` は外部参照解決に影響し得るため、`warnings[].code=sxnet_input_path_staged` を出す
 - `warnings` は以下の形を基本にする
 
 ```json
@@ -47,6 +63,7 @@
 ### 必須項目
 
 - `input_path`
+- `source_file`
 - `source_format`
 - `source_kind`
 - `extractor_name`

@@ -11,9 +11,6 @@ namespace IcadExtraction.Runner
 {
     public static class Program
     {
-        private const int WindowsFilenameLimit = 255;
-        private const int WindowsLegacyPathLimit = 259;
-
         public static int Main(string[] args)
         {
             try
@@ -64,7 +61,6 @@ namespace IcadExtraction.Runner
         private static int RunExtract(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
-            ValidateIcadInputPathForSxNet(inputPath);
             var sourceKind = RequireOption(command, "source-kind");
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
@@ -77,6 +73,7 @@ namespace IcadExtraction.Runner
             var previewAssetOptions = BuildPreviewAssetOptions(command);
 
             var stopwatch = Stopwatch.StartNew();
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
@@ -86,11 +83,11 @@ namespace IcadExtraction.Runner
             ExtractionEnvelope envelope;
             if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad3DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions, previewAssetOptions);
+                envelope = new Icad3DExtractor().Extract(sxnetDllPath, sxNetInputFile.SxNetInputPath, conditionOptions, previewAssetOptions);
             }
             else if (string.Equals(sourceKind, "2d", StringComparison.OrdinalIgnoreCase))
             {
-                envelope = new Icad2DExtractor().Extract(sxnetDllPath, inputPath, conditionOptions, previewAssetOptions);
+                envelope = new Icad2DExtractor().Extract(sxnetDllPath, sxNetInputFile.SxNetInputPath, conditionOptions, previewAssetOptions);
             }
             else
             {
@@ -98,7 +95,8 @@ namespace IcadExtraction.Runner
             }
 
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
-            envelope.SourceFile = BuildSourceFilePayload(inputPath);
+            envelope.InputPath = sxNetInputFile.OriginalPath;
+            envelope.SourceFile = BuildSourceFilePayload(sxNetInputFile);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
             envelope.ExtractionProfile = extractionProfile;
             envelope.ExtractionOptions = extractionOptions;
@@ -107,6 +105,7 @@ namespace IcadExtraction.Runner
             {
                 envelope.Warnings.Insert(0, autostartWarning);
             }
+            InsertSxNetInputWarning(envelope.Warnings, sxNetInputFile);
 
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
             var serializerSettings = new JsonSerializerSettings
@@ -165,7 +164,6 @@ namespace IcadExtraction.Runner
         private static int RunDetect(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
-            ValidateIcadInputPathForSxNet(inputPath);
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
@@ -173,19 +171,22 @@ namespace IcadExtraction.Runner
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
 
             var stopwatch = Stopwatch.StartNew();
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
-            var envelope = new IcadPresenceDetector().Detect(sxnetDllPath, inputPath);
+            var envelope = new IcadPresenceDetector().Detect(sxnetDllPath, sxNetInputFile.SxNetInputPath);
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
-            envelope.SourceFile = BuildSourceFilePayload(inputPath);
+            envelope.InputPath = sxNetInputFile.OriginalPath;
+            envelope.SourceFile = BuildSourceFilePayload(sxNetInputFile);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
             if (icadLease.StartupWarning != null)
             {
                 envelope.Warnings.Insert(0, icadLease.StartupWarning);
             }
+            InsertSxNetInputWarning(envelope.Warnings, sxNetInputFile);
 
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
             var serializerSettings = new JsonSerializerSettings
@@ -204,7 +205,6 @@ namespace IcadExtraction.Runner
         private static int RunProbe2DPrint(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
-            ValidateIcadInputPathForSxNet(inputPath);
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
             var icadExecutablePath = OptionalOption(command, "icad-executable-path");
@@ -212,19 +212,22 @@ namespace IcadExtraction.Runner
             var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
 
             var stopwatch = Stopwatch.StartNew();
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
-            var envelope = new Icad2DPrintProbe().Probe(sxnetDllPath, inputPath);
+            var envelope = new Icad2DPrintProbe().Probe(sxnetDllPath, sxNetInputFile.SxNetInputPath);
             envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
-            envelope.SourceFile = BuildSourceFilePayload(inputPath);
+            envelope.InputPath = sxNetInputFile.OriginalPath;
+            envelope.SourceFile = BuildSourceFilePayload(sxNetInputFile);
             envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
             if (icadLease.StartupWarning != null)
             {
                 envelope.Warnings.Insert(0, icadLease.StartupWarning);
             }
+            InsertSxNetInputWarning(envelope.Warnings, sxNetInputFile);
 
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
             var serializerSettings = new JsonSerializerSettings
@@ -240,8 +243,9 @@ namespace IcadExtraction.Runner
             return 0;
         }
 
-        private static SourceFilePayload BuildSourceFilePayload(string inputPath)
+        private static SourceFilePayload BuildSourceFilePayload(SxNetInputFileLease sxNetInputFile)
         {
+            var inputPath = sxNetInputFile.OriginalPath;
             return new SourceFilePayload
             {
                 FullPath = inputPath,
@@ -249,32 +253,25 @@ namespace IcadExtraction.Runner
                 FileName = Path.GetFileName(inputPath),
                 FileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath),
                 Extension = Path.GetExtension(inputPath),
+                SxNetInputPath = sxNetInputFile.SxNetInputPath,
+                SxNetInputStrategy = sxNetInputFile.Strategy,
+                UsedSxNetAlternatePath = sxNetInputFile.UsedAlternatePath,
+                OriginalPathLength = inputPath.Length,
+                SxNetInputPathLength = sxNetInputFile.SxNetInputPath.Length,
             };
         }
 
-        private static void ValidateIcadInputPathForSxNet(string inputPath)
+        private static void InsertSxNetInputWarning(IList<WarningPayload> warnings, SxNetInputFileLease sxNetInputFile)
         {
-            var fullPath = Path.GetFullPath(inputPath);
-            var fileName = Path.GetFileName(fullPath);
-            if (fileName.Length > WindowsFilenameLimit)
+            var warningCode = sxNetInputFile.WarningCode;
+            var warningMessage = sxNetInputFile.WarningMessage;
+            if (!string.IsNullOrWhiteSpace(warningCode) && !string.IsNullOrWhiteSpace(warningMessage))
             {
-                throw new ArgumentException(
-                    $"ICADファイル名が長すぎます。SXNETへ渡すファイル名は{WindowsFilenameLimit}文字以下にしてください。" +
-                    $"現在の文字数: {fileName.Length}"
-                );
-            }
-
-            if (fullPath.Length > WindowsLegacyPathLimit)
-            {
-                throw new ArgumentException(
-                    $"ICADファイルのパスが長すぎます。SXNETへ渡すパスは{WindowsLegacyPathLimit}文字以下にしてください。" +
-                    $"現在の文字数: {fullPath.Length}。SXNETで開く前に中断しています。短い作業フォルダへコピーして再登録してください。"
-                );
-            }
-
-            if (!File.Exists(fullPath))
-            {
-                throw new FileNotFoundException("指定されたICADファイルが見つかりません。原本パスとネットワークドライブ接続を確認してください。", fullPath);
+                warnings.Insert(0, new WarningPayload
+                {
+                    Code = warningCode!,
+                    Message = warningMessage!,
+                });
             }
         }
 

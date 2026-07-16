@@ -26,5 +26,33 @@ namespace IcadExtraction.Runner.Tests
                 Console.SetError(originalError);
             }
         }
+
+        [Fact]
+        public void SxNetInputFileLease_UsesOriginalPathForNormalPath()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");
+            File.WriteAllText(tempPath, "dummy");
+            try
+            {
+                using var lease = SxNetInputFileLease.Create(tempPath);
+
+                Assert.Equal(Path.GetFullPath(tempPath), lease.OriginalPath);
+                Assert.Equal(Path.GetFullPath(tempPath), lease.SxNetInputPath);
+                Assert.Equal("original", lease.Strategy);
+                Assert.False(lease.UsedAlternatePath);
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
+
+        [Fact]
+        public void SxNetInputFileLease_DetectsPathBeyondSxNetLegacyLimit()
+        {
+            var longPath = @"C:\" + new string('a', SxNetInputFileLease.WindowsLegacyPathLimit);
+
+            Assert.True(SxNetInputFileLease.RequiresAlternatePathForSxNet(longPath));
+        }
     }
 }

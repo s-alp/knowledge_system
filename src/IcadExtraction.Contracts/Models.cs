@@ -291,6 +291,11 @@ namespace IcadExtraction.Contracts
         public string FileName { get; set; } = string.Empty;
         public string FileNameWithoutExtension { get; set; } = string.Empty;
         public string Extension { get; set; } = string.Empty;
+        public string SxNetInputPath { get; set; } = string.Empty;
+        public string SxNetInputStrategy { get; set; } = "original";
+        public bool UsedSxNetAlternatePath { get; set; }
+        public int OriginalPathLength { get; set; }
+        public int SxNetInputPathLength { get; set; }
     }
 
     public sealed class ExtractionEnvelope

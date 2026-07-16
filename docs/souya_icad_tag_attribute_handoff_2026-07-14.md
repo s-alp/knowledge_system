@@ -92,7 +92,7 @@
 
 | 提供単位 | 主なキー | 内容 | 備考 |
 | --- | --- | --- | --- |
-| `source_file` | `full_path`, `directory_path`, `file_name`, `extension` | 保存フォルダ、ファイル名、拡張子 | ユーザー要望により検索・追跡用属性として保持 |
+| `source_file` | `full_path`, `directory_path`, `file_name`, `extension`, `sx_net_input_path`, `sx_net_input_strategy`, `used_sx_net_alternate_path` | 保存フォルダ、ファイル名、拡張子、SXNETへ実際に渡したパス | 原本パスは検索・追跡用属性として保持。SXNETの長パス制限を避けるため短縮パスまたは一時コピーを使った場合も診断できるようにする |
 | `raw_extract_2d` | `view_sheets`, `print_frames`, `layers`, `texts`, `dimensions`, `geometry_primitives` | SXNETから取得した2D証拠 | 図枠外/印刷枠外は削除せず `inside_print_area` で判定 |
 | `raw_2d_sections` | `title_block`, `drawing_body`, `dimensions`, `notes`, `balloons`, `manufacturing_symbols` | 2D証拠を画面/fixture向けに6区画へ整理した要約 | `raw_2d_sections.v1`。印刷枠がある図面では `inside_print_area=true` の要素だけを自動利用数へ含める |
 | `raw_extract_3d` | `top_part`, `parts`, `mass_properties`, `mass_probe_status`, `materials`, `material_probe_status` | SXNETから取得した3D証拠 | パーツ付加情報は `ex_info_fields` として保持 |
