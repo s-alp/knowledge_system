@@ -11,6 +11,7 @@ from apps.drawing_metadata.models import (
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
+from apps.drawing_metadata.services.path_constraints import validate_icad_path_length
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
@@ -26,6 +27,10 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
     def validate_sourcePath(self, value):
         if not value.lower().endswith(".icd"):
             raise serializers.ValidationError(".icd ファイルを指定してください。")
+        try:
+            validate_icad_path_length(value)
+        except ValueError as exc:
+            raise serializers.ValidationError(str(exc)) from exc
         if not Path(value).exists():
             raise serializers.ValidationError("指定されたICADファイルが見つかりません。原本パスを確認してください。")
         return value

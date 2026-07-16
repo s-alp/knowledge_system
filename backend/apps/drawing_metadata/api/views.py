@@ -28,6 +28,10 @@ from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_sc
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
+from apps.drawing_metadata.services.path_constraints import (
+    validate_icad_filename_length,
+    validate_icad_path_length,
+)
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
 from apps.drawing_metadata.services.worker_status import build_worker_status_payload
@@ -324,12 +328,27 @@ class RegistrationUploadApiView(APIView):
                 {"error": {"code": "icad_file_extension", "message": ".icd ファイルを指定してください。"}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        try:
+            validate_icad_filename_length(original_name)
+        except ValueError as exc:
+            return Response(
+                {"error": {"code": "icad_filename_too_long", "message": str(exc)}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         upload_root = settings.DRAWING_METADATA_STORAGE_ROOT / "uploads"
-        upload_root.mkdir(parents=True, exist_ok=True)
         stored_directory = upload_root / str(uuid.uuid4())
+        stored_path = (stored_directory / original_name).resolve(strict=False)
+        try:
+            validate_icad_path_length(stored_path)
+        except ValueError as exc:
+            return Response(
+                {"error": {"code": "icad_path_too_long", "message": str(exc)}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        upload_root.mkdir(parents=True, exist_ok=True)
         stored_directory.mkdir(parents=True, exist_ok=True)
-        stored_path = (stored_directory / original_name).resolve()
 
         with stored_path.open("wb") as destination:
             for chunk in uploaded_file.chunks():

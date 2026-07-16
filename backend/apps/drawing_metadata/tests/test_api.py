@@ -12,6 +12,7 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
+from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length
 
 
 @pytest.mark.django_db
@@ -67,6 +68,49 @@ def test_registration_upload_rejects_non_icad(settings, tmp_path):
 
 
 @pytest.mark.django_db
+def test_registration_upload_rejects_long_uploaded_name_that_exceeds_stored_path(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path
+    client = APIClient()
+    too_long_name = f"{'A' * 256}.icd"
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile(too_long_name, b"icad-data")},
+        format="multipart",
+    )
+
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "icad_path_too_long"
+    assert "パスが長すぎます" in response.json()["error"]["message"]
+    assert RegisteredDrawing.objects.count() == 0
+
+
+def test_icad_filename_constraint_rejects_component_over_windows_limit():
+    with pytest.raises(ValueError, match="ファイル名が長すぎます"):
+        validate_icad_filename_length(f"{'A' * 256}.icd")
+
+
+@pytest.mark.django_db
+def test_registration_upload_rejects_too_long_stored_path(settings, tmp_path):
+    long_storage_root = tmp_path
+    for _index in range(35):
+        long_storage_root = long_storage_root / "segment"
+    settings.DRAWING_METADATA_STORAGE_ROOT = long_storage_root
+    client = APIClient()
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations/upload",
+        {"file": SimpleUploadedFile("sample.icd", b"icad-data")},
+        format="multipart",
+    )
+
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "icad_path_too_long"
+    assert "パスが長すぎます" in response.json()["error"]["message"]
+    assert RegisteredDrawing.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_registration_create_rejects_missing_original_path(sample_registration_payload):
     client = APIClient()
     sample_registration_payload["sourcePath"] = r"C:\missing\sample_3d.icd"
@@ -75,6 +119,18 @@ def test_registration_create_rejects_missing_original_path(sample_registration_p
 
     assert response.status_code == 400
     assert "指定されたICADファイルが見つかりません" in str(response.json())
+
+
+@pytest.mark.django_db
+def test_registration_create_rejects_too_long_original_path(sample_registration_payload):
+    client = APIClient()
+    segment_path = "\\".join(["segment"] * 35)
+    sample_registration_payload["sourcePath"] = rf"C:\{segment_path}\sample_3d.icd"
+
+    response = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+
+    assert response.status_code == 400
+    assert "パスが長すぎます" in str(response.json())
 
 
 @pytest.mark.django_db
