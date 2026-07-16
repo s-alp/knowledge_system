@@ -36,6 +36,17 @@ ACTIVE_HANDOFF_DOCS = [
     ROOT / "docs" / "icad_tag_selection_and_viewer_ui_spec_2026-07-15.md",
 ]
 
+ACTIVE_SOURCE_TEXT_PATHS = [
+    ROOT / "src",
+    ROOT / "backend" / "apps" / "drawing_metadata" / "api",
+    ROOT / "backend" / "apps" / "drawing_metadata" / "management",
+    ROOT / "backend" / "apps" / "drawing_metadata" / "models.py",
+    ROOT / "backend" / "apps" / "drawing_metadata" / "services",
+    ROOT / "backend" / "apps" / "drawing_metadata" / "templates",
+    ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend" / "src",
+    ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "handover_package" / "frontend" / "src",
+]
+
 STALE_DOC_PATTERNS = [
     re.compile(pattern)
     for pattern in (
@@ -59,6 +70,23 @@ STALE_DOC_PATTERNS = [
         r"作成日/改訂日/承認日の分類は未実装",
     )
 ]
+
+SOURCE_GUARDRAIL_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in (
+        r"not implemented yet",
+        r"\bTODO\b",
+        r"\bFIXME\b",
+        r"未実装",
+        r"確認待ち",
+        r"材質要確認:",
+        r"創屋連携データ確認",
+        r"ユーザー画面には表示しません",
+        r"通常画面へ出さず",
+    )
+]
+
+SOURCE_GUARDRAIL_SUFFIXES = {".cs", ".py", ".ts", ".tsx", ".html"}
 
 
 def _command_env() -> dict[str, str]:
@@ -122,6 +150,47 @@ def _scan_stale_docs(paths: Iterable[Path]) -> dict:
                     )
     return {
         "name": "stale_handoff_doc_search",
+        "passed": not findings,
+        "findingCount": len(findings),
+        "findings": findings,
+    }
+
+
+def _iter_source_files(paths: Iterable[Path]) -> Iterable[Path]:
+    for path in paths:
+        if path.is_file():
+            if path.suffix in SOURCE_GUARDRAIL_SUFFIXES:
+                yield path
+            continue
+        if not path.is_dir():
+            continue
+        for child in path.rglob("*"):
+            if not child.is_file() or child.suffix not in SOURCE_GUARDRAIL_SUFFIXES:
+                continue
+            if ".test." in child.name or ".spec." in child.name:
+                continue
+            parts = set(child.parts)
+            if {"bin", "obj", "node_modules", "dist", "__pycache__"}.intersection(parts):
+                continue
+            yield child
+
+
+def _scan_source_text_guardrails(paths: Iterable[Path]) -> dict:
+    findings: list[dict] = []
+    for path in _iter_source_files(paths):
+        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            for pattern in SOURCE_GUARDRAIL_PATTERNS:
+                if pattern.search(line):
+                    findings.append(
+                        {
+                            "file": str(path),
+                            "line": line_number,
+                            "pattern": pattern.pattern,
+                            "text": line.strip(),
+                        }
+                    )
+    return {
+        "name": "source_text_guardrails",
         "passed": not findings,
         "findingCount": len(findings),
         "findings": findings,
@@ -201,6 +270,7 @@ def main() -> int:
         ),
     ]
     gates.append(_scan_stale_docs(ACTIVE_HANDOFF_DOCS))
+    gates.append(_scan_source_text_guardrails(ACTIVE_SOURCE_TEXT_PATHS))
     gates.append(_git_status_gate(args.require_clean))
 
     if args.include_tests:

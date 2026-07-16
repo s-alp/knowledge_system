@@ -1,6 +1,6 @@
 {
   "schemaVersion": "icad_delivery_readiness_audit.v1",
-  "gateCount": 10,
+  "gateCount": 11,
   "failedGateCount": 0,
   "gatePassed": true,
   "gates": [
@@ -96,6 +96,12 @@
     },
     {
       "name": "stale_handoff_doc_search",
+      "passed": true,
+      "findingCount": 0,
+      "findings": []
+    },
+    {
+      "name": "source_text_guardrails",
       "passed": true,
       "findingCount": 0,
       "findings": []

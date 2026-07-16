@@ -56,7 +56,7 @@ namespace IcadExtraction.SxNet
                 }
                 if (previewAssetOptions.Enabled)
                 {
-                    const string message = "2D preview asset export is not implemented yet. Print/plot settings must be verified per ICAD environment.";
+                    const string message = "2D preview uses the Django metadata SVG endpoint; SXNET print/plot file export is disabled until an explicit plotter profile is selected.";
                     rawExtract.ViewerAssets["2d"] = new List<ViewerAssetPayload>
                     {
                         new ViewerAssetPayload
