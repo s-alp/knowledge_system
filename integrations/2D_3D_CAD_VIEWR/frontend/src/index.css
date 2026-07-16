@@ -1275,6 +1275,49 @@ p {
   color: #1d4ed8;
 }
 
+.tag-evidence-list {
+  display: grid;
+  gap: 8px;
+}
+
+.tag-evidence-list > strong {
+  color: var(--text-color-strong);
+  font-size: 0.86rem;
+}
+
+.tag-evidence-list dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.tag-evidence-list div {
+  min-width: 0;
+}
+
+.tag-evidence-list dt {
+  color: var(--text-color-soft);
+  font-size: 0.74rem;
+}
+
+.tag-evidence-list dd {
+  margin: 0;
+  color: var(--text-color-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.tag-evidence-list p {
+  margin: 0;
+  color: var(--text-color-soft);
+  font-size: 0.8rem;
+}
+
 .tag-attribute-list {
   display: grid;
   gap: 8px;

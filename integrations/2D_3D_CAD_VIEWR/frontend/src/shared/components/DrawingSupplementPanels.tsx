@@ -8,6 +8,13 @@ interface DrawingSupplementPanelsProps {
 
 const ATTRIBUTE_VALUE_PREVIEW_LENGTH = 160;
 
+function confidenceLabel(value: string): string {
+  if (value === "high") return "高";
+  if (value === "medium") return "中";
+  if (value === "low") return "低";
+  return value || "-";
+}
+
 export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps) {
   const [activeTabId, setActiveTabId] = useState(detail.relatedTabs[0]?.id ?? "");
   const activeTab =
@@ -86,6 +93,34 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
                       <span className="tag-target-empty">タグなし</span>
                     )}
                   </div>
+                  {target.tagEvidence && target.tagEvidence.length > 0 ? (
+                    <div className="tag-evidence-list">
+                      <strong>タグ根拠</strong>
+                      {target.tagEvidence.slice(0, 4).map((item) => (
+                        <dl key={`${target.targetKey}-${item.tag}-${item.evidence}`}>
+                          <div>
+                            <dt>タグ</dt>
+                            <dd>{item.tag}</dd>
+                          </div>
+                          <div>
+                            <dt>取得元</dt>
+                            <dd>{item.source}</dd>
+                          </div>
+                          <div>
+                            <dt>信頼度</dt>
+                            <dd>{confidenceLabel(item.confidence)}</dd>
+                          </div>
+                          <div>
+                            <dt>採用理由</dt>
+                            <dd>{item.reason}</dd>
+                          </div>
+                        </dl>
+                      ))}
+                      {target.tagEvidence.length > 4 ? (
+                        <p>{target.tagEvidence.length - 4} 件のタグ根拠を省略</p>
+                      ) : null}
+                    </div>
+                  ) : null}
                   {target.attributes.length > 0 ? (
                     <dl className="tag-attribute-list">
                       {target.attributes.slice(0, 6).map((attribute) => (

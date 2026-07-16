@@ -20,6 +20,15 @@ const detail: DrawingKnowledgeDetail = {
       writePolicy: "preview_only_no_production_write",
       reviewRequired: true,
       tags: ["材質:SUS304", "装置:供給台"],
+      tagEvidence: [
+        {
+          tag: "材質:SUS304",
+          source: "material_keywords",
+          evidence: "canonicalAttributes.material_keywords",
+          confidence: "medium",
+          reason: "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
+        },
+      ],
       attributes: [
         {
           name: "材質",
@@ -85,8 +94,11 @@ describe("DrawingSupplementPanels", () => {
     expect(within(panel as HTMLElement).getByText("レビュー要")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("図面")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("candidate_existing")).toBeInTheDocument();
-    expect(within(panel as HTMLElement).getByText("材質:SUS304")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getAllByText("材質:SUS304").length).toBeGreaterThanOrEqual(2);
     expect(within(panel as HTMLElement).getByText("装置:供給台")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("タグ根拠")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("material_keywords")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("正式材質として分類でき、加工・調達検索に使えるため採用しています。")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("材質")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("SUS304")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("パーツ付加情報トークン")).toBeInTheDocument();
