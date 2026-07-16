@@ -109,7 +109,7 @@
 | レファー / 配置子図 | A | `SxEntRefer.getInfDetail()` -> `SxInfRefer` | 実装済み | `raw_extract.referenced_parts[]` / `canonicalAttributes.referenced_2d_ref_model_names`, `referenced_2d_ref_vs_names`。配置スケール、角度、ミラー/空参照もrawに保持 |
 | 図面名 | A/B | `SxInfModel.name`、図枠文字 | 候補実装済み | `title_block_candidates` / `title_block_fields`。2D/3D両方で照合対象 |
 | 担当者 / 設計者 / 検図者 / 承認者 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠解析 | 候補実装済み | SXNET固定フィールドとしてはヒットなし。作成/検図/承認分類は辞書拡充が必要 |
-| 日付 / 作成日 / 改訂日 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠/改訂表解析 | 候補実装済み | 作成日/改訂日/承認日の分類は未実装 |
+| 日付 / 作成日 / 検図日 / 承認日 / 改訂日 | B/D | `SxGeomText`, `SxGeomLabel` + 図枠/改訂表解析 | 候補実装済み | 明示ラベル付きの日付だけを `created_date`, `checked_date`, `approved_date`, `revision_date` に分類。日付らしくない値は採用しない |
 | 材質 | B | 2D文字、注記、部品表、引出し注記 | 候補実装済み | 2D固定材質APIではなく文字解析対象。3D材質と照合 |
 | 重量 | B | 図枠文字、注記、表 | 候補実装済み | 3Dマスプロパティと照合 |
 | 表面処理 | B/D | 文字、注記、表面粗さ記号 | 候補実装済み | 専用語はSXNET固定フィールドとしてヒットなし。表面粗さ記号は特徴候補として別保持 |

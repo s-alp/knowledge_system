@@ -26,6 +26,10 @@ TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "designer": {"label": "設計者", "keywords": ["設計", "作成", "製図", "drawn", "designed"], "max_value_length": 40},
     "checker": {"label": "検図者", "keywords": ["検図", "照査", "check", "checked"], "max_value_length": 40},
     "approver": {"label": "承認者", "keywords": ["承認", "認可", "approved"], "max_value_length": 40},
+    "created_date": {"label": "作成日", "keywords": ["作成日", "製図日", "作図日", "drawn date", "designed date"], "max_value_length": 40},
+    "checked_date": {"label": "検図日", "keywords": ["検図日", "照査日", "checked date"], "max_value_length": 40},
+    "approved_date": {"label": "承認日", "keywords": ["承認日", "認可日", "approved date"], "max_value_length": 40},
+    "revision_date": {"label": "改訂日", "keywords": ["改訂日", "訂正日", "revision date", "rev date"], "max_value_length": 40},
     "date": {"label": "日付", "keywords": ["日付", "年月日", "date"], "max_value_length": 40},
     "revision": {"label": "改訂", "keywords": ["改訂", "訂正", "rev", "revision"], "max_value_length": 40},
     "prfx": {"label": "PRFX", "keywords": ["prfx", "p/rfx", "prefix", "pfx"], "max_value_length": 40},
@@ -58,6 +62,12 @@ TWO_D_SECTION_DEFINITIONS: tuple[tuple[str, str, str], ...] = (
 MANUFACTURING_GEOMETRY_TYPES = set(GEOMETRY_FEATURE_RULES)
 
 SURFACE_ROUGHNESS_PATTERN = re.compile(r"\b(Ra|Rz|Ry|Rmax)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)", re.IGNORECASE)
+DATE_VALUE_PATTERN = re.compile(
+    r"(?:"
+    r"(?:19|20)?[0-9]{2}[./年月日\-\s]+[01]?[0-9][./月日\-\s]+[0-3]?[0-9]日?"
+    r"|(?:19|20)[0-9]{2}[01][0-9][0-3][0-9]"
+    r")"
+)
 MATERIAL_VALUE_PATTERN = re.compile(
     r"(?<![A-Z0-9])(SUS[0-9][0-9A-Z-]*|SUS(?!-)|SS400[A-Z-]*|SPCC|S[0-9]{2}C|A[0-9]{4}P?|AL|SKD[0-9]*|SKS[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*|PETG|PET|POM|PVC|PTFE|PPS|NBR|EPDM|FKM|PP)(?![A-Z0-9])",
     re.IGNORECASE,
@@ -230,6 +240,9 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
         if not re.search(r"[-+]?\d+(?:\.\d+)?\s*(?:kg|g|t|ｋｇ|ｇ)\b", normalized_value, re.IGNORECASE):
             return False
         if any(token in normalized_evidence for token in ("吸引力", "倍", "÷")):
+            return False
+    if field in {"date", "created_date", "checked_date", "approved_date", "revision_date"}:
+        if not DATE_VALUE_PATTERN.search(normalized_value):
             return False
     if field == "coating_instruction" and "仕上げ面不可" in normalized_value:
         return False
@@ -571,6 +584,11 @@ def _build_revision_note_candidates(texts: list[dict], *, has_print_frames: bool
             if _normalize_for_match(keyword) in normalized_evidence
         ]
         if not matched_keywords:
+            continue
+        if DATE_VALUE_PATTERN.search(evidence_text) and any(
+            _normalize_for_match(keyword) in normalized_evidence
+            for keyword in ("改訂日", "訂正日", "revision date", "rev date")
+        ):
             continue
 
         value = None
@@ -968,6 +986,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "checker": None,
         "approver": None,
         "drawing_date": None,
+        "created_date": None,
+        "checked_date": None,
+        "approved_date": None,
+        "revision_date": None,
         "prfx": None,
         "unit_number": None,
         "source_format": raw_payload.get("source_format", "icad"),
@@ -1250,6 +1272,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             "checker": "checker",
             "approver": "approver",
             "date": "drawing_date",
+            "created_date": "created_date",
+            "checked_date": "checked_date",
+            "approved_date": "approved_date",
+            "revision_date": "revision_date",
             "revision": "revision",
             "prfx": "prfx",
             "unit_number": "unit_number",

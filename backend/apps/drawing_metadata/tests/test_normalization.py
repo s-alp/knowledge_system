@@ -165,6 +165,10 @@ def test_normalize_2d_raw_extract():
                 {"text_lines": ["塗装", "マンセル 5Y7/1"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 30.0},
                 {"text_lines": ["PRFX RAA4844"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 40.0},
                 {"text_lines": ["ユニット U01"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 50.0},
+                {"text_lines": ["設計者", "創屋 太郎"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 60.0},
+                {"text_lines": ["検図者", "山田 花子"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 70.0},
+                {"text_lines": ["承認日", "2026/07/16"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 80.0},
+                {"text_lines": ["改訂日", "2026-07-17"], "source_type": "text", "inside_print_area": True, "position_x": 10.0, "position_y": 90.0},
                 {"text_lines": ["材質 SS400"], "source_type": "text", "inside_print_area": False, "position_x": 999.0, "position_y": 999.0},
                 {"text_lines": ["材質 \ufffd\ufffd"], "source_type": "text", "inside_print_area": True, "position_x": 11.0, "position_y": 20.0},
                 {"text_lines": ["製図者"], "source_type": "text", "inside_print_area": True, "position_x": 12.0, "position_y": 20.0},
@@ -230,9 +234,16 @@ def test_normalize_2d_raw_extract():
     assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
     assert canonical["title_block_fields"]["prfx"] == "RAA4844"
     assert canonical["title_block_fields"]["unit_number"] == "U01"
+    assert canonical["title_block_fields"]["designer"] == "創屋 太郎"
+    assert canonical["title_block_fields"]["checker"] == "山田 花子"
+    assert canonical["title_block_fields"]["approved_date"] == "2026/07/16"
+    assert canonical["title_block_fields"]["revision_date"] == "2026-07-17"
+    assert canonical["designer"] == "創屋 太郎"
+    assert canonical["checker"] == "山田 花子"
+    assert canonical["approved_date"] == "2026/07/16"
+    assert canonical["revision_date"] == "2026-07-17"
     assert canonical["prfx_candidates"] == ["RAA4844"]
     assert canonical["unit_number_candidates"] == ["U01"]
-    assert "designer" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "１．使用" for candidate in canonical["title_block_candidates"])
     assert all(candidate.get("value") != "SS400" for candidate in canonical["title_block_candidates"])
     assert all("\ufffd" not in str(candidate.get("evidence_text")) for candidate in canonical["title_block_candidates"])
@@ -294,6 +305,8 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
                 {"text_lines": ["図番：参考：M24A88810"], "inside_print_area": True},
                 {"text_lines": ["図番：P-100"], "inside_print_area": True},
                 {"text_lines": ["塗装", "仕上げ面不可"], "inside_print_area": True},
+                {"text_lines": ["日付 未定"], "inside_print_area": True},
+                {"text_lines": ["承認日 A寸法変更"], "inside_print_area": True},
             ],
             "print_frames": [{"frame_no": 1}],
         },
@@ -304,6 +317,8 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
     assert canonical["title_block_fields"]["weight"] == "0.49 kg"
     assert canonical["weight_value"] == "0.49 kg"
     assert canonical["title_block_fields"]["drawing_number"] == "P-100"
+    assert "date" not in canonical["title_block_fields"]
+    assert "approved_date" not in canonical["title_block_fields"]
     assert "material" not in canonical["title_block_fields"]
     assert "coating_instruction" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "参考：M24A88810" for candidate in canonical["title_block_candidates"])
