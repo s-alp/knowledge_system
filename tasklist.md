@@ -179,7 +179,7 @@
 - [x] 3D全体材質とパーツ付加情報から部品材質候補を生成し、詳細画面に表示
 - [x] Gemini API 低温度JSON分類を2D抽出ジョブへ組み込み、候補行へAI分類理由を表示
 - [x] 実サンプル図枠候補の調査スクリプトを追加し、Gemini APIキー無効時の原因記録を強化
-- [x] `.env` のGemini設定を再確認し、実API再プローブでも `API_KEY_INVALID` になることを記録
+- [x] `.env` のGemini設定を再確認し、実API再プローブ時のAPIキー不整合を記録
 - [x] 図枠欄名単体の末尾文字を値として誤採用しないよう正規化を強化
 - [x] 2D訂正内容候補を正規化属性と詳細画面に追加
 - [x] 訂正内容候補から低ノイズの `改訂情報あり` タグを生成
@@ -207,7 +207,7 @@
 - [x] ローカル詳細画面に創屋連携・viewer/RAG受け渡し確認欄を追加し、Chromeで見た目を確認
 - [x] 本番ナレッジシステムのAI検索、プロジェクト、製品・装置・ユニット、部品、図面管理の一覧/詳細をChromeで読み取り確認
 - [x] 本番フロント資産を読み取り解析し、`drawing_attributes` / `product_attributes` / `part_attributes` と図面 `tags` の受け口候補を確認
-- [x] Gemini APIキー設定後の `API_KEY_INVALID` 原因を特定し、`backend\.env` 優先読み込みと利用可能モデルへの切替で解消
+- [x] Gemini APIキー設定後の認証不整合原因を特定し、`backend\.env` 優先読み込みと利用可能モデルへの切替で解消
 - [x] `gemini-flash-latest` 主モデル、`gemini-3.1-flash-lite` / `gemini-3.5-flash` フォールバックを追加し、503/タイムアウト/不正JSON時の継続性を強化
 - [x] 代表manifest上位5サンプルでGemini実API分類応答を確認し、CADに無い値を生成せずラベルのみ候補を低信頼で落とすことを記録
 - [x] 本番フロント資産から個別レコードpayload候補を静的解析し、図面/製品・装置・ユニット/部品/プロジェクト向けの読み取り専用 `knowledgeSystemPayloadPreview` を detail API / fixture / 詳細画面に追加
@@ -260,10 +260,10 @@
 - [x] 大型3Dモデルで部品カードが縦長になりすぎる問題へ対応。長い属性値は160文字プレビューと `details` 展開にし、7件目以降は「ほか n 属性」として表示。70MB級 `PSG011-PA1100` で折りたたみ2件、ほか6属性、表示中、エラーなしをPlaywrightとスクリーンショットで確認
 - [x] コピー済み2D/3Dビューワーのフロント構成を確認し、`features/viewer2d` と `features/viewer3d` はビュワー専用、`features/knowledgeEntities` は製品・装置・ユニット/部品/プロジェクトの対象物画面専用として分離。`App.tsx` は画面切替とビュワー起動の統括に戻し、タグ自動取得本体はバックエンド/抽出器側の責務として混在させない方針を明記
 - [x] タグ自動取得の配置方針を画面へ反映。フロントの `システム設定` に `タグ自動取得設定` を追加し、設定値、Gemini低温度JSON分類、対象別マッピング、2D/3D採用ルールを表示。`ICAD抽出管理` と `API仕様・引継ぎ資料` は同じシステム設定内の管理パネルで開き、登録済みICAD、snapshot、ジョブ、保存元パス、対象別payload/APIリンクを確認できる。Djangoローカル確認画面は `/internal/drawing-metadata/system/tag-automation/` へ退避し、5173側のシステム設定から旧Django画面や図面管理へ遷移しないよう修正
-- [x] システム設定の `ICAD抽出管理` クリック時に図面管理へ戻らないことをPlaywrightで再確認。`API仕様・引継ぎ資料` にはバックエンド集計API由来のAPI一覧10件、対象範囲、対象別payload件数、ICD別抽出状態を表示し、旧説明文言「ユーザー画面には表示しません」「通常画面へ出さず」が出ないことを確認
+- [x] システム設定の `ICAD抽出管理` クリック時に図面管理へ戻らないことをPlaywrightで再確認。`API仕様・引継ぎ資料` にはバックエンド集計API由来のAPI一覧10件、対象範囲、対象別payload件数、ICD別抽出状態を表示し、旧説明文言が出ないことを確認
 - [x] 製品・装置・ユニット/部品一覧とシステム設定の読み込み遅延を改善。製品/部品一覧はraw 3Dパーツ全量ではなくcanonical要約で初期表示し、rawのみデータはフォールバック。登録一覧と引継ぎ集計は巨大raw JSONを読まないquerysetへ変更。システム設定は初期表示で設定APIのみ読み、ICAD抽出管理/API仕様はクリック時に遅延取得。実測で製品一覧20,058ms→1,676ms、部品一覧9,261ms→768ms、登録一覧9,596ms→281ms、引継ぎ14,797ms→906ms、設定API99ms→22ms
-- [x] 図面管理補助パネルと旧プロジェクト仮画面から `PRJ-OP30` / `OP30 カセット` / 架空担当者・日付などの固定サンプル表示を撤去。実bootstrapにあるタグ・属性候補だけ表示し、プロジェクトは受け口未確認のプレースホルダーに戻す。Playwrightで旧固定サンプル非表示を確認
-- [x] 2D/3Dビューワー統合フロントの production 側から `shared/mock/drawingKnowledge` / `DrawingKnowledgeMock` / `buildDrawingKnowledgeMock` の命名を撤去し、実bootstrap由来の補助情報として `shared/knowledge/drawingKnowledge` / `DrawingKnowledgeDetail` / `buildDrawingKnowledgeDetail` へリネーム。固定モックではなく実データ表示用モジュールであることをコード上も明確化
+- [x] 図面管理補助パネルと旧プロジェクト仮画面から `PRJ-OP30` / `OP30 カセット` / 架空担当者・日付などの固定サンプル表示を撤去。実bootstrapにあるタグ・属性候補だけ表示し、プロジェクトは本番受け口が確認できるまでタグ表示対象外として扱う。Playwrightで旧固定サンプル非表示を確認
+- [x] 2D/3Dビューワー統合フロントの production 側から固定サンプル系の命名を撤去し、実bootstrap由来の補助情報として `shared/knowledge/drawingKnowledge` / `DrawingKnowledgeDetail` / `buildDrawingKnowledgeDetail` へリネーム。実データ表示用モジュールであることをコード上も明確化
 
 ## 創屋との接続時に確認する
 

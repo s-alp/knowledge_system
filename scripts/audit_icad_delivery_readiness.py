@@ -31,10 +31,12 @@ FRONTEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "frontend"
 VIEWER_BACKEND_DIR = ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "backend"
 
 ACTIVE_HANDOFF_DOCS = [
+    ROOT / "tasklist.md",
     ROOT / "docs" / "icad_2d_3d_extraction_capability_matrix_2026-07-14.md",
     ROOT / "docs" / "icad_entity_operations_and_quality_handoff_2026-07-16.md",
     ROOT / "docs" / "souya_icad_tag_attribute_handoff_2026-07-14.md",
     ROOT / "docs" / "icad_tag_selection_and_viewer_ui_spec_2026-07-15.md",
+    ROOT / "integrations" / "2D_3D_CAD_VIEWR" / "tasklist.md",
 ]
 
 ACTIVE_SOURCE_TEXT_PATHS = [
@@ -60,6 +62,7 @@ STALE_DOC_PATTERNS = [
         r"classification positive recall\s*\|\s*0\.5000",
         r"2026-07-16に共有抽出から10ファイル",
         r"創屋連携データ確認",
+        r"モック\s*UI",
         r"ユーザー画面には表示しません",
         r"通常画面へ出さず",
         r"\|\s*PRFX\s*\|[^\n]*\|\s*未実装\s*\|",

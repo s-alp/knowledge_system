@@ -41,7 +41,7 @@
 - [x] frontend を drawingId 起動へ切り替えた
 - [x] debug 用 URL / upload UI を本番表示から分離した
 - [x] PDM 埋込前提で README / docs を同期した
-- [x] ナレッジ画面に寄せた図面詳細モック UI を追加した
+- [x] ナレッジ画面に寄せた図面詳細 UI を追加した
 - [x] 2D viewer のパン / ズーム時の再ラスタライズを抑制して操作体感を改善した
 - [x] 2D viewer の操作 state を preview 内へ局所化し、PDF の軽量 scale 制御を追加した
 

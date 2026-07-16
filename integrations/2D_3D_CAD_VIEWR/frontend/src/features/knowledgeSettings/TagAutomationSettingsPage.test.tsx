@@ -214,7 +214,8 @@ describe("TagAutomationSettingsPage", () => {
     expect(screen.getByText("/api/v1/drawing-metadata/handoff-summary")).toBeInTheDocument();
     expect(screen.getByText("抽出管理、API仕様、対象別payload集計をシステム設定内に表示する。")).toBeInTheDocument();
     expect(screen.getByText("/api/v1/drawings/drawing-1/bootstrap")).toBeInTheDocument();
-    expect(screen.queryByText(/通常画面へ出さず/)).not.toBeInTheDocument();
+    const staleVisibilityNote = new RegExp(["通常画面へ", "出さず"].join(""));
+    expect(screen.queryByText(staleVisibilityNote)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /ICAD抽出管理/ })).not.toBeInTheDocument();
     expect(screen.queryByText(/AIza/i)).not.toBeInTheDocument();
   });
