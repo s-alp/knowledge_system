@@ -73,6 +73,7 @@ def _latest_job(snapshot) -> dict:
             "startedAt": None,
             "finishedAt": None,
             "errorMessage": "",
+            "warnings": [],
         }
     return {
         "status": job.status,
@@ -81,6 +82,7 @@ def _latest_job(snapshot) -> dict:
         "startedAt": job.started_at.isoformat() if job.started_at else None,
         "finishedAt": job.finished_at.isoformat() if job.finished_at else None,
         "errorMessage": job.error_message,
+        "warnings": job.warnings_json or [],
     }
 
 
@@ -145,6 +147,7 @@ def main() -> int:
         issues: list[dict] = []
         job_2d = _latest_job(two_d)
         job_3d = _latest_job(three_d)
+        source_access_status = _source_access_status(source_path)
 
         if drawing is None:
             _add_issue(
@@ -153,6 +156,14 @@ def main() -> int:
                 code="registration_missing",
                 message="manifestのICADがRegisteredDrawingに登録されていません。",
                 reextract_condition="登録処理を実行し、1 ICD = 1登録単位でsourcePathを一致させます。",
+            )
+        if drawing is not None and source_access_status != "exists":
+            _add_issue(
+                issues,
+                severity="known_condition",
+                code="source_not_accessible_current_environment",
+                message="現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+                reextract_condition="再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。",
             )
         if manifest_source_counts[source_path] > 1:
             _add_issue(
@@ -221,10 +232,10 @@ def main() -> int:
         if content_count > 0 and print_frame_count == 0:
             _add_issue(
                 issues,
-                severity="warning",
-                code="2d_content_without_print_frame",
-                message="2D要素はありますが、印刷枠を検出できていません。",
-                reextract_condition="SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。",
+                severity="known_condition",
+                code="2d_print_frame_not_defined_by_sxnet",
+                message="2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+                reextract_condition="必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。",
             )
         if three_d and not parts:
             _add_issue(
@@ -234,7 +245,16 @@ def main() -> int:
                 message="3D snapshotはありますが、parts配列が空です。",
                 reextract_condition="3D構成取得条件を確認し、パーツツリー抽出を再実行します。",
             )
-        if three_d and not mass_kg:
+        mass_probe_status = raw_3d.get("mass_probe_status")
+        if three_d and not mass_kg and mass_probe_status == "no_entities":
+            _add_issue(
+                issues,
+                severity="known_condition",
+                code="3d_mass_no_searchable_entities",
+                message="SxWF.getEntListが質量計算対象の3D要素を返していないため、質量を算出できません。",
+                reextract_condition="3D形状エンティティが存在するかICAD側で確認します。存在しない場合は質量取得不可理由として保持します。",
+            )
+        elif three_d and not mass_kg:
             _add_issue(
                 issues,
                 severity="warning",
@@ -261,7 +281,7 @@ def main() -> int:
             {
                 "sourcePath": source_path,
                 "filename": Path(source_path).name,
-                "sourceAccessStatus": _source_access_status(source_path),
+                "sourceAccessStatus": source_access_status,
                 "registered": drawing is not None,
                 "has2dSnapshot": two_d is not None,
                 "has3dSnapshot": three_d is not None,
@@ -289,6 +309,8 @@ def main() -> int:
                 "massStatus": mass_status,
                 "massKg": mass_kg,
                 "massEvidence": mass_evidence,
+                "massProbeStatus": mass_probe_status,
+                "materialProbeStatus": raw_3d.get("material_probe_status"),
                 "latestJobs": {"2d": job_2d, "3d": job_3d},
                 "canonicalSourceEvidence": {
                     "2dTitleBlockFields": sorted((canonical_2d.get("title_block_fields") or {}).keys()),
@@ -312,6 +334,12 @@ def main() -> int:
         for issue in row["issues"]
         if issue["severity"] == "warning"
     ]
+    known_condition_issues = [
+        {"sourcePath": row["sourcePath"], **issue}
+        for row in rows
+        for issue in row["issues"]
+        if issue["severity"] == "known_condition"
+    ]
     result = {
         "schemaVersion": "icad_shared_sample_current_audit.v2",
         "manifest": str(manifest_path),
@@ -325,9 +353,12 @@ def main() -> int:
                 "3D snapshotありでparts欠落",
             ],
             "warning": [
-                "2D要素ありで印刷枠未検出",
-                "3D質量をkgへ正規化不可",
-                "材質・パーツ付加情報が元データに存在しない可能性",
+                "3D質量をkgへ正規化できず、SXNETの失敗理由も既知条件化できない",
+            ],
+            "knownCondition": [
+                "2D要素ありでSXNET印刷枠リストが空",
+                "SXNETが質量計算対象の3D要素を返さない",
+                "現環境から原本ICADパスにアクセスできないがsnapshotは存在する",
             ],
         },
         "sampleCount": len(rows),
@@ -348,9 +379,11 @@ def main() -> int:
         "sourceNotAccessibleCount": sum(row["sourceAccessStatus"] != "exists" for row in rows),
         "blockingIssueCount": len(blocking_issues),
         "warningIssueCount": len(warning_issues),
+        "knownConditionCount": len(known_condition_issues),
         "gatePassed": not blocking_issues,
         "blockingIssues": blocking_issues,
         "warningIssues": warning_issues,
+        "knownConditionIssues": known_condition_issues,
         "unresolved": [
             row
             for row in rows
@@ -365,6 +398,15 @@ def main() -> int:
             }
             for row in rows
             if row["printFrameStatus"] == "not_defined"
+        ]
+        + [
+            {
+                "sourcePath": row["sourcePath"],
+                "condition": "mass_no_searchable_entities",
+                "handling": "SxWF.getEntListが質量計算対象を返さないため、質量取得不可理由として保持する。",
+            }
+            for row in rows
+            if row["massProbeStatus"] == "no_entities"
         ],
         "rows": rows,
     }

@@ -11,9 +11,12 @@
       "3D snapshotありでparts欠落"
     ],
     "warning": [
-      "2D要素ありで印刷枠未検出",
-      "3D質量をkgへ正規化不可",
-      "材質・パーツ付加情報が元データに存在しない可能性"
+      "3D質量をkgへ正規化できず、SXNETの失敗理由も既知条件化できない"
+    ],
+    "knownCondition": [
+      "2D要素ありでSXNET印刷枠リストが空",
+      "SXNETが質量計算対象の3D要素を返さない",
+      "現環境から原本ICADパスにアクセスできないがsnapshotは存在する"
     ]
   },
   "sampleCount": 39,
@@ -36,37 +39,46 @@
   "massAvailableDrawingCount": 38,
   "sourceNotAccessibleCount": 1,
   "blockingIssueCount": 0,
-  "warningIssueCount": 4,
+  "warningIssueCount": 0,
+  "knownConditionCount": 5,
   "gatePassed": true,
   "blockingIssues": [],
-  "warningIssues": [
+  "warningIssues": [],
+  "knownConditionIssues": [
     {
       "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
-      "severity": "warning",
-      "code": "3d_mass_missing",
-      "message": "3D質量・重量をkg表示へ正規化できていません。",
-      "reextractCondition": "3D質量プローブを再実行し、取得不可なら取得不可理由を記録します。"
+      "severity": "known_condition",
+      "code": "3d_mass_no_searchable_entities",
+      "message": "SxWF.getEntListが質量計算対象の3D要素を返していないため、質量を算出できません。",
+      "reextractCondition": "3D形状エンティティが存在するかICAD側で確認します。存在しない場合は質量取得不可理由として保持します。"
     },
     {
       "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
-      "severity": "warning",
-      "code": "2d_content_without_print_frame",
-      "message": "2D要素はありますが、印刷枠を検出できていません。",
-      "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
     },
     {
       "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
-      "severity": "warning",
-      "code": "2d_content_without_print_frame",
-      "message": "2D要素はありますが、印刷枠を検出できていません。",
-      "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
     },
     {
       "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
-      "severity": "warning",
-      "code": "2d_content_without_print_frame",
-      "message": "2D要素はありますが、印刷枠を検出できていません。",
-      "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+    },
+    {
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\18T5-10BF(8).icd",
+      "severity": "known_condition",
+      "code": "source_not_accessible_current_environment",
+      "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+      "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
     }
   ],
   "unresolved": [],
@@ -100,6 +112,8 @@
       "massStatus": "present",
       "massKg": "17.71 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -107,7 +121,8 @@
           "createdAt": "2026-07-15T13:03:04.541638+00:00",
           "startedAt": "2026-07-15T13:03:04.541638+00:00",
           "finishedAt": "2026-07-15T13:03:04.541638+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -115,7 +130,8 @@
           "createdAt": "2026-07-15T13:03:06.467088+00:00",
           "startedAt": "2026-07-15T13:03:06.467088+00:00",
           "finishedAt": "2026-07-15T13:03:06.467088+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -155,6 +171,8 @@
       "massStatus": "present",
       "massKg": "0.03 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -162,7 +180,8 @@
           "createdAt": "2026-07-15T13:03:04.473430+00:00",
           "startedAt": "2026-07-15T13:03:04.472942+00:00",
           "finishedAt": "2026-07-15T13:03:04.472942+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -170,7 +189,8 @@
           "createdAt": "2026-07-15T13:03:06.316361+00:00",
           "startedAt": "2026-07-15T13:03:06.315860+00:00",
           "finishedAt": "2026-07-15T13:03:06.315860+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -210,6 +230,8 @@
       "massStatus": "present",
       "massKg": "0.02 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -217,7 +239,8 @@
           "createdAt": "2026-07-15T13:03:05.807576+00:00",
           "startedAt": "2026-07-15T13:03:05.807077+00:00",
           "finishedAt": "2026-07-15T13:03:05.807077+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -225,7 +248,8 @@
           "createdAt": "2026-07-15T13:03:07.288695+00:00",
           "startedAt": "2026-07-15T13:03:07.288211+00:00",
           "finishedAt": "2026-07-15T13:03:07.288211+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -265,6 +289,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -272,7 +298,8 @@
           "createdAt": "2026-07-15T13:03:04.455443+00:00",
           "startedAt": "2026-07-15T13:03:04.455443+00:00",
           "finishedAt": "2026-07-15T13:03:04.455443+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -280,7 +307,8 @@
           "createdAt": "2026-07-15T13:03:06.295734+00:00",
           "startedAt": "2026-07-15T13:03:06.295734+00:00",
           "finishedAt": "2026-07-15T13:03:06.295734+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -320,6 +348,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -327,7 +357,8 @@
           "createdAt": "2026-07-15T13:03:04.603740+00:00",
           "startedAt": "2026-07-15T13:03:04.603740+00:00",
           "finishedAt": "2026-07-15T13:03:04.603740+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -335,7 +366,8 @@
           "createdAt": "2026-07-15T13:03:06.708365+00:00",
           "startedAt": "2026-07-15T13:03:06.707866+00:00",
           "finishedAt": "2026-07-15T13:03:06.707866+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -375,6 +407,8 @@
       "massStatus": "present",
       "massKg": "0.01 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -382,7 +416,8 @@
           "createdAt": "2026-07-15T13:03:04.582163+00:00",
           "startedAt": "2026-07-15T13:03:04.581664+00:00",
           "finishedAt": "2026-07-15T13:03:04.581664+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -390,7 +425,8 @@
           "createdAt": "2026-07-15T13:03:06.687817+00:00",
           "startedAt": "2026-07-15T13:03:06.687817+00:00",
           "finishedAt": "2026-07-15T13:03:06.687817+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -430,6 +466,8 @@
       "massStatus": "present",
       "massKg": "0.05 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -437,7 +475,8 @@
           "createdAt": "2026-07-15T13:03:04.562139+00:00",
           "startedAt": "2026-07-15T13:03:04.562139+00:00",
           "finishedAt": "2026-07-15T13:03:04.562139+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -445,7 +484,8 @@
           "createdAt": "2026-07-15T13:03:06.669306+00:00",
           "startedAt": "2026-07-15T13:03:06.669306+00:00",
           "finishedAt": "2026-07-15T13:03:06.669306+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -485,6 +525,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -492,7 +534,8 @@
           "createdAt": "2026-07-15T13:03:04.359865+00:00",
           "startedAt": "2026-07-15T13:03:04.359865+00:00",
           "finishedAt": "2026-07-15T13:03:04.359865+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -500,7 +543,8 @@
           "createdAt": "2026-07-15T13:03:06.224212+00:00",
           "startedAt": "2026-07-15T13:03:06.224212+00:00",
           "finishedAt": "2026-07-15T13:03:06.224212+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -509,7 +553,14 @@
         "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
         "3dMass": "canonicalAttributes.mass_value"
       },
-      "issues": []
+      "issues": [
+        {
+          "severity": "known_condition",
+          "code": "source_not_accessible_current_environment",
+          "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+          "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
+        }
+      ]
     }
   ],
   "knownDataConditions": [
@@ -527,6 +578,11 @@
       "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
       "condition": "print_frame_not_defined",
       "handling": "座標・ビュー・レイヤーは保持し、inside_print_areaは判定不明のままにする。"
+    },
+    {
+      "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+      "condition": "mass_no_searchable_entities",
+      "handling": "SxWF.getEntListが質量計算対象を返さないため、質量取得不可理由として保持する。"
     }
   ],
   "rows": [
@@ -559,6 +615,8 @@
       "massStatus": "present",
       "massKg": "3.96 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -566,7 +624,33 @@
           "createdAt": "2026-07-15T13:03:04.862527+00:00",
           "startedAt": "2026-07-15T13:03:04.862028+00:00",
           "finishedAt": "2026-07-15T13:03:04.862028+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "set_dim_skipped",
+              "message": "2D window setDim(false) was skipped: 呼び出しのターゲットが例外をスローしました。"
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (67) and layer count (69) did not match in view '!YZ'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -574,7 +658,8 @@
           "createdAt": "2026-07-15T13:03:06.851115+00:00",
           "startedAt": "2026-07-15T13:03:06.850614+00:00",
           "finishedAt": "2026-07-15T13:03:06.850614+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -614,6 +699,8 @@
       "massStatus": "present",
       "massKg": "2.16 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -621,7 +708,13 @@
           "createdAt": "2026-07-15T13:03:05.758451+00:00",
           "startedAt": "2026-07-15T13:03:05.757951+00:00",
           "finishedAt": "2026-07-15T13:03:05.757951+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (342) and layer count (356) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -629,7 +722,8 @@
           "createdAt": "2026-07-15T13:03:07.261777+00:00",
           "startedAt": "2026-07-15T13:03:07.261280+00:00",
           "finishedAt": "2026-07-15T13:03:07.261280+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -669,6 +763,8 @@
       "massStatus": "present",
       "massKg": "9.70 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -676,7 +772,8 @@
           "createdAt": "2026-07-15T13:03:05.187459+00:00",
           "startedAt": "2026-07-15T13:03:05.186958+00:00",
           "finishedAt": "2026-07-15T13:03:05.186958+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -684,7 +781,8 @@
           "createdAt": "2026-07-15T13:03:07.112535+00:00",
           "startedAt": "2026-07-15T13:03:07.112535+00:00",
           "finishedAt": "2026-07-15T13:03:07.112535+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -724,6 +822,8 @@
       "massStatus": "present",
       "massKg": "0.18 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -731,7 +831,21 @@
           "createdAt": "2026-07-15T13:03:05.831160+00:00",
           "startedAt": "2026-07-15T13:03:05.830662+00:00",
           "finishedAt": "2026-07-15T13:03:05.830662+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (293) and layer count (307) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -739,7 +853,8 @@
           "createdAt": "2026-07-15T13:03:07.321283+00:00",
           "startedAt": "2026-07-15T13:03:07.321283+00:00",
           "finishedAt": "2026-07-15T13:03:07.321283+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -779,6 +894,8 @@
       "massStatus": "present",
       "massKg": "0.01 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -786,7 +903,8 @@
           "createdAt": "2026-07-15T13:03:04.380374+00:00",
           "startedAt": "2026-07-15T13:03:04.380374+00:00",
           "finishedAt": "2026-07-15T13:03:04.380374+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -794,7 +912,8 @@
           "createdAt": "2026-07-15T13:03:06.243236+00:00",
           "startedAt": "2026-07-15T13:03:06.242735+00:00",
           "finishedAt": "2026-07-15T13:03:06.242735+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -834,6 +953,8 @@
       "massStatus": "present",
       "massKg": "4.76 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -841,7 +962,8 @@
           "createdAt": "2026-07-15T13:03:05.929310+00:00",
           "startedAt": "2026-07-15T13:03:05.929310+00:00",
           "finishedAt": "2026-07-15T13:03:05.929310+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -849,7 +971,8 @@
           "createdAt": "2026-07-15T13:03:07.398806+00:00",
           "startedAt": "2026-07-15T13:03:07.394819+00:00",
           "finishedAt": "2026-07-15T13:03:07.394819+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -889,6 +1012,8 @@
       "massStatus": "present",
       "massKg": "7.81 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -896,7 +1021,8 @@
           "createdAt": "2026-07-15T13:03:04.429940+00:00",
           "startedAt": "2026-07-15T13:03:04.429940+00:00",
           "finishedAt": "2026-07-15T13:03:04.429940+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -904,7 +1030,8 @@
           "createdAt": "2026-07-15T13:03:06.278724+00:00",
           "startedAt": "2026-07-15T13:03:06.278724+00:00",
           "finishedAt": "2026-07-15T13:03:06.278724+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -944,6 +1071,8 @@
       "massStatus": "present",
       "massKg": "11.66 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -951,7 +1080,17 @@
           "createdAt": "2026-07-15T13:03:04.334862+00:00",
           "startedAt": "2026-07-15T13:03:04.334363+00:00",
           "finishedAt": "2026-07-15T13:03:04.334363+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (40) and layer count (42) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -959,7 +1098,8 @@
           "createdAt": "2026-07-15T13:03:06.193073+00:00",
           "startedAt": "2026-07-15T13:03:06.192571+00:00",
           "finishedAt": "2026-07-15T13:03:06.192571+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1001,6 +1141,8 @@
       "massStatus": "not_provided",
       "massKg": null,
       "massEvidence": "",
+      "massProbeStatus": "no_entities",
+      "materialProbeStatus": "no_entities",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1008,15 +1150,79 @@
           "createdAt": "2026-07-15T13:03:04.950670+00:00",
           "startedAt": "2026-07-15T13:03:04.950151+00:00",
           "finishedAt": "2026-07-15T13:03:04.950151+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
           "profile": "default",
-          "createdAt": "2026-07-15T13:03:07.493369+00:00",
-          "startedAt": "2026-07-15T13:03:07.493369+00:00",
-          "finishedAt": "2026-07-15T13:03:07.493369+00:00",
-          "errorMessage": ""
+          "createdAt": "2026-07-16T11:13:07.366395+00:00",
+          "startedAt": "2026-07-16T11:13:07.365893+00:00",
+          "finishedAt": "2026-07-16T11:13:07.365893+00:00",
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "mass_probe_no_entities",
+              "message": "SxWF.getEntList returned no searchable 3D elements for mass property calculation."
+            },
+            {
+              "code": "material_probe_no_entities",
+              "message": "SxWF.getEntList returned no searchable 3D elements for material extraction."
+            }
+          ]
         }
       },
       "canonicalSourceEvidence": {
@@ -1027,10 +1233,10 @@
       },
       "issues": [
         {
-          "severity": "warning",
-          "code": "3d_mass_missing",
-          "message": "3D質量・重量をkg表示へ正規化できていません。",
-          "reextractCondition": "3D質量プローブを再実行し、取得不可なら取得不可理由を記録します。"
+          "severity": "known_condition",
+          "code": "3d_mass_no_searchable_entities",
+          "message": "SxWF.getEntListが質量計算対象の3D要素を返していないため、質量を算出できません。",
+          "reextractCondition": "3D形状エンティティが存在するかICAD側で確認します。存在しない場合は質量取得不可理由として保持します。"
         }
       ]
     },
@@ -1063,6 +1269,8 @@
       "massStatus": "present",
       "massKg": "0.02 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1070,7 +1278,13 @@
           "createdAt": "2026-07-15T13:03:05.052300+00:00",
           "startedAt": "2026-07-15T13:03:05.052300+00:00",
           "finishedAt": "2026-07-15T13:03:05.052300+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -1078,7 +1292,8 @@
           "createdAt": "2026-07-15T13:03:06.983762+00:00",
           "startedAt": "2026-07-15T13:03:06.983762+00:00",
           "finishedAt": "2026-07-15T13:03:06.983762+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1118,6 +1333,8 @@
       "massStatus": "present",
       "massKg": "17.71 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1125,7 +1342,8 @@
           "createdAt": "2026-07-15T13:03:04.541638+00:00",
           "startedAt": "2026-07-15T13:03:04.541638+00:00",
           "finishedAt": "2026-07-15T13:03:04.541638+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1133,7 +1351,8 @@
           "createdAt": "2026-07-15T13:03:06.467088+00:00",
           "startedAt": "2026-07-15T13:03:06.467088+00:00",
           "finishedAt": "2026-07-15T13:03:06.467088+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1173,6 +1392,8 @@
       "massStatus": "present",
       "massKg": "0.03 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1180,7 +1401,8 @@
           "createdAt": "2026-07-15T13:03:04.473430+00:00",
           "startedAt": "2026-07-15T13:03:04.472942+00:00",
           "finishedAt": "2026-07-15T13:03:04.472942+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1188,7 +1410,8 @@
           "createdAt": "2026-07-15T13:03:06.316361+00:00",
           "startedAt": "2026-07-15T13:03:06.315860+00:00",
           "finishedAt": "2026-07-15T13:03:06.315860+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1228,6 +1451,8 @@
       "massStatus": "present",
       "massKg": "0.05 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1235,7 +1460,8 @@
           "createdAt": "2026-07-15T13:03:05.028800+00:00",
           "startedAt": "2026-07-15T13:03:05.028287+00:00",
           "finishedAt": "2026-07-15T13:03:05.028287+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1243,7 +1469,8 @@
           "createdAt": "2026-07-15T13:03:06.962258+00:00",
           "startedAt": "2026-07-15T13:03:06.962258+00:00",
           "finishedAt": "2026-07-15T13:03:06.962258+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1283,6 +1510,8 @@
       "massStatus": "present",
       "massKg": "4.70 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1290,7 +1519,113 @@
           "createdAt": "2026-07-15T13:03:04.631757+00:00",
           "startedAt": "2026-07-15T13:03:04.631757+00:00",
           "finishedAt": "2026-07-15T13:03:04.631757+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (141) and layer count (145) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -1298,7 +1633,8 @@
           "createdAt": "2026-07-15T13:03:06.734398+00:00",
           "startedAt": "2026-07-15T13:03:06.733899+00:00",
           "finishedAt": "2026-07-15T13:03:06.733899+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1338,6 +1674,8 @@
       "massStatus": "present",
       "massKg": "0.20 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1345,7 +1683,8 @@
           "createdAt": "2026-07-15T13:03:05.862199+00:00",
           "startedAt": "2026-07-15T13:03:05.862199+00:00",
           "finishedAt": "2026-07-15T13:03:05.862199+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1353,7 +1692,8 @@
           "createdAt": "2026-07-15T13:03:07.342307+00:00",
           "startedAt": "2026-07-15T13:03:07.342307+00:00",
           "finishedAt": "2026-07-15T13:03:07.342307+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1364,10 +1704,10 @@
       },
       "issues": [
         {
-          "severity": "warning",
-          "code": "2d_content_without_print_frame",
-          "message": "2D要素はありますが、印刷枠を検出できていません。",
-          "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
         }
       ]
     },
@@ -1400,6 +1740,8 @@
       "massStatus": "present",
       "massKg": "0.02 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1407,7 +1749,8 @@
           "createdAt": "2026-07-15T13:03:05.807576+00:00",
           "startedAt": "2026-07-15T13:03:05.807077+00:00",
           "finishedAt": "2026-07-15T13:03:05.807077+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1415,7 +1758,8 @@
           "createdAt": "2026-07-15T13:03:07.288695+00:00",
           "startedAt": "2026-07-15T13:03:07.288211+00:00",
           "finishedAt": "2026-07-15T13:03:07.288211+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1455,6 +1799,8 @@
       "massStatus": "present",
       "massKg": "0.21 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1462,7 +1808,8 @@
           "createdAt": "2026-07-15T13:03:04.806616+00:00",
           "startedAt": "2026-07-15T13:03:04.806616+00:00",
           "finishedAt": "2026-07-15T13:03:04.806616+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1470,7 +1817,8 @@
           "createdAt": "2026-07-15T13:03:06.812974+00:00",
           "startedAt": "2026-07-15T13:03:06.812974+00:00",
           "finishedAt": "2026-07-15T13:03:06.812974+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1510,6 +1858,8 @@
       "massStatus": "present",
       "massKg": "0.04 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1517,7 +1867,8 @@
           "createdAt": "2026-07-15T13:03:04.900666+00:00",
           "startedAt": "2026-07-15T13:03:04.900666+00:00",
           "finishedAt": "2026-07-15T13:03:04.900666+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1525,7 +1876,8 @@
           "createdAt": "2026-07-15T13:03:06.890174+00:00",
           "startedAt": "2026-07-15T13:03:06.890174+00:00",
           "finishedAt": "2026-07-15T13:03:06.890174+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1565,6 +1917,8 @@
       "massStatus": "present",
       "massKg": "0.01 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1572,7 +1926,8 @@
           "createdAt": "2026-07-15T13:03:04.924169+00:00",
           "startedAt": "2026-07-15T13:03:04.924169+00:00",
           "finishedAt": "2026-07-15T13:03:04.924169+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1580,7 +1935,8 @@
           "createdAt": "2026-07-15T13:03:06.912232+00:00",
           "startedAt": "2026-07-15T13:03:06.911718+00:00",
           "finishedAt": "2026-07-15T13:03:06.911718+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1620,6 +1976,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1627,7 +1985,8 @@
           "createdAt": "2026-07-15T13:03:04.835026+00:00",
           "startedAt": "2026-07-15T13:03:04.835026+00:00",
           "finishedAt": "2026-07-15T13:03:04.835026+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1635,7 +1994,8 @@
           "createdAt": "2026-07-15T13:03:06.833091+00:00",
           "startedAt": "2026-07-15T13:03:06.832560+00:00",
           "finishedAt": "2026-07-15T13:03:06.832560+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1675,6 +2035,8 @@
       "massStatus": "present",
       "massKg": "348.08 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1682,7 +2044,8 @@
           "createdAt": "2026-07-15T13:03:05.269124+00:00",
           "startedAt": "2026-07-15T13:03:05.268623+00:00",
           "finishedAt": "2026-07-15T13:03:05.268623+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1690,7 +2053,8 @@
           "createdAt": "2026-07-15T13:03:07.170098+00:00",
           "startedAt": "2026-07-15T13:03:07.169598+00:00",
           "finishedAt": "2026-07-15T13:03:07.169598+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1730,6 +2094,8 @@
       "massStatus": "present",
       "massKg": "0.47 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1737,7 +2103,8 @@
           "createdAt": "2026-07-15T13:03:05.106431+00:00",
           "startedAt": "2026-07-15T13:03:05.106431+00:00",
           "finishedAt": "2026-07-15T13:03:05.106431+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1745,7 +2112,8 @@
           "createdAt": "2026-07-15T13:03:07.028412+00:00",
           "startedAt": "2026-07-15T13:03:07.028412+00:00",
           "finishedAt": "2026-07-15T13:03:07.028412+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1785,6 +2153,8 @@
       "massStatus": "present",
       "massKg": "129.05 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1792,7 +2162,8 @@
           "createdAt": "2026-07-15T13:03:05.160449+00:00",
           "startedAt": "2026-07-15T13:03:05.160449+00:00",
           "finishedAt": "2026-07-15T13:03:05.160449+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1800,7 +2171,8 @@
           "createdAt": "2026-07-15T13:03:07.060926+00:00",
           "startedAt": "2026-07-15T13:03:07.060426+00:00",
           "finishedAt": "2026-07-15T13:03:07.060426+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1840,6 +2212,8 @@
       "massStatus": "present",
       "massKg": "350.80 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1847,7 +2221,8 @@
           "createdAt": "2026-07-15T13:03:05.729573+00:00",
           "startedAt": "2026-07-15T13:03:05.729573+00:00",
           "finishedAt": "2026-07-15T13:03:05.729573+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1855,7 +2230,8 @@
           "createdAt": "2026-07-15T13:03:07.224264+00:00",
           "startedAt": "2026-07-15T13:03:07.223776+00:00",
           "finishedAt": "2026-07-15T13:03:07.223776+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1895,6 +2271,8 @@
       "massStatus": "present",
       "massKg": "0.11 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1902,7 +2280,8 @@
           "createdAt": "2026-07-15T13:03:05.076301+00:00",
           "startedAt": "2026-07-15T13:03:05.076301+00:00",
           "finishedAt": "2026-07-15T13:03:05.076301+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1910,7 +2289,8 @@
           "createdAt": "2026-07-15T13:03:07.006881+00:00",
           "startedAt": "2026-07-15T13:03:07.006881+00:00",
           "finishedAt": "2026-07-15T13:03:07.006881+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -1950,6 +2330,8 @@
       "massStatus": "present",
       "massKg": "0.24 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -1957,7 +2339,8 @@
           "createdAt": "2026-07-15T13:03:04.405939+00:00",
           "startedAt": "2026-07-15T13:03:04.405939+00:00",
           "finishedAt": "2026-07-15T13:03:04.405939+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -1965,7 +2348,8 @@
           "createdAt": "2026-07-15T13:03:06.261720+00:00",
           "startedAt": "2026-07-15T13:03:06.261235+00:00",
           "finishedAt": "2026-07-15T13:03:06.261235+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2005,6 +2389,8 @@
       "massStatus": "present",
       "massKg": "0.12 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2012,7 +2398,8 @@
           "createdAt": "2026-07-15T13:03:06.144843+00:00",
           "startedAt": "2026-07-15T13:03:06.144338+00:00",
           "finishedAt": "2026-07-15T13:03:06.144338+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2020,7 +2407,8 @@
           "createdAt": "2026-07-15T13:03:07.464370+00:00",
           "startedAt": "2026-07-15T13:03:07.463857+00:00",
           "finishedAt": "2026-07-15T13:03:07.463857+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2033,10 +2421,10 @@
       },
       "issues": [
         {
-          "severity": "warning",
-          "code": "2d_content_without_print_frame",
-          "message": "2D要素はありますが、印刷枠を検出できていません。",
-          "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
         }
       ]
     },
@@ -2069,6 +2457,8 @@
       "massStatus": "present",
       "massKg": "0.39 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2076,7 +2466,8 @@
           "createdAt": "2026-07-15T13:03:05.685109+00:00",
           "startedAt": "2026-07-15T13:03:05.685109+00:00",
           "finishedAt": "2026-07-15T13:03:05.685109+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2084,7 +2475,8 @@
           "createdAt": "2026-07-15T13:03:07.192625+00:00",
           "startedAt": "2026-07-15T13:03:07.192124+00:00",
           "finishedAt": "2026-07-15T13:03:07.192124+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2124,6 +2516,8 @@
       "massStatus": "present",
       "massKg": "2.86 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2131,7 +2525,13 @@
           "createdAt": "2026-07-15T13:03:04.516634+00:00",
           "startedAt": "2026-07-15T13:03:04.516634+00:00",
           "finishedAt": "2026-07-15T13:03:04.516634+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -2139,7 +2539,8 @@
           "createdAt": "2026-07-15T13:03:06.357838+00:00",
           "startedAt": "2026-07-15T13:03:06.357838+00:00",
           "finishedAt": "2026-07-15T13:03:06.357838+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2179,6 +2580,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2186,7 +2589,8 @@
           "createdAt": "2026-07-15T13:03:04.455443+00:00",
           "startedAt": "2026-07-15T13:03:04.455443+00:00",
           "finishedAt": "2026-07-15T13:03:04.455443+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2194,7 +2598,8 @@
           "createdAt": "2026-07-15T13:03:06.295734+00:00",
           "startedAt": "2026-07-15T13:03:06.295734+00:00",
           "finishedAt": "2026-07-15T13:03:06.295734+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2234,6 +2639,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2241,7 +2648,8 @@
           "createdAt": "2026-07-15T13:03:04.603740+00:00",
           "startedAt": "2026-07-15T13:03:04.603740+00:00",
           "finishedAt": "2026-07-15T13:03:04.603740+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2249,7 +2657,8 @@
           "createdAt": "2026-07-15T13:03:06.708365+00:00",
           "startedAt": "2026-07-15T13:03:06.707866+00:00",
           "finishedAt": "2026-07-15T13:03:06.707866+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2289,6 +2698,8 @@
       "massStatus": "present",
       "massKg": "0.01 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2296,7 +2707,8 @@
           "createdAt": "2026-07-15T13:03:04.582163+00:00",
           "startedAt": "2026-07-15T13:03:04.581664+00:00",
           "finishedAt": "2026-07-15T13:03:04.581664+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2304,7 +2716,8 @@
           "createdAt": "2026-07-15T13:03:06.687817+00:00",
           "startedAt": "2026-07-15T13:03:06.687817+00:00",
           "finishedAt": "2026-07-15T13:03:06.687817+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2344,6 +2757,8 @@
       "massStatus": "present",
       "massKg": "0.05 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2351,7 +2766,8 @@
           "createdAt": "2026-07-15T13:03:04.562139+00:00",
           "startedAt": "2026-07-15T13:03:04.562139+00:00",
           "finishedAt": "2026-07-15T13:03:04.562139+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2359,7 +2775,8 @@
           "createdAt": "2026-07-15T13:03:06.669306+00:00",
           "startedAt": "2026-07-15T13:03:06.669306+00:00",
           "finishedAt": "2026-07-15T13:03:06.669306+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2399,6 +2816,8 @@
       "massStatus": "present",
       "massKg": "0.05 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2406,7 +2825,8 @@
           "createdAt": "2026-07-15T13:03:04.492471+00:00",
           "startedAt": "2026-07-15T13:03:04.492471+00:00",
           "finishedAt": "2026-07-15T13:03:04.492471+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2414,7 +2834,8 @@
           "createdAt": "2026-07-15T13:03:06.334850+00:00",
           "startedAt": "2026-07-15T13:03:06.334362+00:00",
           "finishedAt": "2026-07-15T13:03:06.334362+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2456,6 +2877,8 @@
       "massStatus": "present",
       "massKg": "40.71 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2463,7 +2886,8 @@
           "createdAt": "2026-07-15T13:03:04.980700+00:00",
           "startedAt": "2026-07-15T13:03:04.980700+00:00",
           "finishedAt": "2026-07-15T13:03:04.980700+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2471,7 +2895,8 @@
           "createdAt": "2026-07-15T13:03:06.934773+00:00",
           "startedAt": "2026-07-15T13:03:06.934272+00:00",
           "finishedAt": "2026-07-15T13:03:06.934272+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2513,6 +2938,8 @@
       "massStatus": "present",
       "massKg": "0.23 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2520,7 +2947,13 @@
           "createdAt": "2026-07-15T13:03:04.706916+00:00",
           "startedAt": "2026-07-15T13:03:04.706916+00:00",
           "finishedAt": "2026-07-15T13:03:04.706916+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (125) and layer count (129) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -2528,7 +2961,8 @@
           "createdAt": "2026-07-15T13:03:06.758397+00:00",
           "startedAt": "2026-07-15T13:03:06.757898+00:00",
           "finishedAt": "2026-07-15T13:03:06.757898+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2568,6 +3002,8 @@
       "massStatus": "present",
       "massKg": "2.70 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2575,7 +3011,25 @@
           "createdAt": "2026-07-15T13:03:04.740465+00:00",
           "startedAt": "2026-07-15T13:03:04.740465+00:00",
           "finishedAt": "2026-07-15T13:03:04.740465+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (160) and layer count (164) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            }
+          ]
         },
         "3d": {
           "status": "succeeded",
@@ -2583,7 +3037,8 @@
           "createdAt": "2026-07-15T13:03:06.786928+00:00",
           "startedAt": "2026-07-15T13:03:06.786928+00:00",
           "finishedAt": "2026-07-15T13:03:06.786928+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2623,6 +3078,8 @@
       "massStatus": "present",
       "massKg": "0.01 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2630,7 +3087,8 @@
           "createdAt": "2026-07-15T13:03:05.882199+00:00",
           "startedAt": "2026-07-15T13:03:05.881698+00:00",
           "finishedAt": "2026-07-15T13:03:05.881698+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2638,7 +3096,8 @@
           "createdAt": "2026-07-15T13:03:07.367790+00:00",
           "startedAt": "2026-07-15T13:03:07.367291+00:00",
           "finishedAt": "2026-07-15T13:03:07.367291+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2649,10 +3108,10 @@
       },
       "issues": [
         {
-          "severity": "warning",
-          "code": "2d_content_without_print_frame",
-          "message": "2D要素はありますが、印刷枠を検出できていません。",
-          "reextractCondition": "SXNETで印刷枠候補を再確認し、枠が取れない場合はinside_print_areaをunknownとして保持します。"
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
         }
       ]
     },
@@ -2685,6 +3144,8 @@
       "massStatus": "present",
       "massKg": "0.00 kg",
       "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
       "latestJobs": {
         "2d": {
           "status": "succeeded",
@@ -2692,7 +3153,8 @@
           "createdAt": "2026-07-15T13:03:04.359865+00:00",
           "startedAt": "2026-07-15T13:03:04.359865+00:00",
           "finishedAt": "2026-07-15T13:03:04.359865+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         },
         "3d": {
           "status": "succeeded",
@@ -2700,7 +3162,8 @@
           "createdAt": "2026-07-15T13:03:06.224212+00:00",
           "startedAt": "2026-07-15T13:03:06.224212+00:00",
           "finishedAt": "2026-07-15T13:03:06.224212+00:00",
-          "errorMessage": ""
+          "errorMessage": "",
+          "warnings": []
         }
       },
       "canonicalSourceEvidence": {
@@ -2709,7 +3172,14 @@
         "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
         "3dMass": "canonicalAttributes.mass_value"
       },
-      "issues": []
+      "issues": [
+        {
+          "severity": "known_condition",
+          "code": "source_not_accessible_current_environment",
+          "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+          "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
+        }
+      ]
     }
   ]
 }
