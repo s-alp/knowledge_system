@@ -58,6 +58,17 @@
       "tagApiStatus": "candidate_existing",
       "writePolicy": "preview_only_no_production_write",
       "tags": ["材質:SUS304"],
+      "tagEvidence": [
+        {
+          "tag": "材質:SUS304",
+          "source": "material_keywords",
+          "evidence": "composedMetadata.canonicalAttributes.material_keywords",
+          "confidence": "medium",
+          "reason": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
+          "manualFlag": false,
+          "tagRuleVersion": "1.0.0"
+        }
+      ],
       "attributes": [
         {
           "name": "図面名",
@@ -75,6 +86,7 @@
 ```
 
 `tagAttributes.targets` は図面、プロジェクト、製品・装置・ユニット、部品を同時に返す。ビューワー側では初期表示で図面向けを開き、必要に応じて対象別タブまたは折りたたみで他対象候補を見せる。
+`tags` は既存表示互換の文字列配列、`tagEvidence` はタグごとの取得元、証拠、信頼度、採用理由である。2D/3Dビューワーの補助パネルでは、タグチップだけでなく `タグ根拠` として `tagEvidence` を表示する。
 
 `metadata.knowledgeDetail` の形:
 
@@ -253,6 +265,8 @@
 | `confidence` | high / medium / low |
 | `evidence` | 元文字、部品パス、座標、レイヤー、印刷枠内外、ファイルパスなど |
 | `review_required` | 人の確認が必要か |
+
+タグ候補は `metadata.tags` / `targets[].tags` の互換用文字列だけでなく、`targets[].tagEvidence[]` に `tag`, `source`, `evidence`, `confidence`, `reason` を持つ。画面上はタグチップとタグ根拠を分けて表示し、創屋側へ渡すpayloadでも根拠欠落を監査対象にする。
 
 ## 2D/3D照合
 

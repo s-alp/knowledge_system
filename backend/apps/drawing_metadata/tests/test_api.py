@@ -976,6 +976,15 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
         for target in bootstrap["metadata"]["tagAttributes"]["targets"]
     }
     assert target_by_key["drawing"]["tags"] == ["材質:SUS304", "装置:ロボット"]
+    assert target_by_key["drawing"]["tagEvidence"][0] == {
+        "tag": "材質:SUS304",
+        "source": "manual_override",
+        "evidence": "test",
+        "confidence": "high",
+        "reason": "テスト",
+        "manualFlag": True,
+        "tagRuleVersion": None,
+    }
     assert any(attribute["name"] == "図面名" for attribute in target_by_key["drawing"]["attributes"])
 
 

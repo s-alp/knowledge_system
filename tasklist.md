@@ -15,6 +15,7 @@
 - [x] タグJSONに `source` / `evidence` / `confidence` / `reason` を必須化。既存82 snapshotを再正規化し、DB監査で禁止タグ0件、source/evidence/confidence/reason欠落0件を確認。全共有39件fixture検証にもタグ根拠必須チェックを追加し、issue 0件を確認
 - [x] ナレッジ連携payloadにも `tagEvidence` を追加し、互換用の `tags` 文字列配列とは別に、対象別タグの取得元・根拠・信頼度・採用理由を監査できるようにした。共有39件で属性607件、対象別タグ227件、issue 0件を確認
 - [x] 図面管理の2D/3Dビューワー補助パネルでもタグ根拠を表示し、図面側のタグ・属性候補から取得元・信頼度・採用理由を確認できるようにした
+- [x] 創屋向けICADタグ・属性連携項目表を分冊化。入口ファイルは約3KBの目次にし、詳細は `docs\souya_icad_tag_attribute_handoff_2026-07-14_parts\` 配下へ章別に分割。最大分冊は約13.7KBに抑え、ファイル長制限で開けない状態を避ける
 - [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
 - [x] Geminiの追加採用値0件を明記し、任意補助から正本へ格上げしない
 - [x] Django drawing_metadata 104件、フロント62件、C# 20件、system check、migration差分、本番ビルドを確認

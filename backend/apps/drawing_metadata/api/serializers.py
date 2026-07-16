@@ -280,6 +280,22 @@ def _viewer_tag_attribute_targets(knowledge_payload_preview: dict) -> list[dict]
                 }
             )
 
+        tag_evidence = []
+        for evidence in (target.get("tagEvidence") or [])[:20]:
+            if not isinstance(evidence, dict):
+                continue
+            tag_evidence.append(
+                {
+                    "tag": evidence.get("tag"),
+                    "source": evidence.get("source"),
+                    "evidence": evidence.get("evidence"),
+                    "confidence": evidence.get("confidence"),
+                    "reason": evidence.get("reason"),
+                    "manualFlag": bool(evidence.get("manualFlag")),
+                    "tagRuleVersion": evidence.get("tagRuleVersion"),
+                }
+            )
+
         targets.append(
             {
                 "targetKey": target.get("targetKey"),
@@ -288,6 +304,7 @@ def _viewer_tag_attribute_targets(knowledge_payload_preview: dict) -> list[dict]
                 "tagApiStatus": target.get("tagApiStatus"),
                 "writePolicy": target.get("writePolicy"),
                 "tags": (target.get("tags") or [])[:20],
+                "tagEvidence": tag_evidence,
                 "attributes": attributes,
                 "reviewRequired": bool(target.get("reviewRequired")),
                 "notes": target.get("notes") or [],

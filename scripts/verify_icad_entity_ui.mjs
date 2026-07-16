@@ -63,9 +63,55 @@ async function verifyDrawingManagementEntry() {
   await page.screenshot({ path: `${outputDirectory}/drawing-management-icad-entry.png`, fullPage: true });
 }
 
+async function findDrawingWithTagEvidence() {
+  return page.evaluate(async () => {
+    const response = await fetch("/api/v1/drawing-metadata/handoff-summary");
+    if (!response.ok) {
+      throw new Error(`handoff-summary API returned ${response.status}`);
+    }
+    const payload = await response.json();
+    for (const row of payload.rows ?? []) {
+      if (!row.drawingId) {
+        continue;
+      }
+      const bootstrapResponse = await fetch(`/api/v1/drawings/${row.drawingId}/bootstrap`);
+      if (!bootstrapResponse.ok) {
+        continue;
+      }
+      const bootstrap = await bootstrapResponse.json();
+      const targets = bootstrap.metadata?.tagAttributes?.targets ?? [];
+      if (targets.some((target) => (target.tagEvidence ?? []).length > 0)) {
+        return row;
+      }
+    }
+    return null;
+  });
+}
+
+async function verifyDrawingViewerTagEvidence() {
+  const row = await findDrawingWithTagEvidence();
+  if (!row?.drawingId) {
+    throw new Error("タグ根拠を確認できる図面候補がhandoff-summaryにありません。");
+  }
+  const drawingUrl = new URL(baseUrl);
+  drawingUrl.searchParams.set("drawingId", row.drawingId);
+  await page.goto(drawingUrl.toString(), { waitUntil: "domcontentloaded", timeout: 120000 });
+  await page.getByRole("heading", { name: "図面管理" }).waitFor();
+  await page.getByRole("heading", { name: "タグ・属性候補" }).waitFor();
+  await page.getByText("タグ根拠").first().waitFor();
+  await page.getByText("取得元").first().waitFor();
+  await page.getByText("信頼度").first().waitFor();
+  await page.getByText("採用理由").first().waitFor();
+  if ((await page.getByText(/確認待ち|未確認|レビュー待ち|手直し待ち/).count()) > 0) {
+    throw new Error("図面管理のタグ根拠表示に抽出レビューの内部状態が表示されています。");
+  }
+  await page.screenshot({ path: `${outputDirectory}/drawing-viewer-tag-evidence.png`, fullPage: true });
+}
+
 try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 120000 });
   await verifyDrawingManagementEntry();
+  await verifyDrawingViewerTagEvidence();
 
   await page.locator(".sidebar-link", { hasText: "プロジェクト" }).click();
   await page.getByRole("heading", { name: "プロジェクト詳細", level: 1 }).waitFor();
@@ -167,6 +213,7 @@ try {
     drawingLinkOptionCount: drawingOptionCount,
     editFormsVerified: true,
     drawingManagementIcadEntryVerified: true,
+    drawingViewerTagEvidenceVerified: true,
     businessTagsVerified: true,
     historyTimestampVerified: true,
     systemSettingsVerified: true,

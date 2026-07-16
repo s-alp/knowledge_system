@@ -832,6 +832,17 @@ def _viewer_tag_target_cards(tag_attributes: dict | None) -> list[dict]:
             continue
         attributes = target.get("attributes") or []
         tags = _string_values(target.get("tags") or [])
+        tag_evidence = [
+            {
+                "tag": _display_value(evidence.get("tag")),
+                "source": _display_value(evidence.get("source")),
+                "evidence": _display_value(evidence.get("evidence")),
+                "confidence": _display_value(evidence.get("confidence")),
+                "reason": _display_value(evidence.get("reason")),
+            }
+            for evidence in (target.get("tagEvidence") or [])[:8]
+            if isinstance(evidence, dict)
+        ]
         cards.append(
             {
                 "targetKey": target.get("targetKey"),
@@ -843,6 +854,8 @@ def _viewer_tag_target_cards(tag_attributes: dict | None) -> list[dict]:
                 "attributeCount": len(attributes),
                 "tags": tags[:12],
                 "tagsTruncated": len(tags) > 12,
+                "tagEvidence": tag_evidence,
+                "tagEvidenceTruncated": len(target.get("tagEvidence") or []) > 8,
                 "attributes": [
                     {
                         "name": _display_value(attribute.get("name")),
