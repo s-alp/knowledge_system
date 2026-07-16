@@ -198,7 +198,8 @@ def apply_title_block_classifications(canonical_attributes: dict, classification
 
         value = candidate.get("value")
         accepted_as_field = False
-        if field and confidence in {"high", "medium"} and field not in fields:
+        inside_print_area = candidate.get("inside_print_area")
+        if field and confidence in {"high", "medium"} and field not in fields and inside_print_area is not False:
             rule = TITLE_BLOCK_FIELD_RULES.get(field, {})
             max_value_length = int(rule.get("max_value_length", 80))
             if _is_title_block_value_usable(value, max_length=max_value_length):

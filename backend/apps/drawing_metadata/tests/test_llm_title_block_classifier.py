@@ -239,3 +239,28 @@ def test_apply_title_block_classifications_does_not_accept_label_only_value():
     assert "material" not in result["title_block_fields"]
     assert result["title_block_candidates"][0]["llm_field"] == "material"
     assert result["title_block_llm_classifications"][0]["accepted_as_field"] is False
+
+
+def test_apply_title_block_classifications_does_not_accept_outside_print_area():
+    canonical = {
+        "title_block_fields": {},
+        "title_block_candidates": [
+            {
+                "field": "material",
+                "label": "材質",
+                "value": "SUS304",
+                "confidence": "medium",
+                "evidence_text": "材質 SUS304",
+                "inside_print_area": False,
+            }
+        ],
+    }
+
+    result = apply_title_block_classifications(
+        canonical,
+        [{"index": 0, "field": "material", "confidence": "high", "reason": "材質値に見える"}],
+    )
+
+    assert "material" not in result["title_block_fields"]
+    assert result["title_block_candidates"][0]["llm_field"] == "material"
+    assert result["title_block_llm_classifications"][0]["accepted_as_field"] is False
