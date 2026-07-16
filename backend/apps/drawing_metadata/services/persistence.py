@@ -12,7 +12,6 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
-from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length
 
 
 def enqueue_extraction_job(
@@ -25,8 +24,6 @@ def enqueue_extraction_job(
     extraction_options: dict | None = None,
     diagnostics: dict | None = None,
 ) -> DrawingMetadataExtractionJob:
-    validate_icad_filename_length(drawing.filename)
-
     with transaction.atomic():
         active_job = (
             DrawingMetadataExtractionJob.objects.select_for_update()

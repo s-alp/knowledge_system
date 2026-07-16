@@ -53,23 +53,22 @@ def test_register_cad_drawings_registers_icd_files_idempotently(tmp_path):
 
 
 @pytest.mark.django_db
-def test_register_cad_drawings_skips_filename_constraint_error(monkeypatch, tmp_path):
+def test_register_cad_drawings_normalizes_display_filename(monkeypatch, tmp_path):
     cad_root = tmp_path / "cad_data"
     cad_root.mkdir()
-    drawing = cad_root / "too-long.icd"
+    drawing = cad_root / "customer-long-name.icd"
     drawing.write_text("", encoding="utf-8")
 
-    def reject_filename(_filename):
-        raise ValueError("ICADファイル名が長すぎます。")
-
-    monkeypatch.setattr(register_cad_drawings, "validate_icad_filename_length", reject_filename)
+    monkeypatch.setattr(register_cad_drawings, "normalize_icad_display_filename", lambda _filename: "short.icd")
     stdout = StringIO()
 
     call_command("register_cad_drawings", cad_root=str(cad_root), stdout=stdout)
 
-    assert RegisteredDrawing.objects.count() == 0
-    assert "SKIPPED filename limit" in stdout.getvalue()
-    assert "skipped=1" in stdout.getvalue()
+    drawing_record = RegisteredDrawing.objects.get()
+    assert drawing_record.filename == "short.icd"
+    assert "CREATED: short.icd" in stdout.getvalue()
+    assert "created=1" in stdout.getvalue()
+    assert "skipped=0" in stdout.getvalue()
 
 
 @pytest.mark.django_db

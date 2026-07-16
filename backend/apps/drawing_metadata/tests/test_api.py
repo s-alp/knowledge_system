@@ -12,7 +12,7 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
-from apps.drawing_metadata.services.path_constraints import sxnet_staging_reasons, validate_icad_filename_length
+from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename, sxnet_staging_reasons
 
 
 @pytest.mark.django_db
@@ -126,9 +126,11 @@ def test_registration_upload_accepts_django_normalized_long_filename(settings, t
     assert Path(drawing.source_path).name == "input.icd"
 
 
-def test_icad_filename_constraint_rejects_component_over_windows_limit():
-    with pytest.raises(ValueError, match="ファイル名が長すぎます"):
-        validate_icad_filename_length(f"{'A' * 256}.icd")
+def test_icad_display_filename_normalization_keeps_storage_length_and_extension():
+    normalized = normalize_icad_display_filename(f"{'A' * 256}.icd")
+
+    assert len(normalized) == 255
+    assert normalized.endswith(".icd")
 
 
 def test_sxnet_staging_reasons_explain_path_and_filename_limits():

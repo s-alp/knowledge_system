@@ -1,20 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import os
 from pathlib import Path
 
 
 WINDOWS_FILENAME_LIMIT = 255
 WINDOWS_LEGACY_PATH_LIMIT = 259
-
-
-def filename_length_error(filename: str) -> str:
-    return (
-        f"ICADファイル名が長すぎます。SXNETへ渡すファイル名は"
-        f"{WINDOWS_FILENAME_LIMIT}文字以下にしてください。"
-        f"現在の文字数: {len(filename)}。"
-        "短いファイル名へ変更してから再登録してください。"
-    )
 
 
 def path_length_error(path: str | Path) -> str:
@@ -32,9 +24,17 @@ def validate_icad_path_length(path: str | Path) -> None:
         raise ValueError(path_length_error(path))
 
 
-def validate_icad_filename_length(filename: str) -> None:
-    if len(filename) > WINDOWS_FILENAME_LIMIT:
-        raise ValueError(filename_length_error(filename))
+def normalize_icad_display_filename(filename: str) -> str:
+    """DBに保存する表示用ファイル名を、拡張子を残して255文字以内へ丸める。"""
+    normalized = filename.strip() or "input.icd"
+    if len(normalized) <= WINDOWS_FILENAME_LIMIT:
+        return normalized
+
+    suffix = Path(normalized).suffix or ".icd"
+    digest = hashlib.sha1(normalized.encode("utf-8")).hexdigest()[:8]
+    reserved = len(suffix) + len(digest) + 1
+    stem_limit = max(1, WINDOWS_FILENAME_LIMIT - reserved)
+    return f"{Path(normalized).stem[:stem_limit]}-{digest}{suffix}"
 
 
 def sxnet_staging_reasons(path: str | Path, *, filename: str = "") -> list[str]:

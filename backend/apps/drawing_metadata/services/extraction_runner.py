@@ -9,7 +9,7 @@ from urllib.parse import quote
 from django.conf import settings
 
 from apps.drawing_metadata.models import RegisteredDrawing
-from apps.drawing_metadata.services.path_constraints import requires_sxnet_staged_input, validate_icad_filename_length
+from apps.drawing_metadata.services.path_constraints import requires_sxnet_staged_input
 
 
 class ExtractionRunnerError(RuntimeError):
@@ -50,11 +50,6 @@ def build_extractor_command(
             "DRAWING_METADATA_EXTRACTOR_EXECUTABLE が未設定です。Django 自体は Linux でも動作できますが、"
             "sxnet を使う C# 抽出器は Windows 側に分離して設定してください。"
         )
-    try:
-        validate_icad_filename_length(drawing.filename)
-    except ValueError as exc:
-        raise ExtractionRunnerError(str(exc)) from exc
-
     command = [
         executable,
         "extract",

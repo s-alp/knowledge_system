@@ -89,6 +89,26 @@ def test_build_extractor_command_forces_staged_input_for_too_long_path(settings)
 
 
 @pytest.mark.django_db
+def test_build_extractor_command_forces_staged_input_for_legacy_too_long_filename(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-long-filename",
+        filename=f"{'A' * 256}.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode="3d",
+        output_path=Path(r"C:\temp\out.json"),
+    )
+
+    force_index = command.index("--force-sxnet-staged-input")
+    assert command[force_index + 1] == "true"
+
+
+@pytest.mark.django_db
 def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_assets(settings):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="sample-command",

@@ -15,7 +15,7 @@ from apps.drawing_metadata.services.failure_diagnostics import (
     truncate_error_message_for_api,
 )
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
-from apps.drawing_metadata.services.path_constraints import icad_source_path_exists
+from apps.drawing_metadata.services.path_constraints import icad_source_path_exists, normalize_icad_display_filename
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
@@ -38,7 +38,9 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         source_path = attrs.get("source_path", "")
         if source_path and not attrs.get("filename"):
-            attrs["filename"] = Path(source_path).name
+            attrs["filename"] = normalize_icad_display_filename(Path(source_path).name)
+        elif attrs.get("filename"):
+            attrs["filename"] = normalize_icad_display_filename(attrs["filename"])
         return attrs
 
 

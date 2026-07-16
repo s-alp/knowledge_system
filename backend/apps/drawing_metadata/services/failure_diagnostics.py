@@ -18,7 +18,7 @@ def summarize_error_message(message: str, *, limit: int = ERROR_MESSAGE_SUMMARY_
     if "パスが長すぎます" in message:
         return "ICAD原本パスが長すぎます。短い一時パスへ退避して再抽出します。"
     if "ファイル名が長すぎます" in message:
-        return "ICADファイル名が長すぎます。短いファイル名へ変更してから再登録してください。"
+        return "ICADファイル名が長すぎます。短い一時ファイル名へ退避して再抽出します。"
     if "図面ファイルではありません" in message:
         return "ICD拡張子ですが、ICAD/SXNETが図面モデルとして開けていません。"
     if "ICADSXはすでに起動されています" in message:
@@ -88,7 +88,7 @@ def build_reextract_condition(*, error_class: str, preflight: dict) -> str:
     if error_class == "missing_error_message":
         return "失敗理由が記録されていません。workerログとICAD起動状態を確認してから再抽出します。"
     if error_class == "filename_length_limit":
-        return "ファイル名自体が長すぎます。短いICADファイル名で再登録してから再抽出します。"
+        return "現行抽出では短い一時ファイル名へ退避して再抽出します。退避後も失敗する場合はICAD対応版や外部参照を確認します。"
     if error_class == "path_length_limit":
         return "現行抽出では短い一時パスへ退避して再抽出します。退避後も失敗する場合はICAD対応版や外部参照を確認します。"
     if error_class == "sxnet_rejected_as_not_drawing_file":

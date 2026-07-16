@@ -34,9 +34,7 @@ from apps.drawing_metadata.services.failure_diagnostics import (
 from apps.drawing_metadata.services.handoff_dashboard import build_handoff_dashboard_payload
 from apps.drawing_metadata.services.icad_entities import build_icad_entity_catalog, find_icad_entity
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
-from apps.drawing_metadata.services.path_constraints import (
-    validate_icad_filename_length,
-)
+from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
 from apps.drawing_metadata.services.worker_status import build_worker_status_payload
@@ -328,25 +326,10 @@ class RegistrationUploadApiView(APIView):
             )
 
         raw_original_name = uploaded_file.name
-        try:
-            validate_icad_filename_length(raw_original_name)
-        except ValueError as exc:
-            return Response(
-                {"error": {"code": "icad_filename_too_long", "message": str(exc)}},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        original_name = get_valid_filename(raw_original_name)
+        original_name = normalize_icad_display_filename(get_valid_filename(raw_original_name))
         if not original_name.lower().endswith(".icd"):
             return Response(
                 {"error": {"code": "icad_file_extension", "message": ".icd ファイルを指定してください。"}},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        try:
-            validate_icad_filename_length(original_name)
-        except ValueError as exc:
-            return Response(
-                {"error": {"code": "icad_filename_too_long", "message": str(exc)}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

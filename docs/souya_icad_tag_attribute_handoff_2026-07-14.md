@@ -115,6 +115,8 @@
 
 SXNETの `指定したファイルは図面ファイルではありません。` は、ICD拡張子そのものを否定する意味に固定しない。原本パス、長パス退避、ICAD/SXNET対応版、外部参照不足、2D/3Dデータ有無を分けて確認する。
 
+登録時の `filename` は一覧・詳細画面で見せる表示名であり、DB上限に合わせて255文字以内へ丸める場合がある。抽出時は `source_path` を原本として保持し、SXNETへ直接渡すには危険な長パス/長ファイル名の場合だけ短い `input.icd` 相当の一時入力へ退避する。利用者に原本ファイル名の変更を求める運用にはしない。
+
 既存DBに失敗ジョブが残っている場合は、`python manage.py backfill_drawing_metadata_failure_diagnostics` で過去分の `diagnostics_json.failure` を補完する。事前確認だけ行う場合は `--dry-run` を付ける。納品監査では `scripts/audit_drawing_metadata_job_state.py` が失敗ジョブの `failure diagnostics` 欠落をブロックする。
 
 属性連携プレビュー `targets[].attributes[]` は `sourcePath`, `evidence`, `confidence`, `reason` を必須項目とする。`scripts/audit_knowledge_payload_attribute_quality.py` はmanifest対象の属性候補を走査し、根拠・信頼度・採用理由の欠落をブロックする。2026-07-17時点の確認ではmanifest対象39件、属性候補613件、issue 0件。

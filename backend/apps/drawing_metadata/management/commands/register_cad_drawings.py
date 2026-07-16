@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.drawing_metadata.models import RegisteredDrawing
-from apps.drawing_metadata.services.path_constraints import validate_icad_filename_length
+from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename
 
 
 class Command(BaseCommand):
@@ -37,28 +37,23 @@ class Command(BaseCommand):
             return
 
         for input_path in icd_paths:
-            try:
-                validate_icad_filename_length(input_path.name)
-            except ValueError as exc:
-                skipped += 1
-                self.stdout.write(self.style.WARNING(f"SKIPPED filename limit: {input_path} ({exc})"))
-                continue
+            display_filename = normalize_icad_display_filename(input_path.name)
 
             existing = RegisteredDrawing.objects.filter(source_path=str(input_path)).order_by("created_at").first()
             if existing is None:
                 RegisteredDrawing.objects.create(
                     host_drawing_id="",
-                    filename=input_path.name,
+                    filename=display_filename,
                     source_path=str(input_path),
                     source_format="icad",
                 )
                 created += 1
-                self.stdout.write(f"CREATED: {input_path.name}")
+                self.stdout.write(f"CREATED: {display_filename}")
                 continue
 
             update_fields: list[str] = []
-            if existing.filename != input_path.name:
-                existing.filename = input_path.name
+            if existing.filename != display_filename:
+                existing.filename = display_filename
                 update_fields.append("filename")
             if existing.source_format != "icad":
                 existing.source_format = "icad"
@@ -67,7 +62,7 @@ class Command(BaseCommand):
             if update_fields:
                 existing.save(update_fields=update_fields + ["updated_at"])
                 updated += 1
-                self.stdout.write(f"UPDATED: {existing.id} {input_path.name}")
+                self.stdout.write(f"UPDATED: {existing.id} {display_filename}")
                 continue
 
             skipped += 1
