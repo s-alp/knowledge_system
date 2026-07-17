@@ -8,7 +8,14 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
-from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.models import (
+    EXTRACTION_MODE_CHOICES,
+    DrawingMetadataExtractionJob,
+    DrawingMetadataSnapshot,
+    RegisteredDrawing,
+)
+
+VALID_EXTRACTION_MODES = {mode for mode, _ in EXTRACTION_MODE_CHOICES}
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, enqueue_extraction_job
 
@@ -68,6 +75,10 @@ class RegistrationDetailPageView(View):
         action = request.POST.get("action", "").strip()
         extraction_mode = request.POST.get("extraction_mode", "").strip()
 
+        if action in {"extract", "override"} and extraction_mode not in VALID_EXTRACTION_MODES:
+            messages.error(request, f"抽出モードが不正です: {extraction_mode!r}(2d / 3d を指定してください)")
+            return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
+
         if action == "extract":
             job = enqueue_extraction_job(
                 drawing=drawing,
@@ -80,7 +91,14 @@ class RegistrationDetailPageView(View):
 
         if action == "override":
             raw_payload = request.POST.get("manual_overrides_json", "").strip() or "{}"
-            payload = json.loads(raw_payload)
+            try:
+                payload = json.loads(raw_payload)
+            except json.JSONDecodeError as exc:
+                messages.error(request, f"手動補正 JSON を解釈できません: {exc}")
+                return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
+            if not isinstance(payload, dict):
+                messages.error(request, "手動補正 JSON はオブジェクト形式で入力してください。")
+                return redirect("drawing-metadata-detail-page", drawing_id=drawing.id)
             apply_manual_overrides(
                 drawing=drawing,
                 extraction_mode=extraction_mode,

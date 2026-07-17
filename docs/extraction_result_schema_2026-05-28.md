@@ -260,7 +260,108 @@
 - `derived_tags` が属性から再生成できる
 - `manual_overrides` を後から適用しても元抽出値が残る
 
-## 12. 結論
+## 12. 2026-07-17 実装改訂
+
+`docs/tagging_system_improvement_backlog_2026-07-17.md` の対応で、以下がこの文書の記述から変わった。
+実装が正であり、以降はこの節を優先する。
+
+### 12.1 `canonical_attributes` の追加キー
+
+```json
+{
+  "customer_name_candidates": [],
+  "equipment_category_candidates": [],
+  "parts": [
+    {
+      "name": null,
+      "comment": null,
+      "tree_path": [],
+      "ref_model_name": null,
+      "ref_model_path": null,
+      "is_external": false,
+      "is_mirror": false,
+      "is_unloaded": false
+    }
+  ],
+  "spec_names": [],
+  "match_evidence": {
+    "customer_name": [{ "value": "コマツ小山", "field": "top_part_ex_info", "token": "...", "alias": "コマツ小山" }],
+    "equipment_category": [],
+    "maker_keywords": [],
+    "spec_names": []
+  }
+}
+```
+
+- `spec_tokens` は生トークンのみ。辞書一致した正規規格名は `spec_names` に分離した。
+- `parts` は部品単位の対応関係(名前・コメント・階層・参照)を構造のまま保持する。
+- 照合は NFKC 正規化 + casefold 後に行い、ASCII 候補は語境界一致(`ses` が `hoses` に一致しない)。
+- `extraction_status` は warnings があると `partial` になる。
+- 複数客先/装置候補がある場合は `confidence_summary` を1段階下げる。
+
+### 12.2 `derived_tags` の形(改訂)
+
+```json
+[
+  {
+    "tag": "装置:ガントリー",
+    "namespace": "装置",
+    "value": "ガントリー",
+    "source": "equipment_category",
+    "confidence": "high",
+    "manual_flag": false,
+    "tag_rule_version": "1.1.0",
+    "evidence": [{ "value": "ガントリー", "field": "part_comments", "token": "...", "alias": "gantry" }]
+  }
+]
+```
+
+- 2D/3D 競合属性由来のタグは除外せず `confidence=low` で残す。
+
+### 12.3 `manual_overrides` の形(実装準拠)
+
+キーは実装どおり camelCase とする(§8 の snake_case 表記は旧案)。
+
+```json
+{
+  "canonicalAttributes": {
+    "equipment_category": { "value": "ガントリー" }
+  },
+  "derivedTags": {
+    "added": ["工程:熱処理"],
+    "removed": ["装置:ロボット"]
+  }
+}
+```
+
+- 補正保存はキー単位マージ。値に `null` を渡した項目だけ補正解除される。
+- `derivedTags.added` / `removed` は累積集合で、追加→削除・削除→再追加は相殺される。
+- 確定値は常に `自動抽出値 + manual_overrides` の合成として再計算されるため、再抽出・再正規化後も手動補正は消えない。
+
+### 12.4 統合結果の永続化
+
+- `DrawingComposedMetadata`(drawing 1:1)に統合済みの属性・タグ・競合を保存する。
+- 更新契機: 抽出成功時、手動補正保存時、`re_normalize_snapshots` 実行時。
+- 一覧フィルタと RAG 投入はこの保存値を読む。
+
+### 12.5 辞書と再正規化
+
+- 辞書は `TagDictionaryEntry`(kind: customer / equipment_category / maker / spec)が正本。DB が空の kind は seed 定数へフォールバックする。
+- `python manage.py seed_tag_dictionaries` で seed を投入できる。
+- `python manage.py re_normalize_snapshots [--stale-only] [--drawing-id ID] [--mode 2d|3d]` で、ICAD 再抽出なしに保存済み raw_extract から正規化・タグ生成をやり直せる。
+
+### 12.6 一覧 API の契約
+
+`GET /api/v1/drawing-metadata/registrations` は envelope 形式で返す。
+
+```json
+{ "items": [], "page": 1, "pageSize": 50, "total": 0 }
+```
+
+クエリ: `customer`, `equipmentCategory`, `tag`(部分一致), `mode`, `jobStatus`, `page`, `pageSize`。
+同一 `sourcePath` の再登録は 400 で拒否する。
+
+## 13. 結論
 
 - スキーマは `生抽出` と `意味付け済みデータ` を必ず分ける。
 - C# は `raw_extract` まで、Django は `canonical_attributes` 以降を主担当にする。

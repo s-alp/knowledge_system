@@ -21,6 +21,14 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
         fields = ("id", "hostDrawingId", "filename", "sourcePath", "sourceFormat")
         read_only_fields = ("id",)
 
+    def validate(self, attrs):
+        source_path = attrs.get("source_path")
+        if source_path and RegisteredDrawing.objects.filter(source_path=source_path).exists():
+            raise serializers.ValidationError(
+                {"sourcePath": "同じ sourcePath の図面が既に登録されています。再抽出は既存図面の extract を使ってください。"}
+            )
+        return attrs
+
 
 class ExtractRequestSerializer(serializers.Serializer):
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
@@ -124,10 +132,11 @@ class RegisteredDrawingListSerializer(serializers.ModelSerializer):
         return sorted(snapshot.extraction_mode for snapshot in obj.snapshots.all())
 
     def get_latestJobStatusByMode(self, obj: RegisteredDrawing) -> dict[str, str | None]:
-        statuses: dict[str, str | None] = {}
-        for mode in ("2d", "3d"):
-            latest_job = obj.jobs.filter(extraction_mode=mode).first()
-            statuses[mode] = latest_job.status if latest_job else None
+        # prefetch 済みの jobs(-created_at 順)を使い、図面ごとの追加クエリを発行しない。
+        statuses: dict[str, str | None] = {"2d": None, "3d": None}
+        for job in obj.jobs.all():
+            if statuses.get(job.extraction_mode) is None:
+                statuses[job.extraction_mode] = job.status
         return statuses
 
 

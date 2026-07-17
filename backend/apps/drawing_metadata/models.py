@@ -98,14 +98,71 @@ class DrawingMetadataSnapshot(models.Model):
         return f"snapshot:{self.drawing.filename}:{self.extraction_mode}"
 
 
+class DrawingComposedMetadata(models.Model):
+    """2D/3D スナップショットと手動補正を合成した確定値。一覧絞り込みと RAG 投入の読み出し先。"""
+
+    drawing = models.OneToOneField(RegisteredDrawing, on_delete=models.CASCADE, related_name="composed_metadata")
+    canonical_attributes_json = models.JSONField(default=dict, blank=True)
+    derived_tags_json = models.JSONField(default=list, blank=True)
+    conflicts_json = models.JSONField(default=list, blank=True)
+    normalizer_version = models.CharField(max_length=32, blank=True)
+    tag_rule_version = models.CharField(max_length=32, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self) -> str:
+        return f"composed:{self.drawing.filename}"
+
+
+class TagDictionaryEntry(models.Model):
+    """タグ・属性正規化に使う辞書。コード内 seed 定数の運用置き換え先で、admin から編集できる。"""
+
+    KIND_CUSTOMER = "customer"
+    KIND_EQUIPMENT_CATEGORY = "equipment_category"
+    KIND_MAKER = "maker"
+    KIND_SPEC = "spec"
+    KIND_CHOICES = [
+        (KIND_CUSTOMER, "客先"),
+        (KIND_EQUIPMENT_CATEGORY, "装置カテゴリ"),
+        (KIND_MAKER, "メーカー"),
+        (KIND_SPEC, "規格"),
+    ]
+
+    id = models.BigAutoField(primary_key=True)
+    kind = models.CharField(max_length=32, choices=KIND_CHOICES, db_index=True)
+    canonical_value = models.CharField(max_length=255)
+    aliases_json = models.JSONField(default=list, blank=True)
+    priority = models.IntegerField(default=100, help_text="小さいほど優先。複数候補時の主候補選択順。")
+    enabled = models.BooleanField(default=True)
+    note = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["kind", "priority", "canonical_value"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["kind", "canonical_value"],
+                name="tag_dictionary_unique_kind_value",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.kind}:{self.canonical_value}"
+
+
 class DrawingMetadataAuditLog(models.Model):
     ACTION_EXTRACTION = "extraction"
     ACTION_OVERRIDE = "override"
     ACTION_REQUEUE = "requeue"
+    ACTION_RENORMALIZE = "re_normalize"
     ACTION_CHOICES = [
         (ACTION_EXTRACTION, "Extraction"),
         (ACTION_OVERRIDE, "Override"),
         (ACTION_REQUEUE, "Requeue"),
+        (ACTION_RENORMALIZE, "ReNormalize"),
     ]
 
     id = models.BigAutoField(primary_key=True)

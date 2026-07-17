@@ -4,11 +4,12 @@ from collections.abc import Iterable
 
 from django.conf import settings
 
-from apps.drawing_metadata.services.seed_dictionaries import (
-    CUSTOMER_KEYWORDS,
-    EQUIPMENT_CATEGORY_KEYWORDS,
-    MAKER_KEYWORDS,
-    SPEC_KEYWORDS,
+from apps.drawing_metadata.models import TagDictionaryEntry
+from apps.drawing_metadata.services.dictionaries import load_keyword_mapping
+from apps.drawing_metadata.services.text_matching import (
+    build_token_sources,
+    flatten_match_evidence,
+    match_dictionary,
 )
 
 
@@ -23,17 +24,29 @@ def _flatten_strings(values: Iterable[str | None]) -> list[str]:
     return normalized
 
 
-def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> str | None:
-    lowered = " ".join(token.lower() for token in tokens)
-    for canonical, candidates in mapping.items():
-        if any(candidate.lower() in lowered for candidate in candidates):
-            return canonical
-    return None
+def _structured_parts(parts: list[dict]) -> list[dict]:
+    """部品単位の name/comment/参照情報の対応を崩さずに保持する。"""
+    structured: list[dict] = []
+    for part in parts:
+        structured.append(
+            {
+                "name": part.get("name"),
+                "comment": part.get("comment"),
+                "tree_path": list(part.get("tree_path") or []),
+                "ref_model_name": part.get("ref_model_name"),
+                "ref_model_path": part.get("ref_model_path"),
+                "is_external": bool(part.get("is_external")),
+                "is_mirror": bool(part.get("is_mirror")),
+                "is_unloaded": bool(part.get("is_unloaded")),
+            }
+        )
+    return structured
 
 
 def normalize_raw_extract(raw_payload: dict) -> dict:
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
+    warnings = raw_payload.get("warnings") or []
 
     canonical = {
         "drawing_number": None,
@@ -43,20 +56,23 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "source_kind": source_kind,
         "document_kind": None,
         "customer_name": None,
+        "customer_name_candidates": [],
         "project_name": None,
         "equipment_name": None,
         "equipment_category": None,
+        "equipment_category_candidates": [],
         "module_name": None,
         "status": None,
         "owner": None,
         "design_purpose": None,
         "paper_size": None,
-        "extraction_status": "success",
+        "extraction_status": "partial" if warnings else "success",
         "ocr_used": False,
         "confidence_summary": "medium",
         "top_part_name": None,
         "top_part_comment": None,
         "top_part_ex_info": None,
+        "parts": [],
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -75,6 +91,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "balloon_keys": [],
         "surface_treatment_tokens": [],
         "spec_tokens": [],
+        "spec_names": [],
         "part_keywords": [],
         "material_keywords": [],
         "maker_keywords": [],
@@ -83,6 +100,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "inspection_keywords": [],
         "change_keywords": [],
         "issue_keywords": [],
+        "match_evidence": {},
         "normalizer_version": settings.DRAWING_METADATA_NORMALIZER_VERSION,
     }
 
@@ -92,6 +110,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["top_part_name"] = top_part.get("name")
         canonical["top_part_comment"] = top_part.get("comment")
         canonical["top_part_ex_info"] = top_part.get("ex_info")
+        canonical["parts"] = _structured_parts(parts)
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]
@@ -101,17 +120,16 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["mirror_part_exists"] = any(part.get("is_mirror") for part in parts)
         canonical["unresolved_part_exists"] = any(part.get("is_unloaded") for part in parts)
 
-        search_tokens = _flatten_strings(
+        token_sources = build_token_sources(
             [
-                top_part.get("name"),
-                top_part.get("comment"),
-                top_part.get("ex_info"),
-                *canonical["part_names"],
-                *canonical["part_comments"],
-                *canonical["ref_model_names"],
+                ("top_part_name", [top_part.get("name")]),
+                ("top_part_comment", [top_part.get("comment")]),
+                ("top_part_ex_info", [top_part.get("ex_info")]),
+                ("part_names", canonical["part_names"]),
+                ("part_comments", canonical["part_comments"]),
+                ("ref_model_names", canonical["ref_model_names"]),
             ]
         )
-        canonical["part_keywords"] = search_tokens
     else:
         texts = raw_extract.get("texts", [])
         dimensions = raw_extract.get("dimensions", [])
@@ -138,34 +156,48 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["weld_note_texts"] = _flatten_strings(note.get("text") for note in weld_notes)
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
+        # spec_tokens は生トークン、spec_names は辞書一致した正規規格名。混在させない。
         canonical["spec_tokens"] = _flatten_strings(canonical["text_tokens"] + canonical["tolerance_texts"])
 
-        search_tokens = (
-            canonical["text_tokens"]
-            + canonical["dimension_symbols"]
-            + canonical["weld_note_texts"]
-            + canonical["balloon_keys"]
-            + canonical["tolerance_texts"]
+        token_sources = build_token_sources(
+            [
+                ("text_tokens", canonical["text_tokens"]),
+                ("dimension_symbols", canonical["dimension_symbols"]),
+                ("weld_note_texts", canonical["weld_note_texts"]),
+                ("balloon_keys", canonical["balloon_keys"]),
+                ("tolerance_texts", canonical["tolerance_texts"]),
+            ]
         )
-        canonical["part_keywords"] = search_tokens
 
-    customer_name = _match_dictionary(canonical["part_keywords"], CUSTOMER_KEYWORDS)
-    equipment_category = _match_dictionary(canonical["part_keywords"], EQUIPMENT_CATEGORY_KEYWORDS)
+    canonical["part_keywords"] = [source["token"] for source in token_sources]
 
-    if customer_name:
-        canonical["customer_name"] = customer_name
-    if equipment_category:
-        canonical["equipment_category"] = equipment_category
+    customer_matches = match_dictionary(token_sources, load_keyword_mapping(TagDictionaryEntry.KIND_CUSTOMER))
+    equipment_matches = match_dictionary(
+        token_sources, load_keyword_mapping(TagDictionaryEntry.KIND_EQUIPMENT_CATEGORY)
+    )
+    maker_matches = match_dictionary(token_sources, load_keyword_mapping(TagDictionaryEntry.KIND_MAKER))
+    spec_matches = match_dictionary(token_sources, load_keyword_mapping(TagDictionaryEntry.KIND_SPEC))
 
-    for maker, candidates in MAKER_KEYWORDS.items():
-        if any(candidate in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
-            canonical["maker_keywords"].append(maker)
+    canonical["customer_name_candidates"] = [match["value"] for match in customer_matches]
+    canonical["equipment_category_candidates"] = [match["value"] for match in equipment_matches]
+    if customer_matches:
+        canonical["customer_name"] = customer_matches[0]["value"]
+    if equipment_matches:
+        canonical["equipment_category"] = equipment_matches[0]["value"]
+    canonical["maker_keywords"] = [match["value"] for match in maker_matches]
+    canonical["spec_names"] = [match["value"] for match in spec_matches]
 
-    for spec, candidates in SPEC_KEYWORDS.items():
-        if any(candidate in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
-            canonical["spec_tokens"].append(spec)
+    canonical["match_evidence"] = {
+        "customer_name": flatten_match_evidence(customer_matches),
+        "equipment_category": flatten_match_evidence(equipment_matches),
+        "maker_keywords": flatten_match_evidence(maker_matches),
+        "spec_names": flatten_match_evidence(spec_matches),
+    }
 
-    if source_kind == "3d":
-        canonical["confidence_summary"] = "high"
+    base_confidence = "high" if source_kind == "3d" else "medium"
+    has_ambiguity = len(customer_matches) > 1 or len(equipment_matches) > 1
+    if has_ambiguity:
+        base_confidence = "medium" if base_confidence == "high" else "low"
+    canonical["confidence_summary"] = base_confidence
 
     return canonical

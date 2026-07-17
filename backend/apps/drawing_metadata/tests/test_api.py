@@ -17,7 +17,60 @@ def test_registration_create_and_list(sample_registration_payload):
 
     list_response = client.get("/api/v1/drawing-metadata/registrations")
     assert list_response.status_code == 200
-    assert list_response.json()[0]["drawingId"] == drawing_id
+    payload = list_response.json()
+    assert payload["total"] == 1
+    assert payload["items"][0]["drawingId"] == drawing_id
+
+
+@pytest.mark.django_db
+def test_registration_rejects_duplicate_source_path(sample_registration_payload):
+    client = APIClient()
+
+    first = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+    assert first.status_code == 201
+    second = client.post("/api/v1/drawing-metadata/registrations", sample_registration_payload, format="json")
+    assert second.status_code == 400
+    assert "sourcePath" in second.json()
+
+
+@pytest.mark.django_db
+def test_registration_list_filters_by_composed_attributes():
+    from apps.drawing_metadata.models import DrawingComposedMetadata
+
+    drawing_a = RegisteredDrawing.objects.create(
+        filename="a.icd", source_path=r"C:\temp\a.icd", source_format="icad"
+    )
+    drawing_b = RegisteredDrawing.objects.create(
+        filename="b.icd", source_path=r"C:\temp\b.icd", source_format="icad"
+    )
+    DrawingComposedMetadata.objects.create(
+        drawing=drawing_a,
+        canonical_attributes_json={"customer_name": "コマツ小山", "equipment_category": "ガントリー"},
+        derived_tags_json=[{"tag": "客先:コマツ小山"}],
+    )
+    DrawingComposedMetadata.objects.create(
+        drawing=drawing_b,
+        canonical_attributes_json={"customer_name": "澁谷工業", "equipment_category": "ロボット"},
+        derived_tags_json=[{"tag": "客先:澁谷工業"}],
+    )
+
+    client = APIClient()
+
+    response = client.get("/api/v1/drawing-metadata/registrations", {"customer": "コマツ小山"})
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["total"] == 1
+    assert payload["items"][0]["filename"] == "a.icd"
+
+    response = client.get("/api/v1/drawing-metadata/registrations", {"tag": "客先:澁谷工業"})
+    payload = response.json()
+    assert payload["total"] == 1
+    assert payload["items"][0]["filename"] == "b.icd"
+
+    response = client.get("/api/v1/drawing-metadata/registrations", {"pageSize": "1", "page": "2"})
+    payload = response.json()
+    assert payload["total"] == 2
+    assert len(payload["items"]) == 1
 
 
 @pytest.mark.django_db

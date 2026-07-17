@@ -12,11 +12,9 @@ from apps.drawing_metadata.models import (
     EXTRACTION_MODE_2D,
     EXTRACTION_MODE_3D,
 )
-from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
-from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
 def _resolve_mode_filter(mode: str) -> list[str]:
@@ -84,17 +82,15 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
             job_id=job.id,
         )
         canonical_attributes = normalize_raw_extract(result.payload)
-        derived_tags = build_derived_tags(canonical_attributes)
+        # 手動補正の再適用と統合結果(composed)の更新は save_extraction_snapshot 側で行う。
         save_extraction_snapshot(
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,
             job=job,
             raw_extract=result.payload.get("raw_extract", {}),
             canonical_attributes=canonical_attributes,
-            derived_tags=derived_tags,
             executed_by=executed_by,
         )
-        compose_drawing_metadata(job.drawing)
         job.status = DrawingMetadataExtractionJob.STATUS_SUCCEEDED
         job.finished_at = timezone.now()
         job.elapsed_ms = int(result.payload.get("elapsed_ms") or 0)
