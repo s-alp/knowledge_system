@@ -313,6 +313,7 @@ def main() -> int:
     gates = [
         _run_gate("shared_icad_completion", [python, str(ROOT / "scripts" / "audit_shared_icad_completion.py")]),
         _run_gate("goal_completion_coverage", [python, str(ROOT / "scripts" / "audit_goal_completion_coverage.py")]),
+        _run_gate("handoff_numeric_consistency", [python, str(ROOT / "scripts" / "audit_handoff_numeric_consistency.py")]),
         _run_gate("drawing_metadata_job_state", [python, str(ROOT / "scripts" / "audit_drawing_metadata_job_state.py")]),
         _run_gate("tag_quality", [python, str(ROOT / "scripts" / "audit_tag_quality.py")]),
         _run_gate(

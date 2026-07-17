@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "icad_handoff_numeric_consistency_audit.v1",
+  "gatePassed": true,
+  "issueCount": 0,
+  "issues": [],
+  "observed": {
+    "tagQuality": {
+      "snapshotCount": 84,
+      "tagCount": 118,
+      "forbiddenTagCount": 0
+    },
+    "payloadQuality": {
+      "totalRegistrationCount": 79,
+      "scopedRegistrationCount": 39,
+      "excludedRegistrationCount": 40,
+      "attributeCount": 607,
+      "tagCount": 227
+    },
+    "targetAttributeCounts": {
+      "drawing": 158,
+      "product": 43,
+      "part": 363,
+      "project": 43
+    }
+  }
+}

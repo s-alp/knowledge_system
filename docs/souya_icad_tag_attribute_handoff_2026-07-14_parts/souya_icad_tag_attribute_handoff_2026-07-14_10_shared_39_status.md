@@ -17,8 +17,8 @@
 - 2D snapshot: 39/39
 - レビューサマリ検証: `valid=true`、issue 0件、255.5KB
 - 読み取り専用payload: 図面、製品・装置・ユニット、部品、プロジェクトを各39件
-- 属性候補数: 図面158、部品370、製品・装置・ユニット43、プロジェクト43
-- タグ候補数: 図面168、部品116、製品・装置・ユニット2、プロジェクト2
+- 属性候補数: 図面158、部品363、製品・装置・ユニット43、プロジェクト43（合計607）
+- タグ候補数: 対象別タグ227件。内訳は `scripts\audit_knowledge_payload_attribute_quality.py` と `output\souya_handoff\icad_handoff_numeric_consistency_audit_current.json` を正とする
 
 ### 10.2 3D構成からの実エンティティ生成
 
