@@ -15,6 +15,17 @@ function confidenceLabel(value: string): string {
   return value || "-";
 }
 
+const TAG_API_STATUS_LABELS: Record<string, string> = {
+  candidate_existing: "タグ候補あり(既存タグAPIへ連携可能)",
+  not_found_use_attribute_fallback: "タグ候補なし(属性として提示)",
+  not_found_requires_souya_extension: "タグ候補なし(創屋側のAPI拡張が必要)",
+};
+
+function tagApiStatusLabel(value: string): string {
+  // 内部ステータスコードを利用者向けの文言へ変換する(原文はtitle属性で確認できる)。
+  return TAG_API_STATUS_LABELS[value] ?? value;
+}
+
 export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps) {
   const [activeTabId, setActiveTabId] = useState(detail.relatedTabs[0]?.id ?? "");
   const activeTab =
@@ -78,7 +89,7 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
                   <div className="tag-target-card-header">
                     <div>
                       <strong>{target.label}</strong>
-                      <p>{target.tagApiStatus}</p>
+                      <p title={target.tagApiStatus}>{tagApiStatusLabel(target.tagApiStatus)}</p>
                     </div>
                     <span>{target.attributes.length} 属性</span>
                   </div>

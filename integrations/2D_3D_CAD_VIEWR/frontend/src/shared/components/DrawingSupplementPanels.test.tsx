@@ -93,7 +93,7 @@ describe("DrawingSupplementPanels", () => {
     expect(panel).not.toBeNull();
     expect(within(panel as HTMLElement).getByText("レビュー要")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("図面")).toBeInTheDocument();
-    expect(within(panel as HTMLElement).getByText("candidate_existing")).toBeInTheDocument();
+    expect(within(panel as HTMLElement).getByText("タグ候補あり(既存タグAPIへ連携可能)")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getAllByText("材質:SUS304").length).toBeGreaterThanOrEqual(2);
     expect(within(panel as HTMLElement).getByText("装置:供給台")).toBeInTheDocument();
     expect(within(panel as HTMLElement).getByText("タグ根拠")).toBeInTheDocument();

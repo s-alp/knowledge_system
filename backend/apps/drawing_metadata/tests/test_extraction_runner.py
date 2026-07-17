@@ -140,7 +140,10 @@ def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_a
     assert '{"scanAllViews":true,"scanAllLayers":true}' in command
     assert "--icad-executable-path" in command
     assert "--preview-output-dir" in command
-    assert r"C:\temp\drawing_metadata_preview_assets\11111111-1111-1111-1111-111111111111" in command
+    # パス結合はOSのセパレータに依存するため、実装と同じ Path 結合で期待値を作る
+    # (Windows実機でもLinux CI/Cloud検証でも同じテストが通るようにする)。
+    expected_preview_dir = str(Path(r"C:\temp\drawing_metadata_preview_assets") / "11111111-1111-1111-1111-111111111111")
+    assert expected_preview_dir in command
     assert "--preview-public-base-url" in command
     assert "/api/v1/drawing-metadata-preview-assets/11111111-1111-1111-1111-111111111111" in command
     assert "--preview-file-name-prefix" in command

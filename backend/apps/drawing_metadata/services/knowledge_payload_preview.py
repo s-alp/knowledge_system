@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from apps.drawing_metadata.models import RegisteredDrawing
+from apps.drawing_metadata.services.display import format_mass_kg, format_weight_as_kg
 
 
 SCHEMA_VERSION = "knowledge_system_payload_preview.v1"
@@ -124,8 +125,16 @@ def _attribute_items(canonical_attributes: dict, specs: tuple[tuple[str, str], .
         value = _value_at_path(canonical_attributes, source_path)
         if not _has_value(value):
             continue
-        attribute_value = _attribute_value(value)
-        evidence = _attribute_evidence(source_path, attribute_value)
+        raw_attribute_value = _attribute_value(value)
+        # 質量・重量は reason の宣言どおり kg・小数点以下2桁へ整形して提示する
+        # (根拠 evidence には抽出生値を残す)。
+        if source_path == "mass_value":
+            attribute_value = format_mass_kg(value)
+        elif source_path == "weight_value":
+            attribute_value = format_weight_as_kg(value)
+        else:
+            attribute_value = raw_attribute_value
+        evidence = _attribute_evidence(source_path, raw_attribute_value)
         items.append(
             {
                 "sourcePath": f"canonicalAttributes.{source_path}",

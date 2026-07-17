@@ -638,6 +638,7 @@ p {
   table-layout: auto;
 }
 
+
 .production-table th,
 .production-table td {
   height: 35px;
@@ -648,6 +649,14 @@ p {
   color: var(--text-color-strong);
   font-size: 0.86rem;
   vertical-align: middle;
+}
+
+.production-table td {
+  /* 長い抽出値・診断文字列でページ全体が横スクロールにならないよう、td は必ず折り返す。
+     (直前ルールの white-space: nowrap は見出し th のみ維持する) */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .production-table th {

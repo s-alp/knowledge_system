@@ -12,6 +12,11 @@ from apps.drawing_metadata.models import (
     DrawingMetadataSnapshot,
     RegisteredDrawing,
 )
+from apps.drawing_metadata.services.overrides import (
+    apply_attribute_overrides,
+    apply_tag_overrides,
+    merge_manual_overrides,
+)
 
 
 def enqueue_extraction_job(
@@ -89,6 +94,12 @@ def save_extraction_snapshot(
         "derived_tags": deepcopy(snapshot.derived_tags_json),
         "manual_overrides": deepcopy(snapshot.manual_overrides_json),
     }
+    # 再抽出で利用者の手動補正(属性上書き・タグ削除・手動タグ)が消えないよう、
+    # 保存済み manual_overrides を自動抽出結果へ再適用してから保存する。
+    manual_overrides = snapshot.manual_overrides_json or {}
+    canonical_attributes = apply_attribute_overrides(canonical_attributes, manual_overrides)
+    derived_tags = apply_tag_overrides(derived_tags, manual_overrides)
+
     snapshot.latest_job = job
     snapshot.raw_extract_json = raw_extract
     snapshot.canonical_attributes_json = canonical_attributes
@@ -137,26 +148,15 @@ def apply_manual_overrides(
             "manual_overrides": deepcopy(snapshot.manual_overrides_json),
         }
 
-        manual_overrides = deepcopy(snapshot.manual_overrides_json or {})
-        manual_overrides["canonicalAttributes"] = payload.get(
-            "canonicalAttributes",
-            manual_overrides.get("canonicalAttributes", {}),
-        )
-        manual_overrides["derivedTags"] = payload.get(
-            "derivedTags",
-            manual_overrides.get("derivedTags", {}),
-        )
-        if "businessFields" in payload:
-            manual_overrides["businessFields"] = payload["businessFields"]
-        if "relatedDrawingIds" in payload:
-            manual_overrides["relatedDrawingIds"] = [str(item) for item in payload["relatedDrawingIds"]]
-        for key in ("knowledgeEntityTarget", "knowledgeEntityKind"):
-            if key in payload:
-                manual_overrides[key] = payload[key]
+        # 補正記録はキー単位でマージする(丸ごと置換すると過去の補正が消える)。
+        manual_overrides = merge_manual_overrides(snapshot.manual_overrides_json, payload)
         snapshot.manual_overrides_json = manual_overrides
 
         canonical_attributes = deepcopy(snapshot.canonical_attributes_json or {})
         for key, item in payload.get("canonicalAttributes", {}).items():
+            if item is None:
+                # 補正解除。自動抽出値は次回の再抽出/再取込で復元される。
+                continue
             canonical_attributes[key] = item.get("value") if isinstance(item, dict) else item
 
         derived_tags = list(snapshot.derived_tags_json or [])

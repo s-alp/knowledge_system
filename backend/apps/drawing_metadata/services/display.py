@@ -194,6 +194,11 @@ def _format_weight_as_kg(value) -> str:
     return f"{number / STANDARD_GRAVITY:.2f} kg"
 
 
+# 図面詳細・payload preview 側でも同じ kg 表示規約を使うための公開名。
+format_mass_kg = _format_kg
+format_weight_as_kg = _format_weight_as_kg
+
+
 def _raw_2d_section_rows(raw_2d_sections: dict | None) -> list[dict]:
     rows: list[dict] = []
     for section in (raw_2d_sections or {}).get("sections", []) or []:

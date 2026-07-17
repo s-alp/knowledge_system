@@ -374,11 +374,19 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
                 )
 
     manual_tags = []
+    removed_tag_names: set[str] = set()
     for snapshot in snapshots.values():
         for tag in snapshot.derived_tags_json or []:
             if tag.get("manual_flag"):
                 manual_tags.append(_normalize_manual_tag(tag))
-    composed_tags = _merge_unique(manual_tags + build_derived_tags(composed_canonical, excluded_sources=conflicted_keys))
+        tag_overrides = (snapshot.manual_overrides_json or {}).get("derivedTags") or {}
+        removed_tag_names.update(tag_overrides.get("removed") or [])
+    # 利用者が削除したタグは、統合属性からの再生成で復活させない。
+    composed_tags = [
+        tag
+        for tag in _merge_unique(manual_tags + build_derived_tags(composed_canonical, excluded_sources=conflicted_keys))
+        if tag.get("tag") not in removed_tag_names
+    ]
 
     return {
         "canonicalAttributes": composed_canonical,

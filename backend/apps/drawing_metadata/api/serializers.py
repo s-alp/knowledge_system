@@ -10,6 +10,7 @@ from apps.drawing_metadata.models import (
     EXTRACTION_MODE_CHOICES,
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.display import format_mass_kg, format_weight_as_kg
 from apps.drawing_metadata.services.failure_diagnostics import (
     summarize_error_message,
     truncate_error_message_for_api,
@@ -458,7 +459,14 @@ def _viewer_knowledge_detail_payload(
     ):
         value = canonical_attributes.get(key)
         if _has_value(value):
-            attributes.append({"label": label, "value": _preview_text(value)})
+            # 質量・重量は他画面(製品・部品詳細)と同じ kg・小数点以下2桁表示に合わせる。
+            if key == "mass_value":
+                display_value = format_mass_kg(value)
+            elif key == "weight_value":
+                display_value = format_weight_as_kg(value)
+            else:
+                display_value = _preview_text(value)
+            attributes.append({"label": label, "value": display_value})
 
     design_purpose = _as_optional_string(
         _first_value(canonical_attributes.get("intention"), canonical_attributes.get("design_purpose"))

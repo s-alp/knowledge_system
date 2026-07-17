@@ -83,11 +83,20 @@ function confidenceLabel(value: string): string {
 }
 
 
-function compactValue(value: unknown): string {
+const COMPACT_VALUE_MAX_LENGTH = 120;
+
+function rawCompactValue(value: unknown): string {
   if (value === null || value === undefined || value === "") return "-";
-  if (Array.isArray(value)) return value.length ? value.map((item) => compactValue(item)).join(", ") : "-";
+  if (Array.isArray(value)) return value.length ? value.map((item) => rawCompactValue(item)).join(", ") : "-";
   if (typeof value === "object") return JSON.stringify(value);
   return String(value);
+}
+
+function compactValue(value: unknown): string {
+  // 2D抽出根拠などの長い診断文字列がテーブル幅を押し広げないよう表示用に省略する。
+  // 全文は取得元・採用根拠ダイアログで確認できる。
+  const text = rawCompactValue(value);
+  return text.length > COMPACT_VALUE_MAX_LENGTH ? `${text.slice(0, COMPACT_VALUE_MAX_LENGTH)}…` : text;
 }
 
 
