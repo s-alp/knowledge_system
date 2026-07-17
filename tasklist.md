@@ -18,6 +18,7 @@
 - [x] 創屋向けICADタグ・属性連携項目表を分冊化。入口ファイルは約3KBの目次にし、詳細は `docs\souya_icad_tag_attribute_handoff_2026-07-14_parts\` 配下へ章別に分割。最大分冊は約13.7KBに抑え、ファイル長制限で開けない状態を避ける
 - [x] 納品監査へ創屋向け連携項目表のファイルサイズゲートを追加。`scripts\audit_icad_delivery_readiness.py` は本体・分冊の各Markdownが20KBを超えたら失敗し、最終監査は `--include-tests --include-ui --require-clean` で自動テスト、Chrome実操作、作業ツリーcleanを同時確認する
 - [x] 納品監査の古い文言チェック対象を分冊資料まで拡大。完成資料として未完に見える旧見出し・旧予定表現が復活した場合は `stale_handoff_doc_search` で失敗させる
+- [x] 納品監査へゴール要求カバレッジゲートを追加。`scripts\audit_goal_completion_coverage.py` は、1 ICD単位、2D/3D/パーツ付加情報、未抽出理由、タグ根拠、2D/3D照合、kg正規化、Gemini実API評価、本番DB非書込、創屋引継ぎ、UI/テスト/clean確認が納品ゲートと正本資料の両方で証明できるかを確認する
 - [x] 納品監査へ2Dビュー・レイヤー・印刷枠カバレッジゲートを追加。`scripts\audit_2d_view_layer_print_frame_coverage.py` は共有39件のDB snapshotを固定manifestスコープで確認し、2D要素ありでビュー未付与、レイヤー未対応、印刷枠ありなのに枠内外判定なしを失敗にする。印刷枠未定義や座標欠落による判定不明は既知条件として理由付きで残す
 - [x] 納品監査へ3D構成・材質・質量・パーツ付加情報カバレッジゲートを追加。`scripts\audit_3d_structure_material_mass_coverage.py` は共有39件の3D snapshot、parts配列、材質候補、kg小数点以下2桁の質量、パーツ付加情報を確認し、parts欠落や説明不能な質量欠落を失敗にする。パーツ付加情報なし、材質候補なし、検索対象実体なしの質量欠落は既知条件として理由付きで残す
 - [x] Gemini実APIを現行正規化後の図枠候補で再評価し、`gemini_probe_current_normalization_2026-07-17.json` で分類precision/recall 1.0、誤採用0を確認。分類漏れが残る古い評価ファイルを監査対象から外し、missed positive は監査失敗にする
