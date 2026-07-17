@@ -423,16 +423,22 @@ def _build_record(
     part_number = _string_value(canonical.get("drawing_number")) or PureWindowsPath(drawing.filename).stem
     if parts:
         external_count = sum(_has_external_reference(part) for part in parts)
-        child_external_reference_count = sum(part.get("_depth", 0) > 0 and _has_external_reference(part) for part in parts)
         unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
         extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
         unique_part_names = sorted(
             {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
         )
         materials = _material_values(parts)
+        # 部品数は BOM 相当の外部参照パーツのみを数える。内部パーツ(モデリング要素)は
+        # 部品数に含めず、内部パーツ使用数などの参考属性としてだけ持つ。
         component_count = len(parts)
-        child_assembly_count = child_external_reference_count
-        child_part_count = sum(part.get("_child_count", 0) == 0 and not _has_external_reference(part) for part in parts)
+        child_assembly_count = sum(
+            _has_external_reference(part) and part.get("_child_count", 0) > 0 for part in parts
+        )
+        child_part_count = sum(
+            _has_external_reference(part) and part.get("_child_count", 0) == 0 for part in parts
+        )
+        descendant_part_count = external_count
     else:
         unique_part_names = _canonical_list_values(canonical, "part_names", "part_keywords")
         materials = _canonical_list_values(canonical, "material_keywords", "material_names", "material_ids")
@@ -444,8 +450,10 @@ def _build_record(
         unloaded_count = 1 if canonical.get("unresolved_part_exists") else 0
         extended_info_count = 1 if _has_value(canonical.get("part_ex_info_fields")) else 0
         component_count = len(_as_list(canonical.get("part_tree_paths"))) or len(unique_part_names)
-        child_assembly_count = external_count
-        child_part_count = component_count
+        # raw_extract が無い場合は子構造を判定できないため、外部参照数をそのまま部品数とする。
+        child_assembly_count = 0
+        child_part_count = external_count
+        descendant_part_count = external_count
     overrides = snapshot.manual_overrides_json or {}
     business_fields, business_field_sources = _business_fields(
         target_key=classification["targetKey"],
@@ -556,7 +564,7 @@ def _build_record(
         "childEntityIds": [],
         "childAssemblyCount": child_assembly_count,
         "childPartCount": child_part_count,
-        "descendantPartCount": component_count,
+        "descendantPartCount": descendant_part_count,
         "drawingId": str(drawing.id),
         "drawingFilename": drawing.filename,
         "sourcePath": drawing.source_path,

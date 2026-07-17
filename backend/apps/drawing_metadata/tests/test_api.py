@@ -498,8 +498,10 @@ def test_icad_entity_api_classifies_external_reference_as_assembly(sample_regist
     assert payload["count"] == 1
     assert payload["items"][0]["entityKind"] == "assembly"
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
-    assert payload["items"][0]["childAssemblyCount"] == 1
-    assert payload["items"][0]["childPartCount"] == 0
+    # 部品数は外部参照パーツのみ。子構造なしの外部参照は部品として数える。
+    assert payload["items"][0]["childAssemblyCount"] == 0
+    assert payload["items"][0]["childPartCount"] == 1
+    assert payload["items"][0]["descendantPartCount"] == 1
 
 
 @pytest.mark.django_db
@@ -535,7 +537,10 @@ def test_icad_entity_api_treats_ref_model_name_as_external_reference(sample_regi
     payload = response.json()
     assert payload["count"] == 1
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
+    # 子構造を持つ外部参照はサブアセンブリ候補として数え、内部末端パーツは部品数に入れない。
     assert payload["items"][0]["childAssemblyCount"] == 1
+    assert payload["items"][0]["childPartCount"] == 0
+    assert payload["items"][0]["descendantPartCount"] == 1
 
 
 @pytest.mark.django_db

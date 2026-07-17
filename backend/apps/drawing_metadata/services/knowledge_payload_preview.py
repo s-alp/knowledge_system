@@ -18,7 +18,7 @@ DRAWING_ATTRIBUTE_SPECS = (
     ("title_block_fields.surface_treatment", "表面処理"),
     ("surface_treatment_tokens", "表面処理候補"),
     ("title_block_fields.coating_instruction", "塗装指示"),
-    ("title_block_fields.scale", "尺度"),
+    # 尺度は canonical.scale に集約(図枠欄由来もパターン検出由来もここへ入る)。
     ("title_block_fields.prfx", "PRFX"),
     ("title_block_fields.unit_number", "ユニット番号"),
     ("title_block_fields.designer", "設計者"),
@@ -30,6 +30,9 @@ DRAWING_ATTRIBUTE_SPECS = (
     ("title_block_fields.approved_date", "承認日"),
     ("title_block_fields.revision_date", "改訂日"),
     ("revision_note_count", "訂正内容候補数"),
+    ("scale", "尺度"),
+    ("heat_treatment_keywords", "熱処理"),
+    ("hardness_spec_values", "硬度指定"),
     ("mass_value", "質量"),
     ("weight_value", "重量"),
 )

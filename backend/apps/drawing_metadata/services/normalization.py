@@ -9,6 +9,7 @@ from django.conf import settings
 from apps.drawing_metadata.services.seed_dictionaries import (
     CUSTOMER_KEYWORDS,
     EQUIPMENT_CATEGORY_KEYWORDS,
+    HEAT_TREATMENT_KEYWORDS,
     MAKER_KEYWORDS,
     MATERIAL_CLASSIFICATION_RULES,
     SPEC_KEYWORDS,
@@ -127,6 +128,94 @@ def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> s
 
 def _normalize_for_match(value: str) -> str:
     return "".join(value.lower().replace("　", " ").split())
+
+
+# 尺度表記(例: 1:6, 1/6, S=1:6, 尺度 1:6)。トークン全体が尺度表記であるものだけを拾い、
+# 寸法・テーパ注記(テーパ1:10 等の接頭語付き)への誤反応を抑える。
+_SCALE_RATIO_TOKEN_RE = re.compile(
+    r"(?:SCALE|尺度|縮尺)?\s*S?\s*[=＝:：]?\s*([0-9]{1,3})\s*[:：/]\s*([0-9]{1,4})",
+    re.IGNORECASE,
+)
+_SCALE_LABEL_HINT_RE = re.compile(r"scale|尺度|縮尺|^s\s*[=＝:：]", re.IGNORECASE)
+
+# 硬度指定(例: HRC58, HRC58-62, Hv500, HB230)
+_HARDNESS_SPEC_RE = re.compile(
+    r"(?:HRC|HRB|HRA|HV|HBW|HB|HS)\s*[0-9]{1,4}(?:\s*[~〜\-±]\s*[0-9]{1,4})?",
+    re.IGNORECASE,
+)
+
+
+def _extract_scale_candidates(tokens: Iterable[str]) -> list[dict]:
+    candidates: dict[str, dict] = {}
+    for token in _flatten_strings(tokens):
+        text = unicodedata.normalize("NFKC", token).strip()
+        matched = _SCALE_RATIO_TOKEN_RE.fullmatch(text)
+        if not matched:
+            continue
+        left, right = int(matched.group(1)), int(matched.group(2))
+        if left == 0 or right == 0:
+            continue
+        # 図面尺度はほぼ必ず片側が1(1:6, 1:10, 2:1 等)。インチ分数(7/16)や比率表記の誤検出を抑える。
+        if left != 1 and right != 1:
+            continue
+        value = f"{left}:{right}"
+        confidence = "medium" if _SCALE_LABEL_HINT_RE.search(text) else "low"
+        existing = candidates.get(value)
+        if existing and (existing["confidence"] == "medium" or confidence == "low"):
+            continue
+        candidates[value] = {
+            "value": value,
+            "evidence_text": token,
+            "confidence": confidence,
+            "source": "2d_text_scale_pattern",
+        }
+    return list(candidates.values())
+
+
+def _heat_treatment_rules() -> list[tuple[str, str, str]]:
+    rules: list[tuple[str, str, str]] = []
+    for canonical_name, aliases in HEAT_TREATMENT_KEYWORDS.items():
+        for alias in aliases:
+            rules.append((canonical_name, alias, unicodedata.normalize("NFKC", alias).casefold()))
+    # 長い別名を優先照合し、「高周波焼入れ」が「焼入れ」にも同時ヒットする二重取りを防ぐ。
+    rules.sort(key=lambda item: len(item[2]), reverse=True)
+    return rules
+
+
+def _match_heat_treatment_keywords(tokens: Iterable[str]) -> tuple[list[str], list[dict]]:
+    matched: list[str] = []
+    evidence: list[dict] = []
+    rules = _heat_treatment_rules()
+    for token in _flatten_strings(tokens):
+        token_norm = unicodedata.normalize("NFKC", token).casefold()
+        for canonical_name, alias, alias_norm in rules:
+            if alias_norm.isascii():
+                if not re.search(rf"(?<![0-9a-z]){re.escape(alias_norm)}", token_norm):
+                    continue
+            elif alias_norm not in token_norm:
+                continue
+            if canonical_name not in matched:
+                matched.append(canonical_name)
+            if len(evidence) < 20:
+                evidence.append({"value": canonical_name, "alias": alias, "token": token})
+            break  # 1トークンにつき最長一致の1件だけ採用する
+    return matched, evidence
+
+
+def _extract_hardness_spec_candidates(tokens: Iterable[str]) -> list[dict]:
+    candidates: dict[str, dict] = {}
+    for token in _flatten_strings(tokens):
+        text = unicodedata.normalize("NFKC", token)
+        for matched in _HARDNESS_SPEC_RE.finditer(text):
+            value = re.sub(r"\s+", "", matched.group(0)).upper()
+            if value not in candidates:
+                candidates[value] = {
+                    "value": value,
+                    "evidence_text": token,
+                    "confidence": "medium",
+                    "source": "hardness_spec_pattern",
+                }
+    return list(candidates.values())
 
 
 def _strip_label_value(text: str, keyword: str) -> str | None:
@@ -1282,6 +1371,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "maker_keywords": [],
         "process_keywords": [],
         "heat_treatment_keywords": [],
+        "heat_treatment_evidence": [],
+        "hardness_spec_candidates": [],
+        "hardness_spec_values": [],
+        "scale_candidates": [],
         "inspection_keywords": [],
         "change_keywords": [],
         "issue_keywords": [],
@@ -1360,6 +1453,19 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             _extract_identity_candidates_from_part_ex_info(parts, "unit_number")
             + _extract_labeled_field_candidates("unit_number", identity_tokens)
         )
+        heat_treatment_tokens = _flatten_strings(
+            [
+                top_part.get("comment"),
+                top_part.get("ex_info"),
+                *canonical["part_comments"],
+                *canonical["part_ex_info_tokens"],
+            ]
+        )
+        canonical["heat_treatment_keywords"], canonical["heat_treatment_evidence"] = _match_heat_treatment_keywords(
+            heat_treatment_tokens
+        )
+        canonical["hardness_spec_candidates"] = _extract_hardness_spec_candidates(heat_treatment_tokens)
+        canonical["hardness_spec_values"] = [item["value"] for item in canonical["hardness_spec_candidates"]]
         canonical["part_material_candidates"] = _build_part_material_candidates(parts, materials)
         canonical["part_material_candidate_count"] = len(canonical["part_material_candidates"])
         part_material_keywords, part_unresolved_material_keywords = _split_material_keywords(
@@ -1507,6 +1613,25 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             )
         if title_fields.get("surface_treatment"):
             canonical["surface_treatment_tokens"] = [title_fields["surface_treatment"]]
+        # 尺度: ラベル付き図枠欄が無い場合でも「1:6」「S=1:6」形のトークンから拾う。
+        # 候補が1種類に定まる場合だけ scale を確定する(テーパ表記 1:10 との衝突対策)。
+        canonical["scale_candidates"] = _extract_scale_candidates(trusted_text_tokens)
+        if not canonical.get("scale"):
+            distinct_scale_values = _merge_unique([item["value"] for item in canonical["scale_candidates"]])
+            if len(distinct_scale_values) == 1:
+                canonical["scale"] = distinct_scale_values[0]
+        # 熱処理・硬度: 図面注記と図枠欄の値から抽出する。
+        heat_treatment_tokens = _flatten_strings(
+            [
+                *trusted_text_tokens,
+                *[str(value) for value in title_fields.values() if value],
+            ]
+        )
+        canonical["heat_treatment_keywords"], canonical["heat_treatment_evidence"] = _match_heat_treatment_keywords(
+            heat_treatment_tokens
+        )
+        canonical["hardness_spec_candidates"] = _extract_hardness_spec_candidates(heat_treatment_tokens)
+        canonical["hardness_spec_values"] = [item["value"] for item in canonical["hardness_spec_candidates"]]
         canonical["revision_note_candidates"] = _build_revision_note_candidates(texts, has_print_frames=has_print_frames)
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)
