@@ -1,0 +1,193 @@
+{
+  "schemaVersion": "icad_2d_view_layer_print_frame_audit.v1",
+  "scope": {
+    "mode": "manifest",
+    "manifestPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\souya_handoff\\icad_extract_import_manifest_all_shared_2026-07-15.json",
+    "manifestSourceCount": 39,
+    "totalRegistrationCount": 79,
+    "scopedRegistrationCount": 39,
+    "excludedRegistrationCount": 40
+  },
+  "drawingCount": 39,
+  "twoDSnapshotCount": 39,
+  "contentStatusCounts": {
+    "content": 31,
+    "extracted_no_2d_entities": 8
+  },
+  "contentDrawingCount": 31,
+  "contentWithViewSheetsCount": 31,
+  "contentWithLayerDefinitionsCount": 31,
+  "contentWithPrintFramesCount": 28,
+  "multiplePrintFrameDrawingCount": 2,
+  "itemsWithoutViewCount": 0,
+  "itemsWithoutLayerCount": 1168,
+  "insidePrintAreaCount": 5088,
+  "outsidePrintAreaCount": 23849,
+  "unknownPrintAreaCount": 1168,
+  "blockingIssueCount": 0,
+  "knownConditionCount": 34,
+  "gatePassed": true,
+  "blockingIssues": [],
+  "knownConditionSamples": [
+    {
+      "drawingId": "b11d6961-d2f6-4783-a7e2-404f0d071881",
+      "filename": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "severity": "known_condition",
+      "code": "2d_items_without_layer_remain",
+      "message": "一部の2D要素はSXNETの要素数とレイヤー数の不一致などでlayer_noを付与できません。",
+      "reextractCondition": "geometry_layer_count_mismatchの発生ビューと要素型を確認し、紐づけ可能な型からlayer_no取得を追加します。"
+    },
+    {
+      "drawingId": "b11d6961-d2f6-4783-a7e2-404f0d071881",
+      "filename": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "5ec120c1-a47c-4253-9ea9-8390acccb294",
+      "filename": "217008-41J-3004.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "2dabbf02-8abf-4398-9fbf-97c09c985599",
+      "filename": "23022-007_231218.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "334e06fd-9b4a-4ead-a0d4-de625facecf7",
+      "filename": "23022-013_231218.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "3f19665d-2f99-4b31-8ada-491d4d227b2a",
+      "filename": "47323200X40c.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "cf60d396-0166-441b-9117-e396ff9a2e77",
+      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "severity": "known_condition",
+      "code": "2d_items_without_layer_remain",
+      "message": "一部の2D要素はSXNETの要素数とレイヤー数の不一致などでlayer_noを付与できません。",
+      "reextractCondition": "geometry_layer_count_mismatchの発生ビューと要素型を確認し、紐づけ可能な型からlayer_no取得を追加します。"
+    },
+    {
+      "drawingId": "cf60d396-0166-441b-9117-e396ff9a2e77",
+      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "0c348c0f-ad46-4ee4-a0f8-caf6cad6380f",
+      "filename": "9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "severity": "known_condition",
+      "code": "2d_items_without_layer_remain",
+      "message": "一部の2D要素はSXNETの要素数とレイヤー数の不一致などでlayer_noを付与できません。",
+      "reextractCondition": "geometry_layer_count_mismatchの発生ビューと要素型を確認し、紐づけ可能な型からlayer_no取得を追加します。"
+    },
+    {
+      "drawingId": "a3ab9e05-d977-4093-85a6-d43cae9af8c9",
+      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "severity": "known_condition",
+      "code": "2d_items_without_layer_remain",
+      "message": "一部の2D要素はSXNETの要素数とレイヤー数の不一致などでlayer_noを付与できません。",
+      "reextractCondition": "geometry_layer_count_mismatchの発生ビューと要素型を確認し、紐づけ可能な型からlayer_no取得を追加します。"
+    },
+    {
+      "drawingId": "a3ab9e05-d977-4093-85a6-d43cae9af8c9",
+      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "ba938adc-f237-4d57-98ce-5f6463c0a8c4",
+      "filename": "CAA5012-02430002P1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "3401ab15-c687-4eb0-9c22-2e310092c602",
+      "filename": "CAA5012-02430012P1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "0e04246b-e8a2-4b46-a485-9312f6112d33",
+      "filename": "CAA5012-02434000K1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_items_without_layer_remain",
+      "message": "一部の2D要素はSXNETの要素数とレイヤー数の不一致などでlayer_noを付与できません。",
+      "reextractCondition": "geometry_layer_count_mismatchの発生ビューと要素型を確認し、紐づけ可能な型からlayer_no取得を追加します。"
+    },
+    {
+      "drawingId": "0e04246b-e8a2-4b46-a485-9312f6112d33",
+      "filename": "CAA5012-02434000K1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "0a7a7931-9b93-4ef1-bc95-169453a5c75b",
+      "filename": "CAA5012-02434006P1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "f2ced07f-1591-4e9e-b60e-43ec1a569b78",
+      "filename": "CAA5012-02435010P1R1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "6c9a0e21-6e8a-4cb9-bae5-1da813b08530",
+      "filename": "DFR-CM1-AA0305300011.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "dd41635d-1d02-4c0d-9d5d-34c6ea44555a",
+      "filename": "G1630-S3000-039_A0a1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    },
+    {
+      "drawingId": "a6028abb-9d4f-4afa-88c9-4467f7e8ae87",
+      "filename": "G1630-S3000-502_A3a1.icd",
+      "severity": "known_condition",
+      "code": "2d_print_area_unknown_items_remain",
+      "message": "一部の2D要素は座標欠落などで印刷枠内外を判定できません。",
+      "reextractCondition": "unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。"
+    }
+  ]
+}

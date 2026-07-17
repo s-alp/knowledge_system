@@ -1,0 +1,10 @@
+{
+  "valid": true,
+  "schemaVersion": "drawing_metadata_handoff_review_summary.v1",
+  "file": "output\\souya_handoff\\drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json",
+  "sizeBytes": 261590,
+  "maxBytes": 1000000,
+  "itemCount": 39,
+  "issueCount": 0,
+  "issues": []
+}

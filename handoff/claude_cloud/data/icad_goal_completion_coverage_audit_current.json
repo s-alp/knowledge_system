@@ -1,0 +1,335 @@
+{
+  "schemaVersion": "icad_goal_completion_coverage_audit.v1",
+  "requirementCount": 14,
+  "coveredRequirementCount": 14,
+  "missingRequirementCount": 0,
+  "gateCountInReadinessAudit": 23,
+  "gatePassed": true,
+  "requirements": [
+    {
+      "id": "shared_39_and_one_icd_unit",
+      "description": "共有39件を固定manifestで扱い、1 ICDを1登録単位にする。",
+      "requiredGates": [
+        "shared_icad_completion",
+        "knowledge_payload_attribute_quality"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "登録単位は `1 ICD = 1件`"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "固定manifestで共有39件"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "two_d_views_layers_print_frames",
+      "description": "2Dの全ビュー、レイヤー、複数図面、印刷枠内外を監査する。",
+      "requiredGates": [
+        "two_d_view_layer_print_frame_coverage"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "2Dビュー・レイヤー・印刷枠カバレッジゲート"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md",
+          "token": "全ビュー210"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md",
+          "token": "印刷枠内"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "three_d_structure_material_mass_part_info",
+      "description": "3D構成、材質、質量、パーツ付加情報を監査する。",
+      "requiredGates": [
+        "three_d_structure_material_mass_coverage"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "3D構成・材質・質量・パーツ付加情報カバレッジゲート"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "パーツ付加情報あり"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "共有39件中38件は質量取得あり"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "unextracted_reason_and_reextract_condition",
+      "description": "未抽出や取得不可状態を理由と再抽出条件つきで残す。",
+      "requiredGates": [
+        "drawing_metadata_job_state",
+        "two_d_view_layer_print_frame_coverage",
+        "three_d_structure_material_mass_coverage"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "値を捏造せず"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md",
+          "token": "2D要素なし"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "knowledge_entity_ui_integration",
+      "description": "製品・装置・ユニット、部品、図面管理を統合ビューワーへ合わせる。",
+      "requiredGates": [
+        "icad_entity_ui",
+        "frontend_vitest",
+        "viewer_backend_pytest"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "2D・3Dビューワー統合フロント"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "製品・部品詳細"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "図面紐づけ候補38件"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "business_status_separated_from_extraction_review",
+      "description": "抽出内部状態を利用者向け業務状態から分離する。",
+      "requiredGates": [
+        "icad_entity_ui"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "業務状態へ混ぜない"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "業務ステータスから"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "tag_quality_and_evidence",
+      "description": "検索・分類に有効なタグだけを採用し、source/evidence/reason/confidenceを必須化する。",
+      "requiredGates": [
+        "tag_quality",
+        "knowledge_payload_attribute_quality"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "タグ採用規則"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "取得元欠落0件"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "source/evidence/confidence/reason欠落0件"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "two_d_three_d_reconciliation",
+      "description": "2D/3D差異、採用値、要確認理由を追跡する。",
+      "requiredGates": [
+        "knowledge_payload_attribute_quality",
+        "icad_entity_ui"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "reconciledAttributes"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_07a_api_contract.md",
+          "token": "2D/3D照合"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "mass_weight_kg_two_decimals",
+      "description": "質量・重量をkg、小数点以下2桁へ統一する。",
+      "requiredGates": [
+        "mass_weight_format",
+        "three_d_structure_material_mass_coverage"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "表示単位はkgへ統一"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "`0.49 kg` 形式"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "gemini_low_temperature_guarded",
+      "description": "Geminiを低温度の曖昧分類補助に限定し、実API評価と誤採用防止を監査する。",
+      "requiredGates": [
+        "llm_title_block_guardrails",
+        "llm_probe_evaluation"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "温度は `0.0`"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "CADに存在しない値の生成"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "Geminiの追加採用値0件"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "no_souya_production_db_write",
+      "description": "創屋本番DBへの登録・変更・削除を行わない境界を明示する。",
+      "requiredGates": [
+        "stale_handoff_doc_search",
+        "source_text_guardrails"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "創屋本番DBへの登録、変更、削除は一切行わない"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14.md",
+          "token": "本番ナレッジシステムへの登録、変更、削除は創屋側"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "handoff_docs_and_beginner_comments",
+      "description": "創屋が移植できるAPI仕様、データ契約、初心者向け説明、分冊資料を保持する。",
+      "requiredGates": [
+        "stale_handoff_doc_search",
+        "handoff_doc_size_guardrails"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14.md",
+          "token": "API/fixture の最小契約案"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_07a_api_contract.md",
+          "token": "初心者でも確認できる"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "ファイル長制限で開けない状態を避ける"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "automated_tests_chrome_and_clean_tree",
+      "description": "バックエンド、フロントエンド、C#、Chrome UI、作業ツリーcleanを最終監査に含める。",
+      "requiredGates": [
+        "backend_django_check",
+        "backend_drawing_metadata_pytest",
+        "dotnet_build",
+        "dotnet_test",
+        "viewer_backend_pytest",
+        "frontend_vitest",
+        "frontend_build",
+        "icad_entity_ui",
+        "git_worktree_clean"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "--include-tests --include-ui --require-clean"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
+          "token": "Chrome実操作"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    },
+    {
+      "id": "no_unimplemented_mock_or_stale_terms",
+      "description": "未実装、モック、古い未完表現、放置ファイルを監査で落とす。",
+      "requiredGates": [
+        "stale_handoff_doc_search",
+        "source_text_guardrails",
+        "git_worktree_clean"
+      ],
+      "missingGates": [],
+      "requiredDocTokens": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "旧見出し・旧予定表現"
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
+          "token": "未追跡0件"
+        }
+      ],
+      "missingDocTokens": [],
+      "passed": true
+    }
+  ]
+}
