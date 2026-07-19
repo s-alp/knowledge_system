@@ -12,12 +12,13 @@
 
 ```powershell
 git pull origin master
-backend\.venv\Scripts\python.exe -m pytest backend\apps\drawing_metadata\tests
-backend\.venv\Scripts\python.exe backend\manage.py re_normalize_snapshots
+cd backend
+.venv\Scripts\python.exe -m pytest apps\drawing_metadata\tests
+.venv\Scripts\python.exe manage.py renormalize_drawing_metadata_snapshots
 ```
 
   ※ 部品数は knowledge-entities API が都度計算するため再正規化不要。
-  尺度・熱処理・硬度は re_normalize で既存図面の canonical/タグへ反映される。
+  尺度・熱処理・硬度は renormalize で既存図面の canonical/タグへ反映される。
 
 ---
 
@@ -71,7 +72,7 @@ backend\.venv\Scripts\python.exe backend\manage.py re_normalize_snapshots
   - 熱処理: 焼入れ/焼戻し/焼なまし(焼鈍)/焼ならし(焼準)/調質/浸炭/窒化(タフトライド)/高周波焼入れ/真空焼入れ
   - 硬度: `HRC58`, `HRC58-62`, `HV500`, `HB230` 等(HRC/HRB/HRA/HV/HB/HBW/HS)
 - 確認したいこと: 実図面の熱処理注記でこの辞書から漏れる表記(略記・客先固有語)。
-- 手順: `re_normalize_snapshots` 実行後、`熱処理:` タグの付与件数と、熱処理があるはずなのに付かない図面の注記原文を収集する。
+- 手順: `renormalize_drawing_metadata_snapshots` 実行後、`熱処理:` タグの付与件数と、熱処理があるはずなのに付かない図面の注記原文を収集する。
 - 成果物: 取りこぼし表記の一覧(→ `HEAT_TREATMENT_KEYWORDS` へ追記)。
 
 ## F. 尺度表記の実態確認【優先: 中】
