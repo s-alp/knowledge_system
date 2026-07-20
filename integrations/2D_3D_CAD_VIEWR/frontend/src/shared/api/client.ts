@@ -534,3 +534,74 @@ export function uploadViewer2D(file: File): Promise<Open2DResponse> {
 export function uploadViewer3D(file: File): Promise<Open3DResponse> {
   return uploadFile<Open3DResponse>("/viewer3d/upload", file);
 }
+
+export interface TagDictionaryEntryPayload {
+  id: number;
+  kind: string;
+  kindLabel: string;
+  canonicalValue: string;
+  aliases: string[];
+  priority: number;
+  enabled: boolean;
+  note: string;
+  updatedAt: string;
+}
+
+export interface TagDictionaryListResponse {
+  kinds: { kind: string; label: string }[];
+  entries: TagDictionaryEntryPayload[];
+  seedFallbackNote: string;
+}
+
+async function requestTagDictionaryJson<T>(path: string, options?: RequestInit): Promise<T> {
+  // 辞書APIはDRF標準のバリデーションエラー形({field: [msg]})も返すため、ここで文言へ変換する。
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options?.headers ?? {}),
+    },
+    ...options,
+  });
+  if (response.status === 204) {
+    return undefined as T;
+  }
+  const payload: unknown = await response.json().catch(() => null);
+  if (!response.ok) {
+    const record = (payload ?? {}) as Record<string, unknown>;
+    const nested = record.error as { message?: string } | undefined;
+    const firstField = Object.values(record)[0];
+    const fieldMessage = Array.isArray(firstField) ? String(firstField[0]) : null;
+    throw new Error(nested?.message ?? fieldMessage ?? "タグ辞書の操作に失敗しました。");
+  }
+  return payload as T;
+}
+
+export function getTagDictionaries(): Promise<TagDictionaryListResponse> {
+  return requestTagDictionaryJson<TagDictionaryListResponse>("/drawing-metadata/tag-dictionaries");
+}
+
+export function createTagDictionaryEntry(input: {
+  kind: string;
+  canonicalValue: string;
+  aliases: string[];
+  note?: string;
+}): Promise<TagDictionaryEntryPayload> {
+  return requestTagDictionaryJson<TagDictionaryEntryPayload>("/drawing-metadata/tag-dictionaries", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateTagDictionaryEntry(
+  entryId: number,
+  input: Partial<{ canonicalValue: string; aliases: string[]; enabled: boolean; priority: number; note: string }>,
+): Promise<TagDictionaryEntryPayload> {
+  return requestTagDictionaryJson<TagDictionaryEntryPayload>(`/drawing-metadata/tag-dictionaries/${entryId}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteTagDictionaryEntry(entryId: number): Promise<void> {
+  return requestTagDictionaryJson<void>(`/drawing-metadata/tag-dictionaries/${entryId}`, { method: "DELETE" });
+}

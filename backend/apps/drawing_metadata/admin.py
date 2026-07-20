@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from apps.drawing_metadata.models import (
+    TagDictionaryEntry,
     DrawingMetadataAuditLog,
     DrawingMetadataExtractionJob,
     DrawingMetadataSnapshot,
@@ -42,3 +43,11 @@ class DrawingMetadataAuditLogAdmin(admin.ModelAdmin):
     list_display = ("drawing", "extraction_mode", "action_type", "executed_by", "executed_at")
     search_fields = ("drawing__filename", "reason", "executed_by")
     list_filter = ("action_type", "extraction_mode")
+
+
+@admin.register(TagDictionaryEntry)
+class TagDictionaryEntryAdmin(admin.ModelAdmin):
+    list_display = ("kind", "canonical_value", "aliases_json", "priority", "enabled", "updated_at")
+    search_fields = ("canonical_value", "note")
+    list_filter = ("kind", "enabled")
+    list_editable = ("priority", "enabled")

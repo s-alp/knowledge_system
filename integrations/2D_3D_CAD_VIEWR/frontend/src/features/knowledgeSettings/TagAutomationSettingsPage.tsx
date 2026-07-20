@@ -2,15 +2,21 @@ import { useEffect, useState } from "react";
 import { IconChevronRight, IconDatabase, IconTransfer } from "@tabler/icons-react";
 
 import {
+  createTagDictionaryEntry,
+  deleteTagDictionaryEntry,
   getDrawingMetadataHandoffSummary,
   getDrawingMetadataRegistrations,
   getTagAutomationSettings,
+  getTagDictionaries,
+  updateTagDictionaryEntry,
   type DrawingMetadataRegistrationListItem,
   type HandoffSummaryResponse,
   type TagAutomationSettingsResponse,
+  type TagDictionaryEntryPayload,
+  type TagDictionaryListResponse,
 } from "../../shared/api/client";
 
-type SettingsPanelKey = "overview" | "icad-extraction" | "handoff";
+type SettingsPanelKey = "overview" | "icad-extraction" | "handoff" | "tag-dictionaries";
 
 let cachedSettingsPayload: TagAutomationSettingsResponse | null = null;
 let cachedRegistrations: DrawingMetadataRegistrationListItem[] | null = null;
@@ -104,6 +110,9 @@ function panelForAction(action: string): SettingsPanelKey {
   if (action === "show_handoff_note") {
     return "handoff";
   }
+  if (action === "open_tag_dictionaries") {
+    return "tag-dictionaries";
+  }
   return "overview";
 }
 
@@ -156,7 +165,8 @@ export function TagAutomationSettingsPage() {
   }, []);
 
   useEffect(() => {
-    if (activePanel === "overview" || loadedPanels[activePanel]) {
+    // タグ辞書パネルは自前で読み込むため、共通のパネル読み込み対象から外す。
+    if (activePanel === "overview" || activePanel === "tag-dictionaries" || loadedPanels[activePanel]) {
       return;
     }
 
@@ -389,6 +399,8 @@ export function TagAutomationSettingsPage() {
         </section>
       ) : null}
 
+      {activePanel === "tag-dictionaries" ? <TagDictionaryPanel /> : null}
+
       {activePanel === "handoff" ? (
         <section className="production-section">
           <div className="production-section-header">
@@ -592,6 +604,185 @@ export function TagAutomationSettingsPage() {
           </tbody>
         </table>
       </section>
+    </section>
+  );
+}
+
+function TagDictionaryPanel() {
+  const [payload, setPayload] = useState<TagDictionaryListResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [kindFilter, setKindFilter] = useState<string>("all");
+  const [formKind, setFormKind] = useState<string>("customer");
+  const [formCanonical, setFormCanonical] = useState("");
+  const [formAliases, setFormAliases] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const reload = () => {
+    setLoading(true);
+    getTagDictionaries()
+      .then((response) => {
+        setPayload(response);
+        setError(null);
+      })
+      .catch((reason: unknown) => {
+        setError(reason instanceof Error ? reason.message : "タグ辞書を取得できませんでした。");
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const submit = () => {
+    if (!formCanonical.trim()) {
+      setError("正規名を入力してください。");
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    createTagDictionaryEntry({
+      kind: formKind,
+      canonicalValue: formCanonical.trim(),
+      aliases: formAliases
+        .split(/[、,]/)
+        .map((alias) => alias.trim())
+        .filter(Boolean),
+    })
+      .then((entry) => {
+        setNotice(`「${entry.kindLabel}:${entry.canonicalValue}」を登録しました。既存図面への反映には再正規化が必要です。`);
+        setFormCanonical("");
+        setFormAliases("");
+        reload();
+      })
+      .catch((reason: unknown) => {
+        setError(reason instanceof Error ? reason.message : "登録に失敗しました。");
+      })
+      .finally(() => setSaving(false));
+  };
+
+  const toggleEnabled = (entry: TagDictionaryEntryPayload) => {
+    updateTagDictionaryEntry(entry.id, { enabled: !entry.enabled })
+      .then(() => reload())
+      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "更新に失敗しました。"));
+  };
+
+  const removeEntry = (entry: TagDictionaryEntryPayload) => {
+    if (!window.confirm(`「${entry.kindLabel}:${entry.canonicalValue}」を削除しますか？`)) {
+      return;
+    }
+    deleteTagDictionaryEntry(entry.id)
+      .then(() => reload())
+      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "削除に失敗しました。"));
+  };
+
+  const entries = (payload?.entries ?? []).filter((entry) => kindFilter === "all" || entry.kind === kindFilter);
+
+  return (
+    <section className="production-section">
+      <div className="production-section-header">
+        <div>
+          <h2>タグ辞書管理</h2>
+          <p className="production-section-note">
+            客先・案件・装置カテゴリ・メーカー・規格・熱処理の語彙を登録します。ここに登録した語が抽出時の照合とタグ生成に使われます。
+          </p>
+          <p className="production-section-note">{payload?.seedFallbackNote ?? ""}</p>
+        </div>
+      </div>
+      <div className="production-section-divider" />
+      {error ? <p className="production-section-note error-panel">{error}</p> : null}
+      {notice ? <p className="production-section-note">{notice}</p> : null}
+
+      <div className="production-detail-grid">
+        <div className="production-detail-field">
+          <span>種別</span>
+          <select value={formKind} onChange={(event) => setFormKind(event.target.value)}>
+            {(payload?.kinds ?? []).map((kind) => (
+              <option key={kind.kind} value={kind.kind}>
+                {kind.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="production-detail-field">
+          <span>正規名(タグに使う名前)</span>
+          <input
+            type="text"
+            value={formCanonical}
+            placeholder="例: 不二越"
+            onChange={(event) => setFormCanonical(event.target.value)}
+          />
+        </div>
+        <div className="production-detail-field">
+          <span>別名・略名(読点/カンマ区切り)</span>
+          <input
+            type="text"
+            value={formAliases}
+            placeholder="例: 不二越5、NACHI"
+            onChange={(event) => setFormAliases(event.target.value)}
+          />
+        </div>
+        <div className="production-detail-field">
+          <span>&nbsp;</span>
+          <button type="button" onClick={submit} disabled={saving}>
+            {saving ? "登録中..." : "辞書へ登録"}
+          </button>
+        </div>
+      </div>
+
+      <div className="production-section-divider" />
+      <div className="production-detail-field">
+        <span>表示する種別</span>
+        <select value={kindFilter} onChange={(event) => setKindFilter(event.target.value)}>
+          <option value="all">すべて</option>
+          {(payload?.kinds ?? []).map((kind) => (
+            <option key={kind.kind} value={kind.kind}>
+              {kind.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      {loading ? <p className="production-section-note">タグ辞書を読み込んでいます。</p> : null}
+      <div className="production-table-shell">
+        <table className="production-table">
+          <thead>
+            <tr>
+              <th>種別</th>
+              <th>正規名</th>
+              <th>別名・略名</th>
+              <th>有効</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.length ? (
+              entries.map((entry) => (
+                <tr key={entry.id}>
+                  <td>{entry.kindLabel}</td>
+                  <td>{entry.canonicalValue}</td>
+                  <td>{entry.aliases.length ? entry.aliases.join("、") : "-"}</td>
+                  <td>{entry.enabled ? "有効" : "無効"}</td>
+                  <td>
+                    <button type="button" onClick={() => toggleEnabled(entry)}>
+                      {entry.enabled ? "無効にする" : "有効にする"}
+                    </button>{" "}
+                    <button type="button" onClick={() => removeEntry(entry)}>
+                      削除
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5}>{loading ? "-" : "登録済みの辞書エントリはありません(seed辞書で動作中)。"}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

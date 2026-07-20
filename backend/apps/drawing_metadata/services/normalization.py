@@ -6,13 +6,10 @@ import unicodedata
 
 from django.conf import settings
 
+from apps.drawing_metadata.models import TagDictionaryEntry
+from apps.drawing_metadata.services.dictionaries import load_keyword_mapping
 from apps.drawing_metadata.services.seed_dictionaries import (
-    CUSTOMER_KEYWORDS,
-    EQUIPMENT_CATEGORY_KEYWORDS,
-    HEAT_TREATMENT_KEYWORDS,
-    MAKER_KEYWORDS,
     MATERIAL_CLASSIFICATION_RULES,
-    SPEC_KEYWORDS,
 )
 
 
@@ -174,7 +171,7 @@ def _extract_scale_candidates(tokens: Iterable[str]) -> list[dict]:
 
 def _heat_treatment_rules() -> list[tuple[str, str, str]]:
     rules: list[tuple[str, str, str]] = []
-    for canonical_name, aliases in HEAT_TREATMENT_KEYWORDS.items():
+    for canonical_name, aliases in load_keyword_mapping(TagDictionaryEntry.KIND_HEAT_TREATMENT).items():
         for alias in aliases:
             rules.append((canonical_name, alias, unicodedata.normalize("NFKC", alias).casefold()))
     # 長い別名を優先照合し、「高周波焼入れ」が「焼入れ」にも同時ヒットする二重取りを防ぐ。
@@ -1668,20 +1665,27 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["part_keywords"] = search_tokens
 
-    customer_name = _match_dictionary(canonical["part_keywords"], CUSTOMER_KEYWORDS)
-    equipment_category = _match_dictionary(canonical["part_keywords"], EQUIPMENT_CATEGORY_KEYWORDS)
+    # 辞書はDB(GUI編集)を正とし、未登録種別は seed へフォールバックする。
+    customer_name = _match_dictionary(canonical["part_keywords"], load_keyword_mapping(TagDictionaryEntry.KIND_CUSTOMER))
+    equipment_category = _match_dictionary(
+        canonical["part_keywords"], load_keyword_mapping(TagDictionaryEntry.KIND_EQUIPMENT_CATEGORY)
+    )
+    project_name = _match_dictionary(canonical["part_keywords"], load_keyword_mapping(TagDictionaryEntry.KIND_PROJECT))
 
     if customer_name:
         canonical["customer_name"] = customer_name
     if equipment_category:
         canonical["equipment_category"] = equipment_category
+    if project_name and not canonical.get("project_name"):
+        # 案件辞書(パス・部品名のフォルダ語彙)から案件名を確定する。図枠由来があればそちらを優先。
+        canonical["project_name"] = project_name
 
-    for maker, candidates in MAKER_KEYWORDS.items():
-        if any(candidate in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
+    for maker, candidates in load_keyword_mapping(TagDictionaryEntry.KIND_MAKER).items():
+        if any(candidate.lower() in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
             canonical["maker_keywords"].append(maker)
 
-    for spec, candidates in SPEC_KEYWORDS.items():
-        if any(candidate in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
+    for spec, candidates in load_keyword_mapping(TagDictionaryEntry.KIND_SPEC).items():
+        if any(candidate.lower() in " ".join(token.lower() for token in canonical["part_keywords"]) for candidate in candidates):
             canonical["spec_tokens"].append(spec)
 
     if source_kind == "3d":

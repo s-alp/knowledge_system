@@ -5,6 +5,7 @@ from pathlib import Path
 
 from apps.drawing_metadata.models import (
     DrawingMetadataExtractionJob,
+    TagDictionaryEntry,
     DrawingMetadataSnapshot,
     RegisteredDrawing,
     EXTRACTION_MODE_CHOICES,
@@ -670,3 +671,42 @@ class ManualOverrideSerializer(serializers.Serializer):
         required=False,
     )
     reason = serializers.CharField(required=False, allow_blank=True)
+
+
+class TagDictionaryEntrySerializer(serializers.ModelSerializer):
+    canonicalValue = serializers.CharField(source="canonical_value", max_length=255)
+    aliases = serializers.ListField(
+        source="aliases_json", child=serializers.CharField(max_length=255), required=False, default=list
+    )
+
+    class Meta:
+        model = TagDictionaryEntry
+        fields = ("id", "kind", "canonicalValue", "aliases", "priority", "enabled", "note")
+        read_only_fields = ("id",)
+
+    def validate(self, attrs):
+        kind = attrs.get("kind") or (self.instance.kind if self.instance else None)
+        canonical_value = attrs.get("canonical_value") or (self.instance.canonical_value if self.instance else None)
+        if kind and canonical_value:
+            queryset = TagDictionaryEntry.objects.filter(kind=kind, canonical_value=canonical_value)
+            if self.instance is not None:
+                queryset = queryset.exclude(pk=self.instance.pk)
+            if queryset.exists():
+                raise serializers.ValidationError({"canonicalValue": "同じ種別に同じ正規名が既に登録されています。"})
+        if "aliases_json" in attrs:
+            attrs["aliases_json"] = [alias.strip() for alias in attrs["aliases_json"] if alias and alias.strip()]
+        return attrs
+
+    @classmethod
+    def to_payload(cls, entry: TagDictionaryEntry) -> dict:
+        return {
+            "id": entry.id,
+            "kind": entry.kind,
+            "kindLabel": dict(TagDictionaryEntry.KIND_CHOICES).get(entry.kind, entry.kind),
+            "canonicalValue": entry.canonical_value,
+            "aliases": list(entry.aliases_json or []),
+            "priority": entry.priority,
+            "enabled": entry.enabled,
+            "note": entry.note,
+            "updatedAt": entry.updated_at,
+        }

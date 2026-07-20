@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 
 from apps.drawing_metadata.api.serializers import (
     DrawingMetadataExtractionJobSerializer,
+    TagDictionaryEntrySerializer,
     ExtractRequestSerializer,
     ManualOverrideSerializer,
     RegisteredDrawingCreateSerializer,
@@ -24,7 +25,12 @@ from apps.drawing_metadata.api.serializers import (
     RegisteredDrawingListSerializer,
     ReviewDecisionSerializer,
 )
-from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.models import (
+    DrawingMetadataExtractionJob,
+    DrawingMetadataSnapshot,
+    RegisteredDrawing,
+    TagDictionaryEntry,
+)
 from apps.drawing_metadata.services.drawing_scope import apply_active_drawing_scope, build_scope_payload
 from apps.drawing_metadata.services.failure_diagnostics import (
     build_job_failure_diagnostics,
@@ -647,3 +653,54 @@ def _is_relative_to(path: Path, parent: Path) -> bool:
     except ValueError:
         return False
     return True
+
+
+class TagDictionaryListApiView(APIView):
+    """タグ辞書の一覧取得と新規登録。システム設定のタグ辞書管理画面から使う。"""
+
+    def get(self, request):
+        entries = TagDictionaryEntry.objects.all().order_by("kind", "priority", "canonical_value")
+        kind_labels = dict(TagDictionaryEntry.KIND_CHOICES)
+        return Response(
+            {
+                "kinds": [
+                    {"kind": kind, "label": label}
+                    for kind, label in TagDictionaryEntry.KIND_CHOICES
+                ],
+                "entries": [
+                    {
+                        "id": entry.id,
+                        "kind": entry.kind,
+                        "kindLabel": kind_labels.get(entry.kind, entry.kind),
+                        "canonicalValue": entry.canonical_value,
+                        "aliases": list(entry.aliases_json or []),
+                        "priority": entry.priority,
+                        "enabled": entry.enabled,
+                        "note": entry.note,
+                        "updatedAt": entry.updated_at,
+                    }
+                    for entry in entries
+                ],
+                "seedFallbackNote": "DBに1件も無い種別はコード内seed辞書で動作します。編集後は renormalize_drawing_metadata_snapshots で既存図面へ反映してください。",
+            }
+        )
+
+    def post(self, request):
+        serializer = TagDictionaryEntrySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        entry = serializer.save()
+        return Response(TagDictionaryEntrySerializer.to_payload(entry), status=status.HTTP_201_CREATED)
+
+
+class TagDictionaryDetailApiView(APIView):
+    def patch(self, request, entry_id: int):
+        entry = get_object_or_404(TagDictionaryEntry, pk=entry_id)
+        serializer = TagDictionaryEntrySerializer(entry, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        entry = serializer.save()
+        return Response(TagDictionaryEntrySerializer.to_payload(entry))
+
+    def delete(self, request, entry_id: int):
+        entry = get_object_or_404(TagDictionaryEntry, pk=entry_id)
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

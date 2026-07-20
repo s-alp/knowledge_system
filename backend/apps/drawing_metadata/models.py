@@ -141,3 +141,48 @@ class DrawingMetadataAuditLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.drawing.filename}:{self.extraction_mode}:{self.action_type}"
+
+
+class TagDictionaryEntry(models.Model):
+    """タグ・属性正規化に使う辞書の正本。GUI(システム設定/管理画面)から登録・編集できる。
+
+    DBにエントリがない種別は、コード内 seed 辞書へフォールバックする。
+    辞書を編集したら renormalize_drawing_metadata_snapshots で既存図面へ反映する。
+    """
+
+    KIND_CUSTOMER = "customer"
+    KIND_EQUIPMENT_CATEGORY = "equipment_category"
+    KIND_PROJECT = "project"
+    KIND_MAKER = "maker"
+    KIND_SPEC = "spec"
+    KIND_HEAT_TREATMENT = "heat_treatment"
+    KIND_CHOICES = [
+        (KIND_CUSTOMER, "客先"),
+        (KIND_EQUIPMENT_CATEGORY, "装置カテゴリ"),
+        (KIND_PROJECT, "案件"),
+        (KIND_MAKER, "メーカー"),
+        (KIND_SPEC, "規格"),
+        (KIND_HEAT_TREATMENT, "熱処理"),
+    ]
+
+    id = models.BigAutoField(primary_key=True)
+    kind = models.CharField(max_length=32, choices=KIND_CHOICES, db_index=True)
+    canonical_value = models.CharField(max_length=255, help_text="タグ・属性に使う正規名(例: コマツ小山)")
+    aliases_json = models.JSONField(default=list, blank=True, help_text="照合に使う別名・略名のリスト")
+    priority = models.IntegerField(default=100, help_text="小さいほど優先。複数一致時の主候補選択順。")
+    enabled = models.BooleanField(default=True)
+    note = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["kind", "priority", "canonical_value"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["kind", "canonical_value"],
+                name="tag_dictionary_unique_kind_value",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.kind}:{self.canonical_value}"

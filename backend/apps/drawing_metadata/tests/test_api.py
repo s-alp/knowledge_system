@@ -212,6 +212,12 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
             "action": "open_icad_extraction_review",
         },
         {
+            "key": "tag-dictionaries",
+            "label": "タグ辞書管理",
+            "description": "客先・案件・装置カテゴリ・メーカー・規格・熱処理の辞書語彙を登録・編集します。編集後は再正規化で既存図面へ反映します。",
+            "action": "open_tag_dictionaries",
+        },
+        {
             "key": "integration-data-review",
             "label": "API仕様・連携仕様",
             "description": "移植用API、対象別payload、viewer/RAG連携の仕様と集計を確認します。",
