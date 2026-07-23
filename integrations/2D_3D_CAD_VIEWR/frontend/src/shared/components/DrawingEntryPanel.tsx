@@ -58,14 +58,14 @@ export function DrawingEntryPanel({
           <div>
             <h2>図面を開く</h2>
             <p className="section-description">
-              drawingId(UUID) または `/drawing/&lt;drawingId&gt;` を含む URL を入力してください。
+              登録済み図面のURL、または drawingId(UUID) を入力して図面詳細を開きます。
             </p>
           </div>
         </div>
 
         <div className="form-grid launcher-form">
           <label className="input-stack">
-            <span className="field-label">drawingId / URL</span>
+            <span className="field-label">図面URL / drawingId</span>
             <input
               type="text"
               value={value}
@@ -79,7 +79,7 @@ export function DrawingEntryPanel({
             />
           </label>
           <button className="primary-button" type="button" onClick={handleOpen}>
-            drawingId で開く
+            図面を開く
           </button>
         </div>
 
@@ -94,7 +94,7 @@ export function DrawingEntryPanel({
               <div>
                 <h2>ローカルファイルを開く</h2>
                 <p className="section-description">
-                  ローカルファイルを選ぶと 2D/3D を自動判定して詳細画面を開きます。
+                  PC上のファイルを一時的に開いて表示します。ナレッジ用のタグ・属性登録は行いません。
                 </p>
                 <p className="section-description">
                   対応形式: 2D は `.pdf, .jpg, .jpeg, .tif, .tiff`、3D は `.stl, .step, .stp`
@@ -149,7 +149,7 @@ export function DrawingEntryPanel({
                     localFileInputRef.current?.click();
                   }}
                 >
-                  ファイルを選択
+                  ローカルファイルを選択
                 </button>
               </div>
             </label>
@@ -161,27 +161,31 @@ export function DrawingEntryPanel({
         <div className="launcher-local-section">
           <div className="panel-header panel-header-stack">
             <div>
-              <h2>ICADからタグ・属性を取得</h2>
+              <h2>ICADファイルからタグ・属性を取得</h2>
               <p className="section-description">
-                原本のICADパスを登録して、タグ・属性候補の取得を開始します。
+                `.icd` ファイルを1つ登録して、2D/3Dのタグ・属性候補を抽出します。フォルダ指定ではなく、抽出したいICADファイルそのものを指定します。
               </p>
             </div>
           </div>
           <label className="input-stack">
-            <span className="field-label">ICAD原本パス</span>
+            <span className="field-label">ICADファイルのパスを指定（推奨）</span>
             <input
               type="text"
+              aria-label="ICADファイルのパスを指定（推奨）"
               value={icadSourcePath}
               onChange={(event) => {
                 setIcadSourcePath(event.target.value);
                 setSelectedIcadFile(null);
-                setIcadStatus("原本パスを登録対象にします。");
+                setIcadStatus("指定したパスの .icd を worker が直接開いて抽出します。");
               }}
               placeholder="J:\\PROJECT\\PART.icd"
             />
+            <span className="section-description">
+              ネットワークドライブや共有フォルダ上の `.icd` を指定します。サーバーにはコピーせず、worker がその場所を読みに行きます。
+            </span>
           </label>
           <label className="input-stack">
-            <span className="field-label">ICADファイルコピー登録</span>
+            <span className="field-label">ICADファイルをアップロード（パス指定できない場合）</span>
             <div className="launcher-file-row">
               <input
                 type="text"
@@ -216,7 +220,7 @@ export function DrawingEntryPanel({
                   }
 
                   setError(null);
-                  setIcadStatus("コピー登録対象として選択しました。原本パス登録が使えない場合だけ使用してください。");
+                  setIcadStatus("選択した .icd をサーバー管理フォルダへコピーして、そのコピーを抽出対象にします。");
                 }}
               />
               <button
@@ -226,9 +230,12 @@ export function DrawingEntryPanel({
                   icadFileInputRef.current?.click();
                 }}
               >
-                ICADファイルを選択
+                ICADファイルを選択してアップロード
               </button>
             </div>
+            <span className="section-description">
+              ローカルPCから `.icd` を選んで登録します。元ファイルは変更せず、コピーしたファイルを抽出に使います。
+            </span>
           </label>
           <button
             className="secondary-button"
@@ -237,14 +244,14 @@ export function DrawingEntryPanel({
             onClick={() => {
               const trimmedPath = icadSourcePath.trim();
               if (trimmedPath && !trimmedPath.toLowerCase().endsWith(".icd")) {
-                setError("ICAD原本パスには .icd ファイルを指定してください。");
+                setError("ICADファイルのパスには .icd ファイルを指定してください。");
                 setIcadStatus("対応外のファイル形式です。");
                 return;
               }
               onIcadMetadataLaunch({ file: selectedIcadFile, sourcePath: trimmedPath });
             }}
           >
-            タグ・属性取得へ進む
+            このICADを登録して抽出画面へ
           </button>
           {icadStatus ? <p className="section-description">{icadStatus}</p> : null}
         </div>

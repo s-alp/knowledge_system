@@ -287,7 +287,7 @@ export function TagAutomationSettingsPage() {
             <div>
               <h2>ICAD抽出管理</h2>
               <p className="production-section-note">
-                登録済みICD単位で、2D/3D snapshot、起票後の待機・抽出中・完了・失敗、worker状態、保存先を確認します。
+                登録済みICD単位で、2D/3D snapshot、起票後の待機・抽出中・完了・失敗、worker状態、抽出対象ファイルを確認します。
               </p>
               <p className="production-section-note">{scopeLabel(handoffSummary)}</p>
             </div>
@@ -338,7 +338,7 @@ export function TagAutomationSettingsPage() {
                   <th>3Dジョブ</th>
                   <th>最終ジョブ更新</th>
                   <th>失敗理由</th>
-                  <th>保存先</th>
+                  <th>抽出で使うICADファイル</th>
                 </tr>
               </thead>
               <tbody>

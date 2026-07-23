@@ -13,7 +13,7 @@ def build_tag_automation_settings_payload() -> dict:
             {
                 "key": "icad-extraction-management",
                 "label": "ICAD抽出管理",
-                "description": "登録済みICAD、抽出snapshot、2D/3Dジョブ、保存元パスをシステム設定内で確認します。",
+                "description": "登録済みICAD、抽出snapshot、2D/3Dジョブ、抽出で使うICADファイルをシステム設定内で確認します。",
                 "action": "open_icad_extraction_review",
             },
             {

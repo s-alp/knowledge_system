@@ -431,9 +431,9 @@ function DrawingLinkDialog({ record, onClose, onSaved }: { record: KnowledgeEnti
 
   return (
     <ModalShell title="図面を紐づける" onClose={onClose}>
-      <form className="production-link-search" onSubmit={(event) => { event.preventDefault(); void load(query); }}><label><span>図面名・保存先</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label><button className="production-primary-button" type="submit">検索</button></form>
+      <form className="production-link-search" onSubmit={(event) => { event.preventDefault(); void load(query); }}><label><span>図面名・ICADファイル</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label><button className="production-primary-button" type="submit">検索</button></form>
       {error ? <p className="error-text">{error}</p> : null}
-      <div className="production-table-shell production-link-table"><table className="production-table"><thead><tr><th>選択</th><th>図面名</th><th>保存先</th></tr></thead><tbody>
+      <div className="production-table-shell production-link-table"><table className="production-table"><thead><tr><th>選択</th><th>図面名</th><th>抽出で使うICADファイル</th></tr></thead><tbody>
         {loading ? <tr><td colSpan={3}>読み込んでいます。</td></tr> : options.length ? options.map((item) => <tr key={item.drawingId}><td><input aria-label={`${item.filename}を選択`} type="checkbox" checked={selected.has(item.drawingId)} onChange={(event) => setSelected((current) => { const next = new Set(current); if (event.target.checked) next.add(item.drawingId); else next.delete(item.drawingId); return next; })} /></td><td>{item.filename}</td><td>{item.sourcePath}</td></tr>) : <tr><td colSpan={3}>紐づけ可能な図面がありません。</td></tr>}
       </tbody></table></div>
       <div className="production-modal-actions"><span>{selected.size}件を選択中</span><button className="production-secondary-button" type="button" onClick={onClose}>キャンセル</button><button className="production-primary-button" type="button" disabled={saving} onClick={() => void save()}>{saving ? "保存しています。" : "紐づけを保存"}</button></div>

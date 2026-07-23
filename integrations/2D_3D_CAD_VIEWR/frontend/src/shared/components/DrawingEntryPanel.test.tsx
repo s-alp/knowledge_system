@@ -19,12 +19,12 @@ describe("DrawingEntryPanel", () => {
       />,
     );
 
-    expect(screen.getByText("図面を開く")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "ICADからタグ・属性を取得" })).toBeInTheDocument();
-    expect(screen.getByText("ICAD原本パス")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "ICADファイルを選択" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "図面を開く" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "ICADファイルからタグ・属性を取得" })).toBeInTheDocument();
+    expect(screen.getByText("ICADファイルのパスを指定（推奨）")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "ICADファイルを選択してアップロード" })).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "タグ・属性取得へ進む" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "このICADを登録して抽出画面へ" })).toBeDisabled();
     expect(handleIcadMetadataLaunch).not.toHaveBeenCalled();
   });
 
@@ -42,7 +42,7 @@ describe("DrawingEntryPanel", () => {
     const icadFileInput = container.querySelector('input[type="file"][accept=".icd"]');
 
     fireEvent.change(icadFileInput as HTMLInputElement, { target: { files: [file] } });
-    fireEvent.click(screen.getByRole("button", { name: "タグ・属性取得へ進む" }));
+    fireEvent.click(screen.getByRole("button", { name: "このICADを登録して抽出画面へ" }));
 
     expect(handleIcadMetadataLaunch).toHaveBeenCalledWith({ file, sourcePath: "" });
   });
@@ -58,10 +58,10 @@ describe("DrawingEntryPanel", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("ICAD原本パス"), {
+    fireEvent.change(screen.getByLabelText("ICADファイルのパスを指定（推奨）"), {
       target: { value: "J:\\PROJECT\\sample.icd" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "タグ・属性取得へ進む" }));
+    fireEvent.click(screen.getByRole("button", { name: "このICADを登録して抽出画面へ" }));
 
     expect(handleIcadMetadataLaunch).toHaveBeenCalledWith({ file: null, sourcePath: "J:\\PROJECT\\sample.icd" });
   });

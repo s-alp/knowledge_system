@@ -134,7 +134,7 @@ function summarizeJobError(value: string | null | undefined, apiSummary?: string
     return "-";
   }
   if (value.includes("パスが長すぎます")) {
-    return "ICAD原本パスが長すぎます。短い一時パスへ退避して再抽出する必要があります。";
+    return "ICADファイルのパスが長すぎます。短い一時パスへ退避して再抽出する必要があります。";
   }
   if (value.includes("ファイル名が長すぎます")) {
     return "ICADファイル名が長すぎます。短いファイル名へ変更してから再登録してください。";
@@ -146,7 +146,7 @@ function summarizeJobError(value: string | null | undefined, apiSummary?: string
     return "ICAD/SXの多重起動ダイアログが発生しています。既存ICADを閉じて再実行してください。";
   }
   if (value.includes("FileNotFound") || value.includes("ファイルが見つかりません")) {
-    return "対象ファイルまたは参照ファイルが見つかりません。保存先パスと参照先を確認してください。";
+    return "対象ファイルまたは参照ファイルが見つかりません。抽出対象ファイルのパスと参照先を確認してください。";
   }
   const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
   return firstLine.length > 120 ? `${firstLine.slice(0, 120)}...` : firstLine;
@@ -238,12 +238,12 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
     const trimmedSourcePath = sourcePath.trim();
     if (!file && !trimmedSourcePath) {
       setPhase("idle");
-      setMessage("ICAD原本パスを入力するか、ICADファイルを選択してください。");
+      setMessage("ICADファイルのパスを指定するか、ICADファイルをアップロードしてください。");
       return;
     }
 
     setPhase("uploading");
-    setMessage("ICADファイルを登録しています。");
+    setMessage(trimmedSourcePath ? "指定されたICADファイルを登録しています。" : "アップロードされたICADファイルをコピー登録しています。");
     setError(null);
     const request = trimmedSourcePath
       ? registerIcadDrawingMetadataPath(trimmedSourcePath)
@@ -458,7 +458,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
         <div className="production-section-divider" />
         <div className="production-detail-grid">
           <div className="production-detail-field">
-            <span>選択ファイル</span>
+            <span>指定したICAD</span>
             <p>{selectedSourceLabel}</p>
           </div>
           <div className="production-detail-field">
@@ -466,8 +466,12 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
             <p>{registration?.drawingId ?? "-"}</p>
           </div>
           <div className="production-detail-field">
-            <span>保存先</span>
+            <span>抽出で使うICADファイル</span>
             <p>{registration?.sourcePath ?? "-"}</p>
+          </div>
+          <div className="production-detail-field">
+            <span>登録方法</span>
+            <p>{sourcePath.trim() ? "パス指定: worker がこの .icd を直接開きます。" : "アップロード: コピーした .icd を worker が開きます。"}</p>
           </div>
           <div className="production-detail-field">
             <span>状態</span>

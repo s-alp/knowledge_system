@@ -331,6 +331,23 @@ export function resolveApiBaseUrl(
 
 const API_BASE_URL = resolveApiBaseUrl();
 
+async function readJsonResponse<T>(response: Response): Promise<T | null> {
+  if (response.status === 204) {
+    return null;
+  }
+
+  const text = await response.text();
+  if (!text.trim()) {
+    return null;
+  }
+
+  return JSON.parse(text) as T;
+}
+
+function errorMessageFromPayload(payload: ApiErrorPayload | null, response: Response): string {
+  return payload?.error?.message ?? `API request failed: HTTP ${response.status} ${response.statusText}`.trim();
+}
+
 async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
   // API 呼び出しの失敗形を 1 か所にそろえ、画面側は message だけを扱う。
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -342,11 +359,15 @@ async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const payload = (await response.json()) as ApiErrorPayload;
-    throw new Error(payload.error.message);
+    const payload = await readJsonResponse<ApiErrorPayload>(response).catch(() => null);
+    throw new Error(errorMessageFromPayload(payload, response));
   }
 
-  return (await response.json()) as T;
+  const payload = await readJsonResponse<T>(response);
+  if (payload === null) {
+    throw new Error(`API request returned an empty response: HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  return payload;
 }
 
 export function openViewer2D(url: string): Promise<Open2DResponse> {
@@ -520,11 +541,15 @@ async function uploadFile<T>(path: string, file: File): Promise<T> {
   });
 
   if (!response.ok) {
-    const payload = (await response.json()) as ApiErrorPayload;
-    throw new Error(payload.error.message);
+    const payload = await readJsonResponse<ApiErrorPayload>(response).catch(() => null);
+    throw new Error(errorMessageFromPayload(payload, response));
   }
 
-  return (await response.json()) as T;
+  const payload = await readJsonResponse<T>(response);
+  if (payload === null) {
+    throw new Error(`API request returned an empty response: HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  return payload;
 }
 
 export function uploadViewer2D(file: File): Promise<Open2DResponse> {
