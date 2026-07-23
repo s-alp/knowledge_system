@@ -6,6 +6,7 @@ from apps.drawing_metadata.services.seed_dictionaries import (
     EQUIPMENT_CATEGORY_KEYWORDS,
     HEAT_TREATMENT_KEYWORDS,
     MAKER_KEYWORDS,
+    PART_NAME_KEYWORDS,
     SPEC_KEYWORDS,
 )
 
@@ -17,6 +18,7 @@ KIND_TO_SEED: dict[str, dict[str, list[str]]] = {
     TagDictionaryEntry.KIND_MAKER: MAKER_KEYWORDS,
     TagDictionaryEntry.KIND_SPEC: SPEC_KEYWORDS,
     TagDictionaryEntry.KIND_HEAT_TREATMENT: HEAT_TREATMENT_KEYWORDS,
+    TagDictionaryEntry.KIND_PART_NAME: PART_NAME_KEYWORDS,
 }
 
 

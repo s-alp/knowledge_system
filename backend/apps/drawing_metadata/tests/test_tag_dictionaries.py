@@ -68,9 +68,41 @@ def test_seed_command_then_gui_edit_flow():
     assert TagDictionaryEntry.objects.filter(
         kind=TagDictionaryEntry.KIND_CUSTOMER, canonical_value="コマツ小山"
     ).exists()
+    assert TagDictionaryEntry.objects.filter(
+        kind=TagDictionaryEntry.KIND_PART_NAME, canonical_value="PLATE"
+    ).exists()
+    assert TagDictionaryEntry.objects.filter(
+        kind=TagDictionaryEntry.KIND_PART_NAME, canonical_value="POLE"
+    ).exists()
+    assert TagDictionaryEntry.objects.filter(
+        kind=TagDictionaryEntry.KIND_PART_NAME, canonical_value="FENCE"
+    ).exists()
+    assert TagDictionaryEntry.objects.filter(
+        kind=TagDictionaryEntry.KIND_PART_NAME, canonical_value="JIG"
+    ).exists()
     first_count = TagDictionaryEntry.objects.count()
     call_command("seed_tag_dictionaries")
     assert TagDictionaryEntry.objects.count() == first_count
+
+
+@pytest.mark.django_db
+def test_part_name_dictionary_matches_drawing_text_only():
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "raw_extract": {
+                "texts": [
+                    {"text_lines": ["品名 PLATE"], "inside_print_area": True},
+                    {"text_lines": ["FENCE"], "inside_print_area": True},
+                    {"text_lines": ["ジグ"], "inside_print_area": True},
+                    {"text_lines": ["材質 SUS304"], "inside_print_area": True},
+                ],
+            },
+        }
+    )
+
+    assert canonical["part_name_candidates"] == ["PLATE", "FENCE", "JIG"]
 
 
 @pytest.mark.django_db
@@ -98,7 +130,7 @@ def test_tag_dictionary_api_crud():
     assert listed.status_code == 200
     payload = listed.json()
     assert any(item["canonicalValue"] == "アイリスオーヤマ" for item in payload["entries"])
-    assert {kind["kind"] for kind in payload["kinds"]} >= {"customer", "project", "heat_treatment"}
+    assert {kind["kind"] for kind in payload["kinds"]} >= {"customer", "project", "heat_treatment", "part_name"}
 
     updated = client.patch(
         f"/api/v1/drawing-metadata/tag-dictionaries/{entry_id}",

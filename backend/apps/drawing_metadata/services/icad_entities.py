@@ -224,6 +224,15 @@ def _canonical_list_values(canonical: dict, *keys: str) -> list[str]:
     return values
 
 
+def _first_distinct_value(candidates: Iterable[str | None], *excluded_values: str | None) -> str | None:
+    excluded = {value.strip().lower() for value in excluded_values if isinstance(value, str) and value.strip()}
+    for candidate in candidates:
+        value = _string_value(candidate)
+        if value and value.lower() not in excluded:
+            return value
+    return None
+
+
 def _has_lightweight_part_summary(canonical: dict) -> bool:
     has_part_summary = any(
         _has_value(canonical.get(key))
@@ -258,7 +267,9 @@ def _snapshot_canonical(drawing: RegisteredDrawing, snapshot_3d: DrawingMetadata
     )
     if snapshot_2d:
         canonical.update(snapshot_2d.canonical_attributes_json or {})
-    canonical.update(snapshot_3d.canonical_attributes_json or {})
+    for key, value in (snapshot_3d.canonical_attributes_json or {}).items():
+        if _has_value(value) or key not in canonical:
+            canonical[key] = value
     return canonical
 
 
@@ -390,7 +401,9 @@ def _business_fields(
         for key in fields
     }
     sources["name"]["evidence"] = (
-        "manualOverrides.businessFields.name" if "name" in manual else "titleBlock/topPart/filename"
+        "manualOverrides.businessFields.name"
+        if "name" in manual
+        else "canonicalAttributes.drawing_name/part_name_candidates"
     )
     if target_key == TARGET_PART:
         sources["partNumber"]["evidence"] = (
@@ -412,15 +425,19 @@ def _build_record(
     parts = _part_rows(snapshot) if include_details or not _has_lightweight_part_summary(canonical) else []
     classification = _classify_icd(drawing, snapshot, parts, canonical=canonical)
     top_part = ((snapshot.raw_extract_json or {}).get("top_part") or {}) if include_details or parts else {}
+    filename_stem = PureWindowsPath(drawing.filename).stem
+    part_number = _string_value(canonical.get("drawing_number")) or _string_value(canonical.get("part_number")) or filename_stem
+    drawing_name = _string_value(canonical.get("drawing_name"))
     canonical_part_names = _canonical_list_values(canonical, "part_names")
-    name = (
-        _string_value(canonical.get("drawing_name"))
-        or _string_value(canonical.get("top_part_name"))
-        or (canonical_part_names[0] if canonical_part_names else None)
-        or _string_value(top_part.get("name"))
-        or PureWindowsPath(drawing.filename).stem
-    )
-    part_number = _string_value(canonical.get("drawing_number")) or PureWindowsPath(drawing.filename).stem
+    part_name_candidates = _canonical_list_values(canonical, "part_name_candidates")
+    top_part_name = _string_value(canonical.get("top_part_name")) or _string_value(top_part.get("name"))
+    if classification["targetKey"] == TARGET_PART:
+        name = (
+            _first_distinct_value([drawing_name, *part_name_candidates], part_number, filename_stem)
+            or "名称未抽出"
+        )
+    else:
+        name = drawing_name or top_part_name or (canonical_part_names[0] if canonical_part_names else None) or filename_stem
     if parts:
         external_count = sum(_has_external_reference(part) for part in parts)
         unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
@@ -477,7 +494,7 @@ def _build_record(
         confidence=classification["confidence"],
         evidence="ICDファイル全体",
     )
-    _append_attribute(attributes, key="source_path", label="保存先", value=drawing.source_path, source="file", confidence="high", evidence="registeredDrawing.sourcePath")
+    _append_attribute(attributes, key="source_path", label="抽出で使うICADファイル", value=drawing.source_path, source="file", confidence="high", evidence="registeredDrawing.sourcePath")
     _append_attribute(attributes, key="component_occurrence_count", label="内部パーツ使用数", value=component_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts / canonicalAttributes.part_tree_paths")
     _append_attribute(attributes, key="unique_component_name_count", label="内部パーツ名称数", value=len(unique_part_names), source="3d_part_tree", confidence="medium", evidence="rawExtract.parts[].name / canonicalAttributes.part_names")
     _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external / canonicalAttributes.ref_model_names")
@@ -485,6 +502,7 @@ def _build_record(
     _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields / canonicalAttributes.part_ex_info_fields")
     _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials / canonicalAttributes.material_keywords")
     _append_attribute(attributes, key="material_2d", label="材質 (2D図枠)", value=canonical.get("material"), source="2d_title_block", confidence="medium", evidence="canonicalAttributes.title_block_fields.material")
+    _append_attribute(attributes, key="part_name_candidates", label="部品名候補", value=part_name_candidates, source="2d_title_block", confidence="medium", evidence="canonicalAttributes.part_name_candidates")
     mass_kg, mass_evidence = _mass_in_kg(canonical)
     for key, label in (
         ("customer_name", "客先"),

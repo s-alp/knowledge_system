@@ -208,7 +208,7 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
         {
             "key": "icad-extraction-management",
             "label": "ICAD抽出管理",
-            "description": "登録済みICAD、抽出snapshot、2D/3Dジョブ、保存元パスをシステム設定内で確認します。",
+            "description": "登録済みICAD、抽出snapshot、2D/3Dジョブ、抽出で使うICADファイルをシステム設定内で確認します。",
             "action": "open_icad_extraction_review",
         },
         {
@@ -468,8 +468,60 @@ def test_icad_entity_api_does_not_expand_legacy_tree_paths(sample_registration_p
     payload = response.json()
     assert payload["count"] == 1
     assert payload["items"][0]["entityKind"] == "part"
-    assert payload["items"][0]["treePath"] == ["legacy-sample"]
+    assert payload["items"][0]["treePath"] == ["名称未抽出"]
     assert payload["items"][0]["drawingId"] == str(drawing.id)
+
+
+@pytest.mark.django_db
+def test_icad_part_entity_uses_part_name_separately_from_part_number(sample_registration_payload):
+    drawing_number = "CAA5012-02434006P1R1"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-name-drawing",
+        filename=f"{drawing_number}.icd",
+        source_path=rf"C:\temp\部品\{drawing_number}.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={
+            "texts": [
+                {"text_lines": ["品名 PLATE"], "inside_print_area": True},
+                {"text_lines": [f"図番 {drawing_number}"], "inside_print_area": True},
+            ],
+        },
+        canonical_attributes_json={
+            "drawing_number": drawing_number,
+            "drawing_name": "BRACKET",
+            "part_name_candidates": ["BRACKET"],
+        },
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": "MODEL_NODE"},
+            "parts": [{"tree_path": ["MODEL_NODE"], "name": "MODEL_NODE", "depth": 0, "child_count": 0}],
+        },
+        canonical_attributes_json={
+            "drawing_number": drawing_number,
+            "drawing_name": None,
+            "part_name_candidates": [],
+            "part_names": ["MODEL_NODE"],
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=part&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["count"] == 1
+    item = payload["items"][0]
+    assert item["partNumber"] == drawing_number
+    assert item["name"] == "BRACKET"
+    assert item["treePath"] == ["BRACKET"]
+    assert item["businessFields"]["partNumber"] == drawing_number
+    assert item["businessFields"]["name"] == "BRACKET"
 
 
 @pytest.mark.django_db

@@ -93,6 +93,31 @@ SPEC_KEYWORDS = {
     "溶接記号": ["すみ肉溶接", "隅肉溶接", "突合せ溶接", "開先溶接", "プラグ溶接", "スロット溶接", "スポット溶接", "シーム溶接", "全周溶接", "現場溶接"],
 }
 
+PART_NAME_KEYWORDS = {
+    "PLATE": ["PLATE", "プレート", "板"],
+    "COVER": ["COVER", "カバー"],
+    "BRACKET": ["BRACKET", "ブラケット"],
+    "BASE": ["BASE", "ベース"],
+    "FRAME": ["FRAME", "フレーム"],
+    "BLOCK": ["BLOCK", "ブロック"],
+    "SHAFT": ["SHAFT", "シャフト", "軸"],
+    "PIN": ["PIN", "ピン"],
+    "GUIDE": ["GUIDE", "ガイド"],
+    "HOLDER": ["HOLDER", "ホルダー"],
+    "ARM": ["ARM", "アーム"],
+    "STAY": ["STAY", "ステー"],
+    "SPACER": ["SPACER", "スペーサ", "スペーサー"],
+    "COLLAR": ["COLLAR", "カラー"],
+    "FLANGE": ["FLANGE", "フランジ"],
+    "ROLLER": ["ROLLER", "ローラ", "ローラー"],
+    "BUSH": ["BUSH", "ブッシュ"],
+    "SUPPORT": ["SUPPORT", "サポート"],
+    "PANEL": ["PANEL", "パネル"],
+    "POLE": ["POLE", "ポール"],
+    "FENCE": ["FENCE", "フェンス"],
+    "JIG": ["JIG", "ジグ", "治具"],
+}
+
 MATERIAL_CLASSIFICATION_RULES = {
     "SUS304": {"status": "formal", "aliases": ["SUS304", "ＳＵＳ３０４"]},
     "SUS316": {"status": "formal", "aliases": ["SUS316", "ＳＵＳ３１６"]},

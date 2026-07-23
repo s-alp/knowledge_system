@@ -156,6 +156,7 @@ class TagDictionaryEntry(models.Model):
     KIND_MAKER = "maker"
     KIND_SPEC = "spec"
     KIND_HEAT_TREATMENT = "heat_treatment"
+    KIND_PART_NAME = "part_name"
     KIND_CHOICES = [
         (KIND_CUSTOMER, "客先"),
         (KIND_EQUIPMENT_CATEGORY, "装置カテゴリ"),
@@ -163,6 +164,7 @@ class TagDictionaryEntry(models.Model):
         (KIND_MAKER, "メーカー"),
         (KIND_SPEC, "規格"),
         (KIND_HEAT_TREATMENT, "熱処理"),
+        (KIND_PART_NAME, "部品名"),
     ]
 
     id = models.BigAutoField(primary_key=True)
