@@ -74,13 +74,76 @@ namespace IcadExtraction.Runner
             var forceSxNetStagedInput = OptionalBoolOption(command, "force-sxnet-staged-input", false);
 
             var stopwatch = Stopwatch.StartNew();
-            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
             var autostartWarning = icadLease.StartupWarning;
+
+            ExtractionEnvelope envelope;
+            try
+            {
+                envelope = RunExtractWithSxNetInput(
+                    inputPath,
+                    sourceKind,
+                    sxnetDllPath,
+                    conditionOptions,
+                    previewAssetOptions,
+                    forceSxNetStagedInput
+                );
+            }
+            catch (Exception exception) when (ShouldRetrySxNetInputWithTemporaryCopy(exception, inputPath, forceSxNetStagedInput))
+            {
+                envelope = RunExtractWithSxNetInput(
+                    inputPath,
+                    sourceKind,
+                    sxnetDllPath,
+                    conditionOptions,
+                    previewAssetOptions,
+                    forceSxNetStagedInput: true
+                );
+                envelope.Warnings.Insert(0, new WarningPayload
+                {
+                    Code = "sxnet_input_retry_staged",
+                    Message = "SXNETが原本パスを存在しないファイルとして扱ったため、短い一時パスへコピーして再試行しました。",
+                });
+            }
+
+            envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
+            envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
+            envelope.ExtractionProfile = extractionProfile;
+            envelope.ExtractionOptions = extractionOptions;
+            envelope.ConditionDiagnostics = conditionOptions.ToDiagnostics(sourceKind, extractionProfile, extractionOptions.Keys);
+            if (autostartWarning != null)
+            {
+                envelope.Warnings.Insert(0, autostartWarning);
+            }
+
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy(),
+                },
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Include,
+            };
+            File.WriteAllText(outputPath, JsonConvert.SerializeObject(envelope, serializerSettings));
+            return 0;
+        }
+
+        private static ExtractionEnvelope RunExtractWithSxNetInput(
+            string inputPath,
+            string sourceKind,
+            string sxnetDllPath,
+            ExtractionConditionOptions conditionOptions,
+            PreviewAssetOptions previewAssetOptions,
+            bool forceSxNetStagedInput
+        )
+        {
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
             ExtractionEnvelope envelope;
             if (string.Equals(sourceKind, "3d", StringComparison.OrdinalIgnoreCase))
             {
@@ -95,31 +158,32 @@ namespace IcadExtraction.Runner
                 throw new ArgumentException($"unsupported source-kind: {sourceKind}");
             }
 
-            envelope.ExtractorVersion = SchemaVersions.SchemaVersion;
             envelope.InputPath = sxNetInputFile.OriginalPath;
             envelope.SourceFile = BuildSourceFilePayload(sxNetInputFile);
-            envelope.ElapsedMs = stopwatch.ElapsedMilliseconds;
-            envelope.ExtractionProfile = extractionProfile;
-            envelope.ExtractionOptions = extractionOptions;
-            envelope.ConditionDiagnostics = conditionOptions.ToDiagnostics(sourceKind, extractionProfile, extractionOptions.Keys);
-            if (autostartWarning != null)
-            {
-                envelope.Warnings.Insert(0, autostartWarning);
-            }
             InsertSxNetInputWarning(envelope.Warnings, sxNetInputFile);
+            return envelope;
+        }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
-            var serializerSettings = new JsonSerializerSettings
+        public static bool ShouldRetrySxNetInputWithTemporaryCopy(
+            Exception exception,
+            string inputPath,
+            bool forceSxNetStagedInput
+        )
+        {
+            if (forceSxNetStagedInput || !File.Exists(inputPath))
             {
-                ContractResolver = new DefaultContractResolver
+                return false;
+            }
+
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                if (current.Message.Contains("MSG07309") || current.Message.Contains("指定されたファイルは存在しません"))
                 {
-                    NamingStrategy = new SnakeCaseNamingStrategy(),
-                },
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Include,
-            };
-            File.WriteAllText(outputPath, JsonConvert.SerializeObject(envelope, serializerSettings));
-            return 0;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static int RunSelfCheck(CliCommand command)

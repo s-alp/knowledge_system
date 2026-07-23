@@ -106,5 +106,39 @@ namespace IcadExtraction.Runner.Tests
                 File.Delete(tempPath);
             }
         }
+
+        [Fact]
+        public void ShouldRetrySxNetInputWithTemporaryCopy_ReturnsTrueForExistingPathAndSxNetMissingFileError()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");
+            File.WriteAllText(tempPath, "dummy");
+            try
+            {
+                var exception = new InvalidOperationException("MSG07309 指定されたファイルは存在しません。");
+
+                Assert.True(Program.ShouldRetrySxNetInputWithTemporaryCopy(exception, tempPath, forceSxNetStagedInput: false));
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
+
+        [Fact]
+        public void ShouldRetrySxNetInputWithTemporaryCopy_ReturnsFalseWhenAlreadyForced()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");
+            File.WriteAllText(tempPath, "dummy");
+            try
+            {
+                var exception = new InvalidOperationException("MSG07309 指定されたファイルは存在しません。");
+
+                Assert.False(Program.ShouldRetrySxNetInputWithTemporaryCopy(exception, tempPath, forceSxNetStagedInput: true));
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 }

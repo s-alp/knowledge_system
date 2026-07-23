@@ -325,7 +325,11 @@ namespace IcadExtraction.SxNet
             var getSegListMethod = vsType.GetMethods()
                 .FirstOrDefault(method =>
                     method.Name == "getSegList" &&
-                    method.GetParameters().Length == 4);
+                    method.GetParameters().Length == 6)
+                ?? vsType.GetMethods()
+                    .FirstOrDefault(method =>
+                        method.Name == "getSegList" &&
+                        method.GetParameters().Length == 4);
 
             if (getSegListMethod == null)
             {
@@ -339,7 +343,9 @@ namespace IcadExtraction.SxNet
 
             try
             {
-                var segments = getSegListMethod.Invoke(globalVs, new object[] { 0, int.MaxValue, false, false });
+                var segments = getSegListMethod.GetParameters().Length == 6
+                    ? getSegListMethod.Invoke(globalVs, new object[] { 0, int.MaxValue, true, true, true, true })
+                    : getSegListMethod.Invoke(globalVs, new object[] { 0, int.MaxValue, true, true });
                 var segmentArray = ReflectionHelpers.Enumerate(segments).ToArray();
                 var segmentType = globalVs.GetType().Assembly.GetType("sxnet.SxEntSeg", throwOnError: true);
                 var getGeomListMethod = segmentType.GetMethod("getGeomList", new[] { segmentType.MakeArrayType() });

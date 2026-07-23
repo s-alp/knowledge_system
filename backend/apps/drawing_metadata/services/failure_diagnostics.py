@@ -16,7 +16,7 @@ def summarize_error_message(message: str, *, limit: int = ERROR_MESSAGE_SUMMARY_
     if not message:
         return ""
     if "パスが長すぎます" in message:
-        return "ICAD原本パスが長すぎます。短い一時パスへ退避して再抽出します。"
+        return "ICADファイルのパスが長すぎます。短い一時パスへ退避して再抽出します。"
     if "ファイル名が長すぎます" in message:
         return "ICADファイル名が長すぎます。短い一時ファイル名へ退避して再抽出します。"
     if "図面ファイルではありません" in message:
@@ -25,7 +25,7 @@ def summarize_error_message(message: str, *, limit: int = ERROR_MESSAGE_SUMMARY_
         return "ICAD/SXの多重起動ダイアログが発生しています。既存ICADを閉じて再実行してください。"
     normalized = message.lower()
     if "filenotfound" in normalized or "ファイルが見つかりません" in message:
-        return "対象ファイルまたは参照ファイルが見つかりません。保存先パスと参照先を確認してください。"
+        return "対象ファイルまたは参照ファイルが見つかりません。抽出対象ファイルのパスと参照先を確認してください。"
     first_line = next((line.strip() for line in message.splitlines() if line.strip()), message.strip())
     return first_line if len(first_line) <= limit else f"{first_line[:limit]}..."
 
