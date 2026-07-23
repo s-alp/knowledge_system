@@ -26,7 +26,7 @@ MODE_FILENAME_HINTS = {
 
 
 class Command(BaseCommand):
-    help = "抽出済み ICAD JSON を RegisteredDrawing / Snapshot へ取り込みます。"
+    help = "抽出済み CAD メタデータ JSON を RegisteredDrawing / Snapshot へ取り込みます。"
 
     def add_arguments(self, parser) -> None:
         parser.add_argument("json_paths", nargs="*", help="抽出済み JSON ファイルまたはディレクトリ。")
@@ -35,7 +35,7 @@ class Command(BaseCommand):
             "--filename",
             action="append",
             default=[],
-            help="manifest取込を指定したICADファイル名に限定します。複数指定できます。",
+            help="manifest取込を指定したCADファイル名に限定します。複数指定できます。",
         )
         parser.add_argument(
             "--manifest-mode",
@@ -232,7 +232,7 @@ class Command(BaseCommand):
             return str(source_path)
         if use_json_path_as_source:
             return str(input_file)
-        raise CommandError(f"元ICADパスを判定できません: {input_file}")
+        raise CommandError(f"元CADパスを判定できません: {input_file}")
 
     def _source_file_payload(self, payload: dict, source_path: str) -> dict:
         windows_path = PureWindowsPath(source_path)

@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser) -> None:
         parser.add_argument("--drawing-id", action="append", default=[], help="対象 drawing id。複数指定できます。")
+        parser.add_argument("--mode", action="append", choices=["2d", "3d"], default=[], help="対象抽出モード。複数指定できます。")
         parser.add_argument("--executed-by", default="queue_missing_drawing_metadata_extracts")
         parser.add_argument("--dry-run", action="store_true", help="ジョブを作らず対象とprofileだけ表示します。")
 
@@ -21,6 +22,7 @@ class Command(BaseCommand):
             Prefetch("jobs", queryset=DrawingMetadataExtractionJob.objects.order_by("-created_at")),
         )
         drawing_ids = options["drawing_id"]
+        extraction_modes = tuple(options["mode"]) or None
         if drawing_ids:
             queryset = queryset.filter(id__in=drawing_ids)
 
@@ -30,7 +32,7 @@ class Command(BaseCommand):
             if options["dry_run"]:
                 from apps.drawing_metadata.services.reextract_planner import build_missing_or_partial_reextract_plan
 
-                plan_items = build_missing_or_partial_reextract_plan(drawing=drawing)
+                plan_items = build_missing_or_partial_reextract_plan(drawing=drawing, extraction_modes=extraction_modes)
                 planned += len(plan_items)
                 for item in plan_items:
                     self.stdout.write(f"PLAN {item.extraction_mode} {item.profile}: {drawing.filename}")
@@ -39,6 +41,7 @@ class Command(BaseCommand):
             jobs = enqueue_missing_or_partial_reextract_jobs(
                 drawing=drawing,
                 executed_by=options["executed_by"],
+                extraction_modes=extraction_modes,
             )
             queued += len(jobs)
             for job in jobs:

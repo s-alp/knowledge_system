@@ -1,5 +1,13 @@
 # tasklist
 
+## 2026-07-23 STEP/DXFタグ取得・自動付与
+
+- [x] `.icd/.step/.stp/.dxf` を `RegisteredDrawing` へ登録できるようにし、`source_format` を `icad/step/dxf` で保持
+- [x] STEPは3D、DXFは2Dとして抽出ジョブを起票し、SXNETではなくDjango側の汎用CAD抽出器へ分岐
+- [x] STEP/DXFファイルそのものから、STEPヘッダ/文字列/PRODUCT候補、DXF TEXT/MTEXT/寸法/基本図形を抽出し、既存の正規化・タグ生成へ流す
+- [x] 創屋向けに、STEP/DXFの抽出元、raw_extract例、タグ化対象/属性保持対象を `docs/cad_tag_extraction_sources_for_souya_2026-07-23.md` へ整理
+- [x] `backend\.venv` で `drawing_metadata` テスト137件と `manage.py check` を実行
+
 ## 最終ゴール進行状況（2026-07-17 継続監査）
 
 - [x] 1 ICDを1件として登録し、内部パーツツリーを一覧へ展開しない

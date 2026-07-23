@@ -102,6 +102,48 @@ def test_process_job_refreshes_lease_for_extractor_timeout(monkeypatch, settings
 
 
 @pytest.mark.django_db
+def test_process_job_extracts_step_and_saves_tags_without_sxnet(settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+    source_path = tmp_path / "gantry.step"
+    source_path.write_text(
+        """ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('SUS304'),'2;1');
+FILE_NAME('コマツ小山 ガントリー','2026-07-23',('SMC'),('system'),'preprocessor','system','');
+ENDSEC;
+DATA;
+#10=PRODUCT('GANTRY HAND','SMC CYLINDER','',(#1));
+ENDSEC;
+END-ISO-10303-21;
+""",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="step-process",
+        filename="gantry.step",
+        source_path=str(source_path),
+        source_format="step",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_PROCESSING,
+        worker_name="test-worker",
+    )
+
+    processed = extraction_tasks.process_job(job.id)
+    snapshot = DrawingMetadataSnapshot.objects.get(drawing=drawing, extraction_mode="3d")
+    tags = [tag["tag"] for tag in snapshot.derived_tags_json]
+
+    assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert processed.extractor_name == "generic-cad-text-extractor"
+    assert snapshot.canonical_attributes_json["source_format"] == "step"
+    assert "客先:コマツ小山" in tags
+    assert "装置:ガントリー" in tags
+    assert "材質:SUS304" in tags
+
+
+@pytest.mark.django_db
 def test_process_job_records_failure_diagnostics_for_sxnet_open_error(monkeypatch):
     long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
     drawing = RegisteredDrawing.objects.create(

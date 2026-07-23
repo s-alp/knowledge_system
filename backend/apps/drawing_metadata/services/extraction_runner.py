@@ -9,7 +9,9 @@ from urllib.parse import quote
 from django.conf import settings
 
 from apps.drawing_metadata.models import RegisteredDrawing
+from apps.drawing_metadata.services.generic_cad_extractor import extract_generic_cad_metadata
 from apps.drawing_metadata.services.path_constraints import requires_sxnet_staged_input
+from apps.drawing_metadata.services.source_formats import uses_generic_cad_extractor, uses_sxnet_extractor
 
 
 class ExtractionRunnerError(RuntimeError):
@@ -44,6 +46,12 @@ def build_extractor_command(
     extraction_profile: str = "default",
     extraction_options: dict | None = None,
 ) -> list[str]:
+    if not uses_sxnet_extractor(drawing.source_format):
+        raise ExtractionRunnerError(
+            f"{drawing.source_format} はSXNET抽出器の対象外です。"
+            "STEP/DXFはDjango側の汎用CAD抽出器で処理してください。"
+        )
+
     executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
     if not executable:
         raise ExtractionRunnerError(
@@ -75,9 +83,13 @@ def build_extractor_command(
                 "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
             ]
         )
-    if _is_uploaded_icad_source(drawing.source_path) or requires_sxnet_staged_input(
-        drawing.source_path,
-        filename=drawing.filename,
+    if (
+        _is_uploaded_icad_source(drawing.source_path)
+        or requires_sxnet_staged_input(
+            drawing.source_path,
+            filename=drawing.filename,
+        )
+        or _requires_2d_non_ascii_staged_input(drawing.source_path, extraction_mode=extraction_mode)
     ):
         command.extend(["--force-sxnet-staged-input", "true"])
     if job_id is not None:
@@ -99,6 +111,12 @@ def _is_uploaded_icad_source(source_path: str) -> bool:
     return True
 
 
+def _requires_2d_non_ascii_staged_input(source_path: str, *, extraction_mode: str) -> bool:
+    if extraction_mode != "2d":
+        return False
+    return any(ord(char) > 127 for char in source_path)
+
+
 def run_extractor(
     *,
     drawing: RegisteredDrawing,
@@ -110,6 +128,17 @@ def run_extractor(
     output_root = settings.DRAWING_METADATA_STORAGE_ROOT / "raw_extracts"
     output_root.mkdir(parents=True, exist_ok=True)
     output_path = output_root / f"{job_id}.json"
+
+    if uses_generic_cad_extractor(drawing.source_format):
+        payload = extract_generic_cad_metadata(
+            input_path=drawing.source_path,
+            source_format=drawing.source_format,
+            source_kind=extraction_mode,
+            output_path=output_path,
+            extraction_profile=extraction_profile,
+            extraction_options=extraction_options,
+        )
+        return ExtractionRunResult(payload=payload, output_path=output_path)
 
     command = build_extractor_command(
         drawing=drawing,

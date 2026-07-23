@@ -357,6 +357,87 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
     assert "coating_instruction" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "参考：M24A88810" for candidate in canonical["title_block_candidates"])
     assert all("吸引力" not in str(candidate.get("value")) for candidate in canonical["title_block_candidates"])
+
+
+def test_normalize_step_extract_uses_generic_3d_materials_and_path_tokens():
+    payload = {
+        "source_format": "step",
+        "source_kind": "3d",
+        "source_file": {
+            "full_path": r"J:\コマツ小山\ガントリー\HAND.step",
+            "directory_path": r"J:\コマツ小山\ガントリー",
+            "file_name": "HAND.step",
+            "file_name_without_extension": "HAND",
+            "extension": ".step",
+        },
+        "raw_extract": {
+            "model_info": {"name": "ガントリーハンド", "comment": "SMC CYLINDER"},
+            "top_part": {"name": "HAND", "comment": "浸炭焼入れ HRC58-62"},
+            "parts": [
+                {
+                    "tree_path": ["HAND", "PLATE"],
+                    "name": "PLATE",
+                    "materials": ["SUS304"],
+                }
+            ],
+            "materials": ["S45C"],
+            "mass_properties": {"mass": 1.2, "unit_name": "mm-kg"},
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+    tags = build_derived_tags(canonical)
+
+    assert canonical["source_format"] == "step"
+    assert canonical["source_kind"] == "3d"
+    assert canonical["customer_name"] == "コマツ小山"
+    assert canonical["equipment_category"] == "ガントリー"
+    assert canonical["material_keywords"] == ["S45C", "SUS304"]
+    assert canonical["part_material_candidates"][0]["part_name"] == "PLATE"
+    assert canonical["heat_treatment_keywords"] == ["浸炭"]
+    assert canonical["hardness_spec_values"] == ["HRC58-62"]
+    assert any(tag["tag"] == "材質:SUS304" for tag in tags)
+
+
+def test_normalize_dxf_extract_uses_generic_2d_texts_for_title_block_tags():
+    payload = {
+        "source_format": "dxf",
+        "source_kind": "2d",
+        "source_file": {
+            "full_path": r"J:\澁谷工業\ロボット\layout.dxf",
+            "directory_path": r"J:\澁谷工業\ロボット",
+            "file_name": "layout.dxf",
+            "file_name_without_extension": "layout",
+            "extension": ".dxf",
+        },
+        "raw_extract": {
+            "texts": [
+                "図番 DXF-001",
+                {"text": "図名 ロボット架台"},
+                {"value": "材質 SS400", "inside_print_area": True},
+                {"text_lines": ["PRFX", "RAA4844"], "inside_print_area": True},
+                {"joined_text": "ユニット U01", "inside_print_area": True},
+                {"text": "SES", "inside_print_area": True},
+            ],
+            "dimensions": [],
+            "geometry_primitives": [],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+    tags = build_derived_tags(canonical)
+
+    assert canonical["source_format"] == "dxf"
+    assert canonical["source_kind"] == "2d"
+    assert canonical["customer_name"] == "澁谷工業"
+    assert canonical["equipment_category"] == "ロボット"
+    assert canonical["title_block_fields"]["drawing_number"] == "DXF-001"
+    assert canonical["title_block_fields"]["material"] == "SS400"
+    assert canonical["material_keywords"] == ["SS400"]
+    assert canonical["prfx_candidates"] == ["RAA4844"]
+    assert canonical["unit_number_candidates"] == ["U01"]
+    assert any(tag["tag"] == "規格:SES" for tag in tags)
+    assert any(tag["tag"] == "材質:SS400" for tag in tags)
 def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     payload = {
         "source_format": "icad",

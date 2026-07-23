@@ -68,6 +68,87 @@ def test_decode_runner_output_accepts_cp932_stderr():
 
 
 @pytest.mark.django_db
+def test_build_extractor_command_rejects_non_icad_source_for_sxnet_command(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-step",
+        filename="sample.step",
+        source_path=r"C:\temp\sample.step",
+        source_format="step",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    with pytest.raises(ExtractionRunnerError, match="汎用CAD抽出器"):
+        build_extractor_command(
+            drawing=drawing,
+            extraction_mode="3d",
+            output_path=Path(r"C:\temp\out.json"),
+        )
+
+
+@pytest.mark.django_db
+def test_run_extractor_extracts_step_metadata_without_sxnet(settings, tmp_path):
+    source_path = tmp_path / "GANTRY_HAND.step"
+    source_path.write_text(
+        """ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('SUS304 浸炭 HRC58-62'),'2;1');
+FILE_NAME('GANTRY_HAND','2026-07-23',('SMC'),('コマツ小山'),'preprocessor','system','');
+ENDSEC;
+DATA;
+#10=PRODUCT('GANTRY HAND','SMC CYLINDER','',(#1));
+ENDSEC;
+END-ISO-10303-21;
+""",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-step",
+        filename="GANTRY_HAND.step",
+        source_path=str(source_path),
+        source_format="step",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    result = run_extractor(drawing=drawing, extraction_mode="3d", job_id="step-job")
+
+    assert result.output_path.exists()
+    assert result.payload["source_format"] == "step"
+    assert result.payload["source_kind"] == "3d"
+    assert result.payload["extractor_name"] == "generic-cad-text-extractor"
+    assert result.payload["raw_extract"]["materials"] == ["SUS304"]
+    assert any(part["name"] == "GANTRY HAND" for part in result.payload["raw_extract"]["parts"])
+
+
+@pytest.mark.django_db
+def test_run_extractor_extracts_dxf_text_metadata_without_sxnet(settings, tmp_path):
+    source_path = tmp_path / "layout.dxf"
+    source_path.write_text(
+        "0\nSECTION\n2\nENTITIES\n"
+        "0\nTEXT\n8\nTITLE\n10\n1.0\n20\n2.0\n1\n材質 SS400\n"
+        "0\nMTEXT\n8\nNOTE\n10\n3.0\n20\n4.0\n1\nPRFX RAA4844\\PSES\n"
+        "0\nCIRCLE\n8\nHOLE\n10\n5.0\n20\n6.0\n40\n3.0\n"
+        "0\nENDSEC\n0\nEOF\n",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-dxf",
+        filename="layout.dxf",
+        source_path=str(source_path),
+        source_format="dxf",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    result = run_extractor(drawing=drawing, extraction_mode="2d", job_id="dxf-job")
+
+    texts = result.payload["raw_extract"]["texts"]
+    assert result.output_path.exists()
+    assert result.payload["source_format"] == "dxf"
+    assert result.payload["source_kind"] == "2d"
+    assert [item["joined_text"] for item in texts] == ["材質 SS400", "PRFX RAA4844 SES"]
+    assert result.payload["raw_extract"]["geometry_primitives"][0]["geometry_type"] == "DxfCircle"
+
+
+@pytest.mark.django_db
 def test_build_extractor_command_forces_staged_input_for_too_long_path(settings):
     long_source_path = "C:\\" + "\\".join(["segment"] * 40) + "\\sample.icd"
     drawing = RegisteredDrawing.objects.create(
@@ -106,6 +187,45 @@ def test_build_extractor_command_forces_staged_input_for_legacy_too_long_filenam
 
     force_index = command.index("--force-sxnet-staged-input")
     assert command[force_index + 1] == "true"
+
+
+@pytest.mark.django_db
+def test_build_extractor_command_forces_staged_input_for_2d_non_ascii_path(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-2d-non-ascii",
+        filename="sample.icd",
+        source_path=r"J:\不二越5\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode="2d",
+        output_path=Path(r"C:\temp\out.json"),
+    )
+
+    force_index = command.index("--force-sxnet-staged-input")
+    assert command[force_index + 1] == "true"
+
+
+@pytest.mark.django_db
+def test_build_extractor_command_does_not_force_staged_input_for_3d_non_ascii_path(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-3d-non-ascii",
+        filename="sample.icd",
+        source_path=r"J:\不二越5\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+
+    command = build_extractor_command(
+        drawing=drawing,
+        extraction_mode="3d",
+        output_path=Path(r"C:\temp\out.json"),
+    )
+
+    assert "--force-sxnet-staged-input" not in command
 
 
 @pytest.mark.django_db

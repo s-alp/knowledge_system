@@ -16,10 +16,14 @@ def test_register_cad_drawings_registers_icd_files_idempotently(tmp_path):
 
     drawing_a = cad_root / "A-01.icd"
     drawing_b = nested / "B-02.ICD"
+    drawing_c = nested / "assy.step"
+    drawing_d = cad_root / "layout.dxf"
     ignored = cad_root / "memo.txt"
 
     drawing_a.write_text("", encoding="utf-8")
     drawing_b.write_text("", encoding="utf-8")
+    drawing_c.write_text("ISO-10303-21;", encoding="utf-8")
+    drawing_d.write_text("0\nSECTION\n2\nENTITIES\n0\nENDSEC\n0\nEOF\n", encoding="utf-8")
     ignored.write_text("ignore", encoding="utf-8")
 
     existing = RegisteredDrawing.objects.create(
@@ -33,23 +37,28 @@ def test_register_cad_drawings_registers_icd_files_idempotently(tmp_path):
     call_command("register_cad_drawings", cad_root=str(cad_root), stdout=stdout_first)
 
     existing.refresh_from_db()
-    assert RegisteredDrawing.objects.count() == 2
+    assert RegisteredDrawing.objects.count() == 4
     assert existing.filename == "A-01.icd"
     assert existing.source_format == "icad"
     assert {item.source_path for item in RegisteredDrawing.objects.all()} == {
         str(drawing_a.resolve()),
         str(drawing_b.resolve()),
+        str(drawing_c.resolve()),
+        str(drawing_d.resolve()),
     }
-    assert "created=1" in stdout_first.getvalue()
+    formats = {item.filename: item.source_format for item in RegisteredDrawing.objects.all()}
+    assert formats["assy.step"] == "step"
+    assert formats["layout.dxf"] == "dxf"
+    assert "created=3" in stdout_first.getvalue()
     assert "updated=1" in stdout_first.getvalue()
 
     stdout_second = StringIO()
     call_command("register_cad_drawings", cad_root=str(cad_root), stdout=stdout_second)
 
-    assert RegisteredDrawing.objects.count() == 2
+    assert RegisteredDrawing.objects.count() == 4
     assert "created=0" in stdout_second.getvalue()
     assert "updated=0" in stdout_second.getvalue()
-    assert "skipped=2" in stdout_second.getvalue()
+    assert "skipped=4" in stdout_second.getvalue()
 
 
 @pytest.mark.django_db
@@ -528,6 +537,7 @@ def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
     DrawingMetadataSnapshot.objects.create(
         drawing=drawing,
         extraction_mode="2d",
+        raw_extract_json={"raw_extract": {"view_sheets": [{"name": "!!GLOBAL"}]}},
         canonical_attributes_json={"drawing_name": "queue-missing"},
     )
 
@@ -544,6 +554,74 @@ def test_queue_missing_drawing_metadata_extracts_enqueues_condition_profiles():
         "partAttributes",
         "massProperties",
     ]
+
+
+@pytest.mark.django_db
+def test_queue_missing_drawing_metadata_extracts_enqueues_step_3d_source():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="queue-step",
+        filename="queue-step.step",
+        source_path=r"C:\temp\queue-step.step",
+        source_format="step",
+    )
+
+    call_command("queue_missing_drawing_metadata_extracts", drawing_id=[str(drawing.id)], executed_by="test")
+
+    job = DrawingMetadataExtractionJob.objects.get(drawing=drawing)
+    assert job.extraction_mode == "3d"
+    assert job.extraction_profile == "step_text_entities"
+    assert job.extraction_options_json["scanStepHeader"] is True
+    assert job.diagnostics_json["requiredConditionChecks"] == [
+        "stepHeader",
+        "stepStringEntities",
+        "materialTextPatterns",
+    ]
+
+
+@pytest.mark.django_db
+def test_queue_missing_drawing_metadata_extracts_enqueues_dxf_2d_source():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="queue-dxf",
+        filename="queue-dxf.dxf",
+        source_path=r"C:\temp\queue-dxf.dxf",
+        source_format="dxf",
+    )
+
+    call_command("queue_missing_drawing_metadata_extracts", drawing_id=[str(drawing.id)], executed_by="test")
+
+    job = DrawingMetadataExtractionJob.objects.get(drawing=drawing)
+    assert job.extraction_mode == "2d"
+    assert job.extraction_profile == "dxf_text_layers_entities"
+    assert job.extraction_options_json["scanDxfText"] is True
+    assert job.diagnostics_json["requiredConditionChecks"] == ["dxfText", "dxfLayers", "dxfGeometry"]
+
+
+@pytest.mark.django_db
+def test_queue_missing_drawing_metadata_extracts_enqueues_empty_2d_snapshot():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="queue-empty-2d",
+        filename="queue-empty-2d.icd",
+        source_path=r"C:\temp\queue-empty-2d.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        raw_extract_json={"raw_extract": {"texts": [], "geometry_primitives": [], "view_sheets": []}},
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={"raw_extract": {"parts": [{"name": "ROOT"}]}},
+    )
+
+    call_command("queue_missing_drawing_metadata_extracts", drawing_id=[str(drawing.id)], executed_by="test")
+
+    job = DrawingMetadataExtractionJob.objects.get(drawing=drawing, extraction_mode="2d")
+    assert job.status == DrawingMetadataExtractionJob.STATUS_QUEUED
+    assert job.extraction_profile == "2d_all_views_layers_print_frame"
+    assert job.extraction_options_json["scanAllViews"] is True
+    assert job.diagnostics_json["reason"] == "partial_snapshot"
 
 
 @pytest.mark.django_db

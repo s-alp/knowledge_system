@@ -123,6 +123,15 @@ def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> s
     return None
 
 
+def _match_dictionary_values(tokens: Iterable[str], mapping: dict[str, list[str]]) -> list[str]:
+    lowered = " ".join(token.lower() for token in tokens)
+    matches: list[str] = []
+    for canonical, candidates in mapping.items():
+        if any(candidate.lower() in lowered for candidate in candidates):
+            matches.append(canonical)
+    return matches
+
+
 def _normalize_for_match(value: str) -> str:
     return "".join(value.lower().replace("　", " ").split())
 
@@ -233,10 +242,51 @@ def _strip_label_value(text: str, keyword: str) -> str | None:
 
 def _text_lines_from_payload(text: dict) -> list[str]:
     lines = _flatten_strings(text.get("text_lines", []) or [])
+    text_value = text.get("text")
+    if text_value and text_value not in lines:
+        lines.append(text_value)
+    value = text.get("value")
+    if value and value not in lines:
+        lines.append(value)
     joined_text = text.get("joined_text")
     if joined_text and joined_text not in lines:
         lines.append(joined_text)
     return lines
+
+
+def _normalize_text_items(items: Iterable) -> list[dict]:
+    normalized: list[dict] = []
+    for item in items or []:
+        if isinstance(item, str):
+            normalized.append({"text_lines": [item], "joined_text": item, "source_type": "text"})
+            continue
+        if not isinstance(item, dict):
+            continue
+        copied = dict(item)
+        lines = _text_lines_from_payload(copied)
+        if lines:
+            copied["text_lines"] = lines
+            if "joined_text" not in copied and ("text" in copied or "value" in copied):
+                copied["joined_text"] = " / ".join(lines)
+        normalized.append(copied)
+    return normalized
+
+
+def _normalize_material_items(items: Iterable) -> list[dict]:
+    normalized: list[dict] = []
+    for item in items or []:
+        if isinstance(item, str):
+            normalized.append({"matid": item, "name": item})
+            continue
+        if not isinstance(item, dict):
+            continue
+        copied = dict(item)
+        if "material_id" in copied and "matid" not in copied:
+            copied["matid"] = copied["material_id"]
+        if "material_name" in copied and "name" not in copied:
+            copied["name"] = copied["material_name"]
+        normalized.append(copied)
+    return normalized
 
 
 def _extract_labeled_field_candidates(field: str, texts: Iterable[str | None]) -> list[str]:
@@ -1048,6 +1098,10 @@ def _material_id(material: dict) -> str | None:
     return material.get("mat_id") or material.get("matid")
 
 
+def _material_name(material: dict) -> str | None:
+    return material.get("name") or material.get("material_name")
+
+
 def _part_path(part: dict, index: int) -> str:
     return ".".join(part.get("tree_path", []) or [part.get("name") or f"part_{index}"])
 
@@ -1137,9 +1191,9 @@ def _build_part_material_candidates(parts: list[dict], materials: list[dict]) ->
 
     for index, part in enumerate(parts):
         part_path = _part_path(part, index)
-        for material in part.get("materials", []) or []:
+        for material in _normalize_material_items(part.get("materials", []) or []):
             material_id = _material_id(material)
-            material_name = material.get("name")
+            material_name = _material_name(material)
             material_key = material_id or material_name
             classification = _classify_material_value(material_key)
             if classification["status"] == "excluded":
@@ -1310,6 +1364,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "part_material_candidate_count": 0,
         "prfx_candidates": [],
         "unit_number_candidates": [],
+        "part_name_candidates": [],
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
@@ -1382,7 +1437,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         top_part = raw_extract.get("top_part", {})
         parts = raw_extract.get("parts", [])
         mass_properties = raw_extract.get("mass_properties", {}) or {}
-        materials = raw_extract.get("materials", []) or []
+        materials = _normalize_material_items(raw_extract.get("materials", []) or [])
         canonical["top_part_name"] = top_part.get("name")
         canonical["top_part_comment"] = top_part.get("comment")
         canonical["top_part_ex_info"] = top_part.get("ex_info")
@@ -1407,7 +1462,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             )
         canonical["material_probe_status"] = raw_extract.get("material_probe_status")
         canonical["material_ids"] = _flatten_strings(_material_id(material) for material in materials)
-        canonical["material_names"] = _flatten_strings(material.get("name") for material in materials)
+        canonical["material_names"] = _flatten_strings(_material_name(material) for material in materials)
         canonical["material_specific_gravities"] = [
             material.get("specific_gravity")
             for material in materials
@@ -1495,7 +1550,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["part_keywords"] = search_tokens
     else:
-        texts = raw_extract.get("texts", [])
+        texts = _normalize_text_items(raw_extract.get("texts", []))
         dimensions = raw_extract.get("dimensions", [])
         primitives = raw_extract.get("geometry_primitives", [])
         weld_notes = raw_extract.get("weld_notes", [])
@@ -1512,7 +1567,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         trusted_text_tokens = _flatten_strings(
             text_line
             for text in trusted_texts
-            for text_line in text.get("text_lines", [])
+            for text_line in _text_lines_from_payload(text)
         )
         trusted_dimension_symbols = _flatten_strings(
             value
@@ -1526,7 +1581,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["text_tokens"] = _flatten_strings(
             text_line
             for text in texts
-            for text_line in text.get("text_lines", [])
+            for text_line in _text_lines_from_payload(text)
         )
         canonical["label_texts"] = _flatten_strings(text.get("joined_text") for text in texts if text.get("source_type") == "label")
         canonical["dimension_values"] = _flatten_strings(
@@ -1610,6 +1665,16 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             )
         if title_fields.get("surface_treatment"):
             canonical["surface_treatment_tokens"] = [title_fields["surface_treatment"]]
+        part_name_tokens = _flatten_strings(
+            [
+                *trusted_text_tokens,
+                *[str(value) for value in title_fields.values() if value],
+            ]
+        )
+        canonical["part_name_candidates"] = _match_dictionary_values(
+            part_name_tokens,
+            load_keyword_mapping(TagDictionaryEntry.KIND_PART_NAME),
+        )
         # 尺度: ラベル付き図枠欄が無い場合でも「1:6」「S=1:6」形のトークンから拾う。
         # 候補が1種類に定まる場合だけ scale を確定する(テーパ表記 1:10 との衝突対策)。
         canonical["scale_candidates"] = _extract_scale_candidates(trusted_text_tokens)
@@ -1638,7 +1703,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["curve_section_candidates"] = _build_curve_section_candidates(primitives, has_print_frames=has_print_frames)
         canonical["curve_section_candidate_count"] = len(canonical["curve_section_candidates"])
         canonical["raw_2d_sections"] = _build_2d_sections(
-            raw_extract=raw_extract,
+            raw_extract={**raw_extract, "texts": texts},
             canonical=canonical,
             has_print_frames=has_print_frames,
             trusted_texts=trusted_texts,

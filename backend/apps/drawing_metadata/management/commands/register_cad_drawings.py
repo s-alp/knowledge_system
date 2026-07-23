@@ -7,10 +7,11 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.drawing_metadata.models import RegisteredDrawing
 from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename
+from apps.drawing_metadata.services.source_formats import is_supported_cad_source, source_format_from_path
 
 
 class Command(BaseCommand):
-    help = "cad_data 配下の .icd を RegisteredDrawing へ一括登録します。"
+    help = "cad_data 配下の .icd/.step/.stp/.dxf を RegisteredDrawing へ一括登録します。"
 
     def add_arguments(self, parser) -> None:
         default_cad_root = Path(settings.BASE_DIR).parent / "cad_data"
@@ -31,13 +32,18 @@ class Command(BaseCommand):
         updated = 0
         skipped = 0
 
-        icd_paths = sorted(path.resolve() for path in cad_root.rglob("*") if path.is_file() and path.suffix.lower() == ".icd")
-        if not icd_paths:
-            self.stdout.write("登録対象の .icd は見つかりませんでした。")
+        cad_paths = sorted(path.resolve() for path in cad_root.rglob("*") if path.is_file() and is_supported_cad_source(path))
+        if not cad_paths:
+            self.stdout.write("登録対象の .icd/.step/.stp/.dxf は見つかりませんでした。")
             return
 
-        for input_path in icd_paths:
-            display_filename = normalize_icad_display_filename(input_path.name)
+        for input_path in cad_paths:
+            source_format = source_format_from_path(input_path)
+            if source_format is None:
+                continue
+            display_filename = (
+                normalize_icad_display_filename(input_path.name) if source_format == "icad" else input_path.name
+            )
 
             existing = RegisteredDrawing.objects.filter(source_path=str(input_path)).order_by("created_at").first()
             if existing is None:
@@ -45,7 +51,7 @@ class Command(BaseCommand):
                     host_drawing_id="",
                     filename=display_filename,
                     source_path=str(input_path),
-                    source_format="icad",
+                    source_format=source_format,
                 )
                 created += 1
                 self.stdout.write(f"CREATED: {display_filename}")
@@ -55,8 +61,8 @@ class Command(BaseCommand):
             if existing.filename != display_filename:
                 existing.filename = display_filename
                 update_fields.append("filename")
-            if existing.source_format != "icad":
-                existing.source_format = "icad"
+            if existing.source_format != source_format:
+                existing.source_format = source_format
                 update_fields.append("source_format")
 
             if update_fields:
@@ -69,6 +75,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"completed scan created={created} updated={updated} skipped={skipped} total={len(icd_paths)}"
+                f"completed scan created={created} updated={updated} skipped={skipped} total={len(cad_paths)}"
             )
         )
