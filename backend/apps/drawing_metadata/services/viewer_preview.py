@@ -151,7 +151,7 @@ def build_2d_preview_svg(*, drawing: RegisteredDrawing, snapshot: DrawingMetadat
         ("尺度", title_fields.get("scale")),
         ("PRFX", title_fields.get("prfx")),
         ("ユニット", title_fields.get("unit_number")),
-        ("担当/承認", _first_text(title_fields.get("designer"), title_fields.get("approver"), canonical.get("designer"))),
+        ("承認", title_fields.get("approver")),
     ]
 
     svg: list[str] = [

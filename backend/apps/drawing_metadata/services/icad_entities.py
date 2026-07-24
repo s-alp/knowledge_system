@@ -17,6 +17,12 @@ TARGET_PART = "part"
 PART_FOLDER_HINTS = {"部品", "部品図", "parts", "part"}
 ASSEMBLY_NAME_HINTS = {"組立", "組図", "assembly", "assy", "unit", "ユニット"}
 STANDARD_GRAVITY = 9.80665
+PART_NUMBER_NOISE_VALUES = {"組", "クミ", "くみ"}
+PART_NUMBER_NOISE_COMPACT_VALUES = {"cad"}
+PART_NUMBER_REFERENCE_KEYWORDS = ("参考", "元図", "参照", "参照組立号")
+FILE_EXTENSION_FRAGMENT_RE = re.compile(r"\.[a-z0-9]{1,5}", re.IGNORECASE)
+DRAWING_SIZE_SUFFIX_RE = re.compile(r"(?P<body>.+?)(?:[_\s]+A[0-4])$", re.IGNORECASE)
+PART_NUMBER_CODE_SEGMENT_RE = re.compile(r"(?=.*\d)[A-Z0-9][A-Z0-9.-]{2,}[A-Z0-9]", re.IGNORECASE)
 
 
 def _has_value(value) -> bool:
@@ -31,6 +37,43 @@ def _has_value(value) -> bool:
 
 def _string_value(value) -> str | None:
     return str(value).strip() if _has_value(value) else None
+
+
+def _part_number_value(value) -> str:
+    text = _string_value(value) or ""
+    normalized = text.strip(" 　:：=＝-－_/／[]【】()（）")
+    compact = "".join(normalized.lower().replace("　", " ").split())
+    if not normalized:
+        return ""
+    if normalized in PART_NUMBER_NOISE_VALUES:
+        return ""
+    if compact in PART_NUMBER_NOISE_COMPACT_VALUES:
+        return ""
+    if any(keyword in normalized for keyword in PART_NUMBER_REFERENCE_KEYWORDS):
+        return ""
+    if FILE_EXTENSION_FRAGMENT_RE.fullmatch(normalized):
+        return ""
+    size_match = DRAWING_SIZE_SUFFIX_RE.fullmatch(normalized)
+    if size_match:
+        normalized = size_match.group("body").strip()
+
+    segments = [segment.strip() for segment in normalized.split("_") if segment.strip()]
+    if len(segments) > 1:
+        filtered_segments = [
+            segment
+            for segment in segments
+            if not re.fullmatch(r"[0-9]{1,3}", segment)
+            and not re.fullmatch(r"A[0-4]", segment, re.IGNORECASE)
+        ]
+        for segment in filtered_segments:
+            if PART_NUMBER_CODE_SEGMENT_RE.fullmatch(segment):
+                return segment
+        return ""
+
+    if re.search(r"[\u3040-\u30ff\u3400-\u9fff]", normalized):
+        match = PART_NUMBER_CODE_SEGMENT_RE.search(normalized)
+        return match.group(0) if match else ""
+    return normalized
 
 
 def _stable_entity_id(drawing_id) -> str:
@@ -383,9 +426,7 @@ def _business_fields(
         "entityKind": entity_kind,
         "phase": _string_value(canonical.get("phase")) or "",
         "status": _string_value(canonical.get("business_status")) or "",
-        "owner": _string_value(canonical.get("person_in_charge"))
-        or _string_value(canonical.get("designer"))
-        or "",
+        "owner": _string_value(canonical.get("owner")) or "",
         "supplier": _string_value(canonical.get("supplier")) or "",
         "unitPrice": _string_value(canonical.get("unit_price")) or "",
         "unit": _string_value(canonical.get("unit")) or "",
@@ -426,7 +467,11 @@ def _build_record(
     classification = _classify_icd(drawing, snapshot, parts, canonical=canonical)
     top_part = ((snapshot.raw_extract_json or {}).get("top_part") or {}) if include_details or parts else {}
     filename_stem = PureWindowsPath(drawing.filename).stem
-    part_number = _string_value(canonical.get("drawing_number")) or _string_value(canonical.get("part_number")) or filename_stem
+    part_number = (
+        _part_number_value(canonical.get("drawing_number"))
+        or _part_number_value(canonical.get("part_number"))
+        or _part_number_value(filename_stem)
+    )
     drawing_name = _string_value(canonical.get("drawing_name"))
     canonical_part_names = _canonical_list_values(canonical, "part_names")
     part_name_candidates = _canonical_list_values(canonical, "part_name_candidates")

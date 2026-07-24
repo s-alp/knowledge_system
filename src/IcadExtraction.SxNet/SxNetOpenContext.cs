@@ -36,9 +36,12 @@ namespace IcadExtraction.SxNet
         public static SxNetOpenContext OpenReadOnly(string sxnetDllPath, string inputPath)
         {
             var runtimeGuard = new SxNetRuntimeGuard();
-            var assembly = runtimeGuard.LoadAssembly(sxnetDllPath);
-            runtimeGuard.ValidateRequiredTypes(assembly);
+            var assembly = runtimeGuard.LoadAndValidateAssembly(sxnetDllPath);
+            return OpenReadOnly(assembly, inputPath);
+        }
 
+        public static SxNetOpenContext OpenReadOnly(Assembly assembly, string inputPath)
+        {
             var fileModelType = assembly.GetType("sxnet.SxFileModel", throwOnError: true);
             var openMethod = fileModelType.GetMethod("open", new[] { typeof(bool) });
             if (openMethod == null)

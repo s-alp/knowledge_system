@@ -21,7 +21,6 @@ DRAWING_ATTRIBUTE_SPECS = (
     # 尺度は canonical.scale に集約(図枠欄由来もパターン検出由来もここへ入る)。
     ("title_block_fields.prfx", "PRFX"),
     ("title_block_fields.unit_number", "ユニット番号"),
-    ("title_block_fields.designer", "設計者"),
     ("title_block_fields.checker", "検図者"),
     ("title_block_fields.approver", "承認者"),
     ("title_block_fields.date", "日付"),

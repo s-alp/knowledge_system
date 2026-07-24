@@ -525,6 +525,66 @@ def test_icad_part_entity_uses_part_name_separately_from_part_number(sample_regi
 
 
 @pytest.mark.django_db
+def test_icad_part_entity_rejects_obvious_part_number_noise(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-number-noise-drawing",
+        filename=".ni",
+        source_path=r"C:\temp\部品\.ni",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "parts": [{"tree_path": ["PLATE"], "name": "PLATE", "depth": 0, "child_count": 0}],
+        },
+        canonical_attributes_json={
+            "drawing_number": "組",
+            "drawing_name": "PLATE",
+            "part_name_candidates": ["PLATE"],
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=part&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    item = response.json()["items"][0]
+    assert item["partNumber"] == ""
+    assert item["businessFields"]["partNumber"] == ""
+    assert item["name"] == "PLATE"
+
+
+@pytest.mark.django_db
+def test_icad_part_entity_cleans_filename_style_part_number(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="filename-style-part-number-drawing",
+        filename="03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+        source_path=r"C:\temp\部品\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "parts": [{"tree_path": ["シュートベース"], "name": "シュートベース", "depth": 0, "child_count": 0}],
+        },
+        canonical_attributes_json={
+            "drawing_number": "U8718-S71-002_A3",
+            "drawing_name": "シュートベース",
+            "part_name_candidates": ["シュートベース"],
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=part&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    item = response.json()["items"][0]
+    assert item["partNumber"] == "U8718-S71-002"
+    assert item["businessFields"]["partNumber"] == "U8718-S71-002"
+    assert item["name"] == "シュートベース"
+
+
+@pytest.mark.django_db
 def test_icad_entity_api_classifies_external_reference_as_assembly(sample_registration_payload):
     drawing = RegisteredDrawing.objects.create(
         host_drawing_id="external-reference-drawing",
@@ -1019,7 +1079,7 @@ def test_detail_returns_viewer_bootstrap_contract(sample_registration_payload):
     assert bootstrap["metadata"]["drawingName"] == "供給台"
     assert bootstrap["metadata"]["drawingType"] == "ロボット"
     assert bootstrap["metadata"]["paperSize"] == "A3"
-    assert bootstrap["metadata"]["owner"] == "設計者A"
+    assert bootstrap["metadata"]["owner"] is None
     assert bootstrap["metadata"]["tags"] == ["材質:SUS304", "装置:ロボット"]
     assert bootstrap["metadata"]["tagAttributes"]["schemaVersion"] == "viewer_tag_attributes.v1"
     assert bootstrap["metadata"]["tagAttributes"]["reviewRequired"] is True

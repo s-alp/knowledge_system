@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
@@ -24,8 +25,19 @@ namespace IcadExtraction.SxNet
             PreviewAssetOptions previewAssetOptions
         )
         {
+            var sxnetAssembly = new SxNetRuntimeGuard().LoadAndValidateAssembly(sxnetDllPath);
+            return Extract(sxnetAssembly, inputPath, options, previewAssetOptions);
+        }
+
+        public ExtractionEnvelope Extract(
+            Assembly sxnetAssembly,
+            string inputPath,
+            ExtractionConditionOptions options,
+            PreviewAssetOptions previewAssetOptions
+        )
+        {
             var warnings = new List<WarningPayload>();
-            using (var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, inputPath))
+            using (var context = SxNetOpenContext.OpenReadOnly(sxnetAssembly, inputPath))
             {
                 var globalVs = context.GetGlobalVs();
                 Ensure2DWindow(globalVs, warnings);

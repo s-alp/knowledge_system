@@ -13,7 +13,7 @@ from apps.drawing_metadata.models import (
     EXTRACTION_MODE_3D,
 )
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
-from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor
+from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor, run_extractor_batch
 from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics, build_source_preflight
 from apps.drawing_metadata.services.llm_title_block_classifier import (
     GeminiConfigurationError,
@@ -25,6 +25,7 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
 )
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
+from apps.drawing_metadata.services.source_formats import uses_generic_cad_extractor, uses_sxnet_extractor
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
@@ -34,15 +35,17 @@ def _resolve_mode_filter(mode: str) -> list[str]:
     return [mode]
 
 
-def _processing_lease_seconds() -> int:
+def _processing_lease_seconds(batch_size: int = 1) -> int:
     return max(
         settings.DRAWING_METADATA_JOB_LEASE_SECONDS,
-        settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS + 60,
+        settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS * max(batch_size, 1)
+        + settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS
+        + 60,
     )
 
 
-def _refresh_processing_lease(job: DrawingMetadataExtractionJob) -> None:
-    job.lease_expires_at = timezone.now() + timedelta(seconds=_processing_lease_seconds())
+def _refresh_processing_lease(job: DrawingMetadataExtractionJob, *, batch_size: int = 1) -> None:
+    job.lease_expires_at = timezone.now() + timedelta(seconds=_processing_lease_seconds(batch_size))
     job.save(update_fields=["lease_expires_at", "updated_at"])
 
 
@@ -95,6 +98,16 @@ def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob 
         return job
 
 
+def claim_next_jobs(worker_name: str, mode: str, limit: int) -> list[DrawingMetadataExtractionJob]:
+    jobs: list[DrawingMetadataExtractionJob] = []
+    for _index in range(max(limit, 1)):
+        job = claim_next_job(worker_name=worker_name, mode=mode)
+        if not job:
+            break
+        jobs.append(job)
+    return jobs
+
+
 def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: list[dict]) -> None:
     provider = settings.DRAWING_METADATA_LLM_PROVIDER.lower()
     if provider != "gemini" or not settings.GEMINI_API_KEY:
@@ -144,17 +157,97 @@ def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: li
     apply_title_block_classifications(canonical_attributes, classifications)
 
 
+def _prepare_job_for_processing(job: DrawingMetadataExtractionJob, *, batch_size: int = 1) -> dict:
+    _refresh_processing_lease(job, batch_size=batch_size)
+    diagnostics = dict(job.diagnostics_json or {})
+    diagnostics["activeExtractionProfile"] = job.extraction_profile or "default"
+    diagnostics["activeExtractionOptions"] = job.extraction_options_json or {}
+    diagnostics["sourcePreflight"] = build_source_preflight(job.drawing)
+    job.diagnostics_json = diagnostics
+    job.save(update_fields=["diagnostics_json", "updated_at"])
+    return diagnostics
+
+
+def _complete_job_from_payload(
+    job: DrawingMetadataExtractionJob,
+    payload: dict,
+    *,
+    diagnostics: dict,
+    executed_by: str,
+) -> DrawingMetadataExtractionJob:
+    warnings = list(payload.get("warnings", []))
+    canonical_attributes = normalize_raw_extract(payload)
+    if job.extraction_mode == EXTRACTION_MODE_2D:
+        _classify_2d_title_block_candidates(canonical_attributes, warnings)
+    derived_tags = build_derived_tags(canonical_attributes)
+    raw_extract = dict(payload.get("raw_extract", {}))
+    if payload.get("source_file"):
+        raw_extract["_source_file"] = payload["source_file"]
+    save_extraction_snapshot(
+        drawing=job.drawing,
+        extraction_mode=job.extraction_mode,
+        job=job,
+        raw_extract=raw_extract,
+        canonical_attributes=canonical_attributes,
+        derived_tags=derived_tags,
+        executed_by=executed_by,
+    )
+    compose_drawing_metadata(job.drawing)
+    job.status = DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    job.finished_at = timezone.now()
+    job.elapsed_ms = int(payload.get("elapsed_ms") or 0)
+    job.error_message = ""
+    job.warnings_json = warnings
+    diagnostics["resultWarningCount"] = len(warnings)
+    job.diagnostics_json = diagnostics
+    job.extractor_name = payload.get("extractor_name", "")
+    job.extractor_version = payload.get("extractor_version", "")
+    job.schema_version = settings.DRAWING_METADATA_SCHEMA_VERSION
+    job.lease_expires_at = None
+    job.save(
+        update_fields=[
+            "status",
+            "finished_at",
+            "elapsed_ms",
+            "error_message",
+            "warnings_json",
+            "diagnostics_json",
+            "extractor_name",
+            "extractor_version",
+            "schema_version",
+            "lease_expires_at",
+            "updated_at",
+        ]
+    )
+    return job
+
+
+def _fail_job(job: DrawingMetadataExtractionJob, message: str) -> DrawingMetadataExtractionJob:
+    job.status = DrawingMetadataExtractionJob.STATUS_FAILED
+    job.finished_at = timezone.now()
+    job.error_message = message
+    job.lease_expires_at = None
+    diagnostics = dict(job.diagnostics_json or {})
+    diagnostics["failure"] = build_job_failure_diagnostics(job)
+    job.diagnostics_json = diagnostics
+    job.save(
+        update_fields=[
+            "status",
+            "finished_at",
+            "error_message",
+            "diagnostics_json",
+            "lease_expires_at",
+            "updated_at",
+        ]
+    )
+    return job
+
+
 def process_job(job_id) -> DrawingMetadataExtractionJob:
     job = DrawingMetadataExtractionJob.objects.select_related("drawing").get(pk=job_id)
     executed_by = f"worker:{job.worker_name or 'unknown'}"
     try:
-        _refresh_processing_lease(job)
-        diagnostics = dict(job.diagnostics_json or {})
-        diagnostics["activeExtractionProfile"] = job.extraction_profile or "default"
-        diagnostics["activeExtractionOptions"] = job.extraction_options_json or {}
-        diagnostics["sourcePreflight"] = build_source_preflight(job.drawing)
-        job.diagnostics_json = diagnostics
-        job.save(update_fields=["diagnostics_json", "updated_at"])
+        diagnostics = _prepare_job_for_processing(job)
         result = run_extractor(
             drawing=job.drawing,
             extraction_mode=job.extraction_mode,
@@ -162,66 +255,62 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
             extraction_profile=job.extraction_profile or "default",
             extraction_options=job.extraction_options_json or {},
         )
-        warnings = list(result.payload.get("warnings", []))
-        canonical_attributes = normalize_raw_extract(result.payload)
-        if job.extraction_mode == EXTRACTION_MODE_2D:
-            _classify_2d_title_block_candidates(canonical_attributes, warnings)
-        derived_tags = build_derived_tags(canonical_attributes)
-        raw_extract = dict(result.payload.get("raw_extract", {}))
-        if result.payload.get("source_file"):
-            raw_extract["_source_file"] = result.payload["source_file"]
-        save_extraction_snapshot(
-            drawing=job.drawing,
-            extraction_mode=job.extraction_mode,
-            job=job,
-            raw_extract=raw_extract,
-            canonical_attributes=canonical_attributes,
-            derived_tags=derived_tags,
-            executed_by=executed_by,
-        )
-        compose_drawing_metadata(job.drawing)
-        job.status = DrawingMetadataExtractionJob.STATUS_SUCCEEDED
-        job.finished_at = timezone.now()
-        job.elapsed_ms = int(result.payload.get("elapsed_ms") or 0)
-        job.error_message = ""
-        job.warnings_json = warnings
-        diagnostics["resultWarningCount"] = len(warnings)
-        job.diagnostics_json = diagnostics
-        job.extractor_name = result.payload.get("extractor_name", "")
-        job.extractor_version = result.payload.get("extractor_version", "")
-        job.schema_version = settings.DRAWING_METADATA_SCHEMA_VERSION
-        job.lease_expires_at = None
-        job.save(
-            update_fields=[
-                "status",
-                "finished_at",
-                "elapsed_ms",
-                "error_message",
-                "warnings_json",
-                "diagnostics_json",
-                "extractor_name",
-                "extractor_version",
-                "schema_version",
-                "lease_expires_at",
-                "updated_at",
-            ]
-        )
+        _complete_job_from_payload(job, result.payload, diagnostics=diagnostics, executed_by=executed_by)
     except (ExtractionRunnerError, FileNotFoundError, ValueError) as exc:
-        job.status = DrawingMetadataExtractionJob.STATUS_FAILED
-        job.finished_at = timezone.now()
-        job.error_message = str(exc)
-        job.lease_expires_at = None
-        diagnostics = dict(job.diagnostics_json or {})
-        diagnostics["failure"] = build_job_failure_diagnostics(job)
-        job.diagnostics_json = diagnostics
-        job.save(
-            update_fields=[
-                "status",
-                "finished_at",
-                "error_message",
-                "diagnostics_json",
-                "lease_expires_at",
-                "updated_at",
-            ]
-        )
+        _fail_job(job, str(exc))
     return job
+
+
+def process_jobs(jobs: list[DrawingMetadataExtractionJob]) -> list[DrawingMetadataExtractionJob]:
+    job_list = list(jobs)
+    if not job_list:
+        return []
+
+    completed_jobs: list[DrawingMetadataExtractionJob] = []
+    generic_jobs = [job for job in job_list if uses_generic_cad_extractor(job.drawing.source_format)]
+    sxnet_jobs = [job for job in job_list if uses_sxnet_extractor(job.drawing.source_format)]
+    unsupported_jobs = [
+        job
+        for job in job_list
+        if job not in generic_jobs and job not in sxnet_jobs
+    ]
+
+    for job in generic_jobs:
+        completed_jobs.append(process_job(job.id))
+
+    for job in unsupported_jobs:
+        completed_jobs.append(_fail_job(job, f"{job.drawing.source_format} は抽出器の対象外です。"))
+
+    if not sxnet_jobs:
+        return completed_jobs
+
+    diagnostics_by_job_id: dict[str, dict] = {}
+    batch_size = len(sxnet_jobs)
+    for job in sxnet_jobs:
+        diagnostics_by_job_id[str(job.id)] = _prepare_job_for_processing(job, batch_size=batch_size)
+
+    try:
+        batch_results = run_extractor_batch(sxnet_jobs)
+    except (ExtractionRunnerError, FileNotFoundError, ValueError) as exc:
+        for job in sxnet_jobs:
+            completed_jobs.append(_fail_job(job, str(exc)))
+        return completed_jobs
+
+    jobs_by_id = {str(job.id): job for job in sxnet_jobs}
+    for result in batch_results:
+        job = jobs_by_id[result.job_id]
+        if result.error_message or result.payload is None:
+            completed_jobs.append(_fail_job(job, result.error_message or "一括抽出でジョブが失敗しました。"))
+            continue
+        try:
+            completed_jobs.append(
+                _complete_job_from_payload(
+                    job,
+                    result.payload,
+                    diagnostics=diagnostics_by_job_id[result.job_id],
+                    executed_by=f"worker:{job.worker_name or 'unknown'}",
+                )
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            completed_jobs.append(_fail_job(job, str(exc)))
+    return completed_jobs

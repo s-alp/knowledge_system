@@ -246,11 +246,10 @@ def test_normalize_2d_raw_extract():
     assert canonical["title_block_fields"]["coating_instruction"] == "マンセル 5Y7/1"
     assert canonical["title_block_fields"]["prfx"] == "RAA4844"
     assert canonical["title_block_fields"]["unit_number"] == "U01"
-    assert canonical["title_block_fields"]["designer"] == "創屋 太郎"
     assert canonical["title_block_fields"]["checker"] == "山田 花子"
     assert canonical["title_block_fields"]["approved_date"] == "2026/07/16"
     assert canonical["title_block_fields"]["revision_date"] == "2026-07-17"
-    assert canonical["designer"] == "創屋 太郎"
+    assert canonical["designer"] is None
     assert canonical["checker"] == "山田 花子"
     assert canonical["approved_date"] == "2026/07/16"
     assert canonical["revision_date"] == "2026-07-17"
@@ -337,6 +336,11 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
                 {"text_lines": ["ワーク重量より12.4倍の吸引力がある"], "inside_print_area": True},
                 {"text_lines": ["材質：丸棒 φ90"], "inside_print_area": True},
                 {"text_lines": ["図番：参考：M24A88810"], "inside_print_area": True},
+                {"text_lines": ["部品番号：組"], "inside_print_area": True},
+                {"text_lines": ["品番：.ni"], "inside_print_area": True},
+                {"text_lines": ["部品番号：C A D"], "inside_print_area": True},
+                {"text_lines": ["図番：CAD元図 図 番]"], "inside_print_area": True},
+                {"text_lines": ["部品番号：参照組立号"], "inside_print_area": True},
                 {"text_lines": ["図番：P-100"], "inside_print_area": True},
                 {"text_lines": ["塗装", "仕上げ面不可"], "inside_print_area": True},
                 {"text_lines": ["日付 未定"], "inside_print_area": True},
@@ -356,7 +360,30 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
     assert "material" not in canonical["title_block_fields"]
     assert "coating_instruction" not in canonical["title_block_fields"]
     assert all(candidate.get("value") != "参考：M24A88810" for candidate in canonical["title_block_candidates"])
+    assert all(candidate.get("value") != "組" for candidate in canonical["title_block_candidates"])
+    assert all(candidate.get("value") != ".ni" for candidate in canonical["title_block_candidates"])
+    assert all(candidate.get("value") != "C A D" for candidate in canonical["title_block_candidates"])
+    assert all(candidate.get("value") != "CAD元図 図 番]" for candidate in canonical["title_block_candidates"])
+    assert all(candidate.get("value") != "参照組立号" for candidate in canonical["title_block_candidates"])
     assert all("吸引力" not in str(candidate.get("value")) for candidate in canonical["title_block_candidates"])
+
+
+def test_title_block_drawing_number_strips_filename_noise_and_paper_size():
+    payload = {
+        "source_kind": "2d",
+        "source_file": {"full_path": r"J:\sample.icd", "file_name": "sample.icd"},
+        "raw_extract": {
+            "texts": [
+                {"text_lines": ["品番：03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS)"], "inside_print_area": True},
+                {"text_lines": ["図番：U8718-S71-002_A3"], "inside_print_area": True},
+            ],
+            "print_frames": [{"frame_no": 1}],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["title_block_fields"]["drawing_number"] == "20K03379P00"
 
 
 def test_normalize_step_extract_uses_generic_3d_materials_and_path_tokens():

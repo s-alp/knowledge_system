@@ -21,7 +21,6 @@ TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "surface_treatment": {"label": "表面処理", "keywords": ["表面処理", "表処", "処理", "surface treatment", "finish"], "max_value_length": 40},
     "coating_instruction": {"label": "塗装指示", "keywords": ["塗装", "塗装色", "paint", "coating"], "max_value_length": 40},
     "scale": {"label": "尺度", "keywords": ["尺度", "縮尺", "scale"], "max_value_length": 24},
-    "designer": {"label": "設計者", "keywords": ["設計", "作成", "製図", "drawn", "designed"], "max_value_length": 40},
     "checker": {"label": "検図者", "keywords": ["検図", "照査", "check", "checked"], "max_value_length": 40},
     "approver": {"label": "承認者", "keywords": ["承認", "認可", "approved"], "max_value_length": 40},
     "created_date": {"label": "作成日", "keywords": ["作成日", "製図日", "作図日", "drawn date", "designed date"], "max_value_length": 40},
@@ -87,6 +86,12 @@ TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
     "欄",
     "使用",
 }
+DRAWING_NUMBER_NOISE_VALUES = {"組", "クミ", "くみ"}
+DRAWING_NUMBER_NOISE_COMPACT_VALUES = {"cad"}
+DRAWING_NUMBER_REFERENCE_KEYWORDS = ("参考", "元図", "参照", "参照組立号")
+FILE_EXTENSION_FRAGMENT_PATTERN = re.compile(r"\.[a-z0-9]{1,5}", re.IGNORECASE)
+DRAWING_SIZE_SUFFIX_PATTERN = re.compile(r"(?P<body>.+?)(?:[_\s]+A[0-4])$", re.IGNORECASE)
+DRAWING_NUMBER_CODE_SEGMENT_PATTERN = re.compile(r"(?=.*\d)[A-Z0-9][A-Z0-9.-]{2,}[A-Z0-9]", re.IGNORECASE)
 
 
 def _material_lookup_key(value: str | None) -> str:
@@ -355,6 +360,50 @@ def _is_title_block_value_usable(value: str | None, *, max_length: int = 80) -> 
     )
 
 
+def _is_drawing_number_value_usable(value: str | None) -> bool:
+    normalized = unicodedata.normalize("NFKC", str(value or "")).strip()
+    if not normalized:
+        return False
+    compact = _normalize_for_match(normalized)
+    if normalized in DRAWING_NUMBER_NOISE_VALUES:
+        return False
+    if compact in DRAWING_NUMBER_NOISE_COMPACT_VALUES:
+        return False
+    if any(keyword in normalized for keyword in DRAWING_NUMBER_REFERENCE_KEYWORDS):
+        return False
+    if FILE_EXTENSION_FRAGMENT_PATTERN.fullmatch(normalized):
+        return False
+    return True
+
+
+def _clean_drawing_number_value(value: str | None) -> str | None:
+    normalized = unicodedata.normalize("NFKC", str(value or "")).strip(" 　:：=＝-－_/／[]【】()（）")
+    if not _is_drawing_number_value_usable(normalized):
+        return None
+
+    size_match = DRAWING_SIZE_SUFFIX_PATTERN.fullmatch(normalized)
+    if size_match:
+        normalized = size_match.group("body").strip()
+
+    segments = [segment.strip() for segment in normalized.split("_") if segment.strip()]
+    if len(segments) > 1:
+        filtered_segments = [
+            segment
+            for segment in segments
+            if not re.fullmatch(r"[0-9]{1,3}", segment)
+            and not re.fullmatch(r"A[0-4]", segment, re.IGNORECASE)
+        ]
+        for segment in filtered_segments:
+            if DRAWING_NUMBER_CODE_SEGMENT_PATTERN.fullmatch(segment):
+                return segment
+        return None
+
+    if re.search(r"[\u3040-\u30ff\u3400-\u9fff]", normalized):
+        match = DRAWING_NUMBER_CODE_SEGMENT_PATTERN.search(normalized)
+        return match.group(0) if match else None
+    return normalized if _is_drawing_number_value_usable(normalized) else None
+
+
 def _is_field_value_usable(field: str, value: str | None, evidence_text: str) -> bool:
     if not _is_title_block_value_usable(
         value,
@@ -364,8 +413,11 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
     normalized_value = unicodedata.normalize("NFKC", str(value)).strip()
     normalized_evidence = unicodedata.normalize("NFKC", evidence_text).strip()
 
-    if field == "drawing_number" and any(token in normalized_evidence for token in ("参考", "元図")):
-        return False
+    if field == "drawing_number":
+        if any(token in normalized_evidence for token in DRAWING_NUMBER_REFERENCE_KEYWORDS):
+            return False
+        if not _clean_drawing_number_value(normalized_value):
+            return False
     if field == "material":
         classification = _classify_material_value(normalized_value, allow_unknown=False)
         if classification["status"] == "unresolved":
@@ -948,6 +1000,10 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
         max_value_length = int(rule.get("max_value_length", 80))
         if not _is_field_value_usable(field, value, str(candidate.get("evidence_text") or "")):
             continue
+        if field == "drawing_number":
+            value = _clean_drawing_number_value(value)
+            if not value:
+                continue
         if field and field not in selected:
             selected[field] = value
     return selected
@@ -1643,7 +1699,6 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             "surface_treatment": "surface_treatment",
             "coating_instruction": "paint",
             "scale": "scale",
-            "designer": "designer",
             "checker": "checker",
             "approver": "approver",
             "date": "drawing_date",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -21,6 +22,9 @@ def write_worker_heartbeat(
     mode: str,
     state: str,
     job_id: str | None = None,
+    runner_mode: str = "loop",
+    process_id: int | None = None,
+    batch_size: int | None = None,
 ) -> None:
     """Worker の常駐状態をフロントから確認できるように小さなJSONへ記録する。"""
 
@@ -33,6 +37,9 @@ def write_worker_heartbeat(
         "mode": mode,
         "state": state,
         "jobId": job_id or "",
+        "runnerMode": runner_mode,
+        "processId": process_id if process_id is not None else os.getpid(),
+        "batchSize": batch_size,
         "updatedAt": now.isoformat(),
         "staleAfterSeconds": settings.DRAWING_METADATA_WORKER_HEARTBEAT_STALE_SECONDS,
     }
@@ -64,6 +71,9 @@ def build_worker_status_payload() -> dict:
             "mode": "",
             "state": "",
             "jobId": "",
+            "runnerMode": "",
+            "processId": None,
+            "batchSize": None,
             "updatedAt": "",
             "ageSeconds": None,
             "staleAfterSeconds": stale_seconds,
@@ -81,6 +91,9 @@ def build_worker_status_payload() -> dict:
             "mode": "",
             "state": "",
             "jobId": "",
+            "runnerMode": "",
+            "processId": None,
+            "batchSize": None,
             "updatedAt": "",
             "ageSeconds": None,
             "staleAfterSeconds": stale_seconds,
@@ -88,8 +101,11 @@ def build_worker_status_payload() -> dict:
 
     updated_at = _parse_datetime(str(raw_payload.get("updatedAt") or ""))
     age_seconds = int((timezone.now() - updated_at).total_seconds()) if updated_at else None
-    is_running = age_seconds is not None and age_seconds <= stale_seconds
+    is_fresh = age_seconds is not None and age_seconds <= stale_seconds
     state = str(raw_payload.get("state") or "")
+    runner_mode = str(raw_payload.get("runnerMode") or "")
+    is_loop_worker = runner_mode == "loop"
+    is_running = is_fresh and is_loop_worker
     status = "running" if is_running else "stale"
     label = "稼働中" if is_running else "停止または未確認"
     message = (
@@ -97,6 +113,10 @@ def build_worker_status_payload() -> dict:
         if is_running
         else "抽出workerのheartbeat更新が途切れています。起票済みジョブが残る場合はworkerを起動してください。"
     )
+    if is_fresh and not is_loop_worker:
+        status = "not_looping"
+        label = "未常駐"
+        message = "直近の実行は単発処理のため、常駐workerは稼働していません。"
     if is_running and state == "processing":
         message = "抽出workerがジョブを処理中です。"
     elif is_running and state == "idle":
@@ -111,6 +131,9 @@ def build_worker_status_payload() -> dict:
         "mode": str(raw_payload.get("mode") or ""),
         "state": state,
         "jobId": str(raw_payload.get("jobId") or ""),
+        "runnerMode": runner_mode,
+        "processId": raw_payload.get("processId"),
+        "batchSize": raw_payload.get("batchSize"),
         "updatedAt": str(raw_payload.get("updatedAt") or ""),
         "ageSeconds": age_seconds,
         "staleAfterSeconds": stale_seconds,

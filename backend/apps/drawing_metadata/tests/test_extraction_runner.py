@@ -1,14 +1,17 @@
+import json
 import subprocess
 from pathlib import Path
 
 import pytest
 
 from apps.drawing_metadata.models import RegisteredDrawing
+from apps.drawing_metadata.models import DrawingMetadataExtractionJob
 from apps.drawing_metadata.services.extraction_runner import (
     ExtractionRunnerError,
     build_extractor_command,
     _decode_runner_output,
     run_extractor,
+    run_extractor_batch,
 )
 
 
@@ -292,3 +295,67 @@ def test_build_extractor_command_forces_staged_input_for_uploaded_icad(settings,
 
     force_index = command.index("--force-sxnet-staged-input")
     assert command[force_index + 1] == "true"
+
+
+@pytest.mark.django_db
+def test_run_extractor_batch_invokes_batch_command_and_maps_job_results(monkeypatch, settings, tmp_path):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-batch",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    job = DrawingMetadataExtractionJob.objects.create(drawing=drawing, extraction_mode="3d")
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+    settings.DRAWING_METADATA_PREVIEW_ASSET_ROOT = tmp_path / "previews"
+    settings.DRAWING_METADATA_PREVIEW_ASSET_BASE_URL = "/preview"
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 3
+    settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS = 1
+
+    def fake_run(command, **kwargs):
+        assert command[1] == "extract-batch"
+        jobs_json_path = Path(command[command.index("--jobs-json") + 1])
+        result_json_path = Path(command[command.index("--result-json") + 1])
+        request_payload = json.loads(jobs_json_path.read_text(encoding="utf-8"))
+        item = request_payload["jobs"][0]
+        output_path = Path(item["output_path"])
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(
+                {
+                    "warnings": [],
+                    "raw_extract": {},
+                    "elapsed_ms": 12,
+                    "extractor_name": "fake-batch",
+                    "extractor_version": "1.0.0",
+                }
+            ),
+            encoding="utf-8",
+        )
+        result_json_path.write_text(
+            json.dumps(
+                {
+                    "results": [
+                        {
+                            "job_id": item["job_id"],
+                            "output_path": item["output_path"],
+                            "succeeded": True,
+                            "error_message": "",
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(args=command, returncode=0, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    results = run_extractor_batch([job])
+
+    assert len(results) == 1
+    assert results[0].job_id == str(job.id)
+    assert results[0].payload["extractor_name"] == "fake-batch"
+    assert results[0].error_message == ""

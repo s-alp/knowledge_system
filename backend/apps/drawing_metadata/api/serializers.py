@@ -616,9 +616,7 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
                     _first_value(canonical_attributes.get("paper_size"), canonical_attributes.get("drawing_size"))
                 ),
                 "status": _as_optional_string(canonical_attributes.get("status")),
-                "owner": _as_optional_string(
-                    _first_value(canonical_attributes.get("owner"), canonical_attributes.get("designer"))
-                ),
+                "owner": _as_optional_string(canonical_attributes.get("owner")),
                 "designPurpose": _as_optional_string(
                     _first_value(canonical_attributes.get("intention"), canonical_attributes.get("design_purpose"))
                 ),

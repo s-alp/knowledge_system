@@ -39,10 +39,16 @@ namespace IcadExtraction.SxNet
             }
         }
 
-        public string SelfCheck(string sxnetDllPath)
+        public Assembly LoadAndValidateAssembly(string sxnetDllPath)
         {
             var assembly = LoadAssembly(sxnetDllPath);
             ValidateRequiredTypes(assembly);
+            return assembly;
+        }
+
+        public string SelfCheck(string sxnetDllPath)
+        {
+            var assembly = LoadAndValidateAssembly(sxnetDllPath);
             var exported = assembly.GetExportedTypes().Select(type => type.FullName).Where(name => !string.IsNullOrWhiteSpace(name)).Take(10);
             return $"loaded={assembly.FullName}; exported={string.Join(",", exported)}";
         }
