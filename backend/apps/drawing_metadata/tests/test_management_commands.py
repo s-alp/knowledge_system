@@ -4,8 +4,12 @@ import json
 import pytest
 from django.core.management import call_command
 
+from apps.drawing_metadata.management.commands import convert_icad_cad_formats
+from apps.drawing_metadata.management.commands import probe_icad_cad_export_types
 from apps.drawing_metadata.management.commands import register_cad_drawings
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob, DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.services.extraction_runner import CadExportTypeProbeRunResult
+from apps.drawing_metadata.services.extraction_runner import CadConversionRunResult
 
 
 @pytest.mark.django_db
@@ -78,6 +82,168 @@ def test_register_cad_drawings_normalizes_display_filename(monkeypatch, tmp_path
     assert "CREATED: short.icd" in stdout.getvalue()
     assert "created=1" in stdout.getvalue()
     assert "skipped=0" in stdout.getvalue()
+
+
+@pytest.mark.django_db
+def test_convert_icad_cad_formats_registers_and_extracts_converted_step(monkeypatch, settings, tmp_path):
+    source = tmp_path / "source.icd"
+    source.write_bytes(b"icad")
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="source-host",
+        filename="source.icd",
+        source_path=str(source),
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    def fake_run_icad_converter(**kwargs):
+        output_dir = kwargs["output_dir"]
+        output_dir.mkdir(parents=True, exist_ok=True)
+        converted_path = output_dir / "source.step"
+        converted_path.write_text(
+            """ISO-10303-21;
+HEADER;
+FILE_NAME('SOURCE_ASSY','2026-07-26',('設計'),('客先'),'preprocessor','system','');
+ENDSEC;
+DATA;
+#10=PRODUCT('SOURCE ASSY','ICAD変換品','',(#1));
+ENDSEC;
+END-ISO-10303-21;
+""",
+            encoding="utf-8",
+        )
+        result_path = settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / "fake.json"
+        result_path.parent.mkdir(parents=True, exist_ok=True)
+        result_path.write_text("{}", encoding="utf-8")
+        return CadConversionRunResult(
+            payload={"converted_asset": {"file_path": str(converted_path)}},
+            output_path=result_path,
+            converted_file_path=converted_path,
+        )
+
+    monkeypatch.setattr(convert_icad_cad_formats, "run_icad_converter", fake_run_icad_converter)
+    stdout = StringIO()
+
+    call_command(
+        "convert_icad_cad_formats",
+        drawing_id=[str(drawing.id)],
+        format=["step"],
+        output_root=str(tmp_path / "converted"),
+        extract=True,
+        stdout=stdout,
+    )
+
+    converted_drawing = RegisteredDrawing.objects.get(source_format="step")
+    assert converted_drawing.filename == "source.step"
+    assert converted_drawing.host_drawing_id == "source-host:step"
+    snapshot = DrawingMetadataSnapshot.objects.get(drawing=converted_drawing, extraction_mode="3d")
+    assert snapshot.raw_extract_json["step_products"][0]["name"] == "SOURCE ASSY"
+    assert snapshot.latest_job.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
+    assert "converted=1" in stdout.getvalue()
+    assert "extracted=1" in stdout.getvalue()
+
+
+@pytest.mark.django_db
+def test_audit_converted_cad_extractions_writes_comparison_payload(tmp_path):
+    source = RegisteredDrawing.objects.create(
+        host_drawing_id="source-host",
+        filename="source.icd",
+        source_path=r"C:\cad\source.icd",
+        source_format="icad",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=source,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "material_keywords": ["SUS304", "S45C"],
+            "part_names": ["ASSY", "PLATE"],
+            "mass_value": 1.2,
+        },
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=source,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "title_block_fields": {"drawing_number": "A-001", "material": "SUS304"},
+            "material_keywords": ["SUS304"],
+        },
+    )
+    step = RegisteredDrawing.objects.create(
+        host_drawing_id="source-host:step",
+        filename="source.step",
+        source_path=r"C:\cad\source.step",
+        source_format="step",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=step,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "material_keywords": ["SUS304"],
+            "part_names": ["PLATE"],
+            "step_product_names": ["ASSY", "PLATE"],
+            "step_assembly_relationship_count": 1,
+        },
+    )
+    dxf = RegisteredDrawing.objects.create(
+        host_drawing_id="source-host:dxf",
+        filename="source.dxf",
+        source_path=r"C:\cad\source.dxf",
+        source_format="dxf",
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=dxf,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "title_block_fields": {"drawing_number": "A-001"},
+            "material_keywords": ["SUS304"],
+            "dxf_layers": ["TITLE"],
+            "dxf_block_attribute_count": 2,
+            "dxf_block_attribute_tokens": ["TITLE_BLOCK", "MATERIAL", "SUS304"],
+        },
+    )
+    output_path = tmp_path / "audit.json"
+
+    call_command("audit_converted_cad_extractions", drawing_id=str(source.id), output=str(output_path))
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["schemaVersion"] == "converted_cad_extraction_audit.v1"
+    assert payload["comparisons"]["step3d"]["materialKeywordOverlap"]["overlapValues"] == ["SUS304"]
+    assert payload["comparisons"]["step3d"]["convertedStepAssemblyRelationshipCount"] == 1
+    assert payload["comparisons"]["dxf2d"]["titleBlockFieldKeyOverlap"]["overlapValues"] == ["drawing_number"]
+    assert payload["comparisons"]["dxf2d"]["convertedDxfBlockAttributeCount"] == 2
+
+
+def test_probe_icad_cad_export_types_writes_summary(monkeypatch, tmp_path):
+    probe_output = tmp_path / "sxopt-export-probe.json"
+
+    def fake_run_icad_export_type_probe(**kwargs):
+        assert kwargs["output_path"] == probe_output
+        probe_output.write_text("{}", encoding="utf-8")
+        return CadExportTypeProbeRunResult(
+            payload={
+                "expected_formats": {
+                    "step": {
+                        "matched_fields": {"FILE_TYPE_STEP": 10},
+                        "requires_export_file_type_override": False,
+                    },
+                    "dxf": {
+                        "matched_fields": {},
+                        "requires_export_file_type_override": True,
+                    },
+                }
+            },
+            output_path=probe_output,
+        )
+
+    monkeypatch.setattr(probe_icad_cad_export_types, "run_icad_export_type_probe", fake_run_icad_export_type_probe)
+    stdout = StringIO()
+
+    call_command("probe_icad_cad_export_types", output=str(probe_output), stdout=stdout)
+
+    payload, _ = json.JSONDecoder().raw_decode(stdout.getvalue())
+    assert payload["step"]["matchedFields"] == {"FILE_TYPE_STEP": 10}
+    assert payload["dxf"]["requiresOverride"] is True
+    assert "wrote SXNET export type probe" in stdout.getvalue()
 
 
 @pytest.mark.django_db

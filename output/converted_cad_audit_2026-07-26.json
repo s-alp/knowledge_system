@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "converted_cad_extraction_audit.v1",
+  "sourceDrawing": {
+    "id": "53fa78f2-0489-471e-aef7-5edf780583e9",
+    "hostDrawingId": "",
+    "filename": "9NK452WX90-00-LINER-A3-3D-01.icd",
+    "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\cad_data\\9NK452WX90-00-LINER-A3-3D-01.icd",
+    "sourceFormat": "icad"
+  },
+  "convertedDrawings": {
+    "step": {
+      "id": "377de752-bf09-48f6-8653-12f78171ccd0",
+      "hostDrawingId": "53fa78f2-0489-471e-aef7-5edf780583e9:step",
+      "filename": "9NK452WX90-00-LINER-A3-3D-01.stp",
+      "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\cad_conversions_2026-07-26\\53fa78f2-0489-471e-aef7-5edf780583e9\\step\\9NK452WX90-00-LINER-A3-3D-01.stp",
+      "sourceFormat": "step"
+    },
+    "dxf": {
+      "id": "234e151b-56d2-407d-8eb9-c2938c699422",
+      "hostDrawingId": "53fa78f2-0489-471e-aef7-5edf780583e9:dxf",
+      "filename": "9NK452WX90-00-LINER-A3-3D-01.dxf",
+      "sourcePath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\cad_conversions_2026-07-26\\53fa78f2-0489-471e-aef7-5edf780583e9\\dxf\\9NK452WX90-00-LINER-A3-3D-01.dxf",
+      "sourceFormat": "dxf"
+    }
+  },
+  "comparisons": {
+    "step3d": {
+      "convertedDrawingExists": true,
+      "sourceSnapshotExists": true,
+      "convertedSnapshotExists": true,
+      "materialKeywordOverlap": {
+        "leftCount": 1,
+        "rightCount": 0,
+        "overlapCount": 0,
+        "overlapValues": [],
+        "leftOnly": [
+          "SS400"
+        ],
+        "rightOnly": []
+      },
+      "partNameOverlap": {
+        "leftCount": 1,
+        "rightCount": 2,
+        "overlapCount": 0,
+        "overlapValues": [],
+        "leftOnly": [
+          "9NK452WX90-00-LINER-A3-3D-01"
+        ],
+        "rightOnly": [
+          "Assembly",
+          "9NK452WX90-00-LINER-A3-3D-01-prt0"
+        ]
+      },
+      "convertedStepProductNames": [
+        "Assembly",
+        "9NK452WX90-00-LINER-A3-3D-01-prt0"
+      ],
+      "convertedStepAssemblyRelationshipCount": 1,
+      "sourceMassAvailable": true,
+      "convertedMassAvailable": false
+    },
+    "dxf2d": {
+      "convertedDrawingExists": true,
+      "sourceSnapshotExists": true,
+      "convertedSnapshotExists": true,
+      "titleBlockFieldKeyOverlap": {
+        "leftCount": 0,
+        "rightCount": 0,
+        "overlapCount": 0,
+        "overlapValues": [],
+        "leftOnly": [],
+        "rightOnly": []
+      },
+      "sourceMaterialKeywords": [],
+      "convertedMaterialKeywords": [],
+      "convertedDxfLayers": [
+        "SX_DraftLine",
+        "NoLayerName_001",
+        "0",
+        "NoLayerName_002",
+        "NoLayerName_003"
+      ],
+      "convertedDxfBlockAttributeCount": 0,
+      "convertedDxfBlockAttributeTokens": []
+    }
+  }
+}

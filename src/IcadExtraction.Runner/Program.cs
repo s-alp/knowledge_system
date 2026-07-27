@@ -34,6 +34,10 @@ namespace IcadExtraction.Runner
                         return RunClearCommand(command);
                     case "shutdown-icad":
                         return RunShutdownIcad(command);
+                    case "convert-cad":
+                        return RunConvertCad(command);
+                    case "probe-cad-export-types":
+                        return RunProbeCadExportTypes(command);
                     case "self-check":
                         return RunSelfCheck(command);
                     default:
@@ -369,6 +373,103 @@ namespace IcadExtraction.Runner
             return 0;
         }
 
+        private static int RunConvertCad(CliCommand command)
+        {
+            var inputPath = RequireOption(command, "input-path");
+            var outputPath = RequireOption(command, "output-path");
+            var outputDirectory = RequireOption(command, "output-dir");
+            var outputFormat = RequireOption(command, "output-format");
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var icadExecutablePath = OptionalOption(command, "icad-executable-path");
+            var icadStartupWaitSeconds = OptionalIntOption(command, "icad-startup-wait-seconds", 8);
+            var shutdownIfAutostarted = OptionalBoolOption(command, "shutdown-icad-if-autostarted", true);
+            var forceSxNetStagedInput = OptionalBoolOption(command, "force-sxnet-staged-input", false);
+            var outputBaseName = OptionalOption(command, "output-base-name");
+            var exportFileType = OptionalNullableIntOption(command, "export-file-type");
+
+            var stopwatch = Stopwatch.StartNew();
+            using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
+            using var icadLease = IcadProcessStarter.EnsureRunning(
+                icadExecutablePath,
+                icadStartupWaitSeconds,
+                shutdownIfAutostarted
+            );
+            using var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, sxNetInputFile.SxNetInputPath);
+            var warnings = new List<WarningPayload>();
+            if (icadLease.StartupWarning != null)
+            {
+                warnings.Add(icadLease.StartupWarning);
+            }
+            InsertSxNetInputWarning(warnings, sxNetInputFile);
+
+            var asset = new IcadCadFormatExporter().Export(
+                context,
+                sxNetInputFile.OriginalPath,
+                outputDirectory,
+                outputFormat,
+                outputBaseName,
+                exportFileType
+            );
+            var payload = new
+            {
+                input_path = sxNetInputFile.OriginalPath,
+                source_file = BuildSourceFilePayload(sxNetInputFile),
+                source_format = "icad",
+                output_format = IcadCadFormatExporter.ResolveFormat(outputFormat).OutputFormat,
+                extractor_name = "icad-sxnet-cad-converter",
+                extractor_version = SchemaVersions.SchemaVersion,
+                elapsed_ms = stopwatch.ElapsedMilliseconds,
+                warnings,
+                converted_asset = asset,
+            };
+            WriteJsonFile(outputPath, payload);
+            return 0;
+        }
+
+        private static int RunProbeCadExportTypes(CliCommand command)
+        {
+            var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
+            var outputPath = RequireOption(command, "output-path");
+            var assembly = new SxNetRuntimeGuard().LoadAndValidateAssembly(sxnetDllPath);
+            var fields = IcadCadFormatExporter.ListSxOptExportIntegerFields(assembly);
+            var expectedFormats = new Dictionary<string, object>
+            {
+                ["step"] = BuildExportProbeFormatPayload("step", fields),
+                ["dxf"] = BuildExportProbeFormatPayload("dxf", fields),
+            };
+            var payload = new
+            {
+                extractor_name = "icad-sxnet-cad-export-type-probe",
+                extractor_version = SchemaVersions.SchemaVersion,
+                sxnet_dll_path = sxnetDllPath,
+                sxopt_export_integer_fields = fields,
+                expected_formats = expectedFormats,
+            };
+            WriteJsonFile(outputPath, payload);
+            return 0;
+        }
+
+        private static object BuildExportProbeFormatPayload(string outputFormat, Dictionary<string, int> fields)
+        {
+            var format = IcadCadFormatExporter.ResolveFormat(outputFormat);
+            var matches = new Dictionary<string, int>();
+            foreach (var fieldName in format.CandidateSxOptExportFields)
+            {
+                if (fields.TryGetValue(fieldName, out var value))
+                {
+                    matches[fieldName] = value;
+                }
+            }
+
+            return new
+            {
+                output_format = format.OutputFormat,
+                candidate_fields = format.CandidateSxOptExportFields,
+                matched_fields = matches,
+                requires_export_file_type_override = matches.Count == 0,
+            };
+        }
+
         private static int RunDetect(CliCommand command)
         {
             var inputPath = RequireOption(command, "input-path");
@@ -566,6 +667,22 @@ namespace IcadExtraction.Runner
             }
 
             throw new ArgumentException($"{optionName} must be boolean");
+        }
+
+        private static int? OptionalNullableIntOption(CliCommand command, string optionName)
+        {
+            var value = OptionalOption(command, optionName);
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (!int.TryParse(value, out var parsed))
+            {
+                throw new ArgumentException($"{optionName} must be integer");
+            }
+
+            return parsed;
         }
 
         private static Dictionary<string, object> OptionalJsonObjectOption(CliCommand command, string optionName)

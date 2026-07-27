@@ -408,6 +408,18 @@ def test_normalize_step_extract_uses_generic_3d_materials_and_path_tokens():
                 }
             ],
             "materials": ["S45C"],
+            "step_products": [
+                {"entity_id": "#10", "name": "HAND", "description": "ガントリーハンド"},
+                {"entity_id": "#20", "name": "PLATE", "description": "SUS304 PLATE"},
+            ],
+            "step_assembly_relationships": [
+                {
+                    "entity_id": "#30",
+                    "parent_name": "HAND",
+                    "child_name": "PLATE",
+                    "name": "PLATE OCC",
+                }
+            ],
             "mass_properties": {"mass": 1.2, "unit_name": "mm-kg"},
         },
     }
@@ -420,6 +432,9 @@ def test_normalize_step_extract_uses_generic_3d_materials_and_path_tokens():
     assert canonical["customer_name"] == "コマツ小山"
     assert canonical["equipment_category"] == "ガントリー"
     assert canonical["material_keywords"] == ["S45C", "SUS304"]
+    assert canonical["step_product_names"] == ["HAND", "PLATE"]
+    assert canonical["step_assembly_relationship_count"] == 1
+    assert canonical["step_assembly_relationships"][0]["child_name"] == "PLATE"
     assert canonical["part_material_candidates"][0]["part_name"] == "PLATE"
     assert canonical["heat_treatment_keywords"] == ["浸炭"]
     assert canonical["hardness_spec_values"] == ["HRC58-62"]
@@ -446,6 +461,17 @@ def test_normalize_dxf_extract_uses_generic_2d_texts_for_title_block_tags():
                 {"joined_text": "ユニット U01", "inside_print_area": True},
                 {"text": "SES", "inside_print_area": True},
             ],
+            "block_references": [
+                {
+                    "block_name": "TITLE_BLOCK",
+                    "layer_name": "TITLE",
+                    "attributes": [
+                        {"tag": "DWG_NO", "value": "DXF-001"},
+                        {"tag": "MATERIAL", "value": "SS400"},
+                    ],
+                }
+            ],
+            "layers": ["TITLE", "NOTE"],
             "dimensions": [],
             "geometry_primitives": [],
         },
@@ -461,6 +487,10 @@ def test_normalize_dxf_extract_uses_generic_2d_texts_for_title_block_tags():
     assert canonical["title_block_fields"]["drawing_number"] == "DXF-001"
     assert canonical["title_block_fields"]["material"] == "SS400"
     assert canonical["material_keywords"] == ["SS400"]
+    assert canonical["dxf_layers"] == ["TITLE", "NOTE"]
+    assert canonical["dxf_block_attribute_count"] == 2
+    assert "TITLE_BLOCK" in canonical["dxf_block_attribute_tokens"]
+    assert "MATERIAL" in canonical["dxf_block_attribute_tokens"]
     assert canonical["prfx_candidates"] == ["RAA4844"]
     assert canonical["unit_number_candidates"] == ["U01"]
     assert any(tag["tag"] == "規格:SES" for tag in tags)

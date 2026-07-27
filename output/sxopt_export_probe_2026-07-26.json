@@ -1,0 +1,46 @@
+{
+  "extractor_name": "icad-sxnet-cad-export-type-probe",
+  "extractor_version": "1.0.0",
+  "sxnet_dll_path": "C:\\ICADSX\\bin\\sxnet.dll",
+  "sxopt_export_integer_fields": {
+    "FILE_TYPE_BMI": 3,
+    "FILE_TYPE_DOS": 6,
+    "FILE_TYPE_DWF": 5,
+    "FILE_TYPE_DWG": 4,
+    "FILE_TYPE_DXF": 1,
+    "FILE_TYPE_IGES": 2,
+    "FILE_TYPE_PS": 12,
+    "FILE_TYPE_STEP": 11,
+    "FILE_TYPE_STL": 7,
+    "FILE_TYPE_STL_MULTI": 8,
+    "FILE_TYPE_VPS": 10,
+    "FILE_TYPE_WRL": 9,
+    "PS_FORMAT_XMT_BIN": 3,
+    "PS_FORMAT_XMT_TXT": 1,
+    "PS_FORMAT_X_B": 2,
+    "PS_FORMAT_X_T": 0
+  },
+  "expected_formats": {
+    "step": {
+      "output_format": "step",
+      "candidate_fields": [
+        "FILE_TYPE_STEP",
+        "FILE_TYPE_STP"
+      ],
+      "matched_fields": {
+        "FILE_TYPE_STEP": 11
+      },
+      "requires_export_file_type_override": false
+    },
+    "dxf": {
+      "output_format": "dxf",
+      "candidate_fields": [
+        "FILE_TYPE_DXF"
+      ],
+      "matched_fields": {
+        "FILE_TYPE_DXF": 1
+      },
+      "requires_export_file_type_override": false
+    }
+  }
+}

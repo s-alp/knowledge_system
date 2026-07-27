@@ -13,6 +13,8 @@ GENERIC_CAD_EXTRACTOR_VERSION = "1.0.0"
 
 _STEP_STRING_RE = re.compile(r"'((?:[^']|'')*)'")
 _STEP_ENTITY_RE = re.compile(r"#\d+\s*=\s*([A-Z0-9_]+)\s*\((.*?)\)\s*;", re.IGNORECASE | re.DOTALL)
+_STEP_ENTITY_WITH_ID_RE = re.compile(r"#(\d+)\s*=\s*([A-Z0-9_]+)\s*\((.*?)\)\s*;", re.IGNORECASE | re.DOTALL)
+_STEP_REFERENCE_RE = re.compile(r"#(\d+)")
 _MATERIAL_RE = re.compile(
     r"(?<![A-Z0-9])(SUS[0-9][0-9A-Z-]*|SS400[A-Z-]*|SPCC|S[0-9]{2}C|A[0-9]{4}P?|AL|SKD[0-9]*|SKS[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*|PETG|PET|POM|PVC|PTFE|PPS|NBR|EPDM|FKM|PP)(?![A-Z0-9])",
     re.IGNORECASE,
@@ -125,6 +127,10 @@ def _step_strings(value: str) -> list[str]:
     return [item.replace("''", "'").strip() for item in _STEP_STRING_RE.findall(value) if item.strip()]
 
 
+def _step_references(value: str) -> list[str]:
+    return [f"#{matched}" for matched in _STEP_REFERENCE_RE.findall(value)]
+
+
 def _extract_materials(tokens: list[str]) -> list[str]:
     materials: list[str] = []
     for token in tokens:
@@ -133,9 +139,131 @@ def _extract_materials(tokens: list[str]) -> list[str]:
     return _unique_strings(materials)
 
 
+def _step_entity_records(text: str) -> list[dict]:
+    records: list[dict] = []
+    for entity_id, entity_name, body in _STEP_ENTITY_WITH_ID_RE.findall(text):
+        records.append(
+            {
+                "id": f"#{entity_id}",
+                "entity_name": entity_name.upper(),
+                "strings": _step_strings(body),
+                "references": _step_references(body),
+            }
+        )
+    return records
+
+
+def _step_first_product_name_for_ref(entity_ref: str, entity_by_id: dict[str, dict], seen: set[str] | None = None) -> str | None:
+    seen = seen or set()
+    if entity_ref in seen:
+        return None
+    seen.add(entity_ref)
+    entity = entity_by_id.get(entity_ref)
+    if not entity:
+        return None
+    strings = entity.get("strings", [])
+    if entity.get("entity_name") == "PRODUCT" and strings:
+        return strings[0]
+    for child_ref in entity.get("references", []):
+        product_name = _step_first_product_name_for_ref(child_ref, entity_by_id, seen)
+        if product_name:
+            return product_name
+    return None
+
+
+def _step_product_records(entity_records: list[dict]) -> list[dict]:
+    products: list[dict] = []
+    for entity in entity_records:
+        if entity["entity_name"] != "PRODUCT":
+            continue
+        strings = entity["strings"]
+        if not strings:
+            continue
+        products.append(
+            {
+                "entity_id": entity["id"],
+                "name": strings[0],
+                "description": strings[1] if len(strings) > 1 else None,
+                "raw_strings": strings,
+            }
+        )
+    return products
+
+
+def _step_assembly_relationships(entity_records: list[dict], entity_by_id: dict[str, dict]) -> list[dict]:
+    relationships: list[dict] = []
+    for entity in entity_records:
+        if entity["entity_name"] != "NEXT_ASSEMBLY_USAGE_OCCURRENCE":
+            continue
+        refs = entity["references"]
+        parent_name = _step_first_product_name_for_ref(refs[0], entity_by_id) if len(refs) >= 1 else None
+        child_name = _step_first_product_name_for_ref(refs[1], entity_by_id) if len(refs) >= 2 else None
+        strings = entity["strings"]
+        relationships.append(
+            {
+                "entity_id": entity["id"],
+                "occurrence_id": strings[0] if strings else None,
+                "name": strings[1] if len(strings) > 1 else None,
+                "description": strings[2] if len(strings) > 2 else None,
+                "parent_ref": refs[0] if len(refs) >= 1 else None,
+                "child_ref": refs[1] if len(refs) >= 2 else None,
+                "parent_name": parent_name,
+                "child_name": child_name,
+            }
+        )
+    return relationships
+
+
+def _step_part_payloads(products: list[dict], relationships: list[dict], materials: list[str]) -> list[dict]:
+    parts: list[dict] = []
+    seen: set[str] = set()
+
+    for product in products:
+        name = product["name"]
+        key = name.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        parts.append(
+            {
+                "tree_path": [name],
+                "name": name,
+                "comment": product.get("description"),
+                "materials": [material for material in materials if material.upper() in " ".join(product["raw_strings"]).upper()],
+                "step_entity_id": product["entity_id"],
+            }
+        )
+
+    for relationship in relationships:
+        child_name = relationship.get("child_name") or relationship.get("name")
+        parent_name = relationship.get("parent_name")
+        if not child_name:
+            continue
+        path = [value for value in (parent_name, child_name) if value]
+        key = " > ".join(path).casefold() if path else child_name.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        parts.append(
+            {
+                "tree_path": path or [child_name],
+                "name": child_name,
+                "comment": relationship.get("description") or relationship.get("name"),
+                "materials": [material for material in materials if material.upper() in child_name.upper()],
+                "step_entity_id": relationship["entity_id"],
+            }
+        )
+
+    return parts[:500]
+
+
 def _extract_step_raw(*, text: str, path: Path) -> dict:
+    entity_records = _step_entity_records(text)
+    entity_by_id = {entity["id"]: entity for entity in entity_records}
+    products = _step_product_records(entity_records)
+    relationships = _step_assembly_relationships(entity_records, entity_by_id)
     all_strings = _unique_strings(_step_strings(text))
-    part_names: list[str] = []
+    part_names = [product["name"] for product in products]
     for entity_name, body in _STEP_ENTITY_RE.findall(text):
         if entity_name.upper() not in _STEP_PART_ENTITY_NAMES:
             continue
@@ -147,15 +275,17 @@ def _extract_step_raw(*, text: str, path: Path) -> dict:
     model_name = part_names[0] if part_names else path.stem
     comment = next((value for value in all_strings if value != model_name), None)
     materials = _extract_materials(all_strings + part_names)
-    parts = [
-        {
-            "tree_path": [name],
-            "name": name,
-            "comment": None,
-            "materials": [material for material in materials if material.upper() in name.upper()],
-        }
-        for name in part_names[:200]
-    ]
+    parts = _step_part_payloads(products, relationships, materials)
+    if not parts:
+        parts = [
+            {
+                "tree_path": [name],
+                "name": name,
+                "comment": None,
+                "materials": [material for material in materials if material.upper() in name.upper()],
+            }
+            for name in part_names[:200]
+        ]
     if len(parts) == 1 and materials and not parts[0]["materials"]:
         parts[0]["materials"] = materials
 
@@ -172,6 +302,8 @@ def _extract_step_raw(*, text: str, path: Path) -> dict:
         },
         "parts": parts,
         "materials": materials,
+        "step_products": products[:500],
+        "step_assembly_relationships": relationships[:500],
         "step_string_literals": all_strings[:500],
     }
 
@@ -181,6 +313,8 @@ def _extract_dxf_raw(*, text: str) -> dict:
     texts: list[dict] = []
     dimensions: list[dict] = []
     primitives: list[dict] = []
+    block_references: list[dict] = []
+    layers: list[str] = []
     index = 0
     while index < len(pairs):
         code, value = pairs[index]
@@ -196,20 +330,41 @@ def _extract_dxf_raw(*, text: str) -> dict:
             text_item = _dxf_text_entity(entity_type, entity_pairs)
             if text_item:
                 texts.append(text_item)
+                if text_item.get("layer_name"):
+                    layers.append(text_item["layer_name"])
         elif entity_type == "DIMENSION":
             dimension = _dxf_dimension_entity(entity_pairs)
             if dimension:
                 dimensions.append(dimension)
+                if dimension.get("layer_name"):
+                    layers.append(dimension["layer_name"])
+        elif entity_type == "INSERT":
+            block_reference, insert_texts, next_index = _dxf_insert_entity(pairs, index, next_index)
+            if block_reference:
+                block_references.append(block_reference)
+                if block_reference.get("layer_name"):
+                    layers.append(block_reference["layer_name"])
+            texts.extend(insert_texts)
+            for text_item in insert_texts:
+                if text_item.get("layer_name"):
+                    layers.append(text_item["layer_name"])
         elif entity_type in {"LINE", "CIRCLE", "ARC", "ELLIPSE", "LWPOLYLINE", "POLYLINE", "SPLINE", "HATCH"}:
-            primitives.append(_dxf_geometry_entity(entity_type, entity_pairs))
+            primitive = _dxf_geometry_entity(entity_type, entity_pairs)
+            primitives.append(primitive)
+            if primitive.get("layer_name"):
+                layers.append(primitive["layer_name"])
         index = next_index
+    weld_notes = _dxf_note_candidates(texts, ("溶接", "すみ肉", "開先", "現場溶接", "WELD", "FILLET"))
+    tolerances = _dxf_note_candidates(texts, ("公差", "幾何公差", "±", "+/-", "TOL"))
     return {
         "texts": texts,
         "dimensions": dimensions,
         "geometry_primitives": primitives,
-        "weld_notes": [],
+        "block_references": block_references,
+        "layers": _unique_strings(layers),
+        "weld_notes": weld_notes,
         "balloons": [],
-        "tolerances": [],
+        "tolerances": tolerances,
     }
 
 
@@ -243,7 +398,7 @@ def _dxf_text_entity(entity_type: str, entity_pairs: list[tuple[str, str]]) -> d
     text_values = [value.strip() for code, value in entity_pairs if code in {"1", "3"} and value.strip()]
     if not text_values:
         return None
-    joined_text = " ".join(text_values).replace("\\P", " ").strip()
+    joined_text = _clean_dxf_text(" ".join(text_values))
     if not joined_text:
         return None
     return {
@@ -256,6 +411,87 @@ def _dxf_text_entity(entity_type: str, entity_pairs: list[tuple[str, str]]) -> d
         "position_y": _float_group(entity_pairs, "20"),
         "inside_print_area": True,
     }
+
+
+def _clean_dxf_text(value: str) -> str:
+    cleaned = value.replace("\\P", " ")
+    cleaned = re.sub(r"\\[A-Za-z][^;]*;", "", cleaned)
+    cleaned = cleaned.replace("{", "").replace("}", "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _dxf_insert_entity(
+    pairs: list[tuple[str, str]],
+    insert_index: int,
+    next_index: int,
+) -> tuple[dict | None, list[dict], int]:
+    insert_pairs = pairs[insert_index + 1 : next_index]
+    block_name = _first_group(insert_pairs, "2")
+    block_reference = {
+        "block_name": block_name,
+        "layer_name": _first_group(insert_pairs, "8"),
+        "position_x": _float_group(insert_pairs, "10"),
+        "position_y": _float_group(insert_pairs, "20"),
+        "scale_x": _float_group(insert_pairs, "41"),
+        "scale_y": _float_group(insert_pairs, "42"),
+        "rotation": _float_group(insert_pairs, "50"),
+        "attributes": [],
+    }
+    texts: list[dict] = []
+    index = next_index
+    while index < len(pairs):
+        code, value = pairs[index]
+        if code != "0":
+            index += 1
+            continue
+        entity_type = value.upper()
+        if entity_type == "SEQEND":
+            index += 1
+            break
+        if entity_type != "ATTRIB":
+            break
+        attr_next_index = index + 1
+        while attr_next_index < len(pairs) and pairs[attr_next_index][0] != "0":
+            attr_next_index += 1
+        attr_pairs = pairs[index + 1 : attr_next_index]
+        text_item = _dxf_text_entity("ATTRIB", attr_pairs)
+        tag_name = _first_group(attr_pairs, "2")
+        if text_item:
+            text_item["block_name"] = block_name
+            text_item["attribute_tag"] = tag_name
+            texts.append(text_item)
+            block_reference["attributes"].append(
+                {
+                    "tag": tag_name,
+                    "value": text_item["joined_text"],
+                    "layer_name": text_item.get("layer_name"),
+                    "position_x": text_item.get("position_x"),
+                    "position_y": text_item.get("position_y"),
+                }
+            )
+        index = attr_next_index
+    if not block_name and not block_reference["attributes"]:
+        return None, texts, index
+    return block_reference, texts, index
+
+
+def _dxf_note_candidates(texts: list[dict], keywords: tuple[str, ...]) -> list[dict]:
+    candidates: list[dict] = []
+    for text_item in texts:
+        value = text_item.get("joined_text") or ""
+        if not any(keyword.upper() in value.upper() for keyword in keywords):
+            continue
+        candidates.append(
+            {
+                "text": value,
+                "layer_name": text_item.get("layer_name"),
+                "position_x": text_item.get("position_x"),
+                "position_y": text_item.get("position_y"),
+                "inside_print_area": text_item.get("inside_print_area"),
+                "source": "dxf_text",
+            }
+        )
+    return candidates
 
 
 def _dxf_dimension_entity(entity_pairs: list[tuple[str, str]]) -> dict | None:

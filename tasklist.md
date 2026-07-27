@@ -7,6 +7,12 @@
 - [x] STEP/DXFファイルそのものから、STEPヘッダ/文字列/PRODUCT候補、DXF TEXT/MTEXT/寸法/基本図形を抽出し、既存の正規化・タグ生成へ流す
 - [x] 創屋向けに、STEP/DXFの抽出元、raw_extract例、タグ化対象/属性保持対象を `docs/cad_tag_extraction_sources_for_souya_2026-07-23.md` へ整理
 - [x] `backend\.venv` で `drawing_metadata` テスト137件と `manage.py check` を実行
+- [x] 2026-07-26: STEP抽出で `PRODUCT` と `NEXT_ASSEMBLY_USAGE_OCCURRENCE` の関係を `step_products` / `step_assembly_relationships` / 階層付き `parts` へ保持
+- [x] 2026-07-26: DXF抽出で `INSERT` + `ATTRIB` の図枠ブロック属性、レイヤー一覧、溶接/公差注記候補を保持
+- [x] 2026-07-26: ICADからDXF/STEPへ変換するC# runnerコマンド `convert-cad` とDjango側 wrapper `run_icad_converter` を追加
+- [x] 2026-07-26: `convert_icad_cad_formats` 管理コマンドを追加し、登録済みICADからDXF/STEP変換、変換後ファイル登録、任意の即時抽出まで実行可能にした
+- [x] 2026-07-26: C# runnerに `probe-cad-export-types` を追加し、SXNETの `SxOptExport` 定数確認と形式別 `--step-export-file-type` / `--dxf-export-file-type` 指定に対応
+- [x] 2026-07-26: 変換後STEP/DXFの追加rawをcanonicalへ保持し、`audit_converted_cad_extractions` でICAD本体との差分・重なりを確認可能にした
 
 ## 最終ゴール進行状況（2026-07-17 継続監査）
 
@@ -281,6 +287,8 @@
 - [x] 製品・装置・ユニット/部品一覧とシステム設定の読み込み遅延を改善。製品/部品一覧はraw 3Dパーツ全量ではなくcanonical要約で初期表示し、rawのみデータはフォールバック。登録一覧と引継ぎ集計は巨大raw JSONを読まないquerysetへ変更。システム設定は初期表示で設定APIのみ読み、ICAD抽出管理/API仕様はクリック時に遅延取得。実測で製品一覧20,058ms→1,676ms、部品一覧9,261ms→768ms、登録一覧9,596ms→281ms、引継ぎ14,797ms→906ms、設定API99ms→22ms
 - [x] 図面管理補助パネルと旧プロジェクト仮画面から `PRJ-OP30` / `OP30 カセット` / 架空担当者・日付などの固定サンプル表示を撤去。実bootstrapにあるタグ・属性候補だけ表示し、プロジェクトは本番受け口が確認できるまでタグ表示対象外として扱う。Playwrightで旧固定サンプル非表示を確認
 - [x] 2D/3Dビューワー統合フロントの production 側から固定サンプル系の命名を撤去し、実bootstrap由来の補助情報として `shared/knowledge/drawingKnowledge` / `DrawingKnowledgeDetail` / `buildDrawingKnowledgeDetail` へリネーム。実データ表示用モジュールであることをコード上も明確化
+- [x] ICADからDXF/STEPへ変換する前提で、STEPのPRODUCT/親子関係、DXFのINSERT+ATTRIB/レイヤーを抽出・canonical保持し、C# `convert-cad` / Django `convert_icad_cad_formats` / `audit_converted_cad_extractions` / `probe_icad_cad_export_types` で変換・抽出・一致度確認・SXNET export定数確認まで実行できるようにした
+- [x] 実ICAD `9NK452WX90-00-LINER-A3-3D-01.icd` で `probe_icad_cad_export_types`、ICAD→STEP(`.stp`)、ICAD→DXF、変換後STEP 3D抽出、変換後DXF 2D抽出、`audit_converted_cad_extractions` を確認。STEPはPRODUCT/親子関係、DXFはレイヤーを取得できたが、材質・質量はICAD正本と完全同等ではないことを監査結果に記録
 
 ## 創屋との接続時に確認する
 

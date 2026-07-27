@@ -1424,6 +1424,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
+        "step_product_names": [],
+        "step_products": [],
+        "step_assembly_relationships": [],
+        "step_assembly_relationship_count": 0,
         "part_ex_info_fields": {},
         "part_ex_info_tokens": [],
         "ref_model_names": [],
@@ -1439,6 +1443,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "unresolved_part_exists": False,
         "text_tokens": [],
         "label_texts": [],
+        "dxf_layers": [],
+        "dxf_block_references": [],
+        "dxf_block_attribute_count": 0,
+        "dxf_block_attribute_tokens": [],
         "raw_2d_sections": None,
         "title_block_fields": {},
         "title_block_candidates": [],
@@ -1531,6 +1539,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]
+        step_products = raw_extract.get("step_products", []) or []
+        step_assembly_relationships = raw_extract.get("step_assembly_relationships", []) or []
+        canonical["step_products"] = step_products
+        canonical["step_product_names"] = _flatten_strings(product.get("name") for product in step_products if isinstance(product, dict))
+        canonical["step_assembly_relationships"] = step_assembly_relationships
+        canonical["step_assembly_relationship_count"] = len(step_assembly_relationships)
         canonical["part_ex_info_fields"] = {
             ".".join(part.get("tree_path", []) or [part.get("name") or f"part_{index}"]): part.get("ex_info_fields", {})
             for index, part in enumerate(parts)
@@ -1599,6 +1613,18 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 *canonical["material_keywords"],
                 *canonical["unresolved_material_keywords"],
                 *canonical["part_names"],
+                *canonical["step_product_names"],
+                *_flatten_strings(
+                    value
+                    for relationship in step_assembly_relationships
+                    if isinstance(relationship, dict)
+                    for value in [
+                        relationship.get("parent_name"),
+                        relationship.get("child_name"),
+                        relationship.get("name"),
+                        relationship.get("description"),
+                    ]
+                ),
                 *canonical["part_comments"],
                 *canonical["part_ex_info_tokens"],
                 *canonical["ref_model_names"],
@@ -1612,6 +1638,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         weld_notes = raw_extract.get("weld_notes", [])
         balloons = raw_extract.get("balloons", [])
         tolerances = raw_extract.get("tolerances", [])
+        block_references = raw_extract.get("block_references", []) or []
         referenced_parts = raw_extract.get("referenced_parts", [])
         has_print_frames = _has_print_frames(raw_extract)
         trusted_texts = _trusted_print_area_items(texts, has_print_frames=has_print_frames)
@@ -1640,6 +1667,23 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             for text_line in _text_lines_from_payload(text)
         )
         canonical["label_texts"] = _flatten_strings(text.get("joined_text") for text in texts if text.get("source_type") == "label")
+        canonical["dxf_layers"] = _flatten_strings(raw_extract.get("layers", []) or [])
+        canonical["dxf_block_references"] = [
+            reference
+            for reference in block_references
+            if isinstance(reference, dict)
+        ]
+        canonical["dxf_block_attribute_count"] = sum(
+            len(reference.get("attributes") or [])
+            for reference in canonical["dxf_block_references"]
+        )
+        canonical["dxf_block_attribute_tokens"] = _flatten_strings(
+            value
+            for reference in canonical["dxf_block_references"]
+            for attribute in (reference.get("attributes") or [])
+            if isinstance(attribute, dict)
+            for value in [reference.get("block_name"), attribute.get("tag"), attribute.get("value")]
+        )
         canonical["dimension_values"] = _flatten_strings(
             value
             for dimension in dimensions
@@ -1772,6 +1816,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             source_path_tokens
             + model_info_tokens
             + trusted_text_tokens
+            + canonical["dxf_block_attribute_tokens"]
+            + canonical["dxf_layers"]
             + _flatten_strings(str(value) for value in canonical["title_block_fields"].values())
             + _flatten_strings(candidate.get("value") for candidate in canonical["revision_note_candidates"])
             + trusted_dimension_symbols

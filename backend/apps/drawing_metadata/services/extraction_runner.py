@@ -34,6 +34,19 @@ class BatchExtractionRunResult:
     error_message: str
 
 
+@dataclass(slots=True)
+class CadConversionRunResult:
+    payload: dict
+    output_path: Path
+    converted_file_path: Path | None
+
+
+@dataclass(slots=True)
+class CadExportTypeProbeRunResult:
+    payload: dict
+    output_path: Path
+
+
 def _decode_runner_output(output: bytes | str | None) -> str:
     if output is None:
         return ""
@@ -168,6 +181,100 @@ def build_batch_extractor_command(*, jobs_json_path: Path, result_json_path: Pat
     return command
 
 
+def build_icad_converter_command(
+    *,
+    drawing: RegisteredDrawing,
+    output_format: str,
+    output_dir: Path,
+    output_path: Path,
+    output_base_name: str | None = None,
+    export_file_type: int | None = None,
+    step_export_file_type: int | None = None,
+    dxf_export_file_type: int | None = None,
+) -> list[str]:
+    if not uses_sxnet_extractor(drawing.source_format):
+        raise ExtractionRunnerError(f"{drawing.source_format} はICAD変換コマンドの対象外です。")
+
+    executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
+    if not executable:
+        raise ExtractionRunnerError(
+            "DRAWING_METADATA_EXTRACTOR_EXECUTABLE が未設定です。ICADからDXF/STEPへの変換はWindows側のC# runnerで実行してください。"
+        )
+    command = [
+        executable,
+        "convert-cad",
+        "--input-path",
+        drawing.source_path,
+        "--output-path",
+        str(output_path),
+        "--output-dir",
+        str(output_dir),
+        "--output-format",
+        output_format,
+    ]
+    if settings.DRAWING_METADATA_SXNET_DLL_PATH:
+        command.extend(["--sxnet-dll-path", settings.DRAWING_METADATA_SXNET_DLL_PATH])
+    if settings.DRAWING_METADATA_ICAD_EXECUTABLE:
+        command.extend(["--icad-executable-path", settings.DRAWING_METADATA_ICAD_EXECUTABLE])
+        command.extend(["--icad-startup-wait-seconds", str(settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS)])
+        command.extend(
+            [
+                "--shutdown-icad-if-autostarted",
+                "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
+            ]
+        )
+    if _force_sxnet_staged_input(drawing, "2d" if output_format.lower().lstrip(".") == "dxf" else "3d"):
+        command.extend(["--force-sxnet-staged-input", "true"])
+    if output_base_name:
+        command.extend(["--output-base-name", output_base_name])
+    resolved_export_file_type = _resolve_cad_export_file_type(
+        output_format=output_format,
+        export_file_type=export_file_type,
+        step_export_file_type=step_export_file_type,
+        dxf_export_file_type=dxf_export_file_type,
+    )
+    if resolved_export_file_type is not None:
+        command.extend(["--export-file-type", str(resolved_export_file_type)])
+    return command
+
+
+def _resolve_cad_export_file_type(
+    *,
+    output_format: str,
+    export_file_type: int | None,
+    step_export_file_type: int | None,
+    dxf_export_file_type: int | None,
+) -> int | None:
+    normalized_format = output_format.lower().lstrip(".")
+    if normalized_format == "stp":
+        normalized_format = "step"
+    specific_value = None
+    if normalized_format == "step":
+        specific_value = step_export_file_type
+    elif normalized_format == "dxf":
+        specific_value = dxf_export_file_type
+    return specific_value if specific_value is not None else export_file_type
+
+
+def build_icad_export_type_probe_command(*, output_path: Path) -> list[str]:
+    executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
+    if not executable:
+        raise ExtractionRunnerError(
+            "DRAWING_METADATA_EXTRACTOR_EXECUTABLE が未設定です。SXNET export 定数の確認はWindows側のC# runnerで実行してください。"
+        )
+    sxnet_dll_path = settings.DRAWING_METADATA_SXNET_DLL_PATH
+    if not sxnet_dll_path:
+        raise ExtractionRunnerError("DRAWING_METADATA_SXNET_DLL_PATH が未設定です。")
+    return [
+        executable,
+        "probe-cad-export-types",
+        "--sxnet-dll-path",
+        sxnet_dll_path,
+        "--output-path",
+        str(output_path),
+    ]
+
+
 def _is_uploaded_icad_source(source_path: str) -> bool:
     upload_root = (settings.DRAWING_METADATA_STORAGE_ROOT / "uploads").resolve(strict=False)
     source = Path(source_path).resolve(strict=False)
@@ -233,6 +340,89 @@ def run_extractor(
         raise ExtractionRunnerError(f"抽出 JSON が生成されませんでした: {output_path}")
 
     return ExtractionRunResult(payload=json.loads(output_path.read_text(encoding="utf-8")), output_path=output_path)
+
+
+def run_icad_converter(
+    *,
+    drawing: RegisteredDrawing,
+    output_format: str,
+    output_dir: Path,
+    output_base_name: str | None = None,
+    export_file_type: int | None = None,
+    step_export_file_type: int | None = None,
+    dxf_export_file_type: int | None = None,
+    conversion_id=None,
+) -> CadConversionRunResult:
+    conversion_id = conversion_id or uuid.uuid4()
+    output_path = settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / f"{conversion_id}.json"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    command = build_icad_converter_command(
+        drawing=drawing,
+        output_format=output_format,
+        output_dir=output_dir,
+        output_path=output_path,
+        output_base_name=output_base_name,
+        export_file_type=export_file_type,
+        step_export_file_type=step_export_file_type,
+        dxf_export_file_type=dxf_export_file_type,
+    )
+    try:
+        completed = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            timeout=settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        if output_path.exists():
+            return _read_cad_conversion_result(output_path)
+        raise ExtractionRunnerError(
+            f"ICAD CAD conversion timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds: {exc.cmd}"
+        ) from exc
+    if completed.returncode != 0:
+        stderr = _decode_runner_output(completed.stderr).strip()
+        stdout = _decode_runner_output(completed.stdout).strip()
+        raise ExtractionRunnerError(stderr or stdout or f"ICAD CAD conversion failed with exit code {completed.returncode}")
+    if not output_path.exists():
+        raise ExtractionRunnerError(f"変換結果 JSON が生成されませんでした: {output_path}")
+
+    return _read_cad_conversion_result(output_path)
+
+
+def _read_cad_conversion_result(output_path: Path) -> CadConversionRunResult:
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    asset = payload.get("converted_asset") or {}
+    converted_file_path = Path(asset["file_path"]) if asset.get("file_path") else None
+    return CadConversionRunResult(payload=payload, output_path=output_path, converted_file_path=converted_file_path)
+
+
+def run_icad_export_type_probe(*, output_path: Path | None = None, probe_id=None) -> CadExportTypeProbeRunResult:
+    if output_path is None:
+        probe_id = probe_id or uuid.uuid4()
+        output_path = settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / f"export-type-probe-{probe_id}.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    command = build_icad_export_type_probe_command(output_path=output_path)
+    try:
+        completed = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            timeout=settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ExtractionRunnerError(
+            f"ICAD CAD export type probe timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds: {exc.cmd}"
+        ) from exc
+    if completed.returncode != 0:
+        stderr = _decode_runner_output(completed.stderr).strip()
+        stdout = _decode_runner_output(completed.stdout).strip()
+        raise ExtractionRunnerError(stderr or stdout or f"ICAD CAD export type probe failed with exit code {completed.returncode}")
+    if not output_path.exists():
+        raise ExtractionRunnerError(f"export type probe JSON が生成されませんでした: {output_path}")
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    return CadExportTypeProbeRunResult(payload=payload, output_path=output_path)
 
 
 def run_extractor_batch(jobs: Iterable[DrawingMetadataExtractionJob]) -> list[BatchExtractionRunResult]:

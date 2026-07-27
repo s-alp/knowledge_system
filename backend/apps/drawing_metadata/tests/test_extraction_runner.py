@@ -9,7 +9,11 @@ from apps.drawing_metadata.models import DrawingMetadataExtractionJob
 from apps.drawing_metadata.services.extraction_runner import (
     ExtractionRunnerError,
     build_extractor_command,
+    build_icad_export_type_probe_command,
+    build_icad_converter_command,
     _decode_runner_output,
+    run_icad_export_type_probe,
+    run_icad_converter,
     run_extractor,
     run_extractor_batch,
 )
@@ -123,6 +127,46 @@ END-ISO-10303-21;
 
 
 @pytest.mark.django_db
+def test_run_extractor_extracts_step_products_and_assembly_relationships(settings, tmp_path):
+    source_path = tmp_path / "assembly.step"
+    source_path.write_text(
+        """ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('assembly exported from ICAD'),'2;1');
+FILE_NAME('GANTRY_ASSY','2026-07-26',('設計'),('コマツ小山'),'preprocessor','system','');
+ENDSEC;
+DATA;
+#10=PRODUCT('GANTRY ASSY','ガントリー組立','',(#1));
+#11=PRODUCT_DEFINITION_FORMATION('','',#10);
+#12=PRODUCT_DEFINITION('design','',#11,#90);
+#20=PRODUCT('HAND PLATE SUS304','ハンドプレート','',(#1));
+#21=PRODUCT_DEFINITION_FORMATION('','',#20);
+#22=PRODUCT_DEFINITION('design','',#21,#90);
+#30=NEXT_ASSEMBLY_USAGE_OCCURRENCE('1','HAND PLATE OCC','',#12,#22,$);
+ENDSEC;
+END-ISO-10303-21;
+""",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-step-assembly",
+        filename="assembly.step",
+        source_path=str(source_path),
+        source_format="step",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    result = run_extractor(drawing=drawing, extraction_mode="3d", job_id="step-assembly-job")
+
+    raw_extract = result.payload["raw_extract"]
+    assert raw_extract["materials"] == ["SUS304"]
+    assert raw_extract["step_products"][0]["name"] == "GANTRY ASSY"
+    assert raw_extract["step_assembly_relationships"][0]["parent_name"] == "GANTRY ASSY"
+    assert raw_extract["step_assembly_relationships"][0]["child_name"] == "HAND PLATE SUS304"
+    assert any(part["tree_path"] == ["GANTRY ASSY", "HAND PLATE SUS304"] for part in raw_extract["parts"])
+
+
+@pytest.mark.django_db
 def test_run_extractor_extracts_dxf_text_metadata_without_sxnet(settings, tmp_path):
     source_path = tmp_path / "layout.dxf"
     source_path.write_text(
@@ -149,6 +193,45 @@ def test_run_extractor_extracts_dxf_text_metadata_without_sxnet(settings, tmp_pa
     assert result.payload["source_kind"] == "2d"
     assert [item["joined_text"] for item in texts] == ["材質 SS400", "PRFX RAA4844 SES"]
     assert result.payload["raw_extract"]["geometry_primitives"][0]["geometry_type"] == "DxfCircle"
+
+
+@pytest.mark.django_db
+def test_run_extractor_extracts_dxf_block_attributes_and_note_candidates(settings, tmp_path):
+    source_path = tmp_path / "title_block.dxf"
+    source_path.write_text(
+        "0\nSECTION\n2\nENTITIES\n"
+        "0\nINSERT\n8\nTITLE\n2\nTITLE_BLOCK\n10\n0.0\n20\n0.0\n"
+        "0\nATTRIB\n8\nTITLE\n2\nDWG_NO\n10\n1.0\n20\n2.0\n1\nC500-01\n"
+        "0\nATTRIB\n8\nTITLE\n2\nMATERIAL\n10\n1.0\n20\n3.0\n1\nSUS304\n"
+        "0\nSEQEND\n"
+        "0\nTEXT\n8\nNOTE\n10\n5.0\n20\n6.0\n1\nすみ肉溶接 6mm\n"
+        "0\nTEXT\n8\nTOL\n10\n7.0\n20\n8.0\n1\n公差 ±0.05\n"
+        "0\nENDSEC\n0\nEOF\n",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-dxf-block",
+        filename="title_block.dxf",
+        source_path=str(source_path),
+        source_format="dxf",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    result = run_extractor(drawing=drawing, extraction_mode="2d", job_id="dxf-block-job")
+
+    raw_extract = result.payload["raw_extract"]
+    assert raw_extract["block_references"][0]["block_name"] == "TITLE_BLOCK"
+    assert raw_extract["block_references"][0]["attributes"][0] == {
+        "tag": "DWG_NO",
+        "value": "C500-01",
+        "layer_name": "TITLE",
+        "position_x": 1.0,
+        "position_y": 2.0,
+    }
+    assert any(text["attribute_tag"] == "MATERIAL" and text["joined_text"] == "SUS304" for text in raw_extract["texts"])
+    assert raw_extract["layers"] == ["TITLE", "NOTE", "TOL"]
+    assert raw_extract["weld_notes"][0]["text"] == "すみ肉溶接 6mm"
+    assert raw_extract["tolerances"][0]["text"] == "公差 ±0.05"
 
 
 @pytest.mark.django_db
@@ -272,6 +355,207 @@ def test_build_extractor_command_uses_extraction_mode_icad_options_and_preview_a
     assert "--preview-file-name-prefix" in command
     assert "11111111-1111-1111-1111-111111111111" in command
     assert "--force-sxnet-staged-input" not in command
+
+
+@pytest.mark.django_db
+def test_build_icad_converter_command_uses_sxnet_runner_options(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-convert-command",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_ICAD_EXECUTABLE = r"C:\ICADSX\bin\icad.exe"
+    settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS = 8
+
+    command = build_icad_converter_command(
+        drawing=drawing,
+        output_format="step",
+        output_dir=Path(r"C:\temp\converted"),
+        output_path=Path(r"C:\temp\converted-result.json"),
+        output_base_name="sample-converted",
+        export_file_type=123,
+        step_export_file_type=456,
+    )
+
+    assert command[:2] == [r"C:\temp\runner.exe", "convert-cad"]
+    assert "--input-path" in command
+    assert r"C:\temp\sample.icd" in command
+    assert "--output-format" in command
+    assert "step" in command
+    assert "--output-base-name" in command
+    assert "sample-converted" in command
+    assert "--export-file-type" in command
+    assert "456" in command
+    assert "--sxnet-dll-path" in command
+    assert r"C:\ICADSX\bin\sxnet.dll" in command
+
+
+@pytest.mark.django_db
+def test_build_icad_converter_command_uses_dxf_specific_export_file_type(settings):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-convert-dxf-command",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+
+    command = build_icad_converter_command(
+        drawing=drawing,
+        output_format="dxf",
+        output_dir=Path(r"C:\temp\converted"),
+        output_path=Path(r"C:\temp\converted-result.json"),
+        export_file_type=123,
+        step_export_file_type=456,
+        dxf_export_file_type=789,
+    )
+
+    assert "--output-format" in command
+    assert "dxf" in command
+    assert "--export-file-type" in command
+    assert command[command.index("--export-file-type") + 1] == "789"
+
+
+@pytest.mark.django_db
+def test_run_icad_converter_invokes_runner_and_reads_result(monkeypatch, settings, tmp_path):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-convert",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 3
+
+    def fake_run(command, **kwargs):
+        assert command[1] == "convert-cad"
+        output_path = Path(command[command.index("--output-path") + 1])
+        output_dir = Path(command[command.index("--output-dir") + 1])
+        converted_path = output_dir / "sample.step"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        converted_path.write_text("ISO-10303-21;", encoding="utf-8")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(
+                {
+                    "converted_asset": {
+                        "file_path": str(converted_path),
+                        "status": "ready",
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(args=command, returncode=0, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = run_icad_converter(
+        drawing=drawing,
+        output_format="step",
+        output_dir=tmp_path / "converted",
+        conversion_id="convert-job",
+    )
+
+    assert result.output_path.exists()
+    assert result.converted_file_path == tmp_path / "converted" / "sample.step"
+
+
+@pytest.mark.django_db
+def test_run_icad_converter_accepts_completed_output_after_timeout(monkeypatch, settings, tmp_path):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-convert-timeout",
+        filename="sample.icd",
+        source_path=r"C:\temp\sample.icd",
+        source_format="icad",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 3
+
+    def raise_timeout_after_writing_result(command, **kwargs):
+        output_path = Path(command[command.index("--output-path") + 1])
+        output_dir = Path(command[command.index("--output-dir") + 1])
+        converted_path = output_dir / "sample.dxf"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        converted_path.write_text("0\nEOF\n", encoding="utf-8")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps({"converted_asset": {"file_path": str(converted_path), "status": "ready"}}),
+            encoding="utf-8",
+        )
+        raise subprocess.TimeoutExpired(cmd=command, timeout=3)
+
+    monkeypatch.setattr(subprocess, "run", raise_timeout_after_writing_result)
+
+    result = run_icad_converter(
+        drawing=drawing,
+        output_format="dxf",
+        output_dir=tmp_path / "converted",
+        conversion_id="convert-timeout-job",
+    )
+
+    assert result.converted_file_path == tmp_path / "converted" / "sample.dxf"
+
+
+def test_build_icad_export_type_probe_command(settings):
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+
+    command = build_icad_export_type_probe_command(output_path=Path(r"C:\temp\sxopt-export-probe.json"))
+
+    assert command == [
+        r"C:\temp\runner.exe",
+        "probe-cad-export-types",
+        "--sxnet-dll-path",
+        r"C:\ICADSX\bin\sxnet.dll",
+        "--output-path",
+        r"C:\temp\sxopt-export-probe.json",
+    ]
+
+
+def test_run_icad_export_type_probe_invokes_runner_and_reads_result(monkeypatch, settings, tmp_path):
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+    settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE = r"C:\temp\runner.exe"
+    settings.DRAWING_METADATA_SXNET_DLL_PATH = r"C:\ICADSX\bin\sxnet.dll"
+    settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS = 3
+
+    def fake_run(command, **kwargs):
+        assert command[1] == "probe-cad-export-types"
+        output_path = Path(command[command.index("--output-path") + 1])
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(
+                {
+                    "expected_formats": {
+                        "step": {
+                            "matched_fields": {"FILE_TYPE_STEP": 10},
+                            "requires_export_file_type_override": False,
+                        },
+                        "dxf": {
+                            "matched_fields": {},
+                            "requires_export_file_type_override": True,
+                        },
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(args=command, returncode=0, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = run_icad_export_type_probe(probe_id="probe-job")
+
+    assert result.output_path == settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / "export-type-probe-probe-job.json"
+    assert result.payload["expected_formats"]["step"]["matched_fields"] == {"FILE_TYPE_STEP": 10}
 
 
 @pytest.mark.django_db
