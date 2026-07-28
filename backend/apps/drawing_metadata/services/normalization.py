@@ -876,6 +876,7 @@ def _build_2d_sections(
 
 
 def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool = False) -> list[dict]:
+    # 座標は候補レビュー用の証跡として保持するが、客先ごとの差が大きいため別文字要素間の近傍結合には使わない。
     candidates: list[dict] = []
     seen: set[tuple[str, str, str | None, float | None, float | None]] = set()
 

@@ -428,13 +428,13 @@ def build_souya_deck() -> Path:
     add_table_slide(
         prs,
         "ICAD 2D の抽出元",
-        "図枠は固定フィールドではなく、文字・注記・座標から候補化する",
+        "図枠は文字・注記から候補化し、座標はレビュー証跡として保持する",
         ["抽出元", "raw_extract", "正規化先（canonical）"],
         [
             ["ビューシート名・尺度・種別", "view_sheets[]", "model_view_sheet_count, scale_candidates"],
             ["出図範囲枠・用紙サイズ", "print_frames[]", "paper_size, 印刷枠内外判定"],
             ["文字・注記", "texts[]", "text_tokens, label_texts"],
-            ["図枠のラベルと値", "texts[]（座標・並びから判定）", "title_block_candidates → title_block_fields"],
+            ["図枠のラベルと値", "texts[]（同一要素の同じ行／次行）", "title_block_candidates → title_block_fields"],
             ["寸法", "dimensions[]", "dimension_values, dimension_symbols"],
             ["公差・幾何公差", "tolerances[]", "tolerance_candidates"],
             ["溶接記号・注記", "weld_notes[]", "weld_note_candidates"],
@@ -833,7 +833,7 @@ def build_souya_deck() -> Path:
         [
             ["抽出", "1. STEPから製品名・部品名・部品階層・材質・質量特性を取得できるライブラリ／APIを、創屋様側でお持ちか"],
             ["抽出", "2. DXFからTEXT/MTEXT、ブロック属性、レイヤー名、寸法、公差、溶接記号を分離取得できるか"],
-            ["抽出", "3. 図枠のラベルと値が別要素の場合、座標ペアリングまで抽出器側で行うか、候補としてこちらへ渡すか"],
+            ["抽出", "3. 図枠のラベルと値を同一TEXT/MTEXT要素またはDXFブロック属性として取得できるか（別要素の座標ペアリングは対象外）"],
             ["抽出", "4. 材質が色・レイヤー・ブロック名にしか入っていないケースがあるか"],
             ["抽出", "5. 抽出値に推測を混ぜず、取得元フィールドと信頼度を添えて返せるか"],
             ["受け渡し", "6. Django非依存の純Pythonパッケージ形での納品でよいか。それとも現状のDjango app のまま渡す方が組み込みやすいか"],

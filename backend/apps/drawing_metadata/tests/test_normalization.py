@@ -368,6 +368,42 @@ def test_title_block_fields_reject_reference_and_calculation_false_positives():
     assert all("吸引力" not in str(candidate.get("value")) for candidate in canonical["title_block_candidates"])
 
 
+def test_title_block_fields_do_not_pair_separate_text_elements_by_coordinates():
+    payload = {
+        "source_format": "icad",
+        "source_kind": "2d",
+        "source_file": {},
+        "raw_extract": {
+            "texts": [
+                {
+                    "text_lines": ["材質"],
+                    "inside_print_area": True,
+                    "position_x": 10.0,
+                    "position_y": 20.0,
+                },
+                {
+                    "text_lines": ["SUS304"],
+                    "inside_print_area": True,
+                    "position_x": 11.0,
+                    "position_y": 20.0,
+                },
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert "material" not in canonical["title_block_fields"]
+    material_candidate = next(
+        candidate
+        for candidate in canonical["title_block_candidates"]
+        if candidate["field"] == "material"
+    )
+    assert material_candidate["value"] is None
+    assert material_candidate["position_x"] == 10.0
+    assert material_candidate["position_y"] == 20.0
+
+
 def test_title_block_drawing_number_strips_filename_noise_and_paper_size():
     payload = {
         "source_kind": "2d",

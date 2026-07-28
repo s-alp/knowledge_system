@@ -68,7 +68,7 @@
 | ビューシート名・尺度・種別 | `SxModel.getGlobalVS()`, `SxInfVS` | `view_sheets[]` | `model_view_sheet_count`, `scale_candidates` |
 | 出図範囲枠・用紙サイズ | `SxInfPrint` | `print_frames[]` | `paper_size`, 印刷枠内外判定 |
 | 文字・注記 | 文字要素 | `texts[]` | `text_tokens`, `label_texts` |
-| 図枠のラベルと値 | 文字要素の座標・並びから判定 | `texts[]` | `title_block_candidates` → `title_block_fields` |
+| 図枠のラベルと値 | 同一文字要素の同じ行／次行で判定（座標は証跡のみ） | `texts[]` | `title_block_candidates` → `title_block_fields` |
 | 寸法 | 寸法要素 | `dimensions[]` | `dimension_values`, `dimension_symbols` |
 | 公差・幾何公差 | 公差要素 | `tolerances[]` | `tolerance_candidates` |
 | 溶接記号・注記 | 溶接要素 | `weld_notes[]` | `weld_note_candidates` |
@@ -77,6 +77,8 @@
 | 切断線・矢視・ハッチング | 図形要素 | `geometry_primitives[]` | `curve_section_candidates`, `cut_line_count`, `hatch_or_section_count` |
 | 穴・長穴候補 | 図形要素 | `geometry_primitives[]` | `hole_candidate_count`, `slot_candidate_count` |
 | レイヤー | レイヤー情報 | `layers[]` | 判定の補助 |
+
+別文字要素間の汎用的な座標ペアリングは行いません。客先・図枠ごとの差による誤対応を避けるため、座標は表示・候補レビュー・監査証跡として保持し、自動属性確定には使用しません。
 
 **重要**: 図番・図面名・担当者・承認者・日付・材質・重量・表面処理・塗装指示・PRFX・ユニット番号は、SXNETの固定フィールドとしては存在しません。文字・注記・図枠解析で抽出する対象です。会社ごとの図枠差が大きいため、`title_block_fields` は固定列ではなく key-value 候補として持ち、採用条件を通ったものだけを確定値に上げます。
 
@@ -418,7 +420,7 @@
 
 1. STEPから製品名・部品名・部品階層・材質・質量特性を取得できるライブラリ／APIを、創屋様側でお持ちか。
 2. DXFからTEXT/MTEXT、ブロック属性、レイヤー名、寸法、公差、溶接記号を分離取得できるか。
-3. 図枠のラベルと値が別要素の場合、座標ペアリングまで抽出器側で行うか、候補としてこちらへ渡すか。
+3. 図枠のラベルと値を、可能な限り同一TEXT/MTEXT要素またはDXFブロック属性として取得できるか。別要素間の座標ペアリングは対象外とする。
 4. 材質が色・レイヤー・ブロック名にしか入っていないケースがあるか。
 5. 抽出値に推測を混ぜず、取得元フィールドと信頼度を添えて返せるか。
 
