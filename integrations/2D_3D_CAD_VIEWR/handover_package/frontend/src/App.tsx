@@ -353,7 +353,7 @@ export default function App() {
 
           <div className="sidebar-user">
             <span className="sidebar-link-marker" aria-hidden="true" />
-            <span>創屋　太郎</span>
+            <span>アルパイン設計</span>
           </div>
         </aside>
 
