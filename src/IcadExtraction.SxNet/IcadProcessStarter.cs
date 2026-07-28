@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,8 @@ namespace IcadExtraction.SxNet
 
             public WarningPayload? StartupWarning { get; }
 
+            public bool WasAutostarted => _startedProcess != null;
+
             public void Dispose()
             {
                 try
@@ -51,7 +54,7 @@ namespace IcadExtraction.SxNet
                             return;
                         }
 
-                        if (!IcadWindowCloser.TryCloseWithoutSaving(_startedProcess, TimeSpan.FromSeconds(15)))
+                        if (!TryCloseProcessWithoutSavingAndWaitForExit(_startedProcess, 15))
                         {
                             Console.Error.WriteLine(
                                 "ICADの安全な自動終了を完了できなかったため、強制終了せず起動状態を維持しました。"
@@ -209,19 +212,47 @@ namespace IcadExtraction.SxNet
 
         public static bool TryCloseRunningWithoutSaving(int timeoutSeconds = 15)
         {
+            var normalizedTimeoutSeconds = Math.Max(1, timeoutSeconds);
+            var deadline = DateTime.UtcNow.AddSeconds(normalizedTimeoutSeconds);
             var runningProcess = FindRunningProcess();
             if (runningProcess == null)
             {
-                return true;
+                return WaitForAllCandidateProcessesToExit(deadline);
             }
 
             using (runningProcess)
             {
-                return IcadWindowCloser.TryCloseWithoutSaving(
+                return TryCloseProcessWithoutSavingAndWaitForExit(
                     runningProcess,
-                    TimeSpan.FromSeconds(Math.Max(1, timeoutSeconds))
+                    normalizedTimeoutSeconds
                 );
             }
+        }
+
+        private static bool TryCloseProcessWithoutSavingAndWaitForExit(Process process, int timeoutSeconds)
+        {
+            var deadline = DateTime.UtcNow.AddSeconds(Math.Max(1, timeoutSeconds));
+            if (!IcadWindowCloser.TryCloseWithoutSaving(process, TimeSpan.FromSeconds(Math.Max(1, timeoutSeconds))))
+            {
+                return false;
+            }
+
+            return WaitForAllCandidateProcessesToExit(deadline);
+        }
+
+        private static bool WaitForAllCandidateProcessesToExit(DateTime deadline)
+        {
+            while (DateTime.UtcNow < deadline)
+            {
+                if (!IsRunning())
+                {
+                    return true;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            return !IsRunning();
         }
 
         private static Process? FindRunningProcess()
@@ -230,10 +261,21 @@ namespace IcadExtraction.SxNet
             {
                 foreach (var process in Process.GetProcessesByName(processName))
                 {
-                    process.Refresh();
-                    if (!process.HasExited && process.MainWindowHandle != IntPtr.Zero)
+                    try
                     {
-                        return process;
+                        process.Refresh();
+                        if (!process.HasExited && process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            return process;
+                        }
+                    }
+                    catch (Win32Exception)
+                    {
+                        // 保護された補助プロセスは操作せず、同名のメインウィンドウを持つプロセスを探す。
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // 列挙後に終了したプロセスは対象外。
                     }
 
                     process.Dispose();

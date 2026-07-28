@@ -60,6 +60,57 @@ def _decode_runner_output(output: bytes | str | None) -> str:
     return output.decode("utf-8", errors="replace")
 
 
+def icad_was_autostarted(payload: dict | None) -> bool:
+    if not payload:
+        return False
+    if payload.get("icad_autostarted") is True:
+        return True
+    return any(
+        isinstance(warning, dict) and warning.get("code") == "icad_autostarted"
+        for warning in (payload.get("warnings") or [])
+    )
+
+
+def shutdown_icad_without_saving(*, timeout_seconds: int = 30) -> None:
+    executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
+    if not executable:
+        raise ExtractionRunnerError(
+            "DRAWING_METADATA_EXTRACTOR_EXECUTABLE が未設定のため、ICADを保存せず終了できません。"
+        )
+    command = [executable, "shutdown-icad", "--timeout-seconds", str(max(timeout_seconds, 1))]
+    try:
+        completed = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            timeout=max(timeout_seconds, 1) + 15,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ExtractionRunnerError(
+            f"ICADの保存なし終了が{max(timeout_seconds, 1)}秒以内に完了しませんでした: {exc.cmd}"
+        ) from exc
+    if completed.returncode != 0:
+        stderr = _decode_runner_output(completed.stderr).strip()
+        stdout = _decode_runner_output(completed.stdout).strip()
+        raise ExtractionRunnerError(
+            stderr or stdout or f"ICADの保存なし終了に失敗しました: exit code {completed.returncode}"
+        )
+
+
+def _load_json_if_available(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _shutdown_autostarted_icad_from_result(path: Path) -> None:
+    if icad_was_autostarted(_load_json_if_available(path)):
+        shutdown_icad_without_saving()
+
+
 def build_extractor_command(
     *,
     drawing: RegisteredDrawing,
@@ -191,6 +242,7 @@ def build_icad_converter_command(
     export_file_type: int | None = None,
     step_export_file_type: int | None = None,
     dxf_export_file_type: int | None = None,
+    shutdown_icad_if_autostarted: bool | None = None,
 ) -> list[str]:
     if not uses_sxnet_extractor(drawing.source_format):
         raise ExtractionRunnerError(f"{drawing.source_format} はICAD変換コマンドの対象外です。")
@@ -217,12 +269,12 @@ def build_icad_converter_command(
     if settings.DRAWING_METADATA_ICAD_EXECUTABLE:
         command.extend(["--icad-executable-path", settings.DRAWING_METADATA_ICAD_EXECUTABLE])
         command.extend(["--icad-startup-wait-seconds", str(settings.DRAWING_METADATA_ICAD_STARTUP_WAIT_SECONDS)])
-        command.extend(
-            [
-                "--shutdown-icad-if-autostarted",
-                "true" if settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED else "false",
-            ]
-        )
+    should_shutdown = (
+        settings.DRAWING_METADATA_ICAD_SHUTDOWN_IF_AUTOSTARTED
+        if shutdown_icad_if_autostarted is None
+        else shutdown_icad_if_autostarted
+    )
+    command.extend(["--shutdown-icad-if-autostarted", "true" if should_shutdown else "false"])
     if _force_sxnet_staged_input(drawing, "2d" if output_format.lower().lstrip(".") == "dxf" else "3d"):
         command.extend(["--force-sxnet-staged-input", "true"])
     if output_base_name:
@@ -328,6 +380,13 @@ def run_extractor(
             timeout=settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired as exc:
+        try:
+            _shutdown_autostarted_icad_from_result(output_path)
+        except ExtractionRunnerError as shutdown_error:
+            raise ExtractionRunnerError(
+                f"extractor timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds"
+                f" and ICAD cleanup failed: {shutdown_error}"
+            ) from shutdown_error
         raise ExtractionRunnerError(
             f"extractor timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds: {exc.cmd}"
         ) from exc
@@ -352,6 +411,7 @@ def run_icad_converter(
     step_export_file_type: int | None = None,
     dxf_export_file_type: int | None = None,
     conversion_id=None,
+    shutdown_icad_if_autostarted: bool | None = None,
 ) -> CadConversionRunResult:
     conversion_id = conversion_id or uuid.uuid4()
     output_path = settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / f"{conversion_id}.json"
@@ -366,6 +426,7 @@ def run_icad_converter(
         export_file_type=export_file_type,
         step_export_file_type=step_export_file_type,
         dxf_export_file_type=dxf_export_file_type,
+        shutdown_icad_if_autostarted=shutdown_icad_if_autostarted,
     )
     try:
         completed = subprocess.run(
@@ -376,11 +437,18 @@ def run_icad_converter(
         )
     except subprocess.TimeoutExpired as exc:
         if output_path.exists():
-            return _read_cad_conversion_result(output_path)
+            result = _read_cad_conversion_result(output_path)
+            if icad_was_autostarted(result.payload):
+                shutdown_icad_without_saving()
+            if result.converted_file_path is not None:
+                return result
         raise ExtractionRunnerError(
             f"ICAD CAD conversion timed out after {settings.DRAWING_METADATA_EXTRACTOR_TIMEOUT_SECONDS} seconds: {exc.cmd}"
         ) from exc
     if completed.returncode != 0:
+        partial_payload = _load_json_if_available(output_path)
+        if icad_was_autostarted(partial_payload):
+            shutdown_icad_without_saving()
         stderr = _decode_runner_output(completed.stderr).strip()
         stdout = _decode_runner_output(completed.stdout).strip()
         raise ExtractionRunnerError(stderr or stdout or f"ICAD CAD conversion failed with exit code {completed.returncode}")
@@ -473,9 +541,17 @@ def run_extractor_batch(jobs: Iterable[DrawingMetadataExtractionJob]) -> list[Ba
             timeout=timeout_seconds,
         )
     except subprocess.TimeoutExpired as exc:
+        try:
+            _shutdown_autostarted_icad_from_result(result_json_path)
+        except ExtractionRunnerError as shutdown_error:
+            raise ExtractionRunnerError(
+                f"extractor batch timed out after {timeout_seconds} seconds"
+                f" and ICAD cleanup failed: {shutdown_error}"
+            ) from shutdown_error
         raise ExtractionRunnerError(f"extractor batch timed out after {timeout_seconds} seconds: {exc.cmd}") from exc
 
-    if completed.returncode != 0 and not result_json_path.exists():
+    batch_payload = _load_json_if_available(result_json_path)
+    if completed.returncode != 0 and not batch_payload.get("completed"):
         stderr = _decode_runner_output(completed.stderr).strip()
         stdout = _decode_runner_output(completed.stdout).strip()
         raise ExtractionRunnerError(stderr or stdout or f"extractor batch failed with exit code {completed.returncode}")
@@ -483,7 +559,7 @@ def run_extractor_batch(jobs: Iterable[DrawingMetadataExtractionJob]) -> list[Ba
     if not result_json_path.exists():
         raise ExtractionRunnerError(f"一括抽出の結果 JSON が生成されませんでした: {result_json_path}")
 
-    raw_results = json.loads(result_json_path.read_text(encoding="utf-8")).get("results") or []
+    raw_results = batch_payload.get("results") or []
     results_by_job_id = {str(item.get("job_id") or ""): item for item in raw_results}
     batch_results: list[BatchExtractionRunResult] = []
     for job in job_list:

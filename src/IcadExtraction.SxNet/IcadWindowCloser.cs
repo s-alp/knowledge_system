@@ -44,7 +44,7 @@ namespace IcadExtraction.SxNet
 
                     var childWindows = FindChildWindows(dialog);
                     var message = string.Join("\n", childWindows.ConvertAll(GetWindowTextValue));
-                    if (!message.Contains("保存しますか"))
+                    if (!IsSaveConfirmationMessage(message))
                     {
                         continue;
                     }
@@ -52,7 +52,7 @@ namespace IcadExtraction.SxNet
                     var noButton = childWindows.Find(
                         window =>
                             GetClassNameText(window) == "Button"
-                            && GetWindowTextValue(window).StartsWith("いいえ", StringComparison.Ordinal)
+                            && IsDiscardButtonText(GetWindowTextValue(window))
                     );
                     if (noButton != IntPtr.Zero)
                     {
@@ -65,6 +65,31 @@ namespace IcadExtraction.SxNet
 
             process.Refresh();
             return process.HasExited;
+        }
+
+        internal static bool IsSaveConfirmationMessage(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return false;
+            }
+
+            return message.IndexOf("保存しますか", StringComparison.Ordinal) >= 0
+                || message.IndexOf("変更を保存", StringComparison.Ordinal) >= 0
+                || message.IndexOf("保存して終了", StringComparison.Ordinal) >= 0;
+        }
+
+        internal static bool IsDiscardButtonText(string buttonText)
+        {
+            if (string.IsNullOrWhiteSpace(buttonText))
+            {
+                return false;
+            }
+
+            return buttonText.StartsWith("いいえ", StringComparison.Ordinal)
+                || buttonText.StartsWith("保存しない", StringComparison.Ordinal)
+                || buttonText.StartsWith("破棄", StringComparison.Ordinal)
+                || buttonText.StartsWith("No", StringComparison.OrdinalIgnoreCase);
         }
 
         private static List<IntPtr> FindTopLevelWindows(int processId)

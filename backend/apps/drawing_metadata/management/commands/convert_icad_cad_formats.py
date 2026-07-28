@@ -6,7 +6,12 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.drawing_metadata.models import RegisteredDrawing
-from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_icad_converter
+from apps.drawing_metadata.services.extraction_runner import (
+    ExtractionRunnerError,
+    icad_was_autostarted,
+    run_icad_converter,
+    shutdown_icad_without_saving,
+)
 from apps.drawing_metadata.services.reextract_planner import enqueue_missing_or_partial_reextract_jobs
 from apps.drawing_metadata.services.source_formats import source_format_from_path
 from apps.drawing_metadata.tasks.extraction_tasks import process_job
@@ -66,59 +71,79 @@ class Command(BaseCommand):
         converted = 0
         registered = 0
         extracted = 0
-        for drawing_id in drawing_ids:
-            drawing = drawings_by_id[drawing_id]
-            if (drawing.source_format or "").lower() != "icad":
-                raise CommandError(f"ICAD以外は変換対象外です: {drawing.id} {drawing.source_format}")
+        icad_autostarted_for_processing = False
+        processing_error: BaseException | None = None
+        try:
+            for drawing_id in drawing_ids:
+                drawing = drawings_by_id[drawing_id]
+                if (drawing.source_format or "").lower() != "icad":
+                    raise CommandError(f"ICAD以外は変換対象外です: {drawing.id} {drawing.source_format}")
 
-            for output_format in formats:
-                output_dir = output_root / str(drawing.id) / output_format
-                output_base_name = Path(drawing.filename).stem
-                try:
-                    result = run_icad_converter(
-                        drawing=drawing,
-                        output_format=output_format,
-                        output_dir=output_dir,
-                        output_base_name=output_base_name,
-                        export_file_type=options["export_file_type"],
-                        step_export_file_type=options["step_export_file_type"],
-                        dxf_export_file_type=options["dxf_export_file_type"],
+                for output_format in formats:
+                    output_dir = output_root / str(drawing.id) / output_format
+                    output_base_name = Path(drawing.filename).stem
+                    try:
+                        result = run_icad_converter(
+                            drawing=drawing,
+                            output_format=output_format,
+                            output_dir=output_dir,
+                            output_base_name=output_base_name,
+                            export_file_type=options["export_file_type"],
+                            step_export_file_type=options["step_export_file_type"],
+                            dxf_export_file_type=options["dxf_export_file_type"],
+                            shutdown_icad_if_autostarted=False,
+                        )
+                    except (ExtractionRunnerError, FileNotFoundError, ValueError) as exc:
+                        raise CommandError(str(exc)) from exc
+
+                    icad_autostarted_for_processing = (
+                        icad_autostarted_for_processing or icad_was_autostarted(result.payload)
                     )
-                except (ExtractionRunnerError, FileNotFoundError, ValueError) as exc:
-                    raise CommandError(str(exc)) from exc
+                    converted_path = result.converted_file_path
+                    if converted_path is None:
+                        raise CommandError(f"変換結果に file_path が含まれていません: {result.output_path}")
+                    converted += 1
+                    self.stdout.write(f"CONVERTED {output_format}: {drawing.filename} -> {converted_path}")
 
-                converted_path = result.converted_file_path
-                if converted_path is None:
-                    raise CommandError(f"変換結果に file_path が含まれていません: {result.output_path}")
-                converted += 1
-                self.stdout.write(f"CONVERTED {output_format}: {drawing.filename} -> {converted_path}")
+                    converted_drawing = _upsert_converted_drawing(
+                        source_drawing=drawing,
+                        converted_path=converted_path,
+                        output_format=output_format,
+                    )
+                    registered += 1
 
-                converted_drawing = _upsert_converted_drawing(
-                    source_drawing=drawing,
-                    converted_path=converted_path,
-                    output_format=output_format,
-                )
-                registered += 1
+                    if not options["extract"]:
+                        continue
 
-                if not options["extract"]:
-                    continue
-
-                jobs = enqueue_missing_or_partial_reextract_jobs(
-                    drawing=converted_drawing,
-                    executed_by=options["executed_by"],
-                    reason=f"converted from ICAD drawing {drawing.id}",
-                )
-                for job in jobs:
-                    completed = process_job(job.id)
-                    if completed.status == completed.STATUS_SUCCEEDED:
-                        extracted += 1
-                        self.stdout.write(
-                            f"EXTRACTED {completed.extraction_mode}: {converted_drawing.filename} {completed.id}"
-                        )
+                    jobs = enqueue_missing_or_partial_reextract_jobs(
+                        drawing=converted_drawing,
+                        executed_by=options["executed_by"],
+                        reason=f"converted from ICAD drawing {drawing.id}",
+                    )
+                    for job in jobs:
+                        completed = process_job(job.id)
+                        if completed.status == completed.STATUS_SUCCEEDED:
+                            extracted += 1
+                            self.stdout.write(
+                                f"EXTRACTED {completed.extraction_mode}: {converted_drawing.filename} {completed.id}"
+                            )
+                        else:
+                            raise CommandError(
+                                f"変換後ファイルの抽出に失敗しました: "
+                                f"{converted_drawing.filename} {completed.error_message}"
+                            )
+        except BaseException as exc:
+            processing_error = exc
+            raise
+        finally:
+            if icad_autostarted_for_processing:
+                try:
+                    shutdown_icad_without_saving()
+                except ExtractionRunnerError as shutdown_error:
+                    if processing_error is not None:
+                        processing_error.add_note(f"ICADの保存なし終了にも失敗しました: {shutdown_error}")
                     else:
-                        raise CommandError(
-                            f"変換後ファイルの抽出に失敗しました: {converted_drawing.filename} {completed.error_message}"
-                        )
+                        raise CommandError(str(shutdown_error)) from shutdown_error
 
         self.stdout.write(
             self.style.SUCCESS(

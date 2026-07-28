@@ -108,6 +108,12 @@ namespace IcadExtraction.Runner
 
         private sealed class BatchExtractResult
         {
+            [JsonProperty("icad_autostarted")]
+            public bool IcadAutostarted { get; set; }
+
+            [JsonProperty("completed")]
+            public bool Completed { get; set; }
+
             [JsonProperty("results")]
             public List<BatchExtractItemResult> Results { get; set; } = new List<BatchExtractItemResult>();
         }
@@ -178,6 +184,9 @@ namespace IcadExtraction.Runner
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
+            result.IcadAutostarted = icadLease.WasAutostarted;
+            result.Completed = false;
+            WriteJsonFile(resultJsonPath, result);
             var sxnetAssembly = new SxNetRuntimeGuard().LoadAndValidateAssembly(sxnetDllPath);
 
             foreach (var job in request.Jobs)
@@ -215,6 +224,7 @@ namespace IcadExtraction.Runner
                 }
             }
 
+            result.Completed = true;
             WriteJsonFile(resultJsonPath, result);
             return 0;
         }
@@ -394,6 +404,17 @@ namespace IcadExtraction.Runner
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
+            WriteJsonFile(
+                outputPath,
+                new
+                {
+                    input_path = sxNetInputFile.OriginalPath,
+                    source_format = "icad",
+                    output_format = IcadCadFormatExporter.ResolveFormat(outputFormat).OutputFormat,
+                    icad_autostarted = icadLease.WasAutostarted,
+                    completed = false,
+                }
+            );
             using var context = SxNetOpenContext.OpenReadOnly(sxnetDllPath, sxNetInputFile.SxNetInputPath);
             var warnings = new List<WarningPayload>();
             if (icadLease.StartupWarning != null)
@@ -419,6 +440,8 @@ namespace IcadExtraction.Runner
                 extractor_name = "icad-sxnet-cad-converter",
                 extractor_version = SchemaVersions.SchemaVersion,
                 elapsed_ms = stopwatch.ElapsedMilliseconds,
+                icad_autostarted = icadLease.WasAutostarted,
+                completed = true,
                 warnings,
                 converted_asset = asset,
             };
