@@ -151,3 +151,69 @@ def test_compose_drawing_metadata_records_manual_override_reconciliation():
     assert payload["canonicalAttributes"]["material"] == "SUS316"
     assert reconciled_by_attribute["material"]["status"] == "manual_override"
     assert reconciled_by_attribute["material"]["chosenMode"] == "manual_2d"
+
+
+@pytest.mark.django_db
+def test_compose_drawing_metadata_preserves_2d_feature_tags_when_3d_counts_are_zero():
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-compose-feature-tags",
+        filename="feature-tags.icd",
+        source_path=r"C:\temp\feature-tags.icd",
+        source_format="icad",
+    )
+    job_2d = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_SUCCEEDED,
+    )
+    job_3d = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        status=DrawingMetadataExtractionJob.STATUS_SUCCEEDED,
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        latest_job=job_2d,
+        canonical_attributes_json={
+            "dimension_count": 4,
+            "dimension_tolerance_count": 2,
+            "geometric_tolerance_count": 1,
+            "weld_instruction_count": 2,
+            "weld_types": ["すみ肉", "全周"],
+            "hardness_spec_values": ["HRC58-62", "HV500"],
+        },
+        derived_tags_json=[],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        latest_job=job_3d,
+        canonical_attributes_json={
+            "dimension_count": 0,
+            "dimension_tolerance_count": 0,
+            "geometric_tolerance_count": 0,
+            "weld_instruction_count": 0,
+            "weld_types": [],
+            "hardness_spec_values": [],
+        },
+        derived_tags_json=[],
+    )
+
+    result = compose_drawing_metadata(drawing)
+    tags = {tag["tag"] for tag in result["derivedTags"]}
+
+    assert result["canonicalAttributes"]["dimension_count"] == 4
+    assert result["canonicalAttributes"]["dimension_tolerance_count"] == 2
+    assert result["canonicalAttributes"]["geometric_tolerance_count"] == 1
+    assert result["canonicalAttributes"]["weld_instruction_count"] == 2
+    assert {
+        "寸法あり",
+        "寸法公差あり",
+        "幾何公差あり",
+        "溶接指示あり",
+        "溶接:すみ肉",
+        "溶接:全周",
+        "硬度:HRC",
+        "硬度:HV",
+    } <= tags

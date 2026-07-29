@@ -6,6 +6,8 @@ import pytest
 
 from apps.drawing_metadata.models import RegisteredDrawing
 from apps.drawing_metadata.models import DrawingMetadataExtractionJob
+from apps.drawing_metadata.services.normalization import normalize_raw_extract
+from apps.drawing_metadata.services.tag_builder import build_derived_tags
 from apps.drawing_metadata.services.extraction_runner import (
     ExtractionRunnerError,
     build_extractor_command,
@@ -232,6 +234,53 @@ def test_run_extractor_extracts_dxf_block_attributes_and_note_candidates(setting
     assert raw_extract["layers"] == ["TITLE", "NOTE", "TOL"]
     assert raw_extract["weld_notes"][0]["text"] == "すみ肉溶接 6mm"
     assert raw_extract["tolerances"][0]["text"] == "公差 ±0.05"
+
+
+@pytest.mark.django_db
+def test_run_extractor_builds_dxf_dimension_tolerance_weld_and_hardness_tags(settings, tmp_path):
+    source_path = tmp_path / "manufacturing_tags.dxf"
+    source_path.write_text(
+        "0\nSECTION\n2\nTABLES\n"
+        "0\nTABLE\n2\nDIMSTYLE\n"
+        "0\nDIMSTYLE\n2\nStandard\n71\n1\n72\n0\n47\n0.1\n48\n0.1\n"
+        "0\nENDTAB\n0\nENDSEC\n"
+        "0\nSECTION\n2\nENTITIES\n"
+        "0\nDIMENSION\n8\nDIM\n3\nStandard\n70\n0\n42\n100.0\n10\n1.0\n20\n2.0\n"
+        "0\nTOLERANCE\n8\nTOL\n10\n3.0\n20\n4.0\n1\n{\\Fgdt;f}%%v0.01%%v%%vC%%v%%v\n"
+        "0\nTEXT\n8\nNOTE\n10\n5.0\n20\n6.0\n1\nすみ肉溶接\n"
+        "0\nTEXT\n8\nNOTE\n10\n7.0\n20\n8.0\n1\n全周溶接\n"
+        "0\nTEXT\n8\nNOTE\n10\n9.0\n20\n10.0\n1\n硬度 HRC58-62 HV500\n"
+        "0\nENDSEC\n0\nEOF\n",
+        encoding="utf-8",
+    )
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="sample-dxf-manufacturing-tags",
+        filename="manufacturing_tags.dxf",
+        source_path=str(source_path),
+        source_format="dxf",
+    )
+    settings.DRAWING_METADATA_STORAGE_ROOT = tmp_path / "metadata"
+
+    result = run_extractor(drawing=drawing, extraction_mode="2d", job_id="dxf-manufacturing-tags-job")
+    canonical = normalize_raw_extract(result.payload)
+    tags = {tag["tag"] for tag in build_derived_tags(canonical)}
+
+    assert canonical["dimension_count"] == 1
+    assert canonical["dimension_tolerance_count"] == 1
+    assert canonical["geometric_tolerance_count"] == 1
+    assert canonical["weld_instruction_count"] == 2
+    assert canonical["weld_types"] == ["すみ肉", "全周"]
+    assert canonical["hardness_spec_values"] == ["HRC58-62", "HV500"]
+    assert {
+        "寸法あり",
+        "寸法公差あり",
+        "幾何公差あり",
+        "溶接指示あり",
+        "溶接:すみ肉",
+        "溶接:全周",
+        "硬度:HRC",
+        "硬度:HV",
+    } <= tags
 
 
 @pytest.mark.django_db

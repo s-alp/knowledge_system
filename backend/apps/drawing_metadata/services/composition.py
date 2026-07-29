@@ -8,6 +8,12 @@ from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
 MODE_PRIORITY = ("3d", "2d")
+FEATURE_PRESENCE_COUNT_ATTRIBUTES = {
+    "dimension_count",
+    "dimension_tolerance_count",
+    "geometric_tolerance_count",
+    "weld_instruction_count",
+}
 REVIEWABLE_CONFLICT_ATTRIBUTES = {
     "customer_name",
     "project_name",
@@ -182,6 +188,22 @@ def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> 
             chosen_mode="manual_2d",
             status="manual_override",
             reason="2D側の手動上書きを採用しました。",
+        )
+
+    if key in FEATURE_PRESENCE_COUNT_ATTRIBUTES:
+        numeric_2d = int(candidate_2d or 0)
+        numeric_3d = int(candidate_3d or 0)
+        chosen_value = max(numeric_2d, numeric_3d)
+        return chosen_value, _reconciliation_record(
+            key=key,
+            value_2d=value_2d,
+            value_3d=value_3d,
+            manual_2d=manual_2d,
+            manual_3d=manual_3d,
+            chosen_value=chosen_value,
+            chosen_mode="merged",
+            status="merged",
+            reason="図面特徴の存在件数は2D/3Dの大きい値を採用しました。",
         )
 
     if _is_scalar(candidate_2d) and _is_scalar(candidate_3d):

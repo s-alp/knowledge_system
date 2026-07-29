@@ -120,6 +120,22 @@ def _flatten_strings(values: Iterable[str | None]) -> list[str]:
     return normalized
 
 
+def _normalize_layer_names(values: Iterable[object]) -> list[str]:
+    names: list[str] = []
+    for value in values:
+        if isinstance(value, str):
+            candidate = value
+        elif isinstance(value, dict):
+            candidate = value.get("name")
+        else:
+            raise TypeError(
+                f"layers[]は文字列または辞書である必要があります: {type(value).__name__}"
+            )
+        if isinstance(candidate, str) and candidate.strip():
+            names.append(candidate.strip())
+    return _merge_unique(names)
+
+
 def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> str | None:
     lowered = " ".join(token.lower() for token in tokens)
     for canonical, candidates in mapping.items():
@@ -151,9 +167,88 @@ _SCALE_LABEL_HINT_RE = re.compile(r"scale|尺度|縮尺|^s\s*[=＝:：]", re.IGN
 
 # 硬度指定(例: HRC58, HRC58-62, Hv500, HB230)
 _HARDNESS_SPEC_RE = re.compile(
-    r"(?:HRC|HRB|HRA|HV|HBW|HB|HS)\s*[0-9]{1,4}(?:\s*[~〜\-±]\s*[0-9]{1,4})?",
+    r"(?<![A-Z0-9])(?:HRC|HRB|HRA|HV|HBW|HB|HS)\s*[0-9]{1,4}"
+    r"(?:\s*[~〜\-±]\s*[0-9]{1,4})?(?![A-Z0-9])",
     re.IGNORECASE,
 )
+_DIMENSION_TOLERANCE_TEXT_RE = re.compile(
+    r"(?:±|\+/-|%%p|[+＋]\s*\d+(?:\.\d+)?\s*[-－]\s*\d+(?:\.\d+)?)",
+    re.IGNORECASE,
+)
+_ICAD_DIMENSION_TOLERANCE_RATIO_RE = re.compile(
+    r"(?:^|;)\s*dimtol_ratio=([+-]?\d+(?:\.\d+)?)",
+    re.IGNORECASE,
+)
+_WELD_INSTRUCTION_RE = re.compile(
+    r"(?:溶接|すみ肉|隅肉|開先|現場溶接|全周溶接|\bWELD(?:ING)?\b|\bFILLET\b)",
+    re.IGNORECASE,
+)
+_WELD_FILLET_RE = re.compile(r"(?:すみ肉|隅肉|\bFILLET\b)", re.IGNORECASE)
+_WELD_ALL_AROUND_RE = re.compile(r"(?:全周(?:溶接)?|\bALL[\s_-]*AROUND\b)", re.IGNORECASE)
+
+
+def _has_nonzero_tolerance_value(value: object) -> bool:
+    if value is None:
+        return False
+    text = unicodedata.normalize("NFKC", str(value)).strip()
+    if not text:
+        return False
+    try:
+        return float(text) != 0.0
+    except ValueError:
+        return True
+
+
+def _dimension_has_tolerance(dimension: dict) -> bool:
+    if dimension.get("has_tolerance") is True:
+        return True
+    if any(
+        _has_nonzero_tolerance_value(dimension.get(key))
+        for key in ("upper_tol", "lower_tol", "dimtp", "dimtm")
+    ):
+        return True
+    text = " ".join(
+        _flatten_strings(
+            str(dimension.get(key)) if dimension.get(key) is not None else None
+            for key in (
+                "value_1",
+                "value1",
+                "value_2",
+                "value2",
+                "front_word",
+                "back_word",
+                "summary",
+                "text_override",
+            )
+        )
+    )
+    if _DIMENSION_TOLERANCE_TEXT_RE.search(text):
+        return True
+    ratio_match = _ICAD_DIMENSION_TOLERANCE_RATIO_RE.search(
+        str(dimension.get("summary") or "")
+    )
+    return bool(ratio_match and float(ratio_match.group(1)) != 0.0)
+
+
+def _classify_weld_types(values: Iterable[str | None]) -> list[str]:
+    text = " ".join(
+        unicodedata.normalize("NFKC", value)
+        for value in _flatten_strings(values)
+    )
+    weld_types: list[str] = []
+    if _WELD_FILLET_RE.search(text):
+        weld_types.append("すみ肉")
+    if _WELD_ALL_AROUND_RE.search(text):
+        weld_types.append("全周")
+    return weld_types
+
+
+def _weld_instruction_texts(values: Iterable[str | None]) -> list[str]:
+    return _merge_unique(
+        value
+        for value in _flatten_strings(values)
+        if _WELD_INSTRUCTION_RE.search(unicodedata.normalize("NFKC", value))
+    )
 
 
 def _extract_scale_candidates(tokens: Iterable[str]) -> list[dict]:
@@ -1453,11 +1548,17 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "title_block_candidates": [],
         "revision_note_candidates": [],
         "revision_note_count": 0,
+        "dimension_count": 0,
         "dimension_values": [],
         "dimension_symbols": [],
+        "dimension_tolerance_count": 0,
+        "dimension_tolerance_values": [],
+        "geometric_tolerance_count": 0,
         "tolerance_texts": [],
         "tolerance_candidates": [],
         "tolerance_candidate_count": 0,
+        "weld_instruction_count": 0,
+        "weld_types": [],
         "weld_note_texts": [],
         "weld_note_candidates": [],
         "weld_note_candidate_count": 0,
@@ -1656,9 +1757,23 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         trusted_dimension_symbols = _flatten_strings(
             value
             for dimension in trusted_dimensions
-            for value in [dimension.get("mark_2"), dimension.get("mark_3"), dimension.get("front_word"), dimension.get("back_word")]
+            for value in [
+                dimension.get("mark_2") or dimension.get("mark2"),
+                dimension.get("mark_3") or dimension.get("mark3"),
+                dimension.get("front_word"),
+                dimension.get("back_word"),
+            ]
         )
-        trusted_weld_note_texts = _flatten_strings(note.get("text") for note in trusted_weld_notes)
+        trusted_native_weld_note_texts = _flatten_strings(
+            note.get("text")
+            for note in trusted_weld_notes
+        )
+        trusted_weld_note_texts = _merge_unique(
+            [
+                *trusted_native_weld_note_texts,
+                *_weld_instruction_texts(trusted_text_tokens),
+            ]
+        )
         trusted_balloon_keys = _flatten_strings(balloon.get("text") for balloon in trusted_balloons)
         trusted_tolerance_texts = _flatten_strings(tolerance.get("text") for tolerance in trusted_tolerances)
 
@@ -1668,7 +1783,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             for text_line in _text_lines_from_payload(text)
         )
         canonical["label_texts"] = _flatten_strings(text.get("joined_text") for text in texts if text.get("source_type") == "label")
-        canonical["dxf_layers"] = _flatten_strings(raw_extract.get("layers", []) or [])
+        canonical["dxf_layers"] = _normalize_layer_names(raw_extract.get("layers", []) or [])
         canonical["dxf_block_references"] = [
             reference
             for reference in block_references
@@ -1685,17 +1800,61 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             if isinstance(attribute, dict)
             for value in [reference.get("block_name"), attribute.get("tag"), attribute.get("value")]
         )
+        trusted_dimension_tolerances = [
+            dimension
+            for dimension in trusted_dimensions
+            if _dimension_has_tolerance(dimension)
+        ]
+        canonical["dimension_count"] = len(trusted_dimensions)
         canonical["dimension_values"] = _flatten_strings(
             value
             for dimension in dimensions
-            for value in [dimension.get("value_1"), dimension.get("value_2")]
+            for value in [
+                dimension.get("value_1") or dimension.get("value1"),
+                dimension.get("value_2") or dimension.get("value2"),
+            ]
         )
         canonical["dimension_symbols"] = _flatten_strings(
             value
             for dimension in dimensions
-            for value in [dimension.get("mark_2"), dimension.get("mark_3"), dimension.get("front_word"), dimension.get("back_word")]
+            for value in [
+                dimension.get("mark_2") or dimension.get("mark2"),
+                dimension.get("mark_3") or dimension.get("mark3"),
+                dimension.get("front_word"),
+                dimension.get("back_word"),
+            ]
         )
-        canonical["weld_note_texts"] = _flatten_strings(note.get("text") for note in weld_notes)
+        canonical["dimension_tolerance_count"] = len(trusted_dimension_tolerances)
+        canonical["dimension_tolerance_values"] = _flatten_strings(
+            str(value) if value is not None else None
+            for dimension in trusted_dimension_tolerances
+            for value in [
+                dimension.get("upper_tol"),
+                dimension.get("lower_tol"),
+                dimension.get("dimtp"),
+                dimension.get("dimtm"),
+            ]
+        )
+        if str(canonical["source_format"]).lower() == "icad":
+            canonical["geometric_tolerance_count"] = len(trusted_tolerances)
+        else:
+            canonical["geometric_tolerance_count"] = sum(
+                1
+                for tolerance in trusted_tolerances
+                if tolerance.get("source_type") == "geometric_tolerance"
+                or tolerance.get("dxf_entity_type") == "TOLERANCE"
+            )
+        canonical["weld_instruction_count"] = max(
+            len(trusted_weld_notes),
+            len(trusted_weld_note_texts),
+        )
+        canonical["weld_types"] = _classify_weld_types(trusted_weld_note_texts)
+        canonical["weld_note_texts"] = _merge_unique(
+            [
+                *_flatten_strings(note.get("text") for note in weld_notes),
+                *_weld_instruction_texts(canonical["text_tokens"]),
+            ]
+        )
         canonical["balloon_keys"] = _flatten_strings(balloon.get("text") for balloon in balloons)
         canonical["tolerance_texts"] = _flatten_strings(tolerance.get("text") for tolerance in tolerances)
         canonical["weld_note_candidates"] = _structured_2d_symbol_candidates(

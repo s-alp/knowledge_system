@@ -58,6 +58,16 @@ def test_heat_treatment_and_hardness_extracted_from_2d_notes():
     assert any(tag["tag"] == "熱処理:浸炭" for tag in tags)
 
 
+def test_hardness_extraction_ignores_codes_embedded_in_part_identifiers():
+    canonical = normalize_raw_extract(
+        _payload_2d(["LQHB06", "THV6x4 10M", "硬度 HRC58-62", "HV500"])
+    )
+
+    assert canonical["hardness_spec_values"] == ["HRC58-62", "HV500"]
+    tags = {tag["tag"] for tag in build_derived_tags(canonical)}
+    assert {"硬度:HRC", "硬度:HV"} <= tags
+
+
 def test_heat_treatment_extracted_from_3d_ex_info():
     payload = {
         "source_format": "icad",

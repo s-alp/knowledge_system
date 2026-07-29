@@ -9,7 +9,7 @@ from django.conf import settings
 
 
 GENERIC_CAD_EXTRACTOR_NAME = "generic-cad-text-extractor"
-GENERIC_CAD_EXTRACTOR_VERSION = "1.0.0"
+GENERIC_CAD_EXTRACTOR_VERSION = "1.1.0"
 
 _STEP_STRING_RE = re.compile(r"'((?:[^']|'')*)'")
 _STEP_ENTITY_RE = re.compile(r"#\d+\s*=\s*([A-Z0-9_]+)\s*\((.*?)\)\s*;", re.IGNORECASE | re.DOTALL)
@@ -17,6 +17,10 @@ _STEP_ENTITY_WITH_ID_RE = re.compile(r"#(\d+)\s*=\s*([A-Z0-9_]+)\s*\((.*?)\)\s*;
 _STEP_REFERENCE_RE = re.compile(r"#(\d+)")
 _MATERIAL_RE = re.compile(
     r"(?<![A-Z0-9])(SUS[0-9][0-9A-Z-]*|SS400[A-Z-]*|SPCC|S[0-9]{2}C|A[0-9]{4}P?|AL|SKD[0-9]*|SKS[0-9]*|SCM[0-9]*|FC[0-9]*|FCD[0-9]*|PETG|PET|POM|PVC|PTFE|PPS|NBR|EPDM|FKM|PP)(?![A-Z0-9])",
+    re.IGNORECASE,
+)
+_DXF_DIMENSION_TOLERANCE_RE = re.compile(
+    r"(?:±|\+/-|%%p|[+＋]\s*\d+(?:\.\d+)?\s*[-－]\s*\d+(?:\.\d+)?)",
     re.IGNORECASE,
 )
 _STEP_PART_ENTITY_NAMES = {
@@ -315,6 +319,8 @@ def _extract_dxf_raw(*, text: str) -> dict:
     primitives: list[dict] = []
     block_references: list[dict] = []
     layers: list[str] = []
+    dimension_styles: dict[str, dict] = {}
+    geometric_tolerances: list[dict] = []
     index = 0
     while index < len(pairs):
         code, value = pairs[index]
@@ -326,18 +332,28 @@ def _extract_dxf_raw(*, text: str) -> dict:
         while next_index < len(pairs) and pairs[next_index][0] != "0":
             next_index += 1
         entity_pairs = pairs[index + 1 : next_index]
-        if entity_type in {"TEXT", "MTEXT", "ATTRIB", "ATTDEF"}:
+        if entity_type == "DIMSTYLE":
+            dimension_style = _dxf_dimension_style(entity_pairs)
+            if dimension_style:
+                dimension_styles[dimension_style["name"]] = dimension_style
+        elif entity_type in {"TEXT", "MTEXT", "ATTRIB", "ATTDEF"}:
             text_item = _dxf_text_entity(entity_type, entity_pairs)
             if text_item:
                 texts.append(text_item)
                 if text_item.get("layer_name"):
                     layers.append(text_item["layer_name"])
         elif entity_type == "DIMENSION":
-            dimension = _dxf_dimension_entity(entity_pairs)
+            dimension = _dxf_dimension_entity(entity_pairs, dimension_styles)
             if dimension:
                 dimensions.append(dimension)
                 if dimension.get("layer_name"):
                     layers.append(dimension["layer_name"])
+        elif entity_type == "TOLERANCE":
+            tolerance = _dxf_tolerance_entity(entity_pairs)
+            if tolerance:
+                geometric_tolerances.append(tolerance)
+                if tolerance.get("layer_name"):
+                    layers.append(tolerance["layer_name"])
         elif entity_type == "INSERT":
             block_reference, insert_texts, next_index = _dxf_insert_entity(pairs, index, next_index)
             if block_reference:
@@ -355,7 +371,10 @@ def _extract_dxf_raw(*, text: str) -> dict:
                 layers.append(primitive["layer_name"])
         index = next_index
     weld_notes = _dxf_note_candidates(texts, ("溶接", "すみ肉", "開先", "現場溶接", "WELD", "FILLET"))
-    tolerances = _dxf_note_candidates(texts, ("公差", "幾何公差", "±", "+/-", "TOL"))
+    tolerances = [
+        *geometric_tolerances,
+        *_dxf_note_candidates(texts, ("公差", "幾何公差", "±", "+/-", "%%P", "TOL")),
+    ]
     return {
         "texts": texts,
         "dimensions": dimensions,
@@ -392,6 +411,57 @@ def _float_group(entity_pairs: list[tuple[str, str]], code: str) -> float | None
         return float(value)
     except ValueError:
         return None
+
+
+def _int_group(entity_pairs: list[tuple[str, str]], code: str) -> int | None:
+    value = _first_group(entity_pairs, code)
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
+def _dxf_dimension_style(entity_pairs: list[tuple[str, str]]) -> dict | None:
+    name = _first_group(entity_pairs, "2")
+    if not name:
+        return None
+    return {
+        "name": name,
+        "dimtol": _int_group(entity_pairs, "71"),
+        "dimlim": _int_group(entity_pairs, "72"),
+        "dimtp": _float_group(entity_pairs, "47"),
+        "dimtm": _float_group(entity_pairs, "48"),
+    }
+
+
+def _dxf_dimension_overrides(entity_pairs: list[tuple[str, str]]) -> dict:
+    overrides: dict[str, int | float | None] = {}
+    variable_names = {71: "dimtol", 72: "dimlim", 47: "dimtp", 48: "dimtm"}
+    for index, (code, value) in enumerate(entity_pairs[:-1]):
+        if code != "1070":
+            continue
+        try:
+            variable_code = int(value.strip())
+        except ValueError:
+            continue
+        variable_name = variable_names.get(variable_code)
+        if not variable_name:
+            continue
+        next_code, next_value = entity_pairs[index + 1]
+        try:
+            parsed_value: int | float
+            if next_code in {"1070", "1071"}:
+                parsed_value = int(next_value.strip())
+            elif next_code == "1040":
+                parsed_value = float(next_value.strip())
+            else:
+                continue
+        except ValueError:
+            continue
+        overrides[variable_name] = parsed_value
+    return overrides
 
 
 def _dxf_text_entity(entity_type: str, entity_pairs: list[tuple[str, str]]) -> dict | None:
@@ -494,12 +564,56 @@ def _dxf_note_candidates(texts: list[dict], keywords: tuple[str, ...]) -> list[d
     return candidates
 
 
-def _dxf_dimension_entity(entity_pairs: list[tuple[str, str]]) -> dict | None:
+def _dxf_dimension_entity(
+    entity_pairs: list[tuple[str, str]],
+    dimension_styles: dict[str, dict],
+) -> dict | None:
     value = _first_group(entity_pairs, "1") or _first_group(entity_pairs, "42")
     if value is None:
         return None
+    style_name = _first_group(entity_pairs, "3")
+    style = dimension_styles.get(style_name or "", {})
+    overrides = _dxf_dimension_overrides(entity_pairs)
+    dimtol = overrides.get("dimtol", style.get("dimtol"))
+    dimlim = overrides.get("dimlim", style.get("dimlim"))
+    dimtp = overrides.get("dimtp", style.get("dimtp"))
+    dimtm = overrides.get("dimtm", style.get("dimtm"))
+    text_override = _first_group(entity_pairs, "1")
+    tolerance_enabled = dimtol == 1 or dimlim == 1
+    has_tolerance = tolerance_enabled or bool(
+        text_override and _DXF_DIMENSION_TOLERANCE_RE.search(text_override)
+    )
     return {
         "value_1": value,
+        "text_override": text_override,
+        "layer_name": _first_group(entity_pairs, "8"),
+        "position_x": _float_group(entity_pairs, "10"),
+        "position_y": _float_group(entity_pairs, "20"),
+        "dxf_entity_type": "DIMENSION",
+        "dimension_type": _int_group(entity_pairs, "70"),
+        "style_name": style_name,
+        "has_tolerance": has_tolerance,
+        "upper_tol": str(dimtp) if tolerance_enabled and dimtp is not None else None,
+        "lower_tol": str(dimtm) if tolerance_enabled and dimtm is not None else None,
+        "dimtol": dimtol,
+        "dimlim": dimlim,
+        "inside_print_area": True,
+    }
+
+
+def _dxf_tolerance_entity(entity_pairs: list[tuple[str, str]]) -> dict | None:
+    raw_text = " ".join(
+        value.strip()
+        for code, value in entity_pairs
+        if code in {"1", "3"} and value.strip()
+    )
+    if not raw_text:
+        return None
+    return {
+        "text": _clean_dxf_text(raw_text),
+        "raw_text": raw_text,
+        "source_type": "geometric_tolerance",
+        "dxf_entity_type": "TOLERANCE",
         "layer_name": _first_group(entity_pairs, "8"),
         "position_x": _float_group(entity_pairs, "10"),
         "position_y": _float_group(entity_pairs, "20"),

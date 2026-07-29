@@ -531,6 +531,70 @@ def test_normalize_dxf_extract_uses_generic_2d_texts_for_title_block_tags():
     assert canonical["unit_number_candidates"] == ["U01"]
     assert any(tag["tag"] == "規格:SES" for tag in tags)
     assert any(tag["tag"] == "材質:SS400" for tag in tags)
+
+
+def test_normalize_icad_2d_builds_dimension_tolerance_weld_and_hardness_tags():
+    payload = {
+        "source_format": "icad",
+        "source_kind": "2d",
+        "source_file": {"full_path": r"J:\sample\manufacturing_tags.icd"},
+        "raw_extract": {
+            "texts": [
+                {"text_lines": ["硬度 HRC58-62 HV500"], "inside_print_area": True},
+                {"text_lines": ["すみ肉溶接"], "inside_print_area": True},
+                {"text_lines": ["全周溶接"], "inside_print_area": True},
+            ],
+            "dimensions": [
+                {"value_1": "100", "inside_print_area": True},
+                {
+                    "value_1": "50",
+                    "upper_tol": "+0.1",
+                    "lower_tol": "-0.1",
+                    "inside_print_area": True,
+                },
+                {
+                    "value1": "25",
+                    "summary": "dimtol_ratio=0.5; suppress=False",
+                    "inside_print_area": True,
+                },
+            ],
+            "geometry_primitives": [],
+            "layers": [
+                {"no": 1, "name": None},
+                {"no": 2, "name": "寸法"},
+            ],
+            "weld_notes": [
+                {"text": "native weld data", "inside_print_area": True},
+            ],
+            "balloons": [],
+            "tolerances": [
+                {"text": "SxGeomTol value=0.01 datum=A", "inside_print_area": True},
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+    tags = {tag["tag"] for tag in build_derived_tags(canonical)}
+
+    assert canonical["dimension_count"] == 3
+    assert canonical["dxf_layers"] == ["寸法"]
+    assert canonical["dimension_tolerance_count"] == 2
+    assert canonical["geometric_tolerance_count"] == 1
+    assert canonical["weld_instruction_count"] == 3
+    assert canonical["weld_types"] == ["すみ肉", "全周"]
+    assert canonical["hardness_spec_values"] == ["HRC58-62", "HV500"]
+    assert {
+        "寸法あり",
+        "寸法公差あり",
+        "幾何公差あり",
+        "溶接指示あり",
+        "溶接:すみ肉",
+        "溶接:全周",
+        "硬度:HRC",
+        "硬度:HV",
+    } <= tags
+
+
 def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     payload = {
         "source_format": "icad",

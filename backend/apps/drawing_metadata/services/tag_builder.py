@@ -28,6 +28,27 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
         add_tag(f"案件:{canonical_attributes['project_name']}", "project_name")
     if canonical_attributes.get("equipment_category") and "equipment_category" not in excluded_sources:
         add_tag(f"装置:{canonical_attributes['equipment_category']}", "equipment_category")
+    if canonical_attributes.get("dimension_count", 0) > 0 and "dimension_count" not in excluded_sources:
+        add_tag("寸法あり", "dimension_count")
+    if (
+        canonical_attributes.get("dimension_tolerance_count", 0) > 0
+        and "dimension_tolerance_count" not in excluded_sources
+    ):
+        add_tag("寸法公差あり", "dimension_tolerance_count")
+    if (
+        canonical_attributes.get("geometric_tolerance_count", 0) > 0
+        and "geometric_tolerance_count" not in excluded_sources
+    ):
+        add_tag("幾何公差あり", "geometric_tolerance_count")
+    if (
+        canonical_attributes.get("weld_instruction_count", 0) > 0
+        and "weld_instruction_count" not in excluded_sources
+    ):
+        add_tag("溶接指示あり", "weld_instruction_count")
+    if "weld_types" not in excluded_sources:
+        for weld_type in canonical_attributes.get("weld_types", []):
+            if weld_type in {"すみ肉", "全周"}:
+                add_tag(f"溶接:{weld_type}", "weld_types", confidence="medium")
     if "maker_keywords" not in excluded_sources:
         for maker in canonical_attributes.get("maker_keywords", []):
             add_tag(f"メーカー:{maker}", "maker_keywords", confidence="medium")
@@ -43,6 +64,20 @@ def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | 
     if "heat_treatment_keywords" not in excluded_sources:
         for treatment in canonical_attributes.get("heat_treatment_keywords", []):
             add_tag(f"熱処理:{treatment}", "heat_treatment_keywords", confidence="medium")
+    if "hardness_spec_values" not in excluded_sources:
+        hardness_scales = []
+        for hardness_value in canonical_attributes.get("hardness_spec_values", []):
+            normalized = str(hardness_value).upper().replace(" ", "")
+            if normalized.startswith("HRC"):
+                hardness_scales.append("HRC")
+            elif normalized.startswith("HV"):
+                hardness_scales.append("HV")
+        for hardness_scale in hardness_scales:
+            add_tag(
+                f"硬度:{hardness_scale}",
+                "hardness_spec_values",
+                confidence="medium",
+            )
     if "prfx_candidates" not in excluded_sources:
         for prfx in canonical_attributes.get("prfx_candidates", []):
             add_tag(f"PRFX:{prfx}", "prfx_candidates", confidence="medium")
@@ -73,11 +108,17 @@ def _tag_evidence(source: str) -> str:
         "customer_name": "composedMetadata.canonicalAttributes.customer_name",
         "project_name": "composedMetadata.canonicalAttributes.project_name",
         "equipment_category": "composedMetadata.canonicalAttributes.equipment_category",
+        "dimension_count": "composedMetadata.canonicalAttributes.dimension_count",
+        "dimension_tolerance_count": "composedMetadata.canonicalAttributes.dimension_tolerance_count",
+        "geometric_tolerance_count": "composedMetadata.canonicalAttributes.geometric_tolerance_count",
+        "weld_instruction_count": "composedMetadata.canonicalAttributes.weld_instruction_count",
+        "weld_types": "composedMetadata.canonicalAttributes.weld_types",
         "maker_keywords": "composedMetadata.canonicalAttributes.maker_keywords",
         "material_keywords": "composedMetadata.canonicalAttributes.material_keywords",
         "surface_treatment_tokens": "composedMetadata.canonicalAttributes.surface_treatment_tokens",
         "paint_instruction_tokens": "composedMetadata.canonicalAttributes.paint_instruction_tokens",
         "heat_treatment_keywords": "composedMetadata.canonicalAttributes.heat_treatment_keywords",
+        "hardness_spec_values": "composedMetadata.canonicalAttributes.hardness_spec_values",
         "prfx_candidates": "composedMetadata.canonicalAttributes.prfx_candidates",
         "unit_number_candidates": "composedMetadata.canonicalAttributes.unit_number_candidates",
         "spec_tokens": "composedMetadata.canonicalAttributes.spec_tokens",
@@ -95,11 +136,17 @@ def _tag_reason(source: str) -> str:
         "customer_name": "客先名として正規化でき、案件横断検索に使えるため採用しています。",
         "project_name": "案件名として正規化でき、案件単位の検索に使えるため採用しています。",
         "equipment_category": "装置カテゴリとして正規化でき、分類検索に使えるため採用しています。",
+        "dimension_count": "2D図面に寸法要素が存在し、寸法指示を含む図面の検索に使えるため採用しています。",
+        "dimension_tolerance_count": "寸法要素に公差指定が存在し、公差付き寸法を含む図面の検索に使えるため採用しています。",
+        "geometric_tolerance_count": "幾何公差要素が存在し、検査・加工条件を含む図面の検索に使えるため採用しています。",
+        "weld_instruction_count": "溶接記号または溶接注記が存在し、溶接図面の検索に使えるため採用しています。",
+        "weld_types": "溶接注記から溶接種別を明示的に判定でき、溶接条件での検索に使えるため採用しています。",
         "maker_keywords": "メーカー名として抽出でき、購入品や構成部品の検索に使えるため採用しています。",
         "material_keywords": "正式材質として分類でき、加工・調達検索に使えるため採用しています。",
         "surface_treatment_tokens": "表面処理として抽出でき、加工・処理条件の検索に使えるため採用しています。",
         "paint_instruction_tokens": "塗装指示として抽出でき、塗装条件の検索に使えるため採用しています。",
         "heat_treatment_keywords": "熱処理指定として抽出でき、加工条件の検索に使えるため採用しています。",
+        "hardness_spec_values": "硬度尺度を明示的に抽出でき、硬度指定を含む図面の検索に使えるため採用しています。",
         "prfx_candidates": "PRFXとして抽出でき、客先・案件別の識別に使えるため採用しています。",
         "unit_number_candidates": "ユニット番号として抽出でき、ユニット単位の検索に使えるため採用しています。",
         "spec_tokens": "規格識別子として抽出でき、規格・社内標準の検索に使えるため採用しています。",
