@@ -265,8 +265,12 @@
   "text_tokens": [],
   "label_texts": [],
   "title_block_fields": {},
+  "dimension_count": 1,
   "dimension_values": [],
   "dimension_symbols": [],
+  "dimension_tolerance_count": 1,
+  "dimension_tolerance_values": ["+0.1", "-0.1"],
+  "geometric_tolerance_count": 1,
   "tolerance_texts": [],
   "tolerance_candidates": [
     {
@@ -285,6 +289,8 @@
     }
   ],
   "tolerance_candidate_count": 1,
+  "weld_instruction_count": 1,
+  "weld_types": ["すみ肉"],
   "weld_note_texts": [],
   "weld_note_candidates": [],
   "weld_note_candidate_count": 0,
@@ -375,6 +381,18 @@
     "source": "equipment_category",
     "confidence": "high",
     "manual_flag": false
+  },
+  {
+    "tag": "寸法公差あり",
+    "source": "dimension_tolerance_count",
+    "confidence": "high",
+    "manual_flag": false
+  },
+  {
+    "tag": "硬度:HRC",
+    "source": "hardness_spec_values",
+    "confidence": "medium",
+    "manual_flag": false
   }
 ]
 ```
@@ -385,6 +403,8 @@
 - `source` は元属性
 - `confidence` は `high|medium|low`
 - `manual_flag` は手動で追加・修正したか
+- 寸法・公差・溶接は存在または明示分類をタグ化し、具体値は `canonical_attributes` に保持する
+- 硬度は `HRC` / `HV` の尺度をタグ化し、`HRC58-62` 等の具体値は `hardness_spec_values` に保持する
 
 ## 8. `manual_overrides` の形
 

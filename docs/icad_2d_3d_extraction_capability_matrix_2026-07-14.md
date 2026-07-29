@@ -92,16 +92,16 @@
 | スプライン | A | `SxGeomSpline2D` | `curve_section_candidates[]` 実装済み | 開始座標、点数、ビュー、レイヤー、印刷枠判定をレビュー候補として保持。形状特徴だけでは自動タグに採用しない |
 | 楕円 / 楕円弧 | A | `SxGeomEllipse2D`, `SxGeomElparc2D` | primitive実装済み | 中心、半径、角度候補を保持 |
 | ハッチング | A | `SxGeomHatch` | `curve_section_candidates[]` 実装済み | summary、ビュー、レイヤー、印刷枠判定をレビュー候補として保持。断面/材質表現の確定はレビュー対象で、自動タグに採用しない |
-| 長さ寸法 | A | `SxGeomLengthDim`, `SxDimValueAtr`, `SxDimLineAtr` | 実装入口あり | 現行マッピングはフィールド名要再確認 |
+| 長さ寸法 | A | `SxGeomLengthDim`, `SxDimValueAtr`, `SxDimLineAtr` | 実装済み | `dimension_count` が1件以上なら `寸法あり` を自動タグ化 |
 | 角度寸法 | A | `SxGeomAngDim` | 実装入口あり | 同上 |
 | 径寸法 | A | `SxGeomDiaDim` | 実装入口あり | φ/R等のタグ候補 |
 | 面取り寸法 | A | `SxGeomChamDim` | 実装入口あり | 加工タグ候補 |
 | 長円/角穴/座標寸法 | A | `SxGeomAplDim` | 実装入口あり | 長穴・角穴候補 |
 | 円弧長寸法 | A | `SxGeomArcLengDim` | 実装入口あり | 曲げ/円弧特徴 |
-| 寸法値詳細 | A | `SxDimValueAtr` | 実装入口あり | 実寸/擬寸、前置/後置/上下文字、公差、φ/R/M/□ |
-| 幾何公差 | A | `SxGeomTol` | `tolerance_texts[]`, `tolerance_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用属性候補として保持。検索タグへは自動昇格しない |
+| 寸法値詳細 | A | `SxDimValueAtr` | 実装済み | 実寸/擬寸、前置/後置/上下文字、公差、φ/R/M/□。上下公差または公差文字を検出した寸法があれば `寸法公差あり` を自動タグ化 |
+| 幾何公差 | A | `SxGeomTol` | `geometric_tolerance_count`, `tolerance_texts[]`, `tolerance_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定を属性候補として保持し、存在時は `幾何公差あり` を自動タグ化。平行度等の種別タグは実フィールド確認後 |
 | 表面粗さ | A | `SxGeomSmark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=表面粗さ記号あり`, `searchable_tag=false` として保持。表面粗さ記号の存在だけでは自動タグに採用しない |
-| 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | `weld_note_texts[]`, `weld_note_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用属性候補として保持。溶接種別、開先、仕上げ等の細分類は要レビュー |
+| 溶接 | A | `SxGeomWeld`, `SxGeomWeld.MarkText` | `weld_instruction_count`, `weld_types`, `weld_note_texts[]`, `weld_note_candidates[]` | 存在時は `溶接指示あり`、明示文字を確認できた場合は `溶接:すみ肉` / `溶接:全周` を自動タグ化。開先・現場溶接等の細分類は実フィールド確認後 |
 | 仕上げ記号 | A | `SxGeomFinishMark` | 特徴候補実装済み | `geometry_feature_candidates` で `classification_label=仕上げ記号あり`, `searchable_tag=false` として保持。`mark_type`, `side_leng`, `width`, `color` は raw に保持 |
 | バルーン | A | `SxGeomBalloon` | `balloon_keys[]`, `balloon_candidates[]` | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用属性候補として保持。部品番号への確定紐付けは要レビュー |
 | シンボル / 矢視 / 切断線 | A | `SxGeomSymbol`, `SxGeomArrowView`, `SxGeomCutLine` | `view_reference_candidates[]` 実装済み | 値、ビュー、レイヤー、座標、印刷枠判定をレビュー用候補として保持。断面図/詳細図/矢視の確定紐づけは要レビュー |

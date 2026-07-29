@@ -1,21 +1,23 @@
 # CADタグ・属性抽出 抽出元カタログと具体例（創屋様向け）
 
 - 作成日: 2026-07-28
-- 版: r1（`cad_tag_extraction_sources_for_souya_2026-07-23.md` の後継。STEP/DXF中心だった前版に、ICAD正本からの抽出・実データ具体例・ソース切り出し範囲・ライセンス論点を統合）
+- 版: r2（創屋様への供給仕様確定版）
 - 作成: 株式会社アルパイン設計事務所
+- 文書状態: 確定
 
 ---
 
 ## 0. この資料が答えること
 
-創屋様からいただいた4点に、この資料で回答します。
+本資料は、当社が供給する「CADからのタグ・属性抽出および自動タグ付与」の確定仕様を示します。
 
-| ご質問 | 回答箇所 |
+| 確定事項 | 記載箇所 |
 |---|---|
-| どこからどういったものを抜き出すのかが事前に分かるとありがたい | 2章（抽出元カタログ）、3章（正規化後の属性）、4章（タグ生成ルール） |
-| どういったものが抜き出されるのか、具体例が欲しい | 5章（実ICAD 39件の実測結果と実ファイル5例） |
-| 完成後はタグ・属性抽出の部分のソースだけ頂けるとありがたい | 6章（切り出し範囲とモジュール境界） |
-| ICAD→STEP変換／ICADライセンスの用意 | 7章（変換の実測と限界）、8章（ライセンス論点） |
+| どこから何を抜き出すか | 2章（抽出元カタログ）、3章（正規化後の属性） |
+| 文字列・属性からどのタグを付与するか | 4章（タグ生成ルール・辞書） |
+| 実データで何が得られたか | 5章（実ICAD 39件・共有DXF 38件の実測） |
+| どのソースを切り出して供給するか | 6章（モジュール境界・JSON入出力） |
+| STEP/DXF経路の情報差 | 7章（変換実測と限界） |
 
 ---
 
@@ -41,7 +43,20 @@
 | B | ICADから変換したSTEP / DXF | Python汎用抽出器 | 変換時のみ必要 | 中（部品名・階層・レイヤー・文字） |
 | C | 客先支給などの既存STEP / DXF | Python汎用抽出器 | 不要 | 中 |
 
-経路Bと経路Cは同じ抽出器を使います。経路B・Cでは**ICAD本体がなくても抽出処理そのものは動きます**（8章のライセンス論点に直結します）。
+経路Bと経路Cは同じ抽出器を使います。経路B・Cでは**ICAD本体がなくても抽出処理そのものは動きます**。
+
+### 1.3 「タグ付与」の定義と担当境界
+
+本資料における「タグ付与」は、抽出結果を正規化し、検索・分類用のタグを `derived_tags` として生成して、取得元・根拠・信頼度・採用理由を添えたJSONへ格納するところまでを指します。
+
+| 処理 | 担当 | 成果物 |
+|---|---|---|
+| ICAD / STEP / DXFからの生データ抽出 | 当社供給モジュール | `raw_extract` |
+| 共通属性への正規化 | 当社供給モジュール | `canonical_attributes` |
+| 文字列・属性・辞書によるタグ自動付与 | 当社供給モジュール | `derived_tags` |
+| 創屋様ナレッジシステムのDB/APIへの登録 | 創屋様 | 本番タグ・属性レコード |
+
+したがって、当社の供給範囲は**抽出だけではなく、自動タグ付与済みJSONの生成まで**です。本番ナレッジシステムへの登録処理は、創屋様のAPI・DB仕様へ接続する実装として分離します。
 
 ---
 
@@ -92,21 +107,33 @@
 | `NEXT_ASSEMBLY_USAGE_OCCURRENCE` | `step_assembly_relationships[]` | `step_assembly_relationship_count`, `parts[].tree_path` |
 | 文字列中の材質パターン | `materials[]` | `material_keywords` |
 
+#### STEP部品階層の扱い
+
+- STEPの部品階層は、STEP内に保存されたアセンブリ、構成要素、配置の親子関係を表す。ICADでの「内部パーツ」「外部参照パーツ」という作成元の区分を表すものではない。
+- したがって、STEPの `PRODUCT` / `NEXT_ASSEMBLY_USAGE_OCCURRENCE` だけから `external_part_count`、`internal_part_count`、BOM相当の部品数を算出しない。製品・アセンブリ・部品の登録先判定にも使用しない。
+- 内部／外部の区分を取得できない場合は、外部パーツ数を `0` とせず `null`（不明）とする。`0` は「外部パーツが存在しない」と確認できた場合にだけ使用する。
+- STEP階層は、3Dビューワーのツリー表示、親子関係を使った検索補助、同一構成要素の配置数確認、構成単位での材質・質量特性の集計に限って利用する。件数を保持する場合は、BOM部品数と混同しない `step_component_occurrence_count` 等のSTEP専用項目とする。
+- 複数ファイルSTEP等で外部ファイル参照を検出できる場合も、ICADの外部参照パーツと同義とは断定しない。`step_external_reference_count` 等の別項目に保持し、`external_part_count` へ自動変換しない。
+- 製品名・部品名が `Assembly` や `prt0` のような変換時の汎用名になっている場合、階層は表示・監査用の低信頼情報として扱い、案件名・装置名・部品名の確定根拠にはしない。
+
 ### 2.4 DXF（経路B・C）
 
 | 抽出元 | raw_extract | 正規化先 |
 |---|---|---|
 | `TEXT` / `MTEXT` / `ATTRIB` / `ATTDEF` | `texts[]` | `text_tokens`, `title_block_candidates` |
 | `INSERT` + `ATTRIB` のブロック参照 | `block_references[].attributes[]` | `dxf_block_references`, `dxf_block_attribute_tokens` |
-| `DIMENSION` の表示値候補 | `dimensions[]` | `dimension_values` |
+| `DIMENSION` の表示値候補 | `dimensions[]` | `dimension_count`, `dimension_values` |
+| `DIMSTYLE` / `ACAD:DSTYLE` / 寸法文字の公差信号 | `dimensions[].has_tolerance`, `upper_tol`, `lower_tol` | `dimension_tolerance_count`, `dimension_tolerance_values` |
+| `TOLERANCE` | `tolerances[]` | `geometric_tolerance_count`, `tolerance_candidates` |
+| 溶接キーワードを含む `TEXT` / `MTEXT` | `weld_notes[]` | `weld_instruction_count`, `weld_types`, `weld_note_candidates` |
 | `LINE` / `CIRCLE` / `ARC` / `ELLIPSE` / `LWPOLYLINE` / `POLYLINE` / `SPLINE` / `HATCH` | `geometry_primitives[]` | 形状特徴候補 |
-| レイヤー一覧 | `layers[]` | `dxf_layers` |
+| 対応要素で使用されたレイヤー | `layers[]` | `dxf_layers` |
 
 ---
 
 ## 3. 正規化後の属性キー（canonical_attributes）
 
-正規化後は固定スキーマの辞書になります。**2D snapshot で 133 キー、3D snapshot で 97 キー**です。値が取れなかったキーは `null` または空配列のまま残ります（「取れなかった」ことも情報として残す方針）。
+正規化後は固定スキーマの辞書になります。値が取れなかったキーは `null`、`0`、空配列のまま残します（「取れなかった」ことも情報として残す方針）。
 
 主なキーを分類して示します。
 
@@ -158,18 +185,24 @@
 
 ### 4.1 タグの種類
 
-`canonical_attributes` から、以下の11種類のタグを生成します。
+`canonical_attributes` から、以下のタグを生成します。
 
 | タグ接頭辞 | 生成元の属性キー | 確度 |
 |---|---|---|
 | `客先:` | `customer_name` | high |
 | `案件:` | `project_name` | high |
 | `装置:` | `equipment_category` | high |
+| `寸法あり` | `dimension_count` | high |
+| `寸法公差あり` | `dimension_tolerance_count` | high |
+| `幾何公差あり` | `geometric_tolerance_count` | high |
+| `溶接指示あり` | `weld_instruction_count` | high |
+| `溶接:すみ肉` / `溶接:全周` | `weld_types` | medium |
 | `メーカー:` | `maker_keywords` | medium |
 | `材質:` | `material_keywords`, `title_block_fields.material` | medium |
 | `表面処理:` | `surface_treatment_tokens`, `title_block_fields.surface_treatment` | medium |
 | `塗装:` | `paint_instruction_tokens`, `title_block_fields.coating_instruction` | medium |
 | `熱処理:` | `heat_treatment_keywords` | medium |
+| `硬度:HRC` / `硬度:HV` | `hardness_spec_values` | medium |
 | `PRFX:` | `prfx_candidates`, `title_block_fields.prfx` | medium |
 | `ユニット:` | `unit_number_candidates`, `title_block_fields.unit_number` | medium |
 | `規格:` | `spec_tokens` のうち辞書一致語（現状 `SES` のみタグ化） | medium |
@@ -196,9 +229,9 @@
 
 ### 4.3 タグ化するもの／属性保持に留めるもの
 
-**タグ化する**: 客先、案件、装置カテゴリ、メーカー、正式材質、表面処理、塗装、熱処理、PRFX、ユニット番号、明確な規格識別子
+**タグ化する**: 客先、案件、装置カテゴリ、寸法の有無、寸法公差の有無、幾何公差の有無、溶接指示の有無、明示判定できた溶接種別（すみ肉・全周）、メーカー、正式材質、表面処理、塗装、熱処理、硬度尺度（HRC・HV）、PRFX、ユニット番号、明確な規格識別子
 
-**属性として保持し、原則タグ化しない**: 寸法値、公差値、溶接記号、バルーン、穴・長穴・切断線・ハッチング等の形状特徴、質量・体積・重心・慣性モーメント
+**属性として保持し、原則タグ化しない**: 寸法値、公差値、溶接記号の生値、硬度の数値、バルーン、穴・長穴・切断線・ハッチング等の形状特徴、質量・体積・重心・慣性モーメント
 
 理由は、存在するだけでタグにすると検索ノイズが大きくなるためです。これらは図面レビューやRAG投入時の属性・根拠として保持します。
 
@@ -300,7 +333,7 @@
 
 ## 6. タグ・属性抽出ソースの切り出し範囲
 
-創屋様のご要望「タグ・属性抽出の部分のソースだけ頂ければ、その部分だけ切り出しできると考えております」について、**切り出せる構成になっています**。現時点の境界は以下です。
+タグ・属性抽出から自動タグ付与までを、ナレッジシステム本体から独立して供給します。モジュール境界は以下で確定します。
 
 ### 6.1 C#側（ICAD抽出コア）
 
@@ -316,14 +349,14 @@
 
 ### 6.2 Python側（正規化・タグ生成コア）
 
-以下6ファイル（約2,800行）が正規化・タグ生成の本体です。
+以下6ファイルが正規化・タグ生成の本体です。納品時はDjango依存を除去し、単体Pythonパッケージへ再配置します。
 
 | ファイル | 行数 | 役割 | 外部依存 |
 |---|---|---|---|
-| `services/normalization.py` | 1,860 | `raw_extract` → `canonical_attributes` | `settings` 1定数、`TagDictionaryEntry`（定数参照のみ） |
-| `services/generic_cad_extractor.py` | 519 | STEP/DXFの抽出（外部CADライブラリ不要） | `settings` 1定数 |
+| `services/normalization.py` | 2,020 | `raw_extract` → `canonical_attributes` | `settings` 1定数、`TagDictionaryEntry`（定数参照のみ） |
+| `services/generic_cad_extractor.py` | 633 | STEP/DXFの抽出（外部CADライブラリ不要） | `settings` 1定数 |
 | `services/seed_dictionaries.py` | 222 | 初期辞書（純Python、依存なし） | なし |
-| `services/tag_builder.py` | 112 | `canonical_attributes` → `derived_tags` | `settings` 1定数 |
+| `services/tag_builder.py` | 159 | `canonical_attributes` → `derived_tags` | `settings` 1定数 |
 | `services/dictionaries.py` | 54 | 辞書ロード（DB + 初期辞書のマージ） | `TagDictionaryEntry`（ORMクエリあり） |
 | `services/source_formats.py` | 41 | 拡張子→フォーマット判定（純Python） | なし |
 
@@ -332,7 +365,7 @@
 1. `settings` のバージョン文字列3個（`DRAWING_METADATA_NORMALIZER_VERSION`, `DRAWING_METADATA_TAG_RULE_VERSION`, `DRAWING_METADATA_SCHEMA_VERSION`）
 2. `TagDictionaryEntry` モデル（辞書のDB読み出し）
 
-1はコンストラクタ引数や設定オブジェクトへ置き換えるだけです。2はDBアクセスを伴いますが、DBアクセスは `dictionaries.load_keyword_mapping` の1箇所に集約されており（`normalization.py` は `TagDictionaryEntry.KIND_*` を定数として参照しているだけ）、辞書ロード関数をインターフェース化すれば分離できます。したがってDjangoなしの純Pythonパッケージとして切り出せます。ご希望であれば、その形（`icad_tag_extraction` 単体パッケージ + サンプル入出力JSON + 単体テスト）で納品できます。
+1は設定オブジェクトへ置き換え、2は辞書プロバイダーのインターフェースへ置き換えます。DBアクセスは `dictionaries.load_keyword_mapping` の1箇所に集約されているため、Djangoモデルを納品パッケージへ持ち込みません。納品形態は `icad_tag_extraction` 単体パッケージ、サンプル入出力JSON、単体テスト、初期辞書、スキーマ定義です。
 
 ### 6.3 切り出し対象に含めないもの
 
@@ -341,6 +374,60 @@
 - Djangoモデル（`RegisteredDrawing`, `DrawingMetadataSnapshot`, `DrawingMetadataExtractionJob`, `DrawingMetadataAuditLog`, `TagDictionaryEntry`）
 - ジョブ管理・リトライ・タイムアウト制御・監査ログ
 - 画面（タグ辞書管理、抽出管理、レビューUI）
+
+### 6.4 JSONインターフェース
+
+呼び出し単位は `1図面 = 1回` です。ファイルまたは標準入出力でJSONを受け渡し、呼び出し側の言語・フレームワークには依存しません。
+
+**入力**
+
+```json
+{
+  "source_file": {
+    "full_path": "J:\\sample\\drawing.icd",
+    "file_name": "drawing.icd",
+    "source_format": "icad"
+  },
+  "source_kind": "2d",
+  "raw_extract": {}
+}
+```
+
+**出力**
+
+```json
+{
+  "schema_version": "1.x",
+  "source_file": {},
+  "raw_extract": {},
+  "canonical_attributes": {},
+  "derived_tags": [
+    {
+      "tag": "材質:SUS304",
+      "source": "material_keywords",
+      "evidence": "canonical_attributes.material_keywords",
+      "confidence": "medium",
+      "reason": "正式材質として分類できたため採用",
+      "tag_rule_version": "1.x"
+    }
+  ],
+  "warnings": []
+}
+```
+
+`canonical_attributes` の全キー、型、必須・任意区分は、別添のJSONスキーマで定義します。本資料では分類と代表項目だけを示します。
+
+### 6.5 供給成果物
+
+| 成果物 | 内容 |
+|---|---|
+| `IcadExtraction.sln` | ICAD 2D/3D抽出、材質・質量取得、JSON出力 |
+| `icad_tag_extraction` | STEP/DXF抽出、正規化、辞書照合、タグ自動付与 |
+| JSONスキーマ | 入力、`raw_extract`、`canonical_attributes`、`derived_tags` の型定義 |
+| サンプルJSON | ICAD 2D、ICAD 3D、STEP、DXFの正常例・未取得例 |
+| 初期辞書 | 客先、装置、メーカー、材質、熱処理、規格、部品名 |
+| 単体テスト | 正規化、タグ生成、誤検出防止、空値処理 |
+| 組み込み手順 | CLI実行、Python API呼び出し、戻り値処理 |
 
 ---
 
@@ -358,86 +445,94 @@
 ### 7.2 限界（重要）
 
 - **ICAD本体にある材質・質量は、STEP側に同等には残りません。** 変換後データはICAD正本と等価ではなく、補完・比較の対象として扱う必要があります。監査結果（`output/converted_cad_audit_2026-07-26.json`）では、元ICAD側の材質 `SS400` が変換後STEP側では0件（overlapCount=0）、`sourceMassAvailable=true` に対し `convertedMassAvailable=false` でした。部品名も元 `9NK452WX90-00-LINER-A3-3D-01` に対し変換後は `Assembly` / `...-prt0` で、一致0件でした。
-- 今回のDXFサンプルではブロック属性は0件でした。図枠情報がブロック属性で入っているかは客先の図枠仕様に依存します。
+- **STEP側に親子関係が残っていても、ICADの内部／外部パーツ区分は復元できません。** 今回の変換結果も `Assembly` から `...-prt0` への関係が1件あるだけで、BOM相当の外部パーツ数を判断できません。この関係数を部品数としてタグ化・集計せず、STEP構造の表示・検索補助に限定します。
+- 共有DXF 38件ではブロック属性を5ファイル・30属性確認しましたが、すべて `SX_DeltaSymbol / デルタ文字` で、図番・材質等の図枠属性ではありませんでした。図枠情報がブロック属性で入るかは客先の図枠仕様に依存します。
 - STEPはSXNETが `.stp` 拡張子で出力したため、`.step` / `.stp` の両方をSTEP成果物として検出しています。
 - DXF変換時、SXNETのexport自体は成功しても、runnerの終了待ちが長くなるケースがありました。結果JSONが存在する場合は成功済み成果物として読む実装にしています。
 - 変換後にICADの保存確認ダイアログが出ることがありますが、保存は不要です。`IcadExtraction.Runner.exe shutdown-icad` で保存なし終了できます。
 
 ### 7.3 変換に関する所見
 
-「ICAD→STEP変換を機能として用意する」ことは技術的には成立します。ただし**変換したSTEPから取れる情報は、ICAD正本から直接抜いた情報より確実に少ない**という実測結果があります。変換を経由するのは「ICADライセンスのない環境でも最低限の情報を取りたい」場合の代替経路であって、上位互換ではありません。
+「ICAD→STEP変換を機能として用意する」ことは技術的には成立します。ただし**変換したSTEPから取れる情報は、ICAD正本から直接抜いた情報より確実に少ない**という実測結果があります。変換を経由するのは「ICAD正本を直接処理できない環境でも最低限の情報を取りたい」場合の代替経路であって、上位互換ではありません。
+
+### 7.4 共有DXF 38件での本体タグ生成実測（2026-07-28）
+
+本体の `generic_cad_extractor.py` → `normalization.py` → `tag_builder.py` を通して、ICADから変換した共有DXF 38件を再検証しました。
+
+| タグ | 該当ファイル数 |
+|---|---:|
+| `寸法あり` | 30 |
+| `寸法公差あり` | 7 |
+| `幾何公差あり` | 1 |
+| `溶接指示あり` | 13 |
+| `溶接:すみ肉` | 2 |
+| `溶接:全周` | 5 |
+| `硬度:HRC` | 2 |
+| `硬度:HV` | 0 |
+
+`THV6x4`、`LQHB06` のように英数字識別子へ埋め込まれた文字列は硬度として扱いません。実測JSONは `output/dxf_full_audit_2026-07-28/production_tag_validation.json` に保存しています。
+
+### 7.5 共有ICAD抽出JSON 39件でのタグ再生成実測（2026-07-28）
+
+保存済みのICAD 2D/3D抽出JSONを、更新後の `normalization.py` → `tag_builder.py` で再検証しました。出図範囲枠がある図面では、枠外要素を自動タグの根拠から除外しています。
+
+| タグ | 該当図面数 |
+|---|---:|
+| `寸法あり` | 28 |
+| `寸法公差あり` | 5 |
+| `幾何公差あり` | 2 |
+| `溶接指示あり` | 4 |
+| `溶接:すみ肉` | 0 |
+| `溶接:全周` | 0 |
+| `硬度:HRC` | 2 |
+| `硬度:HV` | 0 |
+
+ICAD経路でも `SxGeomWeld` または一般文字中の溶接語から `溶接指示あり` を生成します。今回の保存済みICAD抽出JSONには、すみ肉・全周を確定できる文字値がなかったため、種別タグは0件です。実測JSONは `output/icad_feature_tag_validation_2026-07-28.json` に保存しています。
+
+### 7.6 既存テスト用ICAD全50件のSTEP変換・構造監査（2026-07-28）
+
+固定manifestの共有サンプル39件と、ワークスペース内 `cad_data` の11件を合わせ、既存テスト用ICAD 50件を全件対象にしました。全件監査時は保存確認ダイアログによる停止を避けるため変換ごとに終了していましたが、製品実装では同一処理内の変換でICADを再利用し、処理全体の終了時に1回だけ `shutdown-icad` を実行します。処理側が自動起動したICADだけを対象とし、「保存しますか」が出た場合は「いいえ／保存しない／破棄」を選んで保存せず終了します。タイムアウト時も結果JSONの自動起動記録を確認して同じ終了処理を行います。
+
+| 項目 | 結果 |
+|---|---:|
+| 対象 | 50件 |
+| 元ICAD実体あり | 49件 |
+| STEP変換・監査成功 | 48件 |
+| 形状要素なしで変換不可 | 1件 |
+| 元ICAD実体なし | 1件 |
+| 元ICAD抽出結果と比較可能 | 39件 |
+| STEP内に製品・部品関係あり | 48件 |
+| STEP内に外部参照識別信号あり | 0件 |
+
+変換不可の1件は `DFR-CM1-AA0305300011.icd` で、SXNETが `MSG06223 処理対象となる要素がありません` を返しました。実体なしの1件はmanifest No.8の `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd` です。
+
+元ICAD抽出結果と比較できた39件では、次の結果になりました。
+
+| 比較観点 | 元ICAD側の該当数 | STEP側で同等情報を確認できた数 |
+|---|---:|---:|
+| 外部パーツあり | 6件 | 0件 |
+| 材質あり | 32件 | 0件 |
+| 質量あり | 37件 | 0件 |
+| 部品名が1件以上一致 | 39件中 | 0件 |
+| 外部パーツ名が1件以上一致 | 外部パーツあり6件中 | 0件 |
+
+外部パーツを持つ実データでも、STEPの製品数・関係数とICADの内部／外部パーツ数は一致せず、外部参照を示すSTEPエンティティは0件でした。
+
+| ファイル | ICAD外部 | ICAD内部 | STEP製品 | STEP関係 | STEP外部参照 |
+|---|---:|---:|---:|---:|---:|
+| `CAA5012-02434000K1R1.icd` | 26 | 334 | 320 | 319 | 0 |
+| `XH30-A08001-R03-JP_ロードカップ部改造.icd` | 85 | 490 | 476 | 475 | 0 |
+| `PSG011-PA0500_コラム.icd` | 37 | 225 | 30 | 29 | 0 |
+| `PSG011-PA1300_ベース.icd` | 14 | 81 | 87 | 86 | 0 |
+| `47323200X40c.icd` | 15 | 421 | 746 | 745 | 0 |
+
+したがって、STEPの `PRODUCT` 数や `NEXT_ASSEMBLY_USAGE_OCCURRENCE` 数はBOM部品数・外部パーツ数として使用しません。STEP階層は、ビューワーのツリー表示、親子関係を使った検索補助、配置数確認などのSTEP内構造としてのみ利用します。材質・質量・内部／外部区分・正規の部品名が必要な場合は、ICAD正本からSXNETで直接抽出します。
+
+全件の集計は `output/step_full_audit_2026-07-28/summary.md`、機械可読データは同フォルダの `summary.json` / `summary.csv`、個別結果は `per_file_audit`、変換STEPは `step` に保存しています。
 
 ---
 
-## 8. ICADライセンスの論点
-
-創屋様のご懸念「ナレッジシステム専用として150万円程のICADを販売先が用意してくれるか」「専用である必要はあるのか、兼用は難しいか」について、まず**技術的な事実**を整理し、そのうえで選択肢を示します。
-
-### 8.1 技術的な事実（コード上で確認済み）
-
-| # | 事実 | 根拠 |
-|---|---|---|
-| 1 | 経路A（ICAD正本から抽出）は、SXNET経由でICAD SX本体プロセスを必要とする | `IcadProcessStarter` がICAD実行体を起動、または起動済みプロセスへ接続 |
-| 2 | ICADセッションは**1つずつ排他利用**される。並列に複数の抽出を走らせない | `Local\KnowledgeSystem.IcadExtraction.IcadSession` の Mutex で直列化。`Local\` のため排他範囲はWindowsのログオンセッション単位で、別ユーザーセッション・別マシンには効かない |
-| 3 | ICADが必要なのは**登録・抽出のタイミングだけ**。検索・閲覧・タグ表示・RAG回答にICADは不要 | 抽出結果はsnapshotとしてDBに保存され、以降は参照されない |
-| 4 | 経路B・C（STEP/DXFからの抽出）は**ICADなしで動く**。外部CADライブラリも不要 | `generic_cad_extractor.py` は外部CADライブラリに依存せず、Python標準の文字列処理だけでSTEP/DXFを解析（ezdxf・OCC等の依存なし） |
-| 5 | ICAD→STEP/DXF変換の**その瞬間だけ**ICADが要る | `IcadCadFormatExporter`（SXNET `SxModel.export`） |
-
-**したがって「ナレッジシステム専用のICADライセンス」が技術的に必須という結論にはなりません。** 必要なのは「抽出処理を実行している間、そのICADセッションを占有できること」だけです。
-
-### 8.2 販売を前提にした場合の選択肢
-
-自社導入だけでなく外販を考えると、「顧客が150万円のICADを追加購入する」を前提にした製品は売りにくくなります。前提を分けて設計すべきと考えます。
-
-| 案 | 内容 | 顧客の追加ICAD費用 | 取得できる情報 | 主な制約 |
-|---|---|---|---|---|
-| **① 既存ライセンス兼用（夜間バッチ）** | 顧客が既に持つICADを、設計者が使わない夜間・休日に抽出用として使う | 0円 | 最大 | ライセンス条項の可否確認が必須。抽出中はその座席を占有 |
-| **② 既存ライセンス兼用（専用PC1台）** | 顧客の空き座席1本を抽出専用PCへ割り当て | 0円（座席の振替） | 最大 | 空き座席がある顧客に限る |
-| **③ ICAD不要構成** | 顧客側でSTEP/DXF/PDFへ出力済みのデータを取り込む。経路B・Cのみ | 0円 | 中（材質・質量は落ちる） | 顧客に出力運用を依頼する必要あり |
-| **④ 変換代行** | 当社の余剰ライセンス＋当社サーバーでICAD→STEP/中間データ変換を代行 | 0円 | 最大〜中 | 図面データを社外（当社）へ出すことへの顧客同意が必要 |
-| **⑤ 専用ライセンス新規購入** | 顧客がナレッジシステム用にICADを1本追加 | 約150万円 | 最大 | 費用が導入判断のボトルネックになりやすい |
-
-当社には余剰ライセンスがあるため、④は当社が担げる現実的な選択肢です。また、対象顧客はICADユーザーであることが多く、①②が成立する可能性は相応にあると見ています。
-
-### 8.3 要確認事項（当社→富士通／ICAD販売元）
-
-以下はライセンス条項の問題であり、当社もまだ確認できていません。断定せずに確認事項として残します。
-
-- 設計者向けライセンスを、無人のバッチ処理（サーバー常駐・自動起動）で使うことが許諾範囲か。
-- ライセンス形態（ノードロック／フローティング等）と、フローティングの場合の借用可否。
-- 「同時使用」の定義。1座席を夜間だけ別PCで使う運用が可能か。
-- 当社の余剰ライセンスを使って他社図面の変換を受託することが許諾範囲か（④の前提）。
-
-### 8.4 創屋様へのご相談
-
-上記を踏まえ、**製品としては「ICADがある構成」と「ICADがない構成」の両方を成立させる**方向で設計を進めたいと考えています。具体的には、経路Aで取れる情報と経路B・Cで取れる情報の差を仕様として明示し、顧客の環境に応じて構成を選べる形です。この方針で問題ないか、ご意見をいただきたいところです。
-
----
-
-## 9. 創屋様への確認事項
-
-### 9.1 抽出まわり
-
-1. STEPから製品名・部品名・部品階層・材質・質量特性を取得できるライブラリ／APIを、創屋様側でお持ちか。
-2. DXFからTEXT/MTEXT、ブロック属性、レイヤー名、寸法、公差、溶接記号を分離取得できるか。
-3. 図枠のラベルと値を、可能な限り同一TEXT/MTEXT要素またはDXFブロック属性として取得できるか。別要素間の座標ペアリングは対象外とする。
-4. 材質が色・レイヤー・ブロック名にしか入っていないケースがあるか。
-5. 抽出値に推測を混ぜず、取得元フィールドと信頼度を添えて返せるか。
-
-### 9.2 受け渡しまわり
-
-6. 6.2に書いた「Django非依存の純Pythonパッケージ」形での納品でよいか。それとも現状のDjango app のまま渡す方が組み込みやすいか。
-7. 納品時に一緒に欲しい成果物（サンプル入出力JSON、単体テスト、辞書の初期データ、スキーマ定義）の優先順位。
-8. タグ・属性の書き込み先API（`drawing_attributes` / `product_attributes` / `part_attributes` 相当）の確定仕様。
-
-### 9.3 ライセンス・構成
-
-9. 8.4の「ICADあり／なし両構成」の方針で問題ないか。
-10. ICAD→STEP変換を創屋様側の機能として実装される場合、当社のC# `convert-cad` 実装をそのまま使うか、創屋様側で作り直すか。
-
----
-
-## 10. 参考ドキュメント
+## 8. 参考ドキュメント
 
 | ドキュメント | 内容 |
 |---|---|

@@ -8,6 +8,15 @@
 - [x] 抽出・変換タイムアウト時も自動起動記録からICADを安全に終了
 - [x] Python・C#テストを実行し、修正分だけを日本語コミットしてプッシュ
 
+## 2026-07-28 創屋向けCADタグ・属性抽出 供給仕様資料
+
+- [x] 既存の抽出元カタログをr2供給仕様確定版へ更新
+- [x] 「タグ付与」を `derived_tags` の生成・根拠付与までと定義し、本番DB/API登録との担当境界を明記
+- [x] JSON入出力、供給成果物、C#／Pythonモジュール境界を追記
+- [x] ライセンス論点と質問節を削除し、決定事項の通知資料へ統一
+- [x] 16:9・15枚の創屋向け新規PPTXを作成
+- [x] 全15枚をレンダリングし、タイトル切れ・文字折返しを修正
+
 ## 2026-07-28 図枠ラベル・値の座標ペアリング方針
 
 - [x] 図枠ラベルと値の自動対応は、同一文字要素の同じ行または次の行に限定
@@ -305,6 +314,44 @@
 - [x] 2D/3Dビューワー統合フロントの production 側から固定サンプル系の命名を撤去し、実bootstrap由来の補助情報として `shared/knowledge/drawingKnowledge` / `DrawingKnowledgeDetail` / `buildDrawingKnowledgeDetail` へリネーム。実データ表示用モジュールであることをコード上も明確化
 - [x] ICADからDXF/STEPへ変換する前提で、STEPのPRODUCT/親子関係、DXFのINSERT+ATTRIB/レイヤーを抽出・canonical保持し、C# `convert-cad` / Django `convert_icad_cad_formats` / `audit_converted_cad_extractions` / `probe_icad_cad_export_types` で変換・抽出・一致度確認・SXNET export定数確認まで実行できるようにした
 - [x] 実ICAD `9NK452WX90-00-LINER-A3-3D-01.icd` で `probe_icad_cad_export_types`、ICAD→STEP(`.stp`)、ICAD→DXF、変換後STEP 3D抽出、変換後DXF 2D抽出、`audit_converted_cad_extractions` を確認。STEPはPRODUCT/親子関係、DXFはレイヤーを取得できたが、材質・質量はICAD正本と完全同等ではないことを監査結果に記録
+
+## 共有サンプルICD全件のDXF変換・エンティティ監査（2026-07-28）
+
+- [x] 固定manifestの共有サンプル39件とICD実体の存在を確認（38件参照可能、1件は記録パスに実体なし）
+- [x] 参照可能な共有サンプルICD 38件を全件DXFへ変換
+- [x] TEXT/MTEXT・ブロック属性・レイヤー名・寸法・公差・溶接記号をDXF生エンティティから全件集計
+  - TEXT/MTEXT: 30件（TEXT 909、MTEXT 8,852）
+  - ブロック属性: 5件（ATTRIB 30、確認できた属性は `SX_DeltaSymbol` の `デルタ文字`）
+  - レイヤー名: 38件
+  - 寸法: 30件（DIMENSION 2,234）
+  - 寸法公差: 7件（公差信号付きDIMENSION 16）
+  - 幾何公差: 1件（TOLERANCE 1）
+  - 溶接専用エンティティ: 0件、溶接文字候補: 13件（36候補）
+- [x] 初回タイムアウト2件を600秒枠で個別再実行し、2件とも変換成功を確認
+- [x] JSON/CSV/Markdownと38件分のDXF・個別監査JSONを `output/dxf_full_audit_2026-07-28` へ保存
+- [ ] manifest No.8 `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd` は記録パスに実体がないため、移動先を確認して変換
+
+## 既存テスト用ICAD全件のSTEP変換・構造監査（2026-07-28）
+
+- [x] 固定manifestの共有サンプル39件とワークスペース内 `cad_data` 11件を統合し、対象50件を確定
+- [x] 元ICAD実体あり49件へSTEP変換を実行し、48件成功・1件は形状要素なしを確認
+- [x] 元ICAD抽出結果と比較可能な39件で、製品名・部品関係・材質・質量・外部参照情報を比較
+- [x] JSON/CSV/Markdown、48件分のSTEP・個別監査JSONを `output/step_full_audit_2026-07-28` へ保存
+- [x] 実測結果を `docs/cad_tag_extraction_sources_for_souya_2026-07-28.md` へ反映
+- [ ] manifest No.8 `03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd` は記録パスに実体がないため、移動先を確認して変換
+
+## ICAD・DXF共通の図面特徴タグ追加（2026-07-28）
+
+- [x] 寸法・寸法公差・幾何公差・溶接指示・硬度の既存canonical属性を確認
+- [x] `寸法あり` / `寸法公差あり` / `幾何公差あり` をICAD・DXF共通タグとして追加
+- [x] `溶接指示あり` / `溶接:すみ肉` / `溶接:全周` をICAD・DXF共通タグとして追加
+- [x] `硬度:HRC` / `硬度:HV` をICAD・DXF共通タグとして追加
+- [x] DXFのDIMSTYLE・寸法オーバーライド・TOLERANCEエンティティ解析を本体抽出器へ統合
+- [x] ICAD・DXF両経路の自動テストを追加し、資料を現行実装へ更新
+  - `apps/drawing_metadata/tests`: 159件成功
+  - 実DXF 38件: 寸法30、寸法公差7、幾何公差1、溶接指示13、すみ肉2、全周5、HRC2、HV0
+  - 保存済み実ICAD抽出JSON 39件: 寸法28、寸法公差5、幾何公差2、溶接指示4、すみ肉0、全周0、HRC2、HV0
+  - `THV6x4` / `LQHB06` 等の英数字識別子は硬度タグから除外
 
 ## 創屋との接続時に確認する
 
