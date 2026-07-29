@@ -447,6 +447,7 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
         canonical_attributes_json={
             "material_keywords": ["SS400"],
             "drawing_number": "CAA5012-02434006P1R1",
+            "equipment_name": "供給装置",
         },
         derived_tags_json=[],
     )
@@ -462,14 +463,18 @@ def test_icad_entity_api_registers_one_assembly_for_one_icd(sample_registration_
     assert len(products) == 1
     assert products[0]["entityKind"] == "assembly"
     assert products[0]["drawingId"] == str(drawing.id)
-    assert products[0]["treePath"] == ["MACHINE"]
+    assert products[0]["name"] == "供給装置"
+    assert products[0]["treePath"] == ["供給装置"]
+    assert products[0]["drawingNumber"] == "CAA5012-02434006P1R1"
+    assert products[0]["partNumber"] is None
+    assert products[0]["businessFields"]["drawingNumber"] == "CAA5012-02434006P1R1"
     assert products[0]["parentEntityId"] is None
     assert parts == []
     assert any(attribute["key"] == "materials" for attribute in products[0]["attributes"])
 
     detail_response = client.get(f"/api/v1/knowledge-entities/{products[0]['entityId']}")
     assert detail_response.status_code == 200
-    assert detail_response.json()["treePath"] == ["MACHINE"]
+    assert detail_response.json()["treePath"] == ["供給装置"]
     assert detail_response.json()["classificationEvidence"] == "filename"
     assert detail_response.json()["businessFields"]["status"] == ""
     assert detail_response.json()["extractionReview"]["label"] == "未確認"
@@ -558,10 +563,12 @@ def test_icad_part_entity_uses_part_name_separately_from_part_number(sample_regi
     payload = response.json()
     assert payload["count"] == 1
     item = payload["items"][0]
+    assert item["drawingNumber"] == drawing_number
     assert item["partNumber"] == drawing_number
     assert item["name"] == "BRACKET"
     assert item["treePath"] == ["BRACKET"]
     assert item["businessFields"]["partNumber"] == drawing_number
+    assert item["businessFields"]["drawingNumber"] == drawing_number
     assert item["businessFields"]["name"] == "BRACKET"
 
 
@@ -590,6 +597,7 @@ def test_icad_part_entity_rejects_obvious_part_number_noise(sample_registration_
 
     assert response.status_code == 200
     item = response.json()["items"][0]
+    assert item["drawingNumber"] == ""
     assert item["partNumber"] == ""
     assert item["businessFields"]["partNumber"] == ""
     assert item["name"] == "PLATE"
@@ -620,9 +628,109 @@ def test_icad_part_entity_cleans_filename_style_part_number(sample_registration_
 
     assert response.status_code == 200
     item = response.json()["items"][0]
+    assert item["drawingNumber"] == "U8718-S71-002"
     assert item["partNumber"] == "U8718-S71-002"
     assert item["businessFields"]["partNumber"] == "U8718-S71-002"
     assert item["name"] == "シュートベース"
+
+
+@pytest.mark.django_db
+def test_icad_product_entity_never_uses_top_3d_part_name(sample_registration_payload):
+    drawing_number = "CAA5012-02434000P1R1"
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="product-top-part-name-drawing",
+        filename=f"{drawing_number}.icd",
+        source_path=rf"C:\temp\{drawing_number}.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": "MACHINE"},
+            "parts": [
+                {"tree_path": ["MACHINE"], "name": "MACHINE", "depth": 0, "child_count": 1},
+                {
+                    "tree_path": ["MACHINE", "SUB"],
+                    "name": "SUB",
+                    "depth": 1,
+                    "child_count": 0,
+                    "is_external": True,
+                },
+            ],
+        },
+        canonical_attributes_json={
+            "drawing_number": drawing_number,
+            "top_part_name": "MACHINE",
+            "part_names": ["MACHINE", "SUB"],
+        },
+    )
+
+    response = APIClient().get(f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}")
+
+    assert response.status_code == 200
+    item = response.json()["items"][0]
+    assert item["name"] == "名称未抽出"
+    assert item["name"] != "MACHINE"
+    assert item["drawingNumber"] == drawing_number
+    assert item["businessFields"]["drawingNumber"] == drawing_number
+    assert item["partNumber"] is None
+
+
+@pytest.mark.django_db
+def test_icad_part_entity_uses_validated_comment_then_filename_name(sample_registration_payload):
+    comment_drawing_number = "P-10001"
+    comment_drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-comment-name-drawing",
+        filename=f"{comment_drawing_number}.icd",
+        source_path=rf"C:\temp\部品\{comment_drawing_number}.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=comment_drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": comment_drawing_number, "comment": "開口カバー"},
+            "parts": [{"tree_path": [comment_drawing_number], "name": comment_drawing_number}],
+        },
+        canonical_attributes_json={
+            "drawing_number": comment_drawing_number,
+            "top_part_name": comment_drawing_number,
+            "top_part_comment": "開口カバー",
+        },
+    )
+    filename_drawing_number = "PSG011-PA1100"
+    filename_drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-filename-name-drawing",
+        filename=f"{filename_drawing_number}_クリーニング駆動.icd",
+        source_path=rf"C:\temp\部品\{filename_drawing_number}_クリーニング駆動.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=filename_drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": filename_drawing_number, "comment": "元図を変更"},
+            "parts": [{"tree_path": [filename_drawing_number], "name": filename_drawing_number}],
+        },
+        canonical_attributes_json={
+            "drawing_number": filename_drawing_number,
+            "top_part_name": filename_drawing_number,
+            "top_part_comment": "元図を変更",
+        },
+    )
+
+    comment_response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=part&drawingId={comment_drawing.id}"
+    )
+    filename_response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=part&drawingId={filename_drawing.id}"
+    )
+
+    assert comment_response.status_code == 200
+    assert comment_response.json()["items"][0]["name"] == "開口カバー"
+    assert filename_response.status_code == 200
+    assert filename_response.json()["items"][0]["name"] == "クリーニング駆動"
 
 
 @pytest.mark.django_db

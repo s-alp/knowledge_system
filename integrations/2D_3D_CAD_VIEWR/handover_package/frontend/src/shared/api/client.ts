@@ -1,3 +1,6 @@
+// このファイルは、フロントから呼ぶDjango APIを一か所へ集約し、成功・失敗の応答形をそろえる。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import type { ApiErrorPayload, DrawingBootstrapResponse, Open2DResponse, Open3DResponse } from "../types/viewer";
 
 export type DrawingMetadataExtractionMode = "2d" | "3d";
@@ -17,6 +20,30 @@ export interface DrawingMetadataJobResponse {
   finishedAt?: string | null;
   createdAt?: string;
   updatedAt?: string;
+  diagnostics?: {
+    failure?: {
+      errorClass?: string;
+      sourcePreflight?: {
+        sourcePathLength?: number;
+        sourcePathWithinSxnetLegacyLimit?: boolean;
+        requiresSxnetStagedInput?: boolean;
+        filenameLength?: number;
+        filenameWithinWindowsLimit?: boolean;
+        extensionIsIcd?: boolean;
+        sourceExistsFromCurrentMachine?: boolean;
+      };
+      reextractCondition?: string;
+    };
+    sourcePreflight?: {
+      sourcePathLength?: number;
+      sourcePathWithinSxnetLegacyLimit?: boolean;
+      requiresSxnetStagedInput?: boolean;
+      filenameLength?: number;
+      filenameWithinWindowsLimit?: boolean;
+      extensionIsIcd?: boolean;
+      sourceExistsFromCurrentMachine?: boolean;
+    };
+  };
 }
 
 export interface DrawingMetadataSnapshotResponse {
@@ -307,6 +334,23 @@ export function resolveApiBaseUrl(
 
 const API_BASE_URL = resolveApiBaseUrl();
 
+async function readJsonResponse<T>(response: Response): Promise<T | null> {
+  if (response.status === 204) {
+    return null;
+  }
+
+  const text = await response.text();
+  if (!text.trim()) {
+    return null;
+  }
+
+  return JSON.parse(text) as T;
+}
+
+function errorMessageFromPayload(payload: ApiErrorPayload | null, response: Response): string {
+  return payload?.error?.message ?? `API request failed: HTTP ${response.status} ${response.statusText}`.trim();
+}
+
 async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
   // API 呼び出しの失敗形を 1 か所にそろえ、画面側は message だけを扱う。
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -318,11 +362,15 @@ async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const payload = (await response.json()) as ApiErrorPayload;
-    throw new Error(payload.error.message);
+    const payload = await readJsonResponse<ApiErrorPayload>(response).catch(() => null);
+    throw new Error(errorMessageFromPayload(payload, response));
   }
 
-  return (await response.json()) as T;
+  const payload = await readJsonResponse<T>(response);
+  if (payload === null) {
+    throw new Error(`API request returned an empty response: HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  return payload;
 }
 
 export function openViewer2D(url: string): Promise<Open2DResponse> {
@@ -496,11 +544,15 @@ async function uploadFile<T>(path: string, file: File): Promise<T> {
   });
 
   if (!response.ok) {
-    const payload = (await response.json()) as ApiErrorPayload;
-    throw new Error(payload.error.message);
+    const payload = await readJsonResponse<ApiErrorPayload>(response).catch(() => null);
+    throw new Error(errorMessageFromPayload(payload, response));
   }
 
-  return (await response.json()) as T;
+  const payload = await readJsonResponse<T>(response);
+  if (payload === null) {
+    throw new Error(`API request returned an empty response: HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  return payload;
 }
 
 export function uploadViewer2D(file: File): Promise<Open2DResponse> {
@@ -509,4 +561,75 @@ export function uploadViewer2D(file: File): Promise<Open2DResponse> {
 
 export function uploadViewer3D(file: File): Promise<Open3DResponse> {
   return uploadFile<Open3DResponse>("/viewer3d/upload", file);
+}
+
+export interface TagDictionaryEntryPayload {
+  id: number;
+  kind: string;
+  kindLabel: string;
+  canonicalValue: string;
+  aliases: string[];
+  priority: number;
+  enabled: boolean;
+  note: string;
+  updatedAt: string;
+}
+
+export interface TagDictionaryListResponse {
+  kinds: { kind: string; label: string }[];
+  entries: TagDictionaryEntryPayload[];
+  seedFallbackNote: string;
+}
+
+async function requestTagDictionaryJson<T>(path: string, options?: RequestInit): Promise<T> {
+  // 辞書APIはDRF標準のバリデーションエラー形({field: [msg]})も返すため、ここで文言へ変換する。
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options?.headers ?? {}),
+    },
+    ...options,
+  });
+  if (response.status === 204) {
+    return undefined as T;
+  }
+  const payload: unknown = await response.json().catch(() => null);
+  if (!response.ok) {
+    const record = (payload ?? {}) as Record<string, unknown>;
+    const nested = record.error as { message?: string } | undefined;
+    const firstField = Object.values(record)[0];
+    const fieldMessage = Array.isArray(firstField) ? String(firstField[0]) : null;
+    throw new Error(nested?.message ?? fieldMessage ?? "タグ辞書の操作に失敗しました。");
+  }
+  return payload as T;
+}
+
+export function getTagDictionaries(): Promise<TagDictionaryListResponse> {
+  return requestTagDictionaryJson<TagDictionaryListResponse>("/drawing-metadata/tag-dictionaries");
+}
+
+export function createTagDictionaryEntry(input: {
+  kind: string;
+  canonicalValue: string;
+  aliases: string[];
+  note?: string;
+}): Promise<TagDictionaryEntryPayload> {
+  return requestTagDictionaryJson<TagDictionaryEntryPayload>("/drawing-metadata/tag-dictionaries", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateTagDictionaryEntry(
+  entryId: number,
+  input: Partial<{ canonicalValue: string; aliases: string[]; enabled: boolean; priority: number; note: string }>,
+): Promise<TagDictionaryEntryPayload> {
+  return requestTagDictionaryJson<TagDictionaryEntryPayload>(`/drawing-metadata/tag-dictionaries/${entryId}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteTagDictionaryEntry(entryId: number): Promise<void> {
+  return requestTagDictionaryJson<void>(`/drawing-metadata/tag-dictionaries/${entryId}`, { method: "DELETE" });
 }

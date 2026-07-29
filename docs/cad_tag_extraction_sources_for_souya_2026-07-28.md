@@ -62,6 +62,19 @@
 
 ## 2. 抽出元カタログ（どこから何を抜くか）
 
+### 2.0 全経路共通のファイル出所
+
+ファイル出所はCAD内部から推測するのではなく、抽出ジョブへ渡された入力ファイルを正として保持します。ICAD、STEP、DXFの全経路で同じ扱いです。
+
+| 取得対象 | raw_extract / 入力 | 正規化先 | 主な用途 |
+|---|---|---|---|
+| フルパス・格納フォルダ | `source_file.*` | `source_full_path`, `source_directory_path` | 出所表示、監査証跡、パス辞書照合 |
+| ファイル名・拡張子 | `source_file.*` | `source_file_name`, `source_file_stem`, `source_extension` | 図面識別、形式判定、検索トークン生成 |
+| 入力形式・図面種別 | `source_file.*` | `source_format`, `source_kind` | ICAD / STEP / DXF、2D / 3Dの処理経路選択 |
+| パス分解トークン | 上記のパス・フォルダ・ファイル名を分解 | `source_path_tokens` | 客先・案件・装置辞書の照合候補 |
+
+`source_path_tokens` は、モデル情報、図面内文字、DXFレイヤー、パーツ付加情報等と合わせて検索トークン列（`part_keywords`）へ入れます。パス文字列を無条件にタグ化するのではなく、登録済み辞書と一致し、採用条件を満たした場合だけ `客先:`、`案件:`、`装置:` タグ候補へ上げます。
+
 ### 2.1 ICAD 3D（経路A）
 
 | 抽出元 | SXNET根拠 | raw_extract | 正規化先 |
@@ -74,7 +87,10 @@
 | 材質（全体・部品単位） | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()` | `materials[]`, `parts[].materials[]` | `material_ids`, `material_names`, `material_keywords`, `part_material_candidates` |
 | 質量・重量・体積・面積・密度 | `SxEnt.getMass()` → `SxInfMass` | `mass_properties.*` | `mass_value`, `weight_value`, `volume_value`, `area_value`, `density_value` |
 | 重心・慣性モーメント | `SxInfMass.pos`, `inf_global_moment` ほか | `mass_properties.*_moment` | `center_of_gravity`, `global_moment`, `inertia_moment_candidates` |
-| トップパーツ付加情報 | `SxWF.getInfExTopPart()`, `SxInfPartTree.ex_inf` | `top_part.ex_info` | `top_part_ex_info`, `part_ex_info_fields` |
+| トップパーツ付加情報 | `SxWF.getInfExTopPart()`, ルートの `SxInfPartTree.ex_inf` | `top_part.ex_info`, `top_part.ex_info_fields` | `top_part_ex_info`, `part_ex_info_fields`, `part_ex_info_tokens` |
+| 各構成パーツの付加情報 | 各ノードの `SxInfPartTree.ex_inf` | `parts[].ex_info`, `parts[].ex_info_fields` | パーツ階層別の `part_ex_info_fields`, `part_ex_info_tokens` |
+
+パーツ付加情報はトップパーツだけに限定しません。パーツツリーを再帰走査し、各構成パーツの付加情報を階層パスと対応付けて保持します。キー・値に分解できた項目は、PRFX、ユニット番号、材質、熱処理、硬度の候補抽出に使用し、分解できない生文字列も検索・監査用トークンとして残します。
 
 ### 2.2 ICAD 2D（経路A）
 
@@ -128,6 +144,18 @@
 | 溶接キーワードを含む `TEXT` / `MTEXT` | `weld_notes[]` | `weld_instruction_count`, `weld_types`, `weld_note_candidates` |
 | `LINE` / `CIRCLE` / `ARC` / `ELLIPSE` / `LWPOLYLINE` / `POLYLINE` / `SPLINE` / `HATCH` | `geometry_primitives[]` | 形状特徴候補 |
 | 対応要素で使用されたレイヤー | `layers[]` | `dxf_layers` |
+
+### 2.5 主要な取得値とタグ・属性への接続
+
+| 取得元 | 正規化・候補化 | タグへ上げるもの | 属性・証跡として保持するもの |
+|---|---|---|---|
+| ファイルパス・フォルダ・ファイル名 | `source_path_tokens` → `part_keywords` | 辞書一致した客先・案件・装置 | フルパス、フォルダ、ファイル名、拡張子、形式 |
+| モデル名・コメント・参照モデル名 | モデル／部品の検索トークン | 辞書一致した客先・案件・装置・部品名 | モデル情報、参照モデル名・参照パス |
+| トップ＋各パーツの付加情報 | `part_ex_info_fields`, `part_ex_info_tokens` | PRFX、ユニット番号、正式材質、熱処理、硬度尺度、辞書一致した客先・案件・装置 | パーツ階層別のキー・値、生文字列、採用根拠 |
+| 3D材質・質量API | 材質候補、質量特性 | 正式材質 | 材質ID、比重、質量、体積、面積、密度、重心、慣性モーメント |
+| 2D文字・図枠・DXFブロック属性 | 図枠候補、製造指示候補 | 客先、案件、装置、メーカー、表面処理、塗装、熱処理、硬度尺度、規格 | 図番、図面名、担当者、承認者、日付、座標、印刷枠内外 |
+| 寸法・公差・幾何公差・溶接 | 種別判定、存在判定 | 寸法／公差／幾何公差／溶接の有無、明示判定できた種別 | 寸法値、公差値、記号の生値、候補座標 |
+| 穴・長穴・切断線・ハッチング等 | 形状特徴候補 | 原則タグ化しない | 件数、寸法候補、レイヤー、ビュー／断面参照 |
 
 ---
 

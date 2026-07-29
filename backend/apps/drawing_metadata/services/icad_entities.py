@@ -9,13 +9,14 @@ from collections import Counter
 from pathlib import PureWindowsPath
 import re
 from typing import Iterable
+import unicodedata
 import uuid
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 
 
-SCHEMA_VERSION = "icad_knowledge_entities.v2"
+SCHEMA_VERSION = "icad_knowledge_entities.v3"
 TARGET_PRODUCT = "product"
 TARGET_PART = "part"
 
@@ -26,8 +27,50 @@ PART_NUMBER_NOISE_VALUES = {"組", "クミ", "くみ"}
 PART_NUMBER_NOISE_COMPACT_VALUES = {"cad"}
 PART_NUMBER_REFERENCE_KEYWORDS = ("参考", "元図", "参照", "参照組立号")
 FILE_EXTENSION_FRAGMENT_RE = re.compile(r"\.[a-z0-9]{1,5}", re.IGNORECASE)
-DRAWING_SIZE_SUFFIX_RE = re.compile(r"(?P<body>.+?)(?:[_\s]+A[0-4])$", re.IGNORECASE)
+DRAWING_SIZE_SUFFIX_RE = re.compile(r"(?P<body>.+?)(?:[_\s-]+A[0-4])$", re.IGNORECASE)
 PART_NUMBER_CODE_SEGMENT_RE = re.compile(r"(?=.*\d)[A-Z0-9][A-Z0-9.-]{2,}[A-Z0-9]", re.IGNORECASE)
+PART_NUMBER_FILENAME_WORD_RE = re.compile(r"-(?P<word>[A-Z]{3,})(?:-|$)", re.IGNORECASE)
+PART_NUMBER_FILENAME_WORD_EXCLUSIONS = {
+    "ASSY",
+    "ASSEMBLY",
+    "BRACKET",
+    "COVER",
+    "DRAWING",
+    "MACHINE",
+    "MODEL",
+    "PART",
+    "PLATE",
+    "PRODUCT",
+    "UNIT",
+}
+IDENTITY_CHANGE_NOTE_RE = re.compile(
+    r"(?:参照|元図|流用|コピー|改訂|修正|変更前|変更後|[をへがは]\s*変更)",
+    re.IGNORECASE,
+)
+FILENAME_NAME_NOISE_WORDS = {
+    "ASSY",
+    "ASSEMBLY",
+    "CAD",
+    "CHANGED",
+    "COPIED",
+    "COPY",
+    "DRAWING",
+    "ICAD",
+    "MACHINE",
+    "MODEL",
+    "PART",
+    "PRODUCT",
+    "REV",
+    "UNIT",
+    "UNCHANGED",
+}
+FILENAME_NAME_NOISE_PATTERNS = (
+    re.compile(r"A[0-4]", re.IGNORECASE),
+    re.compile(r"[23]D", re.IGNORECASE),
+    re.compile(r"REV[A-Z0-9]*", re.IGNORECASE),
+    re.compile(r"R\d+", re.IGNORECASE),
+    re.compile(r"\d{1,8}"),
+)
 
 
 def _has_value(value) -> bool:
@@ -46,8 +89,11 @@ def _string_value(value) -> str | None:
 
 def _part_number_value(value) -> str:
     text = _string_value(value) or ""
-    normalized = text.strip(" 　:：=＝-－_/／[]【】()（）")
-    compact = "".join(normalized.lower().replace("　", " ").split())
+    normalized = unicodedata.normalize("NFKC", text).strip(" 　:：=＝-－_/／[]【】")
+    wrapper_match = re.fullmatch(r"[\[(（【](.+?)[\])）】]", normalized)
+    if wrapper_match:
+        normalized = wrapper_match.group(1).strip()
+    compact = "".join(normalized.casefold().split())
     if not normalized:
         return ""
     if normalized in PART_NUMBER_NOISE_VALUES:
@@ -57,6 +103,8 @@ def _part_number_value(value) -> str:
     if any(keyword in normalized for keyword in PART_NUMBER_REFERENCE_KEYWORDS):
         return ""
     if FILE_EXTENSION_FRAGMENT_RE.fullmatch(normalized):
+        return ""
+    if not re.search(r"\d", normalized):
         return ""
     size_match = DRAWING_SIZE_SUFFIX_RE.fullmatch(normalized)
     if size_match:
@@ -79,6 +127,21 @@ def _part_number_value(value) -> str:
         match = PART_NUMBER_CODE_SEGMENT_RE.search(normalized)
         return match.group(0) if match else ""
     return normalized
+
+
+def _filename_drawing_number_value(value) -> str:
+    normalized = unicodedata.normalize("NFKC", _string_value(value) or "").strip()
+    for match in PART_NUMBER_FILENAME_WORD_RE.finditer(normalized):
+        if match.group("word").upper() in PART_NUMBER_FILENAME_WORD_EXCLUSIONS:
+            normalized = normalized[: match.start()]
+            break
+    normalized = re.sub(
+        r"(?:[-_\s]+(?:A[0-4]|[23]D|REV[A-Z0-9]*|R\d+))+$",
+        "",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    return _part_number_value(normalized)
 
 
 def _stable_entity_id(drawing_id) -> str:
@@ -278,12 +341,93 @@ def _canonical_list_values(canonical: dict, *keys: str) -> list[str]:
 
 
 def _first_distinct_value(candidates: Iterable[str | None], *excluded_values: str | None) -> str | None:
-    excluded = {value.strip().lower() for value in excluded_values if isinstance(value, str) and value.strip()}
+    excluded = {
+        unicodedata.normalize("NFKC", value).strip().casefold()
+        for value in excluded_values
+        if isinstance(value, str) and value.strip()
+    }
     for candidate in candidates:
         value = _string_value(candidate)
-        if value and value.lower() not in excluded:
-            return value
+        if not value:
+            continue
+        normalized = unicodedata.normalize("NFKC", value).strip()
+        if normalized.casefold() not in excluded:
+            return normalized
     return None
+
+
+def _is_generic_identity_name(value: str) -> bool:
+    normalized = unicodedata.normalize("NFKC", value).strip().upper()
+    return normalized in FILENAME_NAME_NOISE_WORDS
+
+
+def _validated_comment_name(value: str | None, *excluded_values: str | None) -> str | None:
+    """3Dコメントから、変更履歴や参照指示ではない業務名称だけを返す。"""
+
+    normalized = unicodedata.normalize("NFKC", _string_value(value) or "").strip(" 　:：=＝_/／[]【】()（）")
+    if not normalized or len(normalized) > 80:
+        return None
+    if "\ufffd" in normalized or any("\ue000" <= character <= "\uf8ff" for character in normalized):
+        return None
+    if IDENTITY_CHANGE_NOTE_RE.search(normalized):
+        return None
+    if re.fullmatch(r"[A-Z0-9._/\-\s]+", normalized, re.IGNORECASE) and re.search(r"\d", normalized):
+        return None
+    if _is_generic_identity_name(normalized):
+        return None
+    return _first_distinct_value([normalized], *excluded_values)
+
+
+def _filename_name_candidate(filename_stem: str, drawing_number: str) -> str | None:
+    """ファイル名から図面番号・用紙サイズ・版数を除き、名称らしい部分だけを返す。"""
+
+    normalized = unicodedata.normalize("NFKC", filename_stem).strip()
+    if not normalized:
+        return None
+    normalized = re.sub(r"\([^)]*\)|（[^）]*）", "", normalized)
+    if drawing_number:
+        normalized = re.sub(re.escape(unicodedata.normalize("NFKC", drawing_number)), "", normalized, flags=re.IGNORECASE)
+    chunks = [
+        chunk.strip(" 　:：=＝-－_/／[]【】()（）.")
+        for chunk in re.split(r"[_\s]+", normalized)
+    ]
+    semantic_chunks: list[str] = []
+    for chunk in chunks:
+        if not chunk:
+            continue
+        if any(pattern.fullmatch(chunk) for pattern in FILENAME_NAME_NOISE_PATTERNS):
+            continue
+        if re.search(r"[\u3040-\u30ff\u3400-\u9fff]", chunk):
+            cleaned = re.sub(r"^[A-Z0-9.-]+[-_]", "", chunk, flags=re.IGNORECASE)
+            if cleaned and cleaned not in semantic_chunks:
+                semantic_chunks.append(cleaned)
+            continue
+        words = [
+            word.upper()
+            for word in re.findall(r"(?<![A-Z0-9])[A-Z]{3,}(?![A-Z0-9])", chunk, re.IGNORECASE)
+            if word.upper() not in FILENAME_NAME_NOISE_WORDS
+        ]
+        if words:
+            semantic = "-".join(words)
+            if semantic not in semantic_chunks:
+                semantic_chunks.append(semantic)
+            continue
+        if _part_number_value(chunk):
+            continue
+    return " ".join(semantic_chunks) if semantic_chunks else None
+
+
+def _select_identity_name(
+    candidates: Iterable[tuple[str | None, str]],
+    *excluded_values: str | None,
+) -> tuple[str, str]:
+    """優先順位どおりに名称と採用根拠を選び、見つからない場合は明示的に未抽出とする。"""
+
+    for candidate, evidence in candidates:
+        value = _first_distinct_value([candidate], *excluded_values)
+        if value and not _is_generic_identity_name(value):
+            return value, evidence
+    return "名称未抽出", "identity_name_unresolved"
 
 
 def _has_lightweight_part_summary(canonical: dict) -> bool:
@@ -424,14 +568,17 @@ def _business_fields(
     target_key: str,
     entity_kind: str,
     name: str,
-    part_number: str,
+    drawing_number: str,
+    name_evidence: str,
+    drawing_number_evidence: str,
     comment: str | None,
     canonical: dict,
     overrides: dict,
 ) -> tuple[dict, dict]:
     extracted = {
         "name": name,
-        "partNumber": part_number if target_key == TARGET_PART else "",
+        "drawingNumber": drawing_number,
+        "partNumber": drawing_number if target_key == TARGET_PART else "",
         "category": _string_value(canonical.get("equipment_category")) or "",
         "entityKind": entity_kind,
         "phase": _string_value(canonical.get("phase")) or "",
@@ -443,10 +590,22 @@ def _business_fields(
         "remarks": comment or "",
     }
     manual = overrides.get("businessFields") if isinstance(overrides.get("businessFields"), dict) else {}
+    # 部品番号は独立した別番号を持たせず、確定した図面番号と同じ値に統一する。
+    # 既存データの partNumber 手動補正も drawingNumber として引き継ぐ。
+    manual_drawing_number = _string_value(manual.get("drawingNumber")) or _string_value(manual.get("partNumber"))
+    if manual_drawing_number is not None:
+        extracted["drawingNumber"] = manual_drawing_number
+        extracted["partNumber"] = manual_drawing_number if target_key == TARGET_PART else ""
     fields = {key: str(manual.get(key, value) or "") for key, value in extracted.items()}
+    fields["drawingNumber"] = extracted["drawingNumber"]
+    fields["partNumber"] = extracted["partNumber"]
     sources = {
         key: {
-            "source": "manual_override" if key in manual else "icad_extraction",
+            "source": (
+                "manual_override"
+                if key in manual or (key in {"drawingNumber", "partNumber"} and manual_drawing_number is not None)
+                else "icad_extraction"
+            ),
             "evidence": f"manualOverrides.businessFields.{key}" if key in manual else f"canonicalAttributes.{key}",
         }
         for key in fields
@@ -454,14 +613,15 @@ def _business_fields(
     sources["name"]["evidence"] = (
         "manualOverrides.businessFields.name"
         if "name" in manual
-        else "canonicalAttributes.drawing_name/part_name_candidates"
+        else name_evidence
     )
-    if target_key == TARGET_PART:
-        sources["partNumber"]["evidence"] = (
-            "manualOverrides.businessFields.partNumber"
-            if "partNumber" in manual
-            else "canonicalAttributes.drawing_number/filename"
-        )
+    drawing_number_source = (
+        "manualOverrides.businessFields.drawingNumber/partNumber"
+        if manual_drawing_number is not None
+        else drawing_number_evidence
+    )
+    sources["drawingNumber"]["evidence"] = drawing_number_source
+    sources["partNumber"]["evidence"] = drawing_number_source
     return fields, sources
 
 
@@ -479,22 +639,65 @@ def _build_record(
     classification = _classify_icd(drawing, snapshot, parts, canonical=canonical)
     top_part = ((snapshot.raw_extract_json or {}).get("top_part") or {}) if include_details or parts else {}
     filename_stem = PureWindowsPath(drawing.filename).stem
-    part_number = (
+    canonical_drawing_number = (
         _part_number_value(canonical.get("drawing_number"))
         or _part_number_value(canonical.get("part_number"))
-        or _part_number_value(filename_stem)
+    )
+    drawing_number = canonical_drawing_number or _filename_drawing_number_value(filename_stem)
+    drawing_number_evidence = (
+        "canonicalAttributes.drawing_number"
+        if canonical_drawing_number
+        else "registeredDrawing.filename"
     )
     drawing_name = _string_value(canonical.get("drawing_name"))
-    canonical_part_names = _canonical_list_values(canonical, "part_names")
+    explicit_part_name = _string_value(canonical.get("part_name"))
+    product_name = _string_value(canonical.get("product_name"))
+    equipment_name = _string_value(canonical.get("equipment_name"))
+    unit_name = _string_value(canonical.get("unit_name"))
     part_name_candidates = _canonical_list_values(canonical, "part_name_candidates")
     top_part_name = _string_value(canonical.get("top_part_name")) or _string_value(top_part.get("name"))
+    top_part_comment = _string_value(canonical.get("top_part_comment")) or _string_value(top_part.get("comment"))
+    comment_name = _validated_comment_name(
+        top_part_comment,
+        drawing_number,
+        filename_stem,
+        top_part_name,
+    )
+    filename_name = _filename_name_candidate(filename_stem, drawing_number)
     if classification["targetKey"] == TARGET_PART:
-        name = (
-            _first_distinct_value([drawing_name, *part_name_candidates], part_number, filename_stem)
-            or "名称未抽出"
+        # 部品名は図面内の明示値を最優先し、検証済みコメントとファイル名を補助候補にする。
+        # 3D最上位パーツ名はモデル内部識別子の可能性があるため候補へ入れない。
+        name, name_evidence = _select_identity_name(
+            [
+                (explicit_part_name, "canonicalAttributes.part_name"),
+                (drawing_name, "canonicalAttributes.drawing_name"),
+                (comment_name, "canonicalAttributes.top_part_comment"),
+                (filename_name, "registeredDrawing.filename"),
+                *(
+                    (candidate, "canonicalAttributes.part_name_candidates")
+                    for candidate in part_name_candidates
+                ),
+            ],
+            drawing_number,
+            filename_stem,
+            top_part_name,
         )
     else:
-        name = drawing_name or top_part_name or (canonical_part_names[0] if canonical_part_names else None) or filename_stem
+        # 製品・装置・ユニットも専用名称欄を優先する。3D最上位パーツ名や
+        # パーツツリー先頭名をそのまま業務名称に転用しない。
+        name, name_evidence = _select_identity_name(
+            [
+                (unit_name, "canonicalAttributes.unit_name"),
+                (equipment_name, "canonicalAttributes.equipment_name"),
+                (product_name, "canonicalAttributes.product_name"),
+                (drawing_name, "canonicalAttributes.drawing_name"),
+                (comment_name, "canonicalAttributes.top_part_comment"),
+                (filename_name, "registeredDrawing.filename"),
+            ],
+            drawing_number,
+            filename_stem,
+            top_part_name,
+        )
     if parts:
         external_count = sum(_has_external_reference(part) for part in parts)
         unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
@@ -533,13 +736,16 @@ def _build_record(
         target_key=classification["targetKey"],
         entity_kind=classification["entityKind"],
         name=name,
-        part_number=part_number,
-        comment=_string_value(top_part.get("comment")) or _string_value(canonical.get("top_part_comment")),
+        drawing_number=drawing_number,
+        name_evidence=name_evidence,
+        drawing_number_evidence=drawing_number_evidence,
+        comment=top_part_comment,
         canonical=canonical,
         overrides=overrides,
     )
     name = business_fields["name"] or name
-    part_number = business_fields["partNumber"] or part_number
+    drawing_number = business_fields["drawingNumber"]
+    part_number = drawing_number if classification["targetKey"] == TARGET_PART else ""
 
     attributes: list[dict] = []
     _append_attribute(
@@ -567,6 +773,10 @@ def _build_record(
         ("equipment_category", "装置カテゴリ"),
         ("drawing_number", "図番"),
         ("drawing_name", "図面名"),
+        ("part_name", "部品名"),
+        ("product_name", "製品名"),
+        ("equipment_name", "装置名"),
+        ("unit_name", "ユニット名"),
         ("model_name", "ICADモデル名"),
         ("model_path", "ICADモデル格納パス"),
         ("model_comment", "ICADモデルコメント"),
@@ -631,6 +841,7 @@ def _build_record(
         "classificationConfidence": classification["confidence"],
         "classificationReason": classification["reason"],
         "name": name,
+        "drawingNumber": drawing_number,
         "partNumber": part_number if classification["targetKey"] == TARGET_PART else None,
         "comment": business_fields["remarks"] or None,
         "treePath": [name],
@@ -716,6 +927,7 @@ def build_icad_entity_catalog(
             in " ".join(
                 [
                     record["name"],
+                    record.get("drawingNumber") or "",
                     record.get("partNumber") or "",
                     record["drawingFilename"],
                     record["sourcePath"],
@@ -770,6 +982,7 @@ def find_icad_entity(drawings: Iterable[RegisteredDrawing], entity_id: str) -> d
             "targetKey": candidate["targetKey"],
             "entityKind": candidate["entityKind"],
             "name": candidate["name"],
+            "drawingNumber": candidate.get("drawingNumber"),
             "partNumber": candidate.get("partNumber"),
         }
         for candidate in records

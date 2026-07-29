@@ -124,7 +124,21 @@ namespace IcadExtraction.SxNet
                         payload.ReferencedParts.Add(MapPlacedReference(geometry, viewName, sourceItem.LayerNo));
                         break;
                     default:
-                        // 未対応型を黙って捨てず、追加実装が必要な型名をwarningへ残す。
+                        // ICADの版差で文字図形の実型名だけが変わる場合がある。
+                        // 型名だけで捨てず、txt配列を実際に持つ要素は文字として救済し、採用した型名もwarningへ残す。
+                        var fallbackText = TryMapUnsupportedText(geometry, viewName, sourceItem.LayerNo);
+                        if (fallbackText != null)
+                        {
+                            payload.Texts.Add(fallbackText);
+                            warnings.Add(new WarningPayload
+                            {
+                                Code = "fallback_text_geometry",
+                                Message = $"Mapped unsupported geometry type '{typeName}' as text because it exposed non-empty txt values.",
+                            });
+                            break;
+                        }
+
+                        // txtを持たない未対応型は推測変換せず、追加実装が必要な型名をwarningへ残す。
                         warnings.Add(new WarningPayload
                         {
                             Code = "unsupported_geometry",
@@ -137,8 +151,21 @@ namespace IcadExtraction.SxNet
             return payload;
         }
 
+        private static TextPayload? TryMapUnsupportedText(object geometry, string? viewName, int? layerNo)
+        {
+            var textLines = ReflectionHelpers.ExtractStringList(geometry, "txt");
+            if (textLines.Count == 0)
+            {
+                return null;
+            }
+
+            return MapText(geometry, "text_fallback", viewName, layerNo);
+        }
+
         private static TextPayload MapText(object geometry, string sourceType, string? viewName, int? layerNo)
         {
+            // SXNET文字列は.NETのstringとして受け取り、ここでは再エンコードしない。
+            // 出力時だけRunnerがUTF-8 JSONへ直列化するため、Shift-JIS等への変換による文字化けを避ける。
             var textLines = ReflectionHelpers.ExtractStringList(geometry, "txt");
             return new TextPayload
             {

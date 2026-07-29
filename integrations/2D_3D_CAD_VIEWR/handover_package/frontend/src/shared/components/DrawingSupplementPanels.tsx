@@ -1,3 +1,6 @@
+// このファイルは、タグ根拠、改訂履歴、関連情報などの補助パネルを表示する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useState } from "react";
 
 import type { DrawingKnowledgeDetail } from "../knowledge/drawingKnowledge";
@@ -7,6 +10,24 @@ interface DrawingSupplementPanelsProps {
 }
 
 const ATTRIBUTE_VALUE_PREVIEW_LENGTH = 160;
+
+function confidenceLabel(value: string): string {
+  if (value === "high") return "高";
+  if (value === "medium") return "中";
+  if (value === "low") return "低";
+  return value || "-";
+}
+
+const TAG_API_STATUS_LABELS: Record<string, string> = {
+  candidate_existing: "タグ候補あり(既存タグAPIへ連携可能)",
+  not_found_use_attribute_fallback: "タグ候補なし(属性として提示)",
+  not_found_requires_souya_extension: "タグ候補なし(創屋側のAPI拡張が必要)",
+};
+
+function tagApiStatusLabel(value: string): string {
+  // 内部ステータスコードを利用者向けの文言へ変換する(原文はtitle属性で確認できる)。
+  return TAG_API_STATUS_LABELS[value] ?? value;
+}
 
 export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps) {
   const [activeTabId, setActiveTabId] = useState(detail.relatedTabs[0]?.id ?? "");
@@ -71,7 +92,7 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
                   <div className="tag-target-card-header">
                     <div>
                       <strong>{target.label}</strong>
-                      <p>{target.tagApiStatus}</p>
+                      <p title={target.tagApiStatus}>{tagApiStatusLabel(target.tagApiStatus)}</p>
                     </div>
                     <span>{target.attributes.length} 属性</span>
                   </div>
@@ -86,6 +107,34 @@ export function DrawingSupplementPanels({ detail }: DrawingSupplementPanelsProps
                       <span className="tag-target-empty">タグなし</span>
                     )}
                   </div>
+                  {target.tagEvidence && target.tagEvidence.length > 0 ? (
+                    <div className="tag-evidence-list">
+                      <strong>タグ根拠</strong>
+                      {target.tagEvidence.slice(0, 4).map((item) => (
+                        <dl key={`${target.targetKey}-${item.tag}-${item.evidence}`}>
+                          <div>
+                            <dt>タグ</dt>
+                            <dd>{item.tag}</dd>
+                          </div>
+                          <div>
+                            <dt>取得元</dt>
+                            <dd>{item.source}</dd>
+                          </div>
+                          <div>
+                            <dt>信頼度</dt>
+                            <dd>{confidenceLabel(item.confidence)}</dd>
+                          </div>
+                          <div>
+                            <dt>採用理由</dt>
+                            <dd>{item.reason}</dd>
+                          </div>
+                        </dl>
+                      ))}
+                      {target.tagEvidence.length > 4 ? (
+                        <p>{target.tagEvidence.length - 4} 件のタグ根拠を省略</p>
+                      ) : null}
+                    </div>
+                  ) : null}
                   {target.attributes.length > 0 ? (
                     <dl className="tag-attribute-list">
                       {target.attributes.slice(0, 6).map((attribute) => (

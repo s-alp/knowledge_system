@@ -67,7 +67,11 @@
 - C# 抽出 CLI:
   - `src/IcadExtraction.Runner`
   - `extract --input-path ... --source-kind 2d|3d --output-path ... --sxnet-dll-path ...`
+  - `convert-cad --input-path ... --output-format dxf|step --output-dir ... --output-path ... --sxnet-dll-path ...`
   - `self-check --sxnet-dll-path ...`
+- Django非依存のICAD変換入口:
+  - `scripts/convert_icad_standalone.ps1`
+  - 入力・Runner・SXNETの事前確認、既存成果物の保護、結果JSONと生成ファイルの完了確認を行う
 - 3D 抽出 PoC:
   - `SxFileModel.open(true)` でモデルを開く
   - `SxModel.getGlobalWF()` -> `SxWF.getInfPartTree()` / `getInfExTopPart()`
@@ -127,6 +131,26 @@ pwsh -NoLogo -NoProfile -Command '[Console]::OutputEncoding = [System.Text.Encod
 - SQLiteと図面メタデータ保存領域は`drawing-metadata-data` volumeへ永続化する
 - ICADジョブはWindows agentがAPI経由で処理する
 
+## Djangoを使わないICAD→DXF／STEP変換
+
+変換コアと`IcadExtraction.Runner.exe convert-cad`はDjango、DB、HTTP APIに依存しません。手動実行や創屋側バッチでは、低水準引数と上書き確認を共通化したPowerShell入口を使用します。
+
+初回はファイルを生成しない`-ValidateOnly`で実行環境を確認します。
+
+```powershell
+pwsh -NoLogo -NoProfile -File "scripts\convert_icad_standalone.ps1" `
+  -InputPath "C:\drawing\sample.icd" `
+  -OutputFormat dxf `
+  -OutputDirectory "C:\converted" `
+  -SxNetDllPath "C:\path\to\sxnet.dll" `
+  -IcadExecutablePath "C:\path\to\icad.exe" `
+  -ValidateOnly
+```
+
+確認後、`-ValidateOnly`を外すとDXFを生成します。STEPの場合は`-OutputFormat step`へ変更します。既存成果物は保護され、置き換える場合だけ`-Overwrite`が必要です。
+
+配布物、環境変数、結果JSON、終了判定、SXNET版差、創屋側の組み込み方は、[ICAD→DXF／STEP 独立変換 利用・引継ぎ手順](./docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md)を正本とします。
+
 ## Windows ICAD抽出agent
 
 ### 1. net48版をpublish
@@ -170,7 +194,8 @@ agent APIは以下を提供する。
 - `POST /api/v1/drawing-metadata/agent/jobs/{jobId}/fail`
 - `POST /api/v1/drawing-metadata/agent/heartbeat`
 
-詳細契約と異常時の扱いは[Windows抽出agent API設計](./docs/windows_extraction_agent_api_design_2026-07-29.md)を参照する。
+起動設定、全API payload、C#入出力JSON、異常時の扱いは、正本である
+[C# Windows ICAD抽出エージェント連携仕様](./docs/windows_extraction_agent_api_design_2026-07-29.md)を参照する。
 
 ## 重要ドキュメント
 
@@ -180,6 +205,8 @@ agent APIは以下を提供する。
 - [ICAD抽出の C# / Python 分担アーキテクチャ案](./docs/icad_csharp_python_architecture_2026-05-27.md)
 - [Django統合計画](./docs/django_integration_plan_2026-05-28.md)
 - [抽出結果スキーマ定義案](./docs/extraction_result_schema_2026-05-28.md)
+- [C# Windows ICAD抽出エージェント連携仕様（現行契約の正本）](./docs/windows_extraction_agent_api_design_2026-07-29.md)
+- [ICAD→DXF／STEP 独立変換 利用・引継ぎ手順](./docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md)
 - [タグ・属性管理UI計画](./docs/tag_attribute_management_ui_plan_2026-05-28.md)
 - [ICAD抽出PoCセットアップ](./docs/icad_extraction_poc_setup_2026-05-28.md)
 - [HTML要約報告](./docs/icad_tag_attribute_report_2026-05-26.html)

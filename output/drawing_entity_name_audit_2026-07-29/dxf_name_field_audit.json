@@ -1,0 +1,2740 @@
+{
+  "schemaVersion": "dxf_name_field_audit.v1",
+  "sourceSummary": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\summary.json",
+  "counts": {
+    "audited": 38,
+    "withText": 30,
+    "withNameLabel": 10
+  },
+  "rows": [
+    {
+      "filename": "CAA5012-02434000K1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434000K1R1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_001\\sample_001.dxf",
+      "textCount": 1282,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "TR1D9K99027.icd",
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_002\\sample_002.dxf",
+      "textCount": 238,
+      "nameLabelCount": 1,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "名称",
+          "positionX": 432.5762634277344,
+          "positionY": 353.2555541992188,
+          "nearestTexts": [
+            {
+              "text": "アルミフレーム",
+              "distance": 36.346,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 396.5762634277344,
+              "positionY": 348.2555541992188
+            },
+            {
+              "text": "アルミフレーム",
+              "distance": 37.363,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 396.5762634277344,
+              "positionY": 343.2555541992188
+            },
+            {
+              "text": "フレームキャップ",
+              "distance": 39.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 396.5762634277344,
+              "positionY": 338.2555541992188
+            },
+            {
+              "text": "SFF-424 L=1572",
+              "distance": 39.319,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 471.5762634277344,
+              "positionY": 348.2555541992188
+            },
+            {
+              "text": "SFF-424 L=960",
+              "distance": 40.262,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 471.5762634277344,
+              "positionY": 343.2555541992188
+            },
+            {
+              "text": "アルミフレーム",
+              "distance": 41.183,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 396.5762634277344,
+              "positionY": 333.2555541992188
+            },
+            {
+              "text": "SFA-034B",
+              "distance": 41.785,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 471.5762634277344,
+              "positionY": 338.2555541992188
+            },
+            {
+              "text": "No.",
+              "distance": 42.5,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 390.0762634277344,
+              "positionY": 353.2555541992188
+            },
+            {
+              "text": "1",
+              "distance": 42.793,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 390.0762634277344,
+              "positionY": 348.2555541992188
+            },
+            {
+              "text": "2",
+              "distance": 43.661,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 390.0762634277344,
+              "positionY": 343.2555541992188
+            },
+            {
+              "text": "DブラケットL",
+              "distance": 43.829,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 396.5762634277344,
+              "positionY": 328.2555541992188
+            },
+            {
+              "text": "SFF-424 L=400",
+              "distance": 43.829,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 471.5762634277344,
+              "positionY": 333.2555541992188
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "PSG011-PA1100_クリーニング駆動.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\11_クリーニング駆動\\PSG011-PA1100_クリーニング駆動.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_003\\sample_003.dxf",
+      "textCount": 163,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "U8105111315.icd",
+      "sourcePath": "J:\\SBY\\アイソレータ\\210126_エーザイ_アイソレータ_RAA4844\\作業フォルダ\\開閉扉\\U8105111315.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_004\\sample_004.dxf",
+      "textCount": 188,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "217008-41J-3004.icd",
+      "sourcePath": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_005\\sample_005.dxf",
+      "textCount": 264,
+      "nameLabelCount": 3,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_002",
+          "text": "品 名 / Part Name",
+          "positionX": 41.0,
+          "positionY": 3.0,
+          "nearestTexts": [
+            {
+              "text": "beyond 1000 to 2000",
+              "distance": 6.791,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 46.78328875409341,
+              "positionY": 6.560278116215983
+            },
+            {
+              "text": "PERSON   IN CHARGE",
+              "distance": 8.102,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 33.55999946594238,
+              "positionY": 6.206927439924669
+            },
+            {
+              "text": "担当",
+              "distance": 8.364,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 36.5,
+              "positionY": 10.05000002384187
+            },
+            {
+              "text": "beyond 315 to 1000",
+              "distance": 9.127,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 46.78328875409341,
+              "positionY": 10.06027811621598
+            },
+            {
+              "text": "beyond 120 to 315",
+              "distance": 12.576,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 47.82989074607985,
+              "positionY": 13.56027811621598
+            },
+            {
+              "text": "PROCESSING DIMENSION TOLERANCE",
+              "distance": 15.646,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 44.49999995231605,
+              "positionY": 18.2499999999999
+            },
+            {
+              "text": "beyond 30 to 120",
+              "distance": 15.885,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 48.02000031620253,
+              "positionY": 17.25
+            },
+            {
+              "text": "beyond 6 to 30",
+              "distance": 19.724,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 49.60000025480974,
+              "positionY": 20.75
+            },
+            {
+              "text": "CORRECTION",
+              "distance": 22.605,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 18.63001304539671,
+              "positionY": 6.250017825087156
+            },
+            {
+              "text": "from 0.5 to 6",
+              "distance": 23.093,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 50.04000025242556,
+              "positionY": 24.25
+            },
+            {
+              "text": "訂 正",
+              "distance": 24.067,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 17.63001304539671,
+              "positionY": 8.750017825087163
+            },
+            {
+              "text": "呼び寸法",
+              "distance": 25.602,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 46.74000012725583,
+              "positionY": 27.95
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_002",
+          "text": "UNIT Name",
+          "positionX": 102.7,
+          "positionY": 42.42499995231633,
+          "nearestTexts": [
+            {
+              "text": "ユニット名",
+              "distance": 3.506,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 102.5,
+              "positionY": 45.92500000000001
+            },
+            {
+              "text": "DESIGN",
+              "distance": 6.833,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 108.75,
+              "positionY": 39.24999990463257
+            },
+            {
+              "text": "CHECKED",
+              "distance": 7.189,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 96.25,
+              "positionY": 39.24999980926515
+            },
+            {
+              "text": "装置名",
+              "distance": 11.002,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 102.5,
+              "positionY": 53.42500000000001
+            },
+            {
+              "text": "DRAWING",
+              "distance": 18.82,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 121.25,
+              "positionY": 39.24999985694886
+            },
+            {
+              "text": "DWG.No",
+              "distance": 20.946,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 100.4500005245209,
+              "positionY": 21.60000002384186
+            },
+            {
+              "text": "図面番号",
+              "distance": 21.27,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 91.25000023841858,
+              "positionY": 24.5
+            },
+            {
+              "text": "INTERMEDIATE LEVEL",
+              "distance": 22.929,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 85.0,
+              "positionY": 27.85
+            },
+            {
+              "text": "中級",
+              "distance": 24.194,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 82.88000006228674,
+              "positionY": 28.55000000000001
+            },
+            {
+              "text": "±0.10",
+              "distance": 28.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 81.40000003576279,
+              "positionY": 24.25000001192093
+            },
+            {
+              "text": "HRC",
+              "distance": 28.439,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 75.3609910660191,
+              "positionY": 34.59039094153911
+            },
+            {
+              "text": "±0.20",
+              "distance": 30.389,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 81.40000003576279,
+              "positionY": 20.75000001192093
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_002",
+          "text": "MACHINE Name",
+          "positionX": 102.7,
+          "positionY": 49.92499992847448,
+          "nearestTexts": [
+            {
+              "text": "装置名",
+              "distance": 3.506,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 102.5,
+              "positionY": 53.42500000000001
+            },
+            {
+              "text": "ユニット名",
+              "distance": 4.005,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 102.5,
+              "positionY": 45.92500000000001
+            },
+            {
+              "text": "DESIGN",
+              "distance": 12.27,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 108.75,
+              "positionY": 39.24999990463257
+            },
+            {
+              "text": "CHECKED",
+              "distance": 12.472,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 96.25,
+              "positionY": 39.24999980926515
+            },
+            {
+              "text": "DRAWING",
+              "distance": 21.402,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 121.25,
+              "positionY": 39.24999985694886
+            },
+            {
+              "text": "図面番号",
+              "distance": 27.884,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 91.25000023841858,
+              "positionY": 24.5
+            },
+            {
+              "text": "INTERMEDIATE LEVEL",
+              "distance": 28.295,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 85.0,
+              "positionY": 27.85
+            },
+            {
+              "text": "DWG.No",
+              "distance": 28.414,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 100.4500005245209,
+              "positionY": 21.60000002384186
+            },
+            {
+              "text": "中級",
+              "distance": 29.15,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 82.88000006228674,
+              "positionY": 28.55000000000001
+            },
+            {
+              "text": "HRC",
+              "distance": 31.346,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 75.3609910660191,
+              "positionY": 34.59039094153911
+            },
+            {
+              "text": "±0.10",
+              "distance": 33.36,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 81.40000003576279,
+              "positionY": 24.25000001192093
+            },
+            {
+              "text": "SCALE",
+              "distance": 34.018,
+              "sameLayer": true,
+              "layer": "NoLayerName_002",
+              "positionX": 135.0,
+              "positionY": 39.24999990463257
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_006\\sample_006.dxf",
+      "textCount": 1318,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "23022-013_231218.icd",
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_007\\sample_007.dxf",
+      "textCount": 253,
+      "nameLabelCount": 2,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "品    名",
+          "positionX": 40.0,
+          "positionY": 3.0,
+          "nearestTexts": [
+            {
+              "text": "材 料 及 び 寸 法",
+              "distance": 3.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 43.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "訂 正 事 項",
+              "distance": 7.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 33.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "投影法",
+              "distance": 13.4,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 50.75,
+              "positionY": 11.0
+            },
+            {
+              "text": "年月日",
+              "distance": 24.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 64.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "A1",
+              "distance": 24.703,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 20.0,
+              "positionY": 17.5
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "b",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "c",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "d",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "e",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "品    名",
+          "positionX": 40.0,
+          "positionY": 3.0,
+          "nearestTexts": [
+            {
+              "text": "材 料 及 び 寸 法",
+              "distance": 3.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 43.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "訂 正 事 項",
+              "distance": 7.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 33.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "投影法",
+              "distance": 13.4,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 50.75,
+              "positionY": 11.0
+            },
+            {
+              "text": "年月日",
+              "distance": 24.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 64.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "A1",
+              "distance": 24.703,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 20.0,
+              "positionY": 17.5
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "b",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "c",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "d",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "a",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            },
+            {
+              "text": "e",
+              "distance": 26.178,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.1200008392334,
+              "positionY": 22.12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "DFR-CM1-AA0305300011.icd",
+      "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_009\\sample_009.dxf",
+      "textCount": 163,
+      "nameLabelCount": 1,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "名    称",
+          "positionX": 294.2324998378754,
+          "positionY": 58.78127193450928,
+          "nearestTexts": [
+            {
+              "text": "No",
+              "distance": 10.883,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 283.3499984443188,
+              "positionY": 58.78127193450928
+            },
+            {
+              "text": "変更",
+              "distance": 18.166,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 276.0664999485016,
+              "positionY": 58.78127193450928
+            },
+            {
+              "text": "型",
+              "distance": 19.569,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 275.4283657073975,
+              "positionY": 53.36477184295654
+            },
+            {
+              "text": "ブ",
+              "distance": 20.847,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 308.4283657073975,
+              "positionY": 43.51477181911469
+            },
+            {
+              "text": "式",
+              "distance": 21.998,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 275.4283657073975,
+              "positionY": 47.36477184295654
+            },
+            {
+              "text": "ロ",
+              "distance": 22.741,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 308.4283657073975,
+              "positionY": 41.01477181911469
+            },
+            {
+              "text": "ッ",
+              "distance": 24.744,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 308.4283657073975,
+              "positionY": 38.51477181911469
+            },
+            {
+              "text": "機",
+              "distance": 25.294,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 275.4283657073975,
+              "positionY": 41.86477184295654
+            },
+            {
+              "text": "ク",
+              "distance": 26.83,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 308.4283657073975,
+              "positionY": 36.01477181911469
+            },
+            {
+              "text": "名",
+              "distance": 28.878,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 275.4283657073975,
+              "positionY": 36.86477184295654
+            },
+            {
+              "text": "材",
+              "distance": 30.431,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 308.4283657073975,
+              "positionY": 31.86477184295654
+            },
+            {
+              "text": "図",
+              "distance": 32.834,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 275.4285922050476,
+              "positionY": 31.86477184295654
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "M26A07720.icd",
+      "sourcePath": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_010\\sample_010.dxf",
+      "textCount": 119,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "474300AC219.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\474300AC219.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_011\\sample_011.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "36555211A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\03_設計資料\\連絡書\\SBY⇒ALP\\20260623_バルブジョイント部_部品図訂正\\参考組図_データ依頼\\ICADデータ\\AAV1194-58\\32705200030\\32705200030_SEISAKU\\36555211A01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_012\\sample_012.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "G1630-S3000-502_A3a1.icd",
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_013\\sample_013.dxf",
+      "textCount": 429,
+      "nameLabelCount": 5,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "区分名称",
+          "positionX": 209.315043,
+          "positionY": 68.07318099999998,
+          "nearestTexts": [
+            {
+              "text": "指示のない角部",
+              "distance": 2.706,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 210.6432072230225,
+              "positionY": 65.7155150740814
+            },
+            {
+              "text": "NAME OF SECTION",
+              "distance": 6.168,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 207.687056,
+              "positionY": 62.12420700000001
+            },
+            {
+              "text": "CHAMFER",
+              "distance": 7.718,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 213.3209582230225,
+              "positionY": 61.47601307408138
+            },
+            {
+              "text": "C",
+              "distance": 9.58,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 208.9450692230225,
+              "positionY": 58.50018307408141
+            },
+            {
+              "text": "普 通 許 容 差 (削リ加工)",
+              "distance": 14.363,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 210.8684122230225,
+              "positionY": 53.79412807408141
+            },
+            {
+              "text": "TOLERANCE(CUTTING)",
+              "distance": 20.926,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 218.0004152230225,
+              "positionY": 49.03485107408142
+            },
+            {
+              "text": "NAME",
+              "distance": 22.171,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 211.436544,
+              "positionY": 46.00433299999997
+            },
+            {
+              "text": "寸法の区分",
+              "distance": 23.545,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 211.9807132230225,
+              "positionY": 44.67987007408146
+            },
+            {
+              "text": "CHECKED",
+              "distance": 25.503,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 184.07914,
+              "positionY": 64.38849600000003
+            },
+            {
+              "text": "HRC",
+              "distance": 26.425,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 233.9450692230225,
+              "positionY": 58.50018307408141
+            },
+            {
+              "text": "審   査",
+              "distance": 26.45,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 182.882804,
+              "positionY": 69.03489100000002
+            },
+            {
+              "text": "DIMENSION  LIMITS",
+              "distance": 27.998,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 213.1477252230225,
+              "positionY": 40.33914707272334
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "名  称",
+          "positionX": 209.453932,
+          "positionY": 55.50482199999999,
+          "nearestTexts": [
+            {
+              "text": "普 通 許 容 差 (削リ加工)",
+              "distance": 2.22,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 210.8684122230225,
+              "positionY": 53.79412807408141
+            },
+            {
+              "text": "C",
+              "distance": 3.038,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 208.9450692230225,
+              "positionY": 58.50018307408141
+            },
+            {
+              "text": "NAME OF SECTION",
+              "distance": 6.851,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 207.687056,
+              "positionY": 62.12420700000001
+            },
+            {
+              "text": "CHAMFER",
+              "distance": 7.114,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 213.3209582230225,
+              "positionY": 61.47601307408138
+            },
+            {
+              "text": "NAME",
+              "distance": 9.705,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 211.436544,
+              "positionY": 46.00433299999997
+            },
+            {
+              "text": "指示のない角部",
+              "distance": 10.28,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 210.6432072230225,
+              "positionY": 65.7155150740814
+            },
+            {
+              "text": "TOLERANCE(CUTTING)",
+              "distance": 10.719,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 218.0004152230225,
+              "positionY": 49.03485107408142
+            },
+            {
+              "text": "寸法の区分",
+              "distance": 11.116,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 211.9807132230225,
+              "positionY": 44.67987007408146
+            },
+            {
+              "text": "DIMENSION  LIMITS",
+              "distance": 15.609,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 213.1477252230225,
+              "positionY": 40.33914707272334
+            },
+            {
+              "text": "図  番",
+              "distance": 19.894,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 209.453932,
+              "positionY": 35.61077899999998
+            },
+            {
+              "text": "0.5",
+              "distance": 22.671,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 208.5840702230225,
+              "positionY": 32.85028007408141
+            },
+            {
+              "text": "~",
+              "distance": 24.096,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 218.1950692230225,
+              "positionY": 33.05027707408146
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "区分名称",
+          "positionX": 326.0932622230225,
+          "positionY": 64.5233760740814,
+          "nearestTexts": [
+            {
+              "text": "STANDARD",
+              "distance": 5.563,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 323.2388742230224,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "NAME OF SECTION",
+              "distance": 6.168,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 324.4652752230224,
+              "positionY": 58.57440207408138
+            },
+            {
+              "text": "規    格",
+              "distance": 11.014,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 320.5462242230225,
+              "positionY": 74.03851307408138
+            },
+            {
+              "text": "NAME",
+              "distance": 22.171,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 328.2147632230225,
+              "positionY": 42.4545280740814
+            },
+            {
+              "text": "Q'TY",
+              "distance": 23.18,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 348.7765632230224,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "数量",
+              "distance": 24.702,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 348.9619142230225,
+              "positionY": 73.86199907408138
+            },
+            {
+              "text": "CHECKED",
+              "distance": 25.503,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 300.8573592230225,
+              "positionY": 60.83869107408145
+            },
+            {
+              "text": "審   査",
+              "distance": 26.45,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 299.6610232230224,
+              "positionY": 65.48508607408144
+            },
+            {
+              "text": "図  番",
+              "distance": 32.463,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 326.2321512230225,
+              "positionY": 32.0609740740814
+            },
+            {
+              "text": "MATERIAL",
+              "distance": 34.318,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 360.0769962230224,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "材 料",
+              "distance": 35.853,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 360.7086692230225,
+              "positionY": 73.86199907408138
+            },
+            {
+              "text": "作 成",
+              "distance": 37.359,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 295.1950692230225,
+              "positionY": 43.5233760740814
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "名  称",
+          "positionX": 326.2321512230225,
+          "positionY": 51.95501707408141,
+          "nearestTexts": [
+            {
+              "text": "NAME OF SECTION",
+              "distance": 6.851,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 324.4652752230224,
+              "positionY": 58.57440207408138
+            },
+            {
+              "text": "NAME",
+              "distance": 9.705,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 328.2147632230225,
+              "positionY": 42.4545280740814
+            },
+            {
+              "text": "STANDARD",
+              "distance": 17.6,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 323.2388742230224,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "図  番",
+              "distance": 19.894,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 326.2321512230225,
+              "positionY": 32.0609740740814
+            },
+            {
+              "text": "規    格",
+              "distance": 22.804,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 320.5462242230225,
+              "positionY": 74.03851307408138
+            },
+            {
+              "text": "DRAWING No.",
+              "distance": 25.487,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 324.5115002230225,
+              "positionY": 26.52581807408137
+            },
+            {
+              "text": "CHECKED",
+              "distance": 26.885,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 300.8573592230225,
+              "positionY": 60.83869107408145
+            },
+            {
+              "text": "Q'TY",
+              "distance": 28.444,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 348.7765632230224,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "審   査",
+              "distance": 29.818,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 299.6610232230224,
+              "positionY": 65.48508607408144
+            },
+            {
+              "text": "46.6",
+              "distance": 30.274,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 336.0,
+              "positionY": 23.29999973773185
+            },
+            {
+              "text": "規格番号",
+              "distance": 30.894,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 326.0932622230225,
+              "positionY": 21.0609740740814
+            },
+            {
+              "text": "数量",
+              "distance": 31.568,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 348.9619142230225,
+              "positionY": 73.86199907408138
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "部  品  名  称",
+          "positionX": 278.5164622230225,
+          "positionY": 74.03851307408138,
+          "nearestTexts": [
+            {
+              "text": "PARTS NAME",
+              "distance": 8.234,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 285.2491682230225,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "承   認",
+              "distance": 12.157,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 269.8736402230224,
+              "positionY": 65.48944107408147
+            },
+            {
+              "text": "番号",
+              "distance": 14.31,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 264.2065432230224,
+              "positionY": 74.03851307408138
+            },
+            {
+              "text": "No.",
+              "distance": 14.409,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 264.9089792230225,
+              "positionY": 69.2982780740814
+            },
+            {
+              "text": "APPROVED",
+              "distance": 14.6,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 271.9997342230225,
+              "positionY": 60.97381607408147
+            },
+            {
+              "text": "審   査",
+              "distance": 22.809,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 299.6610232230224,
+              "positionY": 65.48508607408144
+            },
+            {
+              "text": "CHECKED",
+              "distance": 25.949,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 300.8573592230225,
+              "positionY": 60.83869107408145
+            },
+            {
+              "text": "尺 度",
+              "distance": 33.263,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 265.2784022230225,
+              "positionY": 43.5233760740814
+            },
+            {
+              "text": "作 成",
+              "distance": 34.776,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 295.1950692230225,
+              "positionY": 43.5233760740814
+            },
+            {
+              "text": "粗級",
+              "distance": 37.872,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 254.0458992230224,
+              "positionY": 45.13372807408143
+            },
+            {
+              "text": "SCALE",
+              "distance": 38.62,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 266.1107282230225,
+              "positionY": 37.46478207408143
+            },
+            {
+              "text": "DESIGNED",
+              "distance": 39.528,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 293.5098442230225,
+              "positionY": 37.46478207408143
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_014\\sample_014.dxf",
+      "textCount": 763,
+      "nameLabelCount": 2,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_006",
+          "text": "PART NAME",
+          "positionX": 81.0,
+          "positionY": 58.0,
+          "nearestTexts": [
+            {
+              "text": "PART NO.",
+              "distance": 10.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 48.0
+            },
+            {
+              "text": "DESIGNED BY",
+              "distance": 15.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 43.0
+            },
+            {
+              "text": "DESCRIPTION",
+              "distance": 15.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 73.0
+            },
+            {
+              "text": "DRAWN BY",
+              "distance": 20.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 38.0
+            },
+            {
+              "text": "CHECKED BY",
+              "distance": 25.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 33.0
+            },
+            {
+              "text": "MACH. NAME",
+              "distance": 25.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 83.0
+            },
+            {
+              "text": "ASME Y14.5M - 1994 AS AMENDED",
+              "distance": 26.019,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 55.0,
+              "positionY": 59.00000000000001
+            },
+            {
+              "text": "BY THE GLOBAL DIMENSIONING AND",
+              "distance": 26.043,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 55.0,
+              "positionY": 56.50000000000001
+            },
+            {
+              "text": "DOCUMENT IS IN ACOORDANCE WITH",
+              "distance": 26.235,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 55.0,
+              "positionY": 61.50000000000001
+            },
+            {
+              "text": "TOLERANCING ADDENDUM-2004",
+              "distance": 26.306,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 55.0,
+              "positionY": 54.00000000000001
+            },
+            {
+              "text": "UNLESS OTHERWISE SPECIFIED THIS",
+              "distance": 26.683,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 55.0,
+              "positionY": 64.00000000000001
+            },
+            {
+              "text": "GM ENG. APPROVED",
+              "distance": 30.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_006",
+              "positionX": 81.0,
+              "positionY": 28.0
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "PART NAME",
+          "positionX": -1078.10359,
+          "positionY": 802.8694,
+          "nearestTexts": [
+            {
+              "text": "SEE DWG",
+              "distance": 8.697,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1073.999999781443,
+              "positionY": 795.2015605419463
+            },
+            {
+              "text": "PART NO.",
+              "distance": 18.437,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1091.10139,
+              "positionY": 815.9451000000003
+            },
+            {
+              "text": "9NK-5E5-1B70",
+              "distance": 21.28,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1082.70515,
+              "positionY": 823.6456700000014
+            },
+            {
+              "text": "1",
+              "distance": 21.455,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1075.48528,
+              "positionY": 824.1639700000009
+            },
+            {
+              "text": "HEAT TREATMENT",
+              "distance": 22.552,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1058.93189,
+              "positionY": 790.9941000000002
+            },
+            {
+              "text": "SIZE",
+              "distance": 22.701,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1059.44189,
+              "positionY": 815.7949000000002
+            },
+            {
+              "text": "0",
+              "distance": 23.331,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1062.999999650309,
+              "positionY": 820.6524995628863
+            },
+            {
+              "text": "DATE",
+              "distance": 25.326,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1052.777890000001,
+              "positionY": 802.8193
+            },
+            {
+              "text": "BRACKET",
+              "distance": 25.455,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1102.999999694021,
+              "positionY": 808.1711983214828
+            },
+            {
+              "text": "SCAN",
+              "distance": 31.229,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1105.0,
+              "positionY": 787.0000000000002
+            },
+            {
+              "text": "’24.07.20",
+              "distance": 32.817,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1046.020515000001,
+              "positionY": 809.7693000000006
+            },
+            {
+              "text": "CASE DEPTH",
+              "distance": 34.892,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1110.91289,
+              "positionY": 790.9937000000003
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "U8718-S71-002_A3.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_015\\sample_015.dxf",
+      "textCount": 19,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "TR1D9Q00027.icd",
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_016\\sample_016.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "CAA5012-02430002P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_017\\sample_017.dxf",
+      "textCount": 170,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "CAA5012-02434006P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_018\\sample_018.dxf",
+      "textCount": 163,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "CAA5012-02435010P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_019\\sample_019.dxf",
+      "textCount": 126,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "CAA5012-02430012P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430012P1R1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_020\\sample_020.dxf",
+      "textCount": 133,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-PA13001.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13001.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_021\\sample_021.dxf",
+      "textCount": 1033,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-P05010.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_022\\sample_022.dxf",
+      "textCount": 175,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-PA0500_コラム.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_023\\sample_023.dxf",
+      "textCount": 193,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-PA1300_ベース.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_024\\sample_024.dxf",
+      "textCount": 106,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-P05008.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05008.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_025\\sample_025.dxf",
+      "textCount": 102,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "23022-007_231218.icd",
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-007_231218.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_026\\sample_026.dxf",
+      "textCount": 139,
+      "nameLabelCount": 2,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "品    名",
+          "positionX": 40.0,
+          "positionY": 3.0,
+          "nearestTexts": [
+            {
+              "text": "(開口)",
+              "distance": 1.501,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 40.00000119455879,
+              "positionY": 1.49926578928347
+            },
+            {
+              "text": "材 料 及 び 寸 法",
+              "distance": 3.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 43.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "訂 正 事 項",
+              "distance": 7.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 33.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "投影法",
+              "distance": 13.4,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 50.75,
+              "positionY": 11.0
+            },
+            {
+              "text": "2",
+              "distance": 22.746,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 61.53585815429688,
+              "positionY": 10.32144927978516
+            },
+            {
+              "text": "年月日",
+              "distance": 24.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 64.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "51",
+              "distance": 27.115,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 15.00000119455879,
+              "positionY": 13.49926578928347
+            },
+            {
+              "text": "70",
+              "distance": 27.803,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.99999999997732,
+              "positionY": 24.99999999999999
+            },
+            {
+              "text": "a",
+              "distance": 28.325,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 13.82500052452087,
+              "positionY": 13.82499999999993
+            },
+            {
+              "text": "b",
+              "distance": 28.325,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 13.82499980926514,
+              "positionY": 13.82499999999999
+            },
+            {
+              "text": "ブラケット",
+              "distance": 29.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 11.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "六角B、SW、W、N",
+              "distance": 29.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 11.0,
+              "positionY": 3.0
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "品    名",
+          "positionX": 40.0,
+          "positionY": 3.0,
+          "nearestTexts": [
+            {
+              "text": "(開口)",
+              "distance": 1.501,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 40.00000119455879,
+              "positionY": 1.49926578928347
+            },
+            {
+              "text": "材 料 及 び 寸 法",
+              "distance": 3.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 43.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "訂 正 事 項",
+              "distance": 7.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 33.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "投影法",
+              "distance": 13.4,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 50.75,
+              "positionY": 11.0
+            },
+            {
+              "text": "2",
+              "distance": 22.746,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 61.53585815429688,
+              "positionY": 10.32144927978516
+            },
+            {
+              "text": "年月日",
+              "distance": 24.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 64.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "51",
+              "distance": 27.115,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 15.00000119455879,
+              "positionY": 13.49926578928347
+            },
+            {
+              "text": "70",
+              "distance": 27.803,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 22.99999999997732,
+              "positionY": 24.99999999999999
+            },
+            {
+              "text": "a",
+              "distance": 28.325,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 13.82500052452087,
+              "positionY": 13.82499999999993
+            },
+            {
+              "text": "b",
+              "distance": 28.325,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 13.82499980926514,
+              "positionY": 13.82499999999999
+            },
+            {
+              "text": "ブラケット",
+              "distance": 29.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 11.0,
+              "positionY": 3.0
+            },
+            {
+              "text": "六角B、SW、W、N",
+              "distance": 29.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 11.0,
+              "positionY": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "XH3001-M08007-01.icd",
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_027\\sample_027.dxf",
+      "textCount": 136,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "PSG011-PA13002.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13002.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_028\\sample_028.dxf",
+      "textCount": 212,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "47323200X40c.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323200X40c.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_029\\sample_029.dxf",
+      "textCount": 162,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "32791729A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\02_参考機データ\\260626_CIP駆動部分\\260626_データ送付\\ICADデータ\\32701700006\\32701700006_SEISAKU\\32791729A01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_030\\sample_030.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "6800DDU.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6800DDU.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_031\\sample_031.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "6051033A.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6051033A.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_032\\sample_032.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "4D-75.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\4D-75.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_033\\sample_033.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "47323023A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323023A01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_034\\sample_034.dxf",
+      "textCount": 214,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "G1630-S3000-039_A0a1.icd",
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-039_A0a1.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_035\\sample_035.dxf",
+      "textCount": 485,
+      "nameLabelCount": 3,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "部  品  名  称",
+          "positionX": 1037.095662117004,
+          "positionY": 74.58837890625,
+          "nearestTexts": [
+            {
+              "text": "PARTS NAME",
+              "distance": 7.808,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1043.949767589569,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "承   認",
+              "distance": 12.88,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1028.452839851379,
+              "positionY": 65.039306640625
+            },
+            {
+              "text": "A",
+              "distance": 13.377,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1025.524589538574,
+              "positionY": 81.300048828125
+            },
+            {
+              "text": "No.",
+              "distance": 14.056,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1023.545929431915,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "番号",
+              "distance": 14.131,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1022.964314460754,
+              "positionY": 74.58837890625
+            },
+            {
+              "text": "APPROVED",
+              "distance": 14.535,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1030.724587917328,
+              "positionY": 61.523681640625
+            },
+            {
+              "text": "テールストックホンタイベース",
+              "distance": 15.013,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1050.524589538574,
+              "positionY": 81.300048828125
+            },
+            {
+              "text": "B",
+              "distance": 17.814,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1038.999938964844,
+              "positionY": 92.300048828125
+            },
+            {
+              "text": "審   査",
+              "distance": 23.395,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1058.452839851379,
+              "positionY": 65.039306640625
+            },
+            {
+              "text": "C",
+              "distance": 23.788,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1038.999938964844,
+              "positionY": 98.300048828125
+            },
+            {
+              "text": "CHECKED",
+              "distance": 27.546,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1061.346810340881,
+              "positionY": 61.523681640625
+            },
+            {
+              "text": "F",
+              "distance": 29.773,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1038.999938964844,
+              "positionY": 104.300048828125
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "区分名称",
+          "positionX": 1084.851033210754,
+          "positionY": 65.0732421875,
+          "nearestTexts": [
+            {
+              "text": "NAME OF SECTION",
+              "distance": 5.225,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1083.174830466509,
+              "positionY": 60.124267578125
+            },
+            {
+              "text": "STANDARD",
+              "distance": 6.463,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1081.949767589569,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "規    格",
+              "distance": 11.12,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1079.095662117004,
+              "positionY": 74.58837890625
+            },
+            {
+              "text": ".",
+              "distance": 16.534,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1088.024589538574,
+              "positionY": 81.300048828125
+            },
+            {
+              "text": "NAME",
+              "distance": 21.17,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1086.913116931915,
+              "positionY": 44.00439453125
+            },
+            {
+              "text": "多田",
+              "distance": 22.544,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1073.024589538574,
+              "positionY": 45.88084491399812
+            },
+            {
+              "text": "Q’TY",
+              "distance": 23.316,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1107.440699100494,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "CHECKED",
+              "distance": 23.771,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1061.346810340881,
+              "positionY": 61.523681640625
+            },
+            {
+              "text": "数量",
+              "distance": 24.702,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1107.719685554504,
+              "positionY": 74.411865234375
+            },
+            {
+              "text": "審   査",
+              "distance": 26.398,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1058.452839851379,
+              "positionY": 65.039306640625
+            },
+            {
+              "text": "’26.06.12",
+              "distance": 27.83,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1073.024589538574,
+              "positionY": 39.88084491399812
+            },
+            {
+              "text": "1",
+              "distance": 30.372,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1110.524589538574,
+              "positionY": 81.300048828125
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "名  称",
+          "positionX": 1084.851033210754,
+          "positionY": 52.5048828125,
+          "nearestTexts": [
+            {
+              "text": "NAME OF SECTION",
+              "distance": 7.802,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1083.174830466509,
+              "positionY": 60.124267578125
+            },
+            {
+              "text": "NAME",
+              "distance": 8.747,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1086.913116931915,
+              "positionY": 44.00439453125
+            },
+            {
+              "text": "多田",
+              "distance": 13.555,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1073.024589538574,
+              "positionY": 45.88084491399812
+            },
+            {
+              "text": "’26.06.12",
+              "distance": 17.298,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1073.024589538574,
+              "positionY": 39.88084491399812
+            },
+            {
+              "text": "STANDARD",
+              "distance": 18.571,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1081.949767589569,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "図  番",
+              "distance": 19.894,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1084.851033210754,
+              "positionY": 32.61083984375
+            },
+            {
+              "text": "規    格",
+              "distance": 22.821,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1079.095662117004,
+              "positionY": 74.58837890625
+            },
+            {
+              "text": "DRAWING No.",
+              "distance": 24.485,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1083.201232433319,
+              "positionY": 28.07568359375
+            },
+            {
+              "text": "CHECKED",
+              "distance": 25.175,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1061.346810340881,
+              "positionY": 61.523681640625
+            },
+            {
+              "text": ".",
+              "distance": 28.97,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1088.024589538574,
+              "positionY": 81.300048828125
+            },
+            {
+              "text": "Q’TY",
+              "distance": 29.099,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1107.440699100494,
+              "positionY": 70.84814453125
+            },
+            {
+              "text": "審   査",
+              "distance": 29.223,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 1058.452839851379,
+              "positionY": 65.039306640625
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\三宅設計\\9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_036\\sample_036.dxf",
+      "textCount": 331,
+      "nameLabelCount": 2,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_003",
+          "text": "PART NAME:",
+          "positionX": 42.05046643057847,
+          "positionY": 27.30969745473749,
+          "nearestTexts": [
+            {
+              "text": "PART NO.:",
+              "distance": 3.963,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.05046643057847,
+              "positionY": 23.34707078344968
+            },
+            {
+              "text": "DESIGNED BY:",
+              "distance": 6.585,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.01185977824332,
+              "positionY": 20.72492124206849
+            },
+            {
+              "text": "DESCRIPTION:",
+              "distance": 7.273,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.08533120060963,
+              "positionY": 34.58250049974743
+            },
+            {
+              "text": "DRAWN BY:",
+              "distance": 9.13,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.05046643057847,
+              "positionY": 18.17989362290689
+            },
+            {
+              "text": "CHECKED BY:",
+              "distance": 11.752,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.01185977824332,
+              "positionY": 15.5577440815257
+            },
+            {
+              "text": "MACH. NAME:",
+              "distance": 12.549,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.01185977824332,
+              "positionY": 39.85869746957587
+            },
+            {
+              "text": "GM ENG. APPROVED:",
+              "distance": 14.316,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.05046643057847,
+              "positionY": 12.99334736162461
+            },
+            {
+              "text": "MACH. NO.:",
+              "distance": 15.711,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.01185977824332,
+              "positionY": 43.02070134773942
+            },
+            {
+              "text": "SHEET SIZE:",
+              "distance": 16.938,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.05046643057847,
+              "positionY": 10.3711975999322
+            },
+            {
+              "text": "LOC.:",
+              "distance": 18.151,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.02209178816383,
+              "positionY": 45.4603595421022
+            },
+            {
+              "text": "Plant:",
+              "distance": 20.493,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 42.05046643057847,
+              "positionY": 47.80226823625026
+            },
+            {
+              "text": "SHEET NO.:",
+              "distance": 21.45,
+              "sameLayer": true,
+              "layer": "NoLayerName_003",
+              "positionX": 55.23862402371628,
+              "positionY": 10.39361558752114
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "PART NAME",
+          "positionX": -1009.664298964844,
+          "positionY": 452.9403075195314,
+          "nearestTexts": [
+            {
+              "text": "---",
+              "distance": 34.787,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -993.2499380906168,
+              "positionY": 422.2689496873161
+            },
+            {
+              "text": "PART NO.",
+              "distance": 73.747,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1061.655498964844,
+              "positionY": 505.2431075195313
+            },
+            {
+              "text": "9NK-5E5-1M00",
+              "distance": 85.119,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1028.070538964844,
+              "positionY": 536.0453875195346
+            },
+            {
+              "text": "1",
+              "distance": 85.82,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -999.1910589648444,
+              "positionY": 538.1185875195335
+            },
+            {
+              "text": "HEAT TREATMENT",
+              "distance": 90.207,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -932.977498964844,
+              "positionY": 405.4391075195314
+            },
+            {
+              "text": "SIZE",
+              "distance": 90.803,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -935.017498964844,
+              "positionY": 504.6423075195307
+            },
+            {
+              "text": "3",
+              "distance": 93.326,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -949.2499375660793,
+              "positionY": 524.0727057710765
+            },
+            {
+              "text": "DATE",
+              "distance": 101.303,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -908.3614989648443,
+              "positionY": 452.7399075195317
+            },
+            {
+              "text": "COVER",
+              "distance": 101.819,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1109.249937740924,
+              "positionY": 474.1475008054624
+            },
+            {
+              "text": "SCAN",
+              "distance": 124.916,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1117.249938964844,
+              "positionY": 389.4627075195315
+            },
+            {
+              "text": "’24.07.20",
+              "distance": 131.267,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -881.3319989648437,
+              "positionY": 480.5399075195342
+            },
+            {
+              "text": "CASE DEPTH",
+              "distance": 139.57,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1140.901498964844,
+              "positionY": 405.4375075195313
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\D-MAX_DK68\\20230821_Automation\\作業\\COVER_A._DRIP_TRAY\\9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_037\\sample_037.dxf",
+      "textCount": 609,
+      "nameLabelCount": 2,
+      "nameLabelEvidence": [
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "PART NAME",
+          "positionX": 81.0,
+          "positionY": 58.0,
+          "nearestTexts": [
+            {
+              "text": "-",
+              "distance": 4.5,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 62.5
+            },
+            {
+              "text": "PART NO.",
+              "distance": 10.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 48.0
+            },
+            {
+              "text": "C30",
+              "distance": 13.471,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 68.76613006603424,
+              "positionY": 63.6395800344286
+            },
+            {
+              "text": "DESIGNED BY",
+              "distance": 15.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 43.0
+            },
+            {
+              "text": "DESCRIPTION",
+              "distance": 15.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 73.0
+            },
+            {
+              "text": "-",
+              "distance": 17.007,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 98.0,
+              "positionY": 57.5
+            },
+            {
+              "text": "-",
+              "distance": 17.868,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 98.0,
+              "positionY": 52.5
+            },
+            {
+              "text": "-",
+              "distance": 19.474,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 98.0,
+              "positionY": 67.5
+            },
+            {
+              "text": "DRAWN BY",
+              "distance": 20.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 38.0
+            },
+            {
+              "text": "-",
+              "distance": 22.344,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 98.0,
+              "positionY": 72.5
+            },
+            {
+              "text": "t",
+              "distance": 23.352,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 76.96084805753321,
+              "positionY": 34.99999891469884
+            },
+            {
+              "text": "CHECKED BY",
+              "distance": 25.0,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": 81.0,
+              "positionY": 33.0
+            }
+          ]
+        },
+        {
+          "entityType": "MTEXT",
+          "layer": "NoLayerName_001",
+          "text": "PART NAME",
+          "positionX": -1078.10359,
+          "positionY": 802.8694,
+          "nearestTexts": [
+            {
+              "text": "---",
+              "distance": 8.697,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1073.999999781443,
+              "positionY": 795.2015605419466
+            },
+            {
+              "text": "1",
+              "distance": 15.517,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1075.48528,
+              "positionY": 818.1639700000006
+            },
+            {
+              "text": "PART NO.",
+              "distance": 18.437,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1091.10139,
+              "positionY": 815.9451000000003
+            },
+            {
+              "text": "9NK-5E5-6H20",
+              "distance": 21.28,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1082.70515,
+              "positionY": 823.6456700000025
+            },
+            {
+              "text": "1",
+              "distance": 21.455,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1075.48528,
+              "positionY": 824.1639700000025
+            },
+            {
+              "text": "HEAT TREATMENT",
+              "distance": 22.552,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1058.93189,
+              "positionY": 790.9941000000002
+            },
+            {
+              "text": "SIZE",
+              "distance": 22.701,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1059.44189,
+              "positionY": 815.7949000000002
+            },
+            {
+              "text": "0",
+              "distance": 23.331,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1062.999999650309,
+              "positionY": 820.6524995628863
+            },
+            {
+              "text": "DATE",
+              "distance": 25.326,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1052.777890000001,
+              "positionY": 802.8193000000001
+            },
+            {
+              "text": "BRACKET",
+              "distance": 25.455,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1102.99999969402,
+              "positionY": 808.1711983214831
+            },
+            {
+              "text": "SCAN",
+              "distance": 31.229,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1105.0,
+              "positionY": 787.0000000000001
+            },
+            {
+              "text": "’24.03.19",
+              "distance": 32.817,
+              "sameLayer": true,
+              "layer": "NoLayerName_001",
+              "positionX": -1046.020515000001,
+              "positionY": 809.7693000000015
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "U8718-S71-149_A4.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_038\\sample_038.dxf",
+      "textCount": 32,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    },
+    {
+      "filename": "18T5-10BF(8).icd",
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
+      "dxfPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\dxf_full_audit_2026-07-28\\dxf\\sample_039\\sample_039.dxf",
+      "textCount": 0,
+      "nameLabelCount": 0,
+      "nameLabelEvidence": []
+    }
+  ]
+}

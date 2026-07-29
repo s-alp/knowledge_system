@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import PureWindowsPath
 import re
 import unicodedata
 
@@ -20,7 +21,11 @@ from apps.drawing_metadata.services.seed_dictionaries import (
 
 TITLE_BLOCK_FIELD_RULES: dict[str, dict[str, object]] = {
     "drawing_number": {"label": "図番", "keywords": ["図番", "図面番号", "品番", "部品番号", "drawing no", "dwg no", "part no"], "max_value_length": 80},
-    "drawing_name": {"label": "図面名", "keywords": ["図名", "図面名", "品名", "名称", "title", "name"], "max_value_length": 80},
+    "drawing_name": {"label": "図面名", "keywords": ["図名", "図面名", "名称", "drawing name", "drawing title", "title"], "max_value_length": 80},
+    "part_name": {"label": "部品名", "keywords": ["部品名", "部品名称", "品名", "part name", "parts name"], "max_value_length": 80},
+    "product_name": {"label": "製品名", "keywords": ["製品名", "製品名称", "product name"], "max_value_length": 80},
+    "equipment_name": {"label": "装置名", "keywords": ["装置名", "装置名称", "設備名", "機械名", "equipment name", "machine name"], "max_value_length": 80},
+    "unit_name": {"label": "ユニット名", "keywords": ["ユニット名", "ユニット名称", "unit name", "unit title"], "max_value_length": 80},
     "material": {"label": "材質", "keywords": ["材質", "材料", "material", "matl"], "max_value_length": 40},
     "weight": {"label": "重量", "keywords": ["重量", "質量", "weight", "mass", "wt"], "max_value_length": 40},
     "surface_treatment": {"label": "表面処理", "keywords": ["表面処理", "表処", "処理", "surface treatment", "finish"], "max_value_length": 40},
@@ -95,8 +100,44 @@ DRAWING_NUMBER_NOISE_VALUES = {"組", "クミ", "くみ"}
 DRAWING_NUMBER_NOISE_COMPACT_VALUES = {"cad"}
 DRAWING_NUMBER_REFERENCE_KEYWORDS = ("参考", "元図", "参照", "参照組立号")
 FILE_EXTENSION_FRAGMENT_PATTERN = re.compile(r"\.[a-z0-9]{1,5}", re.IGNORECASE)
-DRAWING_SIZE_SUFFIX_PATTERN = re.compile(r"(?P<body>.+?)(?:[_\s]+A[0-4])$", re.IGNORECASE)
+DRAWING_SIZE_SUFFIX_PATTERN = re.compile(r"(?P<body>.+?)(?:[_\s-]+A[0-4])$", re.IGNORECASE)
 DRAWING_NUMBER_CODE_SEGMENT_PATTERN = re.compile(r"(?=.*\d)[A-Z0-9][A-Z0-9.-]{2,}[A-Z0-9]", re.IGNORECASE)
+DRAWING_NUMBER_TOKEN_PATTERN = re.compile(
+    r"(?<![A-Z0-9])(?=[A-Z0-9._-]{4,}(?![A-Z0-9]))(?=[A-Z0-9._-]*\d)"
+    r"[A-Z0-9][A-Z0-9._-]*[A-Z0-9](?![A-Z0-9])",
+    re.IGNORECASE,
+)
+DRAWING_NUMBER_FILENAME_WORD_PATTERN = re.compile(r"-(?P<word>[A-Z]{3,})(?:-|$)", re.IGNORECASE)
+DRAWING_NUMBER_FILENAME_WORD_EXCLUSIONS = {
+    "ASSY",
+    "ASSEMBLY",
+    "BRACKET",
+    "COVER",
+    "DRAWING",
+    "MACHINE",
+    "MODEL",
+    "PART",
+    "PLATE",
+    "PRODUCT",
+    "UNIT",
+}
+IDENTITY_NAME_FIELDS = {"drawing_name", "part_name", "product_name", "equipment_name", "unit_name"}
+IDENTITY_NAME_NOISE_VALUES = {
+    "ASSEMBLY",
+    "ASSY",
+    "CHANGED",
+    "COPIED",
+    "COPY",
+    "DRAWING",
+    "MACHINE",
+    "MODEL",
+    "NAME",
+    "PART",
+    "PRODUCT",
+    "TITLE",
+    "UNCHANGED",
+    "UNIT",
+}
 
 
 def _material_lookup_key(value: str | None) -> str:
@@ -142,24 +183,24 @@ def _normalize_layer_names(values: Iterable[object]) -> list[str]:
 
 
 def _match_dictionary(tokens: Iterable[str], mapping: dict[str, list[str]]) -> str | None:
-    lowered = " ".join(token.lower() for token in tokens)
+    lowered = " ".join(unicodedata.normalize("NFKC", token).casefold() for token in tokens)
     for canonical, candidates in mapping.items():
-        if any(candidate.lower() in lowered for candidate in candidates):
+        if any(unicodedata.normalize("NFKC", candidate).casefold() in lowered for candidate in candidates):
             return canonical
     return None
 
 
 def _match_dictionary_values(tokens: Iterable[str], mapping: dict[str, list[str]]) -> list[str]:
-    lowered = " ".join(token.lower() for token in tokens)
+    lowered = " ".join(unicodedata.normalize("NFKC", token).casefold() for token in tokens)
     matches: list[str] = []
     for canonical, candidates in mapping.items():
-        if any(candidate.lower() in lowered for candidate in candidates):
+        if any(unicodedata.normalize("NFKC", candidate).casefold() in lowered for candidate in candidates):
             matches.append(canonical)
     return matches
 
 
 def _normalize_for_match(value: str) -> str:
-    return "".join(value.lower().replace("　", " ").split())
+    return "".join(unicodedata.normalize("NFKC", value).casefold().split())
 
 
 # 尺度表記(例: 1:6, 1/6, S=1:6, 尺度 1:6)。トークン全体が尺度表記であるものだけを拾い、
@@ -330,17 +371,19 @@ def _extract_hardness_spec_candidates(tokens: Iterable[str]) -> list[dict]:
 
 
 def _strip_label_value(text: str, keyword: str) -> str | None:
-    lower_text = text.lower()
-    lower_keyword = keyword.lower()
-    index = lower_text.find(lower_keyword)
-    if index < 0:
-        normalized_text = _normalize_for_match(text)
-        normalized_keyword = _normalize_for_match(keyword)
-        if normalized_keyword not in normalized_text:
-            return None
+    """全角・半角とラベル内空白をそろえ、同じ文字要素内のラベル部分だけを除く。"""
+
+    normalized_text = unicodedata.normalize("NFKC", text)
+    normalized_keyword = unicodedata.normalize("NFKC", keyword)
+    keyword_tokens = re.findall(r"[A-Z0-9]+|[^\s]", normalized_keyword, re.IGNORECASE)
+    if not keyword_tokens:
+        return None
+    keyword_pattern = r"\s*".join(re.escape(token) for token in keyword_tokens)
+    match = re.search(keyword_pattern, normalized_text, re.IGNORECASE)
+    if not match:
         return None
 
-    value = text[:index] + text[index + len(keyword) :]
+    value = normalized_text[: match.start()] + normalized_text[match.end() :]
     value = value.strip(" 　:：=＝-－_/／[]【】()（）")
     return value or None
 
@@ -473,11 +516,14 @@ def _is_drawing_number_value_usable(value: str | None) -> bool:
         return False
     if FILE_EXTENSION_FRAGMENT_PATTERN.fullmatch(normalized):
         return False
-    return True
+    return bool(re.search(r"\d", normalized))
 
 
 def _clean_drawing_number_value(value: str | None) -> str | None:
-    normalized = unicodedata.normalize("NFKC", str(value or "")).strip(" 　:：=＝-－_/／[]【】()（）")
+    normalized = unicodedata.normalize("NFKC", str(value or "")).strip(" 　:：=＝-－_/／[]【】")
+    wrapper_match = re.fullmatch(r"[\[(（【](.+?)[\])）】]", normalized)
+    if wrapper_match:
+        normalized = wrapper_match.group(1).strip()
     if not _is_drawing_number_value_usable(normalized):
         return None
 
@@ -502,6 +548,139 @@ def _clean_drawing_number_value(value: str | None) -> str | None:
         match = DRAWING_NUMBER_CODE_SEGMENT_PATTERN.search(normalized)
         return match.group(0) if match else None
     return normalized if _is_drawing_number_value_usable(normalized) else None
+
+
+def _drawing_number_match_key(value: str | None) -> str:
+    normalized = unicodedata.normalize("NFKC", str(value or "")).upper()
+    return re.sub(r"[^A-Z0-9]", "", normalized)
+
+
+def _source_file_stem(source_file: dict) -> str:
+    explicit_stem = str(source_file.get("file_name_without_extension") or "").strip()
+    if explicit_stem:
+        return explicit_stem
+    file_name = str(source_file.get("file_name") or "").strip()
+    if file_name:
+        return PureWindowsPath(file_name).stem
+    full_path = str(source_file.get("full_path") or "").strip()
+    return PureWindowsPath(full_path).stem if full_path else ""
+
+
+def _clean_filename_drawing_number(value: str | None) -> str | None:
+    normalized = unicodedata.normalize("NFKC", str(value or "")).strip()
+    if not normalized:
+        return None
+    for match in DRAWING_NUMBER_FILENAME_WORD_PATTERN.finditer(normalized):
+        word = match.group("word").upper()
+        if word in DRAWING_NUMBER_FILENAME_WORD_EXCLUSIONS:
+            normalized = normalized[: match.start()]
+            break
+    normalized = re.sub(r"(?:[-_\s]+(?:A[0-4]|[23]D|REV[A-Z0-9]*|R\d+))+$", "", normalized, flags=re.IGNORECASE)
+    return _clean_drawing_number_value(normalized)
+
+
+def _drawing_number_candidates_from_texts(texts: Iterable[str | None]) -> list[str]:
+    """図面文字から英数字を含む図面番号らしい連続トークンだけを列挙する。"""
+
+    values: list[str] = []
+    for text in _flatten_strings(texts):
+        normalized = unicodedata.normalize("NFKC", text).upper()
+        for match in DRAWING_NUMBER_TOKEN_PATTERN.finditer(normalized):
+            value = _clean_drawing_number_value(match.group(0))
+            if value and value not in values:
+                values.append(value)
+    return values
+
+
+def _derive_drawing_number(
+    *,
+    source_file: dict,
+    title_number: str | None,
+    text_tokens: Iterable[str | None],
+) -> tuple[str | None, list[dict]]:
+    """図枠値を優先し、次に図面文字とファイル名が一致する候補、最後にファイル名を使う。
+
+    印刷枠外・枠判定不明の文字を無条件に復活させると参照図番まで混ざるため、
+    raw文字の救済はファイル名と英数字列が一致する候補だけに限定する。
+    """
+
+    candidates: list[dict] = []
+    title_value = _clean_drawing_number_value(title_number)
+    if title_value:
+        candidates.append(
+            {
+                "value": title_value,
+                "source": "2d_title_block",
+                "confidence": "high",
+                "evidence": "title_block_fields.drawing_number",
+            }
+        )
+
+    filename_stem = _source_file_stem(source_file)
+    filename_key = _drawing_number_match_key(filename_stem)
+    for value in _drawing_number_candidates_from_texts(text_tokens):
+        value_key = _drawing_number_match_key(value)
+        if not value_key or not filename_key:
+            continue
+        if value_key not in filename_key and filename_key not in value_key:
+            continue
+        if any(item["value"] == value for item in candidates):
+            continue
+        candidates.append(
+            {
+                "value": value,
+                "source": "2d_text_filename_match",
+                "confidence": "high",
+                "evidence": f"raw_extract.texts ↔ source_file:{filename_stem}",
+            }
+        )
+
+    filename_value = _clean_filename_drawing_number(filename_stem)
+    if filename_value and not any(item["value"] == filename_value for item in candidates):
+        candidates.append(
+            {
+                "value": filename_value,
+                "source": "filename",
+                "confidence": "medium",
+                "evidence": f"source_file:{filename_stem}",
+            }
+        )
+
+    matched_text_values = [
+        item["value"]
+        for item in candidates
+        if item["source"] == "2d_text_filename_match"
+    ]
+    filename_value_key = _drawing_number_match_key(filename_value)
+
+    def matches_filename_number(value: str) -> bool:
+        value_key = _drawing_number_match_key(value)
+        if not value_key or not filename_value_key:
+            return False
+        if value_key == filename_value_key:
+            return True
+        # ファイル名末尾の「-00」は管理用付番として図面内番号から省略される実例がある。
+        # 「-01」等は実体の枝番にもなるため短さだけでは削らず、全ゼロの場合だけ一致扱いにする。
+        # 逆向き（図面内値だけが長い）は子部品番号の可能性があるため一致扱いにしない。
+        suffix = filename_value_key[len(value_key) :] if filename_value_key.startswith(value_key) else ""
+        return bool(suffix and len(suffix) <= 3 and set(suffix) == {"0"})
+
+    matched_filename_value = next(
+        (
+            value
+            for value in matched_text_values
+            if filename_value_key
+            and matches_filename_number(value)
+        ),
+        None,
+    )
+    if title_value:
+        if not filename_value_key or matches_filename_number(title_value):
+            return title_value, candidates
+        # ファイル名にも有効な図面番号があるのに図枠値が一致しない場合は、
+        # 子部品番号や参照図番を拾った可能性が高いためファイル名側を採用する。
+        return matched_filename_value or filename_value, candidates
+    return matched_filename_value or filename_value or (matched_text_values[0] if matched_text_values else None), candidates
 
 
 def _is_field_value_usable(field: str, value: str | None, evidence_text: str) -> bool:
@@ -557,6 +736,22 @@ def _trusted_print_area_items(items: Iterable[dict], *, has_print_frames: bool) 
         for item in items
         if isinstance(item, dict) and _is_usable_print_area_item(item, has_print_frames=has_print_frames)
     ]
+
+
+def _should_enforce_print_area(items: Iterable[dict], *, has_print_frames: bool) -> bool:
+    """枠内外を実際に判定できた要素がある場合だけ、印刷枠フィルターを有効にする。
+
+    ICAD側が印刷枠を返しても、APIや図面状態によって全要素のinside_print_areaが
+    unknownになることがある。この状態で枠の存在だけを根拠に除外すると、図面内文字を
+    全件失うため、判定情報そのものが無い場合に限ってunknownを採用する。
+    """
+
+    if not has_print_frames:
+        return False
+    return any(
+        isinstance(item, dict) and item.get("inside_print_area") is not None
+        for item in items
+    )
 
 
 def _print_area_count_summary(items: Iterable[dict]) -> dict[str, int]:
@@ -863,6 +1058,7 @@ def _build_2d_sections(
     trusted_weld_notes: list[dict],
     trusted_balloons: list[dict],
     trusted_tolerances: list[dict],
+    enforce_text_print_area: bool,
 ) -> dict:
     texts = raw_extract.get("texts", []) or []
     dimensions = raw_extract.get("dimensions", []) or []
@@ -926,7 +1122,7 @@ def _build_2d_sections(
         *[
             item
             for item in revision_note_items
-            if _is_usable_print_area_item(item, has_print_frames=has_print_frames)
+            if _is_usable_print_area_item(item, has_print_frames=enforce_text_print_area)
         ],
     ]
 
@@ -971,12 +1167,103 @@ def _build_2d_sections(
     return {
         "schema_version": "raw_2d_sections.v1",
         "print_area_policy": "inside_only_when_print_frames_exist" if has_print_frames else "include_unknown_when_no_print_frames",
+        "text_print_area_policy": (
+            "inside_only_when_classification_available"
+            if enforce_text_print_area
+            else "include_unknown_when_classification_unavailable"
+        ),
         "sections": sections,
     }
 
 
+def _identity_name_value_is_usable(field: str, value: str | None) -> bool:
+    if field not in IDENTITY_NAME_FIELDS or not _is_field_value_usable(field, value, str(value or "")):
+        return False
+    normalized = unicodedata.normalize("NFKC", str(value or "")).strip()
+    if normalized.upper() in IDENTITY_NAME_NOISE_VALUES:
+        return False
+    if any(keyword in normalized for keyword in DRAWING_NUMBER_REFERENCE_KEYWORDS):
+        return False
+    if any(_normalize_for_match(keyword) in _normalize_for_match(normalized) for keyword in REVISION_NOTE_KEYWORDS):
+        return False
+    if not re.search(r"[A-Z\u3040-\u30ff\u3400-\u9fff]", normalized, re.IGNORECASE):
+        return False
+    if re.fullmatch(r"[A-Z0-9._/\-\s]+", normalized, re.IGNORECASE) and re.search(r"\d", normalized):
+        return False
+    return True
+
+
+def _nearest_identity_name_value(
+    *,
+    label_text: dict,
+    texts: list[dict],
+    field: str,
+    has_print_frames: bool,
+) -> tuple[str | None, dict | None]:
+    """名称ラベルの右または上下に整列する最短の文字要素だけを値候補にする。
+
+    材質・日付などへ汎用化すると図枠レイアウト差で誤対応しやすいため、
+    呼び出し元は製品・装置・ユニット・部品・図面の名称欄に限定する。
+    """
+
+    label_x = label_text.get("position_x")
+    label_y = label_text.get("position_y")
+    if not isinstance(label_x, (int, float)) or not isinstance(label_y, (int, float)):
+        return None, None
+
+    horizontal_ranked: list[tuple[float, str, dict]] = []
+    vertical_ranked: list[tuple[float, str, dict]] = []
+    for candidate_text in texts:
+        if candidate_text is label_text:
+            continue
+        if not _is_usable_print_area_item(candidate_text, has_print_frames=has_print_frames):
+            continue
+        if (
+            label_text.get("view_name")
+            and candidate_text.get("view_name")
+            and label_text.get("view_name") != candidate_text.get("view_name")
+        ):
+            continue
+        if (
+            label_text.get("layer_no") is not None
+            and candidate_text.get("layer_no") is not None
+            and label_text.get("layer_no") != candidate_text.get("layer_no")
+        ):
+            continue
+        candidate_x = candidate_text.get("position_x")
+        candidate_y = candidate_text.get("position_y")
+        if not isinstance(candidate_x, (int, float)) or not isinstance(candidate_y, (int, float)):
+            continue
+        lines = _text_lines_from_payload(candidate_text)
+        if len(lines) != 1:
+            continue
+        value = lines[0].strip()
+        delta_x = float(candidate_x) - float(label_x)
+        delta_y = float(candidate_y) - float(label_y)
+        horizontal = delta_x > 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.15)
+        vertical = delta_y != 0 and abs(delta_x) <= max(0.5, abs(delta_y) * 0.15)
+        if not horizontal and not vertical:
+            continue
+        distance = (delta_x**2 + delta_y**2) ** 0.5
+        ranked_target = horizontal_ranked if horizontal else vertical_ranked
+        ranked_target.append((distance, unicodedata.normalize("NFKC", value), candidate_text))
+
+    # 図枠の名称値は通常ラベル右側にあるため、距離が近い上下の別欄より右側を優先する。
+    # 右側候補が無い図枠だけ、上下方向の候補を検討する。
+    ranked = horizontal_ranked or vertical_ranked
+    if not ranked:
+        return None, None
+    ranked.sort(key=lambda item: item[0])
+    _, value, candidate_text = ranked[0]
+    # 最短要素がプレースホルダーや別ラベルなら、さらに遠い文字へ飛ばさない。
+    # 図枠の別欄を名称として拾う誤対応を防ぐため、このラベルは未抽出のままにする。
+    if not _identity_name_value_is_usable(field, value):
+        return None, None
+    return value, candidate_text
+
+
 def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool = False) -> list[dict]:
-    # 座標は候補レビュー用の証跡として保持するが、客先ごとの差が大きいため別文字要素間の近傍結合には使わない。
+    # 別文字要素の座標結合は誤対応リスクが高いため、明示された名称ラベルの直近値だけに限定する。
     candidates: list[dict] = []
     seen: set[tuple[str, str, str | None, float | None, float | None]] = set()
 
@@ -1007,6 +1294,16 @@ def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool =
                         if _is_field_value_usable(field, next_value, line):
                             value = next_value
                             confidence = "medium"
+                    paired_text = None
+                    if not value and field in IDENTITY_NAME_FIELDS:
+                        value, paired_text = _nearest_identity_name_value(
+                            label_text=text,
+                            texts=texts,
+                            field=field,
+                            has_print_frames=has_print_frames,
+                        )
+                        if value:
+                            confidence = "medium"
 
                     key = (field, line, value, text.get("position_x"), text.get("position_y"))
                     if key in seen:
@@ -1024,7 +1321,9 @@ def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool =
                             "position_x": text.get("position_x"),
                             "position_y": text.get("position_y"),
                             "inside_print_area": text.get("inside_print_area"),
-                            "source": "2d_text",
+                            "value_position_x": paired_text.get("position_x") if paired_text else None,
+                            "value_position_y": paired_text.get("position_y") if paired_text else None,
+                            "source": "2d_text_near_identity_label" if paired_text else "2d_text",
                         }
                     )
                     break
@@ -1458,7 +1757,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
     # どの抽出形式でも同じキーを返し、画面やタグ生成側に形式別の条件分岐を増やさない。
     canonical = {
         "drawing_number": None,
+        "drawing_number_candidates": [],
         "drawing_name": None,
+        "part_name": None,
+        "product_name": None,
+        "equipment_name": None,
+        "unit_name": None,
         "revision": None,
         "material": None,
         "surface_treatment": None,
@@ -1480,7 +1784,6 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "document_kind": None,
         "customer_name": None,
         "project_name": None,
-        "equipment_name": None,
         "equipment_category": None,
         "module_name": None,
         "status": None,
@@ -1682,6 +1985,64 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 *canonical["ref_model_names"],
             ]
         )
+        top_level_parts = [
+            part
+            for part in parts
+            if (
+                part.get("depth") == 0
+                or (
+                    isinstance(part.get("tree_path"), list)
+                    and len(part.get("tree_path") or []) <= 1
+                )
+            )
+        ]
+        if not top_level_parts and parts:
+            top_level_parts = [parts[0]]
+        top_level_identity_tokens = _flatten_strings(
+            [
+                top_part.get("comment"),
+                top_part.get("ex_info"),
+                *[
+                    value
+                    for part in top_level_parts
+                    for value in [
+                        part.get("comment"),
+                        part.get("ex_info"),
+                        *(part.get("ex_info_fields") or {}).values(),
+                    ]
+                ],
+            ]
+        )
+        # 3D最上位パーツ名はモデル内部識別子であり業務名称とは限らない。
+        # 名称・図番として採用するのは、最上位コメントや最上位付加情報に明示ラベルがある値だけにする。
+        # 子部品の「製品名」「部品番号」をICD全体へ誤って昇格させない。
+        for field in ("drawing_number", "drawing_name", "part_name", "product_name", "equipment_name", "unit_name"):
+            candidates = _merge_unique(
+                _extract_identity_candidates_from_part_ex_info(top_level_parts, field)
+                + _extract_labeled_field_candidates(field, top_level_identity_tokens)
+            )
+            if candidates:
+                canonical[field] = (
+                    _clean_drawing_number_value(candidates[0])
+                    if field == "drawing_number"
+                    else candidates[0]
+                )
+        if canonical.get("drawing_number"):
+            canonical["drawing_number_candidates"] = [
+                {
+                    "value": canonical["drawing_number"],
+                    "source": "3d_part_extended_info",
+                    "confidence": "high",
+                    "evidence": "top_part/parts.ex_info_fields",
+                }
+            ]
+        canonical["part_name_candidates"] = _merge_unique(
+            _flatten_strings([canonical.get("part_name")])
+            + _match_dictionary_values(
+                identity_tokens,
+                load_keyword_mapping(TagDictionaryEntry.KIND_PART_NAME),
+            )
+        )
         canonical["prfx_candidates"] = _merge_unique(
             _extract_identity_candidates_from_part_ex_info(parts, "prfx")
             + _extract_labeled_field_candidates("prfx", identity_tokens)
@@ -1758,7 +2119,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         block_references = raw_extract.get("block_references", []) or []
         referenced_parts = raw_extract.get("referenced_parts", [])
         has_print_frames = _has_print_frames(raw_extract)
-        trusted_texts = _trusted_print_area_items(texts, has_print_frames=has_print_frames)
+        # 印刷枠があっても全文字の枠内外がunknownなら、フィルターの判定材料がない。
+        # その場合だけ文字を残し、名称・図面番号を「未抽出」にしてしまう過剰除外を避ける。
+        enforce_text_print_area = _should_enforce_print_area(texts, has_print_frames=has_print_frames)
+        trusted_texts = _trusted_print_area_items(texts, has_print_frames=enforce_text_print_area)
         trusted_dimensions = _trusted_print_area_items(dimensions, has_print_frames=has_print_frames)
         trusted_weld_notes = _trusted_print_area_items(weld_notes, has_print_frames=has_print_frames)
         trusted_balloons = _trusted_print_area_items(balloons, has_print_frames=has_print_frames)
@@ -1898,9 +2262,19 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["referenced_2d_ref_vs_names"] = _flatten_strings(part.get("ref_vs_name") for part in trusted_referenced_parts)
         canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
         # 図枠は候補一覧と採用値を分け、どの文字要素から値を選んだか後でレビューできるようにする。
-        canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
+        canonical["title_block_candidates"] = _build_title_block_candidates(
+            texts,
+            has_print_frames=enforce_text_print_area,
+        )
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
         title_fields = canonical["title_block_fields"]
+        # 図面番号は図枠の明示値を正とする。図枠で取れないときだけ、
+        # raw文字とファイル名を照合して参照図番の混入を抑えながら救済する。
+        canonical["drawing_number"], canonical["drawing_number_candidates"] = _derive_drawing_number(
+            source_file=source_file,
+            title_number=title_fields.get("drawing_number"),
+            text_tokens=canonical["text_tokens"],
+        )
         if title_fields.get("weight"):
             title_fields["weight"] = _normalize_weight_to_kg_text(title_fields["weight"])
         canonical["prfx_candidates"] = _merge_unique(
@@ -1912,8 +2286,11 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             + _extract_labeled_field_candidates("unit_number", trusted_text_tokens)
         )
         for source_key, canonical_key in {
-            "drawing_number": "drawing_number",
             "drawing_name": "drawing_name",
+            "part_name": "part_name",
+            "product_name": "product_name",
+            "equipment_name": "equipment_name",
+            "unit_name": "unit_name",
             "material": "material",
             "weight": "weight_value",
             "surface_treatment": "surface_treatment",
@@ -1950,6 +2327,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             part_name_tokens,
             load_keyword_mapping(TagDictionaryEntry.KIND_PART_NAME),
         )
+        canonical["part_name_candidates"] = _merge_unique(
+            _flatten_strings([canonical.get("part_name")])
+            + canonical["part_name_candidates"]
+        )
         # 尺度: ラベル付き図枠欄が無い場合でも「1:6」「S=1:6」形のトークンから拾う。
         # 候補が1種類に定まる場合だけ scale を確定する(テーパ表記 1:10 との衝突対策)。
         canonical["scale_candidates"] = _extract_scale_candidates(trusted_text_tokens)
@@ -1969,7 +2350,10 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["hardness_spec_candidates"] = _extract_hardness_spec_candidates(heat_treatment_tokens)
         canonical["hardness_spec_values"] = [item["value"] for item in canonical["hardness_spec_candidates"]]
-        canonical["revision_note_candidates"] = _build_revision_note_candidates(texts, has_print_frames=has_print_frames)
+        canonical["revision_note_candidates"] = _build_revision_note_candidates(
+            texts,
+            has_print_frames=enforce_text_print_area,
+        )
         canonical["revision_note_count"] = len(canonical["revision_note_candidates"])
         canonical["geometry_feature_candidates"] = _build_geometry_feature_candidates(primitives, has_print_frames=has_print_frames)
         canonical.update(_build_geometry_attribute_summary(primitives, has_print_frames=has_print_frames))
@@ -1987,6 +2371,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             trusted_weld_notes=trusted_weld_notes,
             trusted_balloons=trusted_balloons,
             trusted_tolerances=trusted_tolerances,
+            enforce_text_print_area=enforce_text_print_area,
         )
 
         search_tokens = (

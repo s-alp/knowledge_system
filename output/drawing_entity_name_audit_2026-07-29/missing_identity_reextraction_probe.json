@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "missing_identity_reextraction_probe.v1",
+  "extractionProfile": "2d_all_views_layers_print_frame",
+  "extractionOptions": {
+    "scanAllViews": true,
+    "scanAllLayers": true,
+    "classifyPrintFrame": true,
+    "recordOutsidePrintFrame": true,
+    "recordUnknownPrintArea": true
+  },
+  "count": 3,
+  "rows": [
+    {
+      "drawingId": "55586d16-baf9-4e72-97b0-5a2ee9a782ce",
+      "filename": "U8718-S71-002_A3.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "rawTextCount": 0,
+      "warningCodes": [
+        "sxnet_input_path_staged",
+        "empty_segment_list",
+        "viewer_2d_asset_export_delegated"
+      ],
+      "drawingNumber": "U8718-S71-002",
+      "partName": null,
+      "drawingName": null,
+      "productName": null,
+      "equipmentName": null,
+      "unitName": null,
+      "partNameCandidates": [],
+      "titleBlockIdentityCandidates": [],
+      "rawExtractOutputPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\var\\drawing_metadata\\raw_extracts\\8d93e717-bccc-4718-8d6b-2da3d1c3551d.json"
+    },
+    {
+      "drawingId": "3370c0d6-0231-4934-af13-85e3552830af",
+      "filename": "U8718-S71-149_A4.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "rawTextCount": 0,
+      "warningCodes": [
+        "sxnet_input_path_staged",
+        "empty_segment_list",
+        "viewer_2d_asset_export_delegated"
+      ],
+      "drawingNumber": "U8718-S71-149",
+      "partName": null,
+      "drawingName": null,
+      "productName": null,
+      "equipmentName": null,
+      "unitName": null,
+      "partNameCandidates": [],
+      "titleBlockIdentityCandidates": [],
+      "rawExtractOutputPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\var\\drawing_metadata\\raw_extracts\\8abf6998-41a9-47df-9727-5cdf9fd872b8.json"
+    },
+    {
+      "drawingId": "14cdc86f-47be-43a7-a010-1764fe00dc6c",
+      "filename": "XH3001-M08007-01.icd",
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "rawTextCount": 109,
+      "warningCodes": [
+        "sxnet_input_path_staged",
+        "geometry_layer_count_mismatch",
+        "geometry_layer_count_mismatch",
+        "empty_segment_list",
+        "viewer_2d_asset_export_delegated"
+      ],
+      "drawingNumber": "XH3001-M08007",
+      "partName": null,
+      "drawingName": null,
+      "productName": null,
+      "equipmentName": null,
+      "unitName": null,
+      "partNameCandidates": [],
+      "titleBlockIdentityCandidates": [
+        {
+          "field": "drawing_name",
+          "label": "図面名",
+          "value": null,
+          "evidence_text": "名 称",
+          "confidence": "low",
+          "view_name": "!XY",
+          "layer_no": null,
+          "position_x": 332.59545166,
+          "position_y": -442.39412777,
+          "inside_print_area": null,
+          "value_position_x": null,
+          "value_position_y": null,
+          "source": "2d_text"
+        }
+      ],
+      "rawExtractOutputPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\var\\drawing_metadata\\raw_extracts\\49a7cdea-aaef-493e-aeb3-78c9ba764039.json"
+    }
+  ]
+}

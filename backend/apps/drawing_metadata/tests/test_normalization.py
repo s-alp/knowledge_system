@@ -415,6 +415,96 @@ def test_title_block_fields_do_not_pair_separate_text_elements_by_coordinates():
     assert material_candidate["position_y"] == 20.0
 
 
+def test_identity_name_pairs_only_an_explicit_nearby_name_label():
+    payload = {
+        "source_format": "icad",
+        "source_kind": "2d",
+        "source_file": {"file_name": "P-100.icd"},
+        "raw_extract": {
+            "texts": [
+                {
+                    "text_lines": ["品　名"],
+                    "inside_print_area": True,
+                    "view_name": "SHEET1",
+                    "layer_no": 1,
+                    "position_x": 10.0,
+                    "position_y": 20.0,
+                },
+                {
+                    "text_lines": ["PPS"],
+                    "inside_print_area": True,
+                    "view_name": "SHEET1",
+                    "layer_no": 1,
+                    "position_x": 10.0,
+                    "position_y": 21.0,
+                },
+                {
+                    "text_lines": ["開口カバー"],
+                    "inside_print_area": True,
+                    "view_name": "SHEET1",
+                    "layer_no": 1,
+                    "position_x": 20.0,
+                    "position_y": 20.0,
+                },
+                {
+                    "text_lines": ["SS400"],
+                    "inside_print_area": True,
+                    "view_name": "SHEET1",
+                    "layer_no": 1,
+                    "position_x": 12.0,
+                    "position_y": 40.0,
+                },
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["part_name"] == "開口カバー"
+    candidate = next(
+        item
+        for item in canonical["title_block_candidates"]
+        if item["field"] == "part_name" and item["value"] == "開口カバー"
+    )
+    assert candidate["source"] == "2d_text_near_identity_label"
+    assert candidate["value_position_x"] == 20.0
+    assert candidate["value_position_y"] == 20.0
+
+
+def test_identity_name_does_not_skip_a_nearby_placeholder_to_an_unrelated_value():
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "source_file": {"file_name": "P-100.icd"},
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["PART NAME"],
+                        "inside_print_area": True,
+                        "position_x": 10.0,
+                        "position_y": 20.0,
+                    },
+                    {
+                        "text_lines": ["COPIED"],
+                        "inside_print_area": True,
+                        "position_x": 11.0,
+                        "position_y": 20.0,
+                    },
+                    {
+                        "text_lines": ["BY"],
+                        "inside_print_area": True,
+                        "position_x": 20.0,
+                        "position_y": 20.0,
+                    },
+                ],
+            },
+        }
+    )
+
+    assert canonical["part_name"] is None
+
+
 def test_title_block_drawing_number_strips_filename_noise_and_paper_size():
     payload = {
         "source_kind": "2d",
@@ -431,6 +521,134 @@ def test_title_block_drawing_number_strips_filename_noise_and_paper_size():
     canonical = normalize_raw_extract(payload)
 
     assert canonical["title_block_fields"]["drawing_number"] == "20K03379P00"
+
+
+def test_identity_labels_are_separated_and_full_width_spacing_is_normalized():
+    drawing_number = "9NK-5E5-1B70"
+    payload = {
+        "source_kind": "2d",
+        "source_file": {
+            "file_name": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+            "file_name_without_extension": "9NK5E51B70-00-BRACKET-A0-3D-01",
+        },
+        "raw_extract": {
+            "texts": [
+                {"text_lines": ["品　名：ＢＲＡＣＫＥＴ"], "inside_print_area": True},
+                {"text_lines": [f"図　番：{drawing_number}"], "inside_print_area": True},
+                {"text_lines": ["UNIT Name"], "inside_print_area": True},
+                {"text_lines": ["MACHINE Name"], "inside_print_area": True},
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["part_name"] == "BRACKET"
+    assert canonical["drawing_name"] is None
+    assert canonical["unit_name"] is None
+    assert canonical["equipment_name"] is None
+    assert canonical["drawing_number"] == drawing_number
+    assert canonical["title_block_fields"]["part_name"] == "BRACKET"
+    assert all(
+        candidate.get("value") not in {"UNIT", "MACHINE"}
+        for candidate in canonical["title_block_candidates"]
+    )
+
+
+def test_drawing_number_recovers_only_raw_text_that_matches_filename():
+    drawing_number = "9NK-5E5-1B70"
+    payload = {
+        "source_kind": "2d",
+        "source_file": {
+            "file_name": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+            "file_name_without_extension": "9NK5E51B70-00-BRACKET-A0-3D-01",
+        },
+        "raw_extract": {
+            "texts": [
+                {"text_lines": [drawing_number], "inside_print_area": None},
+                {"text_lines": ["REF-99999"], "inside_print_area": None},
+            ],
+            "print_frames": [{"frame_no": 1}],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert "drawing_number" not in canonical["title_block_fields"]
+    assert canonical["drawing_number"] == drawing_number
+    assert canonical["drawing_number_candidates"][0]["source"] == "2d_text_filename_match"
+    assert all(
+        candidate["value"] != "REF-99999"
+        for candidate in canonical["drawing_number_candidates"]
+    )
+
+
+def test_drawing_number_rejects_child_number_that_conflicts_with_filename():
+    payload = {
+        "source_kind": "2d",
+        "source_file": {
+            "file_name": "PSG011-PA1300_ベース.icd",
+            "file_name_without_extension": "PSG011-PA1300_ベース",
+        },
+        "raw_extract": {
+            "texts": [
+                {"text_lines": ["図番 PSG011-PA13002"], "inside_print_area": True},
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["title_block_fields"]["drawing_number"] == "PSG011-PA13002"
+    assert canonical["drawing_number"] == "PSG011-PA1300"
+
+
+def test_filename_drawing_number_keeps_numeric_suffix_and_parentheses():
+    for drawing_number in ("4D-75", "18T5-10BF(8)", "XH3001-M08007-01"):
+        canonical = normalize_raw_extract(
+            {
+                "source_kind": "2d",
+                "source_file": {
+                    "file_name": f"{drawing_number}.icd",
+                    "file_name_without_extension": drawing_number,
+                },
+                "raw_extract": {"texts": []},
+            }
+        )
+
+        assert canonical["drawing_number"] == drawing_number
+
+
+def test_3d_child_identity_fields_do_not_become_drawing_identity():
+    payload = {
+        "source_kind": "3d",
+        "source_file": {"file_name": "assembly.icd"},
+        "raw_extract": {
+            "top_part": {"name": "MACHINE"},
+            "parts": [
+                {
+                    "depth": 0,
+                    "tree_path": ["MACHINE"],
+                    "name": "MACHINE",
+                    "ex_info_fields": {},
+                },
+                {
+                    "depth": 1,
+                    "tree_path": ["MACHINE", "CHILD"],
+                    "name": "CHILD",
+                    "ex_info_fields": {
+                        "製品名": "フローティングジョイント",
+                        "部品番号": "PSG011-PA13002",
+                    },
+                },
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["product_name"] is None
+    assert canonical["drawing_number"] is None
 
 
 def test_normalize_step_extract_uses_generic_3d_materials_and_path_tokens():
@@ -664,6 +882,62 @@ def test_normalize_2d_extract_excludes_unknown_print_area_when_frames_exist():
     assert not any(tag["tag"] == "材質:SS400" for tag in tags)
     sections_by_key = {section["key"]: section for section in canonical["raw_2d_sections"]["sections"]}
     assert canonical["raw_2d_sections"]["print_area_policy"] == "inside_only_when_print_frames_exist"
+    assert canonical["raw_2d_sections"]["text_print_area_policy"] == "inside_only_when_classification_available"
     assert sections_by_key["notes"]["unknown_print_area_count"] >= 2
     assert sections_by_key["notes"]["trusted_count"] == 0
     assert sections_by_key["manufacturing_symbols"]["trusted_count"] == 1
+
+
+def test_normalize_2d_extract_uses_unknown_texts_when_print_area_classification_is_unavailable():
+    payload = {
+        "source_format": "icad",
+        "source_kind": "2d",
+        "source_file": {
+            "full_path": r"J:\sample\XH3001-M08007-01.icd",
+            "file_name": "XH3001-M08007-01.icd",
+            "file_name_without_extension": "XH3001-M08007-01",
+        },
+        "raw_extract": {
+            "print_frames": [{"id": "frame-1"}],
+            "texts": [
+                {
+                    "text_lines": ["名 称"],
+                    "joined_text": "名 称",
+                    "view_name": "!XY",
+                    "position_x": 332.6,
+                    "position_y": -442.4,
+                    "inside_print_area": None,
+                },
+                {
+                    "text_lines": ["法兰（右）"],
+                    "joined_text": "法兰（右）",
+                    "view_name": "!XY",
+                    "position_x": 413.3,
+                    "position_y": -449.9,
+                    "inside_print_area": None,
+                },
+                {
+                    "text_lines": ["材 料"],
+                    "joined_text": "材 料",
+                    "view_name": "!XY",
+                    "position_x": 333.2,
+                    "position_y": -424.0,
+                    "inside_print_area": None,
+                },
+                {
+                    "text_lines": ["PPS"],
+                    "joined_text": "PPS",
+                    "view_name": "!XY",
+                    "position_x": 372.8,
+                    "position_y": -427.1,
+                    "inside_print_area": None,
+                },
+            ],
+        },
+    }
+
+    canonical = normalize_raw_extract(payload)
+
+    assert canonical["drawing_name"] == "法兰(右)"
+    assert canonical["drawing_number"] == "XH3001-M08007-01"
+    assert canonical["raw_2d_sections"]["text_print_area_policy"] == "include_unknown_when_classification_unavailable"

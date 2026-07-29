@@ -191,39 +191,40 @@ export function IcadEntityListPage({
             <thead>
               <tr>
                 <th />
+                {/* 製品・部品とも図面番号を表示する。部品のpartNumberはAPI互換用で、表示上は別番号に見せない。 */}
                 {targetKey === "product" ? (
                   <>
-                    <th>製品・装置・ユニット名</th><th>種別</th><th>担当者</th><th>部品数</th><th>ステータス</th><th>最終更新日</th>
+                    <th>図面番号</th><th>製品・装置・ユニット名</th><th>種別</th><th>担当者</th><th>部品数</th><th>ステータス</th><th>最終更新日</th>
                   </>
                 ) : (
                   <>
-                    <th>部品番号</th><th>部品名</th><th>カテゴリ</th><th>材質</th><th>担当者</th><th>ステータス</th><th>最終更新日</th>
+                    <th>図面番号</th><th>部品名</th><th>カテゴリ</th><th>材質</th><th>担当者</th><th>ステータス</th><th>最終更新日</th>
                   </>
                 )}
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={targetKey === "product" ? 7 : 8}>読み込んでいます。</td></tr>
+                <tr><td colSpan={8}>読み込んでいます。</td></tr>
               ) : error ? (
-                <tr><td colSpan={targetKey === "product" ? 7 : 8} className="error-text">{error}</td></tr>
+                <tr><td colSpan={8} className="error-text">{error}</td></tr>
               ) : catalog?.items.length ? (
                 catalog.items.map((record) => (
                   <tr key={record.entityId} className="production-clickable-row" onClick={() => onOpenDetail(record.entityId, record.drawingId)}>
                     <td />
                     {targetKey === "product" ? (
                       <>
-                        <td>{record.name}</td><td>{entityKindLabel(record)}</td><td>{businessValue(record, "owner")}</td><td>{record.descendantPartCount}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
+                        <td>{record.drawingNumber || "-"}</td><td>{record.name}</td><td>{entityKindLabel(record)}</td><td>{businessValue(record, "owner")}</td><td>{record.descendantPartCount}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
                       </>
                     ) : (
                       <>
-                        <td>{record.partNumber ?? "-"}</td><td>{record.name}</td><td>{businessValue(record, "category")}</td><td>{attributeValue(record, "materials")}</td><td>{businessValue(record, "owner")}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
+                        <td>{record.drawingNumber || "-"}</td><td>{record.name}</td><td>{businessValue(record, "category")}</td><td>{attributeValue(record, "materials")}</td><td>{businessValue(record, "owner")}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
                       </>
                     )}
                   </tr>
                 ))
               ) : (
-                <tr><td colSpan={targetKey === "product" ? 7 : 8}>該当する{listLabel}はありません。</td></tr>
+                <tr><td colSpan={8}>該当する{listLabel}はありません。</td></tr>
               )}
             </tbody>
           </table>
@@ -330,7 +331,9 @@ function EntityEditDialog({ record, onClose, onSaved }: { record: KnowledgeEntit
   return (
     <ModalShell title="登録情報を編集" onClose={onClose}>
       <div className="production-edit-grid">
-        {isProduct ? input("name", "製品・装置・ユニット名") : <>{input("partNumber", "部品番号")}{input("name", "部品名")}</>}
+        {/* 図面番号を名称と分けて編集し、部品ではAPI側でpartNumberにも同じ値を反映する。 */}
+        {input("drawingNumber", "図面番号")}
+        {isProduct ? input("name", "製品・装置・ユニット名") : input("name", "部品名")}
         {input("category", "カテゴリ")}
         {isProduct ? (
           <label className="production-form-field"><span>種別</span><select value={fields.entityKind || record.entityKind} onChange={(event) => setFields((current) => ({ ...current, entityKind: event.target.value }))}><option value="assembly">アセンブリ</option><option value="subassembly">サブアセンブリ</option></select></label>
@@ -468,8 +471,8 @@ export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { enti
 
   const isProduct = record.targetKey === "product";
   const basicFields = isProduct
-    ? [["製品・装置・ユニット名", businessValue(record, "name")], ["カテゴリ", businessValue(record, "category")], ["種別", entityKindLabel(record)], ["フェーズ", businessValue(record, "phase")], ["ステータス", businessValue(record, "status")], ["担当者", businessValue(record, "owner")]]
-    : [["部品番号", businessValue(record, "partNumber")], ["部品名", businessValue(record, "name")], ["カテゴリ", businessValue(record, "category")], ["仕入先", businessValue(record, "supplier")], ["単価", businessValue(record, "unitPrice")], ["単位", businessValue(record, "unit")], ["担当者", businessValue(record, "owner")], ["ステータス", businessValue(record, "status")]];
+    ? [["図面番号", businessValue(record, "drawingNumber")], ["製品・装置・ユニット名", businessValue(record, "name")], ["カテゴリ", businessValue(record, "category")], ["種別", entityKindLabel(record)], ["フェーズ", businessValue(record, "phase")], ["ステータス", businessValue(record, "status")], ["担当者", businessValue(record, "owner")]]
+    : [["図面番号", businessValue(record, "drawingNumber")], ["部品名", businessValue(record, "name")], ["カテゴリ", businessValue(record, "category")], ["仕入先", businessValue(record, "supplier")], ["単価", businessValue(record, "unitPrice")], ["単位", businessValue(record, "unit")], ["担当者", businessValue(record, "owner")], ["ステータス", businessValue(record, "status")]];
   const visibleAttributes = record.attributes.filter((attribute) => !["classification_reason", "source_path"].includes(attribute.key));
   const drawings = record.relatedDrawings ?? [];
   const currentRecord = record;

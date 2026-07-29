@@ -11,10 +11,25 @@ using IcadExtraction.Contracts;
 namespace IcadExtraction.SxNet
 {
     /// <summary>
-    /// ICADモデルをDXFまたはSTEPへ変換し、変換結果と警告を共通形式で返す。
+    /// 開いているICADモデルをSXNETの標準export APIでDXFまたはSTEPへ変換します。
+    /// Django、データベース、HTTP APIには依存せず、C# Runnerや別の.NETホストから直接利用できます。
     /// </summary>
     public sealed class IcadCadFormatExporter
     {
+        /// <summary>
+        /// 読み取り専用で開いたSXNETコンテキストから変換ファイルを生成し、保存先・形式・サイズを返します。
+        /// 出力先フォルダの作成と同名ファイルの置換を伴うため、対話利用では事前確認を行う
+        /// <c>scripts/convert_icad_standalone.ps1</c>を入口にしてください。
+        /// SXNETが出力形式定数を公開しない環境では、実機で確認した数値を<paramref name="exportFileType"/>へ指定します。
+        /// 変換ファイルが生成されない場合は推測値で続行せず、例外として呼び出し元へ返します。
+        /// </summary>
+        /// <param name="context">対象ICADを開いたSXNETコンテキスト。</param>
+        /// <param name="inputPath">結果メタデータの既定ファイル名に使う元ICADパス。</param>
+        /// <param name="outputDirectory">変換ファイルを保存するフォルダ。</param>
+        /// <param name="outputFormat"><c>dxf</c>、<c>step</c>、または<c>stp</c>。</param>
+        /// <param name="outputBaseName">拡張子を除いた出力名。未指定時は元ICAD名を使います。</param>
+        /// <param name="exportFileType">環境固有のSXNET出力形式番号。通常は未指定で定数を自動解決します。</param>
+        /// <returns>生成ファイルを後続処理へ渡すための共通メタデータ。</returns>
         public ViewerAssetPayload Export(
             SxNetOpenContext context,
             string inputPath,
@@ -69,6 +84,10 @@ namespace IcadExtraction.SxNet
             };
         }
 
+        /// <summary>
+        /// 利用者の形式指定を、SXNET出力・拡張子・MIME typeに必要な共通設定へ正規化します。
+        /// 未対応形式は誤変換を防ぐため明示的に拒否します。
+        /// </summary>
         public static CadExportFormat ResolveFormat(string outputFormat)
         {
             var normalized = (outputFormat ?? string.Empty).Trim().TrimStart('.').ToLowerInvariant();
@@ -108,6 +127,10 @@ namespace IcadExtraction.SxNet
             throw new ArgumentException($"unsupported output-format: {outputFormat}");
         }
 
+        /// <summary>
+        /// 実機SXNET DLLが公開する出力形式定数を列挙します。
+        /// ICADの版差を推測で吸収せず、<c>probe-cad-export-types</c>の診断結果として確認するために公開しています。
+        /// </summary>
         public static Dictionary<string, int> ListSxOptExportIntegerFields(Assembly assembly)
         {
             var type = assembly.GetType("sxnet.SxOptExport", throwOnError: false);
@@ -187,11 +210,8 @@ namespace IcadExtraction.SxNet
     }
 
     /// <summary>
-
-    /// CadExportFormatに関する処理と状態を一つの責務としてまとめます。
-
+    /// 1つの変換形式について、SXNET出力候補と後続ビューワーへ渡すファイル情報をまとめます。
     /// </summary>
-
     public sealed class CadExportFormat
     {
         public string OutputFormat { get; set; } = string.Empty;

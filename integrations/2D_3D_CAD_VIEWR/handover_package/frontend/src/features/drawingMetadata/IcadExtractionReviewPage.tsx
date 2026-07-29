@@ -1,3 +1,6 @@
+// このファイルは、図面登録、2D/3D抽出、失敗確認、手動補正、レビュー確定を一画面で扱う。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -133,6 +136,12 @@ function summarizeJobError(value: string | null | undefined, apiSummary?: string
   if (!value) {
     return "-";
   }
+  if (value.includes("パスが長すぎます")) {
+    return "ICADファイルのパスが長すぎます。短い一時パスへ退避して再抽出する必要があります。";
+  }
+  if (value.includes("ファイル名が長すぎます")) {
+    return "ICADファイル名が長すぎます。短いファイル名へ変更してから再登録してください。";
+  }
   if (value.includes("指定したファイルは図面ファイルではありません")) {
     return "ICDファイルですが、ICAD/SXNETが図面モデルとして開けません。原本パス、外部参照、ICAD対応版を確認してください。";
   }
@@ -140,7 +149,7 @@ function summarizeJobError(value: string | null | undefined, apiSummary?: string
     return "ICAD/SXの多重起動ダイアログが発生しています。既存ICADを閉じて再実行してください。";
   }
   if (value.includes("FileNotFound") || value.includes("ファイルが見つかりません")) {
-    return "対象ファイルまたは参照ファイルが見つかりません。保存先パスと参照先を確認してください。";
+    return "対象ファイルまたは参照ファイルが見つかりません。抽出対象ファイルのパスと参照先を確認してください。";
   }
   const firstLine = value.split(/\r?\n/).find(Boolean) ?? value;
   return firstLine.length > 120 ? `${firstLine.slice(0, 120)}...` : firstLine;
@@ -156,6 +165,35 @@ function formatJobErrorDetail(job: DrawingMetadataJobResponse) {
   }
   const originalLength = job.errorMessageLength ?? value.length;
   return `${value.slice(0, jobErrorDetailLimit)}\n...（失敗理由は全${originalLength}文字のため先頭${jobErrorDetailLimit}文字のみ表示。全文はworkerログまたは診断スクリプトで確認してください。）`;
+}
+
+function formatCheck(value: boolean | null | undefined) {
+  if (value === true) {
+    return "可";
+  }
+  if (value === false) {
+    return "不可";
+  }
+  return "未確認";
+}
+
+function formatInputDiagnostics(job: DrawingMetadataJobResponse) {
+  const preflight = job.diagnostics?.failure?.sourcePreflight ?? job.diagnostics?.sourcePreflight;
+  if (!preflight) {
+    return "-";
+  }
+  const pathLength = preflight.sourcePathLength == null
+    ? "パス長:未確認"
+    : `パス長:${preflight.sourcePathLength}${preflight.sourcePathWithinSxnetLegacyLimit === false ? " / 上限超過" : ""}`;
+  const filenameLength = preflight.filenameLength == null
+    ? "ファイル名長:未確認"
+    : `ファイル名長:${preflight.filenameLength}${preflight.filenameWithinWindowsLimit === false ? " / 上限超過" : ""}`;
+  return [
+    `原本:${formatCheck(preflight.sourceExistsFromCurrentMachine)}`,
+    `長パス退避:${formatCheck(preflight.requiresSxnetStagedInput)}`,
+    pathLength,
+    filenameLength,
+  ].join(" / ");
 }
 
 function isActiveJob(job: DrawingMetadataJobResponse) {
@@ -188,6 +226,7 @@ function mergeJobs(
 }
 
 export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: IcadExtractionReviewPageProps) {
+  // 画面状態は「登録」「抽出ジョブ」「手動補正」を分け、API再取得時に入力中の値まで失わないようにする。
   const [registration, setRegistration] = useState<DrawingMetadataRegistrationResponse | null>(null);
   const [jobs, setJobs] = useState<DrawingMetadataJobResponse[]>([]);
   const [phase, setPhase] = useState<"idle" | "uploading" | "ready" | "extracting" | "saving">("idle");
@@ -199,16 +238,17 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   const selectedSourceLabel = sourcePath.trim() || file?.name || "未選択";
 
   useEffect(() => {
+    // fileまたは共有パスが変わったときだけ登録し、同じ入力で再描画されても重複登録しない。
     let cancelled = false;
     const trimmedSourcePath = sourcePath.trim();
     if (!file && !trimmedSourcePath) {
       setPhase("idle");
-      setMessage("ICAD原本パスを入力するか、ICADファイルを選択してください。");
+      setMessage("ICADファイルのパスを指定するか、ICADファイルをアップロードしてください。");
       return;
     }
 
     setPhase("uploading");
-    setMessage("ICADファイルを登録しています。");
+    setMessage(trimmedSourcePath ? "指定されたICADファイルを登録しています。" : "アップロードされたICADファイルをコピー登録しています。");
     setError(null);
     const request = trimmedSourcePath
       ? registerIcadDrawingMetadataPath(trimmedSourcePath)
@@ -249,6 +289,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   );
 
   useEffect(() => {
+    // snapshotが切り替わった時点で編集欄を作り直し、2Dの修正値を3Dへ誤保存しない。
     const canonical = activeSnapshot?.canonicalAttributes ?? {};
     setManualFields(Object.fromEntries(
       ["drawing_number", "drawing_name", "material", "surface_treatment", "paint", "mass_value", "weight_value", "scale", "drawing_size", "prfx", "unit_number"]
@@ -270,6 +311,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
     .join(",");
 
   useEffect(() => {
+    // 待機中・処理中ジョブがある間だけpollし、完了後は登録詳細を再取得してsnapshot表示へつなぐ。
     if (!activeJobIds || !registration) {
       return;
     }
@@ -318,6 +360,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   }
 
   async function enqueueExtraction(mode: DrawingMetadataExtractionMode, profile: string, options: Record<string, unknown>) {
+    // 同一モードの有効ジョブはAPI呼出し前にも抑止し、連打で同じ抽出を積まない。
     if (!registration) {
       setError("ICADファイルの登録後に抽出できます。");
       return;
@@ -350,6 +393,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   }
 
   async function saveManualOverride() {
+    // 空欄は未変更ではなく補正解除として扱う契約があるため、APIへ送る形をここで明示的に作る。
     if (!registration) {
       setError("ICADファイルの登録後に手直しできます。");
       return;
@@ -384,6 +428,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
     mode: DrawingMetadataExtractionMode,
     decision: "confirmed" | "needs_correction",
   ) {
+    // レビュー判断は抽出結果そのものを書き換えず、理由付きの別状態として保存する。
     if (!registration) {
       setError("ICADファイルの登録後にレビューできます。");
       return;
@@ -423,7 +468,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
         <div className="production-section-divider" />
         <div className="production-detail-grid">
           <div className="production-detail-field">
-            <span>選択ファイル</span>
+            <span>指定したICAD</span>
             <p>{selectedSourceLabel}</p>
           </div>
           <div className="production-detail-field">
@@ -431,8 +476,12 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
             <p>{registration?.drawingId ?? "-"}</p>
           </div>
           <div className="production-detail-field">
-            <span>保存先</span>
+            <span>抽出で使うICADファイル</span>
             <p>{registration?.sourcePath ?? "-"}</p>
+          </div>
+          <div className="production-detail-field">
+            <span>登録方法</span>
+            <p>{sourcePath.trim() ? "パス指定: worker がこの .icd を直接開きます。" : "アップロード: コピーした .icd を worker が開きます。"}</p>
           </div>
           <div className="production-detail-field">
             <span>状態</span>
@@ -624,6 +673,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
                 <th>起票日時</th>
                 <th>開始日時</th>
                 <th>完了日時</th>
+                <th>入力診断</th>
                 <th>失敗理由</th>
               </tr>
             </thead>
@@ -637,6 +687,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
                   <td>{formatDateTime(job.createdAt)}</td>
                   <td>{formatDateTime(job.startedAt)}</td>
                   <td>{formatDateTime(job.finishedAt ?? job.updatedAt)}</td>
+                  <td>{formatInputDiagnostics(job)}</td>
                   <td>
                     {job.errorMessage ? (
                       <details>

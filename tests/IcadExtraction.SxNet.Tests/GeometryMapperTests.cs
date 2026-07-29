@@ -118,6 +118,31 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(51.0, payload.ReferencedParts[1].PositionY);
         }
 
+        [Fact]
+        public void Map_RecoversTextWhenIcadVersionUsesAnUnknownGeometryTypeName()
+        {
+            var warnings = new List<WarningPayload>();
+            var geometries = new object[]
+            {
+                new VersionSpecificTextGeometry
+                {
+                    txt = new[] { "品名", "開口カバー" },
+                    text_line_num = 2,
+                    pnt = new SxPos { x = 100.0, y = 200.0, z = 0.0 },
+                },
+            };
+
+            var payload = new GeometryMapper().Map(geometries, warnings, "SHEET1");
+
+            Assert.Single(payload.Texts);
+            Assert.Equal("text_fallback", payload.Texts[0].SourceType);
+            Assert.Equal("品名 開口カバー", payload.Texts[0].JoinedText);
+            Assert.Equal("SHEET1", payload.Texts[0].ViewName);
+            Assert.Equal(100.0, payload.Texts[0].PositionX);
+            Assert.Single(warnings);
+            Assert.Equal("fallback_text_geometry", warnings[0].Code);
+        }
+
         /// <summary>
 
         /// SxPosに関する処理と状態を一つの責務としてまとめます。
@@ -443,6 +468,16 @@ namespace IcadExtraction.SxNet.Tests
 
         public sealed class UnknownGeometry
         {
+        }
+
+        /// <summary>
+        /// ICADの版差で実型名が変わってもtxtを保持する文字図形を再現する。
+        /// </summary>
+        public sealed class VersionSpecificTextGeometry
+        {
+            public string[]? txt;
+            public int text_line_num;
+            public SxPos? pnt;
         }
     }
 }

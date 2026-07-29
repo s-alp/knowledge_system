@@ -3,6 +3,10 @@
 - 作成日: 2026-05-28
 - 目的: C# 抽出コアの出力 JSON と、Django 側で保存するタグ・属性データの形を固定する。
 
+> **現行契約について:** Windows agentの起動設定、HTTP API、C#入出力JSONの正本は
+> `docs/windows_extraction_agent_api_design_2026-07-29.md` とする。
+> 本資料はDjango保存スキーマ、正規化属性、派生タグ、手動補正の詳細資料として使用する。
+
 ## 1. スキーマの考え方
 
 - C# 側は「意味付け前の生抽出」を返す。
@@ -219,14 +223,18 @@
 ```json
 {
   "drawing_number": null,
+  "drawing_number_candidates": [],
   "drawing_name": null,
+  "part_name": null,
+  "product_name": null,
+  "equipment_name": null,
+  "unit_name": null,
   "revision": null,
   "source_format": "icad",
   "source_kind": "2d",
   "document_kind": null,
   "customer_name": null,
   "project_name": null,
-  "equipment_name": null,
   "equipment_category": null,
   "module_name": null,
   "status": null,
@@ -369,6 +377,38 @@
   "issue_keywords": []
 }
 ```
+
+### 2026-07-29 名称・図面番号契約
+
+- `drawing_number` は部品、製品、装置、ユニットの共通図面番号である。
+- `drawing_number_candidates` は値、取得元、信頼度、根拠を保持する。採用順は、2D図枠の明示値、図面文字とファイル名の一致候補、ファイル名の図面番号候補とする。
+- `drawing_name`、`part_name`、`product_name`、`equipment_name`、`unit_name` は同一項目ではない。明示ラベルごとに分けて保存する。
+- 2Dと3Dが競合した場合、名称と図面番号は図面上の2D明示値を優先し、競合値は消さずに監査情報へ残す。
+- `top_part_name` は3Dモデルの最上位識別子であり、製品・装置・ユニット名または部品名として使用しない。
+- `top_part_comment` は、図番だけ、変更説明、参照説明、私用領域文字、置換文字を除外した場合だけ名称候補にできる。
+- 3D子部品の `part_names` は構成証跡であり、図面全体やユニット全体の名称へ昇格させない。
+- ICAD文字の印刷範囲は、枠内外判定が1件以上ある場合だけ `inside=true` を信頼する。全文字がunknownの場合は、判定材料がないため文字を全件除外せず、名称ラベル解析へ渡す。
+
+画面向け製品・部品payloadは `icad_knowledge_entities.v3` とし、共通で次を返す。
+
+```json
+{
+  "schemaVersion": "icad_knowledge_entities.v3",
+  "items": [
+    {
+      "entityKind": "product|part",
+      "name": "string|名称未抽出",
+      "drawingNumber": "string|null",
+      "partNumber": "string|null"
+    }
+  ]
+}
+```
+
+- `drawingNumber` は製品・装置・ユニットと部品の両方に返す。
+- `partNumber` は部品だけに返す互換項目で、値は必ず `drawingNumber` と同一にする。
+- 名称を確定できない場合、`top_part_name` やファイル名全体を代入せず `名称未抽出` を返す。
+- 2D/3Dビューワーは、製品・装置・ユニット一覧にも図面番号を表示し、部品一覧の従来「部品番号」表示は「図面番号」とする。
 
 `material_keywords` は正式材質辞書で `formal` に分類できた値だけを通常の材質タグに使う。`unresolved_material_keywords` は `ZZZ`, `75`, `CDQ` など客先固有または意味未解決の材質コードを保持する。`RM` のように材質欄ではなく区分値として扱う値、重量文字列、U+FFFDを含む文字化け済み文字列は `excluded` として材質タグから除外する。未解決材質は捨てず、検索・分類タグにはせず、レビュー属性とRAG投入時の `reviewFlags` に残す。
 

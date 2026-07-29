@@ -661,6 +661,7 @@ class KnowledgeEntityBusinessFieldsSerializer(serializers.Serializer):
     """製品・装置・ユニットや部品の手動確定項目を検証する。"""
 
     name = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    drawingNumber = serializers.CharField(required=False, allow_blank=True, max_length=255)
     partNumber = serializers.CharField(required=False, allow_blank=True, max_length=255)
     category = serializers.CharField(required=False, allow_blank=True, max_length=255)
     entityKind = serializers.ChoiceField(choices=("assembly", "subassembly", "part"), required=False)

@@ -403,7 +403,8 @@ namespace IcadExtraction.Runner
 
         private static int RunConvertCad(CliCommand command)
         {
-            // 後続のDjango取込が検証できるよう、変換ファイルだけでなく形式・警告もJSONへ記録する。
+            // この入口はDjangoに依存しない。Django管理コマンド、創屋側バッチ、手動PowerShellのいずれも
+            // 同じEXEを1図面1プロセスで呼び出し、変換ファイルと機械判定用の結果JSONを受け取る。
             var inputPath = RequireOption(command, "input-path");
             var outputPath = RequireOption(command, "output-path");
             var outputDirectory = RequireOption(command, "output-dir");
@@ -417,12 +418,15 @@ namespace IcadExtraction.Runner
             var exportFileType = OptionalNullableIntOption(command, "export-file-type");
 
             var stopwatch = Stopwatch.StartNew();
+            // 長いパスやSXNETが扱えない文字を含む場合だけ短い一時パスを使い、結果には原本パスを残す。
             using var sxNetInputFile = SxNetInputFileLease.Create(inputPath, forceSxNetStagedInput);
+            // 変換中だけICADセッションを排他利用する。自動起動した場合は、呼び出し元の指定に従って終了する。
             using var icadLease = IcadProcessStarter.EnsureRunning(
                 icadExecutablePath,
                 icadStartupWaitSeconds,
                 shutdownIfAutostarted
             );
+            // 処理途中で異常終了しても「開始済み・未完了」と判別できるよう、export前に中間結果を書く。
             WriteJsonFile(
                 outputPath,
                 new
@@ -442,6 +446,7 @@ namespace IcadExtraction.Runner
             }
             InsertSxNetInputWarning(warnings, sxNetInputFile);
 
+            // ファイル出力という副作用はSxNet層へ閉じ込め、Runnerは起動制御と入出力契約だけを担当する。
             var asset = new IcadCadFormatExporter().Export(
                 context,
                 sxNetInputFile.OriginalPath,

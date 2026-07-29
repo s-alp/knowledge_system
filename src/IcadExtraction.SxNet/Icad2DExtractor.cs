@@ -365,10 +365,20 @@ namespace IcadExtraction.SxNet
 
             try
             {
+                // 2D名称・図番を落とさないため、SXNETの6引数版では4種類の包含フラグをすべて有効にする。
+                // 取得後の印刷枠判定はPython正規化側で行い、ここでは取得対象を先に狭めない。
                 var segments = getSegListMethod.GetParameters().Length == 6
                     ? getSegListMethod.Invoke(globalVs, new object[] { 0, int.MaxValue, true, true, true, true })
                     : getSegListMethod.Invoke(globalVs, new object[] { 0, int.MaxValue, true, true });
                 var segmentArray = ReflectionHelpers.Enumerate(segments).ToArray();
+                if (segmentArray.Length == 0)
+                {
+                    warnings.Add(new WarningPayload
+                    {
+                        Code = "empty_segment_list",
+                        Message = $"SxVS.getSegList returned no segments for view '{viewName ?? "(unknown)"}'.",
+                    });
+                }
                 var segmentType = globalVs.GetType().Assembly.GetType("sxnet.SxEntSeg", throwOnError: true);
                 var getGeomListMethod = segmentType.GetMethod("getGeomList", new[] { segmentType.MakeArrayType() });
                 if (getGeomListMethod == null)
@@ -389,6 +399,14 @@ namespace IcadExtraction.SxNet
 
                 var geometries = getGeomListMethod.Invoke(null, new object[] { typedSegments });
                 var geometryArray = ReflectionHelpers.Enumerate(geometries).ToArray();
+                if (geometryArray.Length == 0 && segmentArray.Length > 0)
+                {
+                    warnings.Add(new WarningPayload
+                    {
+                        Code = "empty_geometry_list",
+                        Message = $"SxEntSeg.getGeomList returned no geometries from {segmentArray.Length} segments in view '{viewName ?? "(unknown)"}'.",
+                    });
+                }
                 var layerNumbers = options.ScanAllLayers
                     ? TryResolveSegmentLayers(globalVs, typedSegments, segmentArray.Length, warnings)
                     : Enumerable.Repeat<int?>(null, geometryArray.Length).ToArray();

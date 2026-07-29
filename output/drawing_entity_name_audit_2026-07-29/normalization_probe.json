@@ -1,0 +1,124 @@
+{
+  "same_element_standard": {
+    "drawingName": "開口カバー",
+    "titleBlockFields": {
+      "drawing_name": "開口カバー"
+    },
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": "開口カバー",
+        "evidence_text": "品名: 開口カバー",
+        "confidence": "medium",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": null,
+        "position_y": null,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  },
+  "same_element_spaced_label": {
+    "drawingName": null,
+    "titleBlockFields": {},
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": null,
+        "evidence_text": "品　名: 開口カバー",
+        "confidence": "low",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": null,
+        "position_y": null,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  },
+  "same_payload_next_line": {
+    "drawingName": "開口カバー",
+    "titleBlockFields": {
+      "drawing_name": "開口カバー"
+    },
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": "開口カバー",
+        "evidence_text": "品　名",
+        "confidence": "medium",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": null,
+        "position_y": null,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  },
+  "separate_text_elements": {
+    "drawingName": null,
+    "titleBlockFields": {},
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": null,
+        "evidence_text": "品　名",
+        "confidence": "low",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": 10.0,
+        "position_y": 10.0,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  },
+  "english_unit_label_only": {
+    "drawingName": "UNIT",
+    "titleBlockFields": {
+      "drawing_name": "UNIT"
+    },
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": "UNIT",
+        "evidence_text": "UNIT Name",
+        "confidence": "medium",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": null,
+        "position_y": null,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  },
+  "english_machine_label_only": {
+    "drawingName": "MACHINE",
+    "titleBlockFields": {
+      "drawing_name": "MACHINE"
+    },
+    "titleBlockNameCandidates": [
+      {
+        "field": "drawing_name",
+        "label": "図面名",
+        "value": "MACHINE",
+        "evidence_text": "MACHINE Name",
+        "confidence": "medium",
+        "view_name": null,
+        "layer_no": null,
+        "position_x": null,
+        "position_y": null,
+        "inside_print_area": null,
+        "source": "2d_text"
+      }
+    ]
+  }
+}

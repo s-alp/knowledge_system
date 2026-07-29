@@ -90,9 +90,18 @@ export interface DrawingTagAttributeTarget {
   tagApiStatus?: string | null;
   writePolicy?: string | null;
   tags?: string[];
+  tagEvidence?: DrawingKnowledgeTagEvidence[];
   attributes?: DrawingTagAttribute[];
   reviewRequired?: boolean;
   notes?: string[];
+}
+
+export interface DrawingKnowledgeTagEvidence {
+  tag: string;
+  source: string;
+  evidence: string;
+  confidence: string;
+  reason: string;
 }
 
 export interface DrawingKnowledgeTagAttributeItem {
@@ -110,6 +119,7 @@ export interface DrawingKnowledgeTagAttributeTarget {
   writePolicy: string;
   reviewRequired: boolean;
   tags: string[];
+  tagEvidence?: DrawingKnowledgeTagEvidence[];
   attributes: DrawingKnowledgeTagAttributeItem[];
   notes: string[];
 }

@@ -7,6 +7,10 @@
   - 抽出後の正規化、タグ生成、保存、RAG 連携
   - Django ベースのナレッジシステムからの呼び出し方式
 
+> **現行契約について:** 本資料は責務分担と設計理由を扱う。
+> Windows agentの具体的な起動設定、HTTP API、C#入出力JSONは
+> `docs/windows_extraction_agent_api_design_2026-07-29.md` を正本とする。
+
 ## 1. 参照元
 
 | 参照元 | 本資料で使う観点 |

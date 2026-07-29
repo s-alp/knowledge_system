@@ -29,6 +29,7 @@ const partRecord: KnowledgeEntityRecord = {
   classificationEvidence: "sxnet_node_fields",
   classificationConfidence: "high",
   name: "BRACKET-A",
+  drawingNumber: "CAA5012-02434006P1R1",
   partNumber: "CAA5012-02434006P1R1",
   comment: "供給台ブラケット",
   treePath: ["MACHINE", "FEEDER", "BRACKET-A"],
@@ -63,6 +64,7 @@ const partRecord: KnowledgeEntityRecord = {
   ],
   businessFields: {
     name: "BRACKET-A",
+    drawingNumber: "CAA5012-02434006P1R1",
     partNumber: "CAA5012-02434006P1R1",
     category: "ブラケット",
     entityKind: "part",
@@ -117,6 +119,7 @@ const partRecord: KnowledgeEntityRecord = {
       targetKey: "product",
       entityKind: "subassembly",
       name: "FEEDER",
+      drawingNumber: null,
       partNumber: null,
     },
   ],
@@ -148,7 +151,7 @@ const partRecord: KnowledgeEntityRecord = {
 };
 
 const catalog: KnowledgeEntityCatalogResponse = {
-  schemaVersion: "icad_knowledge_entities.v1",
+  schemaVersion: "icad_knowledge_entities.v3",
   definitions: {
     product: "1つのICD全体をアセンブリ／サブアセンブリとして登録",
     part: "1つのICD全体を1部品として登録",

@@ -1,3 +1,6 @@
+// このファイルは、ICADの構成情報から作った製品・装置・ユニットと部品を一覧・詳細表示する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import {
@@ -83,11 +86,20 @@ function confidenceLabel(value: string): string {
 }
 
 
-function compactValue(value: unknown): string {
+const COMPACT_VALUE_MAX_LENGTH = 120;
+
+function rawCompactValue(value: unknown): string {
   if (value === null || value === undefined || value === "") return "-";
-  if (Array.isArray(value)) return value.length ? value.map((item) => compactValue(item)).join(", ") : "-";
+  if (Array.isArray(value)) return value.length ? value.map((item) => rawCompactValue(item)).join(", ") : "-";
   if (typeof value === "object") return JSON.stringify(value);
   return String(value);
+}
+
+function compactValue(value: unknown): string {
+  // 2D抽出根拠などの長い診断文字列がテーブル幅を押し広げないよう表示用に省略する。
+  // 全文は取得元・採用根拠ダイアログで確認できる。
+  const text = rawCompactValue(value);
+  return text.length > COMPACT_VALUE_MAX_LENGTH ? `${text.slice(0, COMPACT_VALUE_MAX_LENGTH)}…` : text;
 }
 
 
@@ -129,6 +141,7 @@ export function IcadEntityListPage({
   targetKey: KnowledgeEntityTargetKey;
   onOpenDetail: (entityId: string, drawingId: string) => void;
 }) {
+  // 入力中の検索語と確定検索語を分け、1文字入力ごとのAPI再取得を避ける。
   const [draftQuery, setDraftQuery] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -422,9 +435,9 @@ function DrawingLinkDialog({ record, onClose, onSaved }: { record: KnowledgeEnti
 
   return (
     <ModalShell title="図面を紐づける" onClose={onClose}>
-      <form className="production-link-search" onSubmit={(event) => { event.preventDefault(); void load(query); }}><label><span>図面名・保存先</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label><button className="production-primary-button" type="submit">検索</button></form>
+      <form className="production-link-search" onSubmit={(event) => { event.preventDefault(); void load(query); }}><label><span>図面名・ICADファイル</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label><button className="production-primary-button" type="submit">検索</button></form>
       {error ? <p className="error-text">{error}</p> : null}
-      <div className="production-table-shell production-link-table"><table className="production-table"><thead><tr><th>選択</th><th>図面名</th><th>保存先</th></tr></thead><tbody>
+      <div className="production-table-shell production-link-table"><table className="production-table"><thead><tr><th>選択</th><th>図面名</th><th>抽出で使うICADファイル</th></tr></thead><tbody>
         {loading ? <tr><td colSpan={3}>読み込んでいます。</td></tr> : options.length ? options.map((item) => <tr key={item.drawingId}><td><input aria-label={`${item.filename}を選択`} type="checkbox" checked={selected.has(item.drawingId)} onChange={(event) => setSelected((current) => { const next = new Set(current); if (event.target.checked) next.add(item.drawingId); else next.delete(item.drawingId); return next; })} /></td><td>{item.filename}</td><td>{item.sourcePath}</td></tr>) : <tr><td colSpan={3}>紐づけ可能な図面がありません。</td></tr>}
       </tbody></table></div>
       <div className="production-modal-actions"><span>{selected.size}件を選択中</span><button className="production-secondary-button" type="button" onClick={onClose}>キャンセル</button><button className="production-primary-button" type="button" disabled={saving} onClick={() => void save()}>{saving ? "保存しています。" : "紐づけを保存"}</button></div>
@@ -434,6 +447,7 @@ function DrawingLinkDialog({ record, onClose, onSaved }: { record: KnowledgeEnti
 
 
 export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { entityId: string | null; drawingId: string | null; onNavigate: (page: KnowledgePageKey, entityId?: string, drawingId?: string) => void }) {
+  // 詳細本体と編集・根拠・紐づけdialogの開閉を分け、再取得しても表示中dialogを維持する。
   const { record, loading, error, refresh } = useKnowledgeEntityDetail(entityId, drawingId);
   const [activeTabId, setActiveTabId] = useState<RelatedTabId>("project");
   const [editOpen, setEditOpen] = useState(false);
@@ -441,6 +455,7 @@ export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { enti
   const [linkOpen, setLinkOpen] = useState(false);
 
   useEffect(() => {
+    // 部品には同じ図面内の親製品を最初に見せ、製品ではプロジェクト関連を最初に見せる。
     if (record?.targetKey === "part") setActiveTabId("product");
   }, [record?.targetKey]);
 

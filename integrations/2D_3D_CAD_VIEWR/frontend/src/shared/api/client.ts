@@ -226,6 +226,7 @@ export interface KnowledgeEntityRelatedItem {
   targetKey: KnowledgeEntityTargetKey;
   entityKind: KnowledgeEntityKind;
   name: string;
+  drawingNumber: string | null;
   partNumber: string | null;
 }
 
@@ -236,6 +237,7 @@ export interface KnowledgeEntityRecord {
   classificationEvidence: string;
   classificationConfidence: string;
   name: string;
+  drawingNumber: string;
   partNumber: string | null;
   comment: string | null;
   treePath: string[];

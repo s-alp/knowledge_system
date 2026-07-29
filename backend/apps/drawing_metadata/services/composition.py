@@ -13,6 +13,16 @@ from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
 MODE_PRIORITY = ("3d", "2d")
+# 名称と図面番号は3Dモデル内部名より、設計者が図面へ明記した2D図枠値を優先する。
+# 不一致は捨てず、レビュー画面で比較できる conflict として残す。
+TWO_D_IDENTITY_PRIORITY_ATTRIBUTES = {
+    "drawing_number",
+    "drawing_name",
+    "part_name",
+    "product_name",
+    "equipment_name",
+    "unit_name",
+}
 FEATURE_PRESENCE_COUNT_ATTRIBUTES = {
     "dimension_count",
     "dimension_tolerance_count",
@@ -28,6 +38,9 @@ REVIEWABLE_CONFLICT_ATTRIBUTES = {
     "document_kind",
     "drawing_number",
     "drawing_name",
+    "part_name",
+    "product_name",
+    "unit_name",
     "part_number",
     "paper_size",
     "drawing_size",
@@ -216,16 +229,29 @@ def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> 
     if _is_scalar(candidate_2d) and _is_scalar(candidate_3d):
         if _has_value(candidate_2d) and _has_value(candidate_3d):
             if candidate_2d == candidate_3d:
-                return candidate_3d, _reconciliation_record(
+                chosen_mode = "2d" if key in TWO_D_IDENTITY_PRIORITY_ATTRIBUTES else "3d"
+                return candidate_2d if chosen_mode == "2d" else candidate_3d, _reconciliation_record(
                     key=key,
                     value_2d=value_2d,
                     value_3d=value_3d,
                     manual_2d=manual_2d,
                     manual_3d=manual_3d,
-                    chosen_value=candidate_3d,
-                    chosen_mode="3d",
+                    chosen_value=candidate_2d if chosen_mode == "2d" else candidate_3d,
+                    chosen_mode=chosen_mode,
                     status="matched",
                     reason="2Dと3Dの抽出値が一致したため採用しました。",
+                )
+            if key in TWO_D_IDENTITY_PRIORITY_ATTRIBUTES:
+                return candidate_2d, _reconciliation_record(
+                    key=key,
+                    value_2d=value_2d,
+                    value_3d=value_3d,
+                    manual_2d=manual_2d,
+                    manual_3d=manual_3d,
+                    chosen_value=candidate_2d,
+                    chosen_mode="2d",
+                    status="conflict",
+                    reason="図面識別情報は2D図面内の明示値を優先します。3D値との不一致はレビュー対象として保持します。",
                 )
             return candidate_3d, _reconciliation_record(
                 key=key,

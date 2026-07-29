@@ -1,0 +1,597 @@
+{
+  "schemaVersion": "icad_text_integrity.v1",
+  "manifestPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\souya_handoff\\icad_extract_import_manifest_all_shared_2026-07-15.json",
+  "totals": {
+    "db_texts": 1752,
+    "drawings": 39,
+    "issue.private_use_character": 5,
+    "line_join_mismatch_items": 0,
+    "source_texts": 1752,
+    "text_list_mismatch_drawings": 0
+  },
+  "rows": [
+    {
+      "filename": "CAA5012-02434000K1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434000K1R1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02434000K1R1.latest_2d.json",
+      "drawingId": "707e2afc-ca3b-41a0-9a54-8ae7ad69311e",
+      "sourceTextCount": 94,
+      "dbTextCount": 94,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "TR1D9K99027.icd",
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\TR1D9K99027.latest_2d.json",
+      "drawingId": "8e0479d4-1016-43f2-a40c-2938fac05363",
+      "sourceTextCount": 190,
+      "dbTextCount": 190,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-PA1100_クリーニング駆動.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\11_クリーニング駆動\\PSG011-PA1100_クリーニング駆動.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA1100_クリーニング駆動.latest_2d.json",
+      "drawingId": "20883f62-0079-40fd-bf89-5c82e3767f03",
+      "sourceTextCount": 39,
+      "dbTextCount": 39,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {
+        "private_use_character": 3
+      },
+      "integrityIssueSamples": [
+        {
+          "index": 20,
+          "text": "ウェハークリーニング",
+          "issues": [
+            "private_use_character"
+          ],
+          "codePoints": [
+            "U+30A6",
+            "U+30A7",
+            "U+30CF",
+            "U+30FC",
+            "U+30AF",
+            "U+30EA",
+            "U+30FC",
+            "U+30CB",
+            "U+30F3",
+            "U+30B0",
+            "U+E30E"
+          ],
+          "dxfMatchesWithoutPrivateUse": [
+            "ウェハークリーニング"
+          ]
+        },
+        {
+          "index": 21,
+          "text": "チャッククリーニング",
+          "issues": [
+            "private_use_character"
+          ],
+          "codePoints": [
+            "U+30C1",
+            "U+30E3",
+            "U+30C3",
+            "U+30AF",
+            "U+30AF",
+            "U+30EA",
+            "U+30FC",
+            "U+30CB",
+            "U+30F3",
+            "U+30B0",
+            "U+E30E"
+          ],
+          "dxfMatchesWithoutPrivateUse": [
+            "チャッククリーニング",
+            "チャッククリーニングユニット",
+            "チャッククリーニングユニット"
+          ]
+        },
+        {
+          "index": 24,
+          "text": "チャックテーブル",
+          "issues": [
+            "private_use_character"
+          ],
+          "codePoints": [
+            "U+30C1",
+            "U+30E3",
+            "U+30C3",
+            "U+30AF",
+            "U+30C6",
+            "U+30FC",
+            "U+30D6",
+            "U+30EB",
+            "U+E30E"
+          ],
+          "dxfMatchesWithoutPrivateUse": [
+            "チャックテーブル"
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "U8105111315.icd",
+      "sourcePath": "J:\\SBY\\アイソレータ\\210126_エーザイ_アイソレータ_RAA4844\\作業フォルダ\\開閉扉\\U8105111315.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8105111315.latest_2d.json",
+      "drawingId": "8fb04f10-e582-4b1a-9908-ce25895b1fa1",
+      "sourceTextCount": 159,
+      "dbTextCount": 159,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "217008-41J-3004.icd",
+      "sourcePath": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\217008-41J-3004.latest_2d.json",
+      "drawingId": "c40101d7-352c-4a19-bc8f-607fa349ca11",
+      "sourceTextCount": 73,
+      "dbTextCount": 73,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\XH30-A08001-R03-JP_ロードカップ部改造.latest_2d.json",
+      "drawingId": "7ce69df6-f382-4366-9ddf-9be9fc47fc3b",
+      "sourceTextCount": 318,
+      "dbTextCount": 318,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "23022-013_231218.icd",
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\23022-013_231218.latest_2d.json",
+      "drawingId": "3c8c4763-dc5e-4ad0-b1ae-a62597f3650e",
+      "sourceTextCount": 4,
+      "dbTextCount": 4,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "sourcePath": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).latest_2d.json",
+      "drawingId": "7239b56f-4fd3-43d5-809e-76933a2c06b3",
+      "sourceTextCount": 32,
+      "dbTextCount": 32,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "DFR-CM1-AA0305300011.icd",
+      "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\DFR-CM1-AA0305300011.latest_2d.json",
+      "drawingId": "6a7813d1-4dbe-4eb5-9ec1-6936f5315277",
+      "sourceTextCount": 22,
+      "dbTextCount": 22,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "M26A07720.icd",
+      "sourcePath": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\M26A07720.latest_2d.json",
+      "drawingId": "10793f30-ed72-4ba5-ac5e-662f420851c7",
+      "sourceTextCount": 28,
+      "dbTextCount": 28,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "474300AC219.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\474300AC219.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\474300AC219.latest_2d.json",
+      "drawingId": "c6f2fbc5-8281-4ee7-b0bb-3feac127ee8b",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "36555211A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\03_設計資料\\連絡書\\SBY⇒ALP\\20260623_バルブジョイント部_部品図訂正\\参考組図_データ依頼\\ICADデータ\\AAV1194-58\\32705200030\\32705200030_SEISAKU\\36555211A01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\36555211A01.latest_2d.json",
+      "drawingId": "a315b98d-76a7-4a9b-afef-8e9868f903f3",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "G1630-S3000-502_A3a1.icd",
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\G1630-S3000-502_A3a1.latest_2d.json",
+      "drawingId": "eb981f46-dab7-4096-96a3-fb16ec23dbc9",
+      "sourceTextCount": 56,
+      "dbTextCount": 56,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E51B70-00-BRACKET-A0-3D-01.latest_2d.json",
+      "drawingId": "f8335701-6e8f-436a-b681-5313a2202d1c",
+      "sourceTextCount": 98,
+      "dbTextCount": 98,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "U8718-S71-002_A3.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8718-S71-002_A3.latest_2d.json",
+      "drawingId": "55586d16-baf9-4e72-97b0-5a2ee9a782ce",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "TR1D9Q00027.icd",
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\TR1D9Q00027.latest_2d.json",
+      "drawingId": "5eff8e5b-9eec-42fa-813e-d4139d6d5bcc",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "CAA5012-02430002P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02430002P1R1.latest_2d.json",
+      "drawingId": "b704a0cc-56b6-4654-993e-9ae3a7c27140",
+      "sourceTextCount": 4,
+      "dbTextCount": 4,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "CAA5012-02434006P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02434006P1R1.latest_2d.json",
+      "drawingId": "75d778f9-0887-4536-8db4-2025f6bb06d2",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "CAA5012-02435010P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02435010P1R1.latest_2d.json",
+      "drawingId": "a9447ac5-df7f-4400-ae5c-e942d7ef3bf0",
+      "sourceTextCount": 3,
+      "dbTextCount": 3,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "CAA5012-02430012P1R1.icd",
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430012P1R1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02430012P1R1.latest_2d.json",
+      "drawingId": "9e3bebcc-ef6a-41c2-9719-f9e853ee8d4f",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-PA13001.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13001.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA13001.latest_2d.json",
+      "drawingId": "0c2115e9-3831-49a7-b164-de948bbe063d",
+      "sourceTextCount": 252,
+      "dbTextCount": 252,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-P05010.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-P05010.latest_2d.json",
+      "drawingId": "2551fbd0-0c13-41a1-9cce-c172b62577e8",
+      "sourceTextCount": 17,
+      "dbTextCount": 17,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-PA0500_コラム.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA0500_コラム.latest_2d.json",
+      "drawingId": "64a28feb-c8f6-483f-b0b4-13c2a5e8bc94",
+      "sourceTextCount": 54,
+      "dbTextCount": 54,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {
+        "private_use_character": 2
+      },
+      "integrityIssueSamples": [
+        {
+          "index": 10,
+          "text": "トイシスピンドル　",
+          "issues": [
+            "private_use_character"
+          ],
+          "codePoints": [
+            "U+30C8",
+            "U+30A4",
+            "U+30B7",
+            "U+30B9",
+            "U+30D4",
+            "U+30F3",
+            "U+30C9",
+            "U+30EB",
+            "U+3000",
+            "U+E30E"
+          ],
+          "dxfMatchesWithoutPrivateUse": []
+        },
+        {
+          "index": 14,
+          "text": "トイシスピンドル　",
+          "issues": [
+            "private_use_character"
+          ],
+          "codePoints": [
+            "U+30C8",
+            "U+30A4",
+            "U+30B7",
+            "U+30B9",
+            "U+30D4",
+            "U+30F3",
+            "U+30C9",
+            "U+30EB",
+            "U+3000",
+            "U+E30E"
+          ],
+          "dxfMatchesWithoutPrivateUse": []
+        }
+      ]
+    },
+    {
+      "filename": "PSG011-PA1300_ベース.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA1300_ベース.latest_2d.json",
+      "drawingId": "62d95d21-ff3f-45fc-b8c4-5ddce983aac6",
+      "sourceTextCount": 21,
+      "dbTextCount": 21,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-P05008.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05008.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-P05008.latest_2d.json",
+      "drawingId": "63e65d58-ca3c-4f7f-90de-1c83819db6eb",
+      "sourceTextCount": 14,
+      "dbTextCount": 14,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "23022-007_231218.icd",
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-007_231218.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\23022-007_231218.latest_2d.json",
+      "drawingId": "709145b2-36a1-4c89-9dea-d50babba31f9",
+      "sourceTextCount": 4,
+      "dbTextCount": 4,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "XH3001-M08007-01.icd",
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\XH3001-M08007-01.latest_2d.json",
+      "drawingId": "14cdc86f-47be-43a7-a010-1764fe00dc6c",
+      "sourceTextCount": 23,
+      "dbTextCount": 23,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "PSG011-PA13002.icd",
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13002.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA13002.latest_2d.json",
+      "drawingId": "43485909-7024-4f3b-af64-db167bb1d9e8",
+      "sourceTextCount": 42,
+      "dbTextCount": 42,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "47323200X40c.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323200X40c.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\47323200X40c.latest_2d.json",
+      "drawingId": "0d5318ea-14fd-494c-9b31-66c582bc02b4",
+      "sourceTextCount": 10,
+      "dbTextCount": 10,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "32791729A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\02_参考機データ\\260626_CIP駆動部分\\260626_データ送付\\ICADデータ\\32701700006\\32701700006_SEISAKU\\32791729A01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\32791729A01.latest_2d.json",
+      "drawingId": "b89f9d08-40f2-419d-acf3-2c5d3592cb40",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "6800DDU.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6800DDU.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\6800DDU.latest_2d.json",
+      "drawingId": "c184e9df-6de1-461b-89df-fd90f771cc1a",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "6051033A.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6051033A.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\6051033A.latest_2d.json",
+      "drawingId": "5cb04ce3-9502-485d-aa57-746ea5c3e80f",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "4D-75.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\4D-75.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\4D-75.latest_2d.json",
+      "drawingId": "bd82306c-4972-4e5a-9194-69da5c6c9956",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "47323023A01.icd",
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323023A01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\47323023A01.latest_2d.json",
+      "drawingId": "588a8c85-9993-4ae2-817e-e0b7b8ca6d2e",
+      "sourceTextCount": 3,
+      "dbTextCount": 3,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "G1630-S3000-039_A0a1.icd",
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-039_A0a1.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\G1630-S3000-039_A0a1.latest_2d.json",
+      "drawingId": "20141b53-c298-49b0-98a8-78523b2b2155",
+      "sourceTextCount": 21,
+      "dbTextCount": 21,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\三宅設計\\9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E51M00-00-COVER-A3-3D-01.latest_2d.json",
+      "drawingId": "ac9d517e-20ce-47a9-ac85-dd6f734a8ecb",
+      "sourceTextCount": 73,
+      "dbTextCount": 73,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\D-MAX_DK68\\20230821_Automation\\作業\\COVER_A._DRIP_TRAY\\9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E56H20-00-BRACKET-A0-3D-01.latest_2d.json",
+      "drawingId": "f24b6eab-a65e-4819-a88f-2c6fe51fae50",
+      "sourceTextCount": 98,
+      "dbTextCount": 98,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "U8718-S71-149_A4.icd",
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8718-S71-149_A4.latest_2d.json",
+      "drawingId": "3370c0d6-0231-4934-af13-85e3552830af",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    },
+    {
+      "filename": "18T5-10BF(8).icd",
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
+      "extractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\18T5-10BF(8).latest_2d.json",
+      "drawingId": "0cc08e07-b8dc-46c0-b3d2-d1cb11faf605",
+      "sourceTextCount": 0,
+      "dbTextCount": 0,
+      "sourceAndDbTextListsEqual": true,
+      "sourceLineJoinMismatches": [],
+      "integrityIssueCounts": {},
+      "integrityIssueSamples": []
+    }
+  ]
+}
