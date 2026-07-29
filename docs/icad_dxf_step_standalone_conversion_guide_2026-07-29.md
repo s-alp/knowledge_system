@@ -1,5 +1,8 @@
 # ICAD→DXF／STEP 独立変換 利用・引継ぎ手順
 
+- 文書状態: **現行の変換運用手順**
+- タグ抽出・付与の全体正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
+
 ## 1. 結論
 
 ICADからDXF、ICADからSTEPへの変換は、**Djangoを起動せずに利用できます**。

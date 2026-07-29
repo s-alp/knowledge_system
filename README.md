@@ -1,16 +1,13 @@
 # knowledge_system
 
-ナレッジシステムの RAG 精度検証、ICAD 2D/3D からのタグ・属性抽出設計、Django 統合計画、および PoC 実装をまとめるリポジトリです。
+ナレッジシステムのRAG精度検証、CAD 2D/3Dからのタグ・属性抽出、Django統合、Windows ICAD抽出agent、2D/3D統合フロントをまとめるリポジトリです。
 
 ## 現在の位置づけ
 
 - 共同開発先からナレッジシステム本体ソースコードは共有されていません。
-- そのため本リポジトリは、本体へ後で移植しやすい形で
-  - 調査
-  - 設計
-  - 実装準備
-  - 検証資料作成
-  を進めるための作業場です。
+- 本リポジトリには、本体へ後で移植しやすい独立Django app、C#抽出器、Windows agent、統合Viteフロントが実装されています。
+- ローカルDB、fixture、画面は抽出・正規化・タグ付与・連携payloadの検証用であり、共同開発先の本番DB/APIを置き換えるものではありません。
+- タグ抽出・付与の現行仕様は [CADタグ抽出・属性正規化・タグ付与 現行仕様](./docs/tag_extraction_and_assignment_current_spec_2026-07-29.md) を正とします。
 
 ## 主な内容
 
@@ -24,11 +21,9 @@
 - `tests/`
   - C# 抽出 PoC 向けの単体テスト
 - `docs/`
-  - ICAD タグ・属性設計資料
-  - Django 統合計画
-  - 抽出結果スキーマ
-  - タグ・属性管理 UI 計画
-  - 実装セットアップ手順
+  - 現行仕様と関連ドキュメント索引
+  - 抽出結果スキーマ、Windows agent契約、創屋向け抽出元カタログ
+  - 調査・設計・検証snapshot
 - `scripts/`
   - RAG 検証結果の集計・追記スクリプト
 - `local_test_materials/`
@@ -49,7 +44,7 @@
 - Django / worker は Linux や Docker に載せやすくし、`sxnet` を使う抽出器は Windows 側へ閉じ込める
 - Windows worker が ICAD を自動起動した場合は、その worker が起こした ICAD だけを終了対象にできる
 
-## 現在の PoC 実装
+## 現在の実装
 
 - Django backend:
   - `backend/knowledge_system_backend/`
@@ -60,10 +55,13 @@
   - `POST /api/v1/drawing-metadata/registrations/{drawing_id}/extract`
   - `PATCH /api/v1/drawing-metadata/registrations/{drawing_id}/overrides`
   - `GET /api/v1/drawing-metadata/jobs/{job_id}`
+  - `GET/POST /api/v1/drawing-metadata/tag-dictionaries`
+  - `GET /api/v1/knowledge-entities`
+  - `POST /api/v1/drawing-metadata/agent/jobs/claim`
 - 管理導線:
-  - `/drawing-metadata/`
-  - `/drawing-metadata/{drawing_id}/`
-  - `/drawing-metadata/jobs/{job_id}/`
+  - 利用者向け統合フロント: `http://127.0.0.1:5173/`
+  - Django内部確認: `/internal/drawing-metadata/`
+  - Djangoルート: API専用状態JSON
 - C# 抽出 CLI:
   - `src/IcadExtraction.Runner`
   - `extract --input-path ... --source-kind 2d|3d --output-path ... --sxnet-dll-path ...`
@@ -199,25 +197,22 @@ agent APIは以下を提供する。
 
 ## 重要ドキュメント
 
-- [ICADタグ・属性 調査結果](./docs/icad_tag_attribute_investigation_2026-05-26.md)
-- [ICADタグ・属性 設計計画](./docs/icad_tag_attribute_design_plan_2026-05-26.md)
-- [ICADタグ・属性 実装引継ぎ](./docs/icad_tag_attribute_implementation_backlog_2026-05-26.md)
-- [ICAD抽出の C# / Python 分担アーキテクチャ案](./docs/icad_csharp_python_architecture_2026-05-27.md)
-- [Django統合計画](./docs/django_integration_plan_2026-05-28.md)
-- [抽出結果スキーマ定義案](./docs/extraction_result_schema_2026-05-28.md)
+- [CADタグ抽出・属性正規化・タグ付与 現行仕様（全体の正本）](./docs/tag_extraction_and_assignment_current_spec_2026-07-29.md)
+- [タグ抽出・付与関連ドキュメント索引](./docs/tag_extraction_documentation_index_2026-07-29.md)
+- [抽出結果スキーマ（Django保存・正規化の正本）](./docs/extraction_result_schema_2026-05-28.md)
 - [C# Windows ICAD抽出エージェント連携仕様（現行契約の正本）](./docs/windows_extraction_agent_api_design_2026-07-29.md)
+- [CADタグ・属性抽出 抽出元カタログと具体例（創屋様向け）](./docs/cad_tag_extraction_sources_for_souya_2026-07-28.md)
 - [ICAD→DXF／STEP 独立変換 利用・引継ぎ手順](./docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md)
-- [タグ・属性管理UI計画](./docs/tag_attribute_management_ui_plan_2026-05-28.md)
-- [ICAD抽出PoCセットアップ](./docs/icad_extraction_poc_setup_2026-05-28.md)
-- [HTML要約報告](./docs/icad_tag_attribute_report_2026-05-26.html)
+
+2026-05月の調査、設計計画、バックログ、Django/UI計画、PoCセットアップ、HTML報告は履歴資料です。読み分けはドキュメント索引を参照してください。
 
 ## 次に進めること
 
-1. `sxnet.dll` の正式配置と起動条件を確定
-2. 実サンプル 3D / 2D で live 抽出確認
+1. 幾何公差種別・溶接記号種別・PRFX実フィールド等をWindows実機で継続確認
+2. 客先横断の辞書語彙と抽出率を検証
 3. Windows agent専用セッションまたは専用マシンで連続運転を確認
-4. viewer detail / RAG 側の正式接続契約を詰める
-5. 手動補正 UI を本体側へどう移植するか決める
+4. 創屋本番の属性保存API、タグ保存口、属性マスタID、RAG更新契約を確定
+5. 手動補正・レビュー・監査ログを創屋本体へ移植する境界を確定
 
 ## 補足
 

@@ -477,6 +477,104 @@ def test_identity_name_pairs_only_an_explicit_nearby_name_label():
     assert candidate["value_position_y"] == 20.0
 
 
+def test_identity_name_accepts_bom_value_left_of_name_label_without_selecting_adjacent_header():
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "source_file": {"file_name": "23022-007.icd"},
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["品　　　　名"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 260.0,
+                        "position_y": 66.0,
+                    },
+                    {
+                        "text_lines": ["材質"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 297.5,
+                        "position_y": 66.0,
+                    },
+                    {
+                        "text_lines": ["ブラケット"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 231.0,
+                        "position_y": 72.0,
+                    },
+                    {
+                        "text_lines": ["２３０２２－００７"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 326.0,
+                        "position_y": 21.5,
+                    },
+                ]
+            },
+        }
+    )
+
+    assert canonical["drawing_number"] == "23022-007"
+    assert canonical["part_name"] == "ブラケット"
+    assert canonical["title_block_fields"]["part_name"] == "ブラケット"
+
+
+def test_drawing_name_uses_only_short_vertical_alignment_with_drawing_number_when_label_is_absent():
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "source_file": {"file_name": "PSG011-P05010.icd"},
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["ＰＳＧ０１１－Ｐ０５０１０"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 545.0,
+                        "position_y": 12.0,
+                    },
+                    {
+                        "text_lines": ["ケーブルダクト"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 545.0,
+                        "position_y": 31.0,
+                    },
+                    {
+                        "text_lines": ["４．６ｋｇ"],
+                        "inside_print_area": True,
+                        "view_name": "!!GLOBAL",
+                        "layer_no": 1,
+                        "position_x": 516.0,
+                        "position_y": 15.5,
+                    },
+                ]
+            },
+        }
+    )
+
+    assert canonical["drawing_number"] == "PSG011-P05010"
+    assert canonical["drawing_name"] == "ケーブルダクト"
+    assert canonical["title_block_fields"]["drawing_name"] == "ケーブルダクト"
+    candidate = next(
+        item
+        for item in canonical["title_block_candidates"]
+        if item["field"] == "drawing_name"
+    )
+    assert candidate["source"] == "2d_text_aligned_with_drawing_number"
+
+
 def test_identity_name_does_not_skip_a_nearby_placeholder_to_an_unrelated_value():
     canonical = normalize_raw_extract(
         {

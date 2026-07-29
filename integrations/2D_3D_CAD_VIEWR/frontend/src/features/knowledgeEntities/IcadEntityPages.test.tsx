@@ -36,9 +36,11 @@ const partRecord: KnowledgeEntityRecord = {
   depth: 2,
   parentEntityId: "22222222-2222-4222-8222-222222222222",
   childEntityIds: [],
+  directPartCount: 0,
   childAssemblyCount: 0,
   childPartCount: 0,
   descendantPartCount: 0,
+  partCountByDepth: {},
   drawingId: "33333333-3333-4333-8333-333333333333",
   drawingFilename: "CAA5012-02434006P1R1.icd",
   sourcePath: "J:\\ライズ\\CAA5012-02434006P1R1.icd",
@@ -151,7 +153,7 @@ const partRecord: KnowledgeEntityRecord = {
 };
 
 const catalog: KnowledgeEntityCatalogResponse = {
-  schemaVersion: "icad_knowledge_entities.v3",
+  schemaVersion: "icad_knowledge_entities.v4",
   definitions: {
     product: "1つのICD全体をアセンブリ／サブアセンブリとして登録",
     part: "1つのICD全体を1部品として登録",
@@ -164,6 +166,69 @@ const catalog: KnowledgeEntityCatalogResponse = {
   limit: 50,
   items: [partRecord],
   skippedDrawings: [],
+};
+
+
+const productRecord: KnowledgeEntityRecord = {
+  ...partRecord,
+  entityId: "22222222-2222-4222-8222-222222222222",
+  targetKey: "product",
+  entityKind: "assembly",
+  name: "FEEDER",
+  drawingNumber: "FEEDER-001",
+  partNumber: null,
+  treePath: ["FEEDER"],
+  depth: 0,
+  parentEntityId: null,
+  directPartCount: 2,
+  childAssemblyCount: 1,
+  childPartCount: 1,
+  descendantPartCount: 5,
+  partCountByDepth: { "1": 2, "2": 3 },
+  attributes: [
+    {
+      key: "direct_part_count",
+      label: "1次ツリーパーツ数",
+      value: "2",
+      source: "3d_part_tree",
+      confidence: "high",
+      evidence: "rawExtract.parts[].depth",
+      reason: "1次ツリーの構成数として確認できるため採用しています。",
+    },
+    {
+      key: "descendant_part_count",
+      label: "全階層パーツ数",
+      value: "5",
+      source: "3d_part_tree",
+      confidence: "high",
+      evidence: "rawExtract.parts[].depth",
+      reason: "全階層の参考情報として採用しています。",
+    },
+    {
+      key: "part_count_by_depth",
+      label: "階層別パーツ数",
+      value: "1=2, 2=3",
+      source: "3d_part_tree",
+      confidence: "high",
+      evidence: "rawExtract.parts[].depth",
+      reason: "階層ごとの構成数として確認できるため採用しています。",
+    },
+  ],
+  businessFields: {
+    ...partRecord.businessFields,
+    name: "FEEDER",
+    drawingNumber: "FEEDER-001",
+    partNumber: "",
+    entityKind: "assembly",
+  },
+  relatedEntities: [],
+};
+
+
+const productCatalog: KnowledgeEntityCatalogResponse = {
+  ...catalog,
+  targetKey: "product",
+  items: [productRecord],
 };
 
 
@@ -183,6 +248,35 @@ describe("ICAD knowledge entity pages", () => {
     expect(screen.getByText("SS400")).toBeInTheDocument();
     fireEvent.click(screen.getByText("BRACKET-A"));
     expect(onOpenDetail).toHaveBeenCalledWith(partRecord.entityId, partRecord.drawingId);
+  });
+
+  it("shows the direct tree count in the product list and hierarchy counts in detail", async () => {
+    vi.mocked(getKnowledgeEntities).mockResolvedValue(productCatalog);
+    vi.mocked(getKnowledgeEntity).mockResolvedValue(productRecord);
+    vi.mocked(getDrawingOptions).mockResolvedValue({ items: [], totalCount: 0 });
+
+    const { unmount } = render(
+      <IcadEntityListPage targetKey="product" onOpenDetail={vi.fn()} />,
+    );
+
+    expect(await screen.findByRole("columnheader", { name: "部品数（1次ツリー）" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "2" })).toBeInTheDocument();
+    expect(screen.queryByRole("cell", { name: "5" })).not.toBeInTheDocument();
+    unmount();
+
+    const { unmount: unmountDetail } = render(
+      <IcadEntityDetailPage
+        entityId={productRecord.entityId}
+        drawingId={productRecord.drawingId}
+        onNavigate={vi.fn()}
+      />,
+    );
+
+    expect(await screen.findByText("1次ツリーパーツ数")).toBeInTheDocument();
+    expect(screen.getByText("全階層パーツ数")).toBeInTheDocument();
+    expect(screen.getByText("階層別パーツ数")).toBeInTheDocument();
+    expect(screen.getByText("1=2, 2=3")).toBeInTheDocument();
+    unmountDetail();
   });
 
   it("shows Souya-style business fields, tags, provenance, and relationships", async () => {

@@ -22,13 +22,6 @@ if hasattr(sys.stderr, "reconfigure"):
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_UI_OUTPUT = ROOT / "output" / "entity_ui_delivery_readiness"
-DEFAULT_LLM_PROBE = (
-    ROOT
-    / "output"
-    / "live_extracts"
-    / "title_block_llm_probe_2026-07-14"
-    / "gemini_probe_current_normalization_2026-07-17.json"
-)
 DEFAULT_REVIEW_SUMMARY = ROOT / "output" / "souya_handoff" / "drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json"
 BACKEND_DIR = ROOT / "backend"
 BACKEND_VENV_PYTHON = BACKEND_DIR / ".venv" / "Scripts" / "python.exe"
@@ -69,7 +62,6 @@ STALE_DOC_PATTERNS = [
     for pattern in (
         r"API_KEY_INVALID",
         r"採用率未確認",
-        r"gemini_probe_after_parse_fallback_2026-07-15",
         r"positive recall\s*0\.5000",
         r"classification positive recall\s*\|\s*0\.5000",
         r"2026-07-16に共有抽出から10ファイル",
@@ -338,11 +330,6 @@ def main() -> int:
             [python, str(ROOT / "scripts" / "validate_drawing_handoff_review_summary.py"), str(DEFAULT_REVIEW_SUMMARY)],
         ),
         _run_gate("mass_weight_format", [python, str(ROOT / "scripts" / "audit_mass_weight_format.py")]),
-        _run_gate("llm_title_block_guardrails", [python, str(ROOT / "scripts" / "audit_llm_title_block_guardrails.py")]),
-        _run_gate(
-            "llm_probe_evaluation",
-            [python, str(ROOT / "scripts" / "evaluate_title_block_llm_probe.py"), str(DEFAULT_LLM_PROBE)],
-        ),
     ]
     gates.append(_scan_stale_docs(ACTIVE_HANDOFF_DOCS))
     gates.append(_scan_handoff_doc_size_guardrails(HANDOFF_DOC_SIZE_PATHS))

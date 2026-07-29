@@ -21,22 +21,22 @@
 
 | テーブル | 件数 |
 |---|---:|
-| registered drawing | 42 |
-| extraction job | 84 |
-| snapshot | 84 |
-| audit log | 160 |
+| registered drawing | 52 |
+| extraction job | 102 |
+| snapshot | 102 |
+| audit log | 130 |
 
 ## data JSON
 
 - `drawing_metadata_fixture_all_shared_review_summary_2026-07-17.json`: OK (264060 bytes)
 - `drawing_metadata_fixture_all_shared_review_summary_validation_2026-07-17.json`: OK (298 bytes)
 - `icad_shared_sample_current_audit_2026-07-16.json`: OK (132679 bytes)
-- `icad_shared_sample_completion_2026-07-15.json`: OK (51168 bytes)
-- `icad_2d_view_layer_print_frame_audit_current.json`: OK (10574 bytes)
-- `icad_3d_structure_material_mass_audit_current.json`: OK (13070 bytes)
-- `icad_goal_completion_coverage_audit_current.json`: OK (13047 bytes)
-- `icad_handoff_numeric_consistency_audit_current.json`: OK (590 bytes)
-- `icad_delivery_readiness_full_latest.json`: OK (22034 bytes)
+- `icad_shared_sample_completion_2026-07-15.json`: OK (149730 bytes)
+- `icad_2d_view_layer_print_frame_audit_current.json`: OK (10956 bytes)
+- `icad_3d_structure_material_mass_audit_current.json`: OK (13569 bytes)
+- `icad_goal_completion_coverage_audit_current.json`: OK (12851 bytes)
+- `icad_handoff_numeric_consistency_audit_current.json`: OK (591 bytes)
+- `icad_delivery_readiness_full_latest.json`: OK (39790 bytes)
 
 ## Cloudでの起動例
 
@@ -64,7 +64,7 @@ npm run dev -- --host 127.0.0.1 --port 5173
 - ICADを起動すること
 - workerで実抽出すること
 - 創屋の本番DB/本番ナレッジシステムへ書き込むこと
-- `.env` やGemini APIキーを要求すること
+- 外部AI APIを追加・利用すること
 
 ## 注意
 

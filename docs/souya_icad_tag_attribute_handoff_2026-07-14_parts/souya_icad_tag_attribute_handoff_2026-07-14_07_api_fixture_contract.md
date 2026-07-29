@@ -1,5 +1,10 @@
 # 創屋向け ICADタグ・属性連携項目表 - 7. API/fixture の最小契約案
 
+> **文書状態: handoff snapshot。**
+> 現行APIは
+> [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) と
+> [`../windows_extraction_agent_api_design_2026-07-29.md`](../windows_extraction_agent_api_design_2026-07-29.md) を正とする。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 この章は長くなるため、契約本体と検証ログを分けています。

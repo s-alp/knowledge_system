@@ -1,763 +1,3871 @@
 {
-  "schemaVersion": "icad_shared_sample_completion.v2",
-  "generatedAt": "2026-07-16T20:07:39.360584+00:00",
-  "manifestPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\souya_handoff\\icad_extract_import_manifest_all_shared_2026-07-15.json",
-  "summaryPaths": [
-    "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\_summary.json"
-  ],
+  "schemaVersion": "icad_shared_sample_current_audit.v2",
+  "manifest": "output\\souya_handoff\\icad_extract_import_manifest_all_shared_2026-07-15.json",
+  "validationPolicy": {
+    "registrationUnit": "1 ICD sourcePath = 1 RegisteredDrawing",
+    "blocking": [
+      "manifest未登録",
+      "2D/3D snapshot欠落",
+      "最新2D/3Dジョブ失敗",
+      "2D要素ありでビュー/レイヤー未付与",
+      "3D snapshotありでparts欠落"
+    ],
+    "warning": [
+      "3D質量をkgへ正規化できず、SXNETの失敗理由も既知条件化できない"
+    ],
+    "knownCondition": [
+      "2D要素ありでSXNET印刷枠リストが空",
+      "SXNETが質量計算対象の3D要素を返さない",
+      "現環境から原本ICADパスにアクセスできないがsnapshotは存在する"
+    ]
+  },
   "sampleCount": 39,
-  "threeDExtractedCount": 39,
-  "sourceFileMissingCount": 0,
-  "latest2DAttemptStatusCounts": {
-    "extracted_with_content": 31,
-    "extracted_no_2d_content": 8
+  "registeredCount": 39,
+  "manifestDuplicateSourcePathCount": 0,
+  "registeredDuplicateSourcePathCount": 0,
+  "twoDSnapshotCount": 39,
+  "threeDSnapshotCount": 39,
+  "twoDContentStatusCounts": {
+    "content": 31,
+    "extracted_no_2d_entities": 8
   },
-  "usable2DStatusCounts": {
-    "available_from_latest_attempt": 39
-  },
-  "unresolvedReasonCounts": {},
-  "unresolvedCount": 0,
-  "rows": [
+  "contentWithViewCoverageCount": 31,
+  "contentWithLayerCoverageCount": 30,
+  "contentWithPrintFrameCount": 28,
+  "multiplePrintFrameDrawingCount": 2,
+  "contentWithoutDefinedPrintFrameCount": 3,
+  "partExtendedInfoDrawingCount": 19,
+  "materialCandidateDrawingCount": 27,
+  "massAvailableDrawingCount": 38,
+  "sourceNotAccessibleCount": 1,
+  "blockingIssueCount": 1,
+  "warningIssueCount": 1,
+  "knownConditionCount": 4,
+  "gatePassed": false,
+  "blockingIssues": [
     {
-      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434000K1R1.icd",
-      "filename": "CAA5012-02434000K1R1.icd",
-      "customerHint": "ライズ",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\CAA5012-02434000K1R1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02434000K1R1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02434000K1R1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02434000K1R1.latest_2d.json",
-      "twoDContentCount": 620,
-      "viewSheetCount": 12,
-      "printFrameCount": 4,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
-      "filename": "TR1D9K99027.icd",
-      "customerHint": "シブヤパッケージングシステム",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\TR1D9K99027.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\TR1D9K99027.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\TR1D9K99027.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\TR1D9K99027.latest_2d.json",
-      "twoDContentCount": 1078,
-      "viewSheetCount": 5,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\11_クリーニング駆動\\PSG011-PA1100_クリーニング駆動.icd",
-      "filename": "PSG011-PA1100_クリーニング駆動.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-PA1100_クリーニング駆動.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA1100_クリーニング駆動.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA1100_クリーニング駆動.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA1100_クリーニング駆動.latest_2d.json",
-      "twoDContentCount": 126,
-      "viewSheetCount": 8,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\SBY\\アイソレータ\\210126_エーザイ_アイソレータ_RAA4844\\作業フォルダ\\開閉扉\\U8105111315.icd",
-      "filename": "U8105111315.icd",
-      "customerHint": "SBY",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\U8105111315.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8105111315.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8105111315.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8105111315.latest_2d.json",
-      "twoDContentCount": 353,
-      "viewSheetCount": 3,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
-      "filename": "217008-41J-3004.icd",
-      "customerHint": "NKS",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\217008-41J-3004.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\217008-41J-3004.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\217008-41J-3004.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\217008-41J-3004.latest_2d.json",
-      "twoDContentCount": 252,
-      "viewSheetCount": 5,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH30-A08001-R03-JP_ロードカップ部改造.icd",
-      "filename": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
-      "customerHint": "ZCSET",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\XH30-A08001-R03-JP_ロードカップ部改造.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\XH30-A08001-R03-JP_ロードカップ部改造.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\XH30-A08001-R03-JP_ロードカップ部改造.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\XH30-A08001-R03-JP_ロードカップ部改造.latest_2d.json",
-      "twoDContentCount": 6986,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
-      "filename": "23022-013_231218.icd",
-      "customerHint": "宮本工業所",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\23022-013_231218.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\23022-013_231218.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\23022-013_231218.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\23022-013_231218.latest_2d.json",
-      "twoDContentCount": 146,
-      "viewSheetCount": 8,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
-      "filename": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
-      "customerHint": "アースエンジニアリング",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).latest_2d.json",
-      "twoDContentCount": 101,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "severity": "blocking",
+      "code": "2d_content_without_layer",
+      "message": "2D要素はありますが、レイヤー情報が付いていません。",
+      "reextractCondition": "全レイヤー走査条件を有効にして2D抽出器のlayer_no付与を確認します。"
+    }
+  ],
+  "warningIssues": [
     {
       "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
-      "filename": "DFR-CM1-AA0305300011.icd",
-      "customerHint": "DNPE",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\shared_icad_probe_2026-07-14\\DFR-CM1-AA0305300011_3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\DFR-CM1-AA0305300011.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\DFR-CM1-AA0305300011.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\DFR-CM1-AA0305300011.latest_2d.json",
-      "twoDContentCount": 167,
-      "viewSheetCount": 2,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "severity": "warning",
+      "code": "3d_mass_missing",
+      "message": "3D質量・重量をkg表示へ正規化できていません。",
+      "reextractCondition": "3D質量プローブを再実行し、取得不可なら取得不可理由を記録します。"
+    }
+  ],
+  "knownConditionIssues": [
+    {
+      "sourcePath": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "severity": "known_condition",
+      "code": "source_not_accessible_current_environment",
+      "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+      "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
     },
     {
-      "sourcePath": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
-      "filename": "M26A07720.icd",
-      "customerHint": "スギノマシン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\M26A07720.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\M26A07720.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\M26A07720.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\M26A07720.latest_2d.json",
-      "twoDContentCount": 73,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
     },
+    {
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+    },
+    {
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "severity": "known_condition",
+      "code": "2d_print_frame_not_defined_by_sxnet",
+      "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+      "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+    }
+  ],
+  "unresolved": [
+    {
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "filename": "XH3001-M08007-01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1042,
+      "viewSheetCount": 3,
+      "viewCount": 2,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_defined",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 1042
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.12 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "2d_all_views_layers_print_frame",
+          "createdAt": "2026-07-29T08:11:56.558350+00:00",
+          "startedAt": null,
+          "finishedAt": "2026-07-29T08:12:44.071996+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "icad_autostarted",
+              "message": "ICAD was started automatically via C:\\ICADSX\\bin\\icad.exe."
+            },
+            {
+              "code": "sxnet_input_path_staged",
+              "message": "SXNETへ渡すパスを短く固定するため、ICADファイルを短い一時パスへコピーして開きました。原本パスはsource_file.full_pathに保持しています。"
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (999) and layer count (1007) did not match in view '!XY'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "empty_segment_list",
+              "message": "SxVS.getSegList returned no segments for view '!!GLOBAL'."
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (43) and layer count (44) did not match in view '!YZ'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "viewer_2d_asset_export_delegated",
+              "message": "2D preview uses the Django metadata SVG endpoint; SXNET print/plot file export is disabled until an explicit plotter profile is selected."
+            },
+            {
+              "code": "title_block_llm_skipped_unusable_values",
+              "message": "Value-less or unusable title-block candidates were skipped before Gemini classification: 1",
+              "source": "gemini_title_block_classifier",
+              "count": 1
+            }
+          ],
+          "warningCount": 7,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "icad_autostarted": 1,
+            "sxnet_input_path_staged": 1,
+            "geometry_layer_count_mismatch": 2,
+            "empty_segment_list": 1,
+            "viewer_2d_asset_export_delegated": 1,
+            "title_block_llm_skipped_unusable_values": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.899181+00:00",
+          "startedAt": "2026-07-24T08:01:38.899181+00:00",
+          "finishedAt": "2026-07-24T08:01:38.899181+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "surface_treatment"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": [
+        {
+          "severity": "blocking",
+          "code": "2d_content_without_layer",
+          "message": "2D要素はありますが、レイヤー情報が付いていません。",
+          "reextractCondition": "全レイヤー走査条件を有効にして2D抽出器のlayer_no付与を確認します。"
+        },
+        {
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+        }
+      ]
+    }
+  ],
+  "no2dEntityRows": [
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\474300AC219.icd",
       "filename": "474300AC219.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\474300AC219.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\474300AC219.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\474300AC219.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\474300AC219.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 3,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1692,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1692,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 467,
+      "massStatus": "present",
+      "massKg": "17.71 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.560066+00:00",
+          "startedAt": "2026-07-24T08:01:36.560066+00:00",
+          "finishedAt": "2026-07-24T08:01:36.560066+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.836316+00:00",
+          "startedAt": "2026-07-24T08:01:37.835816+00:00",
+          "finishedAt": "2026-07-24T08:01:37.835816+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\03_設計資料\\連絡書\\SBY⇒ALP\\20260623_バルブジョイント部_部品図訂正\\参考組図_データ依頼\\ICADデータ\\AAV1194-58\\32705200030\\32705200030_SEISAKU\\36555211A01.icd",
       "filename": "36555211A01.icd",
-      "customerHint": "FIL",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\36555211A01.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\36555211A01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\36555211A01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\36555211A01.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
-      "filename": "G1630-S3000-502_A3a1.icd",
-      "customerHint": "不二越5",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\G1630-S3000-502_A3a1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\G1630-S3000-502_A3a1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\G1630-S3000-502_A3a1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\G1630-S3000-502_A3a1.latest_2d.json",
-      "twoDContentCount": 101,
-      "viewSheetCount": 3,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
-      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
-      "customerHint": "NTC",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\9NK5E51B70-00-BRACKET-A0-3D-01.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E51B70-00-BRACKET-A0-3D-01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E51B70-00-BRACKET-A0-3D-01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E51B70-00-BRACKET-A0-3D-01.latest_2d.json",
-      "twoDContentCount": 1995,
-      "viewSheetCount": 10,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
-      "filename": "U8718-S71-002_A3.icd",
-      "customerHint": "不二越",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\U8718-S71-002_A3.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8718-S71-002_A3.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8718-S71-002_A3.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8718-S71-002_A3.latest_2d.json",
-      "twoDContentCount": 49,
-      "viewSheetCount": 3,
-      "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 3,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 3,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 3,
+      "massStatus": "present",
+      "massKg": "0.03 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.515995+00:00",
+          "startedAt": "2026-07-24T08:01:36.515995+00:00",
+          "finishedAt": "2026-07-24T08:01:36.515995+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.602550+00:00",
+          "startedAt": "2026-07-24T08:01:37.602550+00:00",
+          "finishedAt": "2026-07-24T08:01:37.602550+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
       "filename": "TR1D9Q00027.icd",
-      "customerHint": "シブヤパッケージングシステム",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\TR1D9Q00027.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\TR1D9Q00027.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\TR1D9Q00027.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\TR1D9Q00027.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
-      "filename": "CAA5012-02430002P1R1.icd",
-      "customerHint": "ライズ",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\CAA5012-02430002P1R1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02430002P1R1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02430002P1R1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02430002P1R1.latest_2d.json",
-      "twoDContentCount": 291,
-      "viewSheetCount": 7,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
-      "filename": "CAA5012-02434006P1R1.icd",
-      "customerHint": "ライズ",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\CAA5012-02434006P1R1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02434006P1R1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02434006P1R1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02434006P1R1.latest_2d.json",
-      "twoDContentCount": 99,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
-      "filename": "CAA5012-02435010P1R1.icd",
-      "customerHint": "ライズ",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\CAA5012-02435010P1R1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02435010P1R1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02435010P1R1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02435010P1R1.latest_2d.json",
-      "twoDContentCount": 75,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430012P1R1.icd",
-      "filename": "CAA5012-02430012P1R1.icd",
-      "customerHint": "ライズ",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\CAA5012-02430012P1R1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02430012P1R1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\CAA5012-02430012P1R1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\CAA5012-02430012P1R1.latest_2d.json",
-      "twoDContentCount": 58,
-      "viewSheetCount": 3,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13001.icd",
-      "filename": "PSG011-PA13001.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-PA13001.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA13001.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA13001.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA13001.latest_2d.json",
-      "twoDContentCount": 11475,
-      "viewSheetCount": 24,
-      "printFrameCount": 2,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
-      "filename": "PSG011-P05010.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-P05010.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-P05010.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-P05010.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-P05010.latest_2d.json",
-      "twoDContentCount": 1134,
-      "viewSheetCount": 7,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
-      "filename": "PSG011-PA0500_コラム.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-PA0500_コラム.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA0500_コラム.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA0500_コラム.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA0500_コラム.latest_2d.json",
-      "twoDContentCount": 184,
-      "viewSheetCount": 7,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
-      "filename": "PSG011-PA1300_ベース.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-PA1300_ベース.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA1300_ベース.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA1300_ベース.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA1300_ベース.latest_2d.json",
-      "twoDContentCount": 103,
-      "viewSheetCount": 8,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05008.icd",
-      "filename": "PSG011-P05008.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-P05008.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-P05008.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-P05008.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-P05008.latest_2d.json",
-      "twoDContentCount": 117,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-007_231218.icd",
-      "filename": "23022-007_231218.icd",
-      "customerHint": "宮本工業所",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\23022-007_231218.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\23022-007_231218.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\23022-007_231218.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\23022-007_231218.latest_2d.json",
-      "twoDContentCount": 216,
-      "viewSheetCount": 5,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
-      "filename": "XH3001-M08007-01.icd",
-      "customerHint": "ZCSET",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\XH3001-M08007-01.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\XH3001-M08007-01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\XH3001-M08007-01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\XH3001-M08007-01.latest_2d.json",
-      "twoDContentCount": 433,
-      "viewSheetCount": 3,
-      "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13002.icd",
-      "filename": "PSG011-PA13002.icd",
-      "customerHint": "ラップマスターウォルターズジャパン",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\PSG011-PA13002.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA13002.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\PSG011-PA13002.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\PSG011-PA13002.latest_2d.json",
-      "twoDContentCount": 802,
-      "viewSheetCount": 8,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323200X40c.icd",
-      "filename": "47323200X40c.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\47323200X40c.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\47323200X40c.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\47323200X40c.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\47323200X40c.latest_2d.json",
-      "twoDContentCount": 188,
-      "viewSheetCount": 6,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 34,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 20,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 8,
+      "massStatus": "present",
+      "massKg": "0.02 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.298297+00:00",
+          "startedAt": "2026-07-24T08:01:37.297796+00:00",
+          "finishedAt": "2026-07-24T08:01:37.297796+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.794100+00:00",
+          "startedAt": "2026-07-24T08:01:38.793601+00:00",
+          "finishedAt": "2026-07-24T08:01:38.793601+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\02_参考機データ\\260626_CIP駆動部分\\260626_データ送付\\ICADデータ\\32701700006\\32701700006_SEISAKU\\32791729A01.icd",
       "filename": "32791729A01.icd",
-      "customerHint": "FIL",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\32791729A01.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\32791729A01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\32791729A01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\32791729A01.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.504495+00:00",
+          "startedAt": "2026-07-24T08:01:36.504495+00:00",
+          "finishedAt": "2026-07-24T08:01:36.504495+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.591763+00:00",
+          "startedAt": "2026-07-24T08:01:37.591763+00:00",
+          "finishedAt": "2026-07-24T08:01:37.591763+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6800DDU.icd",
       "filename": "6800DDU.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\6800DDU.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\6800DDU.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\6800DDU.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\6800DDU.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.598113+00:00",
+          "startedAt": "2026-07-24T08:01:36.598113+00:00",
+          "finishedAt": "2026-07-24T08:01:36.598113+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.458941+00:00",
+          "startedAt": "2026-07-24T08:01:38.458941+00:00",
+          "finishedAt": "2026-07-24T08:01:38.458941+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6051033A.icd",
       "filename": "6051033A.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\6051033A.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\6051033A.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\6051033A.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\6051033A.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.01 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.585113+00:00",
+          "startedAt": "2026-07-24T08:01:36.585113+00:00",
+          "finishedAt": "2026-07-24T08:01:36.585113+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.446442+00:00",
+          "startedAt": "2026-07-24T08:01:38.445941+00:00",
+          "finishedAt": "2026-07-24T08:01:38.445941+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\4D-75.icd",
       "filename": "4D-75.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\4D-75.3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\4D-75.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\4D-75.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\4D-75.latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323023A01.icd",
-      "filename": "47323023A01.icd",
-      "customerHint": "CAP",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\47323023A01.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\47323023A01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\47323023A01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\47323023A01.latest_2d.json",
-      "twoDContentCount": 102,
-      "viewSheetCount": 6,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-039_A0a1.icd",
-      "filename": "G1630-S3000-039_A0a1.icd",
-      "customerHint": "不二越5",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\G1630-S3000-039_A0a1.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\G1630-S3000-039_A0a1.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\G1630-S3000-039_A0a1.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\G1630-S3000-039_A0a1.latest_2d.json",
-      "twoDContentCount": 936,
-      "viewSheetCount": 6,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\三宅設計\\9NK5E51M00-00-COVER-A3-3D-01.icd",
-      "filename": "9NK5E51M00-00-COVER-A3-3D-01.icd",
-      "customerHint": "NTC",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\9NK5E51M00-00-COVER-A3-3D-01.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E51M00-00-COVER-A3-3D-01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E51M00-00-COVER-A3-3D-01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E51M00-00-COVER-A3-3D-01.latest_2d.json",
-      "twoDContentCount": 200,
-      "viewSheetCount": 4,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\D-MAX_DK68\\20230821_Automation\\作業\\COVER_A._DRIP_TRAY\\9NK5E56H20-00-BRACKET-A0-3D-01.icd",
-      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
-      "customerHint": "NTC",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\9NK5E56H20-00-BRACKET-A0-3D-01.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E56H20-00-BRACKET-A0-3D-01.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\9NK5E56H20-00-BRACKET-A0-3D-01.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\9NK5E56H20-00-BRACKET-A0-3D-01.latest_2d.json",
-      "twoDContentCount": 1560,
-      "viewSheetCount": 12,
-      "printFrameCount": 1,
-      "layerCount": 255,
-      "unresolvedReason": null
-    },
-    {
-      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
-      "filename": "U8718-S71-149_A4.icd",
-      "customerHint": "不二越",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\U8718-S71-149_A4.3d.json",
-      "latest2DAttemptStatus": "extracted_with_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8718-S71-149_A4.latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_2026-07-15\\U8718-S71-149_A4.latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\U8718-S71-149_A4.latest_2d.json",
-      "twoDContentCount": 85,
-      "viewSheetCount": 4,
-      "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.05 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.573076+00:00",
+          "startedAt": "2026-07-24T08:01:36.573076+00:00",
+          "finishedAt": "2026-07-24T08:01:36.573076+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.431418+00:00",
+          "startedAt": "2026-07-24T08:01:38.431418+00:00",
+          "finishedAt": "2026-07-24T08:01:38.431418+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     },
     {
       "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
       "filename": "18T5-10BF(8).icd",
-      "customerHint": "不二越5",
-      "sourceFileExists": true,
-      "threeDStatus": "extracted",
-      "threeDExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\part_material_probe_2026-07-14\\18T5-10BF(8).3d.json",
-      "latest2DAttemptStatus": "extracted_no_2d_content",
-      "latest2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\18T5-10BF(8).latest_2d.json",
-      "prior2DAvailable": true,
-      "prior2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\18T5-10BF(8).latest_2d.json",
-      "usable2DStatus": "available_from_latest_attempt",
-      "usable2DExtractPath": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\all_shared_2d_reextract_current\\18T5-10BF(8).latest_2d.json",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
       "twoDContentCount": 0,
       "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
       "printFrameCount": 0,
-      "layerCount": 255,
-      "unresolvedReason": null
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 4,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.525656+00:00",
+          "startedAt": "2026-07-24T08:01:37.525656+00:00",
+          "finishedAt": "2026-07-24T08:01:37.525656+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.546715+00:00",
+          "startedAt": "2026-07-24T08:01:37.546715+00:00",
+          "finishedAt": "2026-07-24T08:01:37.546715+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    }
+  ],
+  "knownDataConditions": [
+    {
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "condition": "print_frame_not_defined",
+      "handling": "座標・ビュー・レイヤーは保持し、inside_print_areaは判定不明のままにする。"
+    },
+    {
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "condition": "print_frame_not_defined",
+      "handling": "座標・ビュー・レイヤーは保持し、inside_print_areaは判定不明のままにする。"
+    },
+    {
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "condition": "print_frame_not_defined",
+      "handling": "座標・ビュー・レイヤーは保持し、inside_print_areaは判定不明のままにする。"
+    }
+  ],
+  "rows": [
+    {
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434000K1R1.icd",
+      "filename": "CAA5012-02434000K1R1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 616,
+      "viewSheetCount": 12,
+      "viewCount": 9,
+      "layerDefinitionCount": 255,
+      "layerCount": 3,
+      "printFrameCount": 4,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 121,
+        "outside": 432,
+        "unknown": 63
+      },
+      "partOccurrenceCount": 360,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 91,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 7,
+      "massStatus": "present",
+      "massKg": "3.96 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.764387+00:00",
+          "startedAt": "2026-07-24T08:01:36.764387+00:00",
+          "finishedAt": "2026-07-24T08:01:36.764387+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "set_dim_skipped",
+              "message": "2D window setDim(false) was skipped: 呼び出しのターゲットが例外をスローしました。"
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (67) and layer count (69) did not match in view '!YZ'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ],
+          "warningCount": 6,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "set_dim_skipped": 1,
+            "geometry_layer_count_mismatch": 1,
+            "unsupported_geometry:SxGeomPoint2D": 2,
+            "unsupported_geometry:SxGeomArrowView": 2
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.531740+00:00",
+          "startedAt": "2026-07-24T08:01:38.531740+00:00",
+          "finishedAt": "2026-07-24T08:01:38.531740+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\部品図(新規、訂正)\\9K\\TR1D9K99027.icd",
+      "filename": "TR1D9K99027.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1078,
+      "viewSheetCount": 5,
+      "viewCount": 5,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 400,
+        "outside": 678,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "2.16 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.266390+00:00",
+          "startedAt": "2026-07-24T08:01:37.266390+00:00",
+          "finishedAt": "2026-07-24T08:01:37.266390+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (342) and layer count (356) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            }
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.781597+00:00",
+          "startedAt": "2026-07-24T08:01:38.781597+00:00",
+          "finishedAt": "2026-07-24T08:01:38.781597+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "revision",
+          "surface_treatment"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\11_クリーニング駆動\\PSG011-PA1100_クリーニング駆動.icd",
+      "filename": "PSG011-PA1100_クリーニング駆動.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 126,
+      "viewSheetCount": 8,
+      "viewCount": 6,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 28,
+        "outside": 70,
+        "unknown": 28
+      },
+      "partOccurrenceCount": 427,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 8,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 4,
+      "massStatus": "present",
+      "massKg": "9.70 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.954199+00:00",
+          "startedAt": "2026-07-24T08:01:36.954199+00:00",
+          "finishedAt": "2026-07-24T08:01:36.954199+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.697449+00:00",
+          "startedAt": "2026-07-24T08:01:38.697449+00:00",
+          "finishedAt": "2026-07-24T08:01:38.697449+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\SBY\\アイソレータ\\210126_エーザイ_アイソレータ_RAA4844\\作業フォルダ\\開閉扉\\U8105111315.icd",
+      "filename": "U8105111315.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 351,
+      "viewSheetCount": 3,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 299,
+        "outside": 51,
+        "unknown": 1
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.18 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.311810+00:00",
+          "startedAt": "2026-07-24T08:01:37.311310+00:00",
+          "finishedAt": "2026-07-24T08:01:37.311310+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (293) and layer count (307) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            }
+          ],
+          "warningCount": 3,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1,
+            "unsupported_geometry:SxGeomArrow": 2
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.813617+00:00",
+          "startedAt": "2026-07-24T08:01:38.813617+00:00",
+          "finishedAt": "2026-07-24T08:01:38.813617+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "revision",
+          "surface_treatment"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\NKS\\2109_部品図バラシ\\作業\\40J_レール部\\217008-41J-3004.icd",
+      "filename": "217008-41J-3004.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 252,
+      "viewSheetCount": 5,
+      "viewCount": 5,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 58,
+        "outside": 193,
+        "unknown": 1
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.01 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.452425+00:00",
+          "startedAt": "2026-07-24T08:01:36.452425+00:00",
+          "finishedAt": "2026-07-24T08:01:36.452425+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.557714+00:00",
+          "startedAt": "2026-07-24T08:01:37.557714+00:00",
+          "finishedAt": "2026-07-24T08:01:37.557714+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "filename": "XH30-A08001-R03-JP_ロードカップ部改造.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 6986,
+      "viewSheetCount": 4,
+      "viewCount": 4,
+      "layerDefinitionCount": 255,
+      "layerCount": 17,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 21,
+        "outside": 6825,
+        "unknown": 140
+      },
+      "partOccurrenceCount": 575,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 40,
+      "massStatus": "present",
+      "massKg": "4.76 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.397759+00:00",
+          "startedAt": "2026-07-24T08:01:37.397759+00:00",
+          "finishedAt": "2026-07-24T08:01:37.397759+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.850173+00:00",
+          "startedAt": "2026-07-24T08:01:38.849672+00:00",
+          "finishedAt": "2026-07-24T08:01:38.849672+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-013_231218.icd",
+      "filename": "23022-013_231218.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 146,
+      "viewSheetCount": 8,
+      "viewCount": 7,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 7,
+        "outside": 131,
+        "unknown": 8
+      },
+      "partOccurrenceCount": 37,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "7.81 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.489981+00:00",
+          "startedAt": "2026-07-24T08:01:36.489981+00:00",
+          "finishedAt": "2026-07-24T08:01:36.489981+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.579255+00:00",
+          "startedAt": "2026-07-24T08:01:37.579255+00:00",
+          "finishedAt": "2026-07-24T08:01:37.579255+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\アースエンジニアリング\\251216_ツネイシカムテックス\\作業\\6月度分(フォルダ移動禁止)\\優先1\\AR05-A05-B04_No.2 F-FスクリーンスクリーンSシュート組立図\\03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "filename": "03_20K03379P00_ｼｭｰﾄﾍﾞｰｽ(No.2FFS_XS).icd",
+      "sourceAccessStatus": "not_accessible",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 100,
+      "viewSheetCount": 4,
+      "viewCount": 4,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 29,
+        "outside": 63,
+        "unknown": 8
+      },
+      "partOccurrenceCount": 9,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "11.66 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.433559+00:00",
+          "startedAt": "2026-07-24T08:01:36.433559+00:00",
+          "finishedAt": "2026-07-24T08:01:36.433559+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (40) and layer count (42) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            }
+          ],
+          "warningCount": 2,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1,
+            "unsupported_geometry:SxGeomArrowView": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.536657+00:00",
+          "startedAt": "2026-07-24T08:01:37.536657+00:00",
+          "finishedAt": "2026-07-24T08:01:37.536657+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "coating_instruction"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": [
+        {
+          "severity": "known_condition",
+          "code": "source_not_accessible_current_environment",
+          "message": "現在の実行環境から原本ICADパスにアクセスできませんが、登録済みsnapshotは存在します。",
+          "reextractCondition": "再抽出が必要な場合はネットワークドライブ/共有パスを接続し直してから実行します。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "J:\\DNPE\\作業\\220627_DFR-CM1(AA)フィーダー部品図作成\\DNP滝本部品図\\DFR-CM1-AA0305300011.icd",
+      "filename": "DFR-CM1-AA0305300011.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 154,
+      "viewSheetCount": 2,
+      "viewCount": 2,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 42,
+        "outside": 110,
+        "unknown": 2
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "not_provided",
+      "massKg": null,
+      "massEvidence": "",
+      "massProbeStatus": null,
+      "materialProbeStatus": null,
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.811830+00:00",
+          "startedAt": "2026-07-24T08:01:36.811830+00:00",
+          "finishedAt": "2026-07-24T08:01:36.811830+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ],
+          "warningCount": 13,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "unsupported_geometry:SxGeomPoint2D": 13
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.918482+00:00",
+          "startedAt": "2026-07-24T08:01:38.918482+00:00",
+          "finishedAt": "2026-07-24T08:01:38.918482+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": ""
+      },
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "3d_mass_missing",
+          "message": "3D質量・重量をkg表示へ正規化できていません。",
+          "reextractCondition": "3D質量プローブを再実行し、取得不可なら取得不可理由を記録します。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "J:\\スギノマシン\\260513_マルチスズキ乾燥機上部カバー部品図作成(金山様)\\作業\\M26A07720.icd",
+      "filename": "M26A07720.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 72,
+      "viewSheetCount": 4,
+      "viewCount": 4,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 36,
+        "outside": 35,
+        "unknown": 1
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.02 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.874901+00:00",
+          "startedAt": "2026-07-24T08:01:36.874399+00:00",
+          "finishedAt": "2026-07-24T08:01:36.874399+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "unsupported_geometry:SxGeomPoint2D": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.636388+00:00",
+          "startedAt": "2026-07-24T08:01:38.636388+00:00",
+          "finishedAt": "2026-07-24T08:01:38.636388+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\474300AC219.icd",
+      "filename": "474300AC219.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 3,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1692,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1692,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 467,
+      "massStatus": "present",
+      "massKg": "17.71 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.560066+00:00",
+          "startedAt": "2026-07-24T08:01:36.560066+00:00",
+          "finishedAt": "2026-07-24T08:01:36.560066+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.836316+00:00",
+          "startedAt": "2026-07-24T08:01:37.835816+00:00",
+          "finishedAt": "2026-07-24T08:01:37.835816+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\03_設計資料\\連絡書\\SBY⇒ALP\\20260623_バルブジョイント部_部品図訂正\\参考組図_データ依頼\\ICADデータ\\AAV1194-58\\32705200030\\32705200030_SEISAKU\\36555211A01.icd",
+      "filename": "36555211A01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 3,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 3,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 3,
+      "massStatus": "present",
+      "massKg": "0.03 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.515995+00:00",
+          "startedAt": "2026-07-24T08:01:36.515995+00:00",
+          "finishedAt": "2026-07-24T08:01:36.515995+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.602550+00:00",
+          "startedAt": "2026-07-24T08:01:37.602550+00:00",
+          "finishedAt": "2026-07-24T08:01:37.602550+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-502_A3a1.icd",
+      "filename": "G1630-S3000-502_A3a1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 101,
+      "viewSheetCount": 3,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 39,
+        "outside": 61,
+        "unknown": 1
+      },
+      "partOccurrenceCount": 2,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.05 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.859886+00:00",
+          "startedAt": "2026-07-24T08:01:36.859886+00:00",
+          "finishedAt": "2026-07-24T08:01:36.859886+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.625325+00:00",
+          "startedAt": "2026-07-24T08:01:38.625325+00:00",
+          "finishedAt": "2026-07-24T08:01:38.625325+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\マプラスデザイン\\9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "filename": "9NK5E51B70-00-BRACKET-A0-3D-01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1970,
+      "viewSheetCount": 10,
+      "viewCount": 10,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 660,
+        "outside": 1292,
+        "unknown": 18
+      },
+      "partOccurrenceCount": 2,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "4.70 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.622643+00:00",
+          "startedAt": "2026-07-24T08:01:36.622643+00:00",
+          "finishedAt": "2026-07-24T08:01:36.622643+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (141) and layer count (145) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomPoint2D"
+            }
+          ],
+          "warningCount": 26,
+          "warningTruncated": true,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1,
+            "unsupported_geometry:SxGeomPoint2D": 21,
+            "unsupported_geometry:SxGeomArrowView": 2,
+            "unsupported_geometry:SxGeomOtherDraft": 2
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.470447+00:00",
+          "startedAt": "2026-07-24T08:01:38.470447+00:00",
+          "finishedAt": "2026-07-24T08:01:38.470447+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "coating_instruction",
+          "part_name"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-002_A3.icd",
+      "filename": "U8718-S71-002_A3.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 49,
+      "viewSheetCount": 3,
+      "viewCount": 2,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_defined",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 49
+      },
+      "partOccurrenceCount": 5,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.20 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.334734+00:00",
+          "startedAt": "2026-07-24T08:01:37.334734+00:00",
+          "finishedAt": "2026-07-24T08:01:37.334734+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.825117+00:00",
+          "startedAt": "2026-07-24T08:01:38.825117+00:00",
+          "finishedAt": "2026-07-24T08:01:38.825117+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": [
+        {
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "J:\\シブヤパッケージングシステム\\25_9R_膨潤パレットアキューム部\\作業\\SPS送付用\\RAR0116_260618_膨潤パレットアキューム部_作成データ\\TR1D9Q00027.icd",
+      "filename": "TR1D9Q00027.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 34,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 20,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 8,
+      "massStatus": "present",
+      "massKg": "0.02 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.298297+00:00",
+          "startedAt": "2026-07-24T08:01:37.297796+00:00",
+          "finishedAt": "2026-07-24T08:01:37.297796+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.794100+00:00",
+          "startedAt": "2026-07-24T08:01:38.793601+00:00",
+          "finishedAt": "2026-07-24T08:01:38.793601+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430002P1R1.icd",
+      "filename": "CAA5012-02430002P1R1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 291,
+      "viewSheetCount": 7,
+      "viewCount": 6,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 76,
+        "outside": 205,
+        "unknown": 10
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.21 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.730761+00:00",
+          "startedAt": "2026-07-24T08:01:36.730761+00:00",
+          "finishedAt": "2026-07-24T08:01:36.730761+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.503475+00:00",
+          "startedAt": "2026-07-24T08:01:38.503475+00:00",
+          "finishedAt": "2026-07-24T08:01:38.503475+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\34000_供給台部\\CAA5012-02434006P1R1.icd",
+      "filename": "CAA5012-02434006P1R1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 99,
+      "viewSheetCount": 4,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 7,
+        "outside": 88,
+        "unknown": 4
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.04 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.785669+00:00",
+          "startedAt": "2026-07-24T08:01:36.785170+00:00",
+          "finishedAt": "2026-07-24T08:01:36.785170+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.592270+00:00",
+          "startedAt": "2026-07-24T08:01:38.592270+00:00",
+          "finishedAt": "2026-07-24T08:01:38.592270+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\35000_位置決め部\\CAA5012-02435010P1R1.icd",
+      "filename": "CAA5012-02435010P1R1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 75,
+      "viewSheetCount": 4,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 46,
+        "outside": 26,
+        "unknown": 3
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.01 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.798170+00:00",
+          "startedAt": "2026-07-24T08:01:36.798170+00:00",
+          "finishedAt": "2026-07-24T08:01:36.798170+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.602787+00:00",
+          "startedAt": "2026-07-24T08:01:38.602787+00:00",
+          "finishedAt": "2026-07-24T08:01:38.602787+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ライズ\\240603_FCマウント組立装置\\作業\\30000_FC投入部\\CAA5012-02430012P1R1.icd",
+      "filename": "CAA5012-02430012P1R1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 58,
+      "viewSheetCount": 3,
+      "viewCount": 2,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 16,
+        "outside": 40,
+        "unknown": 2
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.747276+00:00",
+          "startedAt": "2026-07-24T08:01:36.746774+00:00",
+          "finishedAt": "2026-07-24T08:01:36.746774+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.515399+00:00",
+          "startedAt": "2026-07-24T08:01:38.515399+00:00",
+          "finishedAt": "2026-07-24T08:01:38.515399+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13001.icd",
+      "filename": "PSG011-PA13001.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 11475,
+      "viewSheetCount": 24,
+      "viewCount": 18,
+      "layerDefinitionCount": 255,
+      "layerCount": 3,
+      "printFrameCount": 2,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 1872,
+        "outside": 9441,
+        "unknown": 162
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "348.08 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.033877+00:00",
+          "startedAt": "2026-07-24T08:01:37.033877+00:00",
+          "finishedAt": "2026-07-24T08:01:37.033877+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.742498+00:00",
+          "startedAt": "2026-07-24T08:01:38.742498+00:00",
+          "finishedAt": "2026-07-24T08:01:38.742498+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05010.icd",
+      "filename": "PSG011-P05010.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1134,
+      "viewSheetCount": 7,
+      "viewCount": 7,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 92,
+        "outside": 1040,
+        "unknown": 2
+      },
+      "partOccurrenceCount": 19,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.47 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.908837+00:00",
+          "startedAt": "2026-07-24T08:01:36.908837+00:00",
+          "finishedAt": "2026-07-24T08:01:36.908837+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.655437+00:00",
+          "startedAt": "2026-07-24T08:01:38.655437+00:00",
+          "finishedAt": "2026-07-24T08:01:38.655437+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\PSG011-PA0500_コラム.icd",
+      "filename": "PSG011-PA0500_コラム.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 184,
+      "viewSheetCount": 7,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 35,
+        "outside": 106,
+        "unknown": 43
+      },
+      "partOccurrenceCount": 262,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "129.05 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.938069+00:00",
+          "startedAt": "2026-07-24T08:01:36.937576+00:00",
+          "finishedAt": "2026-07-24T08:01:36.937576+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.667438+00:00",
+          "startedAt": "2026-07-24T08:01:38.666942+00:00",
+          "finishedAt": "2026-07-24T08:01:38.666942+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\PSG011-PA1300_ベース.icd",
+      "filename": "PSG011-PA1300_ベース.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 103,
+      "viewSheetCount": 8,
+      "viewCount": 7,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 27,
+        "outside": 66,
+        "unknown": 10
+      },
+      "partOccurrenceCount": 95,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "350.80 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.245379+00:00",
+          "startedAt": "2026-07-24T08:01:37.245379+00:00",
+          "finishedAt": "2026-07-24T08:01:37.245379+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.763515+00:00",
+          "startedAt": "2026-07-24T08:01:38.763515+00:00",
+          "finishedAt": "2026-07-24T08:01:38.763515+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\05_コラム\\部品\\PSG011-P05008.icd",
+      "filename": "PSG011-P05008.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 117,
+      "viewSheetCount": 4,
+      "viewCount": 4,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 25,
+        "outside": 92,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 4,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.11 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.888407+00:00",
+          "startedAt": "2026-07-24T08:01:36.887906+00:00",
+          "finishedAt": "2026-07-24T08:01:36.887906+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.646437+00:00",
+          "startedAt": "2026-07-24T08:01:38.646437+00:00",
+          "finishedAt": "2026-07-24T08:01:38.646437+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\宮本工業所\\231109_燃焼ユニット部品図作成\\作業\\1215_修正部品図\\23022-007_231218.icd",
+      "filename": "23022-007_231218.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 801,
+      "viewSheetCount": 5,
+      "viewCount": 5,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 675,
+        "outside": 100,
+        "unknown": 26
+      },
+      "partOccurrenceCount": 7,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.24 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-29T09:41:40.158261+00:00",
+          "startedAt": "2026-07-29T09:41:40.157762+00:00",
+          "finishedAt": "2026-07-29T09:41:40.157762+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "icad_autostarted",
+              "message": "ICAD was started automatically via C:\\ICADSX\\bin\\icad.exe."
+            },
+            {
+              "code": "sxnet_input_path_staged",
+              "message": "SXNETへ渡すパスを短く固定するため、ICADファイルを短い一時パスへコピーして開きました。原本パスはsource_file.full_pathに保持しています。"
+            },
+            {
+              "code": "viewer_2d_asset_export_delegated",
+              "message": "2D preview uses the Django metadata SVG endpoint; SXNET print/plot file export is disabled until an explicit plotter profile is selected."
+            }
+          ],
+          "warningCount": 3,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "icad_autostarted": 1,
+            "sxnet_input_path_staged": 1,
+            "viewer_2d_asset_export_delegated": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.568747+00:00",
+          "startedAt": "2026-07-24T08:01:37.568747+00:00",
+          "finishedAt": "2026-07-24T08:01:37.568747+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "part_name",
+          "revision"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\ZCSET\\300P_210312\\作業\\2_ロードカップ部\\XH3001-M08007-01.icd",
+      "filename": "XH3001-M08007-01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1042,
+      "viewSheetCount": 3,
+      "viewCount": 2,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_defined",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 1042
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.12 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "2d_all_views_layers_print_frame",
+          "createdAt": "2026-07-29T08:11:56.558350+00:00",
+          "startedAt": null,
+          "finishedAt": "2026-07-29T08:12:44.071996+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "icad_autostarted",
+              "message": "ICAD was started automatically via C:\\ICADSX\\bin\\icad.exe."
+            },
+            {
+              "code": "sxnet_input_path_staged",
+              "message": "SXNETへ渡すパスを短く固定するため、ICADファイルを短い一時パスへコピーして開きました。原本パスはsource_file.full_pathに保持しています。"
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (999) and layer count (1007) did not match in view '!XY'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "empty_segment_list",
+              "message": "SxVS.getSegList returned no segments for view '!!GLOBAL'."
+            },
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (43) and layer count (44) did not match in view '!YZ'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "viewer_2d_asset_export_delegated",
+              "message": "2D preview uses the Django metadata SVG endpoint; SXNET print/plot file export is disabled until an explicit plotter profile is selected."
+            },
+            {
+              "code": "title_block_llm_skipped_unusable_values",
+              "message": "Value-less or unusable title-block candidates were skipped before Gemini classification: 1",
+              "source": "gemini_title_block_classifier",
+              "count": 1
+            }
+          ],
+          "warningCount": 7,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "icad_autostarted": 1,
+            "sxnet_input_path_staged": 1,
+            "geometry_layer_count_mismatch": 2,
+            "empty_segment_list": 1,
+            "viewer_2d_asset_export_delegated": 1,
+            "title_block_llm_skipped_unusable_values": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.899181+00:00",
+          "startedAt": "2026-07-24T08:01:38.899181+00:00",
+          "finishedAt": "2026-07-24T08:01:38.899181+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "drawing_name",
+          "surface_treatment"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": [
+        {
+          "severity": "blocking",
+          "code": "2d_content_without_layer",
+          "message": "2D要素はありますが、レイヤー情報が付いていません。",
+          "reextractCondition": "全レイヤー走査条件を有効にして2D抽出器のlayer_no付与を確認します。"
+        },
+        {
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "J:\\ラップマスターウォルターズジャパン\\PLPG1000_260201\\作業\\13_ベース\\部品\\PSG011-PA13002.icd",
+      "filename": "PSG011-PA13002.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 802,
+      "viewSheetCount": 8,
+      "viewCount": 8,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 72,
+        "outside": 717,
+        "unknown": 13
+      },
+      "partOccurrenceCount": 13,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.39 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.222375+00:00",
+          "startedAt": "2026-07-24T08:01:37.221891+00:00",
+          "finishedAt": "2026-07-24T08:01:37.221891+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.752529+00:00",
+          "startedAt": "2026-07-24T08:01:38.752529+00:00",
+          "finishedAt": "2026-07-24T08:01:38.752529+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "scale"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323200X40c.icd",
+      "filename": "47323200X40c.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 187,
+      "viewSheetCount": 6,
+      "viewCount": 5,
+      "layerDefinitionCount": 255,
+      "layerCount": 2,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 53,
+        "outside": 128,
+        "unknown": 6
+      },
+      "partOccurrenceCount": 436,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 426,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 215,
+      "massStatus": "present",
+      "massKg": "2.86 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.544566+00:00",
+          "startedAt": "2026-07-24T08:01:36.544566+00:00",
+          "finishedAt": "2026-07-24T08:01:36.544566+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrow"
+            }
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "unsupported_geometry:SxGeomArrow": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.629569+00:00",
+          "startedAt": "2026-07-24T08:01:37.629569+00:00",
+          "finishedAt": "2026-07-24T08:01:37.629569+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\FIL\\20260511_General_Beverage\\02_参考機データ\\260626_CIP駆動部分\\260626_データ送付\\ICADデータ\\32701700006\\32701700006_SEISAKU\\32791729A01.icd",
+      "filename": "32791729A01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.504495+00:00",
+          "startedAt": "2026-07-24T08:01:36.504495+00:00",
+          "finishedAt": "2026-07-24T08:01:36.504495+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.591763+00:00",
+          "startedAt": "2026-07-24T08:01:37.591763+00:00",
+          "finishedAt": "2026-07-24T08:01:37.591763+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6800DDU.icd",
+      "filename": "6800DDU.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.598113+00:00",
+          "startedAt": "2026-07-24T08:01:36.598113+00:00",
+          "finishedAt": "2026-07-24T08:01:36.598113+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.458941+00:00",
+          "startedAt": "2026-07-24T08:01:38.458941+00:00",
+          "finishedAt": "2026-07-24T08:01:38.458941+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\6051033A.icd",
+      "filename": "6051033A.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.01 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.585113+00:00",
+          "startedAt": "2026-07-24T08:01:36.585113+00:00",
+          "finishedAt": "2026-07-24T08:01:36.585113+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.446442+00:00",
+          "startedAt": "2026-07-24T08:01:38.445941+00:00",
+          "finishedAt": "2026-07-24T08:01:38.445941+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\4D-75.icd",
+      "filename": "4D-75.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.05 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.573076+00:00",
+          "startedAt": "2026-07-24T08:01:36.573076+00:00",
+          "finishedAt": "2026-07-24T08:01:36.573076+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.431418+00:00",
+          "startedAt": "2026-07-24T08:01:38.431418+00:00",
+          "finishedAt": "2026-07-24T08:01:38.431418+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "\\\\HONSYA-FILE01\\data_cad3d\\SBY\\CAP\\260527_AAM6351_アイリスオーヤマ_宮本様\\47323023A01.icd",
+      "filename": "47323023A01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 102,
+      "viewSheetCount": 6,
+      "viewCount": 6,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 74,
+        "outside": 28,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "present",
+      "partExtendedInfoCount": 1,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 2,
+      "massStatus": "present",
+      "massKg": "0.05 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.529518+00:00",
+          "startedAt": "2026-07-24T08:01:36.529518+00:00",
+          "finishedAt": "2026-07-24T08:01:36.529518+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.613056+00:00",
+          "startedAt": "2026-07-24T08:01:37.613056+00:00",
+          "finishedAt": "2026-07-24T08:01:37.613056+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "weight"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\不二越5\\260501_ブロック円研機_高さ調整機構\\作業\\G1630-S3000-039_A0a1.icd",
+      "filename": "G1630-S3000-039_A0a1.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 936,
+      "viewSheetCount": 6,
+      "viewCount": 6,
+      "layerDefinitionCount": 255,
+      "layerCount": 3,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 497,
+        "outside": 436,
+        "unknown": 3
+      },
+      "partOccurrenceCount": 43,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "40.71 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.832875+00:00",
+          "startedAt": "2026-07-24T08:01:36.832875+00:00",
+          "finishedAt": "2026-07-24T08:01:36.832875+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.613315+00:00",
+          "startedAt": "2026-07-24T08:01:38.613315+00:00",
+          "finishedAt": "2026-07-24T08:01:38.613315+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "coating_instruction"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\GM_Bay\\20240410_オートメーション(MOD3)\\作業\\OP128\\DRIP_TRAY\\LO横MC\\三宅設計\\9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "filename": "9NK5E51M00-00-COVER-A3-3D-01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 200,
+      "viewSheetCount": 4,
+      "viewCount": 4,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 138,
+        "outside": 62,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "0.23 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.664166+00:00",
+          "startedAt": "2026-07-24T08:01:36.664166+00:00",
+          "finishedAt": "2026-07-24T08:01:36.664166+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (125) and layer count (129) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            }
+          ],
+          "warningCount": 1,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.481961+00:00",
+          "startedAt": "2026-07-24T08:01:38.481961+00:00",
+          "finishedAt": "2026-07-24T08:01:38.481961+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "coating_instruction",
+          "part_name"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "T:\\NTC\\TF設計部\\TD2\\D-MAX_DK68\\20230821_Automation\\作業\\COVER_A._DRIP_TRAY\\9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "filename": "9NK5E56H20-00-BRACKET-A0-3D-01.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 1557,
+      "viewSheetCount": 12,
+      "viewCount": 12,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 1,
+      "printFrameStatus": "defined",
+      "insidePrintArea": {
+        "inside": 210,
+        "outside": 1333,
+        "unknown": 14
+      },
+      "partOccurrenceCount": 1,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "present",
+      "materialCandidateCount": 1,
+      "massStatus": "present",
+      "massKg": "2.70 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "available",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:36.692678+00:00",
+          "startedAt": "2026-07-24T08:01:36.692678+00:00",
+          "finishedAt": "2026-07-24T08:01:36.692678+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [
+            {
+              "code": "geometry_layer_count_mismatch",
+              "message": "2D geometry count (160) and layer count (164) did not match in view '!!GLOBAL'. Layer numbers were omitted for this view."
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomArrowView"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            },
+            {
+              "code": "unsupported_geometry",
+              "message": "Unhandled geometry type: SxGeomOtherDraft"
+            }
+          ],
+          "warningCount": 4,
+          "warningTruncated": false,
+          "warningTypeCounts": {
+            "geometry_layer_count_mismatch": 1,
+            "unsupported_geometry:SxGeomArrowView": 1,
+            "unsupported_geometry:SxGeomOtherDraft": 2
+          }
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.493467+00:00",
+          "startedAt": "2026-07-24T08:01:38.492968+00:00",
+          "finishedAt": "2026-07-24T08:01:38.492968+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [
+          "coating_instruction",
+          "part_name"
+        ],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
+    },
+    {
+      "sourcePath": "J:\\不二越\\作業\\U8729\\STA_8\\U8729_S81\\U8718-S71-149_A4.icd",
+      "filename": "U8718-S71-149_A4.icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "content",
+      "twoDContentReason": "2D snapshotに文字・寸法・形状・注記などの抽出対象要素があります。",
+      "twoDContentCount": 85,
+      "viewSheetCount": 4,
+      "viewCount": 3,
+      "layerDefinitionCount": 255,
+      "layerCount": 1,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_defined",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 85
+      },
+      "partOccurrenceCount": 4,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.01 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.350251+00:00",
+          "startedAt": "2026-07-24T08:01:37.350251+00:00",
+          "finishedAt": "2026-07-24T08:01:37.350251+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:38.835657+00:00",
+          "startedAt": "2026-07-24T08:01:38.835657+00:00",
+          "finishedAt": "2026-07-24T08:01:38.835657+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": [
+        {
+          "severity": "known_condition",
+          "code": "2d_print_frame_not_defined_by_sxnet",
+          "message": "2D要素はありますが、SXNETの印刷枠リストが空です。inside_print_areaはunknownとして保持します。",
+          "reextractCondition": "必要に応じてprobe-2d-printで再確認します。印刷枠が返らない場合は図面側に印刷枠定義なしとして扱います。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "J:\\不二越5\\260703_次期円筒研削盤開発(竹中様)\\作業\\OLD\\18T5-10BF(8).icd",
+      "filename": "18T5-10BF(8).icd",
+      "sourceAccessStatus": "exists",
+      "registered": true,
+      "has2dSnapshot": true,
+      "has3dSnapshot": true,
+      "twoDContentStatus": "extracted_no_2d_entities",
+      "twoDContentReason": "2D抽出は完了していますが、SXNETから対象要素が返っていません。3Dのみ、または2D要素なしのICDとして扱います。",
+      "twoDContentCount": 0,
+      "viewSheetCount": 2,
+      "viewCount": 0,
+      "layerDefinitionCount": 255,
+      "layerCount": 0,
+      "printFrameCount": 0,
+      "printFrameStatus": "not_applicable_no_2d_entities",
+      "insidePrintArea": {
+        "inside": 0,
+        "outside": 0,
+        "unknown": 0
+      },
+      "partOccurrenceCount": 4,
+      "partExtendedInfoStatus": "not_provided",
+      "partExtendedInfoCount": 0,
+      "materialCandidateStatus": "not_provided",
+      "materialCandidateCount": 0,
+      "massStatus": "present",
+      "massKg": "0.00 kg",
+      "massEvidence": "canonicalAttributes.mass_value",
+      "massProbeStatus": "available",
+      "materialProbeStatus": "no_materials",
+      "latestJobs": {
+        "2d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.525656+00:00",
+          "startedAt": "2026-07-24T08:01:37.525656+00:00",
+          "finishedAt": "2026-07-24T08:01:37.525656+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        },
+        "3d": {
+          "status": "succeeded",
+          "profile": "default",
+          "createdAt": "2026-07-24T08:01:37.546715+00:00",
+          "startedAt": "2026-07-24T08:01:37.546715+00:00",
+          "finishedAt": "2026-07-24T08:01:37.546715+00:00",
+          "errorMessage": "",
+          "errorMessageLength": 0,
+          "errorMessageTruncated": false,
+          "warnings": [],
+          "warningCount": 0,
+          "warningTruncated": false,
+          "warningTypeCounts": {}
+        }
+      },
+      "canonicalSourceEvidence": {
+        "2dTitleBlockFields": [],
+        "3dPartExtendedInfo": "rawExtract.parts[].ex_info_fields",
+        "3dMaterialCandidates": "canonicalAttributes.part_material_candidates",
+        "3dMass": "canonicalAttributes.mass_value"
+      },
+      "issues": []
     }
   ]
 }

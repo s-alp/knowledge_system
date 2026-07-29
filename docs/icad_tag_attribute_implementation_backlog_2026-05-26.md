@@ -1,8 +1,19 @@
 # ICADタグ・属性 実装引継ぎバックログ
 
+> **文書状態: 履歴資料（初期バックログ）**
+> B01～B04を含む主要基盤は実装済みである。現在の残課題は
+> [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) の「未実装・実機確認中」と
+> [`windows_confirmation_items_2026-07-17.md`](windows_confirmation_items_2026-07-17.md) を正とする。
+
 - 作成日: 2026-05-26
 - 目的: 次会話以降で実装を始める際に、探索をやり直さず着手できるようにする。
 - 前提: `図面管理` をタグ・属性の正本とし、viewer と RAG は参照・利用側に寄せる。
+
+## 0. 2026-07-29時点の扱い
+
+このバックログは完了判定に使用しない。C# PoC、Django保存、canonical schema、タグ生成、管理UI、viewer/RAG preview、辞書、手動補正、Windows agent分離まで進んでいるためである。
+
+現行の未完了範囲は、創屋本番側の保存API・属性マスタ・RAG更新契約の確定、幾何公差/溶接記号/PRFX等のWindows実値確認、および客先横断での抽出率検証である。
 
 ## 1. このバックログの使い方
 

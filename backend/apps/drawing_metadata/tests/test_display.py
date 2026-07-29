@@ -948,11 +948,6 @@ def test_product_unit_and_part_tag_pages_render_target_payloads(client, sample_r
 
 @pytest.mark.django_db
 def test_tag_automation_settings_page_renders_system_setting_link(client, settings):
-    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
-    settings.GEMINI_API_KEY = "test-key"
-    settings.GEMINI_MODEL = "gemini-flash-latest"
-    settings.GEMINI_FALLBACK_MODELS = ["gemini-3.1-flash-lite", "gemini-3.5-flash"]
-    settings.GEMINI_TEMPERATURE = 0.0
     settings.DRAWING_METADATA_TAG_RULE_VERSION = "1.0.0"
 
     response = client.get("/internal/drawing-metadata/system/tag-automation/")
@@ -961,10 +956,9 @@ def test_tag_automation_settings_page_renders_system_setting_link(client, settin
     content = response.content.decode("utf-8")
     assert "システム設定" in content
     assert "タグ自動取得設定" in content
-    assert "Gemini APIキー" in content
-    assert "設定済み" in content
-    assert "温度" in content
-    assert "0.0" in content
+    assert "外部AI" in content
+    assert "使用しない" in content
+    assert "Gemini" not in content
     assert "製品・装置・ユニット" in content
     assert "図面管理 &gt; タグ候補レビュー" in content
     assert "管理項目" in content

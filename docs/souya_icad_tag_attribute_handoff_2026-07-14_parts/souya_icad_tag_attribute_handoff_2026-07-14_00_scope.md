@@ -1,5 +1,8 @@
 # 創屋向け ICADタグ・属性連携項目表 - 前提と読み方
 
+> **文書状態: handoff snapshot。**
+> 現行仕様は [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を正とする。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 # 創屋向け ICADタグ・属性連携項目表

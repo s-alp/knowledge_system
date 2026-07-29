@@ -53,9 +53,9 @@ async function assertBusinessDetailSignals(expectedTitle, tagScreenshotName) {
 async function verifyDrawingManagementEntry() {
   await page.locator(".sidebar-link", { hasText: "図面管理" }).click();
   await page.getByRole("heading", { name: "図面管理" }).waitFor();
-  await page.getByRole("heading", { name: "ICADからタグ・属性を取得" }).waitFor();
-  await page.getByLabel("ICAD原本パス").waitFor();
-  const proceedButton = page.getByRole("button", { name: "タグ・属性取得へ進む" });
+  await page.getByRole("heading", { name: "ICADファイルからタグ・属性を取得" }).waitFor();
+  await page.getByLabel("ICADファイルのパスを指定（推奨）").waitFor();
+  const proceedButton = page.getByRole("button", { name: "このICADを登録して抽出画面へ" });
   await proceedButton.waitFor();
   if (!(await proceedButton.isDisabled())) {
     throw new Error("ICAD未選択の状態でタグ・属性取得へ進むボタンが有効になっています。");
@@ -176,7 +176,7 @@ try {
   await page.getByRole("button", { name: "閉じる" }).click();
   await page.getByRole("button", { name: "編集" }).click();
   await page.getByRole("dialog", { name: "登録情報を編集" }).waitFor();
-  await page.getByLabel("部品番号").waitFor();
+  await page.getByLabel("図面番号").waitFor();
   await page.screenshot({ path: `${outputDirectory}/part-edit.png`, fullPage: true });
   await page.getByRole("button", { name: "閉じる" }).click();
 
@@ -197,7 +197,7 @@ try {
   await page.screenshot({ path: `${outputDirectory}/system-settings.png`, fullPage: true });
   await page.locator(".settings-management-link", { hasText: "ICAD抽出管理" }).click();
   await page.getByRole("heading", { name: "ICAD抽出管理" }).waitFor();
-  await page.getByRole("columnheader", { name: "ICADファイル" }).waitFor();
+  await page.getByRole("columnheader", { name: "ICADファイル", exact: true }).waitFor();
   await page.getByRole("columnheader", { name: "snapshot" }).waitFor();
   if (page.url().includes("/drawing-metadata/")) {
     throw new Error(`ICAD抽出管理から旧Django画面へ遷移しています: ${page.url()}`);

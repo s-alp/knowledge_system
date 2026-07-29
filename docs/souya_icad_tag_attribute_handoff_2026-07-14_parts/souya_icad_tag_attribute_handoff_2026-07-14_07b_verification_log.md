@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 7B. 検証ログ
 
+> **文書状態: 検証snapshot。**
+> 数値と成果物パスは検証時点を固定した記録であり、現在の実装件数を示すものではない。
+> 現行仕様は [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [7章目次へ戻る](souya_icad_tag_attribute_handoff_2026-07-14_07_api_fixture_contract.md)
 
 2026-07-15 に 2D の全ビュー、レイヤー、印刷枠内外判定を確認するため、詳細画面へ `ビュー別取得状況` と `レイヤー別取得状況` を追加した。文字、寸法、図形をまとめて、ビュー別/レイヤー別に何件取れているか、印刷枠内/外/不明が何件あるかを表示する。

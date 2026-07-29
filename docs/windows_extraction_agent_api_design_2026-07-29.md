@@ -24,6 +24,7 @@
 | C#が返す抽出JSON | 本資料 |
 | lease、heartbeat、失敗処理 | 本資料 |
 | Django正規化後の属性・タグ | `docs/extraction_result_schema_2026-05-28.md`のDjango保存スキーマ |
+| 抽出からタグ付与・UI・運用までの全体 | `docs/tag_extraction_and_assignment_current_spec_2026-07-29.md` |
 | C# / Djangoの設計理由 | `docs/icad_csharp_python_architecture_2026-05-27.md` |
 
 旧資料と本資料が矛盾する場合は、本資料と現行コードを優先する。

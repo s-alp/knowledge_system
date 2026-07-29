@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 10. 共有39件の最終受け渡し状況
 
+> **文書状態: 共有39件の検証snapshot。**
+> 本文の「最終」は2026-07-15～17のhandoff範囲に対する表現である。2026-07-29の名称・図面番号改善と
+> 本体／外部参照パーツ分離は [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 ## 10. 共有39件の最終受け渡し状況
@@ -42,7 +46,9 @@
 | `GET /api/v1/drawing-metadata/settings/tag-automation` | AI、抽出対象、採用ルールの管理設定を取得 |
 | `PUT /api/v1/drawing-metadata/settings/tag-automation` | ローカル管理設定を更新 |
 
-Gemini APIキーは設定値そのものを返さず、設定済みかどうかだけを返す。本番DB向けendpointは実装せず、創屋へはfixtureとAPI契約を渡す。
+Geminiを含む外部AI APIは使用せず、APIキー設定も設けない。本番DB向けendpointは実装せず、創屋へはfixtureとAPI契約を渡す。
+
+現行の対象別payloadは、属性候補数: 図面158、部品363、製品・装置・ユニット43、プロジェクト43（合計764）、対象別タグ367件である。
 
 ### 10.4 2D再抽出の状態と理由
 

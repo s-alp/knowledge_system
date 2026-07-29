@@ -112,13 +112,12 @@ REQUIREMENTS: list[dict[str, Any]] = [
         ],
     },
     {
-        "id": "gemini_low_temperature_guarded",
-        "description": "Geminiを低温度の曖昧分類補助に限定し、実API評価と誤採用防止を監査する。",
-        "gates": ["llm_title_block_guardrails", "llm_probe_evaluation"],
+        "id": "external_ai_disabled",
+        "description": "名称・図枠分類はICAD原文、座標、明示ルール、辞書だけで行い、外部AIを利用しない。",
+        "gates": ["source_text_guardrails", "stale_handoff_doc_search"],
         "docs": [
-            (OPERATIONS_HANDOFF, "温度は `0.0`"),
-            (OPERATIONS_HANDOFF, "CADに存在しない値の生成"),
-            (TASKLIST, "Geminiの追加採用値0件"),
+            (OPERATIONS_HANDOFF, "外部AIは使用しない"),
+            (TASKLIST, "Gemini実行経路を削除"),
         ],
     },
     {

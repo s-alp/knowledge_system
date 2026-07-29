@@ -1,7 +1,9 @@
 # STEP/DXFタグ取得・自動付与の抽出元整理
 
 > **最新版はこちら**: [`cad_tag_extraction_sources_for_souya_2026-07-28.md`](cad_tag_extraction_sources_for_souya_2026-07-28.md)
+> **文書状態: 廃止済みの履歴資料。**
 > 本ファイルはSTEP/DXF経路に特化した版です。ICAD正本からの抽出、実データ具体例、ソース切り出し範囲、ICADライセンス論点を含む統合版は上記を参照してください。
+> 現行コード全体は [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照してください。
 
 - 作成日: 2026-07-23
 - 目的: 創屋側でSTEP/DXFデータから何を抽出すれば、ナレッジシステム側のタグ・属性自動付与へつながるかを具体化する。

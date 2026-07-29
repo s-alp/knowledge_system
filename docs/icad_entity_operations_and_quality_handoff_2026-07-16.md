@@ -1,8 +1,13 @@
 # ICAD登録情報・タグ品質・創屋移植連携仕様
 
 - 作成日: 2026-07-16
+- 最終更新日: 2026-07-29
+- 文書状態: **現行補足資料**
+- 全体正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
 - 対象: 共有済みICAD 39件、統合2D・3Dビューワー、Django連携API、C#抽出器
 - 境界: 創屋本番DBへの登録、変更、削除は一切行わない。本資料の保存・編集・紐づけはローカル検証DBだけを対象とする。
+
+2026-07-29に、図面名称・図面番号の抽出改善と、アセンブリ本体／外部参照パーツの属性分離を追加した。外部パーツの名称・材質・付加情報は検索・構成証跡として保持するが、本体の正式名称・正式材質へ昇格させない。
 
 ## 1. 登録単位と分類
 
@@ -37,7 +42,7 @@
 
 編集値と紐づけIDは `manual_overrides_json` に保存し、抽出スナップショットのraw証拠を上書きしない。変更履歴には抽出更新と手動更新を分けて残す。
 
-ローカルDBにはブラウザ検証アップロード、重複アップロード、途中検証用 `cad_data` 登録も残るため、利用者向け一覧、図面候補、製品・装置・ユニット、部品、引継ぎ集計は `DRAWING_METADATA_HANDOFF_MANIFEST` の固定manifestで共有39件へスコープする。2026-07-17時点の実DBは全登録79件、固定manifest対象39件、対象外40件。対象39件は2D/3D snapshotあり39件、未抽出0件である。対象外40件は検証登録として集計対象外にし、`scripts/audit_registered_drawings.py` で内訳を確認する。
+ローカルDBにはブラウザ検証アップロード、重複アップロード、途中検証用 `cad_data` 登録も残るため、利用者向け一覧、図面候補、製品・装置・ユニット、部品、引継ぎ集計は `DRAWING_METADATA_HANDOFF_MANIFEST` の固定manifestで共有39件へスコープする。2026-07-29時点の実DBは全登録54件、固定manifest対象39件、対象外15件。対象39件は2D/3D snapshotあり39件、未抽出0件である。対象外15件は検証登録として集計対象外にし、`scripts/audit_registered_drawings.py` で内訳を確認する。
 
 ## 4. 取得根拠
 
@@ -57,7 +62,7 @@
 - 表面粗さ、データム、幾何公差、穴・長穴、ハッチング等は属性・raw証拠として保持し、汎用タグにはしない。
 - `改訂情報あり` のような存在フラグはタグにしない。訂正内容は属性・変更根拠として保持する。
 - 未解決材質コードは通常材質へ混ぜず、検索・分類タグにもせず、要確認属性とRAG投入時の `reviewFlags` として分離する。
-- 2026-07-17 DB監査: snapshot 84件、タグ118件、禁止タグ0件、取得元欠落0件、根拠欠落0件、信頼度欠落0件、採用理由欠落0件。
+- 2026-07-29 DB監査: snapshot 102件、タグ312件、禁止タグ0件、取得元欠落0件、根拠欠落0件、信頼度欠落0件、採用理由欠落0件。
 
 ## 6. 質量・重量
 
@@ -67,33 +72,13 @@
 - `scripts/audit_mass_weight_format.py` で、DB内の図枠重量・文字列重量が `0.49 kg` 形式に正規化済みか監査する。
 - 共有39件中38件は質量取得あり。`DFR-CM1-AA0305300011.icd` は3D質量を取得できず、値を捏造せず `massAvailable=false` とする。
 
-## 7. Gemini実API評価
+## 7. 外部AI不使用方針
 
-Geminiは低温度の図枠候補分類補助だけに使う。CADに存在しない値の生成、ルール値の上書き、値なし候補の採用は禁止する。値がnull/空、ラベルのみ、文字化け、値として使えない候補はGeminiへ送らず、warningと検証レポートに除外件数を残す。
+2026-07-29以降、Geminiを含む外部AIは使用しない。抽出ジョブ、設定、API、画面、創屋向け引継ぎ物から実行経路とAPIキー設定を削除した。
 
-2026-07-17の実APIプローブ `output/live_extracts/title_block_llm_probe_2026-07-14/gemini_probe_current_normalization_2026-07-17.json` を `scripts/evaluate_title_block_llm_probe.py` で再評価した。5ファイル、現行正規化後にGeminiへ送る正例3件で、Gemini APIエラーは0件だった。温度は `0.0`、用途は `title_block_candidate_field_classification_only` として記録した。プロンプトと事前フィルタで以下を固定している。
+名称・図枠分類は、ICADから取得した原文、印刷枠内外、ビュー、レイヤー、文字座標、明示ラベル、タグ辞書だけで判定する。曖昧な候補を推測で確定せず、raw証跡と候補として残す。`品名 SUS304` のように欄名が不適切でも値が正式材質規格に一致する場合は、外部AIへ送らず材質辞書で振り分ける。
 
-- 値がnull/空なら `field=null`
-- 参考図番・元図を現在図番にしない
-- 材質等級を含まない形鋼・寸法だけを材質にしない
-- 値なし/ラベルのみ候補はAPI送信前に除外する
-
-再評価結果:
-
-| 指標 | 結果 |
-| --- | ---: |
-| classification precision | 1.0000 |
-| classification positive recall | 1.0000 |
-| classification false positive | 0 |
-| classification wrong field | 0 |
-| classification missed positive | 0 |
-| guardrail false positive | 0 |
-| guardrail wrong field | 0 |
-| accepted uplift | 0 |
-| gemini error | 0 |
-| accepted uplift | 0 |
-
-誤採用防止は確認できたが、ルール抽出を上回る新規採用値は0件である。したがってGeminiは任意補助のままとし、品質向上効果があるとは断定しない。検証は `scripts/probe_title_block_llm.py` と `scripts/evaluate_title_block_llm_probe.py` で再実行でき、Gemini APIエラー、guardrail false positive、wrong field が出た場合は評価コマンドを失敗させる。さらに `scripts/audit_llm_title_block_guardrails.py` で共有39件のDB snapshotを監査し、Gemini分類が印刷枠外候補を属性採用していないことを確認する。
+創屋側でも外部AI APIやAPIキーは不要であり、追加・利用しない。
 
 ## 8. 共有39件監査
 

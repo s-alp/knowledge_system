@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 2. こちらが提供するデータ単位
 
+> **文書状態: handoff snapshot。**
+> 現行のraw/canonical/tag/manual override契約は
+> [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を正とする。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 ## 2. こちらが提供するデータ単位

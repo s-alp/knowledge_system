@@ -17,7 +17,7 @@ from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.normalization import normalize_identity_name_value
 
 
-SCHEMA_VERSION = "icad_knowledge_entities.v3"
+SCHEMA_VERSION = "icad_knowledge_entities.v4"
 TARGET_PRODUCT = "product"
 TARGET_PART = "part"
 
@@ -185,6 +185,79 @@ def _part_rows(snapshot: DrawingMetadataSnapshot) -> list[dict]:
         )
         rows.append(row)
     return rows
+
+
+def _canonical_part_paths(canonical: dict) -> list[tuple[str, ...]]:
+    """軽量一覧用のcanonical要約から、出現順と重複を保ったパーツ階層パスを復元する。
+
+    一覧APIは巨大なraw抽出JSONを読まないため、正規化済みの`part_tree_paths`を使う。
+    階層区切りを復元できない値は深さ0として残し、直下件数へ推測加算しない。
+    """
+
+    paths: list[tuple[str, ...]] = []
+    for raw_path in _as_list(canonical.get("part_tree_paths")):
+        if isinstance(raw_path, (list, tuple)):
+            path = tuple(str(item).strip() for item in raw_path if str(item).strip())
+        else:
+            path = tuple(segment.strip() for segment in str(raw_path).split(" > ") if segment.strip())
+        if path:
+            paths.append(path)
+    return paths
+
+
+def _part_hierarchy_counts(parts: list[dict], canonical: dict) -> dict:
+    """1次ツリー、直下内訳、全階層、階層別のパーツ出現数を分離して返す。
+
+    raw階層がある詳細APIでは`depth`と`child_count`を使う。軽量一覧ではcanonicalの
+    階層パスから同じ集計を復元する。階層自体が無い場合は全外部参照数などで代用せず、
+    件数を`None`にして「不明」と「0件」を区別する。
+    """
+
+    if parts:
+        depth_counts = Counter(
+            part.get("_depth")
+            for part in parts
+            if isinstance(part.get("_depth"), int) and part["_depth"] > 0
+        )
+        direct_parts = [part for part in parts if part.get("_depth") == 1]
+        child_assembly_count = sum(part.get("_child_count", 0) > 0 for part in direct_parts)
+        child_part_count = len(direct_parts) - child_assembly_count
+    else:
+        paths = _canonical_part_paths(canonical)
+        if not paths:
+            return {
+                "directPartCount": None,
+                "childAssemblyCount": None,
+                "childPartCount": None,
+                "descendantPartCount": None,
+                "partCountByDepth": None,
+            }
+        path_counts = Counter(paths)
+        depth_counts = Counter(len(path) - 1 for path in paths if len(path) > 1)
+        direct_path_counts = {
+            path: occurrence_count
+            for path, occurrence_count in path_counts.items()
+            if len(path) == 2
+        }
+        child_assembly_count = sum(
+            occurrence_count
+            for path, occurrence_count in direct_path_counts.items()
+            if any(len(candidate) > len(path) and candidate[: len(path)] == path for candidate in paths)
+        )
+        child_part_count = sum(direct_path_counts.values()) - child_assembly_count
+
+    part_count_by_depth = {
+        str(depth): depth_counts[depth]
+        for depth in sorted(depth_counts)
+    }
+    direct_part_count = depth_counts.get(1, 0)
+    return {
+        "directPartCount": direct_part_count,
+        "childAssemblyCount": child_assembly_count,
+        "childPartCount": child_part_count,
+        "descendantPartCount": sum(depth_counts.values()),
+        "partCountByDepth": part_count_by_depth,
+    }
 
 
 def _manual_classification(snapshot: DrawingMetadataSnapshot) -> tuple[str, str] | None:
@@ -720,16 +793,9 @@ def _build_record(
         )
         materials = _material_values(internal_parts)
         external_materials = _material_values(external_parts)
-        # 部品数は BOM 相当の外部参照パーツのみを数える。内部パーツ(モデリング要素)は
-        # 部品数に含めず、内部パーツ使用数などの参考属性としてだけ持つ。
+        # 外部参照数と内部パーツ使用数は構成の参考属性として別々に保持する。
+        # 画面の「部品数」はここで混ぜず、1次ツリー集計から後段で設定する。
         component_count = len(internal_parts)
-        child_assembly_count = sum(
-            part.get("_child_count", 0) > 0 for part in external_parts
-        )
-        child_part_count = sum(
-            part.get("_child_count", 0) == 0 for part in external_parts
-        )
-        descendant_part_count = external_count
     else:
         unique_part_names = _canonical_list_values(
             canonical,
@@ -751,10 +817,12 @@ def _build_record(
         extended_info_count = 1 if _has_value(canonical.get("internal_part_ex_info_fields")) else 0
         external_extended_info_count = 1 if _has_value(canonical.get("external_part_ex_info_fields")) else 0
         component_count = len(_as_list(canonical.get("internal_part_tree_paths"))) or len(unique_part_names)
-        # raw_extract が無い場合は子構造を判定できないため、外部参照数をそのまま部品数とする。
-        child_assembly_count = 0
-        child_part_count = external_count
-        descendant_part_count = external_count
+    hierarchy_counts = _part_hierarchy_counts(parts, canonical)
+    direct_part_count = hierarchy_counts["directPartCount"]
+    child_assembly_count = hierarchy_counts["childAssemblyCount"]
+    child_part_count = hierarchy_counts["childPartCount"]
+    descendant_part_count = hierarchy_counts["descendantPartCount"]
+    part_count_by_depth = hierarchy_counts["partCountByDepth"]
     overrides = snapshot.manual_overrides_json or {}
     business_fields, business_field_sources = _business_fields(
         target_key=classification["targetKey"],
@@ -785,6 +853,9 @@ def _build_record(
     _append_attribute(attributes, key="component_occurrence_count", label="本体パーツ使用数", value=component_count, source="3d_internal_part_tree", confidence="high", evidence="rawExtract.parts[not external] / canonicalAttributes.internal_part_tree_paths")
     _append_attribute(attributes, key="unique_component_name_count", label="本体パーツ名称数", value=len(unique_part_names), source="3d_internal_part_tree", confidence="medium", evidence="rawExtract.parts[not external].name / canonicalAttributes.internal_part_names")
     _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external / canonicalAttributes.ref_model_names")
+    _append_attribute(attributes, key="direct_part_count", label="1次ツリーパーツ数", value=direct_part_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].depth / canonicalAttributes.part_tree_paths")
+    _append_attribute(attributes, key="descendant_part_count", label="全階層パーツ数", value=descendant_part_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].depth / canonicalAttributes.part_tree_paths")
+    _append_attribute(attributes, key="part_count_by_depth", label="階層別パーツ数", value=part_count_by_depth, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].depth / canonicalAttributes.part_tree_paths")
     _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded / canonicalAttributes.unresolved_part_exists")
     _append_attribute(attributes, key="part_extended_info_count", label="本体パーツ付加情報あり", value=extended_info_count or None, source="3d_internal_part_extended_info", confidence="high", evidence="rawExtract.parts[not external].ex_info_fields / canonicalAttributes.internal_part_ex_info_fields")
     _append_attribute(attributes, key="materials", label="本体材質", value=materials, source="3d_internal_part_material", confidence="high", evidence="rawExtract.parts[not external].materials / canonicalAttributes.material_keywords")
@@ -792,8 +863,11 @@ def _build_record(
     _append_attribute(attributes, key="external_part_materials", label="外部パーツ材質", value=external_materials, source="3d_external_part_material", confidence="high", evidence="rawExtract.parts[external].materials / canonicalAttributes.external_part_material_keywords")
     _append_attribute(attributes, key="external_part_extended_info_count", label="外部パーツ付加情報あり", value=external_extended_info_count or None, source="3d_external_part_extended_info", confidence="high", evidence="rawExtract.parts[external].ex_info_fields / canonicalAttributes.external_part_ex_info_fields")
     _append_attribute(attributes, key="material_2d", label="材質 (2D図枠)", value=canonical.get("material"), source="2d_title_block", confidence="medium", evidence="canonicalAttributes.title_block_fields.material")
-    _append_attribute(attributes, key="part_name_candidates", label="本体部品名候補", value=part_name_candidates, source="internal_identity", confidence="medium", evidence="canonicalAttributes.part_name_candidates")
-    _append_attribute(attributes, key="external_part_name_candidates", label="外部パーツ部品名候補", value=external_part_name_candidates, source="external_identity", confidence="medium", evidence="canonicalAttributes.external_part_name_candidates")
+    # 製品・装置・ユニット詳細では構成部品の実名を別属性で表示する。
+    # 部品名「候補」は部品詳細だけの概念であり、アセンブリ本体の名称候補へ混ぜない。
+    if classification["targetKey"] == TARGET_PART:
+        _append_attribute(attributes, key="part_name_candidates", label="本体部品名候補", value=part_name_candidates, source="internal_identity", confidence="medium", evidence="canonicalAttributes.part_name_candidates")
+        _append_attribute(attributes, key="external_part_name_candidates", label="外部パーツ部品名候補", value=external_part_name_candidates, source="external_identity", confidence="medium", evidence="canonicalAttributes.external_part_name_candidates")
     mass_kg, mass_evidence = _mass_in_kg(canonical)
     for key, label in (
         ("customer_name", "客先"),
@@ -876,9 +950,11 @@ def _build_record(
         "depth": 0,
         "parentEntityId": None,
         "childEntityIds": [],
+        "directPartCount": direct_part_count,
         "childAssemblyCount": child_assembly_count,
         "childPartCount": child_part_count,
         "descendantPartCount": descendant_part_count,
+        "partCountByDepth": part_count_by_depth,
         "drawingId": str(drawing.id),
         "drawingFilename": drawing.filename,
         "sourcePath": drawing.source_path,

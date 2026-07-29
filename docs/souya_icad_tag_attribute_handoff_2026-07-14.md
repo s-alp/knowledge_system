@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表
 
+> **文書状態: 2026-07-14～17のhandoff snapshot。**
+> 当時の実測値、fixture、画面確認、創屋確認事項を再現する資料である。
+> 現行コードの仕様は [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を正とする。
+
 このファイルは入口です。ファイル長制限で開けなくなることを避けるため、詳細は章ごとに分冊しています。
 
 ## 分冊一覧

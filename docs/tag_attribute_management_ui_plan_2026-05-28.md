@@ -1,10 +1,24 @@
 # タグ・属性管理UI計画
 
+> **文書状態: 履歴資料（初期UI計画）**
+> 現行画面はVite統合フロントの`IcadExtractionReviewPage`、`TagAutomationSettingsPage`、
+> `IcadEntityPages`を正とする。現在の画面/APIは
+> [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 - 作成日: 2026-05-28
 - 目的: 図面管理におけるタグ・属性の登録、確認、補正、再抽出の UI を実装可能な粒度で整理する。
 - 前提:
   - 本体ナレッジシステムのソースは無い。
   - `2D_3D_CAD_VIEWR` の図面詳細 UI を参考に、後で本体へ組み込みやすい形で設計する。
+
+## 0. 2026-07-29 現行UI
+
+- 利用者向け統合フロントは通常`http://127.0.0.1:5173/`。
+- 抽出管理、2D/3D再抽出、候補タグ、手動補正、レビューを実装済み。
+- 製品・装置・ユニット／部品の一覧・詳細・編集・図面紐づけ・根拠表示を実装済み。
+- タグ辞書の一覧、追加、編集、削除を「システム設定 > タグ辞書管理」へ実装済み。
+- Django HTMLは内部確認用`/internal/drawing-metadata/`へ退避した。
+- 本文の`/drawing-metadata/`は初期PoCルートの記録であり、現在の通常導線では使用しない。
 
 ## 1. この UI の位置づけ
 

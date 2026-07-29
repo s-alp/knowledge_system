@@ -23,6 +23,9 @@ namespace IcadExtraction.Runner
         {
             try
             {
+                // DjangoやPowerShellへ日本語の例外位置・図面診断を渡すため、CLI入出力をUTF-8へ固定する。
+                Console.InputEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+                Console.OutputEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
                 // Mainでは引数解析と終了コード変換だけを行い、各コマンドの実処理は専用メソッドへ分ける。
                 var command = CliArgumentsParser.Parse(args);
                 return ExecuteCommand(command);

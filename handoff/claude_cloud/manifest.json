@@ -1,12 +1,12 @@
 {
   "schemaVersion": "claude_cloud_handoff_manifest.v1",
-  "generatedAt": "2026-07-17T09:39:58.414130+00:00",
+  "generatedAt": "2026-07-29T10:34:51.406739+00:00",
   "sourceCommitNote": "Run git rev-parse HEAD in the receiving repo for the exact commit.",
   "seedCounts": {
-    "drawing_metadata_registereddrawing": 42,
-    "drawing_metadata_drawingmetadataextractionjob": 84,
-    "drawing_metadata_drawingmetadatasnapshot": 84,
-    "drawing_metadata_drawingmetadataauditlog": 160
+    "drawing_metadata_registereddrawing": 52,
+    "drawing_metadata_drawingmetadataextractionjob": 102,
+    "drawing_metadata_drawingmetadatasnapshot": 102,
+    "drawing_metadata_drawingmetadataauditlog": 130
   },
   "copiedData": [
     {
@@ -27,32 +27,32 @@
     {
       "name": "icad_shared_sample_completion_2026-07-15.json",
       "copied": true,
-      "bytes": 51168
+      "bytes": 149730
     },
     {
       "name": "icad_2d_view_layer_print_frame_audit_current.json",
       "copied": true,
-      "bytes": 10574
+      "bytes": 10956
     },
     {
       "name": "icad_3d_structure_material_mass_audit_current.json",
       "copied": true,
-      "bytes": 13070
+      "bytes": 13569
     },
     {
       "name": "icad_goal_completion_coverage_audit_current.json",
       "copied": true,
-      "bytes": 13047
+      "bytes": 12851
     },
     {
       "name": "icad_handoff_numeric_consistency_audit_current.json",
       "copied": true,
-      "bytes": 590
+      "bytes": 591
     },
     {
       "name": "icad_delivery_readiness_full_latest.json",
       "copied": true,
-      "bytes": 22034
+      "bytes": 39790
     }
   ],
   "cloudLimitations": [

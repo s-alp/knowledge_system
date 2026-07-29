@@ -244,9 +244,11 @@ export interface KnowledgeEntityRecord {
   depth: number;
   parentEntityId: string | null;
   childEntityIds: string[];
-  childAssemblyCount: number;
-  childPartCount: number;
-  descendantPartCount: number;
+  directPartCount: number | null;
+  childAssemblyCount: number | null;
+  childPartCount: number | null;
+  descendantPartCount: number | null;
+  partCountByDepth: Record<string, number> | null;
   drawingId: string;
   drawingFilename: string;
   sourcePath: string;

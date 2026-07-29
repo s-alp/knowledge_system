@@ -1,8 +1,18 @@
 # ICADタグ・属性 設計計画書
 
+> **文書状態: 履歴資料（実装前の設計計画）**
+> 現行コード準拠の仕様は [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)、
+> 文書の読み分けは [`tag_extraction_documentation_index_2026-07-29.md`](tag_extraction_documentation_index_2026-07-29.md) を参照する。
+
 - 作成日: 2026-05-26
 - 対象: ナレッジシステムの `図面管理`、図面詳細 viewer、RAG 検索
 - 前提: タグ・属性は `図面管理` を正本とし、viewer と RAG はそこから参照・利用する
+
+## 0. 現在の到達点
+
+本計画で定義した`raw_extract`、`canonical_attributes`、`derived_tags`、`manual_overrides`の4層はDjangoへ実装済みである。C# 2D/3D抽出、mode別snapshot、2D/3D照合、タグ辞書DB、手動補正、レビュー、viewer/RAG payload、Windows agent APIも実装済みである。
+
+未完了なのは創屋本番DB/APIへの保存接続、属性マスタIDの解決、製品・部品・プロジェクトのタグ保存口確定、およびWindows実機でしか判断できない抽出語彙の継続確認である。本文のPhase表は当初計画として残し、現在の進捗表には使用しない。
 
 ## 1. 参照ドキュメント一覧
 

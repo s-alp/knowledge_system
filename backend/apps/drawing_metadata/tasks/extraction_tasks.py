@@ -20,14 +20,6 @@ from apps.drawing_metadata.models import (
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
 from apps.drawing_metadata.services.extraction_runner import ExtractionRunnerError, run_extractor, run_extractor_batch
 from apps.drawing_metadata.services.failure_diagnostics import build_job_failure_diagnostics, build_source_preflight
-from apps.drawing_metadata.services.llm_title_block_classifier import (
-    GeminiConfigurationError,
-    GeminiResponseError,
-    apply_title_block_classifications,
-    classify_title_block_candidates,
-    filter_classifiable_title_block_candidates_with_stats,
-    remap_title_block_classification_indexes,
-)
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
 from apps.drawing_metadata.services.source_formats import (
@@ -154,55 +146,6 @@ def claim_next_jobs(
     return jobs
 
 
-def _classify_2d_title_block_candidates(canonical_attributes: dict, warnings: list[dict]) -> None:
-    provider = settings.DRAWING_METADATA_LLM_PROVIDER.lower()
-    if provider != "gemini" or not settings.GEMINI_API_KEY:
-        return
-
-    candidates = canonical_attributes.get("title_block_candidates") or []
-    if not candidates:
-        return
-
-    classifiable_candidates, original_indexes, skip_stats = filter_classifiable_title_block_candidates_with_stats(candidates)
-    replacement_count = int(skip_stats.get("replacement_character") or 0)
-    if replacement_count:
-        warnings.append(
-            {
-                "code": "title_block_llm_skipped_replacement_characters",
-                "message": f"Replacement-character title-block candidates were skipped before Gemini classification: {replacement_count}",
-                "source": "gemini_title_block_classifier",
-                "count": replacement_count,
-            }
-        )
-    unusable_count = int(skip_stats.get("unusable_value") or 0)
-    if unusable_count:
-        warnings.append(
-            {
-                "code": "title_block_llm_skipped_unusable_values",
-                "message": f"Value-less or unusable title-block candidates were skipped before Gemini classification: {unusable_count}",
-                "source": "gemini_title_block_classifier",
-                "count": unusable_count,
-            }
-        )
-    if not classifiable_candidates:
-        return
-
-    try:
-        classifications = classify_title_block_candidates(classifiable_candidates)
-    except (GeminiConfigurationError, GeminiResponseError) as exc:
-        warnings.append(
-            {
-                "code": "title_block_llm_classification_failed",
-                "message": str(exc),
-                "source": "gemini_title_block_classifier",
-            }
-        )
-        return
-
-    classifications = remap_title_block_classification_indexes(classifications, original_indexes)
-    apply_title_block_classifications(canonical_attributes, classifications)
-
-
 def _prepare_job_for_processing(job: DrawingMetadataExtractionJob, *, batch_size: int = 1) -> dict:
     _refresh_processing_lease(job, batch_size=batch_size)
     diagnostics = dict(job.diagnostics_json or {})
@@ -225,8 +168,6 @@ def _complete_job_from_payload(
 
     warnings = list(payload.get("warnings", []))
     canonical_attributes = normalize_raw_extract(payload)
-    if job.extraction_mode == EXTRACTION_MODE_2D:
-        _classify_2d_title_block_candidates(canonical_attributes, warnings)
     derived_tags = build_derived_tags(canonical_attributes)
     raw_extract = dict(payload.get("raw_extract", {}))
     if payload.get("source_file"):

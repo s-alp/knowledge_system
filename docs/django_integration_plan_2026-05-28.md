@@ -1,11 +1,29 @@
 # Django統合計画
 
+> **文書状態: 履歴資料（初期統合計画）**
+> 現行実装は [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を正とする。
+> 本文中の「推奨構成」「最小API」「実装前確認」は設計当時の記録であり、現在のURLや実装済み範囲を示すものではない。
+
 - 作成日: 2026-05-28
 - 目的: ICAD 2D/3D 抽出、タグ・属性自動付与、管理画面を、Django ベースのナレッジシステムへどう組み込むかを具体化する。
 - 前提:
   - ナレッジシステム本体のソースコードは共有されていない。
   - 実際の本体へ後で移植できるよう、Django モジュールとして独立性を高く設計する。
   - `2D_3D_CAD_VIEWR` は UI / viewer 導線の参照元として扱う。
+
+## 0. 2026-07-29 現行実装との差分
+
+| 初期計画時 | 現在 |
+|---|---|
+| app構成案 | `backend/apps/drawing_metadata`へ実装済み |
+| C#をDjango workerから直接実行 | Docker/Linux WebとWindows ICAD抽出agentをHTTPで分離可能 |
+| `/api/drawing-metadata/...`案 | `/api/v1/drawing-metadata/...`へ実装 |
+| `/drawing-metadata/`管理画面 | Django HTMLは`/internal/drawing-metadata/`、利用者画面はVite `5173` |
+| タグ辞書メンテUIは将来 | `TagDictionaryEntry`、REST API、Vite GUI、`/admin`へ実装済み |
+| 手動補正の保存案 | キー単位マージ、タグ追加・削除、再抽出後の再適用まで実装済み |
+| RAG接続案 | `drawing_metadata_rag_payload.v1`のpreview APIまで実装。本番投入先は創屋確認待ち |
+
+現行モデルは`RegisteredDrawing`、`DrawingMetadataExtractionJob`、`DrawingMetadataAgentHeartbeat`、`DrawingMetadataSnapshot`、`DrawingMetadataAuditLog`、`TagDictionaryEntry`である。主要APIの正確な一覧は現行仕様書12章、Windows agent APIは`windows_extraction_agent_api_design_2026-07-29.md`を参照する。
 
 ## 1. 今回の再確認結果
 

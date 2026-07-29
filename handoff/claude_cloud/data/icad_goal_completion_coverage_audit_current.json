@@ -3,7 +3,7 @@
   "requirementCount": 14,
   "coveredRequirementCount": 14,
   "missingRequirementCount": 0,
-  "gateCountInReadinessAudit": 23,
+  "gateCountInReadinessAudit": 22,
   "gatePassed": true,
   "requirements": [
     {
@@ -211,25 +211,21 @@
       "passed": true
     },
     {
-      "id": "gemini_low_temperature_guarded",
-      "description": "Geminiを低温度の曖昧分類補助に限定し、実API評価と誤採用防止を監査する。",
+      "id": "external_ai_disabled",
+      "description": "名称・図枠分類はICAD原文、座標、明示ルール、辞書だけで行い、外部AIを利用しない。",
       "requiredGates": [
-        "llm_title_block_guardrails",
-        "llm_probe_evaluation"
+        "source_text_guardrails",
+        "stale_handoff_doc_search"
       ],
       "missingGates": [],
       "requiredDocTokens": [
         {
           "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
-          "token": "温度は `0.0`"
-        },
-        {
-          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\icad_entity_operations_and_quality_handoff_2026-07-16.md",
-          "token": "CADに存在しない値の生成"
+          "token": "外部AIは使用しない"
         },
         {
           "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tasklist.md",
-          "token": "Geminiの追加採用値0件"
+          "token": "Gemini実行経路を削除"
         }
       ],
       "missingDocTokens": [],

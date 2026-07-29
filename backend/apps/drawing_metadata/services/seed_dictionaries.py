@@ -121,6 +121,7 @@ PART_NAME_KEYWORDS = {
     "POLE": ["POLE", "ポール"],
     "FENCE": ["FENCE", "フェンス"],
     "JIG": ["JIG", "ジグ", "治具"],
+    "ケーブルダクト": ["ケーブルダクト", "CABLE DUCT", "CABLE-DUCT"],
 }
 
 MATERIAL_CLASSIFICATION_RULES = {

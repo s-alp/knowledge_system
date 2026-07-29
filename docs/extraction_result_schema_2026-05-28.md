@@ -1,11 +1,15 @@
-# 抽出結果スキーマ定義案
+# 抽出結果スキーマ（現行保存・正規化契約）
 
 - 作成日: 2026-05-28
+- 最終更新日: 2026-07-29
+- 文書状態: **Django保存・canonical・タグ・手動補正の正本**
 - 目的: C# 抽出コアの出力 JSON と、Django 側で保存するタグ・属性データの形を固定する。
 
 > **現行契約について:** Windows agentの起動設定、HTTP API、C#入出力JSONの正本は
 > `docs/windows_extraction_agent_api_design_2026-07-29.md` とする。
 > 本資料はDjango保存スキーマ、正規化属性、派生タグ、手動補正の詳細資料として使用する。
+> 全体の処理順序、タグ一覧、UI、運用コマンドは
+> [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
 
 ## 1. スキーマの考え方
 
@@ -388,18 +392,39 @@
 - `top_part_comment` は、図番だけ、変更説明、参照説明、私用領域文字、置換文字を除外した場合だけ名称候補にできる。
 - 3D子部品の `part_names` は構成証跡であり、図面全体やユニット全体の名称へ昇格させない。
 - ICAD文字の印刷範囲は、枠内外判定が1件以上ある場合だけ `inside=true` を信頼する。全文字がunknownの場合は、判定材料がないため文字を全件除外せず、名称ラベル解析へ渡す。
+- `SFF-424 L=1572`等の型式・寸法トークンだけの値と、`型式`等の図枠見出しは名称として確定しない。候補原文は監査・手動確認用に保持する。
+- 名称・図枠候補はICAD原文、印刷枠、ビュー、レイヤー、文字座標、明示ラベル、タグ辞書だけで分類し、外部AIは使用しない。
+- `★`、`※`等の先頭注記記号はraw原文に残し、表示名称からだけ除去する。
 
-画面向け製品・部品payloadは `icad_knowledge_entities.v3` とし、共通で次を返す。
+### アセンブリ本体と外部パーツの分離
+
+- `internal_part_names` / `internal_part_tree_paths` / `internal_part_ex_info_fields` はアセンブリ本体側だけを保持する。
+- `external_part_names` / `external_part_tree_paths` / `external_part_ex_info_fields` は外部参照パーツ側だけを保持する。
+- `internal_part_material_keywords` と `external_part_material_keywords` を別々に保持する。
+- `part_name_candidates` は本体候補、`external_part_name_candidates` は外部パーツ候補とする。
+- `part_material_candidates` は本体候補、`external_part_material_candidates` は外部パーツ候補とする。
+- 外部パーツの名称、材質、図番、付加情報は検索・構成証跡として保存できるが、アセンブリ本体の正式名称・正式材質・正式図番へ昇格させない。
+- 2D/3Dビューワー詳細では、`本体材質`、`外部パーツ名称`、`外部パーツ材質`、本体／外部の付加情報件数を別行で表示する。
+
+画面向け製品・部品payloadは `icad_knowledge_entities.v4` とし、共通で次を返す。
 
 ```json
 {
-  "schemaVersion": "icad_knowledge_entities.v3",
+  "schemaVersion": "icad_knowledge_entities.v4",
   "items": [
     {
       "entityKind": "product|part",
       "name": "string|名称未抽出",
       "drawingNumber": "string|null",
-      "partNumber": "string|null"
+      "partNumber": "string|null",
+      "directPartCount": "integer|null",
+      "childAssemblyCount": "integer|null",
+      "childPartCount": "integer|null",
+      "descendantPartCount": "integer|null",
+      "partCountByDepth": {
+        "1": 12,
+        "2": 37
+      }
     }
   ]
 }
@@ -407,6 +432,10 @@
 
 - `drawingNumber` は製品・装置・ユニットと部品の両方に返す。
 - `partNumber` は部品だけに返す互換項目で、値は必ず `drawingNumber` と同一にする。
+- `directPartCount` は深さ1の全パーツ出現数であり、一覧の「部品数」に使用する。
+- `childAssemblyCount` / `childPartCount` は深さ1を子構造の有無で分けた内訳とする。
+- `descendantPartCount` は深さ1以上の全パーツ出現数、`partCountByDepth` は深さ別の出現数とする。
+- 階層を復元できない場合は外部参照数などで代用せず、件数と階層別集計を `null` にする。
 - 名称を確定できない場合、`top_part_name` やファイル名全体を代入せず `名称未抽出` を返す。
 - 2D/3Dビューワーは、製品・装置・ユニット一覧にも図面番号を表示し、部品一覧の従来「部品番号」表示は「図面番号」とする。
 

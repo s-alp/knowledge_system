@@ -1,5 +1,10 @@
 # ICADタグ・属性 調査結果詳細まとめ
 
+> **文書状態: 履歴資料（実装前調査）**
+> SXNET根拠と当時の論点を残す文書である。現行の実装可否は
+> [`icad_2d_3d_extraction_capability_matrix_2026-07-14.md`](icad_2d_3d_extraction_capability_matrix_2026-07-14.md)、
+> 現行全体仕様は [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 - 作成日: 2026-05-26
 - 目的: ICAD 2D/3D から抽出したタグ・属性を、ナレッジシステムの `図面管理` を正本として活用するための事実整理を行う。
 - 対象範囲:
@@ -7,6 +12,15 @@
   - `2D_3D_CAD_VIEWR` の現行 viewer 契約と旧検証用 detail
   - `sxnet` HTML リファレンス
   - `http://210.165.3.139/web/drawing` の確認可能範囲
+
+## 0. 実装後に確定した事項
+
+- C# SXNET抽出コア、Django正規化、タグ生成、mode別snapshot、監査ログを実装済み。
+- Windows agentとDocker/Linux WebをHTTPで分離できる。
+- タグ辞書は`TagDictionaryEntry`へDB化し、Vite GUIと`/admin`から編集できる。
+- 手動属性、タグ追加、タグ削除は再抽出・再正規化後も維持する。
+- 2D/3Dの名称・図番、材質、外部参照パーツを照合し、本体属性と外部パーツ証跡を分離する。
+- viewerとRAGのpreview payloadは実装済みだが、創屋本番DB/APIへの書き込みは未接続。
 
 ## 1. 参照元
 

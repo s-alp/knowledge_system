@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 4. プロジェクトへ連携する項目
 
+> **文書状態: handoff snapshot。**
+> 創屋本番のプロジェクト保存口は引き続き未確定である。現行ローカル仕様は
+> [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 ## 4. プロジェクトへ連携する項目

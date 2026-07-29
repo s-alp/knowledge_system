@@ -129,15 +129,6 @@ DRAWING_METADATA_AGENT_MAX_ASSET_BYTES = int(
 DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS = (
     os.getenv("DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS", "false").lower() == "true"
 )
-DRAWING_METADATA_LLM_PROVIDER = os.getenv("DRAWING_METADATA_LLM_PROVIDER", "gemini").strip()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest").strip()
-GEMINI_FALLBACK_MODELS = [
-    model.strip()
-    for model in os.getenv("GEMINI_FALLBACK_MODELS", "gemini-3.1-flash-lite,gemini-3.5-flash").split(",")
-    if model.strip()
-]
-GEMINI_TEMPERATURE = float(os.getenv("GEMINI_TEMPERATURE", "0.0"))
 DRAWING_METADATA_SCHEMA_VERSION = "1.0.0"
 DRAWING_METADATA_NORMALIZER_VERSION = "1.1.0"
 DRAWING_METADATA_TAG_RULE_VERSION = "1.1.0"

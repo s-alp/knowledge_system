@@ -193,7 +193,7 @@ export function IcadEntityListPage({
                 <th />
                 {targetKey === "product" ? (
                   <>
-                    <th>製品・装置・ユニット名</th><th>種別</th><th>担当者</th><th>部品数</th><th>ステータス</th><th>最終更新日</th>
+                    <th>製品・装置・ユニット名</th><th>種別</th><th>担当者</th><th>部品数（1次ツリー）</th><th>ステータス</th><th>最終更新日</th>
                   </>
                 ) : (
                   <>
@@ -213,7 +213,8 @@ export function IcadEntityListPage({
                     <td />
                     {targetKey === "product" ? (
                       <>
-                        <td>{record.name}</td><td>{entityKindLabel(record)}</td><td>{businessValue(record, "owner")}</td><td>{record.descendantPartCount}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
+                        {/* 設計者が直下構成を把握できるよう、全階層合計ではなく1次ツリー総数を表示する。 */}
+                        <td>{record.name}</td><td>{entityKindLabel(record)}</td><td>{businessValue(record, "owner")}</td><td>{record.directPartCount ?? "-"}</td><td>{businessValue(record, "status")}</td><td>{formatDate(record.updatedAt)}</td>
                       </>
                     ) : (
                       <>

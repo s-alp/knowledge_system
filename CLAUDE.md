@@ -89,6 +89,12 @@
   - `C:\Users\s-iwata\Desktop\knowledge_system\scripts\generate_rag_test_report.py`
 
 ## 実装準備ドキュメント
+- 現行仕様の正本:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_extraction_and_assignment_current_spec_2026-07-29.md`
+- 関連ドキュメント索引:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_extraction_documentation_index_2026-07-29.md`
+- Windows agent / C#入出力の正本:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\windows_extraction_agent_api_design_2026-07-29.md`
 - 調査結果:
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_investigation_2026-05-26.md`
 - 設計計画:
@@ -107,12 +113,13 @@
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_report_2026-05-26.html`
 
 ## 現時点の実装前提
-- ナレッジシステム本体のソースコードは未共有である。
-- したがって、実装は「後で本体へ移植しやすい独立モジュール」を前提に組み立てる。
-- ICAD ネイティブ抽出コアは `C#` を第一候補とする。
-- 正規化、タグ生成、保存、RAG 連携は `Django(Python)` の service / task 層で扱う。
-- `Python -> C#` は細粒度呼び出しではなく、`1図面 = 1回呼び出し` の一括実行を原則とする。
-- 重い処理は Django の request thread に残さず、非同期ジョブへ逃がす。
+- 創屋側ナレッジシステム本体のソースコードは未共有である。一方、本リポジトリには移植用の独立Django app、C#抽出器、統合Viteフロントが実装済みである。
+- 実装は「後で創屋側本体へ移植しやすい独立モジュール」を前提に維持する。
+- ICAD ネイティブ抽出コアは `C# + SXNET` で実装済みである。
+- 正規化、タグ生成、保存、RAG preview連携は `Django(Python)` の service / task 層で実装済みである。
+- ICAD抽出は `1図面 = 1回呼び出し` の一括実行を原則とし、Docker/Linux WebとWindows agentをHTTPで分離できる。
+- 重い処理は Django の request thread に残さず、非同期ジョブまたはWindows agentで処理する。
+- 現行挙動は `docs\tag_extraction_and_assignment_current_spec_2026-07-29.md` とコードを正とし、2026-05月の調査・計画文書は履歴資料として扱う。
 
 ## やり取り項目リスト運用
 - 開発先とのやり取り項目は、`C:\Users\s-iwata\Desktop\knowledge_system\ナレッジシステム_やり取り項目リスト.xlsx` の `検索関連やり取り項目リスト` シートに追記する。

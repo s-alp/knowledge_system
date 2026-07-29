@@ -142,10 +142,17 @@ IDENTITY_NAME_NOISE_VALUES = {
     "TITLE",
     "UNCHANGED",
     "UNIT",
+    "コード",
+    "メーカー",
+    "単重量",
+    "図番",
+    "所要数",
+    "材質",
     "名称",
     "図面名",
     "品名",
     "部品名",
+    "符号",
     "型式",
     "形式",
     "品種",
@@ -714,8 +721,6 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
     normalized_value = unicodedata.normalize("NFKC", str(value)).strip()
     normalized_evidence = unicodedata.normalize("NFKC", evidence_text).strip()
 
-    if field in IDENTITY_NAME_FIELDS and not _identity_name_value_is_usable(field, normalized_value):
-        return False
     if field == "drawing_number":
         if any(token in normalized_evidence for token in DRAWING_NUMBER_REFERENCE_KEYWORDS):
             return False
@@ -723,10 +728,12 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
             return False
     if field == "material":
         classification = _classify_material_value(normalized_value, allow_unknown=False)
-        if classification["status"] == "unresolved":
+        if classification["status"] != "formal":
             return False
         if re.search(r"(?:丸棒|角棒|パイプ|板厚|φ\s*\d)", normalized_value, re.IGNORECASE) and not MATERIAL_VALUE_PATTERN.search(normalized_value.upper()):
             return False
+    if field == "unit_number" and not re.search(r"\d", normalized_value):
+        return False
     if field == "weight":
         if not re.search(r"[-+]?\d+(?:\.\d+)?\s*(?:kg|g|t|ｋｇ|ｇ)\b", normalized_value, re.IGNORECASE):
             return False
@@ -1259,7 +1266,8 @@ def _nearest_identity_name_value(
     if not isinstance(label_x, (int, float)) or not isinstance(label_y, (int, float)):
         return None, None
 
-    horizontal_ranked: list[tuple[float, str, dict]] = []
+    right_ranked: list[tuple[float, str, dict]] = []
+    left_ranked: list[tuple[float, str, dict]] = []
     vertical_ranked: list[tuple[float, str, dict]] = []
     for candidate_text in texts:
         if candidate_text is label_text:
@@ -1291,25 +1299,113 @@ def _nearest_identity_name_value(
         value = normalize_identity_name_value(raw_value) or unicodedata.normalize("NFKC", raw_value)
         delta_x = float(candidate_x) - float(label_x)
         delta_y = float(candidate_y) - float(label_y)
-        horizontal = delta_x > 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.15)
+        right_horizontal = delta_x > 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.15)
+        # BOM欄では品名値が見出しの左側かつ行中央に置かれる実例がある。
+        # 右側より少し広い行ずれを許容するが、同一ビュー・同一レイヤー・印刷枠内は必須とする。
+        left_horizontal = delta_x < 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.25)
         vertical = delta_y != 0 and abs(delta_x) <= max(0.5, abs(delta_y) * 0.15)
-        if not horizontal and not vertical:
+        if not right_horizontal and not left_horizontal and not vertical:
             continue
         distance = (delta_x**2 + delta_y**2) ** 0.5
-        ranked_target = horizontal_ranked if horizontal else vertical_ranked
+        if right_horizontal:
+            ranked_target = right_ranked
+        elif left_horizontal:
+            ranked_target = left_ranked
+        else:
+            ranked_target = vertical_ranked
         ranked_target.append((distance, unicodedata.normalize("NFKC", value), candidate_text))
 
-    # 図枠の名称値は通常ラベル右側にあるため、距離が近い上下の別欄より右側を優先する。
-    # 右側候補が無い図枠だけ、上下方向の候補を検討する。
-    ranked = horizontal_ranked or vertical_ranked
+    # 通常の右側配置、BOMで見られる左側配置、上下配置の順に確認する。
+    # 同じ方向では最短要素だけを評価し、別欄を飛び越えて遠方文字を拾わない。
+    for ranked in (right_ranked, left_ranked, vertical_ranked):
+        if not ranked:
+            continue
+        ranked.sort(key=lambda item: item[0])
+        _, value, candidate_text = ranked[0]
+        if _identity_name_value_is_usable(field, value):
+            return value, candidate_text
+    return None, None
+
+
+def _nearest_drawing_name_aligned_with_number(
+    *,
+    texts: list[dict],
+    drawing_number: str | None,
+    has_print_frames: bool,
+) -> tuple[str | None, dict | None]:
+    """図番と縦に揃った名称文字を、明示ラベルがない図枠の限定救済に使う。
+
+    図番と同一ビュー・同一レイヤーで、短い距離に縦整列する4文字以上の名称だけを対象とする。
+    日付、重量、尺度、材質、別図番は候補から除外し、検印欄等の誤採用を抑える。
+    """
+
+    drawing_number_key = _drawing_number_match_key(drawing_number)
+    if not drawing_number_key:
+        return None, None
+
+    number_texts: list[dict] = []
+    for text in texts:
+        if not _is_usable_print_area_item(text, has_print_frames=has_print_frames):
+            continue
+        for line in _text_lines_from_payload(text):
+            if _drawing_number_match_key(_clean_drawing_number_value(line)) == drawing_number_key:
+                number_texts.append(text)
+                break
+
+    ranked: list[tuple[float, str, dict]] = []
+    for number_text in number_texts:
+        number_x = number_text.get("position_x")
+        number_y = number_text.get("position_y")
+        if not isinstance(number_x, (int, float)) or not isinstance(number_y, (int, float)):
+            continue
+        for candidate_text in texts:
+            if candidate_text is number_text:
+                continue
+            if not _is_usable_print_area_item(candidate_text, has_print_frames=has_print_frames):
+                continue
+            if (
+                number_text.get("view_name")
+                and candidate_text.get("view_name")
+                and number_text.get("view_name") != candidate_text.get("view_name")
+            ):
+                continue
+            if (
+                number_text.get("layer_no") is not None
+                and candidate_text.get("layer_no") is not None
+                and number_text.get("layer_no") != candidate_text.get("layer_no")
+            ):
+                continue
+            candidate_x = candidate_text.get("position_x")
+            candidate_y = candidate_text.get("position_y")
+            if not isinstance(candidate_x, (int, float)) or not isinstance(candidate_y, (int, float)):
+                continue
+            delta_x = float(candidate_x) - float(number_x)
+            delta_y = float(candidate_y) - float(number_y)
+            distance = abs(delta_y)
+            if distance < 4.0 or distance > 40.0 or abs(delta_x) > max(1.0, distance * 0.08):
+                continue
+            lines = _text_lines_from_payload(candidate_text)
+            if len(lines) != 1:
+                continue
+            value = normalize_identity_name_value(lines[0])
+            if not value or len(_normalize_for_match(value)) < 4:
+                continue
+            if not _identity_name_value_is_usable("drawing_name", value):
+                continue
+            if _clean_drawing_number_value(value):
+                continue
+            if DATE_VALUE_PATTERN.search(value) or _SCALE_RATIO_TOKEN_RE.fullmatch(value):
+                continue
+            if re.search(r"[-+]?\d+(?:\.\d+)?\s*(?:kg|g|t)\b", value, re.IGNORECASE):
+                continue
+            if _classify_material_value(value, allow_unknown=False)["status"] == "formal":
+                continue
+            ranked.append((distance, value, candidate_text))
+
     if not ranked:
         return None, None
     ranked.sort(key=lambda item: item[0])
     _, value, candidate_text = ranked[0]
-    # 最短要素がプレースホルダーや別ラベルなら、さらに遠い文字へ飛ばさない。
-    # 図枠の別欄を名称として拾う誤対応を防ぐため、このラベルは未抽出のままにする。
-    if not _identity_name_value_is_usable(field, value):
-        return None, None
     return value, candidate_text
 
 
@@ -1454,6 +1550,13 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
         rule = TITLE_BLOCK_FIELD_RULES.get(field, {})
         max_value_length = int(rule.get("max_value_length", 80))
         if not _is_field_value_usable(field, value, str(candidate.get("evidence_text") or "")):
+            continue
+        if field in IDENTITY_NAME_FIELDS and not _identity_name_value_is_usable(field, value):
+            # 「品名 SUS304」のように欄名だけが誤っていても、値が正式な材質規格なら
+            # 外部AIへ送らず材質辞書で確定する。
+            material = _classify_material_value(value, allow_unknown=False)
+            if material["status"] == "formal" and "material" not in selected:
+                selected["material"] = material["canonical"]
             continue
         if field == "drawing_number":
             value = _clean_drawing_number_value(value)
@@ -2134,6 +2237,12 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 _extract_identity_candidates_from_part_ex_info(top_level_parts, field)
                 + _extract_labeled_field_candidates(field, top_level_identity_tokens)
             )
+            if field in IDENTITY_NAME_FIELDS:
+                candidates = [
+                    candidate
+                    for candidate in candidates
+                    if _identity_name_value_is_usable(field, candidate)
+                ]
             if candidates:
                 canonical[field] = (
                     _clean_drawing_number_value(candidates[0])
@@ -2410,6 +2519,30 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             title_number=title_fields.get("drawing_number"),
             text_tokens=canonical["text_tokens"],
         )
+        if not any(title_fields.get(field) for field in IDENTITY_NAME_FIELDS):
+            aligned_name, aligned_text = _nearest_drawing_name_aligned_with_number(
+                texts=texts,
+                drawing_number=canonical["drawing_number"],
+                has_print_frames=enforce_text_print_area,
+            )
+            if aligned_name and aligned_text:
+                title_fields["drawing_name"] = aligned_name
+                canonical["title_block_candidates"].append(
+                    {
+                        "field": "drawing_name",
+                        "label": "図面名",
+                        "value": aligned_name,
+                        "evidence_text": aligned_name,
+                        "confidence": "medium",
+                        "view_name": aligned_text.get("view_name"),
+                        "layer_no": aligned_text.get("layer_no"),
+                        "position_x": aligned_text.get("position_x"),
+                        "position_y": aligned_text.get("position_y"),
+                        "value_position_x": aligned_text.get("position_x"),
+                        "value_position_y": aligned_text.get("position_y"),
+                        "source": "2d_text_aligned_with_drawing_number",
+                    }
+                )
         if title_fields.get("weight"):
             title_fields["weight"] = _normalize_weight_to_kg_text(title_fields["weight"])
         canonical["prfx_candidates"] = _merge_unique(

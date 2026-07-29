@@ -230,21 +230,14 @@ def test_registration_create_accepts_too_long_original_path_for_staged_sxnet(
 
 
 @pytest.mark.django_db
-def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_key(settings):
-    settings.DRAWING_METADATA_LLM_PROVIDER = "gemini"
-    settings.GEMINI_API_KEY = "secret-value-must-not-be-returned"
-    settings.GEMINI_MODEL = "gemini-test-model"
-    settings.GEMINI_TEMPERATURE = 0.0
-
+def test_tag_automation_settings_api_declares_rule_based_classification_without_external_ai():
     response = APIClient().get("/api/v1/drawing-metadata/settings/tag-automation")
 
     assert response.status_code == 200
     payload = response.json()
     runtime_by_label = {row["label"]: row["value"] for row in payload["runtimeRows"]}
-    assert runtime_by_label["LLM provider"] == "gemini"
-    assert runtime_by_label["Gemini APIキー"] == "設定済み"
-    assert runtime_by_label["主モデル"] == "gemini-test-model"
-    assert runtime_by_label["温度"] == "0.0"
+    assert runtime_by_label["分類方式"] == "ICAD文字・座標・図枠ルール・タグ辞書"
+    assert runtime_by_label["外部AI"] == "使用しない"
     assert payload["managementLinks"] == [
         {
             "key": "icad-extraction-management",
@@ -265,7 +258,7 @@ def test_tag_automation_settings_api_uses_runtime_settings_without_exposing_api_
             "action": "show_handoff_note",
         },
     ]
-    assert "secret-value-must-not-be-returned" not in response.content.decode("utf-8")
+    assert "Gemini" not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -765,10 +758,12 @@ def test_icad_entity_api_classifies_external_reference_as_assembly(sample_regist
     assert payload["count"] == 1
     assert payload["items"][0]["entityKind"] == "assembly"
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
-    # 部品数は外部参照パーツのみ。子構造なしの外部参照は部品として数える。
+    # 一覧の部品数は1次ツリーを基準とし、全階層合計と階層別件数を分離する。
+    assert payload["items"][0]["directPartCount"] == 1
     assert payload["items"][0]["childAssemblyCount"] == 0
     assert payload["items"][0]["childPartCount"] == 1
     assert payload["items"][0]["descendantPartCount"] == 1
+    assert payload["items"][0]["partCountByDepth"] == {"1": 1}
 
 
 @pytest.mark.django_db
@@ -804,10 +799,52 @@ def test_icad_entity_api_treats_ref_model_name_as_external_reference(sample_regi
     payload = response.json()
     assert payload["count"] == 1
     assert payload["items"][0]["classificationEvidence"] == "sxnet_external_parts"
-    # 子構造を持つ外部参照はサブアセンブリ候補として数え、内部末端パーツは部品数に入れない。
+    # 深さ2の末端パーツは全階層合計には入るが、1次ツリーの部品数を増やさない。
+    assert payload["items"][0]["directPartCount"] == 1
     assert payload["items"][0]["childAssemblyCount"] == 1
     assert payload["items"][0]["childPartCount"] == 0
-    assert payload["items"][0]["descendantPartCount"] == 1
+    assert payload["items"][0]["descendantPartCount"] == 2
+    assert payload["items"][0]["partCountByDepth"] == {"1": 1, "2": 1}
+
+
+@pytest.mark.django_db
+def test_icad_entity_api_restores_hierarchy_counts_from_canonical_summary(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="canonical-hierarchy-summary",
+        filename="canonical-hierarchy-summary.icd",
+        source_path=r"C:\temp\canonical-hierarchy-summary.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={},
+        canonical_attributes_json={
+            "part_tree_paths": [
+                "ROOT",
+                "ROOT > SUB",
+                "ROOT > SUB > LEAF",
+                "ROOT > DIRECT-PART",
+            ],
+            "material_keywords": ["SS400"],
+        },
+        manual_overrides_json={
+            "knowledgeEntityTarget": "product",
+            "knowledgeEntityKind": "assembly",
+        },
+    )
+
+    response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}"
+    )
+
+    assert response.status_code == 200
+    item = response.json()["items"][0]
+    assert item["directPartCount"] == 2
+    assert item["childAssemblyCount"] == 1
+    assert item["childPartCount"] == 1
+    assert item["descendantPartCount"] == 3
+    assert item["partCountByDepth"] == {"1": 2, "2": 1}
 
 
 @pytest.mark.django_db
@@ -1702,5 +1739,6 @@ def test_icad_assembly_keeps_external_part_attributes_separate(sample_registrati
     assert attributes["materials"] == "SUS304"
     assert attributes["external_part_names"] == "EXTERNAL-RAIL"
     assert attributes["external_part_materials"] == "SS400"
-    assert attributes["external_part_name_candidates"] == "GUIDE"
+    assert "part_name_candidates" not in attributes
+    assert "external_part_name_candidates" not in attributes
     assert "SS400" not in attributes["materials"]

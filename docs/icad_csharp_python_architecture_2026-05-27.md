@@ -1,5 +1,8 @@
 # ICAD抽出の C# / Python 分担アーキテクチャ案
 
+- 文書状態: **設計理由の補足資料**
+- 現行全体仕様: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
+
 - 作成日: 2026-05-27
 - 目的: ICAD 2D/3D のタグ・属性抽出を実装する際に、`C#` と `Python` の責務分担、境界、入出力、実装順序を明確にする。
 - 対象:

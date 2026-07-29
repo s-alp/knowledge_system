@@ -96,7 +96,6 @@ DJANGO_SERVICE_PURPOSES = {
     "handoff_dashboard": "創屋引継ぎ画面で使う登録数・ジョブ状態・API一覧を集約する",
     "icad_entities": "ICADパーツ構成から製品・装置・ユニットと部品の表示情報を組み立てる",
     "knowledge_payload_preview": "ナレッジシステムへ渡す対象別タグ・属性payloadを読み取り専用で確認できる形へする",
-    "llm_title_block_classifier": "図枠候補だけをGeminiへ渡し、規則抽出を上書きせず項目分類を補助する",
     "normalization": "C#・STEP・DXFのraw抽出を、検索・タグ生成に使う共通canonical形式へ正規化する",
     "overrides": "自動抽出結果へ利用者の属性修正・タグ追加削除を再適用する",
     "path_constraints": "DB表示名とSXNET入力パスの長さ・文字種制約を判定する",

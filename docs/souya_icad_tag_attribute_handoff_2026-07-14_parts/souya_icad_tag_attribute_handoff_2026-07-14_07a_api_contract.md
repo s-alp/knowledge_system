@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 7A. API/fixture契約
 
+> **文書状態: handoff snapshot。**
+> 本文の件数・URLは当時の検証記録である。現行API一覧は
+> [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [7章目次へ戻る](souya_icad_tag_attribute_handoff_2026-07-14_07_api_fixture_contract.md)
 
 # 創屋向け ICADタグ・属性連携項目表 - 7. API/fixture の最小契約案

@@ -1,7 +1,13 @@
 # ICAD抽出PoCセットアップ
 
+> **文書状態: 履歴資料（初期PoCセットアップ）**
+> 現在のWindows agent構成は [`windows_extraction_agent_api_design_2026-07-29.md`](windows_extraction_agent_api_design_2026-07-29.md)、
+> 全体構成と検証コマンドは [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 - 作成日: 2026-05-28
 - 目的: `knowledge_system` 内へ追加した standalone backend と C# 抽出 CLI を、次担当者が探索なしで起動できるようにする。
+
+初期PoC後に、Docker/Linux上のDjango Web・generic CAD workerと、Windows上のICAD/SXNET agentを分離する構成を追加した。本文の直接CLI/worker手順は単体確認には利用できるが、本番相当構成の正本ではない。
 
 ## 1. 追加した構成
 

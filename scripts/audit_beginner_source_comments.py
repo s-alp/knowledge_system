@@ -86,8 +86,11 @@ def _tracked_files(repo_root: Path) -> list[Path]:
         if path.suffix == ".js" and (repo_root / path.with_suffix(".ts")).exists():
             continue
         absolute_path = repo_root / path
+        # 削除予定としてGit差分に載っているファイルは作業ツリーに存在しないため、現行ソース監査から除外する。
+        if not absolute_path.is_file():
+            continue
         if path.name == "__init__.py" and (
-            not absolute_path.exists() or not absolute_path.read_text(encoding="utf-8").strip()
+            not absolute_path.read_text(encoding="utf-8").strip()
         ):
             continue
         paths.append(path)

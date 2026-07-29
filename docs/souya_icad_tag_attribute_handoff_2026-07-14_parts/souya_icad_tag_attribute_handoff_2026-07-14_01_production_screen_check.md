@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 1. 本番実画面の確認結果
 
+> **文書状態: handoff snapshot。**
+> 創屋本番画面の当時の確認記録であり、ローカル実装の現行仕様ではない。現行仕様は
+> [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 ## 1. 本番実画面の確認結果

@@ -1,15 +1,19 @@
 # CADタグ・属性抽出 抽出元カタログと具体例（創屋様向け）
 
 - 作成日: 2026-07-28
-- 版: r2（創屋様への供給仕様確定版）
+- 最終更新日: 2026-07-29
+- 版: r3（現行コード反映版）
 - 作成: 株式会社アルパイン設計事務所
-- 文書状態: 確定
+- 文書状態: 確定（抽出・正規化・自動タグ付与済みJSONまで）
+- コード全体の正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
 
 ---
 
 ## 0. この資料が答えること
 
 本資料は、当社が供給する「CADからのタグ・属性抽出および自動タグ付与」の確定仕様を示します。
+
+2026-07-29版では、図面名称・図面番号の抽出改善、ICAD版差で未知型になった文字の救済、印刷枠判定が全文字`unknown`の場合の限定採用、アセンブリ本体と外部参照パーツの名称・材質・付加情報分離を反映しました。
 
 | 確定事項 | 記載箇所 |
 |---|---|
@@ -81,16 +85,18 @@
 |---|---|---|---|
 | モデル名・格納フォルダ・コメント | `SxModel.getInf()` → `SxInfModel.name/path/comment` | `model_info.*` | `model_name`, `model_path`, `model_comment` |
 | パーツ階層 | `SxWF.getInfPartTree()` | `parts[].tree_path` | `part_tree_paths` |
-| パーツ名・コメント | `SxInfPart.name/comment` | `parts[].name/comment` | `part_names`, `part_comments` |
+| パーツ名・コメント | `SxInfPart.name/comment` | `parts[].name/comment` | 全体の`part_*`に加え、`internal_part_*`と`external_part_*`へ分離 |
 | 外部参照・ミラー・未解決参照 | `SxInfPart.is_external/is_mirror/is_unloaded` | `parts[].is_*` | `external_part_exists` ほか |
 | 参照図面名・パス | `SxInfPart.ref_model_name/path` | `parts[].ref_model_*` | `ref_model_names`, `ref_model_paths` |
-| 材質（全体・部品単位） | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()` | `materials[]`, `parts[].materials[]` | `material_ids`, `material_names`, `material_keywords`, `part_material_candidates` |
+| 材質（全体・部品単位） | `SxEnt.getInfMaterialList()`, `SxEntPart.getInfMaterialList()` | `materials[]`, `parts[].materials[]` | `material_ids`, `material_names`, `part_material_candidates`, `external_part_material_candidates` |
 | 質量・重量・体積・面積・密度 | `SxEnt.getMass()` → `SxInfMass` | `mass_properties.*` | `mass_value`, `weight_value`, `volume_value`, `area_value`, `density_value` |
 | 重心・慣性モーメント | `SxInfMass.pos`, `inf_global_moment` ほか | `mass_properties.*_moment` | `center_of_gravity`, `global_moment`, `inertia_moment_candidates` |
 | トップパーツ付加情報 | `SxWF.getInfExTopPart()`, ルートの `SxInfPartTree.ex_inf` | `top_part.ex_info`, `top_part.ex_info_fields` | `top_part_ex_info`, `part_ex_info_fields`, `part_ex_info_tokens` |
 | 各構成パーツの付加情報 | 各ノードの `SxInfPartTree.ex_inf` | `parts[].ex_info`, `parts[].ex_info_fields` | パーツ階層別の `part_ex_info_fields`, `part_ex_info_tokens` |
 
 パーツ付加情報はトップパーツだけに限定しません。パーツツリーを再帰走査し、各構成パーツの付加情報を階層パスと対応付けて保持します。キー・値に分解できた項目は、PRFX、ユニット番号、材質、熱処理、硬度の候補抽出に使用し、分解できない生文字列も検索・監査用トークンとして残します。
+
+アセンブリ本体と外部参照パーツは別の情報源として扱います。`internal_part_*`は本体側、`external_part_*`は外部側です。外部パーツの名称・材質・付加情報は検索・構成証跡として保持しますが、本体の正式名称・正式材質へ昇格させません。
 
 ### 2.2 ICAD 2D（経路A）
 
@@ -99,7 +105,7 @@
 | ビューシート名・尺度・種別 | `SxModel.getGlobalVS()`, `SxInfVS` | `view_sheets[]` | `model_view_sheet_count`, `scale_candidates` |
 | 出図範囲枠・用紙サイズ | `SxInfPrint` | `print_frames[]` | `paper_size`, 印刷枠内外判定 |
 | 文字・注記 | 文字要素 | `texts[]` | `text_tokens`, `label_texts` |
-| 図枠のラベルと値 | 同一文字要素の同じ行／次行で判定（座標は証跡のみ） | `texts[]` | `title_block_candidates` → `title_block_fields` |
+| 図枠のラベルと値 | 同一文字要素の同じ行／次行。名称欄だけ同一ビュー・同一レイヤー・近接整列を限定採用 | `texts[]` | `title_block_candidates` → `title_block_fields` |
 | 寸法 | 寸法要素 | `dimensions[]` | `dimension_values`, `dimension_symbols` |
 | 公差・幾何公差 | 公差要素 | `tolerances[]` | `tolerance_candidates` |
 | 溶接記号・注記 | 溶接要素 | `weld_notes[]` | `weld_note_candidates` |
@@ -184,10 +190,10 @@
 `mass_value`, `weight_value`, `volume_value`, `area_value`, `density_value`, `center_of_gravity`, `global_moment`, `gravity_moment`, `main_moment`, `inertia_moment_candidates`, `mass_probe_status`, `mass_unit_name`, `mass_element_count`
 
 **材質**
-`material`, `material_ids`, `material_names`, `material_specific_gravities`, `material_keywords`, `unresolved_material_keywords`, `part_material_candidates`, `material_probe_status`
+`material`, `material_ids`, `material_names`, `material_specific_gravities`, `material_keywords`, `unresolved_material_keywords`, `part_material_candidates`, `external_part_material_candidates`, `internal_part_material_keywords`, `external_part_material_keywords`, `material_probe_status`
 
 **部品構成**
-`part_names`, `part_comments`, `part_tree_paths`, `part_name_candidates`, `part_ex_info_fields`, `part_ex_info_tokens`, `ref_model_names`, `ref_model_paths`, `external_part_exists`, `mirror_part_exists`, `unresolved_part_exists`, `referenced_2d_part_count`, `referenced_2d_trusted_part_count`
+`part_names`, `part_comments`, `part_tree_paths`, `part_name_candidates`, `part_ex_info_fields`, `part_ex_info_tokens`, `internal_part_names`, `internal_part_comments`, `internal_part_tree_paths`, `internal_part_ex_info_fields`, `external_part_names`, `external_part_comments`, `external_part_tree_paths`, `external_part_ex_info_fields`, `external_part_name_candidates`, `ref_model_names`, `ref_model_paths`, `external_part_exists`, `mirror_part_exists`, `unresolved_part_exists`, `referenced_2d_part_count`, `referenced_2d_trusted_part_count`
 
 **2D注記・図枠**
 `title_block_fields`, `title_block_candidates`, `revision_note_candidates`, `text_tokens`, `label_texts`, `raw_2d_sections`
@@ -228,7 +234,7 @@
 | `メーカー:` | `maker_keywords` | medium |
 | `材質:` | `material_keywords`, `title_block_fields.material` | medium |
 | `表面処理:` | `surface_treatment_tokens`, `title_block_fields.surface_treatment` | medium |
-| `塗装:` | `paint_instruction_tokens`, `title_block_fields.coating_instruction` | medium |
+| `塗装:` | `title_block_fields.coating_instruction`。`paint_instruction_tokens`が連携された場合も対応 | medium |
 | `熱処理:` | `heat_treatment_keywords` | medium |
 | `硬度:HRC` / `硬度:HV` | `hardness_spec_values` | medium |
 | `PRFX:` | `prfx_candidates`, `title_block_fields.prfx` | medium |
@@ -236,6 +242,8 @@
 | `規格:` | `spec_tokens` のうち辞書一致語（現状 `SES` のみタグ化） | medium |
 
 各タグには `source`（生成元キー）、`evidence`（根拠パス）、`confidence`、`reason`（日本語の採用理由）、`tag_rule_version` が付きます。根拠なしのタグは作りません。
+
+現行バージョンはスキーマ`1.0.0`、正規化`1.1.0`、タグ規則`1.1.0`です。
 
 なお `spec_tokens` は、2Dでは図面内の文字トークンと公差テキストをまとめた生の集合です（実例では1図面で112件）。この集合そのものをタグにするのではなく、その中の辞書一致語（現状は `SES` のみ）だけを `規格:` タグにしています。
 

@@ -5,16 +5,16 @@
   "issues": [],
   "observed": {
     "tagQuality": {
-      "snapshotCount": 84,
-      "tagCount": 118,
+      "snapshotCount": 102,
+      "tagCount": 312,
       "forbiddenTagCount": 0
     },
     "payloadQuality": {
-      "totalRegistrationCount": 79,
+      "totalRegistrationCount": 54,
       "scopedRegistrationCount": 39,
-      "excludedRegistrationCount": 40,
-      "attributeCount": 607,
-      "tagCount": 227
+      "excludedRegistrationCount": 15,
+      "attributeCount": 764,
+      "tagCount": 367
     },
     "targetAttributeCounts": {
       "drawing": 158,

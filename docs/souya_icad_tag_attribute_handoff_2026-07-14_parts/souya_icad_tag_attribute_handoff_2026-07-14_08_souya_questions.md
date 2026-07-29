@@ -1,5 +1,9 @@
 # 創屋向け ICADタグ・属性連携項目表 - 8. 創屋への確認事項
 
+> **文書状態: handoff snapshot。**
+> 創屋本番側で未解決の保存・属性マスタ・RAG契約は現在も確認対象である。
+> ローカル実装済み範囲は [`../tag_extraction_and_assignment_current_spec_2026-07-29.md`](../tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+
 [目次へ戻る](../souya_icad_tag_attribute_handoff_2026-07-14.md)
 
 ## 8. 創屋への確認事項

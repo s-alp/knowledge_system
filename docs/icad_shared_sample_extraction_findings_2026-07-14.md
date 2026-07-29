@@ -1,5 +1,11 @@
 # ICAD共有サンプル抽出確認メモ
 
+> **文書状態: 検証snapshot（共有23件の初期抽出）**
+> 本文の「未実装」「次の実装」は2026-07-14時点の記録である。現在は2D/3D検出、共有39件固定manifest、
+> 再抽出、名称・図番改善まで進んでいる。現行仕様は
+> [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+> 本文に残るGemini分類の記録は当時の検証履歴であり、2026-07-29に外部AIの実行経路・設定・専用スクリプトを削除した。
+
 - 確認日: 2026-07-14 17:23:45 +09:00
 - 対象: ユーザー共有の実ICADファイル 23件
 - 出力先: `C:\Users\s-iwata\Desktop\knowledge_system\output\live_extracts\shared_icad_probe_2026-07-14`

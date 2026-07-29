@@ -277,7 +277,7 @@ npm run dev -- --host 127.0.0.1 --port 5173
 - ICADを起動すること
 - workerで実抽出すること
 - 創屋の本番DB/本番ナレッジシステムへ書き込むこと
-- `.env` やGemini APIキーを要求すること
+- 外部AI APIを追加・利用すること
 
 ## 注意
 
@@ -313,12 +313,13 @@ def _checklist() -> str:
 - `backend/apps/drawing_metadata` のAPIが本番DB前提の書き込みを行っていないこと
 - seed投入後、`/api/v1/drawing-metadata/registrations/` と `/api/v1/knowledge-entities/` が200を返すこと
 - worker未起動やCloud環境で、実抽出できないことがUI上で誤解されないこと
-- Gemini APIキーが無い状態でも、既存抽出結果の表示・検証は可能であること
+- 名称・図枠分類がICAD原文、座標、明示ルール、辞書だけで動作すること
 
 ## 禁止
 
 - 創屋本番DBへの接続、登録、変更、削除
 - APIキーや認証情報をログ/fixture/READMEへ書くこと
+- Gemini等の外部AI APIを追加・利用すること
 - Cloud環境でICAD/SXNET実抽出ができたように見せること
 """
 
@@ -358,7 +359,13 @@ def _prompt_for_claude() -> str:
 
 
 def _apply_seed_script() -> str:
-    return '''from __future__ import annotations
+    return '''"""創屋引継ぎ用seed SQLを検証用SQLiteへ適用する。
+
+固定されたSQLファイルだけを読み込み、対象DBが存在しない場合やSQL実行に失敗した場合は
+処理を中断する。本番DBや外部APIには接続しない。
+"""
+
+from __future__ import annotations
 
 import sqlite3
 from pathlib import Path

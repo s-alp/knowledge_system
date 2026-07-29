@@ -1,8 +1,8 @@
 {
   "schemaVersion": "icad_delivery_readiness_audit.v1",
-  "gateCount": 19,
-  "failedGateCount": 0,
-  "gatePassed": true,
+  "gateCount": 22,
+  "failedGateCount": 3,
+  "gatePassed": false,
   "gates": [
     {
       "name": "shared_icad_completion",
@@ -10,9 +10,31 @@
         "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
         "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_shared_icad_completion.py"
       ],
+      "returnCode": 1,
+      "passed": false,
+      "stdoutTail": "      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-24T08:01:37.525656+00:00\",\n          \"startedAt\": \"2026-07-24T08:01:37.525656+00:00\",\n          \"finishedAt\": \"2026-07-24T08:01:37.525656+00:00\",\n          \"errorMessage\": \"\",\n          \"errorMessageLength\": 0,\n          \"errorMessageTruncated\": false,\n          \"warnings\": [],\n          \"warningCount\": 0,\n          \"warningTruncated\": false,\n          \"warningTypeCounts\": {}\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-24T08:01:37.546715+00:00\",\n          \"startedAt\": \"2026-07-24T08:01:37.546715+00:00\",\n          \"finishedAt\": \"2026-07-24T08:01:37.546715+00:00\",\n          \"errorMessage\": \"\",\n          \"errorMessageLength\": 0,\n          \"errorMessageTruncated\": false,\n          \"warnings\": [],\n          \"warningCount\": 0,\n          \"warningTruncated\": false,\n          \"warningTypeCounts\": {}\n        }\n      },\n      \"canonicalSourceEvidence\": {\n        \"2dTitleBlockFields\": [],\n        \"3dPartExtendedInfo\": \"rawExtract.parts[].ex_info_fields\",\n        \"3dMaterialCandidates\": \"canonicalAttributes.part_material_candidates\",\n        \"3dMass\": \"canonicalAttributes.mass_value\"\n      },\n      \"issues\": []\n    }\n  ]\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "goal_completion_coverage",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_goal_completion_coverage.py"
+      ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-16T20:04:35.600724+00:00\",\n          \"startedAt\": \"2026-07-16T20:04:35.600257+00:00\",\n          \"finishedAt\": \"2026-07-16T20:04:35.600257+00:00\",\n          \"errorMessage\": \"\",\n          \"errorMessageLength\": 0,\n          \"errorMessageTruncated\": false,\n          \"warnings\": [],\n          \"warningCount\": 0,\n          \"warningTruncated\": false,\n          \"warningTypeCounts\": {}\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"profile\": \"default\",\n          \"createdAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"startedAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:06.224212+00:00\",\n          \"errorMessage\": \"\",\n          \"errorMessageLength\": 0,\n          \"errorMessageTruncated\": false,\n          \"warnings\": [],\n          \"warningCount\": 0,\n          \"warningTruncated\": false,\n          \"warningTypeCounts\": {}\n        }\n      },\n      \"canonicalSourceEvidence\": {\n        \"2dTitleBlockFields\": [],\n        \"3dPartExtendedInfo\": \"rawExtract.parts[].ex_info_fields\",\n        \"3dMaterialCandidates\": \"canonicalAttributes.part_material_candidates\",\n        \"3dMass\": \"canonicalAttributes.mass_value\"\n      },\n      \"issues\": []\n    }\n  ]\n}",
+      "stdoutTail": "        \"git_worktree_clean\"\n      ],\n      \"missingGates\": [],\n      \"requiredDocTokens\": [\n        {\n          \"file\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\tasklist.md\",\n          \"token\": \"--include-tests --include-ui --require-clean\"\n        },\n        {\n          \"file\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\docs\\\\icad_entity_operations_and_quality_handoff_2026-07-16.md\",\n          \"token\": \"Chrome実操作\"\n        }\n      ],\n      \"missingDocTokens\": [],\n      \"passed\": true\n    },\n    {\n      \"id\": \"no_unimplemented_mock_or_stale_terms\",\n      \"description\": \"未実装、モック、古い未完表現、放置ファイルを監査で落とす。\",\n      \"requiredGates\": [\n        \"stale_handoff_doc_search\",\n        \"source_text_guardrails\",\n        \"git_worktree_clean\"\n      ],\n      \"missingGates\": [],\n      \"requiredDocTokens\": [\n        {\n          \"file\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\tasklist.md\",\n          \"token\": \"旧見出し・旧予定表現\"\n        },\n        {\n          \"file\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\tasklist.md\",\n          \"token\": \"未追跡0件\"\n        }\n      ],\n      \"missingDocTokens\": [],\n      \"passed\": true\n    }\n  ]\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "handoff_numeric_consistency",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_handoff_numeric_consistency.py"
+      ],
+      "returnCode": 0,
+      "passed": true,
+      "stdoutTail": "{\n  \"schemaVersion\": \"icad_handoff_numeric_consistency_audit.v1\",\n  \"gatePassed\": true,\n  \"issueCount\": 0,\n  \"issues\": [],\n  \"observed\": {\n    \"tagQuality\": {\n      \"snapshotCount\": 102,\n      \"tagCount\": 312,\n      \"forbiddenTagCount\": 0\n    },\n    \"payloadQuality\": {\n      \"totalRegistrationCount\": 54,\n      \"scopedRegistrationCount\": 39,\n      \"excludedRegistrationCount\": 15,\n      \"attributeCount\": 764,\n      \"tagCount\": 367\n    },\n    \"targetAttributeCounts\": {\n      \"drawing\": 158,\n      \"product\": 43,\n      \"part\": 363,\n      \"project\": 43\n    }\n  }\n}",
       "stderrTail": ""
     },
     {
@@ -23,7 +45,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "          \"finishedAt\": \"2026-07-16T19:49:44.832623+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"1ba71493-e46f-464f-b4d8-f5a8c73dc9ab\",\n          \"createdAt\": \"2026-07-15T13:03:07.398806+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:07.394819+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 66\n    },\n    {\n      \"sourcePath\": \"J:\\\\ZCSET\\\\300P_210312\\\\作業\\\\2_ロードカップ部\\\\XH3001-M08007-01.icd\",\n      \"filename\": \"XH3001-M08007-01.icd\",\n      \"snapshotModes\": [\n        \"2d\",\n        \"3d\"\n      ],\n      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"3ce34c86-5369-4944-9a94-f129fdea0df7\",\n          \"createdAt\": \"2026-07-16T19:49:45.379846+00:00\",\n          \"finishedAt\": \"2026-07-16T19:49:45.379345+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"4691236e-ac00-4664-9b80-dc513c4baa37\",\n          \"createdAt\": \"2026-07-15T13:03:07.464370+00:00\",\n          \"finishedAt\": \"2026-07-15T13:03:07.463857+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 54\n    }\n  ]\n}",
+      "stdoutTail": "          \"finishedAt\": \"2026-07-24T08:01:37.397759+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"089bb48d-a7d6-4832-bcbf-fc1ca92c5a87\",\n          \"createdAt\": \"2026-07-24T08:01:38.850173+00:00\",\n          \"finishedAt\": \"2026-07-24T08:01:38.849672+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 66\n    },\n    {\n      \"sourcePath\": \"J:\\\\ZCSET\\\\300P_210312\\\\作業\\\\2_ロードカップ部\\\\XH3001-M08007-01.icd\",\n      \"filename\": \"XH3001-M08007-01.icd\",\n      \"snapshotModes\": [\n        \"2d\",\n        \"3d\"\n      ],\n      \"latestJobs\": {\n        \"2d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"d74a5138-0bdf-4e5b-a8ba-d9ce3539f991\",\n          \"createdAt\": \"2026-07-29T08:11:56.558350+00:00\",\n          \"finishedAt\": \"2026-07-29T08:12:44.071996+00:00\",\n          \"errorMessage\": \"\"\n        },\n        \"3d\": {\n          \"status\": \"succeeded\",\n          \"jobId\": \"2fd26541-6078-4702-a212-3144f5d5bcce\",\n          \"createdAt\": \"2026-07-24T08:01:38.899181+00:00\",\n          \"finishedAt\": \"2026-07-24T08:01:38.899181+00:00\",\n          \"errorMessage\": \"\"\n        }\n      },\n      \"sourcePathLength\": 54\n    }\n  ]\n}",
       "stderrTail": ""
     },
     {
@@ -34,7 +56,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "{\n  \"snapshotCount\": 84,\n  \"tagCount\": 118,\n  \"forbiddenTagCount\": 0,\n  \"forbiddenTags\": [],\n  \"missingSourceCount\": 0,\n  \"missingEvidenceCount\": 0,\n  \"missingConfidenceCount\": 0,\n  \"missingReasonCount\": 0,\n  \"sourceCounts\": {\n    \"customer_name\": 1,\n    \"equipment_category\": 1,\n    \"maker_keywords\": 4,\n    \"material_keywords\": 106,\n    \"spec_tokens\": 2,\n    \"surface_treatment_tokens\": 2,\n    \"title_block_fields.coating_instruction\": 2\n  }\n}",
+      "stdoutTail": "{\n  \"snapshotCount\": 102,\n  \"tagCount\": 312,\n  \"forbiddenTagCount\": 0,\n  \"forbiddenTags\": [],\n  \"missingSourceCount\": 0,\n  \"missingEvidenceCount\": 0,\n  \"missingConfidenceCount\": 0,\n  \"missingReasonCount\": 0,\n  \"sourceCounts\": {\n    \"customer_name\": 1,\n    \"dimension_count\": 40,\n    \"dimension_tolerance_count\": 15,\n    \"equipment_category\": 59,\n    \"geometric_tolerance_count\": 5,\n    \"hardness_spec_values\": 5,\n    \"heat_treatment_keywords\": 7,\n    \"maker_keywords\": 54,\n    \"material_keywords\": 98,\n    \"spec_tokens\": 2,\n    \"surface_treatment_tokens\": 4,\n    \"title_block_fields.coating_instruction\": 17,\n    \"unit_number_candidates\": 1,\n    \"weld_instruction_count\": 4\n  }\n}",
       "stderrTail": ""
     },
     {
@@ -45,7 +67,29 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "{\n  \"schemaVersion\": \"knowledge_payload_attribute_quality_audit.v1\",\n  \"scope\": {\n    \"mode\": \"manifest\",\n    \"manifestPath\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\icad_extract_import_manifest_all_shared_2026-07-15.json\",\n    \"manifestSourceCount\": 39,\n    \"totalRegistrationCount\": 79,\n    \"scopedRegistrationCount\": 39,\n    \"excludedRegistrationCount\": 40\n  },\n  \"drawingCount\": 39,\n  \"snapshotCount\": 78,\n  \"attributeCount\": 607,\n  \"issueCount\": 0,\n  \"gatePassed\": true,\n  \"issues\": []\n}",
+      "stdoutTail": "{\n  \"schemaVersion\": \"knowledge_payload_attribute_quality_audit.v1\",\n  \"scope\": {\n    \"mode\": \"manifest\",\n    \"manifestPath\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\icad_extract_import_manifest_all_shared_2026-07-15.json\",\n    \"manifestSourceCount\": 39,\n    \"totalRegistrationCount\": 54,\n    \"scopedRegistrationCount\": 39,\n    \"excludedRegistrationCount\": 15\n  },\n  \"drawingCount\": 39,\n  \"snapshotCount\": 78,\n  \"attributeCount\": 764,\n  \"tagCount\": 367,\n  \"issueCount\": 0,\n  \"gatePassed\": true,\n  \"issues\": []\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "two_d_view_layer_print_frame_coverage",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_2d_view_layer_print_frame_coverage.py"
+      ],
+      "returnCode": 1,
+      "passed": false,
+      "stdoutTail": "      \"filename\": \"CAA5012-02434006P1R1.icd\",\n      \"severity\": \"known_condition\",\n      \"code\": \"2d_print_area_unknown_items_remain\",\n      \"message\": \"一部の2D要素は座標欠落などで印刷枠内外を判定できません。\",\n      \"reextractCondition\": \"unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。\"\n    },\n    {\n      \"drawingId\": \"a9447ac5-df7f-4400-ae5c-e942d7ef3bf0\",\n      \"filename\": \"CAA5012-02435010P1R1.icd\",\n      \"severity\": \"known_condition\",\n      \"code\": \"2d_print_area_unknown_items_remain\",\n      \"message\": \"一部の2D要素は座標欠落などで印刷枠内外を判定できません。\",\n      \"reextractCondition\": \"unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。\"\n    },\n    {\n      \"drawingId\": \"6a7813d1-4dbe-4eb5-9ec1-6936f5315277\",\n      \"filename\": \"DFR-CM1-AA0305300011.icd\",\n      \"severity\": \"known_condition\",\n      \"code\": \"2d_print_area_unknown_items_remain\",\n      \"message\": \"一部の2D要素は座標欠落などで印刷枠内外を判定できません。\",\n      \"reextractCondition\": \"unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。\"\n    },\n    {\n      \"drawingId\": \"20141b53-c298-49b0-98a8-78523b2b2155\",\n      \"filename\": \"G1630-S3000-039_A0a1.icd\",\n      \"severity\": \"known_condition\",\n      \"code\": \"2d_print_area_unknown_items_remain\",\n      \"message\": \"一部の2D要素は座標欠落などで印刷枠内外を判定できません。\",\n      \"reextractCondition\": \"unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。\"\n    },\n    {\n      \"drawingId\": \"eb981f46-dab7-4096-96a3-fb16ec23dbc9\",\n      \"filename\": \"G1630-S3000-502_A3a1.icd\",\n      \"severity\": \"known_condition\",\n      \"code\": \"2d_print_area_unknown_items_remain\",\n      \"message\": \"一部の2D要素は座標欠落などで印刷枠内外を判定できません。\",\n      \"reextractCondition\": \"unknown要素のgeometry_typeと座標有無を確認し、必要な型だけ座標取得を追加します。\"\n    }\n  ]\n}",
+      "stderrTail": ""
+    },
+    {
+      "name": "three_d_structure_material_mass_coverage",
+      "command": [
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_3d_structure_material_mass_coverage.py"
+      ],
+      "returnCode": 1,
+      "passed": false,
+      "stdoutTail": "      \"materialCandidateCount\": 2,\n      \"massKg\": \"7.81 kg\"\n    },\n    {\n      \"filename\": \"32791729A01.icd\",\n      \"partOccurrenceCount\": 1,\n      \"partExtendedInfoCount\": 1,\n      \"materialCandidateCount\": 2,\n      \"massKg\": \"0.00 kg\"\n    },\n    {\n      \"filename\": \"36555211A01.icd\",\n      \"partOccurrenceCount\": 3,\n      \"partExtendedInfoCount\": 3,\n      \"materialCandidateCount\": 3,\n      \"massKg\": \"0.03 kg\"\n    },\n    {\n      \"filename\": \"47323023A01.icd\",\n      \"partOccurrenceCount\": 1,\n      \"partExtendedInfoCount\": 1,\n      \"materialCandidateCount\": 2,\n      \"massKg\": \"0.05 kg\"\n    },\n    {\n      \"filename\": \"47323200X40c.icd\",\n      \"partOccurrenceCount\": 436,\n      \"partExtendedInfoCount\": 426,\n      \"materialCandidateCount\": 215,\n      \"massKg\": \"2.86 kg\"\n    },\n    {\n      \"filename\": \"474300AC219.icd\",\n      \"partOccurrenceCount\": 1692,\n      \"partExtendedInfoCount\": 1692,\n      \"materialCandidateCount\": 467,\n      \"massKg\": \"17.71 kg\"\n    }\n  ]\n}",
       "stderrTail": ""
     },
     {
@@ -68,30 +112,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "{\n  \"snapshotCount\": 84,\n  \"invalidWeightStringCount\": 0,\n  \"invalidWeightStringSamples\": []\n}",
-      "stderrTail": ""
-    },
-    {
-      "name": "llm_title_block_guardrails",
-      "command": [
-        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
-        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\audit_llm_title_block_guardrails.py"
-      ],
-      "returnCode": 0,
-      "passed": true,
-      "stdoutTail": "{\n  \"schemaVersion\": \"llm_title_block_guardrail_audit.v1\",\n  \"scope\": {\n    \"mode\": \"manifest\",\n    \"manifestPath\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\souya_handoff\\\\icad_extract_import_manifest_all_shared_2026-07-15.json\",\n    \"manifestSourceCount\": 39,\n    \"totalRegistrationCount\": 79,\n    \"scopedRegistrationCount\": 39,\n    \"excludedRegistrationCount\": 40\n  },\n  \"snapshotCount\": 39,\n  \"llmClassificationCount\": 0,\n  \"blockingIssueCount\": 0,\n  \"gatePassed\": true,\n  \"blockingIssues\": []\n}",
-      "stderrTail": ""
-    },
-    {
-      "name": "llm_probe_evaluation",
-      "command": [
-        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\\.venv\\Scripts\\python.exe",
-        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\evaluate_title_block_llm_probe.py",
-        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\live_extracts\\title_block_llm_probe_2026-07-14\\gemini_probe_current_normalization_2026-07-17.json"
-      ],
-      "returnCode": 0,
-      "passed": true,
-      "stdoutTail": "{\n  \"probeFile\": \"C:\\\\Users\\\\s-iwata\\\\Desktop\\\\knowledge_system\\\\output\\\\live_extracts\\\\title_block_llm_probe_2026-07-14\\\\gemini_probe_current_normalization_2026-07-17.json\",\n  \"referenceDefinition\": \"A candidate with an existing non-empty value is a positive label. A label-only or value-less candidate is a negative label.\",\n  \"fileCount\": 5,\n  \"classified\": true,\n  \"geminiErrorCount\": 0,\n  \"positiveLabelCount\": 3,\n  \"negativeLabelCount\": 0,\n  \"classificationTruePositiveCount\": 3,\n  \"classificationFalsePositiveCount\": 0,\n  \"classificationWrongFieldCount\": 0,\n  \"classificationMissedPositiveCount\": 0,\n  \"classificationPrecision\": 1.0,\n  \"classificationPositiveRecall\": 1.0,\n  \"guardrailFalsePositiveCount\": 0,\n  \"guardrailWrongFieldCount\": 0,\n  \"guardrailSafetyRate\": null,\n  \"acceptedUpliftCount\": 0,\n  \"classificationFalsePositives\": [],\n  \"classificationWrongFields\": [],\n  \"classificationMissedPositives\": [],\n  \"geminiErrors\": [],\n  \"guardrailFalsePositives\": [],\n  \"acceptedWrongFields\": [],\n  \"assessment\": \"safe_but_no_accepted_uplift\"\n}",
+      "stdoutTail": "{\n  \"snapshotCount\": 102,\n  \"invalidWeightStringCount\": 0,\n  \"invalidWeightStringSamples\": []\n}",
       "stderrTail": ""
     },
     {
@@ -99,6 +120,56 @@
       "passed": true,
       "findingCount": 0,
       "findings": []
+    },
+    {
+      "name": "handoff_doc_size_guardrails",
+      "passed": true,
+      "maxBytes": 20000,
+      "checkedFileCount": 14,
+      "findingCount": 0,
+      "findings": [],
+      "largestFiles": [
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_07b_verification_log.md",
+          "sizeBytes": 14057
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_07a_api_contract.md",
+          "sizeBytes": 11909
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_01_production_screen_check.md",
+          "sizeBytes": 10240
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md",
+          "sizeBytes": 8776
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_02_data_unit.md",
+          "sizeBytes": 6214
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_03_drawing_items.md",
+          "sizeBytes": 3842
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14.md",
+          "sizeBytes": 3556
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_08_souya_questions.md",
+          "sizeBytes": 2072
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_09_operation_handover_items.md",
+          "sizeBytes": 1725
+        },
+        {
+          "file": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\docs\\souya_icad_tag_attribute_handoff_2026-07-14_parts\\souya_icad_tag_attribute_handoff_2026-07-14_06_part_items.md",
+          "sizeBytes": 1653
+        }
+      ]
     },
     {
       "name": "source_text_guardrails",
@@ -110,9 +181,9 @@
       "name": "git_worktree_clean",
       "returnCode": 0,
       "passed": true,
-      "required": true,
-      "dirty": false,
-      "stdout": "",
+      "required": false,
+      "dirty": true,
+      "stdout": "M AGENTS.md\n M CLAUDE.md\n M README.md\n M backend/.env.example\n M backend/apps/drawing_metadata/services/icad_entities.py\n D backend/apps/drawing_metadata/services/llm_title_block_classifier.py\n M backend/apps/drawing_metadata/services/normalization.py\n M backend/apps/drawing_metadata/services/seed_dictionaries.py\n M backend/apps/drawing_metadata/services/tag_automation_settings.py\n M backend/apps/drawing_metadata/tasks/extraction_tasks.py\n M backend/apps/drawing_metadata/tests/test_api.py\n M backend/apps/drawing_metadata/tests/test_display.py\n D backend/apps/drawing_metadata/tests/test_llm_probe_evaluation_script.py\n D backend/apps/drawing_metadata/tests/test_llm_title_block_classifier.py\n M backend/apps/drawing_metadata/tests/test_normalization.py\n M backend/apps/drawing_metadata/tests/test_worker_claim.py\n M backend/knowledge_system_backend/settings.py\n M \"docs/PDM\\343\\203\\212\\343\\203\\254\\343\\203\\203\\343\\202\\270\\343\\202\\267\\343\\202\\271\\343\\203\\206\\343\\203\\240\\350\\246\\213\\347\\251\\215\\350\\252\\277\\346\\237\\273\\343\\201\\276\\343\\201\\250\\343\\202\\201_2026-04-27.md\"\n M docs/cad_tag_extraction_sources_for_souya_2026-07-23.md\n M docs/cad_tag_extraction_sources_for_souya_2026-07-28.md\n M docs/django_integration_plan_2026-05-28.md\n M docs/drawing_entity_name_extraction_investigation_2026-07-29.md\n M docs/extraction_result_schema_2026-05-28.md\n M docs/icad_2d_3d_extraction_capability_matrix_2026-07-14.md\n M docs/icad_cad_tag_attribute_redesign_2026-07-14.md\n M docs/icad_csharp_python_architecture_2026-05-27.md\n M docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md\n M docs/icad_entity_operations_and_quality_handoff_2026-07-16.md\n M docs/icad_extraction_poc_setup_2026-05-28.md\n M docs/icad_shared_sample_extraction_findings_2026-07-14.md\n M docs/icad_tag_attribute_design_plan_2026-05-26.md\n M docs/icad_tag_attribute_implementation_backlog_2026-05-26.md\n M docs/icad_tag_attribute_investigation_2026-05-26.md\n M docs/icad_tag_attribute_report_2026-05-26.html\n M docs/icad_tag_selection_and_viewer_ui_spec_2026-07-15.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_00_scope.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_01_production_screen_check.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_02_data_unit.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_03_drawing_items.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_04_project_items.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_05_product_unit_items.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_06_part_items.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_07_api_fixture_contract.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_07a_api_contract.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_07b_verification_log.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_08_souya_questions.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_09_operation_handover_items.md\n M docs/souya_icad_tag_attribute_handoff_2026-07-14_parts/souya_icad_tag_attribute_handoff_2026-07-14_10_shared_39_status.md\n M docs/tag_attribute_management_ui_plan_2026-05-28.md\n M docs/windows_confirmation_items_2026-07-17.md\n M docs/windows_extraction_agent_api_design_2026-07-29.md\n M handoff/claude_cloud/README.md\n M handoff/claude_cloud/VALIDATION_CHECKLIST.md\n M handoff/claude_cloud/manifest.json\n M handoff/claude_cloud/sql/schema_drawing_metadata.sql\n M handoff/claude_cloud/sql/seed_drawing_metadata_minimal.sql\n M handoff/claude_cloud/tools/apply_seed_sql.py\n M output/drawing_entity_name_audit_2026-07-29/drawing_entity_name_audit.json\n M output/souya_handoff/icad_2d_view_layer_print_frame_audit_current.json\n M output/souya_handoff/icad_3d_structure_material_mass_audit_current.json\n M output/souya_handoff/icad_goal_completion_coverage_audit_current.json\n M output/souya_handoff/icad_handoff_numeric_consistency_audit_current.json\n M output/souya_handoff/icad_shared_sample_completion_2026-07-15.json\n M scripts/add_beginner_comment_headers.py\n M scripts/audit_beginner_source_comments.py\n M scripts/audit_goal_completion_coverage.py\n M scripts/audit_icad_delivery_readiness.py\n D scripts/audit_llm_title_block_guardrails.py\n M scripts/build_claude_cloud_handoff.py\n D scripts/evaluate_title_block_llm_probe.py\n D scripts/list_gemini_models.py\n D scripts/probe_gemini_generate.py\n D scripts/probe_title_block_llm.py\n M scripts/verify_icad_entity_ui.mjs\n M src/IcadExtraction.Runner/Program.cs\n M tasklist.md\n?? docs/tag_extraction_and_assignment_current_spec_2026-07-29.md\n?? docs/tag_extraction_documentation_index_2026-07-29.md\n?? output/souya_handoff/icad_handoff_numeric_consistency_current.json\n?? output/souya_handoff/icad_ui_verification_current.json/\n?? scripts/audit_tag_documentation.py",
       "stderr": ""
     },
     {
@@ -137,7 +208,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "============================= test session starts =============================\nplatform win32 -- Python 3.12.10, pytest-8.3.4, pluggy-1.6.0\ndjango: version: 5.1.5, settings: knowledge_system_backend.settings (from ini)\nrootdir: C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\nconfigfile: pytest.ini\nplugins: django-4.9.0\ncollected 104 items\n\napps\\drawing_metadata\\tests\\test_api.py ................................ [ 30%]\n.....                                                                    [ 35%]\napps\\drawing_metadata\\tests\\test_composition.py ....                     [ 39%]\napps\\drawing_metadata\\tests\\test_display.py ........                     [ 47%]\napps\\drawing_metadata\\tests\\test_extraction_runner.py ......             [ 52%]\napps\\drawing_metadata\\tests\\test_management_commands.py ...............  [ 67%]\napps\\drawing_metadata\\tests\\test_worker_claim.py ......                  [ 73%]\napps\\drawing_metadata\\tests\\test_api.py ..                               [ 75%]\napps\\drawing_metadata\\tests\\test_display.py .......                      [ 81%]\napps\\drawing_metadata\\tests\\test_extraction_runner.py .                  [ 82%]\napps\\drawing_metadata\\tests\\test_llm_probe_evaluation_script.py ..       [ 84%]\napps\\drawing_metadata\\tests\\test_llm_title_block_classifier.py ......... [ 93%]\n.                                                                        [ 94%]\napps\\drawing_metadata\\tests\\test_normalization.py ....                   [ 98%]\napps\\drawing_metadata\\tests\\test_worker_claim.py ..                      [100%]\n\n============================= 104 passed in 2.91s =============================",
+      "stdoutTail": "============================= test session starts =============================\nplatform win32 -- Python 3.12.10, pytest-8.3.4, pluggy-1.6.0\ndjango: version: 5.1.5, settings: knowledge_system_backend.settings (from ini)\nrootdir: C:\\Users\\s-iwata\\Desktop\\knowledge_system\\backend\nconfigfile: pytest.ini\nplugins: django-4.9.0\ncollected 175 items\n\napps\\drawing_metadata\\tests\\test_api.py ................................ [ 18%]\n..............                                                           [ 26%]\napps\\drawing_metadata\\tests\\test_composition.py .....                    [ 29%]\napps\\drawing_metadata\\tests\\test_display.py ........                     [ 33%]\napps\\drawing_metadata\\tests\\test_extraction_runner.py .................. [ 44%]\n.                                                                        [ 44%]\napps\\drawing_metadata\\tests\\test_icad_process_lifecycle.py ...           [ 46%]\napps\\drawing_metadata\\tests\\test_management_commands.py ................ [ 55%]\n....                                                                     [ 57%]\napps\\drawing_metadata\\tests\\test_manual_override_lifecycle.py .....      [ 60%]\napps\\drawing_metadata\\tests\\test_renormalize_commands.py ..              [ 61%]\napps\\drawing_metadata\\tests\\test_tag_dictionaries.py .....               [ 64%]\napps\\drawing_metadata\\tests\\test_windows_agent_api.py .......            [ 68%]\napps\\drawing_metadata\\tests\\test_worker_claim.py ......                  [ 72%]\napps\\drawing_metadata\\tests\\test_api.py ..                               [ 73%]\napps\\drawing_metadata\\tests\\test_display.py .......                      [ 77%]\napps\\drawing_metadata\\tests\\test_extraction_runner.py ...                [ 78%]\napps\\drawing_metadata\\tests\\test_icad_process_lifecycle.py ...           [ 80%]\napps\\drawing_metadata\\tests\\test_management_commands.py .                [ 81%]\napps\\drawing_metadata\\tests\\test_manual_override_lifecycle.py ..         [ 82%]\napps\\drawing_metadata\\tests\\test_normalization.py .....................  [ 94%]\napps\\drawing_metadata\\tests\\test_scale_heat_extraction.py .......        [ 98%]\napps\\drawing_metadata\\tests\\test_tag_dictionaries.py .                   [ 98%]\napps\\drawing_metadata\\tests\\test_worker_status.py ..                     [100%]\n\n============================ 175 passed in 25.48s =============================",
       "stderrTail": ""
     },
     {
@@ -151,7 +222,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "  復元対象のプロジェクトを決定しています...\n  復元対象のすべてのプロジェクトは最新です。\n  IcadExtraction.Contracts -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Contracts\\bin\\Debug\\netstandard2.0\\IcadExtraction.Contracts.dll\n  IcadExtraction.SxNet -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.SxNet\\bin\\Debug\\netstandard2.0\\IcadExtraction.SxNet.dll\n  IcadExtraction.Contracts.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Contracts.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Contracts.Tests.dll\n  IcadExtraction.Runner -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Runner\\bin\\Debug\\net48\\IcadExtraction.Runner.exe\n  IcadExtraction.Runner -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Runner\\bin\\Debug\\net8.0\\IcadExtraction.Runner.dll\n  IcadExtraction.SxNet.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.SxNet.Tests\\bin\\Debug\\net8.0\\IcadExtraction.SxNet.Tests.dll\n  IcadExtraction.Runner.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Runner.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Runner.Tests.dll\n\nビルドに成功しました。\n    0 個の警告\n    0 エラー\n\n経過時間 00:00:23.15",
+      "stdoutTail": "  復元対象のプロジェクトを決定しています...\n  復元対象のすべてのプロジェクトは最新です。\n  IcadExtraction.Contracts -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Contracts\\bin\\Debug\\netstandard2.0\\IcadExtraction.Contracts.dll\n  IcadExtraction.SxNet -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.SxNet\\bin\\Debug\\netstandard2.0\\IcadExtraction.SxNet.dll\n  IcadExtraction.Runner -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Runner\\bin\\Debug\\net48\\IcadExtraction.Runner.exe\n  IcadExtraction.Runner -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\src\\IcadExtraction.Runner\\bin\\Debug\\net8.0\\IcadExtraction.Runner.dll\n  IcadExtraction.Contracts.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Contracts.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Contracts.Tests.dll\n  IcadExtraction.SxNet.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.SxNet.Tests\\bin\\Debug\\net8.0\\IcadExtraction.SxNet.Tests.dll\n  IcadExtraction.Runner.Tests -> C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Runner.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Runner.Tests.dll\n\nビルドに成功しました。\n    0 個の警告\n    0 エラー\n\n経過時間 00:00:16.27",
       "stderrTail": ""
     },
     {
@@ -166,7 +237,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.SxNet.Tests\\bin\\Debug\\net8.0\\IcadExtraction.SxNet.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nC:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Contracts.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Contracts.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nC:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Runner.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Runner.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nVSTest のバージョン 17.14.1 (x64)\nVSTest のバージョン 17.14.1 (x64)\n\n\nVSTest のバージョン 17.14.1 (x64)\n\nテスト実行を開始しています。お待ちください...\nテスト実行を開始しています。お待ちください...\nテスト実行を開始しています。お待ちください...\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\n\n成功!   -失敗:     0、合格:    12、スキップ:     0、合計:    12、期間: 771 ms - IcadExtraction.SxNet.Tests.dll (net8.0)\n\n成功!   -失敗:     0、合格:     3、スキップ:     0、合計:     3、期間: 1 s - IcadExtraction.Contracts.Tests.dll (net8.0)\n\n成功!   -失敗:     0、合格:     5、スキップ:     0、合計:     5、期間: 4 s - IcadExtraction.Runner.Tests.dll (net8.0)",
+      "stdoutTail": "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Contracts.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Contracts.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nC:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.SxNet.Tests\\bin\\Debug\\net8.0\\IcadExtraction.SxNet.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nC:\\Users\\s-iwata\\Desktop\\knowledge_system\\tests\\IcadExtraction.Runner.Tests\\bin\\Debug\\net8.0\\IcadExtraction.Runner.Tests.dll (.NETCoreApp,Version=v8.0) のテスト実行\nVSTest のバージョン 17.14.1 (x64)\nVSTest のバージョン 17.14.1 (x64)\n\n\nVSTest のバージョン 17.14.1 (x64)\n\nテスト実行を開始しています。お待ちください...\nテスト実行を開始しています。お待ちください...\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\nテスト実行を開始しています。お待ちください...\n合計 1 個のテスト ファイルが指定されたパターンと一致しました。\n\n成功!   -失敗:     0、合格:    30、スキップ:     0、合計:    30、期間: 83 ms - IcadExtraction.SxNet.Tests.dll (net8.0)\n\n成功!   -失敗:     0、合格:     8、スキップ:     0、合計:     8、期間: 261 ms - IcadExtraction.Runner.Tests.dll (net8.0)\n\n成功!   -失敗:     0、合格:     3、スキップ:     0、合計:     3、期間: 33 ms - IcadExtraction.Contracts.Tests.dll (net8.0)",
       "stderrTail": ""
     },
     {
@@ -179,7 +250,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "============================= test session starts =============================\nplatform win32 -- Python 3.12.10, pytest-8.3.4, pluggy-1.6.0\ndjango: version: 5.1.5, settings: viewer_backend.settings (from ini)\nrootdir: C:\\Users\\s-iwata\\Desktop\\knowledge_system\\integrations\\2D_3D_CAD_VIEWR\\backend\nconfigfile: pytest.ini\nplugins: django-4.9.0\ncollected 33 items\n\ntests\\test_api_2d.py ...........                                         [ 33%]\ntests\\test_api_3d.py .........s                                          [ 63%]\ntests\\test_fetchers.py ......                                            [ 81%]\ntests\\test_filetypes.py ..                                               [ 87%]\ntests\\test_pdm_resolver.py ....                                          [100%]\n\n======================== 32 passed, 1 skipped in 2.11s ========================",
+      "stdoutTail": "============================= test session starts =============================\nplatform win32 -- Python 3.12.10, pytest-8.3.4, pluggy-1.6.0\ndjango: version: 5.1.5, settings: viewer_backend.settings (from ini)\nrootdir: C:\\Users\\s-iwata\\Desktop\\knowledge_system\\integrations\\2D_3D_CAD_VIEWR\\backend\nconfigfile: pytest.ini\nplugins: django-4.9.0\ncollected 33 items\n\ntests\\test_api_2d.py ...........                                         [ 33%]\ntests\\test_api_3d.py .........s                                          [ 63%]\ntests\\test_fetchers.py ......                                            [ 81%]\ntests\\test_filetypes.py ..                                               [ 87%]\ntests\\test_pdm_resolver.py ....                                          [100%]\n\n======================== 32 passed, 1 skipped in 0.93s ========================",
       "stderrTail": ""
     },
     {
@@ -193,7 +264,7 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "\n> viewer-frontend@0.1.0 test\n> vitest run\n\n\n RUN  v2.1.9 C:/Users/s-iwata/Desktop/knowledge_system/integrations/2D_3D_CAD_VIEWR/frontend\n\n ✓ src/features/viewer2d/components/TwoDViewerCanvas.test.tsx (5 tests) 220ms\n ✓ src/features/drawingMetadata/IcadExtractionReviewPage.test.tsx (5 tests) 387ms\n ✓ src/features/knowledgeSettings/TagAutomationSettingsPage.test.tsx (1 test) 201ms\n ✓ src/features/viewer2d/adapters/pdfAdapter.test.ts (4 tests) 11ms\n ✓ src/shared/knowledge/drawingKnowledge.test.ts (3 tests) 6ms\n ✓ src/features/knowledgeEntities/IcadEntityPages.test.tsx (2 tests) 260ms\n ✓ src/shared/components/DrawingSupplementPanels.test.tsx (1 test) 141ms\n ✓ src/features/viewer2d/pages/Viewer2DPage.test.tsx (1 test) 59ms\n ✓ src/features/viewer3d/pages/Viewer3DPage.test.tsx (1 test) 127ms\n ✓ src/shared/hooks/useViewerSourceLoader.test.tsx (3 tests) 71ms\n ✓ src/features/viewer2d/components/Viewer2DPreviewPane.test.tsx (3 tests) 110ms\n ✓ src/shared/components/DrawingEntryPanel.test.tsx (3 tests) 162ms\n ✓ src/features/viewer2d/state/viewer2dState.test.ts (6 tests) 4ms\n ✓ src/shared/drawingRoute.test.ts (7 tests) 5ms\n ✓ src/features/viewer2d/controls/Viewer2DToolbar.test.tsx (1 test) 54ms\n ✓ src/shared/components/DrawingOverviewPanel.test.tsx (2 tests) 104ms\n ✓ src/features/viewer3d/controls/Viewer3DToolbar.test.tsx (1 test) 39ms\n ✓ src/features/viewer3d/controls/Viewer3DSectionControls.test.tsx (1 test) 64ms\n ✓ src/shared/env.test.ts (5 tests) 3ms\n ✓ src/features/viewer3d/utils/meshAnalysis.test.ts (2 tests) 3ms\n ✓ src/shared/api/client.test.ts (3 tests) 3ms\n ✓ src/features/viewer3d/state/viewer3dState.test.ts (2 tests) 2ms\n\n Test Files  22 passed (22)\n      Tests  62 passed (62)\n   Start at  06:32:34\n   Duration  20.39s (transform 1.16s, setup 3.10s, collect 6.91s, tests 2.04s, environment 19.06s, prepare 2.64s)\n",
+      "stdoutTail": "\n> viewer-frontend@0.1.0 test\n> vitest run\n\n\n\u001b[1m\u001b[7m\u001b[36m RUN \u001b[39m\u001b[27m\u001b[22m \u001b[36mv2.1.9 \u001b[39m\u001b[90mC:/Users/s-iwata/Desktop/knowledge_system/integrations/2D_3D_CAD_VIEWR/frontend\u001b[39m\n\n \u001b[32m✓\u001b[39m src/features/viewer2d/components/TwoDViewerCanvas.test.tsx \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 248\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/drawingMetadata/IcadExtractionReviewPage.test.tsx \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 375\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/knowledgeSettings/TagAutomationSettingsPage.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 205\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/knowledge/drawingKnowledge.test.ts \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 5\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer2d/adapters/pdfAdapter.test.ts \u001b[2m(\u001b[22m\u001b[2m4 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 11\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/knowledgeEntities/IcadEntityPages.test.tsx \u001b[2m(\u001b[22m\u001b[2m2 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 191\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/components/DrawingSupplementPanels.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 93\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer3d/pages/Viewer3DPage.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 109\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer2d/pages/Viewer2DPage.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 46\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/hooks/useViewerSourceLoader.test.tsx \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 64\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer2d/components/Viewer2DPreviewPane.test.tsx \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 95\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/components/DrawingEntryPanel.test.tsx \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 148\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer2d/state/viewer2dState.test.ts \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 4\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/drawingRoute.test.ts \u001b[2m(\u001b[22m\u001b[2m7 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 3\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer2d/controls/Viewer2DToolbar.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 30\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/components/DrawingOverviewPanel.test.tsx \u001b[2m(\u001b[22m\u001b[2m2 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 123\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer3d/controls/Viewer3DToolbar.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 37\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer3d/controls/Viewer3DSectionControls.test.tsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 76\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer3d/utils/meshAnalysis.test.ts \u001b[2m(\u001b[22m\u001b[2m2 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 3\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/env.test.ts \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 3\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/shared/api/client.test.ts \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 2\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m src/features/viewer3d/state/viewer3dState.test.ts \u001b[2m(\u001b[22m\u001b[2m2 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[90m 2\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m22 passed\u001b[39m\u001b[22m\u001b[90m (22)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m62 passed\u001b[39m\u001b[22m\u001b[90m (62)\u001b[39m\n\u001b[2m   Start at \u001b[22m 19:32:06\n\u001b[2m   Duration \u001b[22m 18.29s\u001b[2m (transform 1.63s, setup 2.80s, collect 6.27s, tests 1.87s, environment 17.63s, prepare 2.83s)\u001b[22m\n",
       "stderrTail": ""
     },
     {
@@ -207,8 +278,8 @@
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "\n> viewer-frontend@0.1.0 build\n> tsc -b && vite build\n\nvite v6.4.2 building for production...\ntransforming...\n✓ 6190 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                                0.48 kB │ gzip:   0.30 kB\ndist/assets/pdf.worker.min-yatZIOMy.mjs    1,375.84 kB\ndist/assets/index-CY-iACvG.css                26.56 kB │ gzip:   5.76 kB\ndist/assets/ThreeDViewerScene-xaPVcRKY.js      6.64 kB │ gzip:   2.70 kB\ndist/assets/Viewer3DPage-B4gbu8Rm.js           8.32 kB │ gzip:   3.36 kB\ndist/assets/IconToolbarButton-CYudCF5m.js     10.23 kB │ gzip:   3.17 kB\ndist/assets/Viewer2DPage-BGX61pkf.js          16.74 kB │ gzip:   6.33 kB\ndist/assets/index-BeYo5_i3.js                 84.97 kB │ gzip:  21.67 kB\ndist/assets/react-vendor-6jpJv_CO.js         242.95 kB │ gzip:  76.47 kB\ndist/assets/viewer-2d-vendor-C2rNBfL7.js     364.11 kB │ gzip: 107.41 kB\ndist/assets/viewer-3d-vendor-CQZAde-r.js     790.54 kB │ gzip: 207.85 kB\n✓ built in 8.26s",
-      "stderrTail": "\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+      "stdoutTail": "\n> viewer-frontend@0.1.0 build\n> tsc -b && vite build --config vite.config.ts\n\n\u001b[36mvite v6.4.2 \u001b[32mbuilding for production...\u001b[36m\u001b[39m\ntransforming...\n\u001b[32m✓\u001b[39m 6190 modules transformed.\nrendering chunks...\ncomputing gzip size...\n\u001b[2mdist/\u001b[22m\u001b[32mindex.html                            \u001b[39m\u001b[1m\u001b[2m    0.48 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   0.30 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[32massets/pdf.worker.min-yatZIOMy.mjs    \u001b[39m\u001b[1m\u001b[2m1,375.84 kB\u001b[22m\u001b[1m\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[35massets/index-C_z8c1r_.css             \u001b[39m\u001b[1m\u001b[2m   27.21 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   5.86 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/ThreeDViewerScene-xaPVcRKY.js  \u001b[39m\u001b[1m\u001b[2m    6.64 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   2.70 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/Viewer3DPage-CqD1aTZj.js       \u001b[39m\u001b[1m\u001b[2m    8.32 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   3.36 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/IconToolbarButton-Vy_iaPKS.js  \u001b[39m\u001b[1m\u001b[2m   10.23 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   3.17 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/Viewer2DPage-Duyn7HSM.js       \u001b[39m\u001b[1m\u001b[2m   16.74 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   6.33 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/index-BnJ2FSc1.js              \u001b[39m\u001b[1m\u001b[2m   93.45 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  23.84 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/react-vendor-6jpJv_CO.js       \u001b[39m\u001b[1m\u001b[2m  242.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  76.47 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/viewer-2d-vendor-C2rNBfL7.js   \u001b[39m\u001b[1m\u001b[2m  364.11 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 107.41 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/viewer-3d-vendor-CQZAde-r.js   \u001b[39m\u001b[1m\u001b[33m  790.54 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 207.85 kB\u001b[22m\n\u001b[32m✓ built in 7.93s\u001b[39m",
+      "stderrTail": "\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m"
     },
     {
       "name": "icad_entity_ui",
@@ -216,11 +287,11 @@
         "node",
         "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\scripts\\verify_icad_entity_ui.mjs",
         "http://127.0.0.1:5173/",
-        "output\\entity_ui_delivery_readiness"
+        "C:\\Users\\s-iwata\\Desktop\\knowledge_system\\output\\entity_ui_delivery_readiness"
       ],
       "returnCode": 0,
       "passed": true,
-      "stdoutTail": "{\n  \"baseUrl\": \"http://127.0.0.1:5173/\",\n  \"projectPlaceholderVerified\": true,\n  \"productAndPartDetailsVerified\": true,\n  \"provenanceVerified\": true,\n  \"reconciliationVerified\": true,\n  \"drawingLinkScreenVerified\": true,\n  \"drawingLinkOptionCount\": 38,\n  \"editFormsVerified\": true,\n  \"drawingManagementIcadEntryVerified\": true,\n  \"businessTagsVerified\": true,\n  \"historyTimestampVerified\": true,\n  \"systemSettingsVerified\": true,\n  \"extractionReviewHiddenFromBusinessStatus\": true,\n  \"browserErrors\": []\n}",
+      "stdoutTail": "{\n  \"baseUrl\": \"http://127.0.0.1:5173/\",\n  \"projectPlaceholderVerified\": true,\n  \"productAndPartDetailsVerified\": true,\n  \"provenanceVerified\": true,\n  \"reconciliationVerified\": true,\n  \"drawingLinkScreenVerified\": true,\n  \"drawingLinkOptionCount\": 38,\n  \"editFormsVerified\": true,\n  \"drawingManagementIcadEntryVerified\": true,\n  \"drawingViewerTagEvidenceVerified\": true,\n  \"businessTagsVerified\": true,\n  \"historyTimestampVerified\": true,\n  \"systemSettingsVerified\": true,\n  \"extractionReviewHiddenFromBusinessStatus\": true,\n  \"browserErrors\": []\n}",
       "stderrTail": ""
     }
   ]

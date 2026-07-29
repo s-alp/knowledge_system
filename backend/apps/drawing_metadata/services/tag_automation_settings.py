@@ -9,8 +9,6 @@ from django.conf import settings
 
 
 def build_tag_automation_settings_payload() -> dict:
-    api_key_configured = bool(getattr(settings, "GEMINI_API_KEY", ""))
-    fallback_models = list(getattr(settings, "GEMINI_FALLBACK_MODELS", []) or [])
     return {
         "title": "タグ自動取得設定",
         "summary": "ICAD 2D/3D 抽出結果からタグ・属性候補を作るための運用設定です。",
@@ -36,11 +34,8 @@ def build_tag_automation_settings_payload() -> dict:
         ],
         "runtimeRows": [
             {"label": "設定配置", "value": "システム設定 > タグ自動取得設定"},
-            {"label": "LLM provider", "value": getattr(settings, "DRAWING_METADATA_LLM_PROVIDER", "") or "-"},
-            {"label": "Gemini APIキー", "value": "設定済み" if api_key_configured else "未設定"},
-            {"label": "主モデル", "value": getattr(settings, "GEMINI_MODEL", "") or "-"},
-            {"label": "フォールバックモデル", "value": ", ".join(fallback_models) if fallback_models else "-"},
-            {"label": "温度", "value": str(getattr(settings, "GEMINI_TEMPERATURE", "0.0"))},
+            {"label": "分類方式", "value": "ICAD文字・座標・図枠ルール・タグ辞書"},
+            {"label": "外部AI", "value": "使用しない"},
             {"label": "タグルール版", "value": getattr(settings, "DRAWING_METADATA_TAG_RULE_VERSION", "") or "-"},
             {"label": "DB操作", "value": "登録・変更・削除は行わず、候補確認と連携データ出力まで"},
         ],
@@ -48,7 +43,7 @@ def build_tag_automation_settings_payload() -> dict:
             {
                 "area": "設定",
                 "screen": "システム設定 > タグ自動取得設定",
-                "role": "LLM、温度、タグルール、採用方針を管理する。",
+                "role": "タグ辞書、図枠ルール、採用方針を管理する。",
                 "writePolicy": "保存系の実装は埋め込み先で扱う。こちらは設定値と連携データ仕様を渡す。",
             },
             {
@@ -106,7 +101,7 @@ def build_tag_automation_settings_payload() -> dict:
                 "value": "図面名、図面サイズ候補、重量、材質、パーツツリー、パーツ付加情報、PRFX、ユニット番号",
             },
             {"label": "照合", "value": "2D/3D の同名属性は統合し、競合と診断差分を分けてレビューへ出す"},
-            {"label": "AI採用", "value": "CAD内に存在する候補値の分類補助だけに使い、存在しない値は生成しない"},
+            {"label": "名称・材質判定", "value": "ICAD原文、座標、明示ラベル、タグ辞書だけで判定し、外部AIは使用しない"},
             {"label": "図枠外", "value": "印刷枠内を自動採用優先。枠外・枠不明は証跡として残してレビュー対象"},
         ],
     }
