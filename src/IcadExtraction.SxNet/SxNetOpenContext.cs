@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
     public sealed class SxNetOpenContext : IDisposable
     {
+        private const int FileModelOpenRetryCount = 20;
+        private const int FileModelOpenRetryDelayMilliseconds = 1000;
         private readonly object _model;
 
         private SxNetOpenContext(Assembly assembly, object model)
@@ -49,7 +52,7 @@ namespace IcadExtraction.SxNet
                 throw new MissingMethodException("sxnet.SxFileModel.open(bool) could not be resolved");
             }
 
-            var fileModel = Activator.CreateInstance(fileModelType, inputPath);
+            var fileModel = CreateFileModel(fileModelType, inputPath);
             if (fileModel == null)
             {
                 throw new InvalidOperationException("sxnet.SxFileModel could not be constructed");
@@ -62,6 +65,37 @@ namespace IcadExtraction.SxNet
             }
 
             return new SxNetOpenContext(assembly, model);
+        }
+
+        private static object CreateFileModel(Type fileModelType, string inputPath)
+        {
+            for (var attempt = 1; attempt <= FileModelOpenRetryCount; attempt++)
+            {
+                try
+                {
+                    return Activator.CreateInstance(fileModelType, inputPath);
+                }
+                catch (TargetInvocationException exception)
+                    when (IsTransientCommandBusy(exception) && attempt < FileModelOpenRetryCount)
+                {
+                    Thread.Sleep(FileModelOpenRetryDelayMilliseconds);
+                }
+            }
+
+            throw new InvalidOperationException("sxnet.SxFileModel retry loop ended unexpectedly");
+        }
+
+        private static bool IsTransientCommandBusy(Exception exception)
+        {
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                if (current.Message.IndexOf("コマンド実行中", StringComparison.Ordinal) >= 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public object GetGlobalWf()
