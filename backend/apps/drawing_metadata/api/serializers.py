@@ -1,3 +1,8 @@
+"""図面メタデータAPIのserializersを定義し、HTTP入出力をservice層へ接続する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -23,6 +28,8 @@ from apps.drawing_metadata.services.path_constraints import icad_source_path_exi
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
+    """図面登録APIの入力を検証し、外部向けcamelCaseをDjangoモデル名へ対応付ける。"""
+
     hostDrawingId = serializers.CharField(source="host_drawing_id", allow_blank=True, required=False)
     sourcePath = serializers.CharField(source="source_path")
     sourceFormat = serializers.CharField(source="source_format")
@@ -52,6 +59,8 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
 
 
 class ExtractRequestSerializer(serializers.Serializer):
+    """再抽出要求のモード・profile・詳細条件を検証する。"""
+
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
     extractionProfile = serializers.CharField(required=False, allow_blank=True, default="default")
     extractionOptions = serializers.JSONField(required=False, default=dict)
@@ -63,12 +72,16 @@ class ExtractRequestSerializer(serializers.Serializer):
 
 
 class ReviewDecisionSerializer(serializers.Serializer):
+    """抽出結果に対する承認・差戻しと、その理由を検証する。"""
+
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
     decision = serializers.ChoiceField(choices=DrawingMetadataSnapshot.REVIEW_STATUS_CHOICES)
     reason = serializers.CharField(required=False, allow_blank=True, default="")
 
 
 class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
+    """抽出ジョブの状態と診断情報を、画面更新に必要な形で返す。"""
+
     jobId = serializers.UUIDField(source="id")
     drawingId = serializers.UUIDField(source="drawing_id")
     extractionMode = serializers.CharField(source="extraction_mode")
@@ -134,6 +147,8 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
+    """2Dまたは3D snapshotのraw・canonical・タグ・レビュー状態を返す。"""
+
     extractionMode = serializers.CharField(source="extraction_mode")
     latestJob = serializers.SerializerMethodField()
     rawExtract = serializers.JSONField(source="raw_extract_json")
@@ -169,6 +184,8 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
 
 class RegisteredDrawingListSerializer(serializers.ModelSerializer):
+    """図面一覧向けに、巨大なraw JSONを含めず軽量な状態だけを返す。"""
+
     drawingId = serializers.UUIDField(source="id")
     hostDrawingId = serializers.CharField(source="host_drawing_id")
     sourcePath = serializers.CharField(source="source_path")
@@ -539,6 +556,8 @@ def _viewer_extraction_diagnostics(has_2d: bool, has_3d: bool) -> dict:
 
 
 class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
+    """図面詳細向けに、最新snapshot・ジョブ・合成結果をまとめて返す。"""
+
     drawingId = serializers.UUIDField(source="id")
     hostDrawingId = serializers.CharField(source="host_drawing_id")
     sourcePath = serializers.CharField(source="source_path")
@@ -639,6 +658,8 @@ class RegisteredDrawingDetailSerializer(serializers.ModelSerializer):
 
 
 class KnowledgeEntityBusinessFieldsSerializer(serializers.Serializer):
+    """製品・装置・ユニットや部品の手動確定項目を検証する。"""
+
     name = serializers.CharField(required=False, allow_blank=True, max_length=255)
     partNumber = serializers.CharField(required=False, allow_blank=True, max_length=255)
     category = serializers.CharField(required=False, allow_blank=True, max_length=255)
@@ -663,6 +684,8 @@ class KnowledgeEntityBusinessFieldsSerializer(serializers.Serializer):
 
 
 class ManualOverrideSerializer(serializers.Serializer):
+    """canonical属性・タグ・関連図面への手動補正要求を検証する。"""
+
     extractionMode = serializers.ChoiceField(choices=EXTRACTION_MODE_CHOICES)
     canonicalAttributes = serializers.JSONField(required=False)
     derivedTags = serializers.JSONField(required=False)
@@ -677,6 +700,8 @@ class ManualOverrideSerializer(serializers.Serializer):
 
 
 class TagDictionaryEntrySerializer(serializers.ModelSerializer):
+    """タグ辞書の正規名と別名一覧をAPI入出力へ変換する。"""
+
     canonicalValue = serializers.CharField(source="canonical_value", max_length=255)
     aliases = serializers.ListField(
         source="aliases_json", child=serializers.CharField(max_length=255), required=False, default=list

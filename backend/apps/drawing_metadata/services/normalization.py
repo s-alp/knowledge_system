@@ -1,3 +1,8 @@
+"""C#・STEP・DXFのraw抽出を、検索・タグ生成に使う共通canonical形式へ正規化する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from collections.abc import Iterable
@@ -1424,6 +1429,12 @@ def _build_part_material_candidates(parts: list[dict], materials: list[dict]) ->
 
 
 def normalize_raw_extract(raw_payload: dict) -> dict:
+    """抽出方式ごとに異なるraw JSONを、タグ・検索・表示で共用するcanonical属性へ変換する。
+
+    読み方は「共通の空枠を作る→3Dまたは2D固有値を埋める→辞書で業務語彙を確定する」の順である。
+    取得できない値は推測で補わずNoneまたは空配列にし、未抽出と実値0を区別する。
+    """
+
     source_kind = raw_payload.get("source_kind")
     raw_extract = raw_payload.get("raw_extract", {})
     source_file = raw_payload.get("source_file", {}) or raw_extract.get("_source_file", {}) or {}
@@ -1444,6 +1455,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         ]
     )
 
+    # どの抽出形式でも同じキーを返し、画面やタグ生成側に形式別の条件分岐を増やさない。
     canonical = {
         "drawing_number": None,
         "drawing_name": None,
@@ -1600,6 +1612,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
     }
 
     if source_kind == "3d":
+        # 3Dではパーツツリーを中心に、材質・質量・外部参照・付加情報を対象別候補へ展開する。
         top_part = raw_extract.get("top_part", {})
         parts = raw_extract.get("parts", [])
         mass_properties = raw_extract.get("mass_properties", {}) or {}
@@ -1705,6 +1718,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["mirror_part_exists"] = any(part.get("is_mirror") for part in parts)
         canonical["unresolved_part_exists"] = any(part.get("is_unloaded") for part in parts)
 
+        # 検索用語はraw値を捨てずにまとめ、後段の辞書照合で客先・案件・装置名へ昇格させる。
         search_tokens = _flatten_strings(
             [
                 *source_path_tokens,
@@ -1734,6 +1748,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["part_keywords"] = search_tokens
     else:
+        # 2Dでは印刷枠内を自動採用対象とし、枠外・判定不明の要素はraw証跡にだけ残す。
         texts = _normalize_text_items(raw_extract.get("texts", []))
         dimensions = raw_extract.get("dimensions", [])
         primitives = raw_extract.get("geometry_primitives", [])
@@ -1882,6 +1897,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["referenced_2d_ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in trusted_referenced_parts)
         canonical["referenced_2d_ref_vs_names"] = _flatten_strings(part.get("ref_vs_name") for part in trusted_referenced_parts)
         canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
+        # 図枠は候補一覧と採用値を分け、どの文字要素から値を選んだか後でレビューできるようにする。
         canonical["title_block_candidates"] = _build_title_block_candidates(texts, has_print_frames=has_print_frames)
         canonical["title_block_fields"] = _select_title_block_fields(canonical["title_block_candidates"])
         title_fields = canonical["title_block_fields"]
@@ -1961,6 +1977,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["view_reference_candidate_count"] = len(canonical["view_reference_candidates"])
         canonical["curve_section_candidates"] = _build_curve_section_candidates(primitives, has_print_frames=has_print_frames)
         canonical["curve_section_candidate_count"] = len(canonical["curve_section_candidates"])
+        # 画面レビュー用に図枠・中央図面・寸法・注記・バルーン・製造記号の区分を保持する。
         canonical["raw_2d_sections"] = _build_2d_sections(
             raw_extract={**raw_extract, "texts": texts},
             canonical=canonical,
@@ -1991,6 +2008,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["part_keywords"] = search_tokens
 
+    # 最後に2D/3D共通の検索語へ辞書を適用し、業務上の客先・案件・装置カテゴリを確定する。
     # 辞書はDB(GUI編集)を正とし、未登録種別は seed へフォールバックする。
     customer_name = _match_dictionary(canonical["part_keywords"], load_keyword_mapping(TagDictionaryEntry.KIND_CUSTOMER))
     equipment_category = _match_dictionary(

@@ -1,3 +1,8 @@
+"""ナレッジシステムへ渡す対象別タグ・属性payloadを読み取り専用で確認できる形へする。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from apps.drawing_metadata.models import RegisteredDrawing

@@ -1,3 +1,8 @@
+"""STEPとDXFをPythonだけで解析し、ICAD抽出と同じraw形式へ変換する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import json
@@ -42,6 +47,12 @@ def extract_generic_cad_metadata(
     extraction_profile: str = "default",
     extraction_options: dict | None = None,
 ) -> dict:
+    """STEPまたはDXFを読み、C# ICAD抽出と同じ最上位JSON契約へそろえる。
+
+    形式判定とファイル読込はここで行い、各形式固有の構文解析は専用関数へ渡す。
+    対応外形式や読込不能を空結果へ置き換えず、呼び出し元が失敗として扱える例外を送る。
+    """
+
     started = time.monotonic()
     path = Path(input_path)
     if not path.exists():
@@ -92,6 +103,8 @@ def extract_generic_cad_metadata(
 
 
 def _read_text(path: Path) -> tuple[str, str]:
+    """CADテキストを代表的な文字コード順に読み、実際に採用した文字コードも返す。"""
+
     content = path.read_bytes()
     for encoding in ("utf-8-sig", "cp932", "latin-1"):
         try:
@@ -144,6 +157,8 @@ def _extract_materials(tokens: list[str]) -> list[str]:
 
 
 def _step_entity_records(text: str) -> list[dict]:
+    """STEPの#番号付きエンティティを、後続で参照関係をたどれる一覧へ分解する。"""
+
     records: list[dict] = []
     for entity_id, entity_name, body in _STEP_ENTITY_WITH_ID_RE.findall(text):
         records.append(
@@ -195,6 +210,8 @@ def _step_product_records(entity_records: list[dict]) -> list[dict]:
 
 
 def _step_assembly_relationships(entity_records: list[dict], entity_by_id: dict[str, dict]) -> list[dict]:
+    """STEPの参照番号をたどり、親製品と子製品の関係を名称付きで復元する。"""
+
     relationships: list[dict] = []
     for entity in entity_records:
         if entity["entity_name"] != "NEXT_ASSEMBLY_USAGE_OCCURRENCE":
@@ -262,6 +279,8 @@ def _step_part_payloads(products: list[dict], relationships: list[dict], materia
 
 
 def _extract_step_raw(*, text: str, path: Path) -> dict:
+    """STEPヘッダー・製品・親子関係・材質候補を3D raw payloadへまとめる。"""
+
     entity_records = _step_entity_records(text)
     entity_by_id = {entity["id"]: entity for entity in entity_records}
     products = _step_product_records(entity_records)
@@ -313,6 +332,8 @@ def _extract_step_raw(*, text: str, path: Path) -> dict:
 
 
 def _extract_dxf_raw(*, text: str) -> dict:
+    """DXFのgroup code列を走査し、2D文字・寸法・公差・図形・ブロック属性へ分類する。"""
+
     pairs = _dxf_group_pairs(text)
     texts: list[dict] = []
     dimensions: list[dict] = []
@@ -322,6 +343,7 @@ def _extract_dxf_raw(*, text: str) -> dict:
     dimension_styles: dict[str, dict] = {}
     geometric_tolerances: list[dict] = []
     index = 0
+    # DXFは「0, エンティティ名」を境界に一まとまりずつ読み、次の0が来るまでを同一要素として扱う。
     while index < len(pairs):
         code, value = pairs[index]
         if code != "0":

@@ -1,3 +1,8 @@
+"""図面メタデータAPIのagent_viewsを定義し、HTTP入出力をservice層へ接続する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import hashlib
@@ -50,6 +55,8 @@ class AgentIdentity:
 
 
 class DrawingMetadataAgentAuthentication(BaseAuthentication):
+    """Windows agent専用Bearer tokenを検証し、worker名付きの認証主体を作る。"""
+
     keyword = "Bearer"
 
     def authenticate(self, request):
@@ -193,6 +200,8 @@ def _update_agent_heartbeat(validated_data: dict) -> DrawingMetadataAgentHeartbe
 
 
 class AgentClaimApiView(AgentApiView):
+    """待機ジョブを排他的に確保し、入力取得先と抽出条件をagentへ返す。"""
+
     def post(self, request):
         serializer = AgentClaimSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -264,6 +273,8 @@ class AgentClaimApiView(AgentApiView):
 
 
 class AgentHeartbeatApiView(AgentApiView):
+    """agentの生存状態と現在処理中のジョブを記録する。"""
+
     def post(self, request):
         serializer = AgentHeartbeatSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -284,6 +295,8 @@ class AgentHeartbeatApiView(AgentApiView):
 
 
 class AgentJobSourceApiView(AgentApiView):
+    """共有パスを直接読めないagentへ、確保済みジョブの元CADを配信する。"""
+
     def get(self, request, job_id):
         serializer = AgentOwnedJobSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
@@ -306,6 +319,8 @@ class AgentJobSourceApiView(AgentApiView):
 
 
 class AgentJobAssetApiView(AgentApiView):
+    """agentが生成したSTLなどを、ジョブ専用の安全な相対パスへ保存する。"""
+
     def post(self, request, job_id):
         serializer = AgentAssetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -322,6 +337,8 @@ class AgentJobAssetApiView(AgentApiView):
 
 
 class AgentJobCompleteApiView(AgentApiView):
+    """所有権とresult JSONを検証し、snapshot保存後にジョブを完了へ遷移する。"""
+
     def post(self, request, job_id):
         serializer = AgentCompleteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -343,6 +360,8 @@ class AgentJobCompleteApiView(AgentApiView):
 
 
 class AgentJobFailApiView(AgentApiView):
+    """agentが返した失敗理由を保存し、ジョブを再確認可能な失敗状態へ遷移する。"""
+
     def post(self, request, job_id):
         serializer = AgentFailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

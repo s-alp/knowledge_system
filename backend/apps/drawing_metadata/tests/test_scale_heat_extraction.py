@@ -1,3 +1,8 @@
+"""test_scale_heat_extractionの正常系・境界値・失敗時の挙動が変わらないことを自動テストで確認する。
+
+テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
+"""
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 

@@ -1,8 +1,14 @@
+// このファイルは、2D・3D抽出で有効にする走査条件を既定値とJSON指定から組み立てる。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// 2D・3D抽出で有効にする走査条件を既定値とJSON指定から組み立てる。
+    /// </summary>
     public sealed class ExtractionConditionOptions
     {
         public bool ScanAllViews { get; set; } = true;

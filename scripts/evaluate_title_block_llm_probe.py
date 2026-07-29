@@ -1,3 +1,8 @@
+"""`evaluate_title_block_llm_probe`として検証結果を正解条件と照合し、精度を評価する補助スクリプトである。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import json

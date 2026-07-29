@@ -1,9 +1,15 @@
+// このファイルは、材質候補の取得と重複除去が想定どおりに動くことを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System.Linq;
 using IcadExtraction.SxNet;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// 材質候補の取得と重複除去が想定どおりに動くことを検証する。
+    /// </summary>
     public sealed class IcadMaterialProbeTests
     {
         [Fact]
@@ -31,6 +37,12 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal("A5052", payload[1].MatId);
             Assert.Equal(1, payload[1].ElementCount);
         }
+
+        /// <summary>
+
+        /// FakeMaterialに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class FakeMaterial
         {

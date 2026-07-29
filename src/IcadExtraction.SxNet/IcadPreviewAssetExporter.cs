@@ -1,3 +1,6 @@
+// このファイルは、3D表示用STLを作業領域へ出力し、配信に必要なメタデータを作る。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +10,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// 3D表示用STLを作業領域へ出力し、配信に必要なメタデータを作る。
+    /// </summary>
     internal sealed class IcadPreviewAssetExporter
     {
         public List<ViewerAssetPayload> Export3DStl(

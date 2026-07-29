@@ -1,3 +1,8 @@
+"""`requeue_drawing_metadata_extractions`として条件に合う抽出ジョブを再実行待ちへ戻す補助スクリプトである。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import argparse

@@ -1,3 +1,8 @@
+"""DjangoからC# Runnerを起動し、タイムアウト・一時入力・結果JSONを管理する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import json
@@ -72,6 +77,8 @@ def icad_was_autostarted(payload: dict | None) -> bool:
 
 
 def shutdown_icad_without_saving(*, timeout_seconds: int = 30) -> None:
+    """C# Runnerへ終了を依頼し、保存確認では原本を変更しない選択を行わせる。"""
+
     executable = settings.DRAWING_METADATA_EXTRACTOR_EXECUTABLE
     if not executable:
         raise ExtractionRunnerError(
@@ -120,6 +127,11 @@ def build_extractor_command(
     extraction_profile: str = "default",
     extraction_options: dict | None = None,
 ) -> list[str]:
+    """図面・抽出モード・再抽出条件から、C# Runnerへ渡す引数配列を組み立てる。
+
+    shell文字列へ連結せず配列のまま返し、空白や日本語を含むWindowsパスを安全に渡す。
+    """
+
     if not uses_sxnet_extractor(drawing.source_format):
         raise ExtractionRunnerError(
             f"{drawing.source_format} はSXNET抽出器の対象外です。"
@@ -244,6 +256,8 @@ def build_icad_converter_command(
     dxf_export_file_type: int | None = None,
     shutdown_icad_if_autostarted: bool | None = None,
 ) -> list[str]:
+    """ICADからSTEP/DXFへ変換するRunnerコマンドを、形式別の出力種別付きで組み立てる。"""
+
     if not uses_sxnet_extractor(drawing.source_format):
         raise ExtractionRunnerError(f"{drawing.source_format} はICAD変換コマンドの対象外です。")
 
@@ -351,6 +365,11 @@ def run_extractor(
     extraction_profile: str = "default",
     extraction_options: dict | None = None,
 ) -> ExtractionRunResult:
+    """1件の図面をC# Runnerで抽出し、検証済みJSONと出力パスを返す。
+
+    SXNETへ直接渡せないパスは作業領域へ退避し、タイムアウト時は自動起動したICADだけを終了する。
+    """
+
     output_path = _raw_extract_output_path(job_id)
 
     if uses_generic_cad_extractor(drawing.source_format):
@@ -364,6 +383,7 @@ def run_extractor(
         )
         return ExtractionRunResult(payload=payload, output_path=output_path)
 
+    # コマンド生成と実行を分け、テストではOSプロセスを起動せず引数契約だけを検証できるようにする。
     command = build_extractor_command(
         drawing=drawing,
         extraction_mode=extraction_mode,
@@ -413,6 +433,8 @@ def run_icad_converter(
     conversion_id=None,
     shutdown_icad_if_autostarted: bool | None = None,
 ) -> CadConversionRunResult:
+    """ICAD変換を実行し、変換ファイルの存在と結果JSONを確認してから返す。"""
+
     conversion_id = conversion_id or uuid.uuid4()
     output_path = settings.DRAWING_METADATA_STORAGE_ROOT / "cad_conversions" / f"{conversion_id}.json"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -494,6 +516,11 @@ def run_icad_export_type_probe(*, output_path: Path | None = None, probe_id=None
 
 
 def run_extractor_batch(jobs: Iterable[DrawingMetadataExtractionJob]) -> list[BatchExtractionRunResult]:
+    """複数ジョブを1回のRunner起動で処理し、ジョブごとの成功・失敗へ戻す。
+
+    ICADの起動コストを抑えつつ、1件の失敗で残りの結果を失わないよう個別結果を保持する。
+    """
+
     job_list = list(jobs)
     if not job_list:
         return []

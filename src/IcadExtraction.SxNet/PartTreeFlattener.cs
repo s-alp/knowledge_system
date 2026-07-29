@@ -1,9 +1,15 @@
+// このファイルは、SXNETの階層パーツツリーを親子関係と階層パスを保った一覧へ変換する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// SXNETの階層パーツツリーを親子関係と階層パスを保った一覧へ変換する。
+    /// </summary>
     public sealed class PartTreeFlattener
     {
         public RawExtract3DPayload Flatten(object rootNode, string? topPartExInfo, List<WarningPayload>? warnings = null)

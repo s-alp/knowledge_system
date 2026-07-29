@@ -1,3 +1,4 @@
+"""3Dソースの取得・変換・キャッシュ再利用をまとめ、表示ジョブを作成する。"""
 from __future__ import annotations
 
 """3D job creation flow.
@@ -33,7 +34,7 @@ def open_3d_job(
     job_store: JobStore,
     conversion_backend: ThreeDConversionBackend,
 ) -> Viewer3DJob:
-    """Fetch a remote 3D source, then reuse the common job pipeline."""
+    """URLから3Dソースを取得し、共通処理で変換または直接表示のジョブを作成する。"""
     fetch_started_at = perf_counter()
     fetched = fetcher.fetch(source_url)
     fetch_ms = (perf_counter() - fetch_started_at) * 1000
@@ -55,7 +56,10 @@ def open_3d_job_from_source(
     job_store: JobStore,
     conversion_backend: ThreeDConversionBackend,
 ) -> Viewer3DJob:
-    """Create a 3D job, reusing cached conversions when the input matches."""
+    """取得済み3Dファイルを保存し、キャッシュ確認後に必要な変換だけを実行する。
+
+    STEPなど変換が必要な形式とSTL/GLBの直接表示形式を同じjob状態へそろえる。
+    """
     cleanup_artifacts(job_store, artifact_store)
     resolved = resolver.resolve(fetched.filename, fetched.mime_type)
     if resolved.viewer_kind != "3d":

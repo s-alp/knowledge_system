@@ -1,3 +1,4 @@
+"""2Dソースの取得・形式判定・保存をまとめ、表示用セッションを作成する。"""
 from __future__ import annotations
 
 """2D session creation flow.
@@ -29,7 +30,7 @@ def open_2d_session(
     artifact_store: ArtifactStore,
     job_store: JobStore,
 ) -> Viewer2DSession:
-    """Fetch a remote 2D source and hand it to the shared session pipeline."""
+    """URLから2Dソースを取得し、形式判定後に共通処理で表示セッションを作成する。"""
     fetched = fetcher.fetch(source_url)
     return open_2d_session_from_source(
         fetched=fetched,
@@ -46,7 +47,7 @@ def open_2d_session_from_source(
     artifact_store: ArtifactStore,
     job_store: JobStore,
 ) -> Viewer2DSession:
-    """Create one stable session record from already fetched 2D bytes."""
+    """取得済みファイルを保存し、PDF・画像・TIFFの違いを共通セッションへそろえる。"""
     # 一時保存は viewer 共通なので、2D でも新規受付前に期限切れを掃除する。
     cleanup_artifacts(job_store, artifact_store)
     resolved = resolver.resolve(fetched.filename, fetched.mime_type)

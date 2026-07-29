@@ -1,9 +1,15 @@
+// このファイルは、パーツツリーの親子関係・深さ・外部参照判定を検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System.Collections.Generic;
 using IcadExtraction.SxNet;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// パーツツリーの親子関係・深さ・外部参照判定を検証する。
+    /// </summary>
     public sealed class PartTreeFlattenerTests
     {
         [Fact]
@@ -168,6 +174,12 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Empty(payload.Parts[1].Materials);
         }
 
+        /// <summary>
+
+        /// FakePartTreeに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class FakePartTree
         {
             public FakePartInfo? inf;
@@ -175,6 +187,12 @@ namespace IcadExtraction.SxNet.Tests
             public FakeEntPart? entpart;
             public FakePartTree[]? child_list;
         }
+
+        /// <summary>
+
+        /// FakePartInfoに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class FakePartInfo
         {
@@ -188,6 +206,12 @@ namespace IcadExtraction.SxNet.Tests
             public bool is_unloaded;
         }
 
+        /// <summary>
+
+        /// FakeEntPartに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class FakeEntPart
         {
             public FakeMaterial[]? Materials { get; set; }
@@ -197,6 +221,12 @@ namespace IcadExtraction.SxNet.Tests
                 return Materials;
             }
         }
+
+        /// <summary>
+
+        /// FakeMaterialに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class FakeMaterial
         {

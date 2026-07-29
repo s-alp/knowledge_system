@@ -1,3 +1,6 @@
+// このファイルは、指定DLLが必要なSXNET型を持つか検証してから抽出処理へ渡す。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.IO;
 using System.Linq;
@@ -5,6 +8,9 @@ using System.Reflection;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// 指定DLLが必要なSXNET型を持つか検証してから抽出処理へ渡す。
+    /// </summary>
     public sealed class SxNetRuntimeGuard
     {
         public Assembly LoadAssembly(string sxnetDllPath)

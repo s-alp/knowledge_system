@@ -1,3 +1,8 @@
+"""共有ICADを全件DXFへ変換し、文字・寸法・公差・溶接などの取得率を監査する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import argparse
@@ -185,6 +190,8 @@ def _run_conversion(
     resume: bool,
     safe_shutdown_after_conversion: bool,
 ) -> dict[str, Any]:
+    """1サンプルをDXFへ変換し、timeout・標準出力・生成ファイルを個別結果へ記録する。"""
+
     index = int(sample["index"])
     sample_name = str(sample["sampleName"])
     source_path = Path(str(sample["sourcePath"]))
@@ -550,6 +557,8 @@ def _candidate_rows(
 
 
 def _audit_dxf(path: Path) -> dict[str, Any]:
+    """DXFをgroup codeへ分解し、文字・寸法・公差・ブロック属性・溶接候補を数える。"""
+
     text, encoding = _decode_dxf(path)
     pairs = _group_pairs(text)
     records = _records(pairs)
@@ -703,6 +712,8 @@ def _audit_conversion_result(result: dict[str, Any], output_root: Path) -> dict[
 
 
 def _summary(results: list[dict[str, Any]]) -> dict[str, Any]:
+    """個別監査を成功・失敗・要素種別ごとの全体件数へ集約する。"""
+
     audited = [result for result in results if result.get("auditStatus") == "audited"]
 
     def file_count(predicate) -> int:
@@ -819,6 +830,8 @@ def _write_markdown(
     summary: dict[str, Any],
     results: list[dict[str, Any]],
 ) -> None:
+    """人が確認する要約表と、再確認が必要なファイル一覧をMarkdownへ保存する。"""
+
     audits = [result["audit"] for result in results if result.get("audit")]
     total_text = sum(audit["text"]["textCount"] for audit in audits)
     total_mtext = sum(audit["text"]["mtextCount"] for audit in audits)
@@ -920,6 +933,8 @@ def _write_markdown(
 
 
 def main() -> None:
+    """対象manifestを確定し、変換、個別監査、JSON/CSV/Markdown保存を順に実行する。"""
+
     parser = argparse.ArgumentParser(
         description="共有サンプルICDを全件DXFへ変換し、DXF生エンティティを分類監査します。"
     )

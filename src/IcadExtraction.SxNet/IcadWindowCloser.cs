@@ -1,3 +1,6 @@
+// このファイルは、自動起動したICADへ保存しない終了操作を送り、既存起動分を保護する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +10,9 @@ using System.Threading;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// 自動起動したICADへ保存しない終了操作を送り、既存起動分を保護する。
+    /// </summary>
     internal static class IcadWindowCloser
     {
         private const uint WmClose = 0x0010;

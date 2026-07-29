@@ -1,3 +1,8 @@
+"""現行PDMデータを外部共有可能なCSVへ整形し、列定義と件数を確認する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import csv
@@ -276,6 +281,8 @@ def transform_parts(parts: list[dict[str, str]]) -> list[dict[str, str]]:
 
 
 def collect_master_usage(data: dict[str, list[dict[str, str]]]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """変換後データが参照したマスター値と、現行マスターに無い候補を分けて一覧化する。"""
+
     used: list[tuple[str, str, str]] = []
 
     for row in data["projects"]:
@@ -421,6 +428,8 @@ def zip_output() -> None:
 
 
 def main() -> None:
+    """元CSV読込、現行項目への変換、マスター監査、CSV/README/ZIP出力を順に実行する。"""
+
     src = load_all()
 
     customer_rows = build_customer_rows(src["customers"], src["contacts"])

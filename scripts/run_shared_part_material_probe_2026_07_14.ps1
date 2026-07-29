@@ -1,3 +1,6 @@
+# このファイルは、`run_shared_part_material_probe_2026_07_14`として決められた検証または再抽出手順を順番に実行する補助スクリプトである。
+# 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+# 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 [CmdletBinding()]
 param(
     [string]$RunnerPath = "C:\Users\s-iwata\Desktop\knowledge_system\src\IcadExtraction.Runner\bin\Debug\net48\IcadExtraction.Runner.exe",

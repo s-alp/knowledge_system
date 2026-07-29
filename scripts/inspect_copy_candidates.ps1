@@ -1,3 +1,6 @@
+# このファイルは、`inspect_copy_candidates`としてDB・JSON・図面などの中身を変更せず確認する補助スクリプトである。
+# 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+# 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 param(
     [Parameter(Mandatory = $true)]
     [string[]]$Roots,

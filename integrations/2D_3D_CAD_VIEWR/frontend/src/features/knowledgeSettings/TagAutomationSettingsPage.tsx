@@ -1,3 +1,6 @@
+// このファイルは、タグ辞書、自動取得規則、抽出管理、引継ぎAPI情報を設定画面へ表示する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useEffect, useState } from "react";
 import { IconChevronRight, IconDatabase, IconTransfer } from "@tabler/icons-react";
 
@@ -131,6 +134,7 @@ function scopeLabel(summary: HandoffSummaryResponse | null) {
 }
 
 export function TagAutomationSettingsPage() {
+  // 初期表示に必要な設定だけを先に読み、登録一覧や引継ぎ集計は該当パネルを開くまで遅延させる。
   const [settingsPayload, setSettingsPayload] = useState<TagAutomationSettingsResponse | null>(() => cachedSettingsPayload);
   const [registrations, setRegistrations] = useState<DrawingMetadataRegistrationListItem[]>(() => cachedRegistrations ?? []);
   const [handoffSummary, setHandoffSummary] = useState<HandoffSummaryResponse | null>(() => cachedHandoffSummary);
@@ -143,6 +147,7 @@ export function TagAutomationSettingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // 画面間を戻ったときはmodule cacheを再利用し、同じ静的設定を毎回APIから読み直さない。
     if (cachedSettingsPayload) {
       return;
     }
@@ -217,6 +222,7 @@ export function TagAutomationSettingsPage() {
   }, [activePanel, loadedPanels]);
 
   useEffect(() => {
+    // 抽出管理を表示中だけ状態を更新し、他パネルで不要な定期通信を続けない。
     if (activePanel !== "icad-extraction") {
       return;
     }
@@ -609,6 +615,7 @@ export function TagAutomationSettingsPage() {
 }
 
 function TagDictionaryPanel() {
+  // 一覧の読込状態と入力フォーム状態を分け、再読込で入力途中の正規名を消さない。
   const [payload, setPayload] = useState<TagDictionaryListResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -638,6 +645,7 @@ function TagDictionaryPanel() {
   }, []);
 
   const submit = () => {
+    // 空の正規名はAPIへ送らず、別名は改行・読点を一覧へ正規化してから登録する。
     if (!formCanonical.trim()) {
       setError("正規名を入力してください。");
       return;

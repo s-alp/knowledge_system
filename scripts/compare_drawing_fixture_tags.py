@@ -1,8 +1,8 @@
-"""Compare drawing metadata handoff fixture tags between a git revision and a file.
+"""Git の指定版とファイル版の図面メタデータ引継ぎ fixture を比較する。
 
-The script is intentionally narrow: it compares the fixture shape exported by
-export_drawing_metadata_fixtures and reports per drawing/mode tag and keyword
-differences. It does not modify the database or fixture files.
+`export_drawing_metadata_fixtures` が出力する形式だけを対象とし、
+図面・抽出モードごとのタグとキーワードの差分を表示する。
+データベースや fixture 自体は変更しないため、共有前の読み取り専用確認に使える。
 """
 
 from __future__ import annotations

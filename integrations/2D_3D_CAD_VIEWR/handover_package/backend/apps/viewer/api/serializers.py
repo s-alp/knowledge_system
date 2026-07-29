@@ -1,7 +1,7 @@
-"""Serializer layer for the public viewer API.
+"""公開ビューワーAPIの入出力を検証し、Pythonのモデル項目をcamelCaseへ変換する。
 
-Python model fields are converted here into the camelCase keys documented for
-frontend and handover consumers.
+フロントエンドと引継ぎ先が参照するAPI契約をこの層へ集約し、
+変換・保存処理からHTTP固有の表現を分離する。
 """
 
 from rest_framework import serializers

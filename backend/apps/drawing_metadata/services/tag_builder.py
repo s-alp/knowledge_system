@@ -1,9 +1,19 @@
+"""canonical属性から採用可能なタグを根拠・信頼度・理由付きで生成する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from django.conf import settings
 
 
 def build_derived_tags(canonical_attributes: dict, excluded_sources: set[str] | None = None) -> list[dict]:
+    """確定済みcanonical属性だけから、根拠・信頼度・採用理由付きの検索タグを生成する。
+
+    件数や内部状態のような検索価値が低い値はタグ化せず、競合属性はexcluded_sourcesで除外する。
+    """
+
     excluded_sources = excluded_sources or set()
     tags: list[dict] = []
 

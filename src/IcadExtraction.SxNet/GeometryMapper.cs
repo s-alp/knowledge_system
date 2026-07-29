@@ -1,9 +1,15 @@
+// このファイルは、SXNETが返す2D図形を文字・寸法・公差・溶接記号などの共通JSON形式へ変換する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// GeometrySourceItemに関する処理と状態を一つの責務としてまとめます。
+    /// </summary>
     internal sealed class GeometrySourceItem
     {
         public GeometrySourceItem(object geometry, int? layerNo)
@@ -15,6 +21,12 @@ namespace IcadExtraction.SxNet
         public object Geometry { get; }
         public int? LayerNo { get; }
     }
+
+    /// <summary>
+
+    /// SXNETが返す2D図形を文字・寸法・公差・溶接記号などの共通JSON形式へ変換する。
+
+    /// </summary>
 
     public sealed class GeometryMapper
     {
@@ -36,6 +48,7 @@ namespace IcadExtraction.SxNet
             {
                 var geometry = sourceItem.Geometry;
                 var typeName = geometry.GetType().Name;
+                // SXNETの実型名で分類し、専用DTOがある要素は汎用primitiveへ二重登録しない。
                 switch (typeName)
                 {
                     case "SxGeomText":
@@ -111,6 +124,7 @@ namespace IcadExtraction.SxNet
                         payload.ReferencedParts.Add(MapPlacedReference(geometry, viewName, sourceItem.LayerNo));
                         break;
                     default:
+                        // 未対応型を黙って捨てず、追加実装が必要な型名をwarningへ残す。
                         warnings.Add(new WarningPayload
                         {
                             Code = "unsupported_geometry",
@@ -215,6 +229,7 @@ namespace IcadExtraction.SxNet
         private static GeometryPrimitivePayload MapPrimitive(object geometry, string? viewName, int? layerNo)
         {
             var geometryType = geometry.GetType().Name;
+            // ICAD版ごとに座標メンバー名が異なるため、形状別の候補名を順に試して共通座標へそろえる。
             return new GeometryPrimitivePayload
             {
                 ViewName = viewName,
@@ -335,6 +350,7 @@ namespace IcadExtraction.SxNet
 
         private static int? ResolvePointCount(object geometry, string geometryType)
         {
+            // 点数はスプラインにだけ意味があるため、他形状へ0を入れて「取得済み」と誤解させない。
             if (geometryType != "SxGeomSpline2D")
             {
                 return null;

@@ -1,3 +1,6 @@
+// このファイルは、ICAD図面の全ビュー・レイヤー・印刷枠と2D要素を読み取り専用で抽出する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +9,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// ICAD図面の全ビュー・レイヤー・印刷枠と2D要素を読み取り専用で抽出する。
+    /// </summary>
     public sealed class Icad2DExtractor
     {
         public ExtractionEnvelope Extract(string sxnetDllPath, string inputPath)
@@ -36,6 +42,7 @@ namespace IcadExtraction.SxNet
             PreviewAssetOptions previewAssetOptions
         )
         {
+            // 読み取り専用contextの寿命内でSXNETオブジェクトを使い切り、解放後に参照を残さない。
             var warnings = new List<WarningPayload>();
             using (var context = SxNetOpenContext.OpenReadOnly(sxnetAssembly, inputPath))
             {
@@ -45,6 +52,7 @@ namespace IcadExtraction.SxNet
                 {
                     ModelInfo = context.GetModelInfo(),
                 };
+                // ビューごとに図形を列挙してから共通DTOへ分類し、どのビュー由来かを各要素へ残す。
                 foreach (var viewGeometry in TryResolveAllViewGeometries(context, warnings, options))
                 {
                     rawExtract.ViewSheets.Add(viewGeometry.ViewSheet);
@@ -58,6 +66,7 @@ namespace IcadExtraction.SxNet
                 }
                 if (options.ClassifyPrintFrame)
                 {
+                    // 枠を取得した後で各要素を内・外・不明へ分類し、設定に従って保持対象を絞る。
                     rawExtract.PrintFrames.AddRange(TryResolvePrintFrames(context, warnings));
                     ApplyPrintAreaClassification(rawExtract);
                     ApplyPrintAreaRetention(rawExtract, options);
@@ -68,6 +77,7 @@ namespace IcadExtraction.SxNet
                 }
                 if (previewAssetOptions.Enabled)
                 {
+                    // 2D画像化はDjangoのSVG経路へ委譲し、未確定のICAD plotter設定を推測して使わない。
                     const string message = "2D preview uses the Django metadata SVG endpoint; SXNET print/plot file export is disabled until an explicit plotter profile is selected.";
                     rawExtract.ViewerAssets["2d"] = new List<ViewerAssetPayload>
                     {

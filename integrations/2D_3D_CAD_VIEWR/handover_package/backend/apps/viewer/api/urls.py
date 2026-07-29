@@ -1,4 +1,4 @@
-"""Public API routes consumed by the React viewer."""
+"""Reactビューワーが利用する公開APIのURLとviewの対応を定義する。"""
 
 from django.urls import path
 

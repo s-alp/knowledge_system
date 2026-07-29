@@ -1,3 +1,6 @@
+// このファイルは、3Dジョブ、描画Scene、断面・輪郭操作、完了表示を統括する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { Suspense, lazy, useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import { openDrawingViewer3D, openViewer3D, uploadViewer3D } from "../../../shared/api/client";

@@ -1,6 +1,7 @@
-"""List Gemini models available for the local backend .env API key.
+"""ローカル backend の API キーで利用できる Gemini モデルを一覧表示する。
 
-The API key is read from backend/.env and is never printed.
+API キーは `backend/.env` から読み取り、画面やログには表示しない。
+通信や設定の不備は既定値で隠さず、終了コードとエラー内容で呼び出し元へ伝える。
 """
 
 from __future__ import annotations

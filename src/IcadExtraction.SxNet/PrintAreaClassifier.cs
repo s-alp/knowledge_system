@@ -1,3 +1,6 @@
+// このファイルは、2D要素の代表座標が印刷枠の内側・外側・不明のどれかを判定する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +8,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// 2D要素の代表座標が印刷枠の内側・外側・不明のどれかを判定する。
+    /// </summary>
     internal static class PrintAreaClassifier
     {
         public static PrintAreaClassificationResult Resolve(IEnumerable<PrintFramePayload> printFrames, double? x, double? y)
@@ -41,6 +47,12 @@ namespace IcadExtraction.SxNet
             return PrintAreaClassificationResult.Outside();
         }
     }
+
+    /// <summary>
+
+    /// PrintAreaClassificationResultに関する処理と状態を一つの責務としてまとめます。
+
+    /// </summary>
 
     internal sealed class PrintAreaClassificationResult
     {

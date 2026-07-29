@@ -1,3 +1,8 @@
+"""共有ICADを全件STEPへ変換し、製品名・構成・材質・質量の保持率を監査する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import argparse
@@ -247,6 +252,8 @@ def _run_conversion(
     resume: bool,
     safe_shutdown_after_conversion: bool,
 ) -> dict[str, Any]:
+    """1サンプルをSTEPへ変換し、timeout・標準出力・生成ファイルを個別結果へ記録する。"""
+
     sample_name = str(sample["sampleName"])
     source_path = Path(str(sample["sourcePath"]))
     result_path = output_root / "conversion_results" / f"{sample_name}.json"
@@ -474,6 +481,8 @@ def _assembly_depth(relationships: list[dict[str, Any]]) -> int:
 
 
 def _audit_step(path: Path) -> dict[str, Any]:
+    """STEPエンティティを解析し、製品名・親子関係・構成深さ・材質候補を集計する。"""
+
     data = path.read_bytes()
     text = data.decode("utf-8", errors="replace")
     records = _entity_records(text)
@@ -626,6 +635,8 @@ def _audit_conversion_result(
     conversion_result: dict[str, Any],
     output_root: Path,
 ) -> dict[str, Any]:
+    """元ICAD抽出と変換後STEPを同じ観点へそろえ、保持できた値と欠落値を比較する。"""
+
     step_path_value = conversion_result.get("stepPath")
     if not step_path_value:
         return {
@@ -694,6 +705,8 @@ def _audit_conversion_result(
 
 
 def _summary(results: list[dict[str, Any]]) -> dict[str, Any]:
+    """全サンプルの変換成否と、製品・構成・材質・質量の一致度を集約する。"""
+
     source_audited = [result for result in results if result.get("sourceAudit")]
     step_audited = [result for result in results if result.get("stepAudit")]
     comparable = [result for result in results if result.get("comparison")]
@@ -864,6 +877,8 @@ def _write_markdown(
 
 
 def main() -> None:
+    """manifestと追加サンプルを確定し、変換、比較監査、成果物保存を順に実行する。"""
+
     parser = argparse.ArgumentParser(
         description="既存テスト用ICADを全件STEPへ変換し、元ICAD抽出結果と構造・属性を比較監査します。"
     )

@@ -1,3 +1,6 @@
+// このファイルは、SXNETのバージョン差を吸収し、実行時に存在するプロパティやメソッドから値を読む。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +10,9 @@ using System.Reflection;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// SXNETのバージョン差を吸収し、実行時に存在するプロパティやメソッドから値を読む。
+    /// </summary>
     internal static class ReflectionHelpers
     {
         public static object? GetMemberValue(object? instance, string memberName)
@@ -17,6 +23,7 @@ namespace IcadExtraction.SxNet
             }
 
             var type = instance.GetType();
+            // SXNETでは同じ値が版によってpropertyまたはfieldで公開されるため、両方を大文字小文字無視で探す。
             var property = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             if (property != null)
             {
@@ -115,6 +122,7 @@ namespace IcadExtraction.SxNet
 
         private static double? ConvertToDouble(object? value)
         {
+            // COM経由の数値型は一定でないため、代表的な数値型と文字列表現を順に安全変換する。
             if (value == null)
             {
                 return null;
@@ -189,6 +197,7 @@ namespace IcadExtraction.SxNet
 
         public static Dictionary<string, string> FlattenScalarMembers(object? instance)
         {
+            // raw証跡用の要約なので、再帰的に巨大なSXNETオブジェクトを辿らずscalarと単純配列だけを採用する。
             var flattened = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (instance == null)
             {

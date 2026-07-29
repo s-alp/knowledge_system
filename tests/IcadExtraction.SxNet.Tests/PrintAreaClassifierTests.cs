@@ -1,9 +1,15 @@
+// このファイルは、境界を含む印刷枠内外判定と座標欠損時の扱いを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System.Collections.Generic;
 using IcadExtraction.Contracts;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// 境界を含む印刷枠内外判定と座標欠損時の扱いを検証する。
+    /// </summary>
     public sealed class PrintAreaClassifierTests
     {
         [Fact]

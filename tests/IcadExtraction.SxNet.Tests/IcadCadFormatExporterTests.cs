@@ -1,9 +1,15 @@
+// このファイルは、CAD形式ごとのSXNET出力種別と変換引数が正しく選ばれることを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System;
 using IcadExtraction.SxNet;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// CAD形式ごとのSXNET出力種別と変換引数が正しく選ばれることを検証する。
+    /// </summary>
     public sealed class IcadCadFormatExporterTests
     {
         [Theory]
@@ -52,6 +58,9 @@ namespace IcadExtraction.SxNet.Tests
 
 namespace sxnet
 {
+    /// <summary>
+    /// SxOptExportに関する処理と状態を一つの責務としてまとめます。
+    /// </summary>
     public static class SxOptExport
     {
         public static int FILE_TYPE_STEP = 101;

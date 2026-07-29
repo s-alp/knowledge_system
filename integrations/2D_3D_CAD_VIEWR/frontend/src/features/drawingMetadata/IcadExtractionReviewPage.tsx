@@ -1,3 +1,6 @@
+// このファイルは、図面登録、2D/3D抽出、失敗確認、手動補正、レビュー確定を一画面で扱う。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -223,6 +226,7 @@ function mergeJobs(
 }
 
 export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: IcadExtractionReviewPageProps) {
+  // 画面状態は「登録」「抽出ジョブ」「手動補正」を分け、API再取得時に入力中の値まで失わないようにする。
   const [registration, setRegistration] = useState<DrawingMetadataRegistrationResponse | null>(null);
   const [jobs, setJobs] = useState<DrawingMetadataJobResponse[]>([]);
   const [phase, setPhase] = useState<"idle" | "uploading" | "ready" | "extracting" | "saving">("idle");
@@ -234,6 +238,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   const selectedSourceLabel = sourcePath.trim() || file?.name || "未選択";
 
   useEffect(() => {
+    // fileまたは共有パスが変わったときだけ登録し、同じ入力で再描画されても重複登録しない。
     let cancelled = false;
     const trimmedSourcePath = sourcePath.trim();
     if (!file && !trimmedSourcePath) {
@@ -284,6 +289,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   );
 
   useEffect(() => {
+    // snapshotが切り替わった時点で編集欄を作り直し、2Dの修正値を3Dへ誤保存しない。
     const canonical = activeSnapshot?.canonicalAttributes ?? {};
     setManualFields(Object.fromEntries(
       ["drawing_number", "drawing_name", "material", "surface_treatment", "paint", "mass_value", "weight_value", "scale", "drawing_size", "prfx", "unit_number"]
@@ -305,6 +311,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
     .join(",");
 
   useEffect(() => {
+    // 待機中・処理中ジョブがある間だけpollし、完了後は登録詳細を再取得してsnapshot表示へつなぐ。
     if (!activeJobIds || !registration) {
       return;
     }
@@ -353,6 +360,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   }
 
   async function enqueueExtraction(mode: DrawingMetadataExtractionMode, profile: string, options: Record<string, unknown>) {
+    // 同一モードの有効ジョブはAPI呼出し前にも抑止し、連打で同じ抽出を積まない。
     if (!registration) {
       setError("ICADファイルの登録後に抽出できます。");
       return;
@@ -385,6 +393,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
   }
 
   async function saveManualOverride() {
+    // 空欄は未変更ではなく補正解除として扱う契約があるため、APIへ送る形をここで明示的に作る。
     if (!registration) {
       setError("ICADファイルの登録後に手直しできます。");
       return;
@@ -419,6 +428,7 @@ export function IcadExtractionReviewPage({ file, sourcePath = "", onBack }: Icad
     mode: DrawingMetadataExtractionMode,
     decision: "confirmed" | "needs_correction",
   ) {
+    // レビュー判断は抽出結果そのものを書き換えず、理由付きの別状態として保存する。
     if (!registration) {
       setError("ICADファイルの登録後にレビューできます。");
       return;

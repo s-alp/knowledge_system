@@ -1,3 +1,6 @@
+// このファイルは、Windows上でDjangoの抽出ジョブを取得し、C# Runner実行と結果返却を繰り返す。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +19,9 @@ using Newtonsoft.Json.Linq;
 
 namespace IcadExtraction.Runner
 {
+    /// <summary>
+    /// Windows上でDjangoの抽出ジョブを取得し、C# Runner実行と結果返却を繰り返す。
+    /// </summary>
     internal sealed class WindowsExtractionAgent : IDisposable
     {
         private readonly AgentOptions _options;
@@ -48,6 +54,7 @@ namespace IcadExtraction.Runner
 
         private int RunLoop()
         {
+            // 常駐ループはCtrl+Cを安全な停止要求へ変換し、処理中ジョブを突然中断しない。
             ConsoleCancelEventHandler cancelHandler = (_, eventArgs) =>
             {
                 eventArgs.Cancel = true;
@@ -123,6 +130,7 @@ namespace IcadExtraction.Runner
 
         private AgentJob? ClaimNextJob()
         {
+            // claim APIは同じジョブを複数agentが処理しないためのlease取得も兼ねている。
             var payload = new JObject
             {
                 ["workerName"] = _options.WorkerName,
@@ -143,6 +151,7 @@ namespace IcadExtraction.Runner
 
         private bool ProcessJob(AgentJob job)
         {
+            // ジョブ専用領域を作り、別ジョブの入力・結果・プレビュー資産が混ざらないようにする。
             var workDirectory = Path.Combine(_options.WorkRoot, job.JobId);
             var previewDirectory = Path.Combine(workDirectory, "preview");
             var resultPath = Path.Combine(workDirectory, "result.json");
@@ -150,11 +159,13 @@ namespace IcadExtraction.Runner
 
             try
             {
+                // 処理中heartbeatを先に送り、Django側が長時間処理と停止を区別できるようにする。
                 SendHeartbeat("processing", job.JobId, null);
                 var inputPath = ResolveInputPath(job, workDirectory);
                 VerifySourceHash(inputPath, job.Source.Sha256);
                 RunExtractionWithHeartbeat(job, inputPath, resultPath, previewDirectory);
 
+                // C#が返したローカルパスを、Djangoが監査・配信できる元情報と相対パスへ置き換える。
                 var result = JObject.Parse(File.ReadAllText(resultPath, Encoding.UTF8));
                 RewriteSourceMetadata(result, job.Source);
                 RewritePreviewFilePaths(result, previewDirectory);
@@ -174,6 +185,7 @@ namespace IcadExtraction.Runner
             }
             finally
             {
+                // 調査用に明示保存する設定でない限り、成功・失敗どちらでもジョブ作業領域を片付ける。
                 if (!_options.KeepWorkFiles)
                 {
                     TryDeleteWorkDirectory(workDirectory);
@@ -183,6 +195,7 @@ namespace IcadExtraction.Runner
 
         private string ResolveInputPath(AgentJob job, string workDirectory)
         {
+            // Windowsから共有パスを直接読める場合はコピーを省き、読めない場合だけAPIから取得する。
             if (!string.IsNullOrWhiteSpace(job.Source.Path) && File.Exists(job.Source.Path))
             {
                 return Path.GetFullPath(job.Source.Path);
@@ -269,6 +282,7 @@ namespace IcadExtraction.Runner
 
         private void UploadPreviewAssets(AgentJob job, string previewDirectory)
         {
+            // 抽出JSON内の相対パスと同じ階層を保って送り、複数資産でも参照先を一意にする。
             if (!Directory.Exists(previewDirectory))
             {
                 return;
@@ -362,6 +376,7 @@ namespace IcadExtraction.Runner
 
         private static void VerifySourceHash(string path, string? expectedHash)
         {
+            // 取得途中の破損や元ファイル差し替えを検知し、異なる図面の結果を完了登録しない。
             if (string.IsNullOrWhiteSpace(expectedHash))
             {
                 return;

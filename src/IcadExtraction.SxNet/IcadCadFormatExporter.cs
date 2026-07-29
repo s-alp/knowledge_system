@@ -1,3 +1,6 @@
+// このファイルは、ICADモデルをDXFまたはSTEPへ変換し、変換結果と警告を共通形式で返す。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +10,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// ICADモデルをDXFまたはSTEPへ変換し、変換結果と警告を共通形式で返す。
+    /// </summary>
     public sealed class IcadCadFormatExporter
     {
         public ViewerAssetPayload Export(
@@ -179,6 +185,12 @@ namespace IcadExtraction.SxNet
             return string.IsNullOrWhiteSpace(sanitized) ? "icad-converted" : sanitized;
         }
     }
+
+    /// <summary>
+
+    /// CadExportFormatに関する処理と状態を一つの責務としてまとめます。
+
+    /// </summary>
 
     public sealed class CadExportFormat
     {

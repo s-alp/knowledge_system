@@ -1,3 +1,8 @@
+"""タグ自動取得画面へ返す実行条件・採用規則・対象範囲を組み立てる。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from django.conf import settings

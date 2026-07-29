@@ -1,8 +1,8 @@
-"""Validate drawing metadata handoff fixture contracts.
+"""創屋や取込先へ渡す図面メタデータ fixture の契約を検証する。
 
-This script checks the JSON package that is handed to Souya/importing systems.
-It intentionally validates shape and read-only handoff guarantees, not business
-truth. The goal is to catch accidental contract drift before sharing a fixture.
+JSON の構造と、引継ぎ処理が読み取り専用であることを確認する。
+図面内容そのものの正しさを判定するスクリプトではなく、
+共有前に項目名や必須構造が意図せず変わったことを検出するために使う。
 """
 
 from __future__ import annotations

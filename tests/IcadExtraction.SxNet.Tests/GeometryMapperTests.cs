@@ -1,3 +1,6 @@
+// このファイルは、代表的なSXNET図形が共通JSON項目へ正しく変換されることを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System.Collections.Generic;
 using IcadExtraction.Contracts;
 using IcadExtraction.SxNet;
@@ -5,6 +8,9 @@ using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// 代表的なSXNET図形が共通JSON項目へ正しく変換されることを検証する。
+    /// </summary>
     public sealed class GeometryMapperTests
     {
         [Fact]
@@ -112,12 +118,24 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal(51.0, payload.ReferencedParts[1].PositionY);
         }
 
+        /// <summary>
+
+        /// SxPosに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxPos
         {
             public double x;
             public double y;
             public double z;
         }
+
+        /// <summary>
+
+        /// SxVecに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxVec
         {
@@ -126,6 +144,12 @@ namespace IcadExtraction.SxNet.Tests
             public double z;
         }
 
+        /// <summary>
+
+        /// SxGeomTextに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomText
         {
             public string[]? txt;
@@ -133,11 +157,23 @@ namespace IcadExtraction.SxNet.Tests
             public SxPos? pnt;
         }
 
+        /// <summary>
+
+        /// SxGeomLabelに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomLabel
         {
             public string[]? txt;
             public int text_line_num;
         }
+
+        /// <summary>
+
+        /// SxGeomLengthDimに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomLengthDim
         {
@@ -145,16 +181,34 @@ namespace IcadExtraction.SxNet.Tests
             public SxPos? pnt1;
         }
 
+        /// <summary>
+
+        /// DimInfoに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class DimInfo
         {
             public string? value_1;
             public string? mark_2;
         }
 
+        /// <summary>
+
+        /// SxGeomWeldに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomWeld
         {
             public string? atr_weld;
         }
+
+        /// <summary>
+
+        /// SxGeomLine2Dに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomLine2D
         {
@@ -166,16 +220,34 @@ namespace IcadExtraction.SxNet.Tests
             public SxPos? pnt2;
         }
 
+        /// <summary>
+
+        /// SxGeomSpline2Dに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomSpline2D
         {
             public SxPos? pos;
             public SxVec[]? vec_list;
         }
 
+        /// <summary>
+
+        /// SxGeomPoint2Dに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomPoint2D
         {
             public SxPos? pnt;
         }
+
+        /// <summary>
+
+        /// SxGeomElparc2Dに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomElparc2D
         {
@@ -186,11 +258,23 @@ namespace IcadExtraction.SxNet.Tests
             public double eang;
         }
 
+        /// <summary>
+
+        /// SxGeomSmarkに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomSmark
         {
             public SxPos? pnt;
             public string? val1;
         }
+
+        /// <summary>
+
+        /// SxGeomCutLineに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomCutLine
         {
@@ -198,11 +282,23 @@ namespace IcadExtraction.SxNet.Tests
             public SxPos? pnt2;
         }
 
+        /// <summary>
+
+        /// SxGeomSymbolに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomSymbol
         {
             public SxPos? pnt;
             public string? name;
         }
+
+        /// <summary>
+
+        /// SxGeomArrowViewに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomArrowView
         {
@@ -210,17 +306,35 @@ namespace IcadExtraction.SxNet.Tests
             public string? name;
         }
 
+        /// <summary>
+
+        /// SxGeomArrowに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomArrow
         {
             public SxPos? pnt;
             public string? name;
         }
 
+        /// <summary>
+
+        /// SxGeomOtherDraftに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomOtherDraft
         {
             public SxPos? pnt;
             public string? name;
         }
+
+        /// <summary>
+
+        /// SxGeomFinishMarkに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxGeomFinishMark
         {
@@ -231,15 +345,33 @@ namespace IcadExtraction.SxNet.Tests
             public int color;
         }
 
+        /// <summary>
+
+        /// SxGeomBalloonに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomBalloon
         {
             public string? txt;
         }
 
+        /// <summary>
+
+        /// SxGeomTolに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxGeomTol
         {
             public string? atr_geotol;
         }
+
+        /// <summary>
+
+        /// SxEntRPartに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class SxEntRPart
         {
@@ -250,6 +382,12 @@ namespace IcadExtraction.SxNet.Tests
                 return Detail;
             }
         }
+
+        /// <summary>
+
+        /// InfRPartに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class InfRPart
         {
@@ -263,6 +401,12 @@ namespace IcadExtraction.SxNet.Tests
             public SxPos? pos;
         }
 
+        /// <summary>
+
+        /// SxEntReferに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class SxEntRefer
         {
             public InfRefer? Detail { get; set; }
@@ -272,6 +416,12 @@ namespace IcadExtraction.SxNet.Tests
                 return Detail;
             }
         }
+
+        /// <summary>
+
+        /// InfReferに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class InfRefer
         {
@@ -284,6 +434,12 @@ namespace IcadExtraction.SxNet.Tests
             public double angle;
             public SxPos? pos;
         }
+
+        /// <summary>
+
+        /// UnknownGeometryに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class UnknownGeometry
         {

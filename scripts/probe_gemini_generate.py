@@ -1,6 +1,7 @@
-"""Probe Gemini generateContent availability for candidate models.
+"""候補の Gemini モデルで `generateContent` を利用できるか確認する。
 
-The API key is read from backend/.env and is never printed.
+API キーは `backend/.env` から読み取り、画面やログには表示しない。
+各モデルの応答を個別に記録し、通信や設定の失敗を成功扱いにしない。
 """
 
 from __future__ import annotations

@@ -1,3 +1,8 @@
+"""抽出結果、snapshot、タグ、レビュー状態をトランザクション内で保存する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -29,6 +34,8 @@ def enqueue_extraction_job(
     extraction_options: dict | None = None,
     diagnostics: dict | None = None,
 ) -> DrawingMetadataExtractionJob:
+    """同一モードの有効ジョブを重複させず、再抽出条件付きジョブを起票する。"""
+
     with transaction.atomic():
         active_job = (
             DrawingMetadataExtractionJob.objects.select_for_update()
@@ -84,6 +91,8 @@ def save_extraction_snapshot(
     derived_tags: list[dict],
     executed_by: str,
 ) -> DrawingMetadataSnapshot:
+    """raw・canonical・タグを同一トランザクションで保存し、過去の手動補正を再適用する。"""
+
     snapshot, _ = DrawingMetadataSnapshot.objects.get_or_create(
         drawing=drawing,
         extraction_mode=extraction_mode,
@@ -137,6 +146,8 @@ def apply_manual_overrides(
     reason: str,
     executed_by: str,
 ) -> DrawingMetadataSnapshot:
+    """利用者の補正要求を既存正本へマージし、変更履歴とともに保存する。"""
+
     with transaction.atomic():
         snapshot, _ = DrawingMetadataSnapshot.objects.select_for_update().get_or_create(
             drawing=drawing,
@@ -209,6 +220,8 @@ def apply_review_decision(
     reason: str,
     executed_by: str,
 ) -> DrawingMetadataSnapshot:
+    """レビュー判断と理由をsnapshotへ保存し、後続のRAG投入可否を追跡可能にする。"""
+
     with transaction.atomic():
         locked = DrawingMetadataSnapshot.objects.select_for_update().get(pk=snapshot.pk)
         before_status = locked.review_status

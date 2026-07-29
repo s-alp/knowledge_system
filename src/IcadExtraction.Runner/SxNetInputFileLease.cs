@@ -1,3 +1,6 @@
+// このファイルは、長いパスや非ASCIIパスを短い一時領域へ退避し、SXNET入力を安全に貸し出す。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -5,6 +8,9 @@ using System.Text;
 
 namespace IcadExtraction.Runner
 {
+    /// <summary>
+    /// 長いパスや非ASCIIパスを短い一時領域へ退避し、SXNET入力を安全に貸し出す。
+    /// </summary>
     public sealed class SxNetInputFileLease : IDisposable
     {
         public const string TemporaryRootEnvironmentVariable = "ICAD_SXNET_TEMP_ROOT";
@@ -52,6 +58,7 @@ namespace IcadExtraction.Runner
             var originalPath = Path.GetFullPath(inputPath);
             EnsureInputFileExists(originalPath);
 
+            // 呼び出し側が強制した場合は、見かけ上短いパスでも日本語名などの環境差を避けて一時コピーする。
             if (forceTemporaryCopy)
             {
                 return CreateTemporaryCopyLease(
@@ -67,6 +74,7 @@ namespace IcadExtraction.Runner
                 return new SxNetInputFileLease(originalPath, originalPath, "original", null, null, null);
             }
 
+            // 原本→Windows短縮パス→一時コピーの順で、原本周辺の外部参照を保ちやすい方法を優先する。
             var shortPath = TryGetWindowsShortPath(originalPath);
             if (shortPath != null && !RequiresAlternatePathForSxNet(shortPath))
             {
@@ -152,6 +160,7 @@ namespace IcadExtraction.Runner
             string warningMessage
         )
         {
+            // ファイル名をinputへ固定し、元の長い名称が一時パスへ持ち込まれないようにする。
             var temporaryDirectory = Path.Combine(ResolveTemporaryRoot(), Guid.NewGuid().ToString("N"));
             var extension = Path.GetExtension(originalPath);
             var stagedPath = Path.Combine(temporaryDirectory, string.IsNullOrWhiteSpace(extension) ? "input.icd" : "input" + extension);

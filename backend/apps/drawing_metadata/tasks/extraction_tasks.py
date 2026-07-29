@@ -1,3 +1,8 @@
+"""Django backendのextraction_tasksに関する入口またはデータ定義を提供する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from datetime import timedelta
@@ -72,6 +77,11 @@ def claim_next_job(
     mode: str,
     extractor_scope: str = EXTRACTOR_SCOPE_ALL,
 ) -> DrawingMetadataExtractionJob | None:
+    """待機ジョブをDBロック下で1件だけprocessingへ遷移し、workerへ貸し出す。
+
+    期限切れleaseは再取得可能にするが、有効なleaseを持つ別workerのジョブは選ばない。
+    """
+
     mode_values = _resolve_mode_filter(mode)
     now = timezone.now()
     lease_deadline = now + timedelta(seconds=settings.DRAWING_METADATA_JOB_LEASE_SECONDS)
@@ -211,6 +221,8 @@ def _complete_job_from_payload(
     diagnostics: dict,
     executed_by: str,
 ) -> DrawingMetadataExtractionJob:
+    """抽出payloadを正規化・タグ生成・保存し、すべて成功した後でジョブを完了にする。"""
+
     warnings = list(payload.get("warnings", []))
     canonical_attributes = normalize_raw_extract(payload)
     if job.extraction_mode == EXTRACTION_MODE_2D:
@@ -280,6 +292,8 @@ def _fail_job(job: DrawingMetadataExtractionJob, message: str) -> DrawingMetadat
 
 
 def process_job(job_id) -> DrawingMetadataExtractionJob:
+    """Docker側workerがgeneric CADジョブを1件処理し、成功または失敗状態まで確定する。"""
+
     job = DrawingMetadataExtractionJob.objects.select_related("drawing").get(pk=job_id)
     executed_by = f"worker:{job.worker_name or 'unknown'}"
     try:
@@ -325,6 +339,8 @@ def refresh_claimed_job_lease(job_id, worker_name: str) -> DrawingMetadataExtrac
 
 
 def complete_claimed_job(job_id, worker_name: str, payload: dict) -> DrawingMetadataExtractionJob:
+    """Windows agentが返した結果を、所有権確認後にsnapshotへ保存して完了させる。"""
+
     with transaction.atomic():
         job = _owned_processing_job(job_id, worker_name)
         diagnostics = dict(job.diagnostics_json or {})
@@ -343,6 +359,8 @@ def fail_claimed_job(job_id, worker_name: str, message: str) -> DrawingMetadataE
 
 
 def process_jobs(jobs: list[DrawingMetadataExtractionJob]) -> list[DrawingMetadataExtractionJob]:
+    """同じRunnerで処理できる複数ジョブをまとめ、結果は元のジョブ単位へ戻す。"""
+
     job_list = list(jobs)
     if not job_list:
         return []

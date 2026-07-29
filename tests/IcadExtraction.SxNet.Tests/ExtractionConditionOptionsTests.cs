@@ -1,9 +1,15 @@
+// このファイルは、抽出条件の既定値とJSON上書きが想定どおりに合成されることを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using System.Collections.Generic;
 using IcadExtraction.SxNet;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// 抽出条件の既定値とJSON上書きが想定どおりに合成されることを検証する。
+    /// </summary>
     public sealed class ExtractionConditionOptionsTests
     {
         [Fact]

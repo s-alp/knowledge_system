@@ -1,3 +1,6 @@
+// このファイルは、URLのdrawingIdからbootstrapを読み込み、2D・3D・設定・対象物画面を切り替える。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 
 import { DrawingSupplementPanels } from "./shared/components/DrawingSupplementPanels";
@@ -100,6 +103,7 @@ function resolveInitialMode(bootstrap: DrawingBootstrapResponse, requestedMode: 
 }
 
 export default function App() {
+  // URL由来の図面表示とローカル検証用起動を同じbootstrap形へそろえ、下位viewerの分岐を減らす。
   const drawingId = useMemo(
     () => resolveDrawingIdFromLocation(window.location.pathname, window.location.search),
     [],
@@ -168,12 +172,14 @@ export default function App() {
   const pageTitle = detailPage ? pageTitles[detailPage].replace("一覧", "詳細") : pageTitles[activePage];
 
   useEffect(() => {
+    // 図面が変わった時だけ利用可能形式から初期タブを決め、利用者が切り替えたタブを再描画で戻さない。
     if (!activeBootstrap) {
       return;
     }
     setMode(resolveInitialMode(activeBootstrap, requestedMode));
   }, [activeBootstrap, requestedMode]);
 
+  // 左メニューの業務画面と図面viewerをここで切り替え、各Pageは自分の表示責務だけを持つ。
   const pageContent = (() => {
     if (activePage !== "drawing") {
       if (activePage === "product" || activePage === "part") {

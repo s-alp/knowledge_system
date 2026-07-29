@@ -1,8 +1,7 @@
-"""Validate the human-readable drawing handoff review summary.
+"""人が確認する図面メタデータ引継ぎ要約を検証する。
 
-The full handoff fixture is for machines and can be large. This validator keeps
-the review summary small enough to open in editors and checks that heavy API
-payloads did not leak into it.
+機械向けの完全な fixture は大きいため、要約が一般的なエディターで開けるサイズかを確認する。
+あわせて、詳細 API 応答などの重いデータが誤って要約へ混入していないかを検出する。
 """
 
 from __future__ import annotations

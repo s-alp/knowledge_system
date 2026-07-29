@@ -1,8 +1,14 @@
+// このファイルは、質量特性のAPI差異や欠損値を安全に扱えることを検証する。
+// テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+// 外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
 using IcadExtraction.SxNet;
 using Xunit;
 
 namespace IcadExtraction.SxNet.Tests
 {
+    /// <summary>
+    /// 質量特性のAPI差異や欠損値を安全に扱えることを検証する。
+    /// </summary>
     public sealed class IcadMassPropertyProbeTests
     {
         [Fact]
@@ -48,6 +54,12 @@ namespace IcadExtraction.SxNet.Tests
             Assert.Equal("2.67", payload.RawFields["mass"]);
         }
 
+        /// <summary>
+
+        /// FakeMassInfoに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class FakeMassInfo
         {
             public int unit_type;
@@ -64,12 +76,24 @@ namespace IcadExtraction.SxNet.Tests
             public FakeRawMoment? inf_main_moment;
         }
 
+        /// <summary>
+
+        /// FakePosに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
+
         public sealed class FakePos
         {
             public double x;
             public double y;
             public double z;
         }
+
+        /// <summary>
+
+        /// FakeMomentに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class FakeMoment
         {
@@ -80,6 +104,12 @@ namespace IcadExtraction.SxNet.Tests
             public double iy;
             public double iz;
         }
+
+        /// <summary>
+
+        /// FakeRawMomentに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class FakeRawMoment
         {

@@ -1,3 +1,6 @@
+// このファイルは、ICADの起動状態を判定し、必要な場合だけ起動して所有関係を記録する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,10 +11,19 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// ICADの起動状態を判定し、必要な場合だけ起動して所有関係を記録する。
+    /// </summary>
     public static class IcadProcessStarter
     {
         private const string IcadSessionMutexName = @"Local\KnowledgeSystem.IcadExtraction.IcadSession";
         private const int DefaultSessionLockWaitSeconds = 600;
+
+        /// <summary>
+
+        /// IcadProcessLeaseに関する処理と状態を一つの責務としてまとめます。
+
+        /// </summary>
 
         public sealed class IcadProcessLease : IDisposable
         {

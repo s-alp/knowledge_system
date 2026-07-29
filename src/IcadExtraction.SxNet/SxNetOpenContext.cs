@@ -1,3 +1,6 @@
+// このファイルは、SXNETアセンブリの読込、モデルの読み取り専用オープン、後片付けを一つの寿命で管理する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,6 +9,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// SXNETアセンブリの読込、モデルの読み取り専用オープン、後片付けを一つの寿命で管理する。
+    /// </summary>
     public sealed class SxNetOpenContext : IDisposable
     {
         private const int FileModelOpenRetryCount = 20;

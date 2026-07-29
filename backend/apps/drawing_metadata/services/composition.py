@@ -1,3 +1,8 @@
+"""2D・3Dの正規化結果と手動補正を、最終表示・保存用の一つの結果へ合成する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from collections.abc import Iterable
@@ -161,6 +166,8 @@ def _reconciliation_record(
 
 
 def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> tuple[object, dict]:
+    """1属性について手動補正を最優先し、次に仕様化された2D/3D優先順位で採用値を決める。"""
+
     candidate_2d = manual_2d if _has_value(manual_2d) else value_2d
     candidate_3d = manual_3d if _has_value(manual_3d) else value_3d
 
@@ -346,6 +353,11 @@ def _reconcile_attribute(key: str, value_2d, value_3d, manual_2d, manual_3d) -> 
 
 
 def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
+    """1図面の2D/3D snapshotを、根拠と競合情報を保った最終メタデータへ合成する。
+
+    値が異なるだけの診断差分と、設計者レビューが必要な業務属性の競合を分けて返す。
+    """
+
     snapshots = _snapshot_by_mode(drawing)
     snapshot_2d = snapshots.get("2d")
     snapshot_3d = snapshots.get("3d")
@@ -356,6 +368,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
 
     canonical_keys: set[str] = set()
     for snapshot in snapshots.values():
+        # 片方にしか存在しない属性も落とさないよう、両snapshotのキー和集合を合成対象にする。
         canonical_keys.update((snapshot.canonical_attributes_json or {}).keys())
 
     conflicts: list[dict] = []
@@ -395,6 +408,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
                     }
                 )
 
+    # 自動タグを再生成する前に、利用者が確定した追加・削除を全snapshotから集める。
     manual_tags = []
     removed_tag_names: set[str] = set()
     for snapshot in snapshots.values():

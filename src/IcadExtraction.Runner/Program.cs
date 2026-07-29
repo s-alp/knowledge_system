@@ -1,3 +1,6 @@
+// このファイルは、IcadExtraction.RunnerのCLI入口として、抽出・変換・診断・常駐agentへ処理を振り分ける。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,17 +14,22 @@ using Newtonsoft.Json.Serialization;
 
 namespace IcadExtraction.Runner
 {
+    /// <summary>
+    /// IcadExtraction.RunnerのCLI入口として、抽出・変換・診断・常駐agentへ処理を振り分ける。
+    /// </summary>
     public static class Program
     {
         public static int Main(string[] args)
         {
             try
             {
+                // Mainでは引数解析と終了コード変換だけを行い、各コマンドの実処理は専用メソッドへ分ける。
                 var command = CliArgumentsParser.Parse(args);
                 return ExecuteCommand(command);
             }
             catch (Exception exception)
             {
+                // Windows agentやDjangoが原因を追えるよう、最内層例外まで標準エラーへ残す。
                 WriteExceptionDiagnostics(exception);
                 return 1;
             }
@@ -29,6 +37,7 @@ namespace IcadExtraction.Runner
 
         internal static int ExecuteCommand(CliCommand command)
         {
+            // 公開コマンド名と実装メソッドの対応をここへ集約し、入口が複数箇所へ散らばらないようにする。
             switch (command.CommandName)
             {
                 case "extract":
@@ -142,6 +151,7 @@ namespace IcadExtraction.Runner
 
         private static int RunExtract(CliCommand command)
         {
+            // 単発抽出は「入力準備→ICAD起動→抽出→JSON保存」の順で進み、途中失敗は上位へ返す。
             var inputPath = RequireOption(command, "input-path");
             var sourceKind = RequireOption(command, "source-kind");
             var outputPath = RequireOption(command, "output-path");
@@ -176,6 +186,7 @@ namespace IcadExtraction.Runner
 
         private static int RunExtractBatch(CliCommand command)
         {
+            // バッチではICADをジョブごとに終了せず再利用し、全ジョブ後に自動起動分だけを閉じる。
             var jobsJsonPath = RequireOption(command, "jobs-json");
             var resultJsonPath = RequireOption(command, "result-json");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");
@@ -392,6 +403,7 @@ namespace IcadExtraction.Runner
 
         private static int RunConvertCad(CliCommand command)
         {
+            // 後続のDjango取込が検証できるよう、変換ファイルだけでなく形式・警告もJSONへ記録する。
             var inputPath = RequireOption(command, "input-path");
             var outputPath = RequireOption(command, "output-path");
             var outputDirectory = RequireOption(command, "output-dir");
@@ -502,6 +514,7 @@ namespace IcadExtraction.Runner
 
         private static int RunDetect(CliCommand command)
         {
+            // detectは抽出成否ではなく、2D/3Dの実体があるかを根拠件数付きで返す軽量経路である。
             var inputPath = RequireOption(command, "input-path");
             var outputPath = RequireOption(command, "output-path");
             var sxnetDllPath = RequireOption(command, "sxnet-dll-path");

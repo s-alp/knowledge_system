@@ -1,3 +1,6 @@
+# このファイルは、展示説明用のPDM一覧CSVをExcel入力から組み立て、関連項目をそろえる。
+# 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+# 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 param(
     [string]$OutputDir = 'C:\Users\s-iwata\Desktop\knowledge_system\ナレッジシステムお披露目会向け\お披露目会_作成資料_20260601\pdm_csv_exhibition_2026-06-03\20260603_ナレッジシステム用CSV'
 )
@@ -8,6 +11,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 function Write-Utf8Csv {
+    # Excelで日本語列名をそのまま開けるよう、全CSVのUTF-8出力と出力先作成を一か所へ集約する。
     param(
         [Parameter(Mandatory = $true)]
         [string]$Path,
@@ -103,6 +107,7 @@ function New-UserRecord {
 }
 
 function Get-ProductPartTemplates {
+    # 製品種別ごとの代表部品をここで定義し、後段では同じ列構成の部品行として展開する。
     param(
         [string]$TemplateKey
     )
@@ -222,6 +227,7 @@ function Get-ProductPartTemplates {
     }
 }
 
+# ここから展示用の客先・案件・製品を作り、後半で部品・図面・文書と紐づける。
 $customers = @(
     (New-CustomerRecord -CompanyName '蒼峰自動機株式会社' -Department '生産技術部' -LastName '篠岡' -FirstName '悠真' -Title '主任' -Email 'yuma.shinooka@soho-automation.example.jp'),
     (New-CustomerRecord -CompanyName '蒼峰自動機株式会社' -Department '駆動開発部' -LastName '綾部' -FirstName '海斗' -Title '係長' -Email 'kaito.ayabe@soho-automation.example.jp'),
@@ -867,6 +873,7 @@ if ($outputParentDir -and ($outputParentDir -ne $OutputDir)) {
     Set-Content -LiteralPath (Join-Path $outputParentDir '00_README.md') -Value $readme -Encoding utf8
 }
 
+# 親テーブルを先、紐づけテーブルを後の番号にして、取込担当者が依存順に実行できるようにする。
 Write-Utf8Csv -Path (Join-Path $OutputDir '01_顧客.csv') -Rows $customerRows
 Write-Utf8Csv -Path (Join-Path $OutputDir '02_顧客担当者.csv') -Rows $contactRows
 Write-Utf8Csv -Path (Join-Path $OutputDir '03_ユーザー.csv') -Rows $internalUserRows

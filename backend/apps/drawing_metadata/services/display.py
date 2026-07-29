@@ -1,3 +1,8 @@
+"""保存済み抽出結果を、画面とAPIが扱いやすい表示用データへ整形する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import re
@@ -775,6 +780,11 @@ def _inside_print_area_label(value) -> str | None:
 
 
 def build_composed_display_payload(composed_metadata: dict) -> dict:
+    """2D/3D合成済みデータを、一覧画面で短く読める行とタグ表示へ変換する。
+
+    canonicalの生値は保持したまま、未抽出表示や長い配列の省略など表示専用の加工だけを行う。
+    """
+
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
     part_names = canonical_attributes.get("part_names", []) or []
     review_conflict_keys = {
@@ -880,6 +890,11 @@ def _viewer_tag_target_cards(tag_attributes: dict | None) -> list[dict]:
 
 
 def build_viewer_tag_panel_display_payload(*, viewer_bootstrap: dict) -> dict:
+    """既存ビューワーのbootstrapから、タグ・属性補助パネルの表示モデルを作る。
+
+    2D/3Dの表示可否とタグ候補の有無を別々に扱い、未抽出を「タグなし」と誤表示しない。
+    """
+
     metadata = viewer_bootstrap.get("metadata", {}) or {}
     availability = viewer_bootstrap.get("availability", {}) or {}
     tag_attributes = metadata.get("tagAttributes") or {}
@@ -923,6 +938,11 @@ def build_integration_handoff_display_payload(
     api_links: dict,
     knowledge_payload_preview: dict | None = None,
 ) -> dict:
+    """創屋への組み込み確認用に、viewer・RAG・対象物payloadを一つの画面へ集約する。
+
+    本番DBへ書き込む処理ではなく、各API契約が同じ図面を指しているかを読むための表示専用処理である。
+    """
+
     availability = viewer_bootstrap.get("availability", {}) or {}
     metadata = viewer_bootstrap.get("metadata", {}) or {}
     tag_attributes = metadata.get("tagAttributes") or {}
@@ -999,6 +1019,11 @@ def build_tag_review_display_payload(
     snapshots_by_mode: dict,
     knowledge_payload_preview: dict | None = None,
 ) -> dict:
+    """抽出根拠、手動補正、対象別payloadをレビュー画面用の行へ展開する。
+
+    自動採用値と利用者が確定した値を区別し、どの判断を保存するのか追える形で返す。
+    """
+
     canonical_attributes = composed_metadata.get("canonicalAttributes", {}) or {}
     groups = [
         {
@@ -1044,6 +1069,8 @@ def build_tag_review_display_payload(
 
 
 def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes: dict | None) -> dict:
+    """2D snapshotを、ビュー・レイヤー・印刷枠・要素種別ごとの確認情報へ整形する。"""
+
     raw_extract = raw_extract or {}
     canonical_attributes = canonical_attributes or {}
 
@@ -1060,6 +1087,7 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
     revision_note_candidates = canonical_attributes.get("revision_note_candidates", []) or []
     geometry_feature_candidates = canonical_attributes.get("geometry_feature_candidates", []) or []
     raw_2d_sections = canonical_attributes.get("raw_2d_sections") or {}
+    # 同じ要素集合をビュー集計・レイヤー集計・印刷枠集計で共用し、画面間の件数ずれを防ぐ。
     inspectable_items = texts + dimensions + primitives + weld_notes + balloons + tolerances
     layer_tagged_count = len([item for item in inspectable_items if item.get("layer_no") is not None])
     displayed_layer_count = len([layer for layer in layers if layer.get("is_displayed")])
@@ -1179,6 +1207,8 @@ def build_2d_snapshot_display(*, raw_extract: dict | None, canonical_attributes:
 
 
 def build_3d_snapshot_display(*, raw_extract: dict | None, canonical_attributes: dict | None) -> dict:
+    """3D snapshotを、パーツ構成・材質・質量・付加情報ごとの確認情報へ整形する。"""
+
     raw_extract = raw_extract or {}
     canonical_attributes = canonical_attributes or {}
 

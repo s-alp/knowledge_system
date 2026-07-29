@@ -1,3 +1,8 @@
+"""2D/3Dビューワーバックエンドのpdmを担当し、API層と変換・保存処理を分離する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 """PDM drawing lookup adapter used by drawingId-based viewer entrypoints."""
@@ -19,12 +24,19 @@ THREE_D_EXTENSIONS = {"stl", "step", "stp"}
 
 @dataclass(slots=True)
 class PdmResolverConfig:
+    """PDM接続先、drawingId解決パス、timeoutなどの外部接続条件を保持する。"""
+
     base_url: str
     drawing_resolve_path_template: str
     timeout_seconds: int
 
 
 class PdmDrawingResolver:
+    """drawingIdをPDMへ問い合わせ、2D/3Dソースと表示メタデータへ変換する。
+
+    認証情報は受け取ったHTTP requestから必要な範囲だけ引き継ぎ、ログや応答へ露出させない。
+    """
+
     def __init__(self, *, config: PdmResolverConfig, request: HttpRequest):
         self._config = config
         self._request = request

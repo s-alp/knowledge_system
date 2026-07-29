@@ -1,3 +1,14 @@
+"""test_normalizationの正常系・境界値・失敗時の挙動が変わらないことを自動テストで確認する。
+
+テスト名は利用者から見た前提と期待結果を表し、失敗時は対象実装の契約違反を示す。
+外部API・時刻・ファイル操作はfixtureやmockへ置き換え、再現可能性を保つ。
+主な検証観点:
+- 2Dと3Dのraw値が同じcanonicalキーへそろうこと。
+- 印刷枠外・判定不明の要素を自動採用しないこと。
+- 図枠、尺度、材質、熱処理、硬度の誤確定を防ぐこと。
+- 取得できない値を推測せずNoneまたは空配列にすること。
+- canonicalから生成するタグへ根拠と採用理由が付くこと。
+"""
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 

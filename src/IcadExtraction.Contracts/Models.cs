@@ -1,14 +1,26 @@
+// このファイルは、C# RunnerとDjango間で受け渡すCLI入力・抽出JSON・警告の公開契約を定義する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace IcadExtraction.Contracts
 {
+    /// <summary>
+    /// CLIで指定されたコマンド名と、--名前 値形式のオプションを保持します。
+    /// </summary>
     public sealed class CliCommand
     {
         public string CommandName { get; set; } = string.Empty;
         public Dictionary<string, string> Options { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
+
+    /// <summary>
+
+    /// 文字列配列のCLI引数を、Runner内部で扱うCliCommandへ変換します。
+
+    /// </summary>
 
     public static class CliArgumentsParser
     {
@@ -40,11 +52,23 @@ namespace IcadExtraction.Contracts
         }
     }
 
+    /// <summary>
+
+    /// 処理を中断しない不足や制約を、機械判定用コードと説明文で返します。
+
+    /// </summary>
+
     public sealed class WarningPayload
     {
         public string Code { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
     }
+
+    /// <summary>
+
+    /// ICADモデルの最上位パーツに設定された名称・コメント・付加情報を表します。
+
+    /// </summary>
 
     public sealed class TopPartPayload
     {
@@ -53,6 +77,12 @@ namespace IcadExtraction.Contracts
         public string? ExInfo { get; set; }
         public Dictionary<string, string> ExInfoFields { get; set; } = new Dictionary<string, string>();
     }
+
+    /// <summary>
+
+    /// 3Dパーツツリーの1ノードを、親子関係と外部参照状態を保って表します。
+
+    /// </summary>
 
     public sealed class PartPayload
     {
@@ -75,6 +105,12 @@ namespace IcadExtraction.Contracts
         public List<MaterialPayload> Materials { get; set; } = new List<MaterialPayload>();
     }
 
+    /// <summary>
+
+    /// 3D抽出で得た未正規化データをまとめ、取得できた値だけを保持します。
+
+    /// </summary>
+
     public sealed class RawExtract3DPayload
     {
         public ModelInfoPayload ModelInfo { get; set; } = new ModelInfoPayload();
@@ -88,6 +124,12 @@ namespace IcadExtraction.Contracts
         public List<MaterialPayload> Materials { get; set; } = new List<MaterialPayload>();
     }
 
+    /// <summary>
+
+    /// SXNETから取得した材質候補と、その候補が属するパーツを表します。
+
+    /// </summary>
+
     public sealed class MaterialPayload
     {
         public string? MatId { get; set; }
@@ -96,6 +138,12 @@ namespace IcadExtraction.Contracts
         public int ElementCount { get; set; }
         public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
     }
+
+    /// <summary>
+
+    /// ICADモデル全体の名称・コメント・付加情報などの基本情報を表します。
+
+    /// </summary>
 
     public sealed class ModelInfoPayload
     {
@@ -106,6 +154,12 @@ namespace IcadExtraction.Contracts
         public int ViewSheetCount { get; set; }
         public int WorkPlaneCount { get; set; }
     }
+
+    /// <summary>
+
+    /// モデルまたはパーツの質量・重心・慣性モーメントを表します。
+
+    /// </summary>
 
     public sealed class MassPropertyPayload
     {
@@ -128,6 +182,12 @@ namespace IcadExtraction.Contracts
         public Dictionary<string, string> RawFields { get; set; } = new Dictionary<string, string>();
     }
 
+    /// <summary>
+
+    /// 2D/3Dビューワーへ渡すプレビュー資産の場所・形式・生成状態を表します。
+
+    /// </summary>
+
     public sealed class ViewerAssetPayload
     {
         public string Mode { get; set; } = string.Empty;
@@ -143,6 +203,12 @@ namespace IcadExtraction.Contracts
         public string? Message { get; set; }
     }
 
+    /// <summary>
+
+    /// 2D図面上の文字要素を、表示内容・座標・ビュー・レイヤーとともに表します。
+
+    /// </summary>
+
     public sealed class TextPayload
     {
         public List<string> TextLines { get; set; } = new List<string>();
@@ -157,6 +223,12 @@ namespace IcadExtraction.Contracts
         public int? PrintFrameNo { get; set; }
         public string? JoinedText { get; set; }
     }
+
+    /// <summary>
+
+    /// 寸法値と上下公差、配置先ビュー・レイヤーなどの抽出結果を表します。
+
+    /// </summary>
 
     public sealed class DimensionPayload
     {
@@ -178,6 +250,12 @@ namespace IcadExtraction.Contracts
         public string? Summary { get; set; }
     }
 
+    /// <summary>
+
+    /// 溶接記号または溶接注記の候補を、取得元情報付きで表します。
+
+    /// </summary>
+
     public sealed class WeldNotePayload
     {
         public string? ViewName { get; set; }
@@ -189,6 +267,12 @@ namespace IcadExtraction.Contracts
         public int? PrintFrameNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
+
+    /// <summary>
+
+    /// 部品番号などを示すバルーン要素と、その図面上の位置を表します。
+
+    /// </summary>
 
     public sealed class BalloonPayload
     {
@@ -202,6 +286,12 @@ namespace IcadExtraction.Contracts
         public string? Text { get; set; }
     }
 
+    /// <summary>
+
+    /// 幾何公差などの公差要素を、種別・値・配置情報とともに表します。
+
+    /// </summary>
+
     public sealed class TolerancePayload
     {
         public string? ViewName { get; set; }
@@ -213,6 +303,12 @@ namespace IcadExtraction.Contracts
         public int? PrintFrameNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }
+
+    /// <summary>
+
+    /// 2D図面から参照される外部部品と、参照先の識別情報を表します。
+
+    /// </summary>
 
     public sealed class Referenced2DPartPayload
     {
@@ -236,6 +332,12 @@ namespace IcadExtraction.Contracts
         public double? Angle { get; set; }
         public string Summary { get; set; } = string.Empty;
     }
+
+    /// <summary>
+
+    /// 線・円・ハッチングなどの2D図形を共通形式で表します。
+
+    /// </summary>
 
     public sealed class GeometryPrimitivePayload
     {
@@ -266,6 +368,12 @@ namespace IcadExtraction.Contracts
         public string Summary { get; set; } = string.Empty;
     }
 
+    /// <summary>
+
+    /// ICADの1ビューについて、名称・種類・配置番号・要素数を表します。
+
+    /// </summary>
+
     public sealed class ViewSheetPayload
     {
         public string? Name { get; set; }
@@ -276,6 +384,12 @@ namespace IcadExtraction.Contracts
         public int ViewType { get; set; }
         public int GeometryCount { get; set; }
     }
+
+    /// <summary>
+
+    /// 印刷対象となる矩形範囲をICADモデル空間の座標で表します。
+
+    /// </summary>
 
     public sealed class PrintFramePayload
     {
@@ -290,6 +404,12 @@ namespace IcadExtraction.Contracts
         public double? RangeMaxY { get; set; }
     }
 
+    /// <summary>
+
+    /// 2Dレイヤーの番号・名称・表示状態・編集状態を表します。
+
+    /// </summary>
+
     public sealed class LayerPayload
     {
         public int No { get; set; }
@@ -297,6 +417,12 @@ namespace IcadExtraction.Contracts
         public bool IsDisplayed { get; set; }
         public bool IsSearchable { get; set; }
     }
+
+    /// <summary>
+
+    /// 2D抽出で得た要素・ビュー・レイヤー・印刷枠をまとめます。
+
+    /// </summary>
 
     public sealed class RawExtract2DPayload
     {
@@ -315,6 +441,12 @@ namespace IcadExtraction.Contracts
         public List<Referenced2DPartPayload> ReferencedParts { get; set; } = new List<Referenced2DPartPayload>();
     }
 
+    /// <summary>
+
+    /// 抽出対象ファイルの表示名・元パス・サイズ・ハッシュを表します。
+
+    /// </summary>
+
     public sealed class SourceFilePayload
     {
         public string FullPath { get; set; } = string.Empty;
@@ -328,6 +460,12 @@ namespace IcadExtraction.Contracts
         public int OriginalPathLength { get; set; }
         public int SxNetInputPathLength { get; set; }
     }
+
+    /// <summary>
+
+    /// 1回の抽出結果として、抽出種別・rawデータ・警告・実行条件をまとめます。
+
+    /// </summary>
 
     public sealed class ExtractionEnvelope
     {
@@ -345,6 +483,12 @@ namespace IcadExtraction.Contracts
         public object RawExtract { get; set; } = new Dictionary<string, object>();
     }
 
+    /// <summary>
+
+    /// ビューワー資産の出力先と公開URLを組み立てる条件を表します。
+
+    /// </summary>
+
     public sealed class PreviewAssetOptions
     {
         public bool Enabled { get; set; }
@@ -352,6 +496,12 @@ namespace IcadExtraction.Contracts
         public string? PublicBaseUrl { get; set; }
         public string? FileNamePrefix { get; set; }
     }
+
+    /// <summary>
+
+    /// 2D実体の有無を判断した根拠件数を表します。
+
+    /// </summary>
 
     public sealed class DetectionEvidence2DPayload
     {
@@ -363,12 +513,24 @@ namespace IcadExtraction.Contracts
         public int GeometryCount { get; set; }
     }
 
+    /// <summary>
+
+    /// 3D実体の有無を判断した根拠件数を表します。
+
+    /// </summary>
+
     public sealed class DetectionEvidence3DPayload
     {
         public bool HasContent { get; set; }
         public string? TopPartName { get; set; }
         public int PartCount { get; set; }
     }
+
+    /// <summary>
+
+    /// 1ファイルに2D/3Dのどちらが存在するかと判定根拠を表します。
+
+    /// </summary>
 
     public sealed class DetectionPayload
     {
@@ -385,6 +547,12 @@ namespace IcadExtraction.Contracts
         public DetectionEvidence3DPayload ThreeD { get; set; } = new DetectionEvidence3DPayload();
     }
 
+    /// <summary>
+
+    /// 2D/3D存在判定の結果と、判定中に発生した警告をまとめます。
+
+    /// </summary>
+
     public sealed class DetectionEnvelope
     {
         public string InputPath { get; set; } = string.Empty;
@@ -397,12 +565,24 @@ namespace IcadExtraction.Contracts
         public DetectionPayload Detection { get; set; } = new DetectionPayload();
     }
 
+    /// <summary>
+
+    /// ICADに登録されたプロッター名・用紙・向きなどの印刷設定を表します。
+
+    /// </summary>
+
     public sealed class PlotterPayload
     {
         public string? No { get; set; }
         public string? Name { get; set; }
         public bool IsDefault { get; set; }
     }
+
+    /// <summary>
+
+    /// 印刷API調査で取得できたプロッターと印刷枠をまとめます。
+
+    /// </summary>
 
     public sealed class PrintProbePayload
     {
@@ -412,6 +592,12 @@ namespace IcadExtraction.Contracts
         public string PrintExecutionStatus { get; set; } = "not_attempted";
         public string PrintExecutionMessage { get; set; } = "This probe reads print frames and plotter definitions only. It does not execute SxModel.print.";
     }
+
+    /// <summary>
+
+    /// 印刷設定調査の最上位結果と警告をまとめます。
+
+    /// </summary>
 
     public sealed class PrintProbeEnvelope
     {

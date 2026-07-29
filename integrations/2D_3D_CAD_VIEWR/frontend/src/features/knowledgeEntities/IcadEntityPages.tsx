@@ -1,3 +1,6 @@
+// このファイルは、ICADの構成情報から作った製品・装置・ユニットと部品を一覧・詳細表示する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import {
@@ -138,6 +141,7 @@ export function IcadEntityListPage({
   targetKey: KnowledgeEntityTargetKey;
   onOpenDetail: (entityId: string, drawingId: string) => void;
 }) {
+  // 入力中の検索語と確定検索語を分け、1文字入力ごとのAPI再取得を避ける。
   const [draftQuery, setDraftQuery] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -443,6 +447,7 @@ function DrawingLinkDialog({ record, onClose, onSaved }: { record: KnowledgeEnti
 
 
 export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { entityId: string | null; drawingId: string | null; onNavigate: (page: KnowledgePageKey, entityId?: string, drawingId?: string) => void }) {
+  // 詳細本体と編集・根拠・紐づけdialogの開閉を分け、再取得しても表示中dialogを維持する。
   const { record, loading, error, refresh } = useKnowledgeEntityDetail(entityId, drawingId);
   const [activeTabId, setActiveTabId] = useState<RelatedTabId>("project");
   const [editOpen, setEditOpen] = useState(false);
@@ -450,6 +455,7 @@ export function IcadEntityDetailPage({ entityId, drawingId, onNavigate }: { enti
   const [linkOpen, setLinkOpen] = useState(false);
 
   useEffect(() => {
+    // 部品には同じ図面内の親製品を最初に見せ、製品ではプロジェクト関連を最初に見せる。
     if (record?.targetKey === "part") setActiveTabId("product");
   }, [record?.targetKey]);
 

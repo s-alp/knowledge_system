@@ -1,3 +1,8 @@
+"""ICADパーツ構成から製品・装置・ユニットと部品の表示情報を組み立てる。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 from collections import Counter
@@ -145,6 +150,11 @@ def _classify_icd(
     parts: list[dict],
     canonical: dict | None = None,
 ) -> dict:
+    """1 ICDを製品・装置・ユニットまたは部品へ分類し、判定理由も返す。
+
+    子ノードの有無だけで決めず、手動確定、保存先、名称語彙、外部参照の順で根拠を評価する。
+    """
+
     manual = _manual_classification(snapshot)
     if manual:
         return {
@@ -461,6 +471,8 @@ def _build_record(
     *,
     include_details: bool,
 ) -> dict:
+    """1図面から一覧・詳細共通の対象物レコードを作り、属性・タグへ根拠を付ける。"""
+
     composed = compose_drawing_metadata(drawing) if include_details else None
     canonical = (composed or {}).get("canonicalAttributes") or _snapshot_canonical(drawing, snapshot)
     parts = _part_rows(snapshot) if include_details or not _has_lightweight_part_summary(canonical) else []
@@ -688,6 +700,8 @@ def build_icad_entity_catalog(
     offset: int = 0,
     limit: int | None = None,
 ) -> dict:
+    """共有対象図面を対象物一覧へ変換し、検索・ページング後の件数と項目を返す。"""
+
     if target_key not in {None, TARGET_PRODUCT, TARGET_PART}:
         raise ValueError(f"unsupported target_key: {target_key}")
     records, skipped = _records(drawings, include_details=False)
@@ -730,6 +744,8 @@ def build_icad_entity_catalog(
 
 
 def find_icad_entity(drawings: Iterable[RegisteredDrawing], entity_id: str) -> dict | None:
+    """安定IDから対象図面を逆引きし、関連対象物を含む詳細レコードを返す。"""
+
     drawing_list = list(drawings)
     selected_drawing = next(
         (drawing for drawing in drawing_list if _stable_entity_id(drawing.id) == str(entity_id)),

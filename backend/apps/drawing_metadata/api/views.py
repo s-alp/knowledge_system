@@ -1,3 +1,8 @@
+"""図面メタデータAPIのviewsを定義し、HTTP入出力をservice層へ接続する。
+
+初めて読むときは、公開されている入口から呼び出し先を順に追う。
+外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+"""
 from __future__ import annotations
 
 import hashlib
@@ -56,6 +61,8 @@ from apps.drawing_metadata.services.viewer_preview import (
 
 
 class RegistrationListApiView(APIView):
+    """共有対象の登録図面一覧を返し、新規登録要求をservice層へ接続する。"""
+
     def get(self, request):
         queryset = (
             RegisteredDrawing.objects.prefetch_related(
@@ -145,6 +152,8 @@ def _icad_entity_drawings_queryset(*, include_details: bool = False):
 
 
 class IcadEntityListApiView(APIView):
+    """3D snapshotから組み立てた製品・装置・ユニット／部品の一覧を返す。"""
+
     def get(self, request):
         target_key = request.query_params.get("target") or None
         if target_key not in {None, "product", "part"}:
@@ -191,6 +200,8 @@ class IcadEntityListApiView(APIView):
 
 
 class IcadEntityDetailApiView(APIView):
+    """対象物IDと図面IDを解決し、属性・タグ・根拠を含む詳細を返す。"""
+
     def get(self, request, entity_id):
         drawings = _icad_entity_drawings_queryset(include_details=True)
         drawing_id = request.query_params.get("drawingId")
@@ -210,6 +221,8 @@ class IcadEntityDetailApiView(APIView):
 
 
 class DrawingOptionListApiView(APIView):
+    """関連図面の手動紐づけ候補を、現在の図面を除外して返す。"""
+
     def get(self, request):
         query = request.query_params.get("q", "").strip()
         try:
@@ -270,6 +283,8 @@ def _failed_job_payload(job: DrawingMetadataExtractionJob) -> dict:
 
 
 class HandoffSummaryApiView(APIView):
+    """創屋引継ぎ確認用に、抽出状態・直近失敗・API契約の集計を返す。"""
+
     def get(self, request):
         queryset = (
             RegisteredDrawing.objects.prefetch_related(
@@ -327,6 +342,8 @@ class HandoffSummaryApiView(APIView):
 
 
 class RegistrationUploadApiView(APIView):
+    """アップロードされたCADを検証用領域へ保存し、登録図面として作成する。"""
+
     def post(self, request):
         uploaded_file = request.FILES.get("file")
         if uploaded_file is None:
@@ -395,6 +412,8 @@ class RegistrationDetailApiView(APIView):
 
 
 class DrawingViewerBootstrapApiView(APIView):
+    """既存2D/3Dビューワーが最初に読む図面情報と利用可能資産を返す。"""
+
     def get(self, request, drawing_id):
         drawing = get_object_or_404(
             RegisteredDrawing.objects.prefetch_related(
@@ -552,6 +571,8 @@ class DrawingPreviewAssetApiView(APIView):
 
 
 class RegistrationExtractApiView(APIView):
+    """同一モードの重複実行を防ぎながら、条件付き抽出ジョブを起票する。"""
+
     def post(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
         serializer = ExtractRequestSerializer(data=request.data)
@@ -574,6 +595,8 @@ class RegistrationExtractApiView(APIView):
 
 
 class RegistrationOverrideApiView(APIView):
+    """利用者の属性・タグ修正を正本へ保存し、合成結果へ即時反映する。"""
+
     def patch(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
         serializer = ManualOverrideSerializer(data=request.data)
@@ -597,6 +620,8 @@ class RegistrationOverrideApiView(APIView):
 
 
 class RegistrationReviewApiView(APIView):
+    """指定snapshotへ承認・差戻し判断と理由を保存する。"""
+
     def patch(self, request, drawing_id):
         drawing = get_object_or_404(RegisteredDrawing, pk=drawing_id)
         serializer = ReviewDecisionSerializer(data=request.data)

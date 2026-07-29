@@ -1,3 +1,6 @@
+// このファイルは、ICADの印刷設定と印刷枠APIを調査し、利用可能な値を診断情報として返す。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +9,9 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// ICADの印刷設定と印刷枠APIを調査し、利用可能な値を診断情報として返す。
+    /// </summary>
     public sealed class Icad2DPrintProbe
     {
         public PrintProbeEnvelope Probe(string sxnetDllPath, string inputPath)

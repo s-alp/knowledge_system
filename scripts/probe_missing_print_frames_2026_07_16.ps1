@@ -1,3 +1,6 @@
+# このファイルは、`probe_missing_print_frames_2026_07_16`として限定したAPIやデータ経路を試し、実値を確認する補助スクリプトである。
+# 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+# 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 [CmdletBinding()]
 param(
     [string]$AuditPath = "C:\Users\s-iwata\Desktop\knowledge_system\output\souya_handoff\icad_shared_sample_current_audit_2026-07-16.json",

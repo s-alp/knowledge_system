@@ -1,8 +1,14 @@
+// このファイルは、SXNETへキャンセル・クリアなどの制御コマンドを送る小さな境界を提供する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Reflection;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// SXNETへキャンセル・クリアなどの制御コマンドを送る小さな境界を提供する。
+    /// </summary>
     public sealed class SxNetCommandController
     {
         public void Cancel(string sxnetDllPath, int port)

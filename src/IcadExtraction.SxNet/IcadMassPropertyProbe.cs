@@ -1,3 +1,6 @@
+// このファイルは、SXNETの複数API候補から質量・重心・慣性モーメントを安全に取得する。
+// 初めて読むときは、公開されている入口から呼び出し先を順に追う。
+// 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,10 +10,14 @@ using IcadExtraction.Contracts;
 
 namespace IcadExtraction.SxNet
 {
+    /// <summary>
+    /// SXNETの複数API候補から質量・重心・慣性モーメントを安全に取得する。
+    /// </summary>
     internal sealed class IcadMassPropertyProbe
     {
         public void Apply(object globalWf, Assembly assembly, RawExtract3DPayload payload, IList<WarningPayload> warnings)
         {
+            // probeの成否を値の有無と分けて記録し、「未実行」「取得値なし」「API失敗」を区別する。
             payload.MassProbeStatus = "attempted";
 
             try
@@ -46,6 +53,7 @@ namespace IcadExtraction.SxNet
 
         internal static MassPropertyPayload MapMassProperties(object massInfo, int elementCount, Assembly? assembly = null)
         {
+            // SXNETの生値と単位名を同時に保持し、Django側が単位を推測せずkgへ換算できるようにする。
             var unitType = ReflectionHelpers.GetInt(massInfo, "unit_type");
             var center = ReflectionHelpers.GetMemberValue(massInfo, "pos");
             var globalMoment = ReflectionHelpers.GetMemberValue(massInfo, "inf_global_moment");
@@ -194,6 +202,7 @@ namespace IcadExtraction.SxNet
 
         private static string ResolveUnitName(int unitType, Assembly? assembly)
         {
+            // 定数名が取得できる環境ではSDK定義を優先し、未知の番号を既知単位へ決めつけない。
             if (assembly != null)
             {
                 var infMassType = assembly.GetType("sxnet.SxInfMass", throwOnError: false);
