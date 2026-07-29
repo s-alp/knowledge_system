@@ -32,6 +32,36 @@ def test_registration_create_and_list(sample_registration_payload, tmp_path):
 
 
 @pytest.mark.django_db
+def test_registration_create_rejects_remote_agent_path_by_default(sample_registration_payload):
+    client = APIClient()
+    sample_registration_payload["sourcePath"] = r"Z:\remote-agent\missing.icd"
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations",
+        sample_registration_payload,
+        format="json",
+    )
+
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_registration_create_accepts_remote_agent_path_when_enabled(settings, sample_registration_payload):
+    settings.DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS = True
+    client = APIClient()
+    sample_registration_payload["sourcePath"] = r"Z:\remote-agent\sample.icd"
+
+    response = client.post(
+        "/api/v1/drawing-metadata/registrations",
+        sample_registration_payload,
+        format="json",
+    )
+
+    assert response.status_code == 201
+    assert response.json()["sourcePath"] == r"Z:\remote-agent\sample.icd"
+
+
+@pytest.mark.django_db
 def test_registration_create_returns_existing_for_same_source_path(sample_registration_payload, tmp_path):
     client = APIClient()
     source_file = tmp_path / "same_source.icd"

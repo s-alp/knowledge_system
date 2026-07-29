@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from apps.drawing_metadata.models import (
     TagDictionaryEntry,
+    DrawingMetadataAgentHeartbeat,
     DrawingMetadataAuditLog,
     DrawingMetadataExtractionJob,
     DrawingMetadataSnapshot,
@@ -30,6 +31,14 @@ class DrawingMetadataExtractionJobAdmin(admin.ModelAdmin):
     )
     search_fields = ("drawing__filename", "drawing__host_drawing_id", "error_message", "extraction_profile")
     list_filter = ("status", "extraction_mode", "extraction_profile")
+
+
+@admin.register(DrawingMetadataAgentHeartbeat)
+class DrawingMetadataAgentHeartbeatAdmin(admin.ModelAdmin):
+    list_display = ("worker_name", "state", "mode", "current_job", "runner_version", "updated_at")
+    search_fields = ("worker_name", "last_error")
+    list_filter = ("state", "mode")
+    readonly_fields = ("updated_at",)
 
 
 @admin.register(DrawingMetadataSnapshot)

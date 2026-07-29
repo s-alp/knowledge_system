@@ -175,6 +175,14 @@
   - 2D は `SxModel.getGlobalVS()` -> `getSegList(...)` -> `SxEntSeg.getGeomList(...)`
 - `sxnet.dll` が無い状態でも build/test できるよう、実装は reflection 呼び出しで統一した
 
+### 2026-07-29 Docker / Windows分離反映
+
+- Django Web/APIとSTEP/DXF workerはLinux/Dockerで動かす
+- ICAD・SXNET・`net48`抽出器はWindows上の`IcadExtraction.Runner.exe agent`へ閉じ込める
+- agentはDjangoのBearer token付きHTTP APIでjobをclaimし、入力取得、heartbeat、preview asset upload、生抽出JSONのcomplete/failを行う
+- Docker内SQLiteや名前付きvolumeをWindowsへ直接共有しない
+- 正規化、タグ生成、snapshot、監査ログはDjango側に残し、C#へ業務辞書を持ち込まない
+
 ## 7.2 第二候補: Python から C# DLL を呼ぶ
 
 ### 概要

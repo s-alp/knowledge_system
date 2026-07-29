@@ -28,6 +28,28 @@ namespace IcadExtraction.Runner.Tests
         }
 
         [Fact]
+        public void Main_ReturnsErrorWhenAgentApiBaseUrlIsMissing()
+        {
+            var originalError = Console.Error;
+            var originalApiBaseUrl = Environment.GetEnvironmentVariable("DRAWING_METADATA_AGENT_API_BASE_URL");
+            using var error = new StringWriter();
+            Console.SetError(error);
+            Environment.SetEnvironmentVariable("DRAWING_METADATA_AGENT_API_BASE_URL", null);
+            try
+            {
+                var result = Program.Main(new[] { "agent" });
+
+                Assert.Equal(1, result);
+                Assert.Contains("api-base-url is required", error.ToString());
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("DRAWING_METADATA_AGENT_API_BASE_URL", originalApiBaseUrl);
+                Console.SetError(originalError);
+            }
+        }
+
+        [Fact]
         public void SxNetInputFileLease_UsesOriginalPathForNormalPath()
         {
             var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".icd");

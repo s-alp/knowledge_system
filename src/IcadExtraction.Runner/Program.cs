@@ -18,36 +18,43 @@ namespace IcadExtraction.Runner
             try
             {
                 var command = CliArgumentsParser.Parse(args);
-                switch (command.CommandName)
-                {
-                    case "extract":
-                        return RunExtract(command);
-                    case "extract-batch":
-                        return RunExtractBatch(command);
-                    case "detect":
-                        return RunDetect(command);
-                    case "probe-2d-print":
-                        return RunProbe2DPrint(command);
-                    case "cancel":
-                        return RunCancel(command);
-                    case "clear-command":
-                        return RunClearCommand(command);
-                    case "shutdown-icad":
-                        return RunShutdownIcad(command);
-                    case "convert-cad":
-                        return RunConvertCad(command);
-                    case "probe-cad-export-types":
-                        return RunProbeCadExportTypes(command);
-                    case "self-check":
-                        return RunSelfCheck(command);
-                    default:
-                        throw new ArgumentException($"unsupported command: {command.CommandName}");
-                }
+                return ExecuteCommand(command);
             }
             catch (Exception exception)
             {
                 WriteExceptionDiagnostics(exception);
                 return 1;
+            }
+        }
+
+        internal static int ExecuteCommand(CliCommand command)
+        {
+            switch (command.CommandName)
+            {
+                case "extract":
+                    return RunExtract(command);
+                case "extract-batch":
+                    return RunExtractBatch(command);
+                case "detect":
+                    return RunDetect(command);
+                case "probe-2d-print":
+                    return RunProbe2DPrint(command);
+                case "cancel":
+                    return RunCancel(command);
+                case "clear-command":
+                    return RunClearCommand(command);
+                case "shutdown-icad":
+                    return RunShutdownIcad(command);
+                case "convert-cad":
+                    return RunConvertCad(command);
+                case "probe-cad-export-types":
+                    return RunProbeCadExportTypes(command);
+                case "self-check":
+                    return RunSelfCheck(command);
+                case "agent":
+                    return WindowsExtractionAgent.Run(command.Options);
+                default:
+                    throw new ArgumentException($"unsupported command: {command.CommandName}");
             }
         }
 

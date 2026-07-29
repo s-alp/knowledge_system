@@ -25,7 +25,15 @@ from apps.drawing_metadata.services.llm_title_block_classifier import (
 )
 from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.persistence import save_extraction_snapshot
-from apps.drawing_metadata.services.source_formats import uses_generic_cad_extractor, uses_sxnet_extractor
+from apps.drawing_metadata.services.source_formats import (
+    EXTRACTOR_SCOPE_ALL,
+    EXTRACTOR_SCOPE_GENERIC,
+    EXTRACTOR_SCOPE_SXNET,
+    GENERIC_CAD_SOURCE_FORMATS,
+    SXNET_SOURCE_FORMATS,
+    uses_generic_cad_extractor,
+    uses_sxnet_extractor,
+)
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
@@ -49,13 +57,27 @@ def _refresh_processing_lease(job: DrawingMetadataExtractionJob, *, batch_size: 
     job.save(update_fields=["lease_expires_at", "updated_at"])
 
 
-def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob | None:
+def _apply_extractor_scope(queryset, extractor_scope: str):
+    if extractor_scope == EXTRACTOR_SCOPE_ALL:
+        return queryset
+    if extractor_scope == EXTRACTOR_SCOPE_GENERIC:
+        return queryset.filter(drawing__source_format__in=GENERIC_CAD_SOURCE_FORMATS)
+    if extractor_scope == EXTRACTOR_SCOPE_SXNET:
+        return queryset.filter(drawing__source_format__in=SXNET_SOURCE_FORMATS)
+    raise ValueError(f"unsupported extractor scope: {extractor_scope}")
+
+
+def claim_next_job(
+    worker_name: str,
+    mode: str,
+    extractor_scope: str = EXTRACTOR_SCOPE_ALL,
+) -> DrawingMetadataExtractionJob | None:
     mode_values = _resolve_mode_filter(mode)
     now = timezone.now()
     lease_deadline = now + timedelta(seconds=settings.DRAWING_METADATA_JOB_LEASE_SECONDS)
 
     with transaction.atomic():
-        job = (
+        candidates = (
             DrawingMetadataExtractionJob.objects.select_related("drawing")
             .filter(
                 extraction_mode__in=mode_values,
@@ -72,6 +94,11 @@ def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob 
                     lease_expires_at__lte=now,
                 )
             )
+        )
+        candidates = _apply_extractor_scope(candidates, extractor_scope)
+        job = (
+            candidates
+            .select_for_update()
             .order_by("created_at")
             .first()
         )
@@ -98,10 +125,19 @@ def claim_next_job(worker_name: str, mode: str) -> DrawingMetadataExtractionJob 
         return job
 
 
-def claim_next_jobs(worker_name: str, mode: str, limit: int) -> list[DrawingMetadataExtractionJob]:
+def claim_next_jobs(
+    worker_name: str,
+    mode: str,
+    limit: int,
+    extractor_scope: str = EXTRACTOR_SCOPE_ALL,
+) -> list[DrawingMetadataExtractionJob]:
     jobs: list[DrawingMetadataExtractionJob] = []
     for _index in range(max(limit, 1)):
-        job = claim_next_job(worker_name=worker_name, mode=mode)
+        job = claim_next_job(
+            worker_name=worker_name,
+            mode=mode,
+            extractor_scope=extractor_scope,
+        )
         if not job:
             break
         jobs.append(job)
@@ -259,6 +295,51 @@ def process_job(job_id) -> DrawingMetadataExtractionJob:
     except (ExtractionRunnerError, FileNotFoundError, ValueError) as exc:
         _fail_job(job, str(exc))
     return job
+
+
+def prepare_claimed_job(job: DrawingMetadataExtractionJob) -> DrawingMetadataExtractionJob:
+    if job.status != DrawingMetadataExtractionJob.STATUS_PROCESSING:
+        raise ValueError("claimed job must be processing")
+    _prepare_job_for_processing(job)
+    return job
+
+
+def _owned_processing_job(job_id, worker_name: str) -> DrawingMetadataExtractionJob:
+    job = (
+        DrawingMetadataExtractionJob.objects.select_for_update()
+        .select_related("drawing")
+        .get(pk=job_id)
+    )
+    if job.status != DrawingMetadataExtractionJob.STATUS_PROCESSING:
+        raise ValueError("job is not processing")
+    if job.worker_name != worker_name:
+        raise ValueError("job is owned by another worker")
+    return job
+
+
+def refresh_claimed_job_lease(job_id, worker_name: str) -> DrawingMetadataExtractionJob:
+    with transaction.atomic():
+        job = _owned_processing_job(job_id, worker_name)
+        _refresh_processing_lease(job)
+        return job
+
+
+def complete_claimed_job(job_id, worker_name: str, payload: dict) -> DrawingMetadataExtractionJob:
+    with transaction.atomic():
+        job = _owned_processing_job(job_id, worker_name)
+        diagnostics = dict(job.diagnostics_json or {})
+        return _complete_job_from_payload(
+            job,
+            payload,
+            diagnostics=diagnostics,
+            executed_by=f"windows-agent:{worker_name}",
+        )
+
+
+def fail_claimed_job(job_id, worker_name: str, message: str) -> DrawingMetadataExtractionJob:
+    with transaction.atomic():
+        job = _owned_processing_job(job_id, worker_name)
+        return _fail_job(job, message)
 
 
 def process_jobs(jobs: list[DrawingMetadataExtractionJob]) -> list[DrawingMetadataExtractionJob]:

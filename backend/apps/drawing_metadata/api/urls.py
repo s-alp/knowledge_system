@@ -1,9 +1,39 @@
 from django.urls import path
 
-from apps.drawing_metadata.api import views
+from apps.drawing_metadata.api import agent_views, views
 
 
 urlpatterns = [
+    path(
+        "drawing-metadata/agent/jobs/claim",
+        agent_views.AgentClaimApiView.as_view(),
+        name="drawing-metadata-agent-job-claim",
+    ),
+    path(
+        "drawing-metadata/agent/heartbeat",
+        agent_views.AgentHeartbeatApiView.as_view(),
+        name="drawing-metadata-agent-heartbeat",
+    ),
+    path(
+        "drawing-metadata/agent/jobs/<uuid:job_id>/source",
+        agent_views.AgentJobSourceApiView.as_view(),
+        name="drawing-metadata-agent-job-source",
+    ),
+    path(
+        "drawing-metadata/agent/jobs/<uuid:job_id>/assets",
+        agent_views.AgentJobAssetApiView.as_view(),
+        name="drawing-metadata-agent-job-assets",
+    ),
+    path(
+        "drawing-metadata/agent/jobs/<uuid:job_id>/complete",
+        agent_views.AgentJobCompleteApiView.as_view(),
+        name="drawing-metadata-agent-job-complete",
+    ),
+    path(
+        "drawing-metadata/agent/jobs/<uuid:job_id>/fail",
+        agent_views.AgentJobFailApiView.as_view(),
+        name="drawing-metadata-agent-job-fail",
+    ),
     path(
         "drawing-metadata/settings/tag-automation",
         views.TagAutomationSettingsApiView.as_view(),

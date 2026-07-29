@@ -13,19 +13,47 @@ services:
       - drawing-metadata-data:/app/backend/var
     env_file:
       - backend/.env
+    environment:
+      DJANGO_SQLITE_PATH: /app/backend/var/db.sqlite3
+      DRAWING_METADATA_STORAGE_ROOT: /app/backend/var/drawing_metadata
+      DRAWING_METADATA_EXTRACTOR_EXECUTABLE: ""
+      DRAWING_METADATA_SXNET_DLL_PATH: ""
+      DRAWING_METADATA_ICAD_EXECUTABLE: ""
+      DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS: "true"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/drawing-metadata/registrations', timeout=5)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
 
   worker:
     build:
       context: .
       dockerfile: backend/Dockerfile
     command: >
-      sh -c "python manage.py migrate &&
-      python manage.py process_drawing_metadata_jobs --loop --sleep-seconds 5"
+      python manage.py process_drawing_metadata_jobs
+      --loop
+      --sleep-seconds 5
+      --extractor-scope generic
     working_dir: /app/backend
     volumes:
       - drawing-metadata-data:/app/backend/var
     env_file:
       - backend/.env
+    environment:
+      DJANGO_SQLITE_PATH: /app/backend/var/db.sqlite3
+      DRAWING_METADATA_STORAGE_ROOT: /app/backend/var/drawing_metadata
+      DRAWING_METADATA_EXTRACTOR_EXECUTABLE: ""
+      DRAWING_METADATA_SXNET_DLL_PATH: ""
+      DRAWING_METADATA_ICAD_EXECUTABLE: ""
+      DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS: "true"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   drawing-metadata-data:

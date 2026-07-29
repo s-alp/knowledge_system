@@ -70,6 +70,32 @@ class DrawingMetadataExtractionJob(models.Model):
         return f"{self.drawing.filename}:{self.extraction_mode}:{self.status}"
 
 
+class DrawingMetadataAgentHeartbeat(models.Model):
+    """Docker外で動くWindows抽出agentの最終稼働状態。"""
+
+    worker_name = models.CharField(max_length=255, primary_key=True)
+    state = models.CharField(max_length=32, db_index=True)
+    mode = models.CharField(max_length=8, default="all")
+    current_job = models.ForeignKey(
+        DrawingMetadataExtractionJob,
+        on_delete=models.SET_NULL,
+        related_name="agent_heartbeats",
+        null=True,
+        blank=True,
+    )
+    process_id = models.PositiveIntegerField(null=True, blank=True)
+    runner_version = models.CharField(max_length=64, blank=True)
+    last_error = models.TextField(blank=True)
+    metadata_json = models.JSONField(default=dict, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
+
+    class Meta:
+        ordering = ("worker_name",)
+
+    def __str__(self) -> str:
+        return f"{self.worker_name}:{self.state}"
+
+
 class DrawingMetadataSnapshot(models.Model):
     REVIEW_PENDING = "pending"
     REVIEW_CONFIRMED = "confirmed"

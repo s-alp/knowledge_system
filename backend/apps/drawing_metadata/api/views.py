@@ -43,7 +43,10 @@ from apps.drawing_metadata.services.persistence import apply_manual_overrides, a
 from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
-from apps.drawing_metadata.services.worker_status import build_worker_status_payload
+from apps.drawing_metadata.services.worker_status import (
+    build_windows_agent_status_payload,
+    build_worker_status_payload,
+)
 from apps.drawing_metadata.services.viewer_preview import (
     build_2d_preview_svg,
     build_3d_preview_stl,
@@ -311,6 +314,7 @@ class HandoffSummaryApiView(APIView):
         )
         all_jobs = DrawingMetadataExtractionJob.objects.select_related("drawing")
         payload["workerStatus"] = build_worker_status_payload()
+        payload["windowsAgentStatus"] = build_windows_agent_status_payload()
         payload["jobStatusCounts"] = {
             row["status"]: row["count"]
             for row in all_jobs.values("status").annotate(count=Count("id")).order_by("status")

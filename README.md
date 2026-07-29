@@ -78,14 +78,16 @@
 ## Linux / Docker 方針
 
 - Django backend 自体は Linux / Docker に載せる前提
-- DB-backed worker も同様に Docker 化可能
+- STEP / DXF を扱う generic CAD worker も Docker 化する
 - ただし `sxnet.dll` と `net48` 抽出器は Windows / iCAD 実行環境前提
 - そのため本 PoC は
-  - Docker 化しやすい Python/Django 側
-  - 外出し可能な Windows 抽出 CLI
+  - Docker 上の Django API / SQLite / generic CAD worker
+  - Windows 上の `IcadExtraction.Runner.exe agent`
   に境界を分けている
-- 実行時の接続方式は、Django側で `DrawingMetadataExtractionJob` をDBに積み、Windows worker が `process_drawing_metadata_jobs` でclaimして C# runner を呼ぶ方式にする
-- Windows worker は抽出開始前に job lease を抽出timeoutより長く延長し、長時間のICAD処理中に別workerが同じjobを拾わないようにする
+- Django側で `DrawingMetadataExtractionJob` をDBに積み、Windows agentがBearer token付きHTTP APIでICADジョブをclaimする
+- agentはWindows側の元パスを優先し、参照できない場合はDjangoから入力をdownloadする
+- preview assetをuploadし、生抽出JSONをcomplete APIへ返した後、Django側で正規化・タグ生成・保存する
+- agentは抽出中もheartbeatを送り、job leaseを延長する
 - また、live 抽出では `sxnet.dll` の存在だけでなく **ICAD 本体の起動**も必要だった
 - `C:\ICADSX\bin\icadsx.exe` は存在せず、少なくとも今回の環境では起動対象は `C:\ICADSX\bin\icad.exe` だった
 - 最適構成としては、**人が触る ICAD と抽出 worker が使う ICAD を同居させない**。Windows worker 専用セッション、または専用マシンで運用するのが安全
@@ -119,9 +121,56 @@ pwsh -NoLogo -NoProfile -Command '[Console]::OutputEncoding = [System.Text.Encod
 
 注意:
 
-- `backend` / `worker` は Docker 化できる
-- `DRAWING_METADATA_EXTRACTOR_EXECUTABLE` と `DRAWING_METADATA_SXNET_DLL_PATH` は別途設定が必要
-- Linux コンテナの中で `sxnet` 抽出器まで完結させる前提ではない
+- `backend`はWeb/API、`worker`はSTEP/DXF専用であり、LinuxコンテナからWindows EXEは起動しない
+- `backend/.env`の`DRAWING_METADATA_AGENT_TOKEN`へ十分に長いランダム値を設定する
+- Windows agentが別PCの場合は、`DJANGO_ALLOWED_HOSTS`へDockerホストのホスト名またはIPアドレスを追加する
+- SQLiteと図面メタデータ保存領域は`drawing-metadata-data` volumeへ永続化する
+- ICADジョブはWindows agentがAPI経由で処理する
+
+## Windows ICAD抽出agent
+
+### 1. net48版をpublish
+
+```powershell
+pwsh -NoLogo -NoProfile -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $PSDefaultParameterValues["*:Encoding"]="utf8"; dotnet publish "src\IcadExtraction.Runner\IcadExtraction.Runner.csproj" -c Release -f net48 --no-self-contained'
+```
+
+### 2. Windows側の環境変数
+
+Docker側`backend/.env`とWindows側の`DRAWING_METADATA_AGENT_TOKEN`は同じ値にする。token、API URL、ICAD実行ファイル等はリポジトリへコミットしない。
+
+```powershell
+$token = [Convert]::ToHexString([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+$token
+$env:DRAWING_METADATA_AGENT_API_BASE_URL = "http://127.0.0.1:8000/"
+$env:DRAWING_METADATA_AGENT_TOKEN = "<生成してbackend/.envへ設定したtoken>"
+$env:DRAWING_METADATA_AGENT_WORKER_NAME = $env:COMPUTERNAME
+$env:DRAWING_METADATA_SXNET_DLL_PATH = "C:\path\to\sxnet.dll"
+$env:DRAWING_METADATA_ICAD_EXECUTABLE = "C:\ICADSX\bin\icad.exe"
+```
+
+### 3. 常駐起動
+
+```powershell
+pwsh -NoLogo -NoProfile -File "scripts\start_windows_extraction_agent.ps1"
+```
+
+疎通だけを確認するときは、キューが空の状態で`-Once`を付ける。ジョブがある場合は1件処理して終了する。
+
+```powershell
+pwsh -NoLogo -NoProfile -File "scripts\start_windows_extraction_agent.ps1" -Once
+```
+
+agent APIは以下を提供する。
+
+- `POST /api/v1/drawing-metadata/agent/jobs/claim`
+- `GET /api/v1/drawing-metadata/agent/jobs/{jobId}/source`
+- `POST /api/v1/drawing-metadata/agent/jobs/{jobId}/assets`
+- `POST /api/v1/drawing-metadata/agent/jobs/{jobId}/complete`
+- `POST /api/v1/drawing-metadata/agent/jobs/{jobId}/fail`
+- `POST /api/v1/drawing-metadata/agent/heartbeat`
+
+詳細契約と異常時の扱いは[Windows抽出agent API設計](./docs/windows_extraction_agent_api_design_2026-07-29.md)を参照する。
 
 ## 重要ドキュメント
 
@@ -139,7 +188,7 @@ pwsh -NoLogo -NoProfile -Command '[Console]::OutputEncoding = [System.Text.Encod
 
 1. `sxnet.dll` の正式配置と起動条件を確定
 2. 実サンプル 3D / 2D で live 抽出確認
-3. Windows 抽出 worker との接続方式を確定
+3. Windows agent専用セッションまたは専用マシンで連続運転を確認
 4. viewer detail / RAG 側の正式接続契約を詰める
 5. 手動補正 UI を本体側へどう移植するか決める
 

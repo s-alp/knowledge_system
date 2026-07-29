@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from apps.drawing_metadata.tasks.extraction_tasks import claim_next_job, claim_next_jobs, process_job, process_jobs
+from apps.drawing_metadata.services.source_formats import EXTRACTOR_SCOPES
 from apps.drawing_metadata.services.worker_status import write_worker_heartbeat
 
 
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         )
         parser.add_argument("--sleep-seconds", type=int, default=settings.DRAWING_METADATA_WORKER_POLL_SECONDS)
         parser.add_argument("--batch-size", type=int, default=settings.DRAWING_METADATA_WORKER_BATCH_SIZE)
+        parser.add_argument("--extractor-scope", choices=sorted(EXTRACTOR_SCOPES), default="all")
 
     def handle(self, *args, **options) -> None:
         if not options["once"] and not options["loop"]:
@@ -31,6 +33,7 @@ class Command(BaseCommand):
 
         worker_name = options["worker_name"]
         mode = options["mode"]
+        extractor_scope = options["extractor_scope"]
         runner_mode = "once" if options["once"] else "loop"
         batch_size = max(int(options["batch_size"]), 1)
         write_worker_heartbeat(
@@ -43,7 +46,11 @@ class Command(BaseCommand):
 
         if options["once"]:
             write_worker_heartbeat(worker_name=worker_name, mode=mode, state="claiming", runner_mode="once")
-            job = claim_next_job(worker_name=worker_name, mode=mode)
+            job = claim_next_job(
+                worker_name=worker_name,
+                mode=mode,
+                extractor_scope=extractor_scope,
+            )
             if not job:
                 write_worker_heartbeat(worker_name=worker_name, mode=mode, state="completed", runner_mode="once")
                 self.stdout.write("queued job is not found")
@@ -62,7 +69,12 @@ class Command(BaseCommand):
                 runner_mode="loop",
                 batch_size=batch_size,
             )
-            jobs = claim_next_jobs(worker_name=worker_name, mode=mode, limit=batch_size)
+            jobs = claim_next_jobs(
+                worker_name=worker_name,
+                mode=mode,
+                limit=batch_size,
+                extractor_scope=extractor_scope,
+            )
             if jobs:
                 job_ids = ",".join(str(job.id) for job in jobs)
                 write_worker_heartbeat(

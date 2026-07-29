@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from rest_framework import serializers
 from pathlib import Path
+
+from django.conf import settings
+from rest_framework import serializers
 
 from apps.drawing_metadata.models import (
     DrawingMetadataExtractionJob,
@@ -33,7 +35,10 @@ class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
     def validate_sourcePath(self, value):
         if not value.lower().endswith(".icd"):
             raise serializers.ValidationError(".icd ファイルを指定してください。")
-        if not icad_source_path_exists(value):
+        if (
+            not icad_source_path_exists(value)
+            and not settings.DRAWING_METADATA_ALLOW_REMOTE_AGENT_PATHS
+        ):
             raise serializers.ValidationError("指定されたICADファイルが見つかりません。原本パスを確認してください。")
         return value
 

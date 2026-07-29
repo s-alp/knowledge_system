@@ -8,6 +8,8 @@ from pathlib import Path
 from django.conf import settings
 from django.utils import timezone
 
+from apps.drawing_metadata.models import DrawingMetadataAgentHeartbeat
+
 
 HEARTBEAT_SCHEMA_VERSION = "drawing_metadata_worker_heartbeat.v1"
 
@@ -137,4 +139,32 @@ def build_worker_status_payload() -> dict:
         "updatedAt": str(raw_payload.get("updatedAt") or ""),
         "ageSeconds": age_seconds,
         "staleAfterSeconds": stale_seconds,
+    }
+
+
+def build_windows_agent_status_payload() -> dict:
+    stale_seconds = settings.DRAWING_METADATA_WORKER_HEARTBEAT_STALE_SECONDS
+    now = timezone.now()
+    agents = []
+    for heartbeat in DrawingMetadataAgentHeartbeat.objects.select_related("current_job").all():
+        age_seconds = max(int((now - heartbeat.updated_at).total_seconds()), 0)
+        is_fresh = age_seconds <= stale_seconds
+        agents.append(
+            {
+                "workerName": heartbeat.worker_name,
+                "status": "running" if is_fresh else "stale",
+                "state": heartbeat.state,
+                "mode": heartbeat.mode,
+                "jobId": str(heartbeat.current_job_id or ""),
+                "processId": heartbeat.process_id,
+                "runnerVersion": heartbeat.runner_version,
+                "lastError": heartbeat.last_error,
+                "updatedAt": heartbeat.updated_at.isoformat(),
+                "ageSeconds": age_seconds,
+                "staleAfterSeconds": stale_seconds,
+            }
+        )
+    return {
+        "status": "running" if any(agent["status"] == "running" for agent in agents) else "stale",
+        "agents": agents,
     }

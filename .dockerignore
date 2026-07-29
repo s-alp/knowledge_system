@@ -1,0 +1,11 @@
+**
+!backend/
+!backend/**
+
+backend/.env
+backend/.venv/
+backend/db.sqlite3
+backend/var/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
