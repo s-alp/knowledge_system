@@ -122,6 +122,11 @@ DRAWING_NUMBER_FILENAME_WORD_EXCLUSIONS = {
     "UNIT",
 }
 IDENTITY_NAME_FIELDS = {"drawing_name", "part_name", "product_name", "equipment_name", "unit_name"}
+IDENTITY_NAME_PREFIX_MARKERS_RE = re.compile(r"^[\s　★☆※*●○◎■□◆◇▲△▼▽]+")
+IDENTITY_SPEC_TOKEN_RE = re.compile(
+    r"(?<![A-Z0-9])(?:SFF|[LWHT])\s*[-=＝]\s*\d+(?:\.\d+)?(?:\s*mm)?(?![A-Z0-9])",
+    re.IGNORECASE,
+)
 IDENTITY_NAME_NOISE_VALUES = {
     "ASSEMBLY",
     "ASSY",
@@ -437,6 +442,16 @@ def _normalize_material_items(items: Iterable) -> list[dict]:
     return normalized
 
 
+def _is_external_part_payload(part: dict) -> bool:
+    """外部参照パーツを本体パーツから分離するための共通判定。"""
+
+    return bool(
+        part.get("is_external")
+        or part.get("ref_model_name")
+        or part.get("ref_model_path")
+    )
+
+
 def _extract_labeled_field_candidates(field: str, texts: Iterable[str | None]) -> list[str]:
     rule = TITLE_BLOCK_FIELD_RULES[field]
     candidates: list[str] = []
@@ -692,6 +707,8 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
     normalized_value = unicodedata.normalize("NFKC", str(value)).strip()
     normalized_evidence = unicodedata.normalize("NFKC", evidence_text).strip()
 
+    if field in IDENTITY_NAME_FIELDS and not _identity_name_value_is_usable(field, normalized_value):
+        return False
     if field == "drawing_number":
         if any(token in normalized_evidence for token in DRAWING_NUMBER_REFERENCE_KEYWORDS):
             return False
@@ -1176,10 +1193,32 @@ def _build_2d_sections(
     }
 
 
-def _identity_name_value_is_usable(field: str, value: str | None) -> bool:
-    if field not in IDENTITY_NAME_FIELDS or not _is_field_value_usable(field, value, str(value or "")):
-        return False
+def normalize_identity_name_value(value: str | None) -> str | None:
+    """名称本体ではない先頭記号と寸法・型式トークンを表示名称から除く。
+
+    `★ガイドレール`の★や`SFF-424 L=1572`は図面上の注記・仕様情報であり、
+    原文はraw証跡に残しつつ、製品名・部品名へそのまま登録しない。
+    """
+
     normalized = unicodedata.normalize("NFKC", str(value or "")).strip()
+    normalized = IDENTITY_NAME_PREFIX_MARKERS_RE.sub("", normalized)
+    normalized = IDENTITY_SPEC_TOKEN_RE.sub(" ", normalized)
+    # 「法兰(右)」のように名称本体の一部である括弧は残し、前後の区切り記号だけを除く。
+    normalized = re.sub(r"[\s　,、，]+", " ", normalized).strip(" 　:：=＝-－_/／")
+    return normalized or None
+
+
+def _identity_name_value_is_usable(field: str, value: str | None) -> bool:
+    normalized = normalize_identity_name_value(value)
+    if (
+        field not in IDENTITY_NAME_FIELDS
+        or not _is_title_block_value_usable(
+            normalized,
+            max_length=int(TITLE_BLOCK_FIELD_RULES.get(field, {}).get("max_value_length", 80)),
+        )
+    ):
+        return False
+    normalized = str(normalized)
     if normalized.upper() in IDENTITY_NAME_NOISE_VALUES:
         return False
     if any(keyword in normalized for keyword in DRAWING_NUMBER_REFERENCE_KEYWORDS):
@@ -1237,7 +1276,9 @@ def _nearest_identity_name_value(
         lines = _text_lines_from_payload(candidate_text)
         if len(lines) != 1:
             continue
-        value = lines[0].strip()
+        value = normalize_identity_name_value(lines[0])
+        if not value:
+            continue
         delta_x = float(candidate_x) - float(label_x)
         delta_y = float(candidate_y) - float(label_y)
         horizontal = delta_x > 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.15)
@@ -1286,11 +1327,15 @@ def _build_title_block_candidates(texts: list[dict], *, has_print_frames: bool =
                         continue
 
                     value = _strip_label_value(line, str(keyword))
+                    if field in IDENTITY_NAME_FIELDS:
+                        value = normalize_identity_name_value(value)
                     confidence = "medium" if _is_field_value_usable(field, value, line) else "low"
                     if confidence == "low":
                         value = None
                     if not value and line_index + 1 < len(lines):
                         next_value = lines[line_index + 1].strip()
+                        if field in IDENTITY_NAME_FIELDS:
+                            next_value = normalize_identity_name_value(next_value)
                         if _is_field_value_usable(field, next_value, line):
                             value = next_value
                             confidence = "medium"
@@ -1402,6 +1447,10 @@ def _select_title_block_fields(candidates: list[dict]) -> dict:
             continue
         if field == "drawing_number":
             value = _clean_drawing_number_value(value)
+            if not value:
+                continue
+        elif field in IDENTITY_NAME_FIELDS:
+            value = normalize_identity_name_value(value)
             if not value:
                 continue
         if field and field not in selected:
@@ -1829,18 +1878,32 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "material_specific_gravities": [],
         "part_material_candidates": [],
         "part_material_candidate_count": 0,
+        "external_part_material_candidates": [],
+        "external_part_material_candidate_count": 0,
+        "external_part_material_keywords": [],
         "prfx_candidates": [],
         "unit_number_candidates": [],
         "part_name_candidates": [],
+        "external_part_name_candidates": [],
         "part_names": [],
         "part_comments": [],
         "part_tree_paths": [],
+        "internal_part_names": [],
+        "internal_part_comments": [],
+        "internal_part_tree_paths": [],
+        "external_part_names": [],
+        "external_part_comments": [],
+        "external_part_tree_paths": [],
         "step_product_names": [],
         "step_products": [],
         "step_assembly_relationships": [],
         "step_assembly_relationship_count": 0,
         "part_ex_info_fields": {},
         "part_ex_info_tokens": [],
+        "internal_part_ex_info_fields": {},
+        "internal_part_ex_info_tokens": [],
+        "external_part_ex_info_fields": {},
+        "external_part_ex_info_tokens": [],
         "ref_model_names": [],
         "ref_model_paths": [],
         "referenced_2d_part_count": 0,
