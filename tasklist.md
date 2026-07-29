@@ -1,5 +1,16 @@
 # tasklist
 
+## 2026-07-29 Docker Web / Windows ICAD抽出エージェント分離
+
+- [x] 現行のDocker・Django worker・C# Runner境界を監査
+- [x] Windows抽出エージェントAPI契約と認証・lease・ファイル転送方式を設計
+- [x] Djangoへagent claim・source・asset・complete・fail・heartbeat APIを実装
+- [x] Docker workerをgeneric CAD専用にし、LinuxからWindows EXEを起動しない構成へ変更
+- [x] `IcadExtraction.Runner.exe agent` 常駐コマンドを実装
+- [x] Django・C#・Dockerの自動テストと疎通確認を実施
+- [x] 運用手順・環境変数・障害時の確認方法を文書化
+- [x] 差分監査後に日本語コミットを作成してpush
+
 ## 2026-07-29 ICAD処理単位終了・保存確認対応
 
 - [x] ICADをファイルごとに終了せず、変換処理全体で再利用して最後に1回だけ終了
