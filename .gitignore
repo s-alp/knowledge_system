@@ -24,6 +24,10 @@ output/runtime/
 output/server_logs/
 logs/
 output/icad_extraction_probe_2026-07-15/
+output/dxf_full_audit_*/
+output/step_full_audit_*/
+output/icad_feature_tag_validation_*.json
+output/presentation/
 output/souya_handoff/*_probe_*.json
 output/souya_handoff/*_trial_*.json
 output/souya_handoff/*_subset_*.json
