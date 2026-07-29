@@ -130,30 +130,36 @@ def test_normalize_3d_raw_extract():
     assert canonical["material_ids"] == ["SUS304", "A5052", "75", "S45C_MISUMIFA", "03\ufffdX\ufffde"]
     assert canonical["material_names"] == ["SUS304", "AL", "75", "S45C相当", "03\ufffdX\ufffde"]
     assert canonical["material_specific_gravities"] == [7.93, 2.68, 0.0, 7.85, 0.0]
-    assert canonical["part_material_candidate_count"] == 3
-    assert canonical["part_material_candidates"][0]["part_path"] == "Top.UnitA"
-    assert canonical["part_material_candidates"][0]["material_id"] == "SUS304"
-    assert canonical["part_material_candidates"][0]["source"] == "3d_part_material"
-    assert canonical["part_material_candidates"][0]["confidence"] == "high"
-    assert canonical["part_material_candidates"][1]["material_id"] == "ZZZ"
-    assert canonical["part_material_candidates"][1]["canonical_material"] == "ZZZ"
-    assert canonical["part_material_candidates"][1]["material_status"] == "unresolved"
-    assert canonical["part_material_candidates"][1]["confidence"] == "low"
-    assert canonical["part_material_candidates"][2]["material_id"] == "SUS"
-    assert canonical["part_material_candidates"][2]["canonical_material"] == "SUS"
-    assert canonical["part_material_candidates"][2]["material_status"] == "formal"
-    assert canonical["part_material_candidates"][2]["confidence"] == "medium"
-    assert all(candidate["material_id"] != "RM" for candidate in canonical["part_material_candidates"])
+    assert canonical["part_material_candidate_count"] == 0
+    assert canonical["external_part_material_candidate_count"] == 3
+    assert canonical["external_part_material_candidates"][0]["part_path"] == "Top.UnitA"
+    assert canonical["external_part_material_candidates"][0]["material_id"] == "SUS304"
+    assert canonical["external_part_material_candidates"][0]["source"] == "3d_part_material"
+    assert canonical["external_part_material_candidates"][0]["confidence"] == "high"
+    assert canonical["external_part_material_candidates"][1]["material_id"] == "ZZZ"
+    assert canonical["external_part_material_candidates"][1]["canonical_material"] == "ZZZ"
+    assert canonical["external_part_material_candidates"][1]["material_status"] == "unresolved"
+    assert canonical["external_part_material_candidates"][1]["confidence"] == "low"
+    assert canonical["external_part_material_candidates"][2]["material_id"] == "SUS"
+    assert canonical["external_part_material_candidates"][2]["canonical_material"] == "SUS"
+    assert canonical["external_part_material_candidates"][2]["material_status"] == "formal"
+    assert canonical["external_part_material_candidates"][2]["confidence"] == "medium"
+    assert all(
+        candidate["material_id"] != "RM"
+        for candidate in canonical["external_part_material_candidates"]
+    )
+    assert canonical["internal_part_names"] == ["UnitA"]
+    assert canonical["external_part_names"] == ["SMC CYLINDER"]
     assert "ZZZ" not in canonical["material_keywords"]
     assert "S45C" in canonical["material_keywords"]
-    assert canonical["unresolved_material_keywords"] == ["75", "ZZZ"]
+    assert canonical["unresolved_material_keywords"] == ["75"]
     assert "SMC" in canonical["maker_keywords"]
-    assert canonical["prfx_candidates"] == ["CAA5012"]
-    assert canonical["unit_number_candidates"] == ["34000"]
+    assert canonical["prfx_candidates"] == []
+    assert canonical["unit_number_candidates"] == []
     assert any(tag["tag"] == "客先:コマツ小山" for tag in tags)
     assert any(tag["tag"] == "材質:SUS304" for tag in tags)
-    assert any(tag["tag"] == "PRFX:CAA5012" for tag in tags)
-    assert any(tag["tag"] == "ユニット:34000" for tag in tags)
+    assert not any(tag["tag"] == "PRFX:CAA5012" for tag in tags)
+    assert not any(tag["tag"] == "ユニット:34000" for tag in tags)
     assert not any(tag["tag"] == "材質:ZZZ" for tag in tags)
     assert not any(tag["tag"] == "材質要確認:ZZZ" for tag in tags)
 
@@ -941,3 +947,99 @@ def test_normalize_2d_extract_uses_unknown_texts_when_print_area_classification_
     assert canonical["drawing_name"] == "法兰(右)"
     assert canonical["drawing_number"] == "XH3001-M08007-01"
     assert canonical["raw_2d_sections"]["text_print_area_policy"] == "include_unknown_when_classification_unavailable"
+
+
+def test_identity_name_removes_note_marker_and_rejects_spec_only_value():
+    marker_canonical = normalize_raw_extract(
+        {
+            "source_kind": "3d",
+            "source_file": {"file_name": "217008-41J-3004.icd"},
+            "raw_extract": {
+                "top_part": {"name": "217008-41J-3004"},
+                "parts": [
+                    {
+                        "name": "217008-41J-3004",
+                        "depth": 0,
+                        "tree_path": ["217008-41J-3004"],
+                        "ex_info_fields": {"部品名": "★ガイドレール"},
+                    }
+                ],
+            },
+        }
+    )
+    spec_canonical = normalize_raw_extract(
+        {
+            "source_kind": "2d",
+            "source_file": {"file_name": "TR1D9K99027.icd"},
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["名称"],
+                        "view_name": "!!GLOBAL",
+                        "position_x": 432.6,
+                        "position_y": 353.3,
+                        "inside_print_area": True,
+                    },
+                    {
+                        "text_lines": ["型式"],
+                        "view_name": "!!GLOBAL",
+                        "position_x": 500.1,
+                        "position_y": 353.3,
+                        "inside_print_area": True,
+                    },
+                    {
+                        "text_lines": ["SFF-424 L=1572"],
+                        "view_name": "!!GLOBAL",
+                        "position_x": 560.1,
+                        "position_y": 353.3,
+                        "inside_print_area": True,
+                    },
+                ],
+            },
+        }
+    )
+
+    assert marker_canonical["part_name"] == "ガイドレール"
+    assert marker_canonical["part_name_candidates"][0] == "ガイドレール"
+    assert spec_canonical["drawing_name"] is None
+
+
+def test_normalize_3d_separates_internal_and_external_part_information():
+    canonical = normalize_raw_extract(
+        {
+            "source_kind": "3d",
+            "source_file": {"file_name": "assembly.icd"},
+            "raw_extract": {
+                "top_part": {"name": "ASSEMBLY"},
+                "parts": [
+                    {
+                        "name": "MAIN",
+                        "depth": 0,
+                        "tree_path": ["MAIN"],
+                        "materials": [{"matid": "SUS304", "name": "SUS304"}],
+                        "ex_info_fields": {"部品名": "本体フレーム"},
+                    },
+                    {
+                        "name": "EXTERNAL-RAIL",
+                        "depth": 1,
+                        "tree_path": ["MAIN", "EXTERNAL-RAIL"],
+                        "is_external": True,
+                        "ref_model_name": "EXTERNAL-RAIL",
+                        "materials": [{"matid": "SS400", "name": "SS400"}],
+                        "ex_info_fields": {"部品名": "外部ガイドレール"},
+                    },
+                ],
+            },
+        }
+    )
+
+    assert canonical["part_name"] == "本体フレーム"
+    assert canonical["internal_part_names"] == ["MAIN"]
+    assert canonical["external_part_names"] == ["EXTERNAL-RAIL"]
+    assert canonical["internal_part_material_keywords"] == ["SUS304"]
+    assert canonical["external_part_material_keywords"] == ["SS400"]
+    assert all(
+        candidate["part_name"] != "EXTERNAL-RAIL"
+        for candidate in canonical["part_material_candidates"]
+    )
+    assert canonical["external_part_material_candidates"][0]["part_name"] == "EXTERNAL-RAIL"

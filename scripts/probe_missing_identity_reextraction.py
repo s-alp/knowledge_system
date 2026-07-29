@@ -1,3 +1,6 @@
+# 名称未抽出の図面を抽出条件付きで再実行し、再抽出による改善可否を限定的に検証する。
+# 対象を引数で明示し、Djangoジョブと既存抽出Runnerを利用して結果JSONをoutput配下へ残す。
+# 失敗時は対象登録、ICAD実体、worker設定、SXNETの起動状態を確認し、未完了を成功扱いしない。
 from __future__ import annotations
 
 import argparse

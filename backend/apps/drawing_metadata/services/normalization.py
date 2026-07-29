@@ -142,6 +142,13 @@ IDENTITY_NAME_NOISE_VALUES = {
     "TITLE",
     "UNCHANGED",
     "UNIT",
+    "名称",
+    "図面名",
+    "品名",
+    "部品名",
+    "型式",
+    "形式",
+    "品種",
 }
 
 
@@ -1205,6 +1212,8 @@ def normalize_identity_name_value(value: str | None) -> str | None:
     normalized = IDENTITY_SPEC_TOKEN_RE.sub(" ", normalized)
     # 「法兰(右)」のように名称本体の一部である括弧は残し、前後の区切り記号だけを除く。
     normalized = re.sub(r"[\s　,、，]+", " ", normalized).strip(" 　:：=＝-－_/／")
+    if normalized.upper() in IDENTITY_NAME_NOISE_VALUES:
+        return None
     return normalized or None
 
 
@@ -1276,9 +1285,10 @@ def _nearest_identity_name_value(
         lines = _text_lines_from_payload(candidate_text)
         if len(lines) != 1:
             continue
-        value = normalize_identity_name_value(lines[0])
-        if not value:
-            continue
+        raw_value = lines[0].strip()
+        # 最短要素が無効な見出し・プレースホルダーでも順位付けには残す。
+        # ここで捨てると、その奥の無関係な文字を名称として拾ってしまう。
+        value = normalize_identity_name_value(raw_value) or unicodedata.normalize("NFKC", raw_value)
         delta_x = float(candidate_x) - float(label_x)
         delta_y = float(candidate_y) - float(label_y)
         horizontal = delta_x > 0 and abs(delta_y) <= max(0.5, abs(delta_x) * 0.15)
@@ -1880,6 +1890,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         "part_material_candidate_count": 0,
         "external_part_material_candidates": [],
         "external_part_material_candidate_count": 0,
+        "internal_part_material_keywords": [],
         "external_part_material_keywords": [],
         "prfx_candidates": [],
         "unit_number_candidates": [],
@@ -1980,7 +1991,11 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
     if source_kind == "3d":
         # 3Dではパーツツリーを中心に、材質・質量・外部参照・付加情報を対象別候補へ展開する。
         top_part = raw_extract.get("top_part", {})
-        parts = raw_extract.get("parts", [])
+        parts = [part for part in (raw_extract.get("parts", []) or []) if isinstance(part, dict)]
+        # アセンブリ本体と外部参照パーツは別の情報源である。
+        # 外部パーツは検索・構成証跡として保持するが、本体名称・本体材質へ混ぜない。
+        internal_parts = [part for part in parts if not _is_external_part_payload(part)]
+        external_parts = [part for part in parts if _is_external_part_payload(part)]
         mass_properties = raw_extract.get("mass_properties", {}) or {}
         materials = _normalize_material_items(raw_extract.get("materials", []) or [])
         canonical["top_part_name"] = top_part.get("name")
@@ -2020,6 +2035,20 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["part_names"] = _flatten_strings(part.get("name") for part in parts)
         canonical["part_comments"] = _flatten_strings(part.get("comment") for part in parts)
         canonical["part_tree_paths"] = [" > ".join(part.get("tree_path", [])) for part in parts if part.get("tree_path")]
+        canonical["internal_part_names"] = _flatten_strings(part.get("name") for part in internal_parts)
+        canonical["internal_part_comments"] = _flatten_strings(part.get("comment") for part in internal_parts)
+        canonical["internal_part_tree_paths"] = [
+            " > ".join(part.get("tree_path", []))
+            for part in internal_parts
+            if part.get("tree_path")
+        ]
+        canonical["external_part_names"] = _flatten_strings(part.get("name") for part in external_parts)
+        canonical["external_part_comments"] = _flatten_strings(part.get("comment") for part in external_parts)
+        canonical["external_part_tree_paths"] = [
+            " > ".join(part.get("tree_path", []))
+            for part in external_parts
+            if part.get("tree_path")
+        ]
         step_products = raw_extract.get("step_products", []) or []
         step_assembly_relationships = raw_extract.get("step_assembly_relationships", []) or []
         canonical["step_products"] = step_products
@@ -2036,21 +2065,42 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
             for part in parts
             for value in [part.get("ex_info"), *(part.get("ex_info_fields", {}) or {}).values()]
         )
+        for scope_name, scoped_parts in (
+            ("internal", internal_parts),
+            ("external", external_parts),
+        ):
+            canonical[f"{scope_name}_part_ex_info_fields"] = {
+                ".".join(part.get("tree_path", []) or [part.get("name") or f"part_{index}"]): part.get("ex_info_fields", {})
+                for index, part in enumerate(scoped_parts)
+                if part.get("ex_info_fields")
+            }
+            canonical[f"{scope_name}_part_ex_info_tokens"] = _flatten_strings(
+                value
+                for part in scoped_parts
+                for value in [part.get("ex_info"), *(part.get("ex_info_fields", {}) or {}).values()]
+            )
         canonical["ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in parts)
         canonical["ref_model_paths"] = _flatten_strings(part.get("ref_model_path") for part in parts)
-        identity_tokens = _flatten_strings(
+        internal_identity_tokens = _flatten_strings(
             [
                 top_part.get("name"),
                 top_part.get("comment"),
                 top_part.get("ex_info"),
-                *canonical["part_names"],
-                *canonical["part_ex_info_tokens"],
+                *canonical["internal_part_names"],
+                *canonical["internal_part_ex_info_tokens"],
+            ]
+        )
+        external_identity_tokens = _flatten_strings(
+            [
+                *canonical["external_part_names"],
+                *canonical["external_part_comments"],
+                *canonical["external_part_ex_info_tokens"],
                 *canonical["ref_model_names"],
             ]
         )
         top_level_parts = [
             part
-            for part in parts
+            for part in internal_parts
             if (
                 part.get("depth") == 0
                 or (
@@ -2059,8 +2109,8 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 )
             )
         ]
-        if not top_level_parts and parts:
-            top_level_parts = [parts[0]]
+        if not top_level_parts and internal_parts:
+            top_level_parts = [internal_parts[0]]
         top_level_identity_tokens = _flatten_strings(
             [
                 top_part.get("comment"),
@@ -2088,7 +2138,7 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
                 canonical[field] = (
                     _clean_drawing_number_value(candidates[0])
                     if field == "drawing_number"
-                    else candidates[0]
+                    else normalize_identity_name_value(candidates[0])
                 )
         if canonical.get("drawing_number"):
             canonical["drawing_number_candidates"] = [
@@ -2102,17 +2152,21 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         canonical["part_name_candidates"] = _merge_unique(
             _flatten_strings([canonical.get("part_name")])
             + _match_dictionary_values(
-                identity_tokens,
+                internal_identity_tokens,
                 load_keyword_mapping(TagDictionaryEntry.KIND_PART_NAME),
             )
         )
+        canonical["external_part_name_candidates"] = _match_dictionary_values(
+            external_identity_tokens,
+            load_keyword_mapping(TagDictionaryEntry.KIND_PART_NAME),
+        )
         canonical["prfx_candidates"] = _merge_unique(
-            _extract_identity_candidates_from_part_ex_info(parts, "prfx")
-            + _extract_labeled_field_candidates("prfx", identity_tokens)
+            _extract_identity_candidates_from_part_ex_info(internal_parts, "prfx")
+            + _extract_labeled_field_candidates("prfx", internal_identity_tokens)
         )
         canonical["unit_number_candidates"] = _merge_unique(
-            _extract_identity_candidates_from_part_ex_info(parts, "unit_number")
-            + _extract_labeled_field_candidates("unit_number", identity_tokens)
+            _extract_identity_candidates_from_part_ex_info(internal_parts, "unit_number")
+            + _extract_labeled_field_candidates("unit_number", internal_identity_tokens)
         )
         heat_treatment_tokens = _flatten_strings(
             [
@@ -2127,18 +2181,36 @@ def normalize_raw_extract(raw_payload: dict) -> dict:
         )
         canonical["hardness_spec_candidates"] = _extract_hardness_spec_candidates(heat_treatment_tokens)
         canonical["hardness_spec_values"] = [item["value"] for item in canonical["hardness_spec_candidates"]]
-        canonical["part_material_candidates"] = _build_part_material_candidates(parts, materials)
+        canonical["part_material_candidates"] = _build_part_material_candidates(internal_parts, materials)
         canonical["part_material_candidate_count"] = len(canonical["part_material_candidates"])
+        canonical["external_part_material_candidates"] = _build_part_material_candidates(external_parts, [])
+        canonical["external_part_material_candidate_count"] = len(canonical["external_part_material_candidates"])
         part_material_keywords, part_unresolved_material_keywords = _split_material_keywords(
             _flatten_strings(candidate.get("canonical_material") for candidate in canonical["part_material_candidates"])
             + _flatten_strings(candidate.get("material_id") for candidate in canonical["part_material_candidates"])
             + _flatten_strings(candidate.get("material_name") for candidate in canonical["part_material_candidates"])
         )
+        canonical["internal_part_material_keywords"] = part_material_keywords
         canonical["material_keywords"] = _merge_unique(canonical["material_keywords"] + part_material_keywords)
         canonical["unresolved_material_keywords"] = _merge_unique(
             canonical["unresolved_material_keywords"] + part_unresolved_material_keywords
         )
-        canonical["external_part_exists"] = any(part.get("is_external") for part in parts)
+        external_material_keywords, _ = _split_material_keywords(
+            _flatten_strings(
+                candidate.get("canonical_material")
+                for candidate in canonical["external_part_material_candidates"]
+            )
+            + _flatten_strings(
+                candidate.get("material_id")
+                for candidate in canonical["external_part_material_candidates"]
+            )
+            + _flatten_strings(
+                candidate.get("material_name")
+                for candidate in canonical["external_part_material_candidates"]
+            )
+        )
+        canonical["external_part_material_keywords"] = external_material_keywords
+        canonical["external_part_exists"] = bool(external_parts)
         canonical["mirror_part_exists"] = any(part.get("is_mirror") for part in parts)
         canonical["unresolved_part_exists"] = any(part.get("is_unloaded") for part in parts)
 

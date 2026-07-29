@@ -1,3 +1,6 @@
+# ICAD抽出snapshotとDXF監査結果を照合し、文字化け・私用領域文字・欠落候補を検出する。
+# 共有manifestとDjango DBを読み取り専用で参照し、照合結果を監査JSONへ保存する。
+# 失敗時はmanifest、snapshot、DXF summaryの対応関係と文字コードを確認する。
 from __future__ import annotations
 
 import json

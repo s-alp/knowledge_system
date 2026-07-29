@@ -1,3 +1,6 @@
+# 共有対象ICADの保存済みsnapshotを横断し、図面・部品・製品等の名称採用状況を監査する。
+# Django設定と既存DBを読み取るが、登録内容は更新せず、監査JSONだけをoutput配下へ保存する。
+# 実行に失敗した場合は、Django設定、manifest、snapshotの存在と文字コードを順に確認する。
 from __future__ import annotations
 
 import json

@@ -14,6 +14,7 @@ import uuid
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.normalization import normalize_identity_name_value
 
 
 SCHEMA_VERSION = "icad_knowledge_entities.v3"
@@ -364,7 +365,7 @@ def _is_generic_identity_name(value: str) -> bool:
 def _validated_comment_name(value: str | None, *excluded_values: str | None) -> str | None:
     """3Dコメントから、変更履歴や参照指示ではない業務名称だけを返す。"""
 
-    normalized = unicodedata.normalize("NFKC", _string_value(value) or "").strip(" 　:：=＝_/／[]【】()（）")
+    normalized = normalize_identity_name_value(_string_value(value))
     if not normalized or len(normalized) > 80:
         return None
     if "\ufffd" in normalized or any("\ue000" <= character <= "\uf8ff" for character in normalized):
@@ -424,7 +425,10 @@ def _select_identity_name(
     """優先順位どおりに名称と採用根拠を選び、見つからない場合は明示的に未抽出とする。"""
 
     for candidate, evidence in candidates:
-        value = _first_distinct_value([candidate], *excluded_values)
+        value = _first_distinct_value(
+            [normalize_identity_name_value(candidate)],
+            *excluded_values,
+        )
         if value and not _is_generic_identity_name(value):
             return value, evidence
     return "名称未抽出", "identity_name_unresolved"
@@ -655,6 +659,7 @@ def _build_record(
     equipment_name = _string_value(canonical.get("equipment_name"))
     unit_name = _string_value(canonical.get("unit_name"))
     part_name_candidates = _canonical_list_values(canonical, "part_name_candidates")
+    external_part_name_candidates = _canonical_list_values(canonical, "external_part_name_candidates")
     top_part_name = _string_value(canonical.get("top_part_name")) or _string_value(top_part.get("name"))
     top_part_comment = _string_value(canonical.get("top_part_comment")) or _string_value(top_part.get("comment"))
     comment_name = _validated_comment_name(
@@ -699,34 +704,53 @@ def _build_record(
             top_part_name,
         )
     if parts:
-        external_count = sum(_has_external_reference(part) for part in parts)
-        unloaded_count = sum(bool(part.get("is_unloaded")) for part in parts)
-        extended_info_count = sum(bool(part.get("ex_info_fields")) for part in parts)
+        # アセンブリ本体の属性と外部参照パーツの属性を別集計にする。
+        # 外部パーツの名称・材質・付加情報は保持するが、本体の正式属性へ混ぜない。
+        internal_parts = [part for part in parts if not _has_external_reference(part)]
+        external_parts = [part for part in parts if _has_external_reference(part)]
+        external_count = len(external_parts)
+        unloaded_count = sum(bool(part.get("is_unloaded")) for part in external_parts)
+        extended_info_count = sum(bool(part.get("ex_info_fields")) for part in internal_parts)
+        external_extended_info_count = sum(bool(part.get("ex_info_fields")) for part in external_parts)
         unique_part_names = sorted(
-            {_string_value(part.get("name")) for part in parts if _string_value(part.get("name"))}
+            {_string_value(part.get("name")) for part in internal_parts if _string_value(part.get("name"))}
         )
-        materials = _material_values(parts)
+        external_part_names = sorted(
+            {_string_value(part.get("name")) for part in external_parts if _string_value(part.get("name"))}
+        )
+        materials = _material_values(internal_parts)
+        external_materials = _material_values(external_parts)
         # 部品数は BOM 相当の外部参照パーツのみを数える。内部パーツ(モデリング要素)は
         # 部品数に含めず、内部パーツ使用数などの参考属性としてだけ持つ。
-        component_count = len(parts)
+        component_count = len(internal_parts)
         child_assembly_count = sum(
-            _has_external_reference(part) and part.get("_child_count", 0) > 0 for part in parts
+            part.get("_child_count", 0) > 0 for part in external_parts
         )
         child_part_count = sum(
-            _has_external_reference(part) and part.get("_child_count", 0) == 0 for part in parts
+            part.get("_child_count", 0) == 0 for part in external_parts
         )
         descendant_part_count = external_count
     else:
-        unique_part_names = _canonical_list_values(canonical, "part_names", "part_keywords")
-        materials = _canonical_list_values(canonical, "material_keywords", "material_names", "material_ids")
+        unique_part_names = _canonical_list_values(
+            canonical,
+            "internal_part_names",
+        ) or _canonical_list_values(canonical, "part_names", "part_keywords")
+        external_part_names = _canonical_list_values(canonical, "external_part_names")
+        materials = _canonical_list_values(
+            canonical,
+            "internal_part_material_keywords",
+        ) or _canonical_list_values(canonical, "material_keywords", "material_names", "material_ids")
+        external_materials = _canonical_list_values(canonical, "external_part_material_keywords")
         external_count = max(
+            len(external_part_names),
             len(_as_list(canonical.get("ref_model_names"))),
             len(_as_list(canonical.get("ref_model_paths"))),
             1 if canonical.get("external_part_exists") else 0,
         )
         unloaded_count = 1 if canonical.get("unresolved_part_exists") else 0
-        extended_info_count = 1 if _has_value(canonical.get("part_ex_info_fields")) else 0
-        component_count = len(_as_list(canonical.get("part_tree_paths"))) or len(unique_part_names)
+        extended_info_count = 1 if _has_value(canonical.get("internal_part_ex_info_fields")) else 0
+        external_extended_info_count = 1 if _has_value(canonical.get("external_part_ex_info_fields")) else 0
+        component_count = len(_as_list(canonical.get("internal_part_tree_paths"))) or len(unique_part_names)
         # raw_extract が無い場合は子構造を判定できないため、外部参照数をそのまま部品数とする。
         child_assembly_count = 0
         child_part_count = external_count
@@ -758,14 +782,18 @@ def _build_record(
         evidence="ICDファイル全体",
     )
     _append_attribute(attributes, key="source_path", label="抽出で使うICADファイル", value=drawing.source_path, source="file", confidence="high", evidence="registeredDrawing.sourcePath")
-    _append_attribute(attributes, key="component_occurrence_count", label="内部パーツ使用数", value=component_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts / canonicalAttributes.part_tree_paths")
-    _append_attribute(attributes, key="unique_component_name_count", label="内部パーツ名称数", value=len(unique_part_names), source="3d_part_tree", confidence="medium", evidence="rawExtract.parts[].name / canonicalAttributes.part_names")
+    _append_attribute(attributes, key="component_occurrence_count", label="本体パーツ使用数", value=component_count, source="3d_internal_part_tree", confidence="high", evidence="rawExtract.parts[not external] / canonicalAttributes.internal_part_tree_paths")
+    _append_attribute(attributes, key="unique_component_name_count", label="本体パーツ名称数", value=len(unique_part_names), source="3d_internal_part_tree", confidence="medium", evidence="rawExtract.parts[not external].name / canonicalAttributes.internal_part_names")
     _append_attribute(attributes, key="external_part_count", label="外部パーツ数", value=external_count, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_external / canonicalAttributes.ref_model_names")
     _append_attribute(attributes, key="unloaded_part_count", label="未ロード外部パーツ数", value=unloaded_count or None, source="3d_part_tree", confidence="high", evidence="rawExtract.parts[].is_unloaded / canonicalAttributes.unresolved_part_exists")
-    _append_attribute(attributes, key="part_extended_info_count", label="パーツ付加情報あり", value=extended_info_count or None, source="3d_part_extended_info", confidence="high", evidence="rawExtract.parts[].ex_info_fields / canonicalAttributes.part_ex_info_fields")
-    _append_attribute(attributes, key="materials", label="材質", value=materials, source="3d_part_material", confidence="high", evidence="rawExtract.parts[].materials / canonicalAttributes.material_keywords")
+    _append_attribute(attributes, key="part_extended_info_count", label="本体パーツ付加情報あり", value=extended_info_count or None, source="3d_internal_part_extended_info", confidence="high", evidence="rawExtract.parts[not external].ex_info_fields / canonicalAttributes.internal_part_ex_info_fields")
+    _append_attribute(attributes, key="materials", label="本体材質", value=materials, source="3d_internal_part_material", confidence="high", evidence="rawExtract.parts[not external].materials / canonicalAttributes.material_keywords")
+    _append_attribute(attributes, key="external_part_names", label="外部パーツ名称", value=external_part_names, source="3d_external_part_tree", confidence="high", evidence="rawExtract.parts[external].name / canonicalAttributes.external_part_names")
+    _append_attribute(attributes, key="external_part_materials", label="外部パーツ材質", value=external_materials, source="3d_external_part_material", confidence="high", evidence="rawExtract.parts[external].materials / canonicalAttributes.external_part_material_keywords")
+    _append_attribute(attributes, key="external_part_extended_info_count", label="外部パーツ付加情報あり", value=external_extended_info_count or None, source="3d_external_part_extended_info", confidence="high", evidence="rawExtract.parts[external].ex_info_fields / canonicalAttributes.external_part_ex_info_fields")
     _append_attribute(attributes, key="material_2d", label="材質 (2D図枠)", value=canonical.get("material"), source="2d_title_block", confidence="medium", evidence="canonicalAttributes.title_block_fields.material")
-    _append_attribute(attributes, key="part_name_candidates", label="部品名候補", value=part_name_candidates, source="2d_title_block", confidence="medium", evidence="canonicalAttributes.part_name_candidates")
+    _append_attribute(attributes, key="part_name_candidates", label="本体部品名候補", value=part_name_candidates, source="internal_identity", confidence="medium", evidence="canonicalAttributes.part_name_candidates")
+    _append_attribute(attributes, key="external_part_name_candidates", label="外部パーツ部品名候補", value=external_part_name_candidates, source="external_identity", confidence="medium", evidence="canonicalAttributes.external_part_name_candidates")
     mass_kg, mass_evidence = _mass_in_kg(canonical)
     for key, label in (
         ("customer_name", "客先"),

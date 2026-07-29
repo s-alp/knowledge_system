@@ -1,3 +1,6 @@
+# 変換済みDXFの文字・ブロック属性を読み、名称ラベルと値候補の取得状況を監査する。
+# 既存のDXF全件監査成果物を入力とし、原本DXFは変更せず集計JSONだけを生成する。
+# 失敗時はsummary.jsonと個別DXFの存在、DXF文字コード、エンティティ構造を確認する。
 from __future__ import annotations
 
 import json

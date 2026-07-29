@@ -1591,3 +1591,116 @@ def test_api_accepts_trailing_slashes(sample_registration_payload):
     assert client.post(f"/api/v1/drawings/{drawing.id}/viewer3d/open/").status_code == 200
     assert client.get(f"/api/v1/drawings/{drawing.id}/viewer3d/preview.stl").status_code == 200
     assert client.get(f"/api/v1/drawing-metadata/registrations/{drawing.id}/rag-payload/").status_code == 200
+
+
+@pytest.mark.django_db
+def test_icad_part_entity_rejects_spec_name_and_removes_note_marker(sample_registration_payload):
+    frame_drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-frame-spec-name-drawing",
+        filename="TR1D9K99027.icd",
+        source_path=r"C:\temp\部品\TR1D9K99027.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=frame_drawing,
+        extraction_mode="2d",
+        canonical_attributes_json={
+            "drawing_number": "TR1D9K99027",
+            "drawing_name": "SFF-424 L=1572",
+        },
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=frame_drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "drawing_number": "TR1D9K99027",
+            "top_part_name": "TR1D9K990271",
+            "top_part_comment": "アルミフレーム",
+        },
+    )
+    rail_drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="part-rail-marker-name-drawing",
+        filename="217008-41J-3004.icd",
+        source_path=r"C:\temp\部品\217008-41J-3004.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=rail_drawing,
+        extraction_mode="3d",
+        canonical_attributes_json={
+            "drawing_number": "217008-41J-3004",
+            "part_name": "★ガイドレール",
+            "top_part_name": "217008-41J-3004",
+            "top_part_comment": "レール",
+        },
+    )
+
+    frame_response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=part&drawingId={frame_drawing.id}"
+    )
+    rail_response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=part&drawingId={rail_drawing.id}"
+    )
+
+    assert frame_response.status_code == 200
+    assert frame_response.json()["items"][0]["name"] == "アルミフレーム"
+    assert rail_response.status_code == 200
+    assert rail_response.json()["items"][0]["name"] == "ガイドレール"
+
+
+@pytest.mark.django_db
+def test_icad_assembly_keeps_external_part_attributes_separate(sample_registration_payload):
+    drawing = RegisteredDrawing.objects.create(
+        host_drawing_id="assembly-external-separation",
+        filename="ASSEMBLY-001.icd",
+        source_path=r"C:\temp\ASSEMBLY-001.icd",
+        source_format=sample_registration_payload["sourceFormat"],
+    )
+    DrawingMetadataSnapshot.objects.create(
+        drawing=drawing,
+        extraction_mode="3d",
+        raw_extract_json={
+            "top_part": {"name": "ASSEMBLY-001", "comment": "本体アセンブリ"},
+            "parts": [
+                {
+                    "name": "MAIN-BODY",
+                    "depth": 0,
+                    "tree_path": ["MAIN-BODY"],
+                    "materials": [{"matid": "SUS304", "name": "SUS304"}],
+                },
+                {
+                    "name": "EXTERNAL-RAIL",
+                    "depth": 1,
+                    "tree_path": ["MAIN-BODY", "EXTERNAL-RAIL"],
+                    "is_external": True,
+                    "ref_model_name": "EXTERNAL-RAIL",
+                    "materials": [{"matid": "SS400", "name": "SS400"}],
+                    "ex_info_fields": {"部品名": "外部ガイドレール"},
+                },
+            ],
+        },
+        canonical_attributes_json={
+            "drawing_number": "ASSEMBLY-001",
+            "top_part_name": "ASSEMBLY-001",
+            "top_part_comment": "本体アセンブリ",
+            "internal_part_names": ["MAIN-BODY"],
+            "external_part_names": ["EXTERNAL-RAIL"],
+            "internal_part_material_keywords": ["SUS304"],
+            "external_part_material_keywords": ["SS400"],
+            "external_part_name_candidates": ["GUIDE"],
+        },
+    )
+
+    response = APIClient().get(
+        f"/api/v1/knowledge-entities?target=product&drawingId={drawing.id}"
+    )
+
+    assert response.status_code == 200
+    item = response.json()["items"][0]
+    attributes = {attribute["key"]: attribute["value"] for attribute in item["attributes"]}
+    assert item["name"] == "本体アセンブリ"
+    assert attributes["materials"] == "SUS304"
+    assert attributes["external_part_names"] == "EXTERNAL-RAIL"
+    assert attributes["external_part_materials"] == "SS400"
+    assert attributes["external_part_name_candidates"] == "GUIDE"
+    assert "SS400" not in attributes["materials"]

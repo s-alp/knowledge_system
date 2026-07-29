@@ -1,3 +1,6 @@
+# PowerPoint生成時のレイアウトJSONを検査し、文字要素がスライド境界を越えていないか確認する。
+# レイアウト解析結果と元PPTXを読み取り専用で参照し、問題があれば明示的にエラー終了する。
+# 失敗時はスライド寸法、layout JSONのbbox、PPTXと解析結果のページ対応を確認する。
 param(
     [Parameter(Mandatory = $true)]
     [string]$LayoutDirectory,

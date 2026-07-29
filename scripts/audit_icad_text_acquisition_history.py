@@ -1,3 +1,6 @@
+# 過去のlive抽出JSONを時系列で比較し、ICAD文字取得件数と警告の変化を監査する。
+# output/live_extracts配下の既存成果物だけを読み、対象ICADごとの履歴JSONを生成する。
+# 失敗時は対象名と抽出ファイル名の対応、JSON形式、保存日時を確認する。
 from __future__ import annotations
 
 import json
