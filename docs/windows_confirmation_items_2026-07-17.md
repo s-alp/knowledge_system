@@ -1,7 +1,7 @@
 # Windows側確認事項(抽出・タグ付け改善)
 
 - 作成日: 2026-07-17
-- 最終更新日: 2026-07-29
+- 最終更新日: 2026-07-30
 - 文書状態: **現行の実機確認リスト**
 - 実装済み範囲の正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
 - 背景: Cloud検証と抽出内容レビューで、「実ICAD・実図面・SXNET実機でしか確認できない事項」と
