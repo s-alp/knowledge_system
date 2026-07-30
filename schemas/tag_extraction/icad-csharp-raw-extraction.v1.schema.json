@@ -1,0 +1,1899 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alpine.example/schemas/icad-csharp-raw-extraction.v1.schema.json",
+  "title": "ICAD C# raw extraction envelope",
+  "description": "IcadExtraction.Contracts.Models.csを正本として生成した、C# RunnerからPython正規化コアへの入力契約。",
+  "$ref": "#/$defs/ExtractionEnvelope",
+  "$defs": {
+    "CliCommand": {
+      "type": "object",
+      "properties": {
+        "command_name": {
+          "type": "string"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "command_name",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "WarningPayload": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "TopPartPayload": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ex_info": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ex_info_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "comment",
+        "ex_info",
+        "ex_info_fields"
+      ],
+      "additionalProperties": false
+    },
+    "PartPayload": {
+      "type": "object",
+      "properties": {
+        "node_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parent_node_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "depth": {
+          "type": "integer"
+        },
+        "child_count": {
+          "type": "integer"
+        },
+        "entity_kind": {
+          "type": "string"
+        },
+        "tree_path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ex_info": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ex_info_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "ref_model_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ref_model_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_external": {
+          "type": "boolean"
+        },
+        "is_mirror": {
+          "type": "boolean"
+        },
+        "is_read_only": {
+          "type": "boolean"
+        },
+        "is_unloaded": {
+          "type": "boolean"
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MaterialPayload"
+          }
+        }
+      },
+      "required": [
+        "node_id",
+        "parent_node_id",
+        "depth",
+        "child_count",
+        "entity_kind",
+        "tree_path",
+        "name",
+        "comment",
+        "ex_info",
+        "ex_info_fields",
+        "ref_model_name",
+        "ref_model_path",
+        "is_external",
+        "is_mirror",
+        "is_read_only",
+        "is_unloaded",
+        "materials"
+      ],
+      "additionalProperties": false
+    },
+    "RawExtract3DPayload": {
+      "type": "object",
+      "properties": {
+        "model_info": {
+          "$ref": "#/$defs/ModelInfoPayload"
+        },
+        "top_part": {
+          "$ref": "#/$defs/TopPartPayload"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PartPayload"
+          }
+        },
+        "viewer_assets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/ViewerAssetPayload"
+            }
+          }
+        },
+        "condition_diagnostics": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "mass_probe_status": {
+          "type": "string"
+        },
+        "mass_properties": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MassPropertyPayload"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "material_probe_status": {
+          "type": "string"
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MaterialPayload"
+          }
+        }
+      },
+      "required": [
+        "model_info",
+        "top_part",
+        "parts",
+        "viewer_assets",
+        "condition_diagnostics",
+        "mass_probe_status",
+        "mass_properties",
+        "material_probe_status",
+        "materials"
+      ],
+      "additionalProperties": false
+    },
+    "MaterialPayload": {
+      "type": "object",
+      "properties": {
+        "mat_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "specific_gravity": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "element_count": {
+          "type": "integer"
+        },
+        "raw_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "mat_id",
+        "name",
+        "specific_gravity",
+        "element_count",
+        "raw_fields"
+      ],
+      "additionalProperties": false
+    },
+    "ModelInfoPayload": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_read_only": {
+          "type": "boolean"
+        },
+        "view_sheet_count": {
+          "type": "integer"
+        },
+        "work_plane_count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "comment",
+        "path",
+        "is_read_only",
+        "view_sheet_count",
+        "work_plane_count"
+      ],
+      "additionalProperties": false
+    },
+    "MassPropertyPayload": {
+      "type": "object",
+      "properties": {
+        "element_count": {
+          "type": "integer"
+        },
+        "unit_name": {
+          "type": "string"
+        },
+        "unit_type": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "is_si": {
+          "type": "boolean"
+        },
+        "density": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "area": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "volume": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mass": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "weight": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "length": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_of_gravity_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_of_gravity_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_of_gravity_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "global_moment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "gravity_moment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "main_moment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "raw_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "element_count",
+        "unit_name",
+        "unit_type",
+        "is_si",
+        "density",
+        "area",
+        "volume",
+        "mass",
+        "weight",
+        "length",
+        "center_of_gravity_x",
+        "center_of_gravity_y",
+        "center_of_gravity_z",
+        "global_moment",
+        "gravity_moment",
+        "main_moment",
+        "raw_fields"
+      ],
+      "additionalProperties": false
+    },
+    "ViewerAssetPayload": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "filename": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extension": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mime_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "status",
+        "source",
+        "filename",
+        "extension",
+        "mime_type",
+        "model_format",
+        "file_path",
+        "url",
+        "size_bytes",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "TextPayload": {
+      "type": "object",
+      "properties": {
+        "text_lines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "line_count": {
+          "type": "integer"
+        },
+        "source_type": {
+          "type": "string"
+        },
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "joined_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "text_lines",
+        "line_count",
+        "source_type",
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "joined_text"
+      ],
+      "additionalProperties": false
+    },
+    "DimensionPayload": {
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "value1": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value2": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "front_word": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "back_word": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "upper_tol": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lower_tol": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mark2": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mark3": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "value1",
+        "value2",
+        "front_word",
+        "back_word",
+        "upper_tol",
+        "lower_tol",
+        "mark2",
+        "mark3",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "WeldNotePayload": {
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "BalloonPayload": {
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "TolerancePayload": {
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "Referenced2DPartPayload": {
+      "type": "object",
+      "properties": {
+        "entity_type": {
+          "type": "string"
+        },
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "part3_d_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ref_model_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ref_vs_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "is_empty": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "is_mirror": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "scale": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "angle": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type",
+        "view_name",
+        "layer_no",
+        "position_x",
+        "position_y",
+        "position_z",
+        "inside_print_area",
+        "print_frame_no",
+        "name",
+        "comment",
+        "part3_d_name",
+        "ref_model_name",
+        "ref_vs_name",
+        "kind",
+        "is_empty",
+        "is_mirror",
+        "scale",
+        "angle",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "GeometryPrimitivePayload": {
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layer_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "geometry_type": {
+          "type": "string"
+        },
+        "position_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "position_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "end_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "end_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "end_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "center_z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "radius": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "radius1": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "radius2": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "start_angle": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "end_angle": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "point_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "mark_type": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "side_length": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "width": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "color": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "inside_print_area": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "print_frame_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name",
+        "layer_no",
+        "geometry_type",
+        "position_x",
+        "position_y",
+        "position_z",
+        "end_x",
+        "end_y",
+        "end_z",
+        "center_x",
+        "center_y",
+        "center_z",
+        "radius",
+        "radius1",
+        "radius2",
+        "start_angle",
+        "end_angle",
+        "point_count",
+        "mark_type",
+        "side_length",
+        "width",
+        "color",
+        "inside_print_area",
+        "print_frame_no",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "ViewSheetPayload": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scale": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "angle": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "type": {
+          "type": "integer"
+        },
+        "view_type": {
+          "type": "integer"
+        },
+        "geometry_count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "comment",
+        "scale",
+        "angle",
+        "type",
+        "view_type",
+        "geometry_count"
+      ],
+      "additionalProperties": false
+    },
+    "PrintFramePayload": {
+      "type": "object",
+      "properties": {
+        "no": {
+          "type": "integer"
+        },
+        "size": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "vertical": {
+          "type": "boolean"
+        },
+        "dinfo": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "drawing_scale": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "range_min_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "range_min_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "range_max_x": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "range_max_y": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "no",
+        "size",
+        "vertical",
+        "dinfo",
+        "drawing_scale",
+        "range_min_x",
+        "range_min_y",
+        "range_max_x",
+        "range_max_y"
+      ],
+      "additionalProperties": false
+    },
+    "LayerPayload": {
+      "type": "object",
+      "properties": {
+        "no": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_displayed": {
+          "type": "boolean"
+        },
+        "is_searchable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "no",
+        "name",
+        "is_displayed",
+        "is_searchable"
+      ],
+      "additionalProperties": false
+    },
+    "RawExtract2DPayload": {
+      "type": "object",
+      "properties": {
+        "model_info": {
+          "$ref": "#/$defs/ModelInfoPayload"
+        },
+        "condition_diagnostics": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "viewer_assets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/ViewerAssetPayload"
+            }
+          }
+        },
+        "view_sheets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ViewSheetPayload"
+          }
+        },
+        "print_frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PrintFramePayload"
+          }
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LayerPayload"
+          }
+        },
+        "texts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextPayload"
+          }
+        },
+        "dimensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DimensionPayload"
+          }
+        },
+        "geometry_primitives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GeometryPrimitivePayload"
+          }
+        },
+        "weld_notes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WeldNotePayload"
+          }
+        },
+        "balloons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BalloonPayload"
+          }
+        },
+        "tolerances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TolerancePayload"
+          }
+        },
+        "referenced_parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Referenced2DPartPayload"
+          }
+        }
+      },
+      "required": [
+        "model_info",
+        "condition_diagnostics",
+        "viewer_assets",
+        "view_sheets",
+        "print_frames",
+        "layers",
+        "texts",
+        "dimensions",
+        "geometry_primitives",
+        "weld_notes",
+        "balloons",
+        "tolerances",
+        "referenced_parts"
+      ],
+      "additionalProperties": false
+    },
+    "SourceFilePayload": {
+      "type": "object",
+      "properties": {
+        "full_path": {
+          "type": "string"
+        },
+        "directory_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file_name": {
+          "type": "string"
+        },
+        "file_name_without_extension": {
+          "type": "string"
+        },
+        "extension": {
+          "type": "string"
+        },
+        "sx_net_input_path": {
+          "type": "string"
+        },
+        "sx_net_input_strategy": {
+          "type": "string",
+          "enum": [
+            "original",
+            "windows_short_path",
+            "temporary_copy",
+            "temporary_copy_forced"
+          ]
+        },
+        "used_sx_net_alternate_path": {
+          "type": "boolean"
+        },
+        "original_path_length": {
+          "type": "integer"
+        },
+        "sx_net_input_path_length": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "full_path",
+        "directory_path",
+        "file_name",
+        "file_name_without_extension",
+        "extension",
+        "sx_net_input_path",
+        "sx_net_input_strategy",
+        "used_sx_net_alternate_path",
+        "original_path_length",
+        "sx_net_input_path_length"
+      ],
+      "additionalProperties": false
+    },
+    "ExtractionEnvelope": {
+      "type": "object",
+      "properties": {
+        "input_path": {
+          "type": "string"
+        },
+        "source_file": {
+          "$ref": "#/$defs/SourceFilePayload"
+        },
+        "source_format": {
+          "const": "icad"
+        },
+        "source_kind": {
+          "enum": [
+            "2d",
+            "3d"
+          ]
+        },
+        "extraction_profile": {
+          "type": "string"
+        },
+        "extraction_options": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "condition_diagnostics": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "extractor_name": {
+          "type": "string"
+        },
+        "extractor_version": {
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "type": "integer"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WarningPayload"
+          }
+        },
+        "raw_extract": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/RawExtract2DPayload"
+            },
+            {
+              "$ref": "#/$defs/RawExtract3DPayload"
+            }
+          ]
+        }
+      },
+      "required": [
+        "input_path",
+        "source_file",
+        "source_format",
+        "source_kind",
+        "extraction_profile",
+        "extraction_options",
+        "condition_diagnostics",
+        "extractor_name",
+        "extractor_version",
+        "elapsed_ms",
+        "warnings",
+        "raw_extract"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_kind": {
+                "const": "2d"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_extract": {
+                "$ref": "#/$defs/RawExtract2DPayload"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_kind": {
+                "const": "3d"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_extract": {
+                "$ref": "#/$defs/RawExtract3DPayload"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PreviewAssetOptions": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "output_directory": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "public_base_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file_name_prefix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "enabled",
+        "output_directory",
+        "public_base_url",
+        "file_name_prefix"
+      ],
+      "additionalProperties": false
+    },
+    "DetectionEvidence2DPayload": {
+      "type": "object",
+      "properties": {
+        "has_container": {
+          "type": "boolean"
+        },
+        "has_content": {
+          "type": "boolean"
+        },
+        "view_sheet_count": {
+          "type": "integer"
+        },
+        "print_frame_count": {
+          "type": "integer"
+        },
+        "segment_count": {
+          "type": "integer"
+        },
+        "geometry_count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "has_container",
+        "has_content",
+        "view_sheet_count",
+        "print_frame_count",
+        "segment_count",
+        "geometry_count"
+      ],
+      "additionalProperties": false
+    },
+    "DetectionEvidence3DPayload": {
+      "type": "object",
+      "properties": {
+        "has_content": {
+          "type": "boolean"
+        },
+        "top_part_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "part_count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "has_content",
+        "top_part_name",
+        "part_count"
+      ],
+      "additionalProperties": false
+    },
+    "DetectionPayload": {
+      "type": "object",
+      "properties": {
+        "has2_d": {
+          "type": "boolean"
+        },
+        "has2_d_container": {
+          "type": "boolean"
+        },
+        "has3_d": {
+          "type": "boolean"
+        },
+        "two_d": {
+          "$ref": "#/$defs/DetectionEvidence2DPayload"
+        },
+        "three_d": {
+          "$ref": "#/$defs/DetectionEvidence3DPayload"
+        }
+      },
+      "required": [
+        "has2_d",
+        "has2_d_container",
+        "has3_d",
+        "two_d",
+        "three_d"
+      ],
+      "additionalProperties": false
+    },
+    "DetectionEnvelope": {
+      "type": "object",
+      "properties": {
+        "input_path": {
+          "type": "string"
+        },
+        "source_file": {
+          "$ref": "#/$defs/SourceFilePayload"
+        },
+        "source_format": {
+          "type": "string"
+        },
+        "extractor_name": {
+          "type": "string"
+        },
+        "extractor_version": {
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "type": "integer"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WarningPayload"
+          }
+        },
+        "detection": {
+          "$ref": "#/$defs/DetectionPayload"
+        }
+      },
+      "required": [
+        "input_path",
+        "source_file",
+        "source_format",
+        "extractor_name",
+        "extractor_version",
+        "elapsed_ms",
+        "warnings",
+        "detection"
+      ],
+      "additionalProperties": false
+    },
+    "PlotterPayload": {
+      "type": "object",
+      "properties": {
+        "no": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_default": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "no",
+        "name",
+        "is_default"
+      ],
+      "additionalProperties": false
+    },
+    "PrintProbePayload": {
+      "type": "object",
+      "properties": {
+        "print_frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PrintFramePayload"
+          }
+        },
+        "plotters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PlotterPayload"
+          }
+        },
+        "default_plotter": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlotterPayload"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "print_execution_status": {
+          "type": "string"
+        },
+        "print_execution_message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "print_frames",
+        "plotters",
+        "default_plotter",
+        "print_execution_status",
+        "print_execution_message"
+      ],
+      "additionalProperties": false
+    },
+    "PrintProbeEnvelope": {
+      "type": "object",
+      "properties": {
+        "input_path": {
+          "type": "string"
+        },
+        "source_file": {
+          "$ref": "#/$defs/SourceFilePayload"
+        },
+        "source_format": {
+          "type": "string"
+        },
+        "extractor_name": {
+          "type": "string"
+        },
+        "extractor_version": {
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "type": "integer"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WarningPayload"
+          }
+        },
+        "print_probe": {
+          "$ref": "#/$defs/PrintProbePayload"
+        }
+      },
+      "required": [
+        "input_path",
+        "source_file",
+        "source_format",
+        "extractor_name",
+        "extractor_version",
+        "elapsed_ms",
+        "warnings",
+        "print_probe"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

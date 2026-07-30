@@ -27,11 +27,13 @@ CURRENT_SPEC = DOCS / "tag_extraction_and_assignment_current_spec_2026-07-29.md"
 INDEX = DOCS / "tag_extraction_documentation_index_2026-07-29.md"
 
 REQUIRED_FILES = (
+    ROOT / "AGENTS.md",
     CURRENT_SPEC,
     INDEX,
     DOCS / "extraction_result_schema_2026-05-28.md",
     DOCS / "windows_extraction_agent_api_design_2026-07-29.md",
     DOCS / "cad_tag_extraction_sources_for_souya_2026-07-28.md",
+    DOCS / "souya_tag_extraction_minimal_handoff_2026-07-30.md",
     HANDOFF_DOCS / "README.md",
     HANDOFF_DOCS / "VALIDATION_CHECKLIST.md",
     HANDOFF_DOCS / "PROMPT_FOR_CLAUDE.md",
@@ -40,6 +42,10 @@ REQUIRED_FILES = (
     ROOT / "src/IcadExtraction.SxNet/Icad3DExtractor.cs",
     ROOT / "src/IcadExtraction.Runner/WindowsExtractionAgent.cs",
     ROOT / "backend/apps/drawing_metadata/models.py",
+    ROOT / "backend/icad_tag_extraction/pipeline.py",
+    ROOT / "backend/icad_tag_extraction/normalization.py",
+    ROOT / "backend/icad_tag_extraction/tag_builder.py",
+    ROOT / "backend/icad_tag_extraction/dictionary_provider.py",
     ROOT / "backend/apps/drawing_metadata/services/normalization.py",
     ROOT / "backend/apps/drawing_metadata/services/composition.py",
     ROOT / "backend/apps/drawing_metadata/services/tag_builder.py",
@@ -47,9 +53,21 @@ REQUIRED_FILES = (
     ROOT / "backend/apps/drawing_metadata/services/retired_ai_metadata.py",
     ROOT / "backend/apps/drawing_metadata/api/urls.py",
     ROOT / "scripts/audit_retired_ai_database_history.py",
+    ROOT / "schemas/tag_extraction/icad-csharp-raw-extraction.v1.schema.json",
+    ROOT / "schemas/tag_extraction/icad-canonical-attributes.v1.schema.json",
+    ROOT / "schemas/tag_extraction/icad-derived-tags.v1.schema.json",
+    ROOT / "schemas/tag_extraction/icad-tag-extraction-result.v1.schema.json",
 )
 
 CODE_ASSERTIONS = {
+    ROOT / "AGENTS.md": (
+        "創屋向け最小パッケージの再生成手順",
+        "Codexが変更差分、契約影響、テスト結果、同梱内容、既存成果物を順に確認",
+        "既存パッケージを自動削除・自動上書きしない",
+        "git diff --cached",
+        "--output output\\souya_tag_extraction_minimal_YYYY-MM-DD",
+        "manifest.json",
+    ),
     ROOT / "backend/knowledge_system_backend/settings.py": (
         'DRAWING_METADATA_SCHEMA_VERSION = "1.0.0"',
         'DRAWING_METADATA_NORMALIZER_VERSION = "1.1.0"',
@@ -64,7 +82,7 @@ CODE_ASSERTIONS = {
         "class TagDictionaryEntry",
         'KIND_PART_NAME = "part_name"',
     ),
-    ROOT / "backend/apps/drawing_metadata/services/tag_builder.py": (
+    ROOT / "backend/icad_tag_extraction/tag_builder.py": (
         'add_tag("寸法あり"',
         'add_tag("寸法公差あり"',
         'add_tag("幾何公差あり"',

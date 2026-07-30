@@ -1,0 +1,1139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alpine.example/schemas/icad-canonical-attributes.v1.schema.json",
+  "title": "ICAD canonical attributes",
+  "description": "独立Python正規化コアが常に返すキー集合を固定する。未抽出値はnullまたは空配列として保持する。",
+  "type": "object",
+  "properties": {
+    "drawing_number": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "drawing_number_candidates": {
+      "type": "array"
+    },
+    "drawing_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "part_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "product_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "equipment_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "unit_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "revision": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "material": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "surface_treatment": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "paint": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "scale": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "drawing_size": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "designer": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "checker": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "approver": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "drawing_date": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "created_date": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "checked_date": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "approved_date": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "revision_date": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "prfx": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "unit_number": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_format": {
+      "type": "string"
+    },
+    "source_kind": {
+      "type": "string"
+    },
+    "document_kind": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "customer_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "project_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "equipment_category": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "module_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "owner": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "design_purpose": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "paper_size": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "extraction_status": {
+      "type": "string"
+    },
+    "ocr_used": {
+      "type": "boolean"
+    },
+    "confidence_summary": {
+      "type": "string"
+    },
+    "source_full_path": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_directory_path": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_file_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_file_stem": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_extension": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "source_path_tokens": {
+      "type": "array"
+    },
+    "model_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_comment": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_path": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_is_read_only": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_view_sheet_count": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_work_plane_count": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "model_info_tokens": {
+      "type": "array"
+    },
+    "top_part_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "top_part_comment": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "top_part_ex_info": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "mass_probe_status": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "mass_unit_name": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "mass_element_count": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "mass_value": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "weight_value": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "volume_value": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "area_value": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "density_value": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "center_of_gravity": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "global_moment": {
+      "type": "object"
+    },
+    "gravity_moment": {
+      "type": "object"
+    },
+    "main_moment": {
+      "type": "object"
+    },
+    "inertia_moment_candidates": {
+      "type": "array"
+    },
+    "inertia_moment_candidate_count": {
+      "type": "integer"
+    },
+    "material_probe_status": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "number",
+        "object",
+        "string",
+        "null"
+      ]
+    },
+    "material_ids": {
+      "type": "array"
+    },
+    "material_names": {
+      "type": "array"
+    },
+    "material_specific_gravities": {
+      "type": "array"
+    },
+    "part_material_candidates": {
+      "type": "array"
+    },
+    "part_material_candidate_count": {
+      "type": "integer"
+    },
+    "external_part_material_candidates": {
+      "type": "array"
+    },
+    "external_part_material_candidate_count": {
+      "type": "integer"
+    },
+    "internal_part_material_keywords": {
+      "type": "array"
+    },
+    "external_part_material_keywords": {
+      "type": "array"
+    },
+    "prfx_candidates": {
+      "type": "array"
+    },
+    "unit_number_candidates": {
+      "type": "array"
+    },
+    "part_name_candidates": {
+      "type": "array"
+    },
+    "external_part_name_candidates": {
+      "type": "array"
+    },
+    "part_names": {
+      "type": "array"
+    },
+    "part_comments": {
+      "type": "array"
+    },
+    "part_tree_paths": {
+      "type": "array"
+    },
+    "internal_part_names": {
+      "type": "array"
+    },
+    "internal_part_comments": {
+      "type": "array"
+    },
+    "internal_part_tree_paths": {
+      "type": "array"
+    },
+    "external_part_names": {
+      "type": "array"
+    },
+    "external_part_comments": {
+      "type": "array"
+    },
+    "external_part_tree_paths": {
+      "type": "array"
+    },
+    "step_product_names": {
+      "type": "array"
+    },
+    "step_products": {
+      "type": "array"
+    },
+    "step_assembly_relationships": {
+      "type": "array"
+    },
+    "step_assembly_relationship_count": {
+      "type": "integer"
+    },
+    "part_ex_info_fields": {
+      "type": "object"
+    },
+    "part_ex_info_tokens": {
+      "type": "array"
+    },
+    "internal_part_ex_info_fields": {
+      "type": "object"
+    },
+    "internal_part_ex_info_tokens": {
+      "type": "array"
+    },
+    "external_part_ex_info_fields": {
+      "type": "object"
+    },
+    "external_part_ex_info_tokens": {
+      "type": "array"
+    },
+    "ref_model_names": {
+      "type": "array"
+    },
+    "ref_model_paths": {
+      "type": "array"
+    },
+    "referenced_2d_part_count": {
+      "type": "integer"
+    },
+    "referenced_2d_trusted_part_count": {
+      "type": "integer"
+    },
+    "referenced_2d_part_names": {
+      "type": "array"
+    },
+    "referenced_2d_part3d_names": {
+      "type": "array"
+    },
+    "referenced_2d_ref_model_names": {
+      "type": "array"
+    },
+    "referenced_2d_ref_vs_names": {
+      "type": "array"
+    },
+    "external_part_exists": {
+      "type": "boolean"
+    },
+    "mirror_part_exists": {
+      "type": "boolean"
+    },
+    "unresolved_part_exists": {
+      "type": "boolean"
+    },
+    "text_tokens": {
+      "type": "array"
+    },
+    "label_texts": {
+      "type": "array"
+    },
+    "dxf_layers": {
+      "type": "array"
+    },
+    "dxf_block_references": {
+      "type": "array"
+    },
+    "dxf_block_attribute_count": {
+      "type": "integer"
+    },
+    "dxf_block_attribute_tokens": {
+      "type": "array"
+    },
+    "raw_2d_sections": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "title_block_fields": {
+      "type": "object"
+    },
+    "title_block_candidates": {
+      "type": "array"
+    },
+    "revision_note_candidates": {
+      "type": "array"
+    },
+    "revision_note_count": {
+      "type": "integer"
+    },
+    "dimension_count": {
+      "type": "integer"
+    },
+    "dimension_values": {
+      "type": "array"
+    },
+    "dimension_symbols": {
+      "type": "array"
+    },
+    "dimension_tolerance_count": {
+      "type": "integer"
+    },
+    "dimension_tolerance_values": {
+      "type": "array"
+    },
+    "geometric_tolerance_count": {
+      "type": "integer"
+    },
+    "tolerance_texts": {
+      "type": "array"
+    },
+    "tolerance_candidates": {
+      "type": "array"
+    },
+    "tolerance_candidate_count": {
+      "type": "integer"
+    },
+    "weld_instruction_count": {
+      "type": "integer"
+    },
+    "weld_types": {
+      "type": "array"
+    },
+    "weld_note_texts": {
+      "type": "array"
+    },
+    "weld_note_candidates": {
+      "type": "array"
+    },
+    "weld_note_candidate_count": {
+      "type": "integer"
+    },
+    "balloon_keys": {
+      "type": "array"
+    },
+    "balloon_candidates": {
+      "type": "array"
+    },
+    "balloon_candidate_count": {
+      "type": "integer"
+    },
+    "surface_treatment_tokens": {
+      "type": "array"
+    },
+    "geometry_feature_candidates": {
+      "type": "array"
+    },
+    "view_reference_candidates": {
+      "type": "array"
+    },
+    "view_reference_candidate_count": {
+      "type": "integer"
+    },
+    "curve_section_candidates": {
+      "type": "array"
+    },
+    "curve_section_candidate_count": {
+      "type": "integer"
+    },
+    "surface_roughness_count": {
+      "type": "integer"
+    },
+    "surface_roughness_values": {
+      "type": "array"
+    },
+    "section_feature_count": {
+      "type": "integer"
+    },
+    "cut_line_count": {
+      "type": "integer"
+    },
+    "hatch_or_section_count": {
+      "type": "integer"
+    },
+    "finish_mark_count": {
+      "type": "integer"
+    },
+    "finish_mark_types": {
+      "type": "array"
+    },
+    "slot_candidate_count": {
+      "type": "integer"
+    },
+    "slot_candidate_dimensions": {
+      "type": "array"
+    },
+    "hole_candidate_count": {
+      "type": "integer"
+    },
+    "hole_candidate_diameters": {
+      "type": "array"
+    },
+    "spec_tokens": {
+      "type": "array"
+    },
+    "part_keywords": {
+      "type": "array"
+    },
+    "material_keywords": {
+      "type": "array"
+    },
+    "unresolved_material_keywords": {
+      "type": "array"
+    },
+    "maker_keywords": {
+      "type": "array"
+    },
+    "process_keywords": {
+      "type": "array"
+    },
+    "heat_treatment_keywords": {
+      "type": "array"
+    },
+    "heat_treatment_evidence": {
+      "type": "array"
+    },
+    "hardness_spec_candidates": {
+      "type": "array"
+    },
+    "hardness_spec_values": {
+      "type": "array"
+    },
+    "scale_candidates": {
+      "type": "array"
+    },
+    "inspection_keywords": {
+      "type": "array"
+    },
+    "change_keywords": {
+      "type": "array"
+    },
+    "issue_keywords": {
+      "type": "array"
+    },
+    "normalizer_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "drawing_number",
+    "drawing_number_candidates",
+    "drawing_name",
+    "part_name",
+    "product_name",
+    "equipment_name",
+    "unit_name",
+    "revision",
+    "material",
+    "surface_treatment",
+    "paint",
+    "scale",
+    "drawing_size",
+    "designer",
+    "checker",
+    "approver",
+    "drawing_date",
+    "created_date",
+    "checked_date",
+    "approved_date",
+    "revision_date",
+    "prfx",
+    "unit_number",
+    "source_format",
+    "source_kind",
+    "document_kind",
+    "customer_name",
+    "project_name",
+    "equipment_category",
+    "module_name",
+    "status",
+    "owner",
+    "design_purpose",
+    "paper_size",
+    "extraction_status",
+    "ocr_used",
+    "confidence_summary",
+    "source_full_path",
+    "source_directory_path",
+    "source_file_name",
+    "source_file_stem",
+    "source_extension",
+    "source_path_tokens",
+    "model_name",
+    "model_comment",
+    "model_path",
+    "model_is_read_only",
+    "model_view_sheet_count",
+    "model_work_plane_count",
+    "model_info_tokens",
+    "top_part_name",
+    "top_part_comment",
+    "top_part_ex_info",
+    "mass_probe_status",
+    "mass_unit_name",
+    "mass_element_count",
+    "mass_value",
+    "weight_value",
+    "volume_value",
+    "area_value",
+    "density_value",
+    "center_of_gravity",
+    "global_moment",
+    "gravity_moment",
+    "main_moment",
+    "inertia_moment_candidates",
+    "inertia_moment_candidate_count",
+    "material_probe_status",
+    "material_ids",
+    "material_names",
+    "material_specific_gravities",
+    "part_material_candidates",
+    "part_material_candidate_count",
+    "external_part_material_candidates",
+    "external_part_material_candidate_count",
+    "internal_part_material_keywords",
+    "external_part_material_keywords",
+    "prfx_candidates",
+    "unit_number_candidates",
+    "part_name_candidates",
+    "external_part_name_candidates",
+    "part_names",
+    "part_comments",
+    "part_tree_paths",
+    "internal_part_names",
+    "internal_part_comments",
+    "internal_part_tree_paths",
+    "external_part_names",
+    "external_part_comments",
+    "external_part_tree_paths",
+    "step_product_names",
+    "step_products",
+    "step_assembly_relationships",
+    "step_assembly_relationship_count",
+    "part_ex_info_fields",
+    "part_ex_info_tokens",
+    "internal_part_ex_info_fields",
+    "internal_part_ex_info_tokens",
+    "external_part_ex_info_fields",
+    "external_part_ex_info_tokens",
+    "ref_model_names",
+    "ref_model_paths",
+    "referenced_2d_part_count",
+    "referenced_2d_trusted_part_count",
+    "referenced_2d_part_names",
+    "referenced_2d_part3d_names",
+    "referenced_2d_ref_model_names",
+    "referenced_2d_ref_vs_names",
+    "external_part_exists",
+    "mirror_part_exists",
+    "unresolved_part_exists",
+    "text_tokens",
+    "label_texts",
+    "dxf_layers",
+    "dxf_block_references",
+    "dxf_block_attribute_count",
+    "dxf_block_attribute_tokens",
+    "raw_2d_sections",
+    "title_block_fields",
+    "title_block_candidates",
+    "revision_note_candidates",
+    "revision_note_count",
+    "dimension_count",
+    "dimension_values",
+    "dimension_symbols",
+    "dimension_tolerance_count",
+    "dimension_tolerance_values",
+    "geometric_tolerance_count",
+    "tolerance_texts",
+    "tolerance_candidates",
+    "tolerance_candidate_count",
+    "weld_instruction_count",
+    "weld_types",
+    "weld_note_texts",
+    "weld_note_candidates",
+    "weld_note_candidate_count",
+    "balloon_keys",
+    "balloon_candidates",
+    "balloon_candidate_count",
+    "surface_treatment_tokens",
+    "geometry_feature_candidates",
+    "view_reference_candidates",
+    "view_reference_candidate_count",
+    "curve_section_candidates",
+    "curve_section_candidate_count",
+    "surface_roughness_count",
+    "surface_roughness_values",
+    "section_feature_count",
+    "cut_line_count",
+    "hatch_or_section_count",
+    "finish_mark_count",
+    "finish_mark_types",
+    "slot_candidate_count",
+    "slot_candidate_dimensions",
+    "hole_candidate_count",
+    "hole_candidate_diameters",
+    "spec_tokens",
+    "part_keywords",
+    "material_keywords",
+    "unresolved_material_keywords",
+    "maker_keywords",
+    "process_keywords",
+    "heat_treatment_keywords",
+    "heat_treatment_evidence",
+    "hardness_spec_candidates",
+    "hardness_spec_values",
+    "scale_candidates",
+    "inspection_keywords",
+    "change_keywords",
+    "issue_keywords",
+    "normalizer_version"
+  ],
+  "additionalProperties": false
+}

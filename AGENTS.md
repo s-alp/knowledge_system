@@ -99,6 +99,8 @@
 ## 実装準備ドキュメント
 - 現行仕様の正本:
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_extraction_and_assignment_current_spec_2026-07-29.md`
+- 創屋向け最小パッケージ仕様:
+  - `C:\Users\s-iwata\Desktop\knowledge_system\docs\souya_tag_extraction_minimal_handoff_2026-07-30.md`
 - 関連ドキュメント索引:
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\tag_extraction_documentation_index_2026-07-29.md`
 - Windows agent / C#入出力の正本:
@@ -121,13 +123,115 @@
   - `C:\Users\s-iwata\Desktop\knowledge_system\docs\icad_tag_attribute_report_2026-05-26.html`
 
 ## 現時点の実装前提
-- 創屋側ナレッジシステム本体のソースコードは未共有である。一方、本リポジトリには移植用の独立Django app、C#抽出器、統合Viteフロントが実装済みである。
+- 創屋側ナレッジシステム本体のソースコードは未共有である。一方、本リポジトリには移植用のDjango非依存Pythonコア、独立Django app、C#抽出器、統合Viteフロントが実装済みである。
 - 実装は「後で創屋側本体へ移植しやすい独立モジュール」を前提に維持する。
 - ICAD ネイティブ抽出コアは `C# + SXNET` で実装済みである。
-- 正規化、タグ生成、保存、RAG preview連携は `Django(Python)` の service / task 層で実装済みである。
+- 正規化、辞書照合、タグ生成、STEP/DXF汎用抽出は `backend\icad_tag_extraction` のDjango非依存Pythonコアを正本とする。
+- Djangoのservice / task層は、DB辞書、保存、非同期ジョブ、手動補正、RAG previewを独立Pythonコアへ接続するadapterである。
+- C# raw抽出、canonical属性、derived tags、Python処理結果の境界は `schemas\tag_extraction` のJSON Schemaを正本とする。
 - ICAD抽出は `1図面 = 1回呼び出し` の一括実行を原則とし、Docker/Linux WebとWindows agentをHTTPで分離できる。
 - 重い処理は Django の request thread に残さず、非同期ジョブまたはWindows agentで処理する。
 - 現行挙動は `docs\tag_extraction_and_assignment_current_spec_2026-07-29.md` とコードを正とし、2026-05月の調査・計画文書は履歴資料として扱う。
+
+## 創屋向け最小パッケージの再生成手順
+
+### 基本方針
+- パッケージ作成は、生成スクリプトだけを機械的に実行して完了扱いにしない。
+- Codexが変更差分、契約影響、テスト結果、同梱内容、既存成果物を順に確認し、各段階の成功を確認してから生成する。
+- `scripts\build_souya_tag_extraction_package.py`は収集・manifest・ZIP生成を再現するための道具であり、変更内容の妥当性を自動判断するものではない。
+- エラー、Schema差分、現行結果との不一致、意図しないDjango依存、顧客資料やキャッシュの混入が1件でもあれば生成・コミットを中断し、原因を修正する。
+- 既存パッケージを自動削除・自動上書きしない。同名成果物がある場合は、内容と利用状況を確認し、原則として日付または`_r2`等を付けた新しい出力先を使う。
+
+### 1. 変更範囲の確認
+1. `git status --short`、`git diff`、`git diff --cached`を実行する。
+2. 他Codex、他エージェント、ユーザーの変更を分類し、今回のパッケージ対象と混ぜない。
+3. 少なくとも次の変更有無を確認する。
+   - `src\IcadExtraction.*`、`tests\IcadExtraction.*`
+   - `backend\icad_tag_extraction`
+   - `backend\apps\drawing_metadata`のadapter
+   - `schemas\tag_extraction`
+   - `examples\tag_extraction_contract`
+   - `scripts\generate_tag_extraction_schemas.py`
+   - `scripts\build_souya_tag_extraction_package.py`
+   - 初期辞書、変換スクリプト、引き渡し文書
+4. C# DTO、canonicalキー、タグpayload、バージョン、辞書種別に変更がある場合は、JSON Schemaと例の更新が必要と判断する。
+
+### 2. 正本ドキュメントの確認
+- 実装判断前に、少なくとも次を読み、現行コードとの差異がないか確認する。
+  - `docs\tag_extraction_and_assignment_current_spec_2026-07-29.md`
+  - `docs\souya_tag_extraction_minimal_handoff_2026-07-30.md`
+  - `docs\extraction_result_schema_2026-05-28.md`
+  - `docs\windows_extraction_agent_api_design_2026-07-29.md`
+  - `docs\icad_dxf_step_standalone_conversion_guide_2026-07-29.md`
+- コード、Schema、コマンド、同梱範囲を変更した場合は、パッケージ生成前に関連文書と`tasklist.md`を更新する。
+
+### 3. Schemaの生成と確認
+リポジトリルートで次を実行する。
+
+```powershell
+backend\.venv\Scripts\python.exe scripts\generate_tag_extraction_schemas.py
+backend\.venv\Scripts\python.exe scripts\generate_tag_extraction_schemas.py --check
+```
+
+- 1行目で現行C# DTOとPython canonicalからSchema・2D/3D例を再生成する。
+- 2行目で保存済みSchema・例が現行コードと完全一致することを確認する。
+- 意図しない差分が出た場合はSchemaだけを採用せず、DTO、正規化結果、例のどこが変わったかを確認する。
+
+### 4. パッケージ生成前の必須検証
+リポジトリルートで次を順に実行し、すべて成功させる。
+
+```powershell
+backend\.venv\Scripts\python.exe -m pytest
+backend\.venv\Scripts\python.exe backend\manage.py check
+dotnet test IcadExtraction.sln -c Release --no-restore
+backend\.venv\Scripts\python.exe scripts\audit_tag_documentation.py
+backend\.venv\Scripts\python.exe scripts\audit_beginner_source_comments.py
+git diff --check
+```
+
+- 独立PythonコアとDjango adapterの2D/3D完全一致テストを必ず含める。
+- C# raw、canonical、derived tags、Python処理結果のSchema検証を必ず含める。
+- 廃止済み外部AI項目へ影響する変更では、`scripts\audit_retired_ai_database_history.py`も実行する。
+- Docker関連を変更した場合は、Docker Engineの状態を確認してからcompose構成検証とimage buildを行う。Engine都合で未完了の場合は成功と表現しない。
+
+### 5. 新しい出力先の決定と生成
+1. `Get-Date -Format yyyy-MM-dd`で作業日を確認する。
+2. `output\souya_tag_extraction_minimal_YYYY-MM-DD`を基本名とし、同名があれば内容を確認して`_r2`等の別名を選ぶ。
+3. 既存成果物を置換する必要がある場合は、対象絶対パス、manifest、Git状態を確認し、ユーザーの意図が明確な場合だけ実施する。
+4. 出力先を明示して生成する。
+
+```powershell
+backend\.venv\Scripts\python.exe scripts\build_souya_tag_extraction_package.py `
+  --output output\souya_tag_extraction_minimal_YYYY-MM-DD
+```
+
+生成対象は、C#抽出器とテスト、Django非依存Pythonコア、JSON Schema、初期辞書、2D/3D例、ICAD→DXF/STEP変換スクリプト、Docker例、引き渡し文書である。Djangoモデル、DB、API、UI、RAG、顧客原本は含めない。
+
+### 6. 生成後の受入確認
+1. `manifest.json`と実ファイルの集合、サイズ、SHA-256が一致することを確認する。
+2. `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Djangoの`apps`、顧客資料が含まれないことを確認する。
+3. 配布専用テストをパッケージ内のPythonだけで実行する。
+
+```powershell
+$package = Resolve-Path output\souya_tag_extraction_minimal_YYYY-MM-DD
+$env:PYTHONPATH = Join-Path $package "python"
+$env:PYTHONDONTWRITEBYTECODE = "1"
+backend\.venv\Scripts\python.exe -m pytest `
+  (Join-Path $package "tests\python")
+```
+
+4. `docker compose -f <package>\docker\docker-compose.yml config`で構成を確認する。
+5. ZIPの存在、サイズ、manifestのfile countを確認する。
+6. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
+
+### 7. コミット・共有
+- コミット前に`git diff`と`git diff --cached`を確認し、今回の実装・Schema・文書・配布物だけをパス指定でstageする。
+- 生成元ソース、Schema、生成スクリプト、配布専用テスト、手順書をGitの正本とし、展開済みパッケージとZIPは既定ではコミットしない。
+- 展開済みパッケージは同じソースの二重管理になり、checkout時の改行変換でmanifestのSHA-256が変わる可能性があるため、`.gitignore`対象のローカル引き渡し成果物として扱う。
+- ユーザーが展開済みパッケージのバージョン管理を明示した場合だけ、改行変換を含むmanifest再検証方法を決めてからコミットする。
+- `*.zip`はローカル引き渡し物として`.gitignore`対象であり、ユーザーの明示指示なしに`git add -f`しない。
+- コミットメッセージは日本語で書く。
+- push後は、ブランチ名、コミットID、push先、ローカルに残した未コミット変更を報告する。
 
 ## 実装時のコメント方針
 - 実装・修正時は、創屋側の初心者でも処理を追える水準の日本語コメントを適切に入れる。
@@ -244,4 +348,5 @@
   - タグ辞書のDB化とGUI(システム設定>タグ辞書管理、/admin)。初回は `python manage.py seed_tag_dictionaries` を実行
 
 ## 更新日
+- 2026-07-30 創屋向け最小パッケージのCodex確認型再生成手順を追記
 - 2026-07-17 Windows側確認事項を追記

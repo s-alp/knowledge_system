@@ -1,8 +1,8 @@
 # CADタグ・属性抽出 抽出元カタログと具体例（創屋様向け）
 
 - 作成日: 2026-07-28
-- 最終更新日: 2026-07-29
-- 版: r3（現行コード反映版）
+- 最終更新日: 2026-07-30
+- 版: r4（辞書件数をコードの実数へ再照合）
 - 作成: 株式会社アルパイン設計事務所
 - 文書状態: 確定（抽出・正規化・自動タグ付与済みJSONまで）
 - コード全体の正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
@@ -13,7 +13,7 @@
 
 本資料は、当社が供給する「CADからのタグ・属性抽出および自動タグ付与」の確定仕様を示します。
 
-2026-07-29版では、図面名称・図面番号の抽出改善、ICAD版差で未知型になった文字の救済、印刷枠判定が全文字`unknown`の場合の限定採用、アセンブリ本体と外部参照パーツの名称・材質・付加情報分離を反映しました。
+2026-07-30版では、図面名称・図面番号の抽出改善に加え、Python正規化・辞書・タグ生成のDjango非依存化、C#/Python境界のJSON Schema固定、再生成可能な創屋向け最小パッケージを反映しました。
 
 | 確定事項 | 記載箇所 |
 |---|---|
@@ -256,10 +256,12 @@
 | 客先 | 3 | コマツ小山、広島アルミ、澁谷工業 |
 | 装置カテゴリ | 30 | ガントリー、治具、ロボット、コンベア、シュート、架台、制御盤 ほか |
 | メーカー | 40 | SMC、ミスミ、オムロン、キーエンス、THK、NSK、NTN ほか |
-| 材質分類 | 68 | SS400、SUS304、S45C、A5052P、FC300 ほか |
+| 材質分類 | 68 | SS400、SUS304、S45C、A5052P、FC300 ほか（正式63、未解決3、除外2） |
 | 熱処理 | 20 | 焼入れ、調質、浸炭、窒化、高周波焼入れ ほか |
 | 規格 | 7 | SES、JIS、ISO、DIN、ANSI、幾何公差、溶接記号 |
-| 部品名 | 22 | PLATE、COVER、BRACKET、SHAFT、GUIDE ほか |
+| 部品名 | 23 | PLATE、COVER、BRACKET、SHAFT、GUIDE ほか |
+
+上表の件数は `backend/icad_tag_extraction/seed_dictionaries.py` を数え直した実数である（2026-07-30時点）。
 
 案件辞書は初期エントリ0件で、画面／`/admin` からの登録が正本です。照合対象はファイルパスのトークンだけでなく、モデル情報・図面内文字・DXFレイヤー等を合成した検索トークン列（`part_keywords`）です。客先辞書が3件と少ないのは検証優先で絞っているためで、運用開始時には実運用の客先を登録して増やす想定です。
 
@@ -385,23 +387,20 @@
 
 ### 6.2 Python側（正規化・タグ生成コア）
 
-以下6ファイルが正規化・タグ生成の本体です。納品時はDjango依存を除去し、単体Pythonパッケージへ再配置します。
+`backend/icad_tag_extraction`へDjango非依存の単体Pythonパッケージとして切り出し済みです。Djangoをインストールしない環境で、CLIまたはPython APIから実行できます。
 
-| ファイル | 行数 | 役割 | 外部依存 |
-|---|---|---|---|
-| `services/normalization.py` | 2,020 | `raw_extract` → `canonical_attributes` | `settings` 1定数、`TagDictionaryEntry`（定数参照のみ） |
-| `services/generic_cad_extractor.py` | 633 | STEP/DXFの抽出（外部CADライブラリ不要） | `settings` 1定数 |
-| `services/seed_dictionaries.py` | 222 | 初期辞書（純Python、依存なし） | なし |
-| `services/tag_builder.py` | 159 | `canonical_attributes` → `derived_tags` | `settings` 1定数 |
-| `services/dictionaries.py` | 54 | 辞書ロード（DB + 初期辞書のマージ） | `TagDictionaryEntry`（ORMクエリあり） |
-| `services/source_formats.py` | 41 | 拡張子→フォーマット判定（純Python） | なし |
+| ファイル | 役割 | Django依存 |
+|---|---|---|
+| `pipeline.py` | 入力検査、正規化、タグ生成を1回で実行 | なし |
+| `normalization.py` | `raw_extract` → `canonical_attributes` | なし |
+| `generic_cad_extractor.py` | STEP/DXFのraw抽出 | なし |
+| `tag_builder.py` | `canonical_attributes` → `derived_tags` | なし |
+| `dictionary_provider.py` | seed、JSON、mapping辞書の統一インターフェース | なし |
+| `seed_dictionaries.py` | 初期辞書 | なし |
+| `configuration.py` | Schema・正規化・タグ規則の版設定 | なし |
+| `cli.py` | ファイル入出力CLI | なし |
 
-**Djangoへの結合はごく浅く、実質2点だけです。**
-
-1. `settings` のバージョン文字列3個（`DRAWING_METADATA_NORMALIZER_VERSION`, `DRAWING_METADATA_TAG_RULE_VERSION`, `DRAWING_METADATA_SCHEMA_VERSION`）
-2. `TagDictionaryEntry` モデル（辞書のDB読み出し）
-
-1は設定オブジェクトへ置き換え、2は辞書プロバイダーのインターフェースへ置き換えます。DBアクセスは `dictionaries.load_keyword_mapping` の1箇所に集約されているため、Djangoモデルを納品パッケージへ持ち込みません。納品形態は `icad_tag_extraction` 単体パッケージ、サンプル入出力JSON、単体テスト、初期辞書、スキーマ定義です。
+Django側の`services/core_adapter.py`と`services/dictionaries.py`は、DB辞書と保存処理をこの独立コアへ接続するアダプターです。創屋向け最小パッケージにはDjangoモデルや設定を持ち込みません。
 
 ### 6.3 切り出し対象に含めないもの
 
@@ -421,10 +420,11 @@
 {
   "source_file": {
     "full_path": "J:\\sample\\drawing.icd",
-    "file_name": "drawing.icd",
-    "source_format": "icad"
+    "file_name": "drawing.icd"
   },
+  "source_format": "icad",
   "source_kind": "2d",
+  "warnings": [],
   "raw_extract": {}
 }
 ```
@@ -451,19 +451,22 @@
 }
 ```
 
-`canonical_attributes` の全キー、型、必須・任意区分は、別添のJSONスキーマで定義します。本資料では分類と代表項目だけを示します。
+`canonical_attributes` の全キー、型、必須・任意区分は、`schemas/tag_extraction/*.schema.json`で定義します。本資料では分類と代表項目だけを示します。
 
 ### 6.5 供給成果物
 
 | 成果物 | 内容 |
 |---|---|
 | `IcadExtraction.sln` | ICAD 2D/3D抽出、材質・質量取得、JSON出力 |
-| `icad_tag_extraction` | STEP/DXF抽出、正規化、辞書照合、タグ自動付与 |
-| JSONスキーマ | 入力、`raw_extract`、`canonical_attributes`、`derived_tags` の型定義 |
-| サンプルJSON | ICAD 2D、ICAD 3D、STEP、DXFの正常例・未取得例 |
+| `backend/icad_tag_extraction` | STEP/DXF抽出、正規化、辞書照合、タグ自動付与 |
+| `schemas/tag_extraction` | C# raw入力、canonical、`derived_tags`、処理結果の型定義 |
+| `examples/tag_extraction_contract` | Schema検証済みICAD 2D/3D入力例 |
 | 初期辞書 | 客先、装置、メーカー、材質、熱処理、規格、部品名 |
-| 単体テスト | 正規化、タグ生成、誤検出防止、空値処理 |
-| 組み込み手順 | CLI実行、Python API呼び出し、戻り値処理 |
+| 単体テスト | Django非依存、2D/3D期待値一致、Schema検証 |
+| Docker例 | 独立Python CLIを実行するDockerfileとcompose |
+| 組み込み手順 | `souya_tag_extraction_minimal_handoff_2026-07-30.md` |
+
+最小パッケージは`python scripts\build_souya_tag_extraction_package.py`で再生成します。生成物は`output/souya_tag_extraction_minimal_2026-07-30/`と同名ZIPで、`manifest.json`に全ファイルのサイズとSHA-256を記録します。
 
 ---
 

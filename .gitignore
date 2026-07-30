@@ -41,6 +41,7 @@ tmp/
 
 # Local raw/customer handoff bundles
 *.zip
+output/souya_tag_extraction_minimal_*/
 BT50/
 ナレッジシステムお披露目会向け/
 

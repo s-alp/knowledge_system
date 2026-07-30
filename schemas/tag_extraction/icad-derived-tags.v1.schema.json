@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alpine.example/schemas/icad-derived-tags.v1.schema.json",
+  "title": "ICAD derived tags",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tag": {
+        "type": "string",
+        "minLength": 1
+      },
+      "source": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence": {
+        "type": "string",
+        "minLength": 1
+      },
+      "confidence": {
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ]
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "manual_flag": {
+        "type": "boolean"
+      },
+      "tag_rule_version": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "tag",
+      "source",
+      "evidence",
+      "confidence",
+      "reason",
+      "manual_flag",
+      "tag_rule_version"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,16 +1,18 @@
 # CADタグ抽出・属性正規化・タグ付与 現行仕様
 
 - 文書状態: **現行コード準拠の正本**
-- 基準日: 2026-07-29
+- 基準日: 2026-07-30
 - 対象コード:
   - `src/IcadExtraction.*`
+  - `backend/icad_tag_extraction`
   - `backend/apps/drawing_metadata`
+  - `schemas/tag_extraction`
   - `integrations/2D_3D_CAD_VIEWR/frontend/src`
 - スキーマバージョン: `1.0.0`
 - 正規化ルールバージョン: `1.1.0`
 - タグルールバージョン: `1.1.0`
 
-この文書は、CADからの情報抽出、Djangoでの属性正規化、2D/3D照合、タグ付与、手動補正、レビュー、画面/API連携の現行仕様をまとめた正本である。調査時点の事実、旧計画、実データ監査記録は別文書に残すが、現在の挙動を判断するときは本書とコードを優先する。
+この文書は、CADからの情報抽出、Django非依存Pythonコアでの属性正規化・タグ付与、Djangoでの保存・2D/3D照合、手動補正、レビュー、画面/API連携の現行仕様をまとめた正本である。調査時点の事実、旧計画、実データ監査記録は別文書に残すが、現在の挙動を判断するときは本書とコードを優先する。
 
 関連文書の位置づけは [`tag_extraction_documentation_index_2026-07-29.md`](tag_extraction_documentation_index_2026-07-29.md) を参照する。
 
@@ -19,29 +21,33 @@
 | 層 | コード上の正本 | 責務 |
 |---|---|---|
 | C#契約 | `src/IcadExtraction.Contracts/Models.cs` | raw抽出JSON、検出結果、印刷確認結果の型 |
+| C#/Python境界Schema | `schemas/tag_extraction/*.schema.json` | C# raw、canonical、派生タグ、処理結果の機械検証可能な契約 |
 | ICADネイティブ抽出 | `src/IcadExtraction.SxNet/Icad2DExtractor.cs`、`Icad3DExtractor.cs` | SXNETから2D/3Dの事実を型付きで取得 |
 | Windows実行入口 | `src/IcadExtraction.Runner/Program.cs`、`WindowsExtractionAgent.cs` | CLI、ICAD起動、agent常駐、HTTP連携 |
+| 独立Python処理 | `backend/icad_tag_extraction` | raw正規化、辞書照合、タグ生成、STEP/DXF汎用抽出、CLI |
+| 独立辞書境界 | `backend/icad_tag_extraction/dictionary_provider.py` | seed、JSON、任意mappingから辞書を供給するDjango非依存契約 |
 | 保存モデル | `backend/apps/drawing_metadata/models.py` | 登録図面、ジョブ、snapshot、監査ログ、辞書、agent heartbeat |
-| 正規化 | `services/normalization.py` | raw抽出を共通canonical属性へ変換 |
+| Djangoコア接続 | `services/core_adapter.py` | DB辞書を独立Pythonコアへ注入し、処理結果をDjangoへ戻す |
+| 正規化互換入口 | `services/normalization.py` | 既存Django呼び出しを独立Pythonコアへ委譲 |
 | 2D/3D合成 | `services/composition.py` | mode別snapshotの照合、競合記録、最終属性・タグの生成 |
-| タグ生成 | `services/tag_builder.py` | canonical属性から検索用タグを生成 |
-| 辞書 | `services/dictionaries.py`、`seed_dictionaries.py` | DB辞書優先、初期seed辞書 |
+| タグ生成互換入口 | `services/tag_builder.py` | 既存Django呼び出しを独立Pythonコアへ委譲 |
+| Django辞書接続 | `services/dictionaries.py` | `TagDictionaryEntry`を独立Pythonの辞書providerとして供給 |
 | 手動補正 | `services/overrides.py`、`persistence.py` | 属性上書き、タグ追加・削除、再抽出後の再適用 |
 | 非同期処理 | `tasks/extraction_tasks.py` | 抽出結果の正規化、タグ生成、保存、完了処理 |
 | API | `api/urls.py`、`api/views.py`、`api/agent_views.py` | 登録、抽出、補正、レビュー、辞書、agent、viewer/RAG payload |
 | 統合フロント | `integrations/2D_3D_CAD_VIEWR/frontend/src` | 抽出管理、レビュー、辞書管理、製品・部品表示 |
 
-本リポジトリのDjango appは、創屋側の本番ナレッジシステムへ後で移植しやすい独立モジュールである。ローカルDB、fixture、画面は連携仕様の検証用であり、創屋側本番DBの保存先やAPI名を確定したものではない。
+`backend/icad_tag_extraction`はDjangoへ依存せず、創屋へ単体で渡せる正規化・辞書・タグ生成コアである。Django appはそのコアへDB辞書を注入し、保存・ジョブ・補正・API・UIを接続する統合層である。ローカルDB、fixture、画面は連携仕様の検証用であり、創屋側本番DBの保存先やAPI名を確定したものではない。
 
 ## 2. 現行処理フロー
 
 1. `RegisteredDrawing`へICAD、STEP、DXFを登録する。
 2. 形式に応じた抽出modeで`DrawingMetadataExtractionJob`を起票する。
-3. ICADはWindows agentまたはWindows上のworkerがC# Runnerを実行する。STEP/DXFはDjango側generic workerが処理する。
+3. ICADはWindows agentまたはWindows上のworkerがC# Runnerを実行する。STEP/DXFはDjango workerから独立Pythonコアのgeneric CAD抽出器を実行する。
 4. C#またはgeneric抽出器が、意味付け前のraw JSONを返す。
-5. `normalize_raw_extract()`が共通canonical属性へ変換する。
+5. `icad_tag_extraction.pipeline.process_extraction()`が入力契約を検査し、`normalize_raw_extract()`で共通canonical属性へ変換する。
 6. 名称・図枠候補は、ICAD原文、印刷枠、ビュー、レイヤー、文字座標、明示ラベル、タグ辞書だけで分類する。Geminiを含む外部AIは使用しない。
-7. `build_derived_tags()`が検索価値のある確定属性だけをタグ化する。
+7. 独立Pythonコアの`build_derived_tags()`が検索価値のある確定属性だけをタグ化する。
 8. `save_extraction_snapshot()`がraw、canonical、タグを同一処理で保存し、保存済み手動補正を再適用する。
 9. `compose_drawing_metadata()`が2D/3Dを照合し、採用値、競合、診断差分、最終タグを返す。
 10. viewer、製品・部品画面、fixture、RAG payloadは合成結果を参照する。
@@ -55,8 +61,8 @@
 | 拡張子 | `source_format` | 既定mode | 抽出器 | 実行場所 |
 |---|---|---|---|---|
 | `.icd` | `icad` | `2d`と`3d` | SXNET/C# | Windows |
-| `.step`、`.stp` | `step` | `3d` | generic CAD抽出器 | Django側worker |
-| `.dxf` | `dxf` | `2d` | generic CAD抽出器 | Django側worker |
+| `.step`、`.stp` | `step` | `3d` | 独立Python generic CAD抽出器 | Django workerまたは単体CLI/Docker |
+| `.dxf` | `dxf` | `2d` | 独立Python generic CAD抽出器 | Django workerまたは単体CLI/Docker |
 
 ICADは2D/3Dを別snapshotとして保持する。STEP/DXFは現行ではテキスト・構造候補を読む汎用抽出であり、ICADネイティブ抽出と同じ情報量を保証しない。
 
@@ -90,7 +96,7 @@ ICADは2D/3Dを別snapshotとして保持する。STEP/DXFは現行ではテキ�
 
 ### 6.1 共通エンベロープ
 
-C#契約バージョンは`1.0.0`である。エンベロープは少なくとも入力パス、`source_file`、`source_format`、`source_kind`、抽出条件、抽出器名・版、経過時間、warning、`raw_extract`を持つ。
+C#契約バージョンは`1.0.0`である。エンベロープは少なくとも入力パス、`source_file`、`source_format`、`source_kind`、抽出条件、抽出器名・版、経過時間、warning、`raw_extract`を持つ。機械可読な境界契約は`schemas/tag_extraction/icad-csharp-raw-extraction.v1.schema.json`であり、`scripts/generate_tag_extraction_schemas.py`が`Models.cs`から生成する。
 
 Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_api_design_2026-07-29.md`](windows_extraction_agent_api_design_2026-07-29.md) を正本とする。
 
@@ -115,7 +121,7 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 
 ## 7. canonical属性
 
-全形式で同じ空枠を作り、取得できた値だけを埋める。完全なキー一覧は`normalize_raw_extract()`冒頭の`canonical`辞書を正とする。
+全形式で同じ空枠を作り、取得できた値だけを埋める。完全なキー一覧は`backend/icad_tag_extraction/normalization.py`の`normalize_raw_extract()`冒頭の`canonical`辞書と`schemas/tag_extraction/icad-canonical-attributes.v1.schema.json`を正とする。
 
 ### 7.1 識別・業務分類
 
@@ -156,7 +162,7 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 
 ## 8. 自動生成するタグ
 
-`services/tag_builder.py`の`build_derived_tags()`を正とする。現行タグは次のとおりである。
+`backend/icad_tag_extraction/tag_builder.py`の`build_derived_tags()`と`schemas/tag_extraction/icad-derived-tags.v1.schema.json`を正とする。`services/tag_builder.py`はDjango互換入口である。現行タグは次のとおりである。
 
 | 条件 | タグ形式 | 信頼度 |
 |---|---|---|
@@ -191,7 +197,7 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 
 ## 9. タグ辞書
 
-DBの`TagDictionaryEntry`を正本とし、種別単位で有効なDB行が0件の場合はコード内seedを使用する。
+独立Pythonコアは`DictionaryProvider`から辞書を受け取る。単体CLI/Dockerでは同梱JSON辞書またはコード内seedを使い、Django統合時は`TagDictionaryEntry`を正本として`DjangoDictionaryProvider`から供給する。Djangoで種別単位の有効行が0件の場合だけコード内seedを使用する。
 
 | kind | 用途 |
 |---|---|
@@ -309,6 +315,35 @@ Django HTMLは開発・横断確認用であり、`/internal/drawing-metadata/`�
 
 ## 14. 運用コマンド
 
+### 独立Python CLI
+
+```powershell
+Set-Location backend
+$env:PYTHONPATH = (Get-Location).Path
+.venv\Scripts\python.exe -m icad_tag_extraction `
+  --input ..\examples\tag_extraction_contract\csharp_raw_2d.v1.json `
+  --dictionary ..\output\souya_tag_extraction_minimal_2026-07-30\dictionaries\initial-dictionaries.json `
+  --output ..\output\tagged_result.json
+```
+
+入力はC# raw抽出JSONであり、出力は`icad-tag-extraction-result.v1`である。辞書JSONを省略した場合はコード内seed辞書を使用する。不正な入力や辞書は既定値で継続せず、明示的に失敗する。
+
+### JSON Schema再生成・差分確認
+
+```powershell
+python scripts\generate_tag_extraction_schemas.py --check
+```
+
+`Models.cs`、canonical属性、タグpayloadを変更した場合はSchemaを再生成し、`--check`でコードと生成物が一致することを確認する。
+
+### 創屋向け最小パッケージ生成
+
+```powershell
+python scripts\build_souya_tag_extraction_package.py
+```
+
+同名の出力フォルダまたはZIPがある場合は上書きせず停止する。内容、受領側のセットアップ、単体テスト、対象外範囲は[`souya_tag_extraction_minimal_handoff_2026-07-30.md`](souya_tag_extraction_minimal_handoff_2026-07-30.md)を正とする。
+
 ### worker
 
 ```powershell
@@ -344,6 +379,8 @@ RAG payloadのスキーマは`drawing_metadata_rag_payload.v1`である。`preFi
 
 確認が終わるまで、ローカル画面やfixtureの保存を創屋本番DBへの保存と表現しない。
 
+創屋へ先行して切り出せる最小範囲は、C#抽出器、ICAD→DXF/STEP変換スクリプト、Django非依存Pythonコア、初期辞書、JSON Schema、2D/3D例、単体テスト、Docker実行例である。Djangoの保存モデル、ジョブ、API、UI、RAG本番接続は含めず、創屋側の保存先とAPIが決まった後にアダプターとして接続する。
+
 ## 16. 未実装・実機確認中
 
 実装済みと未確認を混同しない。
@@ -371,9 +408,10 @@ RAG payloadのスキーマは`drawing_metadata_rag_payload.v1`である。`preFi
 
 ```powershell
 Set-Location backend
-.venv\Scripts\python.exe -m pytest apps\drawing_metadata\tests
+.venv\Scripts\python.exe -m pytest
 .venv\Scripts\python.exe manage.py check
 Set-Location ..
+python scripts\generate_tag_extraction_schemas.py --check
 python scripts\audit_tag_documentation.py
 python scripts\audit_retired_ai_database_history.py
 python scripts\audit_beginner_source_comments.py
@@ -402,3 +440,16 @@ dotnet test IcadExtraction.sln
 - `python scripts\audit_tag_documentation.py`: エラー0、警告0
 - `python scripts\audit_beginner_source_comments.py`: 270ファイル合格、要補強0
 - 実DB read-only監査: 廃止前のジョブwarning 13件を保持。現行API・内部画面では非表示
+
+### 17.3 2026-07-30 独立Pythonコア・境界Schema・最小パッケージ確認結果
+
+- Django非依存コア、Djangoアダプター、現行結果との2D/3D完全一致テスト: 成功
+- JSON Schema自己検証、C# 2D/3D例、Python処理結果の検証: 成功
+- Djangoを読み込まない別プロセス実行: 成功
+- 最小パッケージ生成、manifestのファイル集合・サイズ・SHA-256検証、同梱CLI実行、配布専用テスト2件: 成功
+- backend `pytest`: 192件成功
+- Django `manage.py check`: 問題なし
+- `.NET solution`: 41件成功
+- `python scripts\audit_tag_documentation.py`: エラー0、警告0
+- `python scripts\audit_beginner_source_comments.py`: 273ファイル合格、要補強0
+- Docker Compose構成検証: 成功。Docker Engineでのimage buildは応答待ちタイムアウトのため未完了

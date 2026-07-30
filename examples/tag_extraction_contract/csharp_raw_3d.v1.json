@@ -1,0 +1,67 @@
+{
+  "input_path": "C:\\fixtures\\sample_3d.icd",
+  "source_file": {
+    "full_path": "C:\\fixtures\\sample_3d.icd",
+    "directory_path": "C:\\fixtures",
+    "file_name": "sample_3d.icd",
+    "file_name_without_extension": "sample_3d",
+    "extension": ".icd",
+    "sx_net_input_path": "C:\\fixtures\\sample_3d.icd",
+    "sx_net_input_strategy": "original",
+    "used_sx_net_alternate_path": false,
+    "original_path_length": 25,
+    "sx_net_input_path_length": 25
+  },
+  "source_format": "icad",
+  "source_kind": "3d",
+  "extraction_profile": "default",
+  "extraction_options": {},
+  "condition_diagnostics": {},
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 1,
+  "warnings": [],
+  "raw_extract": {
+    "model_info": {
+      "name": "sample",
+      "comment": "sample",
+      "path": "sample",
+      "is_read_only": false,
+      "view_sheet_count": 0,
+      "work_plane_count": 0
+    },
+    "top_part": {
+      "name": "SAMPLE-3D",
+      "comment": "ガントリー",
+      "ex_info": "材質 SUS304",
+      "ex_info_fields": {
+        "material": "SUS304"
+      }
+    },
+    "parts": [],
+    "viewer_assets": {},
+    "condition_diagnostics": {},
+    "mass_probe_status": "sample",
+    "mass_properties": {
+      "element_count": 0,
+      "unit_name": "sample",
+      "unit_type": 0,
+      "is_si": false,
+      "density": 0.0,
+      "area": 0.0,
+      "volume": 0.0,
+      "mass": 0.0,
+      "weight": 0.0,
+      "length": 0.0,
+      "center_of_gravity_x": 0.0,
+      "center_of_gravity_y": 0.0,
+      "center_of_gravity_z": 0.0,
+      "global_moment": {},
+      "gravity_moment": {},
+      "main_moment": {},
+      "raw_fields": {}
+    },
+    "material_probe_status": "sample",
+    "materials": []
+  }
+}

@@ -26,6 +26,20 @@
 - [x] scriptsとテストへ実行目的、前提、検証観点の日本語コメントを追加
 - [x] コメント監査、C#テスト、Djangoテスト、フロントテスト・ビルドを実行
 
+## 2026-07-30 創屋向けタグ・属性抽出コアの独立化と最小配布
+
+- [x] 現行の正規化・辞書・タグ生成・STEP/DXF抽出に残るDjango依存を特定
+- [x] Django非依存の`icad_tag_extraction` Pythonパッケージへコア処理を移動
+- [x] バージョン設定と辞書取得を明示的な設定・provider境界へ変更
+- [x] Django側の辞書DB adapterと互換importを実装し、現行アプリも独立コアを正本として利用
+- [x] C# raw抽出、canonical属性、derived tags、処理結果のJSON Schemaを追加
+- [x] C# fixtureとPython出力をJSON Schemaで検証するテストを追加
+- [x] 独立コアとDjango経由で同じ入力から同じ結果が出る同等性テストを追加
+- [x] 創屋向け最小配布パッケージの生成スクリプトと成果物を作成
+- [x] 現行仕様、抽出結果スキーマ、ドキュメント索引、組み込み手順を更新
+- [x] Python単体、Django、C#、Schema、配布物、コメント、ドキュメント監査を実行
+- [x] Codexが差分・契約・検証結果・同梱内容を確認しながら再生成する手順を`AGENTS.md`へ記載
+
 ## 2026-07-29 Docker Web / Windows ICAD抽出エージェント分離
 
 - [x] 現行のDocker・Django worker・C# Runner境界を監査

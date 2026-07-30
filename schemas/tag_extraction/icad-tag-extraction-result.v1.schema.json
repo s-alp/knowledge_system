@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alpine.example/schemas/icad-tag-extraction-result.v1.schema.json",
+  "title": "ICAD tag extraction result",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "normalizer_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tag_rule_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_file": {
+      "type": "object"
+    },
+    "source_format": {
+      "enum": [
+        "icad",
+        "step",
+        "dxf"
+      ]
+    },
+    "source_kind": {
+      "enum": [
+        "2d",
+        "3d"
+      ]
+    },
+    "raw_extract": {
+      "type": "object"
+    },
+    "canonical_attributes": {
+      "$ref": "https://alpine.example/schemas/icad-canonical-attributes.v1.schema.json"
+    },
+    "derived_tags": {
+      "$ref": "https://alpine.example/schemas/icad-derived-tags.v1.schema.json"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "normalizer_version",
+    "tag_rule_version",
+    "source_file",
+    "source_format",
+    "source_kind",
+    "raw_extract",
+    "canonical_attributes",
+    "derived_tags",
+    "warnings"
+  ],
+  "additionalProperties": false
+}

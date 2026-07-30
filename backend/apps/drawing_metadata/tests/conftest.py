@@ -7,8 +7,13 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def disable_default_handoff_manifest(settings):
+def configure_drawing_metadata_test_dependencies(settings, request):
+    """DB許可の有無を辞書providerへ明示し、例外フォールバックへ依存しないテストにする。"""
+
     settings.DRAWING_METADATA_HANDOFF_MANIFEST = ""
+    settings.DRAWING_METADATA_DICTIONARY_SOURCE = (
+        "database" if request.node.get_closest_marker("django_db") else "seed"
+    )
 
 
 @pytest.fixture

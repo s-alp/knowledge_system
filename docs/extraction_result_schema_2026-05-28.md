@@ -1,20 +1,21 @@
 # 抽出結果スキーマ（現行保存・正規化契約）
 
 - 作成日: 2026-05-28
-- 最終更新日: 2026-07-29
-- 文書状態: **Django保存・canonical・タグ・手動補正の正本**
-- 目的: C# 抽出コアの出力 JSON と、Django 側で保存するタグ・属性データの形を固定する。
+- 最終更新日: 2026-07-30
+- 文書状態: **独立Python処理結果・Django保存・canonical・タグ・手動補正の正本**
+- 目的: C# 抽出コアの出力 JSON、独立Pythonコアの処理結果、Django 側で保存するタグ・属性データの形を固定する。
 
 > **現行契約について:** Windows agentの起動設定、HTTP API、C#入出力JSONの正本は
 > `docs/windows_extraction_agent_api_design_2026-07-29.md` とする。
-> 本資料はDjango保存スキーマ、正規化属性、派生タグ、手動補正の詳細資料として使用する。
+> 本資料は独立Pythonコアの入出力、Django保存スキーマ、正規化属性、派生タグ、手動補正の詳細資料として使用する。
 > 全体の処理順序、タグ一覧、UI、運用コマンドは
 > [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
 
 ## 1. スキーマの考え方
 
 - C# 側は「意味付け前の生抽出」を返す。
-- Django 側は、その結果を `canonical_attributes` と `derived_tags` に変換して保存する。
+- Django非依存の `backend/icad_tag_extraction` は、その結果を `canonical_attributes` と `derived_tags` に変換する。
+- Django 側はDB辞書を独立コアへ注入し、raw、canonical、tags、手動補正を保存する。
 - 1 回の抽出で以下 4 層を持つ。
   - `raw_extract`
   - `canonical_attributes`
@@ -81,6 +82,19 @@
 - `elapsed_ms`
 - `warnings`
 - `raw_extract`
+
+### 機械可読な境界契約
+
+`schemas/tag_extraction/`のJSON Schema Draft 2020-12を機械検証の正本とする。
+
+| ファイル | 検証対象 |
+|---|---|
+| `icad-csharp-raw-extraction.v1.schema.json` | C#およびgeneric抽出器が返すrawエンベロープ |
+| `icad-canonical-attributes.v1.schema.json` | 独立Pythonコアが返すcanonical属性 |
+| `icad-derived-tags.v1.schema.json` | 独立Pythonコアが返す派生タグ |
+| `icad-tag-extraction-result.v1.schema.json` | raw、canonical、タグを含む単体処理結果 |
+
+Schemaは`scripts/generate_tag_extraction_schemas.py`で生成し、C# raw部分は`src/IcadExtraction.Contracts/Models.cs`のDTOから導出する。変更時は`python scripts\generate_tag_extraction_schemas.py --check`を実行し、2D/3D例とPython処理結果を`jsonschema`で検証する。
 
 ## 3. `raw_extract` の 3D 形
 
@@ -531,6 +545,7 @@
 ## 12. 結論
 
 - スキーマは `生抽出` と `意味付け済みデータ` を必ず分ける。
-- C# は `raw_extract` まで、Django は `canonical_attributes` 以降を主担当にする。
+- C# は `raw_extract` まで、独立Pythonコアは `canonical_attributes` と `derived_tags` の生成を担当する。
+- Djangoは辞書DB、保存、非同期ジョブ、補正、APIを担う任意の統合アダプターとし、正規化・タグ生成の必須依存にはしない。
 - この形にすると、抽出ロジック改善とタグ付与ルール改善を独立して回せる。
 - 2D の未検証 geometry は warning で明示し、黙って捨てない。

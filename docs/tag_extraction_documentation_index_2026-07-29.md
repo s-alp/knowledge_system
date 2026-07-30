@@ -1,18 +1,19 @@
 # タグ抽出・付与関連ドキュメント索引
 
 - 文書状態: **現行索引**
-- 基準日: 2026-07-29
+- 基準日: 2026-07-30
 - 現行仕様の正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
 
 ## 1. 読む順序
 
 1. 現行全体仕様: `tag_extraction_and_assignment_current_spec_2026-07-29.md`
-2. Django保存・canonical・タグpayload: `extraction_result_schema_2026-05-28.md`
-3. Windows agentとC#入出力: `windows_extraction_agent_api_design_2026-07-29.md`
-4. 創屋向け抽出元カタログ: `cad_tag_extraction_sources_for_souya_2026-07-28.md`
-5. 取得可否と未確認事項: `icad_2d_3d_extraction_capability_matrix_2026-07-14.md`、`windows_confirmation_items_2026-07-17.md`
-6. Cloud検証へ渡す場合: `../handoff/claude_cloud/README.md`、`VALIDATION_CHECKLIST.md`、`PROMPT_FOR_CLAUDE.md`
-7. 履歴や監査結果が必要な場合だけ、調査・計画・handoff snapshotを読む
+2. 創屋へ切り出す最小パッケージ: `souya_tag_extraction_minimal_handoff_2026-07-30.md`
+3. 独立Python処理結果・canonical・タグpayload: `extraction_result_schema_2026-05-28.md`
+4. Windows agentとC#入出力: `windows_extraction_agent_api_design_2026-07-29.md`
+5. 創屋向け抽出元カタログ: `cad_tag_extraction_sources_for_souya_2026-07-28.md`
+6. 取得可否と未確認事項: `icad_2d_3d_extraction_capability_matrix_2026-07-14.md`、`windows_confirmation_items_2026-07-17.md`
+7. Cloud検証へ渡す場合: `../handoff/claude_cloud/README.md`、`VALIDATION_CHECKLIST.md`、`PROMPT_FOR_CLAUDE.md`
+8. 履歴や監査結果が必要な場合だけ、調査・計画・handoff snapshotを読む
 
 ## 2. 文書分類
 
@@ -21,7 +22,8 @@
 | 文書 | 正本範囲 |
 |---|---|
 | `docs/tag_extraction_and_assignment_current_spec_2026-07-29.md` | 抽出からタグ付与、補正、API、UI、運用までの全体 |
-| `docs/extraction_result_schema_2026-05-28.md` | Django保存、canonical属性、derived tags、manual overrides |
+| `docs/souya_tag_extraction_minimal_handoff_2026-07-30.md` | 創屋へ渡す最小ソース、Docker、辞書、Schema、テスト、対象外範囲 |
+| `docs/extraction_result_schema_2026-05-28.md` | 独立Python処理結果、Django保存、canonical属性、derived tags、manual overrides |
 | `docs/windows_extraction_agent_api_design_2026-07-29.md` | Windows agent HTTP、C# raw JSON、起動設定 |
 | `docs/cad_tag_extraction_sources_for_souya_2026-07-28.md` | 創屋向けに渡す抽出元・具体例・供給範囲 |
 | `docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md` | Django非依存のICAD→DXF/STEP変換 |
@@ -105,14 +107,17 @@ handoff分冊は、当時の実測件数、URL、fixture、確認事項を再現
 | 仕様 | コード | 主文書 |
 |---|---|---|
 | C# raw JSON | `src/IcadExtraction.Contracts/Models.cs` | Windows agent仕様、抽出結果スキーマ |
+| C#/Python境界Schema | `schemas/tag_extraction/*.schema.json` | 最小handoff、Windows agent仕様、抽出結果スキーマ |
 | 2D抽出 | `src/IcadExtraction.SxNet/Icad2DExtractor.cs` | 能力マトリクス、現行仕様 |
 | 3D抽出 | `src/IcadExtraction.SxNet/Icad3DExtractor.cs` | 能力マトリクス、現行仕様 |
 | agent | `src/IcadExtraction.Runner/WindowsExtractionAgent.cs` | Windows agent仕様 |
+| 独立処理入口 | `backend/icad_tag_extraction/pipeline.py` | 現行仕様、最小handoff、抽出結果スキーマ |
+| 独立辞書 | `backend/icad_tag_extraction/dictionary_provider.py`、`seed_dictionaries.py` | 現行仕様、最小handoff |
 | DBモデル | `backend/apps/drawing_metadata/models.py` | 現行仕様、Django統合履歴 |
-| canonical | `services/normalization.py` | 抽出結果スキーマ、現行仕様 |
+| canonical | `backend/icad_tag_extraction/normalization.py` | 抽出結果スキーマ、現行仕様 |
 | 2D/3D照合 | `services/composition.py` | 現行仕様、viewer UI仕様 |
-| 派生タグ | `services/tag_builder.py` | 現行仕様、創屋向けカタログ |
-| 辞書 | `services/dictionaries.py`、`seed_dictionaries.py` | 現行仕様、Windows確認事項 |
+| 派生タグ | `backend/icad_tag_extraction/tag_builder.py` | 現行仕様、創屋向けカタログ |
+| Django辞書接続 | `services/dictionaries.py` | 現行仕様、Windows確認事項 |
 | 補正 | `services/overrides.py`、`persistence.py` | 現行仕様、抽出結果スキーマ |
 | HTTP API | `api/urls.py` | 現行仕様、Windows agent仕様 |
 | 統合UI | `integrations/2D_3D_CAD_VIEWR/frontend/src/features` | 現行仕様、viewer UI仕様 |

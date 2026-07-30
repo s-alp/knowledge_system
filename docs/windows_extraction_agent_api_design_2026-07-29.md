@@ -2,7 +2,7 @@
 
 - ステータス: **現行実装の正本**
 - 契約バージョン: `1.0.0`
-- 最終更新日: 2026-07-29
+- 最終更新日: 2026-07-30
 - 対象:
   - Docker / Linux上のDjango Web・API
   - Windows上の`IcadExtraction.Runner.exe agent`
@@ -37,6 +37,8 @@
 | `src/IcadExtraction.Runner/Program.cs` | `agent` / `extract`コマンド、C#内部呼び出し |
 | `src/IcadExtraction.Contracts/Models.cs` | 抽出結果DTO |
 | `src/IcadExtraction.Contracts/SchemaVersions.cs` | 抽出器名、契約バージョン |
+| `schemas/tag_extraction/icad-csharp-raw-extraction.v1.schema.json` | C#出力JSONの機械可読な境界契約 |
+| `scripts/generate_tag_extraction_schemas.py` | `Models.cs`から境界Schemaを再生成・検査 |
 | `src/IcadExtraction.SxNet/ExtractionConditionOptions.cs` | 抽出オプション |
 | `backend/apps/drawing_metadata/api/agent_views.py` | 認証、serializer、API応答 |
 | `backend/apps/drawing_metadata/tasks/extraction_tasks.py` | claim、lease、complete、fail |
@@ -51,7 +53,7 @@
 | 生抽出JSONを生成 | ○ | - |
 | preview用ファイルを生成・upload | ○ | 保存・配信 |
 | 抽出ジョブ登録・排他claim | API利用 | ○ |
-| 正規化、辞書適用、タグ生成 | - | ○ |
+| 正規化、辞書適用、タグ生成 | - | 独立Pythonコア。Djangoまたは単体CLI/Dockerから実行 |
 | snapshot、手動補正、監査ログ | - | ○ |
 | viewer / RAG連携 | - | ○ |
 | STEP / DXF抽出 | - | Docker generic worker |
@@ -69,7 +71,7 @@ C#は業務辞書やタグ確定処理を持たない。C#が返すのは、ICAD
 7. 抽出中はheartbeatを送り、Djangoがjob leaseを延長する。
 8. agentはpreview assetを先にuploadする。
 9. agentは生抽出JSONをcomplete APIへ送る。
-10. Djangoが正規化、タグ生成、snapshot、監査ログを保存する。
+10. Djangoが独立Pythonコアを呼び、正規化、タグ生成、snapshot、監査ログを保存する。
 11. 失敗時はagentがfail APIへエラー全文を返す。
 
 ## 4. 配置・実行要件
@@ -340,7 +342,7 @@ request:
 }
 ```
 
-`result`はJSON object必須。Djangoは受信後に次を実行する。
+`result`はJSON object必須であり、`schemas/tag_extraction/icad-csharp-raw-extraction.v1.schema.json`を満たす。Djangoは受信後に独立Pythonコアへ渡し、次を実行する。
 
 1. `raw_extract`の正規化
 2. 2Dの場合は必要に応じて図枠候補分類
@@ -453,6 +455,8 @@ agentはclaim responseを次の`extract`入力へ変換する。
 ## 13. C#出力JSON共通部
 
 JSON property名は`snake_case`である。
+
+完全なDTO契約は`src/IcadExtraction.Contracts/Models.cs`、機械検証用契約は`schemas/tag_extraction/icad-csharp-raw-extraction.v1.schema.json`を正とする。Schema変更時は`python scripts\generate_tag_extraction_schemas.py --check`でC# DTOとの一致と2D/3D例の妥当性を確認する。
 
 ```json
 {
@@ -704,7 +708,7 @@ asset uploadが1件でも失敗した場合はcompleteせず、job全体をfail�
 
 ## 17. C#が返さない情報
 
-次はC#の責務ではなく、Djangoがcomplete後に生成・保存する。
+次はC#の責務ではなく、独立Pythonコアが生成し、Django統合時はcomplete後に保存する。
 
 - `canonical_attributes`
 - `derived_tags`
@@ -713,7 +717,7 @@ asset uploadが1件でも失敗した場合はcompleteせず、job全体をfail�
 - RAG用本文・チャンク・index
 - viewer画面用の合成detail
 
-C#の`result`へこれらを要求しない。創屋側で必要な形が異なる場合も、Django側で変換する。
+C#の`result`へこれらを要求しない。創屋側で必要な形が異なる場合も、独立Python結果の後段アダプターで変換する。
 
 ## 18. lease・再実行
 

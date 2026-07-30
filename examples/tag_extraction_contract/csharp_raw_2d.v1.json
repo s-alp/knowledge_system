@@ -1,0 +1,63 @@
+{
+  "input_path": "C:\\fixtures\\sample_2d.icd",
+  "source_file": {
+    "full_path": "C:\\fixtures\\sample_2d.icd",
+    "directory_path": "C:\\fixtures",
+    "file_name": "sample_2d.icd",
+    "file_name_without_extension": "sample_2d",
+    "extension": ".icd",
+    "sx_net_input_path": "C:\\fixtures\\sample_2d.icd",
+    "sx_net_input_strategy": "original",
+    "used_sx_net_alternate_path": false,
+    "original_path_length": 25,
+    "sx_net_input_path_length": 25
+  },
+  "source_format": "icad",
+  "source_kind": "2d",
+  "extraction_profile": "default",
+  "extraction_options": {},
+  "condition_diagnostics": {},
+  "extractor_name": "icad-csharp-extractor",
+  "extractor_version": "1.0.0",
+  "elapsed_ms": 1,
+  "warnings": [],
+  "raw_extract": {
+    "model_info": {
+      "name": "sample",
+      "comment": "sample",
+      "path": "sample",
+      "is_read_only": false,
+      "view_sheet_count": 0,
+      "work_plane_count": 0
+    },
+    "condition_diagnostics": {},
+    "viewer_assets": {},
+    "view_sheets": [],
+    "print_frames": [],
+    "layers": [],
+    "texts": [
+      {
+        "text_lines": [
+          "材質 SUS304",
+          "ガントリー"
+        ],
+        "line_count": 2,
+        "source_type": "text",
+        "view_name": "sample",
+        "layer_no": 0,
+        "position_x": 0.0,
+        "position_y": 0.0,
+        "position_z": 0.0,
+        "inside_print_area": true,
+        "print_frame_no": 0,
+        "joined_text": "材質 SUS304 ガントリー"
+      }
+    ],
+    "dimensions": [],
+    "geometry_primitives": [],
+    "weld_notes": [],
+    "balloons": [],
+    "tolerances": [],
+    "referenced_parts": []
+  }
+}
