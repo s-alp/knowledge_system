@@ -25,6 +25,11 @@ from apps.drawing_metadata.services.failure_diagnostics import (
 )
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.path_constraints import icad_source_path_exists, normalize_icad_display_filename
+from apps.drawing_metadata.services.retired_ai_metadata import (
+    contains_retired_ai_metadata,
+    filter_retired_ai_warnings,
+    strip_retired_ai_metadata,
+)
 
 
 class RegisteredDrawingCreateSerializer(serializers.ModelSerializer):
@@ -95,10 +100,10 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
     errorMessageSummary = serializers.SerializerMethodField()
     errorMessageLength = serializers.SerializerMethodField()
     errorMessageTruncated = serializers.SerializerMethodField()
-    warnings = serializers.JSONField(source="warnings_json")
+    warnings = serializers.SerializerMethodField()
     extractionProfile = serializers.CharField(source="extraction_profile", allow_blank=True)
-    extractionOptions = serializers.JSONField(source="extraction_options_json")
-    diagnostics = serializers.JSONField(source="diagnostics_json")
+    extractionOptions = serializers.SerializerMethodField()
+    diagnostics = serializers.SerializerMethodField()
     extractorName = serializers.CharField(source="extractor_name", allow_blank=True)
     extractorVersion = serializers.CharField(source="extractor_version", allow_blank=True)
     schemaVersion = serializers.CharField(source="schema_version", allow_blank=True)
@@ -145,16 +150,25 @@ class DrawingMetadataExtractionJobSerializer(serializers.ModelSerializer):
     def get_errorMessageTruncated(self, obj: DrawingMetadataExtractionJob) -> bool:
         return (obj.error_message or "") != self.get_errorMessage(obj)
 
+    def get_warnings(self, obj: DrawingMetadataExtractionJob) -> list:
+        return filter_retired_ai_warnings(obj.warnings_json)
+
+    def get_extractionOptions(self, obj: DrawingMetadataExtractionJob):
+        return strip_retired_ai_metadata(obj.extraction_options_json)
+
+    def get_diagnostics(self, obj: DrawingMetadataExtractionJob):
+        return strip_retired_ai_metadata(obj.diagnostics_json)
+
 
 class SnapshotSerializer(serializers.ModelSerializer):
     """2Dまたは3D snapshotのraw・canonical・タグ・レビュー状態を返す。"""
 
     extractionMode = serializers.CharField(source="extraction_mode")
     latestJob = serializers.SerializerMethodField()
-    rawExtract = serializers.JSONField(source="raw_extract_json")
-    canonicalAttributes = serializers.JSONField(source="canonical_attributes_json")
-    derivedTags = serializers.JSONField(source="derived_tags_json")
-    manualOverrides = serializers.JSONField(source="manual_overrides_json")
+    rawExtract = serializers.SerializerMethodField()
+    canonicalAttributes = serializers.SerializerMethodField()
+    derivedTags = serializers.SerializerMethodField()
+    manualOverrides = serializers.SerializerMethodField()
     updatedAt = serializers.DateTimeField(source="updated_at")
     updatedBy = serializers.CharField(source="updated_by", allow_blank=True)
     reviewStatus = serializers.CharField(source="review_status")
@@ -181,6 +195,18 @@ class SnapshotSerializer(serializers.ModelSerializer):
         if not obj.latest_job:
             return None
         return DrawingMetadataExtractionJobSerializer(obj.latest_job).data
+
+    def get_rawExtract(self, obj: DrawingMetadataSnapshot):
+        return strip_retired_ai_metadata(obj.raw_extract_json)
+
+    def get_canonicalAttributes(self, obj: DrawingMetadataSnapshot):
+        return strip_retired_ai_metadata(obj.canonical_attributes_json)
+
+    def get_manualOverrides(self, obj: DrawingMetadataSnapshot):
+        return strip_retired_ai_metadata(obj.manual_overrides_json)
+
+    def get_derivedTags(self, obj: DrawingMetadataSnapshot):
+        return strip_retired_ai_metadata(obj.derived_tags_json)
 
 
 class RegisteredDrawingListSerializer(serializers.ModelSerializer):
@@ -698,6 +724,14 @@ class ManualOverrideSerializer(serializers.Serializer):
         required=False,
     )
     reason = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, attrs):
+        for field_name in ("canonicalAttributes", "derivedTags"):
+            if contains_retired_ai_metadata(attrs.get(field_name)):
+                raise serializers.ValidationError(
+                    {field_name: "廃止済みの外部AI互換項目は指定できません。"}
+                )
+        return attrs
 
 
 class TagDictionaryEntrySerializer(serializers.ModelSerializer):

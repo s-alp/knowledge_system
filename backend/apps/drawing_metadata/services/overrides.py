@@ -4,6 +4,11 @@ from copy import deepcopy
 
 from django.conf import settings
 
+from apps.drawing_metadata.services.retired_ai_metadata import (
+    is_retired_ai_field_name,
+    strip_retired_ai_metadata,
+)
+
 
 def merge_manual_overrides(existing: dict | None, payload: dict) -> dict:
     """手動補正の正本(manual_overrides_json)へ、新しい補正リクエストをマージする。
@@ -59,9 +64,9 @@ def apply_attribute_overrides(canonical_attributes: dict, manual_overrides: dict
     """自動抽出済み canonical へ、保存済みの属性補正を再適用する。"""
     result = deepcopy(canonical_attributes or {})
     for key, item in ((manual_overrides or {}).get("canonicalAttributes") or {}).items():
-        if item is None:
+        if item is None or is_retired_ai_field_name(key):
             continue
-        result[key] = deepcopy(override_value(item))
+        result[key] = strip_retired_ai_metadata(override_value(item))
     return result
 
 

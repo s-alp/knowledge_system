@@ -44,7 +44,9 @@ REQUIRED_FILES = (
     ROOT / "backend/apps/drawing_metadata/services/composition.py",
     ROOT / "backend/apps/drawing_metadata/services/tag_builder.py",
     ROOT / "backend/apps/drawing_metadata/services/overrides.py",
+    ROOT / "backend/apps/drawing_metadata/services/retired_ai_metadata.py",
     ROOT / "backend/apps/drawing_metadata/api/urls.py",
+    ROOT / "scripts/audit_retired_ai_database_history.py",
 )
 
 CODE_ASSERTIONS = {
@@ -103,6 +105,7 @@ SPEC_ASSERTIONS = (
     "`PATCH/DELETE /api/v1/drawing-metadata/tag-dictionaries/{entryId}`",
     "`GET /api/v1/drawing-metadata/settings/tag-automation`",
     "Geminiを含む外部AIは使用しない",
+    "DB上の履歴値そのものは変更せず",
     "自動タグ - removed + added",
 )
 
@@ -115,6 +118,23 @@ FORBIDDEN_CODE_ASSERTIONS = {
     ROOT / "backend/apps/drawing_metadata/tasks/extraction_tasks.py": (
         "llm_title_block_classifier",
         "_classify_2d_title_block_candidates",
+    ),
+    ROOT / "backend/apps/drawing_metadata/services/display.py": (
+        '"llmField"',
+        '"llmConfidence"',
+        '"llmReason"',
+    ),
+    ROOT / "backend/apps/drawing_metadata/services/knowledge_payload_preview.py": (
+        'candidate.get("llm_confidence")',
+    ),
+    ROOT / "backend/apps/drawing_metadata/services/composition.py": (
+        '"title_block_llm_"',
+    ),
+    ROOT / "backend/apps/drawing_metadata/templates/drawing_metadata/detail.html": (
+        "candidate.llmField",
+        "candidate.llmConfidence",
+        "candidate.llmReason",
+        "<th>AI分類</th>",
     ),
 }
 

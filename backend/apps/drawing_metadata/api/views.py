@@ -47,6 +47,7 @@ from apps.drawing_metadata.services.icad_entities import build_icad_entity_catal
 from apps.drawing_metadata.services.persistence import apply_manual_overrides, apply_review_decision, enqueue_extraction_job
 from apps.drawing_metadata.services.path_constraints import normalize_icad_display_filename
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
+from apps.drawing_metadata.services.retired_ai_metadata import strip_retired_ai_metadata
 from apps.drawing_metadata.services.tag_automation_settings import build_tag_automation_settings_payload
 from apps.drawing_metadata.services.worker_status import (
     build_windows_agent_status_payload,
@@ -612,9 +613,9 @@ class RegistrationOverrideApiView(APIView):
             {
                 "drawingId": str(drawing.id),
                 "extractionMode": snapshot.extraction_mode,
-                "manualOverrides": snapshot.manual_overrides_json,
-                "canonicalAttributes": snapshot.canonical_attributes_json,
-                "derivedTags": snapshot.derived_tags_json,
+                "manualOverrides": strip_retired_ai_metadata(snapshot.manual_overrides_json),
+                "canonicalAttributes": strip_retired_ai_metadata(snapshot.canonical_attributes_json),
+                "derivedTags": strip_retired_ai_metadata(snapshot.derived_tags_json),
             }
         )
 

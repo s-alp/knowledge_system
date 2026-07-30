@@ -355,6 +355,16 @@ RAG payloadのスキーマは`drawing_metadata_rag_payload.v1`である。`preFi
 - 熱処理・硬度、尺度、外部参照部品数は実装済みだが、客先横断実例で取りこぼしを継続確認する。
 - 創屋本番DB/APIへの書き込みは未接続。
 
+### 16.1 廃止前の外部AI履歴
+
+2026-07-29以前に保存されたsnapshot、ジョブwarning、監査JSON、履歴文書は、当時の検証証跡として更新・削除しない。現行処理では次の境界を守る。
+
+- UI、API、2D/3D合成、RAG payloadへ`llm_*`互換項目を返さない。
+- `title_block_llm_*`warningは現行API・内部画面・fixture集計から除外する。
+- 手動補正APIは廃止済み外部AI互換項目を受け付けない。
+- 既存manual overrideに旧項目があっても、再抽出・再正規化時にcanonical属性へ再適用しない。
+- DB上の履歴値そのものは変更せず、廃止前の監査JSON・履歴文書も保持する。
+
 ## 17. 変更時の検証
 
 タグ抽出・付与のコードまたは本書を変更した場合は、少なくとも次を確認する。
@@ -365,6 +375,7 @@ Set-Location backend
 .venv\Scripts\python.exe manage.py check
 Set-Location ..
 python scripts\audit_tag_documentation.py
+python scripts\audit_retired_ai_database_history.py
 python scripts\audit_beginner_source_comments.py
 dotnet test IcadExtraction.sln
 ```
@@ -380,3 +391,14 @@ dotnet test IcadExtraction.sln
 - Vitest: 62件成功
 - frontend production build: 成功。500 kB超chunkの既知warningあり
 - `python scripts\audit_beginner_source_comments.py`: 269ファイル合格、要補強0
+
+### 17.2 2026-07-30 外部AI互換項目削除後の確認結果
+
+- 現行runtime検索: `llm_*`、`title_block_llm_*`、旧AI列の一致0件
+- Django `pytest`: 182件成功
+- Django `manage.py check`: 問題なし
+- Vitest: 63件成功
+- frontend production build: 成功。500 kB超chunkの既知warningあり
+- `python scripts\audit_tag_documentation.py`: エラー0、警告0
+- `python scripts\audit_beginner_source_comments.py`: 270ファイル合格、要補強0
+- 実DB read-only監査: 廃止前のジョブwarning 13件を保持。現行API・内部画面では非表示

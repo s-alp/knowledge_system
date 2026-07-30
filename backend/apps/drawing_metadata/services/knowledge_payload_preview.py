@@ -104,7 +104,7 @@ def _attribute_confidence(canonical_attributes: dict, source_path: str) -> str:
         field = source_path.split(".", 1)[1]
         for candidate in canonical_attributes.get("title_block_candidates") or []:
             if candidate.get("field") == field and _has_value(candidate.get("value")):
-                confidence = candidate.get("llm_confidence") or candidate.get("confidence")
+                confidence = candidate.get("confidence")
                 if confidence in {"high", "medium", "low"}:
                     return confidence
         return "medium"

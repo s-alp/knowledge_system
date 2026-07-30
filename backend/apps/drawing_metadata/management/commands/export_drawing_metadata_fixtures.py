@@ -15,6 +15,7 @@ from django.utils import timezone
 from apps.drawing_metadata.api.serializers import RegisteredDrawingDetailSerializer
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
 from apps.drawing_metadata.services.composition import compose_drawing_metadata
+from apps.drawing_metadata.services.retired_ai_metadata import filter_retired_ai_warnings
 from apps.drawing_metadata.services.knowledge_payload_preview import build_knowledge_system_payload_preview
 from apps.drawing_metadata.services.rag_payload import build_rag_payload
 
@@ -109,7 +110,7 @@ def _snapshot_summary(drawing: RegisteredDrawing) -> dict:
                 "startedAt": latest_job.started_at.isoformat() if latest_job.started_at else None,
                 "finishedAt": latest_job.finished_at.isoformat() if latest_job.finished_at else None,
                 "elapsedMs": latest_job.elapsed_ms,
-                "warningCount": len(latest_job.warnings_json or []),
+                "warningCount": len(filter_retired_ai_warnings(latest_job.warnings_json)),
             }
             if latest_job.error_message:
                 job_summary["errorMessage"] = latest_job.error_message[:500]

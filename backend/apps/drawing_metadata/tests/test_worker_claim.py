@@ -222,8 +222,4 @@ def test_process_job_reclassifies_formal_material_by_dictionary_without_external
 
     assert processed.status == DrawingMetadataExtractionJob.STATUS_SUCCEEDED
     assert snapshot.canonical_attributes_json["title_block_fields"]["material"] == "SUS304"
-    assert all(
-        not key.startswith("title_block_llm_")
-        for key in snapshot.canonical_attributes_json
-    )
     assert any(tag["tag"] == "材質:SUS304" for tag in snapshot.derived_tags_json)

@@ -9,6 +9,7 @@ from collections.abc import Iterable
 from copy import deepcopy
 
 from apps.drawing_metadata.models import DrawingMetadataSnapshot, RegisteredDrawing
+from apps.drawing_metadata.services.retired_ai_metadata import strip_retired_ai_metadata
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
@@ -118,7 +119,7 @@ def _is_reviewable_conflict_attribute(key: str) -> bool:
         return True
     if key.endswith("_count") or key.endswith("_exists"):
         return False
-    if key.startswith(("confidence_", "source_", "raw_", "title_block_llm_")):
+    if key.startswith(("confidence_", "source_", "raw_")):
         return False
     return False
 
@@ -392,10 +393,14 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
         "3d": _snapshot_trace(snapshot_3d),
     }
 
+    canonical_by_mode = {
+        mode: strip_retired_ai_metadata(snapshot.canonical_attributes_json or {})
+        for mode, snapshot in snapshots.items()
+    }
     canonical_keys: set[str] = set()
-    for snapshot in snapshots.values():
+    for canonical_attributes in canonical_by_mode.values():
         # 片方にしか存在しない属性も落とさないよう、両snapshotのキー和集合を合成対象にする。
-        canonical_keys.update((snapshot.canonical_attributes_json or {}).keys())
+        canonical_keys.update(canonical_attributes)
 
     conflicts: list[dict] = []
     diagnostic_conflicts: list[dict] = []
@@ -404,10 +409,10 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     reconciled_attributes: list[dict] = []
 
     for key in sorted(canonical_keys):
-        value_2d = deepcopy((snapshot_2d.canonical_attributes_json or {}).get(key)) if snapshot_2d else None
-        value_3d = deepcopy((snapshot_3d.canonical_attributes_json or {}).get(key)) if snapshot_3d else None
-        manual_2d = deepcopy(_manual_override_value(snapshot_2d, key))
-        manual_3d = deepcopy(_manual_override_value(snapshot_3d, key))
+        value_2d = deepcopy((canonical_by_mode.get("2d") or {}).get(key))
+        value_3d = deepcopy((canonical_by_mode.get("3d") or {}).get(key))
+        manual_2d = strip_retired_ai_metadata(_manual_override_value(snapshot_2d, key))
+        manual_3d = strip_retired_ai_metadata(_manual_override_value(snapshot_3d, key))
 
         chosen_value, reconciled = _reconcile_attribute(key, value_2d, value_3d, manual_2d, manual_3d)
         reconciled["sourceByMode"] = source_by_mode
@@ -440,7 +445,7 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
     for snapshot in snapshots.values():
         for tag in snapshot.derived_tags_json or []:
             if tag.get("manual_flag"):
-                manual_tags.append(_normalize_manual_tag(tag))
+                manual_tags.append(_normalize_manual_tag(strip_retired_ai_metadata(tag)))
         tag_overrides = (snapshot.manual_overrides_json or {}).get("derivedTags") or {}
         removed_tag_names.update(tag_overrides.get("removed") or [])
     # 利用者が削除したタグは、統合属性からの再生成で復活させない。
@@ -465,12 +470,12 @@ def compose_drawing_metadata(drawing: RegisteredDrawing) -> dict:
             {
                 "group": "2d",
                 "label": "2D抽出",
-                "attributes": snapshot_2d.canonical_attributes_json if snapshot_2d else {},
+                "attributes": canonical_by_mode.get("2d") or {},
             },
             {
                 "group": "3d",
                 "label": "3D抽出",
-                "attributes": snapshot_3d.canonical_attributes_json if snapshot_3d else {},
+                "attributes": canonical_by_mode.get("3d") or {},
             },
             {
                 "group": "reconciledAttributes",

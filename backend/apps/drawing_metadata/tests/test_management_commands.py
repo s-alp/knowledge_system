@@ -356,9 +356,19 @@ def test_export_drawing_metadata_fixtures_review_summary_omits_heavy_payloads(tm
         source_path=r"C:\cad\summary.icd",
         source_format="icad",
     )
+    job = DrawingMetadataExtractionJob.objects.create(
+        drawing=drawing,
+        extraction_mode="2d",
+        status=DrawingMetadataExtractionJob.STATUS_SUCCEEDED,
+        warnings_json=[
+            {"code": "title_block_llm_skipped_unusable_values"},
+            {"code": "geometry_layer_count_mismatch"},
+        ],
+    )
     DrawingMetadataSnapshot.objects.create(
         drawing=drawing,
         extraction_mode="2d",
+        latest_job=job,
         raw_extract_json={"texts": [{"joined_text": "材質 SUS304"}]},
         canonical_attributes_json={
             "drawing_name": "サマリ図面",
@@ -384,9 +394,12 @@ def test_export_drawing_metadata_fixtures_review_summary_omits_heavy_payloads(tm
     assert "viewerBootstrap" not in item
     assert "ragPayload" not in item
     assert item["snapshotSummary"]["2d"]["rawExtractKeys"] == ["texts"]
+    assert item["snapshotSummary"]["2d"]["latestJob"]["warningCount"] == 1
     assert item["selectedAttributes"]["material_keywords"]["values"] == ["SUS304"]
     assert item["selectedAttributes"]["unresolved_material_keywords"]["values"] == ["ZZZ"]
     assert item["derivedTags"]["values"] == ["材質:SUS304"]
+    job.refresh_from_db()
+    assert len(job.warnings_json) == 2
 
 
 @pytest.mark.django_db
