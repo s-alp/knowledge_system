@@ -115,7 +115,7 @@ namespace IcadExtraction.SxNet.Tests
                         {
                             name = "ReferencedContainer",
                             ref_model_name = "REF-001",
-                            path = @"J:\ref\REF-001.icd",
+                            path = @"C:\sample\ref\REF-001.icd",
                             is_external = false,
                         },
                         child_list = new[]

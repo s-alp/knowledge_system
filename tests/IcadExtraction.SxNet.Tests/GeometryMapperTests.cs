@@ -19,7 +19,7 @@ namespace IcadExtraction.SxNet.Tests
             var warnings = new List<WarningPayload>();
             var geometries = new object[]
             {
-                new SxGeomText { txt = new[] { "澁谷工業", "SES" }, text_line_num = 2, pnt = new SxPos { x = 10.5, y = 20.25, z = 0.0 } },
+                new SxGeomText { txt = new[] { "顧客A", "STD-001" }, text_line_num = 2, pnt = new SxPos { x = 10.5, y = 20.25, z = 0.0 } },
                 new SxGeomLabel { txt = new[] { "ロボット" }, text_line_num = 1 },
                 new SxGeomLengthDim { diminfo = new DimInfo { value_1 = "100", mark_2 = "M5" }, pnt1 = new SxPos { x = -1.0, y = 2.0, z = 0.0 } },
                 new SxGeomLine2D { x1 = 0.0, y1 = 1.0, x2 = 2.0, y2 = 3.0 },

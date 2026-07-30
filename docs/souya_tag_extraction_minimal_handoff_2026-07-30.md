@@ -22,6 +22,14 @@
 本番ナレッジシステムのDB/APIへの登録、画面、RAG、ビューワー、Django管理画面は供給本体に含めない。
 Django adapterは本リポジトリ内で現行挙動の同等性を確認するために残すが、最小パッケージには含めない。
 
+### 1.1 外部共有区分
+
+- 創屋様へ渡す対象は、生成後に外部共有監査を通した最小パッケージと、そのZIPだけである。説明資料はPPTXではなく、監査・目視確認済みPDFをパッケージ内へ同梱する。
+- 本リポジトリ全体、Git履歴、`backend/apps`、`output`配下の内部監査結果、顧客原本は渡さない。
+- 配布版の客先辞書・案件辞書は空であり、実顧客名、実案件名、個人名、社内ドライブ、実図面名、実測値を含めない。
+- 例示値は`顧客A`、`SAMPLE-*`、`C:\sample`等の架空値に限定する。
+- 創屋様で使用する運用辞書は、共有範囲の承認後に創屋様のDBまたは辞書JSONから注入する。
+
 ## 2. 責務境界
 
 ```text
@@ -46,6 +54,8 @@ canonical_attributes + derived_tags
 
 どこから何を抽出するかの完全な一覧は
 `docs/cad_tag_extraction_sources_for_souya_2026-07-28.md`を参照する。
+実装順序、創屋様単独で進められる範囲、当社確認が必要な本番接続事項は
+`docs/souya_tag_extraction_delivery_readiness_2026-07-30.md`を参照する。
 
 ## 3. 最小パッケージ構成
 
@@ -71,15 +81,22 @@ souya_tag_extraction_minimal_2026-07-30/
 │  ├─ raw/
 │  └─ results/
 ├─ scripts/
-│  └─ convert_icad_standalone.ps1
+│  ├─ convert_icad_standalone.ps1
+│  └─ start_windows_extraction_agent.ps1
 ├─ docker/
 │  ├─ Dockerfile
-│  └─ docker-compose.yml
+│  ├─ docker-compose.yml
+│  └─ data/
+│     └─ input.json
 └─ docs/
+   ├─ CAD抽出元と抽出内容_ICAD_DXF_STEP_創屋様向け.pdf
+   ├─ icad_remote_windows_agent_setup_for_souya_2026-07-30.md
+   └─ その他の契約・抽出元・変換手順
 ```
 
 `manifest.json`には全ファイルの相対パス、サイズ、SHA-256を記録する。
 同名出力先が既に存在する場合、生成スクリプトは上書きせず停止する。
+PDFは本文監査に加え、全ページを画像化して文字切れ・重なり・社内情報・顧客固有情報がないことを目視確認する。編集元PPTXは中間物であり、配布しない。
 
 ## 4. Python単独実行
 
@@ -167,12 +184,13 @@ result = process_extraction(
 ```json
 {
   "customer": {
-    "コマツ小山": ["komatsu koyama"]
+    "顧客A": ["customer-a"]
   },
   "project": {}
 }
 ```
 
+上記は辞書形式を示す架空例であり、同梱`initial-dictionaries.json`の`customer`と`project`は空である。
 不明な辞書種別、空の正規名、文字列配列でない別名はエラーにする。
 辞書ファイルの不存在・不正をseedへ自動フォールバックしない。
 
@@ -194,6 +212,12 @@ SchemaはJSON Schema Draft 2020-12である。
 C#のビルド・SXNET配置・ICAD実行条件は
 `docs/windows_extraction_agent_api_design_2026-07-29.md`を参照する。
 
+現在はDjangoとICADを同じWindows PCで動かす構成を既定とする。
+別PCのICADをWindows agentとして接続する場合は、
+`docs/icad_remote_windows_agent_setup_for_souya_2026-07-30.md`を参照する。
+Agent PCへはC#ソースやVisual Studioではなく、publish済みRunner一式と
+`scripts/start_windows_extraction_agent.ps1`を配置できる。
+
 ICAD→DXF/STEP変換は`IcadExtraction.Runner convert-cad`または
 `scripts/convert_icad_standalone.ps1`を使用する。詳細は
 `docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md`を参照する。
@@ -211,6 +235,9 @@ docker compose -f ".\docker\docker-compose.yml" run --rm tag-extraction
 ```
 
 `data/input.json`を読み、`data/output.json`へ結果を保存する例である。
+初期状態では、架空データだけを使った2D rawサンプルを`docker/data/input.json`へ同梱している。
+コマンド成功後は`docker/data/output.json`が生成される。実データへ差し替える場合も、
+入力と出力に同じパスを指定せず、顧客資料の共有・保管ルールを確認する。
 
 ## 10. 受入確認
 
@@ -244,6 +271,7 @@ python ".\scripts\build_souya_tag_extraction_package.py"
 
 - 創屋本番DB/APIへの書き込みは未接続であり、納品コアも書き込まない。
 - ICAD/SXNETの実抽出とDXF/STEP変換はWindows＋ICAD環境が必要である。
+- 別PC Windows agentは実装上対応するが、創屋ネットワークでの実機疎通は受入確認が必要である。
 - DockerはPython側だけを対象とする。
 - 手動補正、2D/3D合成、レビュー画面、RAG payloadは最小パッケージの対象外である。
-- 辞書の運用値は創屋側で追加・管理し、同梱seedは開始点として扱う。
+- 客先・案件の運用値は創屋側で追加・管理し、同梱seedには実顧客・実案件を含めない。

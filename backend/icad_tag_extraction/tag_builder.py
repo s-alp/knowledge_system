@@ -102,7 +102,7 @@ def build_derived_tags(
             add_tag(f"ユニット:{unit_number}", "unit_number_candidates", confidence="medium")
     if "spec_tokens" not in excluded_sources:
         for spec in canonical_attributes.get("spec_tokens", []):
-            if spec in {"SES"}:
+            if str(spec).strip():
                 add_tag(f"規格:{spec}", "spec_tokens", confidence="medium")
     if "title_block_fields" not in excluded_sources:
         title_block_fields = canonical_attributes.get("title_block_fields", {}) or {}

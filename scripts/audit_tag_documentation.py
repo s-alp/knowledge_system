@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import re
 import sys
 from pathlib import Path
@@ -25,6 +26,20 @@ DOCS = ROOT / "docs"
 HANDOFF_DOCS = ROOT / "handoff/claude_cloud"
 CURRENT_SPEC = DOCS / "tag_extraction_and_assignment_current_spec_2026-07-29.md"
 INDEX = DOCS / "tag_extraction_documentation_index_2026-07-29.md"
+SOUYA_DOC = DOCS / "cad_tag_extraction_sources_for_souya_2026-07-28.md"
+SEED_DICTIONARY_MODULE = ROOT / "backend/icad_tag_extraction/seed_dictionaries.py"
+
+# 創屋様向け文書 4.2「辞書 / 初期エントリ数」表の行ラベルと、初期辞書の定数名の対応。
+# 文書へ件数を書く以上、コードの実数とズレたら失敗させる。
+SEED_DICTIONARY_TABLE_ROWS = {
+    "客先": "CUSTOMER_KEYWORDS",
+    "装置カテゴリ": "EQUIPMENT_CATEGORY_KEYWORDS",
+    "メーカー": "MAKER_KEYWORDS",
+    "材質分類": "MATERIAL_CLASSIFICATION_RULES",
+    "熱処理": "HEAT_TREATMENT_KEYWORDS",
+    "規格": "SPEC_KEYWORDS",
+    "部品名": "PART_NAME_KEYWORDS",
+}
 
 REQUIRED_FILES = (
     ROOT / "AGENTS.md",
@@ -101,6 +116,10 @@ CODE_ASSERTIONS = {
         '".step": "step"',
         '".stp": "step"',
         '".dxf": "dxf"',
+    ),
+    # 「案件辞書は初期エントリ0件」と各文書に書いているため、seed側の空定義を固定する。
+    ROOT / "backend/icad_tag_extraction/dictionary_provider.py": (
+        "KIND_PROJECT: {}",
     ),
 }
 
@@ -212,6 +231,63 @@ def check_forbidden_code_assertions(errors: list[str]) -> None:
                 )
 
 
+def load_seed_dictionaries() -> dict[str, object] | None:
+    """初期辞書モジュールを、Djangoも独立コア本体も読み込まずに単体で評価する。
+
+    seed_dictionaries.py は定数だけを持つDjango非依存モジュールである。
+    パッケージとしてimportすると他モジュールを巻き込むため、ファイル単体で読み込む。
+    """
+
+    if not SEED_DICTIONARY_MODULE.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location(
+        "audit_seed_dictionaries", SEED_DICTIONARY_MODULE
+    )
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return vars(module)
+
+
+def check_seed_dictionary_counts(errors: list[str]) -> None:
+    """文書に記載した初期辞書の件数が、現行コードの実数と一致するか確認する。"""
+
+    if not SOUYA_DOC.is_file():
+        return
+    namespace = load_seed_dictionaries()
+    if namespace is None:
+        errors.append(
+            "初期辞書モジュールを読み込めません: "
+            f"{SEED_DICTIONARY_MODULE.relative_to(ROOT)}"
+        )
+        return
+    content = read_utf8(SOUYA_DOC)
+    for label, constant in SEED_DICTIONARY_TABLE_ROWS.items():
+        entries = namespace.get(constant)
+        if not isinstance(entries, dict):
+            errors.append(
+                "初期辞書の定数が見つかりません: "
+                f"{SEED_DICTIONARY_MODULE.relative_to(ROOT)} :: {constant}"
+            )
+            continue
+        match = re.search(
+            rf"^\|\s*{re.escape(label)}\s*\|\s*(\d+)\s*\|", content, re.MULTILINE
+        )
+        if match is None:
+            errors.append(
+                f"辞書件数の記載行がありません: {SOUYA_DOC.relative_to(ROOT)} :: {label}"
+            )
+            continue
+        documented = int(match.group(1))
+        actual = len(entries)
+        if documented != actual:
+            errors.append(
+                "辞書件数が現行コードと一致しません: "
+                f"{label} 文書={documented} コード={actual} ({constant})"
+            )
+
+
 def normalized_link_target(raw_target: str) -> str:
     """Markdownリンクからタイトル属性とアンカーを除いたパスを返す。"""
 
@@ -274,6 +350,7 @@ def main() -> int:
     check_code_assertions(errors)
     check_current_spec(errors)
     check_forbidden_code_assertions(errors)
+    check_seed_dictionary_counts(errors)
     check_markdown_links(errors)
     check_index_coverage(warnings)
 

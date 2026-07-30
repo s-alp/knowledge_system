@@ -151,6 +151,9 @@ pwsh -NoLogo -NoProfile -File "scripts\convert_icad_standalone.ps1" `
 
 ## Windows ICAD抽出agent
 
+現在の同一PC構成から、同一社内ネットワーク上の別PCへICAD抽出を分離する場合は、
+[別PCのICADをWindows抽出Agentとして接続する手順（創屋向け）](./docs/icad_remote_windows_agent_setup_for_souya_2026-07-30.md)を参照してください。
+
 ### 1. net48版をpublish
 
 ```powershell

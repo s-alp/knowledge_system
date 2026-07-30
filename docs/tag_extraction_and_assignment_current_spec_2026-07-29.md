@@ -66,6 +66,11 @@
 
 ICADは2D/3Dを別snapshotとして保持する。STEP/DXFは現行ではテキスト・構造候補を読む汎用抽出であり、ICADネイティブ抽出と同じ情報量を保証しない。
 
+現在の検証・初期導入はDjangoとICADを同じWindows PCで動かす構成を既定とする。
+別PCのICADをWindows agentとして接続する場合の配置、ネットワーク、認証、図面参照、受入確認は
+[`icad_remote_windows_agent_setup_for_souya_2026-07-30.md`](icad_remote_windows_agent_setup_for_souya_2026-07-30.md)を参照する。
+別PC配置は現行コードで対応するが、創屋環境で実機確認するまでは受入済みと扱わない。
+
 ## 4. データの4層
 
 | 層 | 保存先 | 内容 |

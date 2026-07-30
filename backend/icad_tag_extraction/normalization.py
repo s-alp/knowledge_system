@@ -2526,7 +2526,9 @@ def normalize_raw_extract(
         canonical["referenced_2d_part3d_names"] = _flatten_strings(part.get("part3d_name") for part in trusted_referenced_parts)
         canonical["referenced_2d_ref_model_names"] = _flatten_strings(part.get("ref_model_name") for part in trusted_referenced_parts)
         canonical["referenced_2d_ref_vs_names"] = _flatten_strings(part.get("ref_vs_name") for part in trusted_referenced_parts)
-        canonical["spec_tokens"] = _flatten_strings(trusted_text_tokens + trusted_tolerance_texts)
+        # 生の図面文字列はtext_tokens等へ監査証跡として残す。
+        # spec_tokensは後段の辞書照合で正規名だけを追加し、任意の注記を規格タグへ誤採用しない。
+        canonical["spec_tokens"] = []
         # 図枠は候補一覧と採用値を分け、どの文字要素から値を選んだか後でレビューできるようにする。
         canonical["title_block_candidates"] = _build_title_block_candidates(
             texts,

@@ -6,11 +6,9 @@
 from __future__ import annotations
 
 
-CUSTOMER_KEYWORDS = {
-    "コマツ小山": ["コマツ小山", "komatsu koyama"],
-    "広島アルミ": ["広島アルミ", "hiroshima alumi"],
-    "澁谷工業": ["澁谷工業", "shibuya"],
-}
+# 客先名と案件名は顧客情報に当たるため、外部配布する独立コアには実値を持たせない。
+# 呼び出し側が承認済みのDBまたはJSON辞書を注入する。空辞書は正常な初期状態である。
+CUSTOMER_KEYWORDS: dict[str, list[str]] = {}
 
 EQUIPMENT_CATEGORY_KEYWORDS = {
     "ガントリー": ["ガントリー", "gantry", "ガントリ"],
@@ -89,7 +87,6 @@ MAKER_KEYWORDS = {
 }
 
 SPEC_KEYWORDS = {
-    "SES": ["ses"],
     "JIS": ["jis", "日本産業規格", "日本工業規格"],
     "ISO": ["iso"],
     "DIN": ["din"],

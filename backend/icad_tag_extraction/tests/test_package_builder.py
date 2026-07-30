@@ -37,10 +37,31 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     assert "schemas/icad-csharp-raw-extraction.v1.schema.json" in manifest_paths
     assert "dictionaries/initial-dictionaries.json" in manifest_paths
     assert "tests/python/test_distribution.py" in manifest_paths
+    assert "scripts/start_windows_extraction_agent.ps1" in manifest_paths
+    assert "docker/data/input.json" in manifest_paths
+    assert (
+        "docs/icad_remote_windows_agent_setup_for_souya_2026-07-30.md"
+        in manifest_paths
+    )
+    assert (
+        "docs/souya_tag_extraction_delivery_readiness_2026-07-30.md"
+        in manifest_paths
+    )
+    assert (
+        "docs/souya_tag_extraction_minimal_handoff_2026-07-30.md"
+        in manifest_paths
+    )
     assert not any(
         path.startswith("python/icad_tag_extraction/tests/")
         for path in manifest_paths
     )
+    dictionaries = json.loads(
+        (output_dir / "dictionaries" / "initial-dictionaries.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert dictionaries["customer"] == {}
+    assert dictionaries["project"] == {}
     assert not any(path.startswith("python/apps/") for path in manifest_paths)
 
     result_path = output_dir / "examples" / "cli_result.json"

@@ -183,7 +183,9 @@ backend\.venv\Scripts\python.exe scripts\generate_tag_extraction_schemas.py --ch
 ```powershell
 backend\.venv\Scripts\python.exe -m pytest
 backend\.venv\Scripts\python.exe backend\manage.py check
-dotnet test IcadExtraction.sln -c Release --no-restore
+dotnet test tests\IcadExtraction.Contracts.Tests\IcadExtraction.Contracts.Tests.csproj -c Release --no-restore
+dotnet test tests\IcadExtraction.Runner.Tests\IcadExtraction.Runner.Tests.csproj -c Release --no-restore
+dotnet test tests\IcadExtraction.SxNet.Tests\IcadExtraction.SxNet.Tests.csproj -c Release --no-restore
 backend\.venv\Scripts\python.exe scripts\audit_tag_documentation.py
 backend\.venv\Scripts\python.exe scripts\audit_beginner_source_comments.py
 git diff --check
@@ -201,11 +203,16 @@ git diff --check
 4. 出力先を明示して生成する。
 
 ```powershell
-backend\.venv\Scripts\python.exe scripts\build_souya_tag_extraction_package.py `
-  --output output\souya_tag_extraction_minimal_YYYY-MM-DD
+<pypdfを利用できる生成用Python> scripts\build_souya_tag_extraction_package.py `
+  --output output\souya_tag_extraction_minimal_YYYY-MM-DD `
+  --guide-pdf output\pdf\<外部共有安全版PDF>
 ```
 
-生成対象は、C#抽出器とテスト、Django非依存Pythonコア、JSON Schema、初期辞書、2D/3D例、ICAD→DXF/STEP変換スクリプト、Docker例、引き渡し文書である。Djangoモデル、DB、API、UI、RAG、顧客原本は含めない。
+生成用Pythonは、Codex Desktopの`load_workspace_dependencies`で確認した文書用Python、または`pypdf`を導入した専用環境を使う。PPTXはPDF生成の中間物であり、創屋様への配布物には含めない。
+
+生成対象は、C#抽出器とテスト、Django非依存Pythonコア、JSON Schema、初期辞書、2D/3D例、ICAD→DXF/STEP変換スクリプト、Docker例、引き渡し文書、外部共有安全版PDFである。Djangoモデル、DB、API、UI、RAG、顧客原本は含めない。
+
+生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行し、社内パス、実顧客・実案件、実図面名、実測件数、顧客固有規格seed、配布対象外ディレクトリの混入を拒否する。客先辞書と案件辞書は配布版で空でなければならない。
 
 ### 6. 生成後の受入確認
 1. `manifest.json`と実ファイルの集合、サイズ、SHA-256が一致することを確認する。
@@ -222,7 +229,17 @@ backend\.venv\Scripts\python.exe -m pytest `
 
 4. `docker compose -f <package>\docker\docker-compose.yml config`で構成を確認する。
 5. ZIPの存在、サイズ、manifestのfile countを確認する。
-6. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
+6. 配布するPDFは全ページをPNGへ変換して目視確認し、次の本文監査も実行する。
+
+```powershell
+<pypdfを利用できる生成用Python> scripts\audit_souya_handoff_content.py `
+  output\souya_tag_extraction_minimal_YYYY-MM-DD `
+  --pdf <外部共有安全版PDF>
+```
+
+PDF本文監査では画像内文字を判定できないため、実データを含むスクリーンショットは使わず、架空データだけの図に差し替える。PDF内のページ数、文字切れ、重なり、空白ページ、社内情報、顧客固有情報を全ページ目視する。
+
+7. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
 
 ### 7. コミット・共有
 - コミット前に`git diff`と`git diff --cached`を確認し、今回の実装・Schema・文書・配布物だけをパス指定でstageする。

@@ -23,6 +23,7 @@
 | agent APIのrequest / response | 本資料 |
 | C#が返す抽出JSON | 本資料 |
 | lease、heartbeat、失敗処理 | 本資料 |
+| 同一PCから別PCへの配置・疎通・創屋側受入 | `docs/icad_remote_windows_agent_setup_for_souya_2026-07-30.md` |
 | Django正規化後の属性・タグ | `docs/extraction_result_schema_2026-05-28.md`のDjango保存スキーマ |
 | 抽出からタグ付与・UI・運用までの全体 | `docs/tag_extraction_and_assignment_current_spec_2026-07-29.md` |
 | C# / Djangoの設計理由 | `docs/icad_csharp_python_architecture_2026-05-27.md` |
@@ -87,6 +88,8 @@ C#は業務辞書やタグ確定処理を持たない。C#が返すのは、ICAD
 - ICADライセンスとWindowsセッションが利用可能であること
 
 人が操作するICADとは分離し、Windows agent専用セッションまたは専用端末での常駐を推奨する。
+現在の同一PC構成から別PCのICADへ切り替える具体的な手順は
+[`icad_remote_windows_agent_setup_for_souya_2026-07-30.md`](icad_remote_windows_agent_setup_for_souya_2026-07-30.md)を参照する。
 
 ### 4.2 publish
 

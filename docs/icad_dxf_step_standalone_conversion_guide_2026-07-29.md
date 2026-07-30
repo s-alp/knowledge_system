@@ -1,7 +1,7 @@
 # ICAD→DXF／STEP 独立変換 利用・引継ぎ手順
 
 - 文書状態: **現行の変換運用手順**
-- タグ抽出・付与の全体正本: [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md)
+- 創屋向け配布範囲の正本: [`souya_tag_extraction_minimal_handoff_2026-07-30.md`](souya_tag_extraction_minimal_handoff_2026-07-30.md)
 
 ## 1. 結論
 

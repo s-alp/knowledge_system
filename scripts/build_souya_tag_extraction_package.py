@@ -22,13 +22,17 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 BACKEND_ROOT = ROOT / "backend"
+SCRIPTS_ROOT = ROOT / "scripts"
 DEFAULT_OUTPUT = ROOT / "output" / "souya_tag_extraction_minimal_2026-07-30"
 
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from icad_tag_extraction.dictionary_provider import DICTIONARY_KINDS, SeedDictionaryProvider  # noqa: E402
 from icad_tag_extraction.pipeline import process_extraction  # noqa: E402
+from audit_souya_handoff_content import assert_external_handoff_safe  # noqa: E402
 
 
 def _copy_tree(
@@ -193,8 +197,12 @@ def _validate_output_target(output_dir: Path) -> None:
         raise FileExistsError(f"ZIPが既に存在します。上書きしません: {archive_path}")
 
 
-def build_package(output_dir: Path) -> tuple[Path, Path]:
-    """正本ソースから最小フォルダとZIPを新規生成する。"""
+def build_package(
+    output_dir: Path,
+    *,
+    guide_pdf: Path | None = None,
+) -> tuple[Path, Path]:
+    """正本ソースと確認済みPDFから最小フォルダとZIPを新規生成する。"""
 
     output_dir = output_dir.resolve()
     _validate_output_target(output_dir)
@@ -257,18 +265,46 @@ def build_package(output_dir: Path) -> tuple[Path, Path]:
         ROOT / "scripts" / "convert_icad_standalone.ps1",
         output_dir / "scripts" / "convert_icad_standalone.ps1",
     )
+    _copy_file(
+        ROOT / "scripts" / "start_windows_extraction_agent.ps1",
+        output_dir / "scripts" / "start_windows_extraction_agent.ps1",
+    )
     guide = ROOT / "docs" / "souya_tag_extraction_minimal_handoff_2026-07-30.md"
     _copy_file(guide, output_dir / "README.md")
     for document_name in (
+        "souya_tag_extraction_minimal_handoff_2026-07-30.md",
         "cad_tag_extraction_sources_for_souya_2026-07-28.md",
         "icad_dxf_step_standalone_conversion_guide_2026-07-29.md",
         "windows_extraction_agent_api_design_2026-07-29.md",
+        "icad_remote_windows_agent_setup_for_souya_2026-07-30.md",
         "extraction_result_schema_2026-05-28.md",
+        "souya_tag_extraction_delivery_readiness_2026-07-30.md",
     ):
         _copy_file(ROOT / "docs" / document_name, output_dir / "docs" / document_name)
 
+    copied_guide_pdf: tuple[Path, ...] = ()
+    if guide_pdf is not None:
+        resolved_guide_pdf = guide_pdf.resolve()
+        if not resolved_guide_pdf.is_file():
+            raise FileNotFoundError(f"説明PDFがありません: {resolved_guide_pdf}")
+        if resolved_guide_pdf.suffix.lower() != ".pdf":
+            raise ValueError(f"説明資料はPDFを指定してください: {resolved_guide_pdf}")
+        package_guide_pdf = (
+            output_dir
+            / "docs"
+            / "CAD抽出元と抽出内容_ICAD_DXF_STEP_創屋様向け.pdf"
+        )
+        _copy_file(resolved_guide_pdf, package_guide_pdf)
+        copied_guide_pdf = (package_guide_pdf,)
+
     _write_text(output_dir / "docker" / "Dockerfile", _dockerfile())
     _write_text(output_dir / "docker" / "docker-compose.yml", _docker_compose())
+    _copy_file(
+        ROOT / "examples" / "tag_extraction_contract" / "csharp_raw_2d.v1.json",
+        output_dir / "docker" / "data" / "input.json",
+    )
+    # manifestとZIPを作る前に、PDFを含めて社内パス・実顧客値・運用辞書の混入を拒否する。
+    assert_external_handoff_safe(output_dir, pdfs=copied_guide_pdf)
     _write_json(output_dir / "manifest.json", _manifest(output_dir))
     validate_package(output_dir)
 
@@ -292,8 +328,17 @@ def main() -> int:
         default=DEFAULT_OUTPUT,
         help="新規作成するパッケージフォルダ。既存パスは拒否する。",
     )
+    parser.add_argument(
+        "--guide-pdf",
+        type=Path,
+        required=True,
+        help="外部共有監査済みの説明PDF。docs配下へ同梱する。",
+    )
     args = parser.parse_args()
-    output_dir, archive_path = build_package(args.output)
+    output_dir, archive_path = build_package(
+        args.output,
+        guide_pdf=args.guide_pdf,
+    )
     print(json.dumps(
         {
             "outputDirectory": str(output_dir),

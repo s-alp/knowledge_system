@@ -8,8 +8,13 @@
 > **現行契約について:** Windows agentの起動設定、HTTP API、C#入出力JSONの正本は
 > `docs/windows_extraction_agent_api_design_2026-07-29.md` とする。
 > 本資料は独立Pythonコアの入出力、Django保存スキーマ、正規化属性、派生タグ、手動補正の詳細資料として使用する。
-> 全体の処理順序、タグ一覧、UI、運用コマンドは
-> [`tag_extraction_and_assignment_current_spec_2026-07-29.md`](tag_extraction_and_assignment_current_spec_2026-07-29.md) を参照する。
+> 創屋向け配布範囲の処理順序、タグ一覧、運用コマンドは
+> [`souya_tag_extraction_minimal_handoff_2026-07-30.md`](souya_tag_extraction_minimal_handoff_2026-07-30.md) を参照する。
+>
+> 創屋向け最小パッケージの必須実装範囲は、`source_file`、`raw_extract`、
+> `canonical_attributes`、`derived_tags`、`warnings`と同梱JSON Schemaである。
+> Django保存、2D/3D合成、`manual_overrides`、レビューUI、RAG連携は同梱しない。
+> これらの節は、創屋様側adapterで同等機能を別途採用する場合だけ参照する。
 
 ## 1. スキーマの考え方
 
