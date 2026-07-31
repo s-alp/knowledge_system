@@ -122,29 +122,35 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 
 ## 6. 当社生成環境での最終確認結果
 
-2026-07-31に、辞書配布許可を反映した生成元と配布パッケージで次を確認しました。
+2026-07-31に、装置カテゴリ判定・塗装指示抽出の改善と辞書配布許可を反映した
+`souya_tag_extraction_minimal_2026-07-31_r18`で次を確認しました。
+機械確認は`scripts/verify_souya_tag_extraction_handoff.py`へ固定し、ZIPの一時展開先だけで
+Pythonをインストールするため、展開済み配布フォルダーへbuild、egg-info、キャッシュを残しません。
 
 | 確認項目 | 結果 |
 |---|---|
 | Schema再生成・保存済みSchemaとの一致 | 合格 |
-| backend pytest | 195件合格 |
+| バージョン | Python package 1.2.0、結果Schema 1.1.0、正規化規則 1.2.0 |
+| backend pytest | 200件合格 |
 | Django system check | 問題0件 |
 | C#単体テスト | Contracts 3件、Runner 8件、SxNet 30件の計41件合格 |
 | タグ関連文書監査 | エラー0件、警告0件 |
 | ソースコメント監査 | 295ファイル合格 |
-| 配布専用Pythonテスト | 2件合格 |
-| ZIP受領シミュレーション | 新規フォルダへ展開し、manifest再検証に合格 |
-| クリーンPython導入 | Python 3.11.9と3.12.10の新規venvへそれぞれインストールし、2D/3D CLI出力が同梱期待JSONと完全一致 |
+| 配布専用Pythonテスト | Python 3.11.9と3.12.10で各4件合格 |
+| ZIP受領シミュレーション | 専用一時領域へ展開し、展開済みフォルダーとの全74ファイルのSHA-256一致に合格 |
+| クリーンPython導入 | 最終ZIPからPython 3.11.9と3.12.10へ隔離インストールし、`importlib.metadata`でpackage 1.2.0を照合 |
 | 初期辞書 | 客先3件、案件0件、規格7件（SES含む）を同梱 |
 | クリーンC#導入 | ZIP内ソリューションだけでrestore・ビルド・41件のテストに合格 |
 | PowerShellスクリプト | ICAD変換・Agent起動の2ファイルとも構文エラー0件 |
 | Docker Compose構成確認 | 合格 |
 | Docker image build | 合格 |
 | Dockerコンテナ実行 | 同梱サンプル入力から`docker/data/output.json`を生成し、期待JSONと意味的に一致 |
-| PDF | 17ページの本文監査と全ページ目視確認に合格 |
+| PDF | 18ページの本文監査と全ページ目視確認に合格。単体PDFとパッケージ内PDFもSHA-256一致 |
 | 外部共有監査 | 配布承認済み初期辞書を許可し、それ以外の社内パス、実図面名、実測件数、配布対象外情報の検出0件 |
-| manifest | 73ファイルの集合、サイズ、SHA-256が一致 |
-| 配布対象外生成物 | `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Django `apps`、顧客資料の混入0件 |
+| manifest | manifest対象73ファイルの集合、サイズ、SHA-256が一致。manifest自身を含むZIPは74ファイル |
+| ZIP | 314,544 bytes、SHA-256 `3bb9cc39ffee2f1f6c57b74adc888ece9a9b26a1e21e6a11b8009d5691d86365` |
+| PDFファイル | 145,556 bytes、SHA-256 `17f4f2ab624caa93e11f767dee19dc7f01d9e1976b42a748e109b3a17e6f5ffe` |
+| 配布対象外生成物 | `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、`build`、`*.egg-info`、PPTX、Django `apps`、顧客資料の混入0件 |
 
 この結果は、同梱ソース・Schema・辞書・例・文書・Docker構成の自己完結性を示します。
 創屋様環境のICAD/SXNET実機動作、本番DB/API、認証、ネットワーク、運用辞書は環境固有なので、5.2の受入確認が別途必要です。

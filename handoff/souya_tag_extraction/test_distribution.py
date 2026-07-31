@@ -103,3 +103,65 @@ def test_2d_and_3d_examples_match_schemas_and_expected_results() -> None:
 
         assert actual == expected
         result_validator.validate(actual)
+
+
+def test_equipment_category_uses_top_level_business_name_before_child_parts() -> None:
+    """最上位の業務名称が、子部品名や「組立図」という図面種別より優先されることを確認する。"""
+
+    dictionary_provider = load_json_dictionary_provider(DICTIONARY_PATH)
+    result = process_extraction(
+        {
+            "source_format": "icad",
+            "source_kind": "3d",
+            "raw_extract": {
+                "parts": [
+                    {
+                        "tree_path": ["SAMPLE-TOP"],
+                        "name": "SAMPLE-TOP",
+                        "depth": 0,
+                        "ex_info_fields": {
+                            "User_WBHNA": "シュート中間部(SAMPLE内) 組立図",
+                        },
+                    },
+                    {
+                        "tree_path": ["SAMPLE-TOP", "SAMPLE-CHILD"],
+                        "name": "SAMPLE-CHILD",
+                        "depth": 1,
+                        "ex_info_fields": {
+                            "User_WBHNA": "アーム",
+                        },
+                    },
+                ]
+            },
+        },
+        dictionary_provider=dictionary_provider,
+    )
+
+    assert result["canonical_attributes"]["equipment_category"] == "シュート"
+    assert any(tag["tag"] == "装置:シュート" for tag in result["derived_tags"])
+
+
+def test_paint_instruction_ignores_split_labels_and_keeps_explicit_code() -> None:
+    """分割見出しを塗装値にせず、文字列だけで確定できる架空のKS番号を採用する。"""
+
+    dictionary_provider = load_json_dictionary_provider(DICTIONARY_PATH)
+    result = process_extraction(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "raw_extract": {
+                "texts": [
+                    {"text_lines": ["PAINT OR"], "inside_print_area": True},
+                    {"text_lines": ["PORTION"], "inside_print_area": True},
+                    {"text_lines": ["KS42"], "inside_print_area": True},
+                ]
+            },
+        },
+        dictionary_provider=dictionary_provider,
+    )
+
+    canonical = result["canonical_attributes"]
+    assert canonical["paint_instruction_tokens"] == ["KS42"]
+    assert canonical["paint"] == "KS42"
+    assert any(tag["tag"] == "塗装:KS42" for tag in result["derived_tags"])
+    assert all(tag["tag"] != "塗装:OR" for tag in result["derived_tags"])

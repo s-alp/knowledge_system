@@ -30,7 +30,7 @@ class ExtractionConfig:
 # 現行の正本バージョン。Django adapterはsettingsの値から同じ型を作り、
 # 独立CLIはこの値を既定契約として使用する。
 DEFAULT_CONFIG = ExtractionConfig(
-    schema_version="1.0.0",
-    normalizer_version="1.1.0",
+    schema_version="1.1.0",
+    normalizer_version="1.2.0",
     tag_rule_version="1.1.0",
 )

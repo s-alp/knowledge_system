@@ -20,6 +20,8 @@
 5. 初期辞書、サンプルJSON、単体テスト、組み込み手順
 6. ICADからDXF/STEPへ変換するC#機能と単独実行スクリプト
 
+現行のPythonパッケージは`1.2.0`、処理結果Schemaは`1.1.0`、正規化規則は`1.2.0`である。正規化結果には、名称欄とICAD 3D最上位業務名称を優先した装置カテゴリと、2D文字列から確定できる塗装候補`paint_instruction_tokens`を含む。
+
 本番ナレッジシステムのDB/APIへの登録、画面、RAG、ビューワー、Django管理画面は供給本体に含めない。
 Django adapterは本リポジトリ内で現行挙動の同等性を確認するために残すが、最小パッケージには含めない。
 
@@ -156,8 +158,8 @@ from icad_tag_extraction import (
 )
 
 config = ExtractionConfig(
-    schema_version="1.0.0",
-    normalizer_version="1.1.0",
+    schema_version="1.1.0",
+    normalizer_version="1.2.0",
     tag_rule_version="1.1.0",
 )
 provider = MappingDictionaryProvider(dictionary_payload)

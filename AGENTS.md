@@ -224,21 +224,38 @@ PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへ�
 生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行する。配布承認済みの客先・案件・規格値は`dictionaries\initial-dictionaries.json`と同じ値を持つ独立Python seed実装内だけ許可し、それ以外の文書・PDF・サンプルに混入した社内パス、実図面名、実測件数、配布対象外ディレクトリは拒否する。辞書JSONは全7種別がobjectであることを必須とし、案件辞書は現行seedに値がないため0件である。
 
 ### 6. 生成後の受入確認
-1. `manifest.json`と実ファイルの集合、サイズ、SHA-256が一致することを確認する。
-2. `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Djangoの`apps`、顧客資料が含まれないことを確認する。
-3. 配布専用テストをパッケージ内のPythonだけで実行する。
+1. 機械確認は、都度コマンドを組み立てず、必ず
+   `scripts\verify_souya_tag_extraction_handoff.py`を使う。
+2. 検証スクリプトには、生成した展開済みフォルダー、ZIP、単体PDF、Python 3.11、
+   Python 3.12の実行ファイルを明示する。
 
 ```powershell
-$package = Resolve-Path output\souya_tag_extraction_minimal_YYYY-MM-DD
-$env:PYTHONPATH = Join-Path $package "python"
-$env:PYTHONDONTWRITEBYTECODE = "1"
-backend\.venv\Scripts\python.exe -m pytest `
-  (Join-Path $package "tests\python")
+<pypdfを利用できる生成用Python> scripts\verify_souya_tag_extraction_handoff.py `
+  --package output\souya_tag_extraction_minimal_YYYY-MM-DD `
+  --archive output\souya_tag_extraction_minimal_YYYY-MM-DD.zip `
+  --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_利用ガイド.pdf `
+  --python <Python 3.11の実行ファイル> `
+  --python <Python 3.12の実行ファイル>
 ```
 
-4. `docker compose -f <package>\docker\docker-compose.yml config`で構成を確認する。
-5. ZIPの存在、サイズ、manifestのfile countを確認する。
-6. 配布するPDFは全ページをPNGへ変換して目視確認し、次の本文監査も実行する。
+3. 専用検証スクリプトは、次をすべて確認する。
+   - `manifest.json`と実ファイルの集合、サイズ、SHA-256
+   - 展開済みフォルダーとZIPの全ファイル内容
+   - `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、`build`、
+     `*.egg-info`、PPTX等の混入
+   - 単体PDFとパッケージ内PDFの一致、空白ページ、本文禁止表現
+   - 外部共有監査
+   - Python 3.11/3.12への一時インストール、配布専用テスト
+   - Docker Compose構成
+   - file count、ZIP/PDFのサイズとSHA-256
+4. Pythonパッケージの確認では`icad_tag_extraction.__version__`を前提にしない。
+   `pyproject.toml`と`importlib.metadata.version("icad-tag-extraction")`を照合する。
+5. 配布フォルダーを直接インストール元にして受入確認しない。検証スクリプトがZIPを
+   専用一時領域へ展開し、build、egg-info、キャッシュを配布成果物へ残さず確認する。
+6. 検証スクリプトが失敗した場合、場当たり的な代替コマンドで成功扱いにしない。
+   失敗原因または検証スクリプト自体を修正し、同じコマンドを再実行する。
+7. 配布するPDFは全ページをPNGへ変換して目視確認し、必要に応じて次の本文監査も
+   個別実行する。
 
 ```powershell
 <pypdfを利用できる生成用Python> scripts\audit_souya_handoff_content.py `
@@ -251,7 +268,7 @@ PDF本文監査では画像内文字を判定できないため、実データ�
 READMEとMarkdown技術文書について、`リポジトリ`、`Git履歴`、`生成スクリプト`、`受入確認`、
 外部共有監査・内部監査等の作成側工程が含まれていないことも自動監査と目視の両方で確認する。
 
-7. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
+8. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
 
 ### 7. コミット・共有
 - コミット前に`git diff`と`git diff --cached`を確認し、今回の実装・Schema・文書・配布物だけをパス指定でstageする。

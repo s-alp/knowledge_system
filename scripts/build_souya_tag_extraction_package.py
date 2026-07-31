@@ -100,7 +100,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "icad-tag-extraction"
-version = "1.1.0"
+version = "1.2.0"
 description = "ICAD/STEP/DXF raw metadata normalization and evidence-backed tag generation"
 requires-python = ">=3.11"
 dependencies = []

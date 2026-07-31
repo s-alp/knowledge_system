@@ -211,8 +211,8 @@ from icad_tag_extraction import (
 )
 
 config = ExtractionConfig(
-    schema_version="1.0.0",
-    normalizer_version="1.1.0",
+    schema_version="1.1.0",
+    normalizer_version="1.2.0",
     tag_rule_version="1.1.0",
 )
 provider = MappingDictionaryProvider(dictionary_payload)

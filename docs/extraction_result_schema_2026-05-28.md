@@ -1,7 +1,7 @@
 # 抽出結果スキーマ（現行保存・正規化契約）
 
 - 作成日: 2026-05-28
-- 最終更新日: 2026-07-30
+- 最終更新日: 2026-07-31
 - 文書状態: **独立Python処理結果・Django保存・canonical・タグ・手動補正の正本**
 - 目的: C# 抽出コアの出力 JSON、独立Pythonコアの処理結果、Django 側で保存するタグ・属性データの形を固定する。
 
@@ -329,6 +329,8 @@ Schemaは`scripts/generate_tag_extraction_schemas.py`で生成し、C# raw部分
   "balloon_candidates": [],
   "balloon_candidate_count": 0,
   "surface_treatment_tokens": [],
+  "paint": null,
+  "paint_instruction_tokens": [],
   "view_reference_candidates": [
     {
       "kind": "arrow_view",
@@ -414,6 +416,15 @@ Schemaは`scripts/generate_tag_extraction_schemas.py`で生成し、C# raw部分
 - `SFF-424 L=1572`等の型式・寸法トークンだけの値と、`型式`等の図枠見出しは名称として確定しない。候補原文は監査・手動確認用に保持する。
 - 名称・図枠候補はICAD原文、印刷枠、ビュー、レイヤー、文字座標、明示ラベル、タグ辞書だけで分類し、外部AIは使用しない。
 - `★`、`※`等の先頭注記記号はraw原文に残し、表示名称からだけ除去する。
+
+### 2026-07-31 装置分類・塗装契約
+
+- `equipment_category`は、装置名、ユニット名、製品名、図面名、部品名と、ICAD 3D最上位パーツの`User_WBHNA`を優先して辞書照合する。子部品を含む全検索語は、優先名称で分類できない場合だけ使用する。
+- 「組立図」は図面種別であり、「組立」の単独一致では`組立装置`へ分類しない。`組立装置`の明示文字列は分類対象とする。
+- `paint_instruction_tokens`は、2D文字列から単独で塗装仕様と判別できる`KS`番号、`マシン塗装色`、`MC塗装色`等を重複除去して保持する。
+- `PAINT OR`、`PORTION`、`マシン`、`MC`のような分割見出し断片は塗装値にしない。
+- `paint`が未確定で`paint_instruction_tokens`が1種類だけなら、その値を`paint`へ設定する。複数候補では代表値を推測しない。
+- 現行の処理結果Schemaは`1.1.0`、正規化規則は`1.2.0`、タグ規則は`1.1.0`である。
 
 ### アセンブリ本体と外部パーツの分離
 

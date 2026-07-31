@@ -8,9 +8,10 @@
   - `backend/apps/drawing_metadata`
   - `schemas/tag_extraction`
   - `integrations/2D_3D_CAD_VIEWR/frontend/src`
-- スキーマバージョン: `1.0.0`
-- 正規化ルールバージョン: `1.1.0`
+- スキーマバージョン: `1.1.0`
+- 正規化ルールバージョン: `1.2.0`
 - タグルールバージョン: `1.1.0`
+- 独立Pythonパッケージバージョン: `1.2.0`
 
 この文書は、CADからの情報抽出、Django非依存Pythonコアでの属性正規化・タグ付与、Djangoでの保存・2D/3D照合、手動補正、レビュー、画面/API連携の現行仕様をまとめた正本である。調査時点の事実、旧計画、実データ監査記録は別文書に残すが、現在の挙動を判断するときは本書とコードを優先する。
 
@@ -140,6 +141,8 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 
 図面番号は、図枠明示値、図面文字とファイル名の一致候補、ファイル名の順で決める。部品の`part_number`は現行表示契約では図面番号と整合させる。
 
+`equipment_category`は、装置名、ユニット名、製品名、図面名、部品名と、ICAD 3D最上位パーツの`User_WBHNA`を先に辞書照合し、その後に図面全体の検索語を照合する。これにより、上位業務名称が「シュート」で子部品に「アーム」がある場合も、図面全体を子部品カテゴリへ誤分類しない。図面種別の「組立図」と装置分類を分離するため、初期辞書の「組立装置」は「組立」の単独一致を使用せず、「組立装置」の明示一致だけを採用する。
+
 ### 7.2 3D構成・材質・質量
 
 - `internal_part_*`と`external_part_*`を分離する。
@@ -159,11 +162,14 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 - `geometric_tolerance_count`
 - `weld_*`
 - `surface_treatment_tokens`
+- `paint`、`paint_instruction_tokens`
 - `heat_treatment_keywords`、`hardness_spec_values`
 - `scale_candidates`、`scale`
 - `raw_2d_sections`
 
 尺度は`S=1:6`と`1:6`を候補化し、異なる候補が1種類だけの場合に確定する。テーパ等の比率表記と競合する場合は確定しない。
+
+塗装は、図枠の同一文字要素から確定した値に加え、文字列自体で仕様と判別できる`KS`＋1～3桁の番号、`マシン塗装色`、`MC塗装色`等を`paint_instruction_tokens`へ保持する。`PAINT OR`、`PORTION`等の分割見出し断片は値として採用しない。候補が1種類だけなら`paint`へ確定し、複数候補では代表値を推測しない。
 
 ## 8. 自動生成するタグ
 

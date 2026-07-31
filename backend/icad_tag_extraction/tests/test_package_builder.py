@@ -14,12 +14,27 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 BUILDER_PATH = ROOT / "scripts" / "build_souya_tag_extraction_package.py"
+VERIFIER_PATH = ROOT / "scripts" / "verify_souya_tag_extraction_handoff.py"
 
 
 def _load_builder_module():
     spec = importlib.util.spec_from_file_location("build_souya_tag_extraction_package", BUILDER_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"パッケージ生成スクリプトを読み込めません: {BUILDER_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_verifier_module():
+    """最終成果物の専用検証スクリプトを、CLI実行せず読み込む。"""
+
+    spec = importlib.util.spec_from_file_location(
+        "verify_souya_tag_extraction_handoff",
+        VERIFIER_PATH,
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"パッケージ検証スクリプトを読み込めません: {VERIFIER_PATH}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -74,6 +89,7 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     dockerfile = (output_dir / "docker" / "Dockerfile").read_text(
         encoding="utf-8"
     )
+    assert 'version = "1.2.0"' in pyproject
     assert 'requires-python = ">=3.11"' in pyproject
     assert dockerfile.startswith("FROM python:3.11-slim\n")
     recipient_readme = (output_dir / "README.md").read_text(encoding="utf-8")
@@ -91,6 +107,16 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
         "`manifest.json`",
     ):
         assert required_navigation in recipient_readme
+    extraction_reference = (
+        output_dir / "docs" / "extraction_reference.md"
+    ).read_text(encoding="utf-8")
+    assert "`paint_instruction_tokens`" in extraction_reference
+    assert "`User_WBHNA`" in extraction_reference
+    integration_contract = (
+        output_dir / "docs" / "integration_contract.md"
+    ).read_text(encoding="utf-8")
+    assert "結果Schemaは`1.1.0`" in integration_contract
+    assert "正規化規則は`1.2.0`" in integration_contract
     recipient_markdown = "\n".join(
         (output_dir / path).read_text(encoding="utf-8")
         for path in sorted(manifest_paths)
@@ -132,3 +158,30 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
 
     assert completed.returncode == 0, completed.stderr
     assert result_path.is_file()
+
+
+def test_final_verifier_compares_exact_zip_without_modifying_package(
+    tmp_path: Path,
+) -> None:
+    """ZIP検証が配布フォルダーを汚さず、全ファイル一致を確認できる。"""
+
+    builder = _load_builder_module()
+    verifier = _load_verifier_module()
+    output_dir, archive_path = builder.build_package(tmp_path / "handoff")
+    before = {
+        path.relative_to(output_dir).as_posix(): verifier._file_sha256(path)
+        for path in output_dir.rglob("*")
+        if path.is_file()
+    }
+
+    verifier.verify_no_generated_artifacts(output_dir)
+    assert verifier.verify_archive_matches_directory(output_dir, archive_path) == len(
+        before
+    )
+
+    after = {
+        path.relative_to(output_dir).as_posix(): verifier._file_sha256(path)
+        for path in output_dir.rglob("*")
+        if path.is_file()
+    }
+    assert after == before

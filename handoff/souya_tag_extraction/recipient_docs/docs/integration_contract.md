@@ -29,8 +29,8 @@ from icad_tag_extraction import (
 )
 
 config = ExtractionConfig(
-    schema_version="1.0.0",
-    normalizer_version="1.1.0",
+    schema_version="1.1.0",
+    normalizer_version="1.2.0",
     tag_rule_version="1.1.0",
 )
 provider = MappingDictionaryProvider(dictionary_payload)
@@ -63,6 +63,8 @@ result = process_extraction(
 
 結果全体は`schemas\icad-tag-extraction-result.v1.schema.json`で検証できます。
 
+現行のPythonパッケージは`1.2.0`、結果Schemaは`1.1.0`、正規化規則は`1.2.0`です。`1.2.0`では、装置カテゴリの判定時に名称欄とICAD 3Dの最上位業務名称を優先し、2D文字列から確定できる塗装仕様を`paint_instruction_tokens`へ保持します。
+
 ## 5. JSON Schema
 
 | ファイル | 用途 |
@@ -74,7 +76,7 @@ result = process_extraction(
 
 JSON SchemaはDraft 2020-12です。外部契約として利用する場合は、ファイル名だけでなく`schema_version`も保存してください。
 
-JSONのキー、型、必須条件を変更する場合は、既存データとの互換性を確認し、必要に応じてSchemaのバージョンを更新してください。`normalizer_version`と`tag_rule_version`は、再処理時に結果差分を判定するために保存してください。
+JSONのキー、型、必須条件を変更する場合は、既存データとの互換性を確認し、必要に応じてSchemaのバージョンを更新してください。`schema_version`が異なる結果を同じ契約として保存せず、`normalizer_version`と`tag_rule_version`も再処理時の結果差分を判定するために保存してください。
 
 ## 6. 辞書
 

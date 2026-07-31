@@ -102,8 +102,8 @@ def test_cli_writes_tagged_result_without_django(tmp_path: Path) -> None:
             output=output_path,
             dictionary=dictionary_path,
             source_kind=None,
-            schema_version="1.0.0",
-            normalizer_version="1.1.0",
+            schema_version="1.1.0",
+            normalizer_version="1.2.0",
             tag_rule_version="1.1.0",
         )
     )

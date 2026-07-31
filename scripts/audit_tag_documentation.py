@@ -89,8 +89,8 @@ CODE_ASSERTIONS = {
         "manifest.json",
     ),
     ROOT / "backend/knowledge_system_backend/settings.py": (
-        'DRAWING_METADATA_SCHEMA_VERSION = "1.0.0"',
-        'DRAWING_METADATA_NORMALIZER_VERSION = "1.1.0"',
+        'DRAWING_METADATA_SCHEMA_VERSION = "1.1.0"',
+        'DRAWING_METADATA_NORMALIZER_VERSION = "1.2.0"',
         'DRAWING_METADATA_TAG_RULE_VERSION = "1.1.0"',
     ),
     ROOT / "backend/apps/drawing_metadata/models.py": (
@@ -130,9 +130,10 @@ CODE_ASSERTIONS = {
 
 SPEC_ASSERTIONS = (
     "現行コード準拠の正本",
-    "スキーマバージョン: `1.0.0`",
-    "正規化ルールバージョン: `1.1.0`",
+    "スキーマバージョン: `1.1.0`",
+    "正規化ルールバージョン: `1.2.0`",
     "タグルールバージョン: `1.1.0`",
+    "独立Pythonパッケージバージョン: `1.2.0`",
     "`客先:{customer_name}`",
     "`案件:{project_name}`",
     "`装置:{equipment_category}`",
@@ -142,6 +143,9 @@ SPEC_ASSERTIONS = (
     "`溶接指示あり`",
     "`硬度:HRC`",
     "`硬度:HV`",
+    "`paint_instruction_tokens`",
+    "`User_WBHNA`",
+    "「組立図」と装置分類を分離",
     "/api/v1/drawing-metadata/tag-dictionaries",
     "/api/v1/drawing-metadata/agent/jobs/claim",
     "`PATCH/DELETE /api/v1/drawing-metadata/tag-dictionaries/{entryId}`",
