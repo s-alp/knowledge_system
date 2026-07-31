@@ -60,6 +60,7 @@ FORBIDDEN_RECIPIENT_DOCUMENT_LITERALS = (
     "受入確認",
     "コメント監査",
     "文書監査",
+    "初心者",
 )
 
 # 既知の社内検証データを外部向け成果物へ戻さないための拒否語。
@@ -185,7 +186,7 @@ def _scan_text(
 
 
 def _scan_recipient_document_wording(label: str, text: str) -> list[Finding]:
-    """受領者向け文書へ作成側の生成・監査・Git工程が混入していないか検査する。"""
+    """受領者向け文書へ内部工程や不適切な読み手表現が混入していないか検査する。"""
 
     findings: list[Finding] = []
     for literal in FORBIDDEN_RECIPIENT_DOCUMENT_LITERALS:
@@ -193,7 +194,7 @@ def _scan_recipient_document_wording(label: str, text: str) -> list[Finding]:
             findings.append(
                 Finding(
                     label,
-                    "受領者向け文書に内部作業表現",
+                    "受領者向け文書に禁止表現",
                     literal,
                 )
             )

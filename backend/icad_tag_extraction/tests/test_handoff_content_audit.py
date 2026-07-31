@@ -73,12 +73,12 @@ def test_external_handoff_audit_accepts_distributed_dictionary_but_rejects_inter
     assert reasons == {"社内ネットワークドライブ"}
 
 
-def test_external_handoff_audit_rejects_internal_process_wording_in_markdown(
+def test_external_handoff_audit_rejects_forbidden_wording_in_markdown(
     tmp_path: Path,
 ) -> None:
     _write_dictionary(tmp_path)
     (tmp_path / "README.md").write_text(
-        "本リポジトリ側の受入確認後に生成スクリプトを実行します。",
+        "初心者向け資料は、本リポジトリ側の受入確認後に生成スクリプトを実行します。",
         encoding="utf-8",
     )
 
@@ -87,5 +87,5 @@ def test_external_handoff_audit_rejects_internal_process_wording_in_markdown(
     assert {
         finding.evidence
         for finding in findings
-        if finding.reason == "受領者向け文書に内部作業表現"
-    } == {"リポジトリ", "生成スクリプト", "受入確認"}
+        if finding.reason == "受領者向け文書に禁止表現"
+    } == {"リポジトリ", "生成スクリプト", "受入確認", "初心者"}

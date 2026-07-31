@@ -30,6 +30,7 @@ from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
+    CondPageBreak,
     HRFlowable,
     PageBreak,
     Paragraph,
@@ -112,7 +113,6 @@ def _styles() -> dict[str, ParagraphStyle]:
             leading=29,
             textColor=colors.HexColor("#17324D"),
             spaceAfter=6 * mm,
-            keepWithNext=True,
         ),
         "h2": ParagraphStyle(
             "Heading2Japanese",
@@ -123,7 +123,6 @@ def _styles() -> dict[str, ParagraphStyle]:
             textColor=colors.HexColor("#0F6E8C"),
             spaceBefore=5 * mm,
             spaceAfter=2.5 * mm,
-            keepWithNext=True,
         ),
         "h3": ParagraphStyle(
             "Heading3Japanese",
@@ -134,7 +133,6 @@ def _styles() -> dict[str, ParagraphStyle]:
             textColor=colors.HexColor("#284B63"),
             spaceBefore=3.5 * mm,
             spaceAfter=1.5 * mm,
-            keepWithNext=True,
         ),
         "body": ParagraphStyle(
             "BodyJapanese",
@@ -296,7 +294,25 @@ def _markdown_story(path: Path, styles: dict[str, ParagraphStyle]) -> list[objec
         heading = re.match(r"^(#{1,3})\s+(.+)$", stripped)
         if heading:
             level = len(heading.group(1))
-            story.append(Paragraph(_format_inline(heading.group(2)), styles[f"h{level}"]))
+            heading_style = styles[f"h{level}"]
+            minimum_following_height = (
+                heading_style.leading + styles["body"].leading + 6 * mm
+            )
+            next_index = index + 1
+            while next_index < len(lines) and not lines[next_index].strip():
+                next_index += 1
+            if next_index < len(lines) and lines[next_index].strip().startswith(
+                ("|", "```", "- ")
+            ):
+                # 表、コード、箇条書きの先頭まで同じページへ置き、見出しだけが
+                # 前ページ末尾へ残った状態でまとまりを分割しない。
+                minimum_following_height = max(minimum_following_height, 45 * mm)
+            story.extend(
+                [
+                    CondPageBreak(minimum_following_height),
+                    Paragraph(_format_inline(heading.group(2)), heading_style),
+                ]
+            )
             index += 1
             continue
         if stripped.startswith("- "):

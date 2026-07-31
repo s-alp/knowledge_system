@@ -131,7 +131,7 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | Django system check | 問題0件 |
 | C#単体テスト | Contracts 3件、Runner 8件、SxNet 30件の計41件合格 |
 | タグ関連文書監査 | エラー0件、警告0件 |
-| 初心者向けソースコメント監査 | 293ファイル合格 |
+| ソースコメント監査 | 295ファイル合格 |
 | 配布専用Pythonテスト | 2件合格 |
 | ZIP受領シミュレーション | 新規フォルダへ展開し、manifest再検証に合格 |
 | クリーンPython導入 | Python 3.11.9と3.12.10の新規venvへそれぞれインストールし、2D/3D CLI出力が同梱期待JSONと完全一致 |
@@ -141,7 +141,7 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | Docker Compose構成確認 | 合格 |
 | Docker image build | 合格 |
 | Dockerコンテナ実行 | 同梱サンプル入力から`docker/data/output.json`を生成し、期待JSONと意味的に一致 |
-| PDF | 14ページの本文監査と全ページ目視確認に合格 |
+| PDF | 17ページの本文監査と全ページ目視確認に合格 |
 | 外部共有監査 | 配布承認済み初期辞書を許可し、それ以外の社内パス、実図面名、実測件数、配布対象外情報の検出0件 |
 | manifest | 73ファイルの集合、サイズ、SHA-256が一致 |
 | 配布対象外生成物 | `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Django `apps`、顧客資料の混入0件 |

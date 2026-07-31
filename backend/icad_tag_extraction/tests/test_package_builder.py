@@ -76,6 +76,21 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     )
     assert 'requires-python = ">=3.11"' in pyproject
     assert dockerfile.startswith("FROM python:3.11-slim\n")
+    recipient_readme = (output_dir / "README.md").read_text(encoding="utf-8")
+    for required_navigation in (
+        "## 1. 目的別・資料の見方",
+        "### 1.1 最初に読む順序",
+        "### 1.2 目的別の参照先",
+        "### 1.3 各資料に書かれていること・書かれていないこと",
+        "### 1.4 担当外の資料は読み飛ばしてよい",
+        "### 1.5 文書以外の重要なファイル",
+        "### 1.6 問題が起きたときの確認先",
+        "`schemas`",
+        "`examples`",
+        "`dictionaries`",
+        "`manifest.json`",
+    ):
+        assert required_navigation in recipient_readme
     recipient_markdown = "\n".join(
         (output_dir / path).read_text(encoding="utf-8")
         for path in sorted(manifest_paths)
@@ -89,6 +104,7 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
         "内部監査",
         "生成スクリプト",
         "受入確認",
+        "初心者",
     ):
         assert internal_wording not in recipient_markdown
 
