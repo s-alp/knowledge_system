@@ -8,12 +8,14 @@
 ## 1. 最初に確認すること
 
 創屋様へ渡すのは、外部共有監査済みの最小パッケージとZIPだけです。本リポジトリ全体、Git履歴、当社内Django app、内部監査結果、顧客原本は受領対象ではありません。
+READMEとMarkdown技術文書は`handoff/souya_tag_extraction/recipient_docs`の専用原稿だけを使用し、本書を含む社内用の納品準備・生成・監査資料は同梱しません。
+PDFも同じ専用Markdownから`scripts/prepare_souya_tag_extraction_handoff.py`で生成し、MarkdownとPDFの説明内容を二重管理しません。
 
 受領後、次の順で確認してください。
 
 1. `manifest.json`の全ファイルについて、相対パス、サイズ、SHA-256が実ファイルと一致する。
 2. `README.md`の供給範囲と「対象外」を確認する。
-3. `docs/cad_tag_extraction_sources_for_souya_2026-07-28.md`で、入力形式ごとの抽出元と出力属性を確認する。
+3. `docs/extraction_reference.md`で、入力形式ごとの抽出元と出力属性を確認する。
 4. `schemas/*.schema.json`で、C# raw、canonical属性、自動タグ、最終結果の型を確認する。
 5. Python配布テストとC#テストを実行する。
 
@@ -125,11 +127,11 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | 確認項目 | 結果 |
 |---|---|
 | Schema再生成・保存済みSchemaとの一致 | 合格 |
-| backend pytest | 194件合格 |
+| backend pytest | 195件合格 |
 | Django system check | 問題0件 |
 | C#単体テスト | Contracts 3件、Runner 8件、SxNet 30件の計41件合格 |
 | タグ関連文書監査 | エラー0件、警告0件 |
-| 初心者向けソースコメント監査 | 291ファイル合格 |
+| 初心者向けソースコメント監査 | 293ファイル合格 |
 | 配布専用Pythonテスト | 2件合格 |
 | ZIP受領シミュレーション | 新規フォルダへ展開し、manifest再検証に合格 |
 | クリーンPython導入 | Python 3.11.9と3.12.10の新規venvへそれぞれインストールし、2D/3D CLI出力が同梱期待JSONと完全一致 |
@@ -141,7 +143,7 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | Dockerコンテナ実行 | 同梱サンプル入力から`docker/data/output.json`を生成し、期待JSONと意味的に一致 |
 | PDF | 14ページの本文監査と全ページ目視確認に合格 |
 | 外部共有監査 | 配布承認済み初期辞書を許可し、それ以外の社内パス、実図面名、実測件数、配布対象外情報の検出0件 |
-| manifest | 77ファイルの集合、サイズ、SHA-256が一致 |
+| manifest | 73ファイルの集合、サイズ、SHA-256が一致 |
 | 配布対象外生成物 | `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Django `apps`、顧客資料の混入0件 |
 
 この結果は、同梱ソース・Schema・辞書・例・文書・Docker構成の自己完結性を示します。

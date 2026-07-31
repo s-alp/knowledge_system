@@ -24,6 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 HANDOFF_DOCS = ROOT / "handoff/claude_cloud"
+SOUYA_RECIPIENT_DOCS = ROOT / "handoff/souya_tag_extraction/recipient_docs"
 CURRENT_SPEC = DOCS / "tag_extraction_and_assignment_current_spec_2026-07-29.md"
 INDEX = DOCS / "tag_extraction_documentation_index_2026-07-29.md"
 SOUYA_DOC = DOCS / "cad_tag_extraction_sources_for_souya_2026-07-28.md"
@@ -49,6 +50,10 @@ REQUIRED_FILES = (
     DOCS / "windows_extraction_agent_api_design_2026-07-29.md",
     DOCS / "cad_tag_extraction_sources_for_souya_2026-07-28.md",
     DOCS / "souya_tag_extraction_minimal_handoff_2026-07-30.md",
+    SOUYA_RECIPIENT_DOCS / "README.md",
+    SOUYA_RECIPIENT_DOCS / "docs/extraction_reference.md",
+    SOUYA_RECIPIENT_DOCS / "docs/integration_contract.md",
+    SOUYA_RECIPIENT_DOCS / "docs/icad_windows_operations.md",
     HANDOFF_DOCS / "README.md",
     HANDOFF_DOCS / "VALIDATION_CHECKLIST.md",
     HANDOFF_DOCS / "PROMPT_FOR_CLAUDE.md",
@@ -300,9 +305,13 @@ def normalized_link_target(raw_target: str) -> str:
 
 
 def check_markdown_links(errors: list[str]) -> None:
-    """正本文書とCloud引継ぎ文書の相対Markdownリンクを確認する。"""
+    """正本文書と各引継ぎ文書の相対Markdownリンクを確認する。"""
 
-    markdown_paths = list(DOCS.rglob("*.md")) + list(HANDOFF_DOCS.rglob("*.md"))
+    markdown_paths = (
+        list(DOCS.rglob("*.md"))
+        + list(HANDOFF_DOCS.rglob("*.md"))
+        + list(SOUYA_RECIPIENT_DOCS.rglob("*.md"))
+    )
     for path in sorted(markdown_paths):
         content = read_utf8(path)
         for match in LINK_PATTERN.finditer(content):
@@ -329,7 +338,11 @@ def check_index_coverage(warnings: list[str]) -> None:
         return
     index_text = read_utf8(INDEX)
     keywords = ("タグ", "tag", "属性", "attribute", "metadata", "抽出", "extract")
-    markdown_paths = list(DOCS.rglob("*.md")) + list(HANDOFF_DOCS.rglob("*.md"))
+    markdown_paths = (
+        list(DOCS.rglob("*.md"))
+        + list(HANDOFF_DOCS.rglob("*.md"))
+        + list(SOUYA_RECIPIENT_DOCS.rglob("*.md"))
+    )
     for path in sorted(markdown_paths):
         content = read_utf8(path)
         lowered = content.lower()

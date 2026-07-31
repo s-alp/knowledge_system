@@ -71,3 +71,21 @@ def test_external_handoff_audit_accepts_distributed_dictionary_but_rejects_inter
 
     reasons = {finding.reason for finding in findings}
     assert reasons == {"社内ネットワークドライブ"}
+
+
+def test_external_handoff_audit_rejects_internal_process_wording_in_markdown(
+    tmp_path: Path,
+) -> None:
+    _write_dictionary(tmp_path)
+    (tmp_path / "README.md").write_text(
+        "本リポジトリ側の受入確認後に生成スクリプトを実行します。",
+        encoding="utf-8",
+    )
+
+    findings = audit_external_handoff(tmp_path)
+
+    assert {
+        finding.evidence
+        for finding in findings
+        if finding.reason == "受領者向け文書に内部作業表現"
+    } == {"リポジトリ", "生成スクリプト", "受入確認"}

@@ -204,16 +204,24 @@ git diff --check
 4. 出力先を明示して生成する。
 
 ```powershell
-<pypdfを利用できる生成用Python> scripts\build_souya_tag_extraction_package.py `
-  --output output\souya_tag_extraction_minimal_YYYY-MM-DD `
-  --guide-pdf output\pdf\<外部共有安全版PDF>
+<reportlabとpypdfを利用できる生成用Python> scripts\prepare_souya_tag_extraction_handoff.py `
+  --output output\souya_tag_extraction_minimal_YYYY-MM-DD
 ```
 
-生成用Pythonは、Codex Desktopの`load_workspace_dependencies`で確認した文書用Python、または`pypdf`を導入した専用環境を使う。PPTXはPDF生成の中間物であり、創屋様への配布物には含めない。
+`prepare_souya_tag_extraction_handoff.py`は、受領者向け専用MarkdownからPDFを生成し、同じMarkdown、
+PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへまとめる。PDF生成と収集を自動化するだけであり、
+変更妥当性、テスト結果、PDF全ページの見た目はCodexが前後に確認する。
+
+生成用Pythonは、Codex Desktopの`load_workspace_dependencies`で確認した文書用Python、または`reportlab`と`pypdf`を導入した専用環境を使う。PPTXは生成も配布もしない。
 
 生成対象は、C#抽出器とテスト、Django非依存Pythonコア、JSON Schema、初期辞書、2D/3D例、ICAD→DXF/STEP変換スクリプト、Docker例、引き渡し文書、外部共有安全版PDFである。Djangoモデル、DB、API、UI、RAG、顧客原本は含めない。
 
-生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行する。配布承認済みの客先・案件・規格値は`dictionaries\initial-dictionaries.json`内だけ許可し、それ以外の文書・PDF・サンプルに混入した社内パス、実図面名、実測件数、配布対象外ディレクトリは拒否する。辞書JSONは全7種別がobjectであることを必須とし、案件辞書は現行seedに値がないため0件である。
+配布パッケージのREADMEとMarkdown技術文書は、`handoff\souya_tag_extraction\recipient_docs`を正とする。
+社内用の仕様書、納品準備状況、生成手順、監査結果を変換・コピーして配布文書にしない。
+生成スクリプトは受領者向け専用原稿を固定の許可リストで同梱し、文書追加時は許可リストと配布テストを更新する。
+これにより、再生成のたびに社内表現を手作業で削除する運用を行わない。
+
+生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行する。配布承認済みの客先・案件・規格値は`dictionaries\initial-dictionaries.json`と同じ値を持つ独立Python seed実装内だけ許可し、それ以外の文書・PDF・サンプルに混入した社内パス、実図面名、実測件数、配布対象外ディレクトリは拒否する。辞書JSONは全7種別がobjectであることを必須とし、案件辞書は現行seedに値がないため0件である。
 
 ### 6. 生成後の受入確認
 1. `manifest.json`と実ファイルの集合、サイズ、SHA-256が一致することを確認する。
@@ -235,10 +243,13 @@ backend\.venv\Scripts\python.exe -m pytest `
 ```powershell
 <pypdfを利用できる生成用Python> scripts\audit_souya_handoff_content.py `
   output\souya_tag_extraction_minimal_YYYY-MM-DD `
-  --pdf <外部共有安全版PDF>
+  --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_利用ガイド.pdf
 ```
 
 PDF本文監査では画像内文字を判定できないため、実データを含むスクリーンショットは使わず、架空データだけの図に差し替える。PDF内のページ数、文字切れ、重なり、空白ページ、社内情報、顧客固有情報を全ページ目視する。
+
+READMEとMarkdown技術文書について、`リポジトリ`、`Git履歴`、`生成スクリプト`、`受入確認`、
+外部共有監査・内部監査等の作成側工程が含まれていないことも自動監査と目視の両方で確認する。
 
 7. 生成後にもう一度`git status --short`を実行し、並行作業の成果物を混入させていないことを確認する。
 

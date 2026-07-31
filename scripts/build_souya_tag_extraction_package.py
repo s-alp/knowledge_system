@@ -23,6 +23,13 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 BACKEND_ROOT = ROOT / "backend"
 SCRIPTS_ROOT = ROOT / "scripts"
+RECIPIENT_DOCS_ROOT = ROOT / "handoff" / "souya_tag_extraction" / "recipient_docs"
+RECIPIENT_DOCUMENT_PATHS = (
+    "README.md",
+    "docs/extraction_reference.md",
+    "docs/integration_contract.md",
+    "docs/icad_windows_operations.md",
+)
 DEFAULT_OUTPUT = ROOT / "output" / "souya_tag_extraction_minimal_2026-07-30"
 
 if str(BACKEND_ROOT) not in sys.path:
@@ -70,6 +77,20 @@ def _write_json(path: Path, payload: object) -> None:
 def _copy_file(source: Path, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
+
+
+def _copy_recipient_documents(output_dir: Path) -> None:
+    """受領者向けとして管理する専用原稿だけを、固定の許可リストから同梱する。
+
+    社内の設計資料や生成手順を自動収集すると、内部工程の説明がREADMEへ混入する。
+    配布原稿を専用フォルダーへ分離し、追加文書もこの一覧への明示登録を必須にする。
+    """
+
+    for relative_path in RECIPIENT_DOCUMENT_PATHS:
+        source = RECIPIENT_DOCS_ROOT / relative_path
+        if not source.is_file():
+            raise FileNotFoundError(f"受領者向け文書がありません: {source}")
+        _copy_file(source, output_dir / relative_path)
 
 
 def _python_pyproject() -> str:
@@ -269,18 +290,7 @@ def build_package(
         ROOT / "scripts" / "start_windows_extraction_agent.ps1",
         output_dir / "scripts" / "start_windows_extraction_agent.ps1",
     )
-    guide = ROOT / "docs" / "souya_tag_extraction_minimal_handoff_2026-07-30.md"
-    _copy_file(guide, output_dir / "README.md")
-    for document_name in (
-        "souya_tag_extraction_minimal_handoff_2026-07-30.md",
-        "cad_tag_extraction_sources_for_souya_2026-07-28.md",
-        "icad_dxf_step_standalone_conversion_guide_2026-07-29.md",
-        "windows_extraction_agent_api_design_2026-07-29.md",
-        "icad_remote_windows_agent_setup_for_souya_2026-07-30.md",
-        "extraction_result_schema_2026-05-28.md",
-        "souya_tag_extraction_delivery_readiness_2026-07-30.md",
-    ):
-        _copy_file(ROOT / "docs" / document_name, output_dir / "docs" / document_name)
+    _copy_recipient_documents(output_dir)
 
     copied_guide_pdf: tuple[Path, ...] = ()
     if guide_pdf is not None:
@@ -292,7 +302,7 @@ def build_package(
         package_guide_pdf = (
             output_dir
             / "docs"
-            / "CAD抽出元と抽出内容_ICAD_DXF_STEP_創屋様向け.pdf"
+            / "CADタグ属性抽出_創屋様向け利用ガイド.pdf"
         )
         _copy_file(resolved_guide_pdf, package_guide_pdf)
         copied_guide_pdf = (package_guide_pdf,)

@@ -42,6 +42,25 @@ REQUIRED_DICTIONARY_KINDS = {
     "heat_treatment",
     "part_name",
 }
+DICTIONARY_SOURCE_RELATIVE_PATH = "python/icad_tag_extraction/seed_dictionaries.py"
+
+# 受領者向けMarkdownへ開発元の作業手順や判断経緯を戻さないための拒否語。
+# 技術的な導入確認は「動作確認」として記載し、生成・監査・Git操作は社内文書へ分離する。
+FORBIDDEN_RECIPIENT_DOCUMENT_LITERALS = (
+    "リポジトリ",
+    "Git履歴",
+    "Gitへ",
+    "コミット",
+    "創屋側から依頼",
+    "依頼された次の範囲",
+    "外部共有監査",
+    "内部監査",
+    "配布承認",
+    "生成スクリプト",
+    "受入確認",
+    "コメント監査",
+    "文書監査",
+)
 
 # 既知の社内検証データを外部向け成果物へ戻さないための拒否語。
 # 本監査スクリプト自体は配布パッケージへ同梱しない。
@@ -165,6 +184,22 @@ def _scan_text(
     return findings
 
 
+def _scan_recipient_document_wording(label: str, text: str) -> list[Finding]:
+    """受領者向け文書へ作成側の生成・監査・Git工程が混入していないか検査する。"""
+
+    findings: list[Finding] = []
+    for literal in FORBIDDEN_RECIPIENT_DOCUMENT_LITERALS:
+        if literal in text:
+            findings.append(
+                Finding(
+                    label,
+                    "受領者向け文書に内部作業表現",
+                    literal,
+                )
+            )
+    return findings
+
+
 def audit_external_handoff(
     package_root: Path,
     *,
@@ -195,14 +230,28 @@ def audit_external_handoff(
         if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES:
             relative = path.relative_to(root).as_posix()
             text = _read_text(path)
+            dictionary_values_allowed = relative in {
+                DICTIONARY_RELATIVE_PATH,
+                DICTIONARY_SOURCE_RELATIVE_PATH,
+            }
             findings.extend(
                 _scan_text(
                     relative,
                     text,
-                    allowed_literals=allowed_dictionary_literals,
-                    allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+                    allowed_literals=(
+                        allowed_dictionary_literals
+                        if dictionary_values_allowed
+                        else set()
+                    ),
+                    allowed_pattern_reasons=(
+                        allowed_dictionary_pattern_reasons
+                        if dictionary_values_allowed
+                        else set()
+                    ),
                 )
             )
+            if path.suffix.lower() == ".md":
+                findings.extend(_scan_recipient_document_wording(relative, text))
 
     forbidden_components = {
         "apps",
@@ -254,26 +303,28 @@ def audit_external_handoff(
         resolved = presentation.resolve()
         if not resolved.is_file():
             raise FileNotFoundError(f"PPTXがありません: {resolved}")
+        presentation_text = _read_pptx_text(resolved)
         findings.extend(
             _scan_text(
                 resolved.name,
-                _read_pptx_text(resolved),
-                allowed_literals=allowed_dictionary_literals,
-                allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+                presentation_text,
             )
+        )
+        findings.extend(
+            _scan_recipient_document_wording(resolved.name, presentation_text)
         )
     for pdf in pdfs:
         resolved = pdf.resolve()
         if not resolved.is_file():
             raise FileNotFoundError(f"PDFがありません: {resolved}")
+        pdf_text = _read_pdf_text(resolved)
         findings.extend(
             _scan_text(
                 resolved.name,
-                _read_pdf_text(resolved),
-                allowed_literals=allowed_dictionary_literals,
-                allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+                pdf_text,
             )
         )
+        findings.extend(_scan_recipient_document_wording(resolved.name, pdf_text))
     return findings
 
 

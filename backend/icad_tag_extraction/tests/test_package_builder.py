@@ -39,18 +39,18 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     assert "tests/python/test_distribution.py" in manifest_paths
     assert "scripts/start_windows_extraction_agent.ps1" in manifest_paths
     assert "docker/data/input.json" in manifest_paths
-    assert (
-        "docs/icad_remote_windows_agent_setup_for_souya_2026-07-30.md"
-        in manifest_paths
-    )
-    assert (
-        "docs/souya_tag_extraction_delivery_readiness_2026-07-30.md"
-        in manifest_paths
-    )
-    assert (
-        "docs/souya_tag_extraction_minimal_handoff_2026-07-30.md"
-        in manifest_paths
-    )
+    assert "README.md" in manifest_paths
+    assert "docs/extraction_reference.md" in manifest_paths
+    assert "docs/integration_contract.md" in manifest_paths
+    assert "docs/icad_windows_operations.md" in manifest_paths
+    assert {
+        path
+        for path in manifest_paths
+        if path.endswith(".md")
+    } == set(builder.RECIPIENT_DOCUMENT_PATHS)
+    assert not any("delivery_readiness" in path for path in manifest_paths)
+    assert not any("minimal_handoff" in path for path in manifest_paths)
+    assert not any("api_design" in path for path in manifest_paths)
     assert not any(
         path.startswith("python/icad_tag_extraction/tests/")
         for path in manifest_paths
@@ -76,6 +76,21 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     )
     assert 'requires-python = ">=3.11"' in pyproject
     assert dockerfile.startswith("FROM python:3.11-slim\n")
+    recipient_markdown = "\n".join(
+        (output_dir / path).read_text(encoding="utf-8")
+        for path in sorted(manifest_paths)
+        if path.endswith(".md")
+    )
+    for internal_wording in (
+        "リポジトリ",
+        "Git履歴",
+        "創屋側から依頼",
+        "外部共有監査",
+        "内部監査",
+        "生成スクリプト",
+        "受入確認",
+    ):
+        assert internal_wording not in recipient_markdown
 
     result_path = output_dir / "examples" / "cli_result.json"
     env = os.environ.copy()

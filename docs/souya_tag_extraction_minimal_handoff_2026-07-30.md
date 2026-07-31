@@ -54,10 +54,9 @@ canonical_attributes + derived_tags
 - PythonコアはDjangoをimportせず、DB・外部APIへアクセスしない。
 - 創屋側の保存処理は、Pythonの処理結果JSONを受け取って実装する。
 
-どこから何を抽出するかの完全な一覧は
-`docs/cad_tag_extraction_sources_for_souya_2026-07-28.md`を参照する。
-実装順序、創屋様単独で進められる範囲、当社確認が必要な本番接続事項は
-`docs/souya_tag_extraction_delivery_readiness_2026-07-30.md`を参照する。
+配布パッケージ内のREADMEと技術文書は、社内向けの設計・生成・監査手順を含めない
+`handoff/souya_tag_extraction/recipient_docs`を生成元とする。
+本書、納品準備状況、現行仕様、テスト記録は社内管理用であり、配布パッケージへコピーしない。
 
 ## 3. 最小パッケージ構成
 
@@ -91,14 +90,18 @@ souya_tag_extraction_minimal_YYYY-MM-DD/
 │  └─ data/
 │     └─ input.json
 └─ docs/
-   ├─ CAD抽出元と抽出内容_ICAD_DXF_STEP_創屋様向け.pdf
-   ├─ icad_remote_windows_agent_setup_for_souya_2026-07-30.md
-   └─ その他の契約・抽出元・変換手順
+   ├─ CADタグ属性抽出_創屋様向け利用ガイド.pdf
+   ├─ extraction_reference.md
+   ├─ integration_contract.md
+   └─ icad_windows_operations.md
 ```
 
 `manifest.json`には全ファイルの相対パス、サイズ、SHA-256を記録する。
 同名出力先が既に存在する場合、生成スクリプトは上書きせず停止する。
 PDFは本文監査に加え、全ページを画像化して文字切れ・重なり・社内情報・顧客固有情報がないことを目視確認する。編集元PPTXは中間物であり、配布しない。
+
+READMEとMarkdown技術文書は生成時に社内文書から変換しない。受領者向け専用原稿を固定の許可リストでコピーし、
+`リポジトリ`、`Git履歴`、`生成スクリプト`、`受入確認`等の内部工程表現を監査で拒否する。
 
 ## 4. Python単独実行
 
@@ -206,8 +209,8 @@ result = process_extraction(
 | `icad-tag-extraction-result.v1.schema.json` | Python処理結果全体 |
 
 SchemaはJSON Schema Draft 2020-12である。
-元リポジトリの`scripts/generate_tag_extraction_schemas.py --check`により、`Models.cs`とPython canonicalキーからの
-生成結果が保存済みSchemaと一致するか確認する。最小パッケージでは生成済みSchemaと配布専用テストを正とする。
+社内生成工程では`scripts/generate_tag_extraction_schemas.py --check`により、`Models.cs`とPython canonicalキーからの
+生成結果が保存済みSchemaと一致するか確認する。配布パッケージでは生成済みSchemaと配布専用テストを利用する。
 
 ## 8. C#実行とICAD→DXF/STEP変換
 
@@ -263,12 +266,11 @@ python -m pytest ".\tests\python"
 
 このテストはDjangoを読み込まないこと、JSON Schema自体の妥当性、C# 2D/3D入力例の妥当性、同梱済み期待結果との完全一致を確認する。
 
-当社リポジトリで再生成する場合のコマンド:
+社内で再生成する場合は、受領者向け専用MarkdownからPDFとパッケージを同時に作る。
 
 ```powershell
-<pypdfを利用できる生成用Python> ".\scripts\build_souya_tag_extraction_package.py" `
-  --output ".\output\souya_tag_extraction_minimal_YYYY-MM-DD" `
-  --guide-pdf ".\output\pdf\<外部共有安全版PDF>"
+<reportlabとpypdfを利用できる生成用Python> ".\scripts\prepare_souya_tag_extraction_handoff.py" `
+  --output ".\output\souya_tag_extraction_minimal_YYYY-MM-DD"
 ```
 
 受領済みパッケージ内には生成スクリプトを含めない。創屋様は`manifest.json`を検証し、同梱ソースを組み込む。
