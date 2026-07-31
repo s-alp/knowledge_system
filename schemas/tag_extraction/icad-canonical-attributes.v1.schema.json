@@ -868,6 +868,9 @@
     "surface_treatment_tokens": {
       "type": "array"
     },
+    "paint_instruction_tokens": {
+      "type": "array"
+    },
     "geometry_feature_candidates": {
       "type": "array"
     },
@@ -1103,6 +1106,7 @@
     "balloon_candidates",
     "balloon_candidate_count",
     "surface_treatment_tokens",
+    "paint_instruction_tokens",
     "geometry_feature_candidates",
     "view_reference_candidates",
     "view_reference_candidate_count",

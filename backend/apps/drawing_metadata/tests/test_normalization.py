@@ -13,6 +13,123 @@ from apps.drawing_metadata.services.normalization import normalize_raw_extract
 from apps.drawing_metadata.services.tag_builder import build_derived_tags
 
 
+def test_equipment_category_does_not_treat_assembly_drawing_as_assembly_equipment():
+    """図面種別の「組立図」より、名称中の実体である「シュート」を優先する。"""
+
+    chute = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["品名：シュート中間部(SYN内) 組立図"],
+                        "inside_print_area": True,
+                    }
+                ]
+            },
+        }
+    )
+    assembly_machine = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "raw_extract": {
+                "texts": [
+                    {
+                        "text_lines": ["装置名：組立装置"],
+                        "inside_print_area": True,
+                    }
+                ]
+            },
+        }
+    )
+
+    assert chute["equipment_category"] == "シュート"
+    assert assembly_machine["equipment_category"] == "組立装置"
+
+
+def test_equipment_category_prioritizes_top_level_business_name_over_child_parts():
+    """最上位のUser_WBHNAを、子部品名のカテゴリ語より先に判定する。"""
+
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "3d",
+            "raw_extract": {
+                "parts": [
+                    {
+                        "tree_path": ["47323200X40c"],
+                        "name": "47323200X40c",
+                        "depth": 0,
+                        "ex_info_fields": {
+                            "User_WBHNA": "シュート中間部(SYN内) 組立図",
+                        },
+                    },
+                    {
+                        "tree_path": ["47323200X40c", "471236315510"],
+                        "name": "471236315510",
+                        "depth": 1,
+                        "ex_info_fields": {
+                            "User_WBHNA": "アーム",
+                        },
+                    },
+                ]
+            },
+        }
+    )
+
+    assert canonical["equipment_category"] == "シュート"
+
+
+def test_paint_instruction_rejects_split_label_fragment_and_uses_explicit_ntc_code():
+    """分割された英語見出しのORを捨て、図面に明記されたKS7だけを塗装値にする。"""
+
+    canonical = normalize_raw_extract(
+        {
+            "source_format": "icad",
+            "source_kind": "2d",
+            "raw_extract": {
+                "texts": [
+                    {"text_lines": ["ＰＡＩＮＴ　ＯＲ"], "inside_print_area": True},
+                    {"text_lines": ["ＰＯＲＴＩＯＮ"], "inside_print_area": True},
+                    {"text_lines": ["ＫＳ７"], "inside_print_area": True},
+                ]
+            },
+        }
+    )
+    tags = build_derived_tags(canonical)
+
+    assert "coating_instruction" not in canonical["title_block_fields"]
+    assert canonical["paint_instruction_tokens"] == ["KS7"]
+    assert canonical["paint"] == "KS7"
+    assert any(tag["tag"] == "塗装:KS7" for tag in tags)
+    assert all(tag["tag"] != "塗装:OR" for tag in tags)
+
+
+def test_paint_instruction_recognizes_machine_paint_terms_without_guessing():
+    """NTCで使う塗装呼称は、図面にその文字がある場合だけ候補として採用する。"""
+
+    for raw_value, expected in (
+        ("マシン塗装色", "マシン塗装色"),
+        ("ＭＣ塗装色", "MC塗装色"),
+    ):
+        canonical = normalize_raw_extract(
+            {
+                "source_format": "icad",
+                "source_kind": "2d",
+                "raw_extract": {
+                    "texts": [
+                        {"text_lines": [raw_value], "inside_print_area": True},
+                    ]
+                },
+            }
+        )
+
+        assert canonical["paint_instruction_tokens"] == [expected]
+        assert canonical["paint"] == expected
+
+
 def test_normalize_3d_raw_extract():
     payload = {
         "source_format": "icad",

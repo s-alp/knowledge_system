@@ -106,6 +106,7 @@ TITLE_BLOCK_LABEL_FRAGMENT_VALUES = {
 DRAWING_NUMBER_NOISE_VALUES = {"組", "クミ", "くみ"}
 DRAWING_NUMBER_NOISE_COMPACT_VALUES = {"cad"}
 DRAWING_NUMBER_REFERENCE_KEYWORDS = ("参考", "元図", "参照", "参照組立号")
+ICAD_BUSINESS_NAME_FIELD_KEYS = {"user_wbhna"}
 FILE_EXTENSION_FRAGMENT_PATTERN = re.compile(r"\.[a-z0-9]{1,5}", re.IGNORECASE)
 DRAWING_SIZE_SUFFIX_PATTERN = re.compile(r"(?P<body>.+?)(?:[_\s-]+A[0-4])$", re.IGNORECASE)
 DRAWING_NUMBER_CODE_SEGMENT_PATTERN = re.compile(r"(?=.*\d)[A-Z0-9][A-Z0-9.-]{2,}[A-Z0-9]", re.IGNORECASE)
@@ -237,6 +238,12 @@ _SCALE_RATIO_TOKEN_RE = re.compile(
 )
 _SCALE_LABEL_HINT_RE = re.compile(r"scale|尺度|縮尺|^s\s*[=＝:：]", re.IGNORECASE)
 
+# NTC図面で塗装仕様として使われるKS番号を、一般の英数字や図番から分離して拾う。
+# 図枠の「PAINT OR」「PORTION」のような分割見出しは対象にせず、仕様値そのものだけを採用する。
+_PAINT_KS_CODE_RE = re.compile(r"(?<![A-Z0-9])KS\s*[-－]?\s*([0-9]{1,3})(?![A-Z0-9])", re.IGNORECASE)
+_PAINT_INSTRUCTION_PHRASES = ("マシン塗装色", "MC塗装色", "マシン塗装", "MC塗装")
+_PAINT_LABEL_FRAGMENT_VALUES = {"OR", "PORTION", "マシン", "MC"}
+
 # 硬度指定(例: HRC58, HRC58-62, Hv500, HB230)
 _HARDNESS_SPEC_RE = re.compile(
     r"(?<![A-Z0-9])(?:HRC|HRB|HRA|HV|HBW|HB|HS)\s*[0-9]{1,4}"
@@ -348,6 +355,27 @@ def _extract_scale_candidates(tokens: Iterable[str]) -> list[dict]:
             "source": "2d_text_scale_pattern",
         }
     return list(candidates.values())
+
+
+def _extract_paint_instruction_tokens(tokens: Iterable[str]) -> list[str]:
+    """図面内に単独で記載された、誤認しにくい塗装仕様だけを抽出する。
+
+    ICADでは英語の図枠見出しが複数文字要素へ分割されることがあるため、
+    座標だけで見出しと値を結合しない。KS番号や「マシン塗装色」のように、
+    文字列自体が塗装仕様だと判別できる値は、図枠欄とは別の根拠として保持する。
+    """
+
+    values: list[str] = []
+    for token in _flatten_strings(tokens):
+        normalized = unicodedata.normalize("NFKC", token).strip()
+        for matched in _PAINT_KS_CODE_RE.finditer(normalized):
+            values.append(f"KS{matched.group(1)}")
+        normalized_for_match = _normalize_for_match(normalized)
+        for phrase in _PAINT_INSTRUCTION_PHRASES:
+            if _normalize_for_match(phrase) in normalized_for_match:
+                values.append(phrase)
+                break
+    return _merge_unique(values)
 
 
 def _heat_treatment_rules(mapping: dict[str, list[str]]) -> list[tuple[str, str, str]]:
@@ -752,8 +780,13 @@ def _is_field_value_usable(field: str, value: str | None, evidence_text: str) ->
     if field in {"date", "created_date", "checked_date", "approved_date", "revision_date"}:
         if not DATE_VALUE_PATTERN.search(normalized_value):
             return False
-    if field == "coating_instruction" and "仕上げ面不可" in normalized_value:
-        return False
+    if field == "coating_instruction":
+        if "仕上げ面不可" in normalized_value:
+            return False
+        # 「PAINT OR」「PORTION」が別文字に分割された図枠では、ORは塗装値ではなく見出しの断片。
+        # 「マシン塗装色」からラベルだけを除いた「マシン」「MC」も仕様値として確定しない。
+        if normalized_value.upper() in _PAINT_LABEL_FRAGMENT_VALUES:
+            return False
     return True
 
 
@@ -2079,6 +2112,7 @@ def normalize_raw_extract(
         "balloon_candidates": [],
         "balloon_candidate_count": 0,
         "surface_treatment_tokens": [],
+        "paint_instruction_tokens": [],
         "geometry_feature_candidates": [],
         "view_reference_candidates": [],
         "view_reference_candidate_count": 0,
@@ -2111,6 +2145,7 @@ def normalize_raw_extract(
         "issue_keywords": [],
         "normalizer_version": config.normalizer_version,
     }
+    equipment_category_priority_tokens: list[str] = []
 
     if source_kind == "3d":
         # 3Dではパーツツリーを中心に、材質・質量・外部参照・付加情報を対象別候補へ展開する。
@@ -2235,6 +2270,14 @@ def normalize_raw_extract(
         ]
         if not top_level_parts and internal_parts:
             top_level_parts = [internal_parts[0]]
+        # ICADのUser_WBHNAは部品ツリー名ではなく、設計者が登録した業務名称。
+        # 子部品の「アーム」等より最上位の業務名称を先に装置カテゴリ判定へ使う。
+        equipment_category_priority_tokens = _flatten_strings(
+            field_value
+            for part in top_level_parts
+            for field_key, field_value in (part.get("ex_info_fields") or {}).items()
+            if _normalize_for_match(str(field_key)) in ICAD_BUSINESS_NAME_FIELD_KEYS
+        )
         top_level_identity_tokens = _flatten_strings(
             [
                 top_part.get("comment"),
@@ -2609,6 +2652,11 @@ def normalize_raw_extract(
             )
         if title_fields.get("surface_treatment"):
             canonical["surface_treatment_tokens"] = [title_fields["surface_treatment"]]
+        # 図枠見出しと値が別文字要素でも、KS番号など文字列単体で意味が確定する塗装仕様は採用する。
+        # 候補が複数ある場合は代表値を推測せず、一覧候補だけを保持してpaintは確定しない。
+        canonical["paint_instruction_tokens"] = _extract_paint_instruction_tokens(trusted_text_tokens)
+        if not canonical.get("paint") and len(canonical["paint_instruction_tokens"]) == 1:
+            canonical["paint"] = canonical["paint_instruction_tokens"][0]
         part_name_tokens = _flatten_strings(
             [
                 *trusted_text_tokens,
@@ -2689,8 +2737,24 @@ def normalize_raw_extract(
     # 最後に2D/3D共通の検索語へ辞書を適用し、業務上の客先・案件・装置カテゴリを確定する。
     # 辞書はDB(GUI編集)を正とし、未登録種別は seed へフォールバックする。
     customer_name = _match_dictionary(canonical["part_keywords"], dictionary_mappings[KIND_CUSTOMER])
+    equipment_identity_tokens = _flatten_strings(
+        [
+            canonical.get("equipment_name"),
+            canonical.get("unit_name"),
+            canonical.get("product_name"),
+            canonical.get("drawing_name"),
+            canonical.get("part_name"),
+            *equipment_category_priority_tokens,
+        ]
+    )
+    # 装置カテゴリは名称欄・最上位業務名称を先に判定する。図面全体には子部品名も含まれるため、
+    # 全検索語を先に使うと「シュート」内の1部品である「アーム」へ誤分類される。
     equipment_category = _match_dictionary(
-        canonical["part_keywords"], dictionary_mappings[KIND_EQUIPMENT_CATEGORY]
+        equipment_identity_tokens,
+        dictionary_mappings[KIND_EQUIPMENT_CATEGORY],
+    ) or _match_dictionary(
+        canonical["part_keywords"],
+        dictionary_mappings[KIND_EQUIPMENT_CATEGORY],
     )
     project_name = _match_dictionary(canonical["part_keywords"], dictionary_mappings[KIND_PROJECT])
 

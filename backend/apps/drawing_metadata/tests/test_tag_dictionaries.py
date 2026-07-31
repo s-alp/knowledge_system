@@ -85,6 +85,11 @@ def test_seed_command_then_gui_edit_flow():
     assert TagDictionaryEntry.objects.filter(
         kind=TagDictionaryEntry.KIND_PART_NAME, canonical_value="JIG"
     ).exists()
+    assembly_equipment = TagDictionaryEntry.objects.get(
+        kind=TagDictionaryEntry.KIND_EQUIPMENT_CATEGORY,
+        canonical_value="組立装置",
+    )
+    assert "組立" not in assembly_equipment.aliases_json
     first_count = TagDictionaryEntry.objects.count()
     call_command("seed_tag_dictionaries")
     assert TagDictionaryEntry.objects.count() == first_count
