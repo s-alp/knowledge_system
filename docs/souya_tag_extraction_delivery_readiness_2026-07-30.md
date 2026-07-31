@@ -1,6 +1,6 @@
 # 創屋向け CADタグ・属性抽出 実装・受入チェックリスト
 
-- 基準日: 2026-07-30
+- 基準日: 2026-07-31
 - 対象: 創屋向け最小ソースパッケージ
 - 目的: C#、Python、Docker、ICAD→DXF/STEP変換、辞書、タグ付けを、創屋様が資料とソースコメントから実装・検証できる状態にする
 - 説明資料: PPTXではなく、外部共有監査と全ページ目視確認を通したPDFを同梱する
@@ -33,7 +33,7 @@
 | Docker実行 | `docker/`、入力JSON、辞書JSON | 処理結果JSON | compose構成成功、CLI正常終了 |
 | 創屋様側adapter実装 | 処理結果JSON | 創屋様DB/APIの保存データ | 後述の接続契約を満たす |
 
-客先名・案件名は配布版に入っていません。承認済みの運用値を創屋様のDBまたは辞書JSONから注入してください。
+配布承認済みの客先辞書3件と顧客固有規格`SES`は初期辞書に含まれます。案件辞書は空です。同梱値以外の運用値は、共有範囲の承認後に創屋様のDBまたは辞書JSONから注入してください。
 
 ## 3. 推奨する実装順序
 
@@ -88,7 +88,7 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | 認証・権限 | API認証、Windows agent token、サービスアカウント | 固定tokenの埋め込み |
 | ICAD実行環境 | ICAD/SXNET版、ライセンス、同時実行数 | 本番一括処理 |
 | ネットワーク | agent URL、許可host、Firewall、UNC権限 | ポート公開 |
-| 運用辞書 | 客先・案件・別名、登録責任者、更新手順 | 実顧客値のseed化 |
+| 運用辞書 | 客先・案件・別名、登録責任者、更新手順 | 配布承認されていない実値のseed化 |
 | ジョブ運用 | timeout、retry、再実行、監視、障害通知 | エラー握り潰し |
 | 手動補正 | 自動再抽出との優先順位、監査履歴 | 自動結果で上書き |
 | RAG連携 | payload項目、投入時点、削除・再索引 | RAG本番投入 |
@@ -120,7 +120,7 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 
 ## 6. 当社生成環境での最終確認結果
 
-2026-07-30に、外部共有安全版の生成元と配布パッケージで次を確認しました。
+2026-07-31に、辞書配布許可を反映した生成元と配布パッケージで次を確認しました。
 
 | 確認項目 | 結果 |
 |---|---|
@@ -132,14 +132,15 @@ result = process_extraction(raw_payload, dictionary_provider=provider)
 | 初心者向けソースコメント監査 | 291ファイル合格 |
 | 配布専用Pythonテスト | 2件合格 |
 | ZIP受領シミュレーション | 新規フォルダへ展開し、manifest再検証に合格 |
-| クリーンPython導入 | 新規venvへインストールし、2D/3D CLI出力が同梱期待JSONと完全一致 |
+| クリーンPython導入 | Python 3.11.9と3.12.10の新規venvへそれぞれインストールし、2D/3D CLI出力が同梱期待JSONと完全一致 |
+| 初期辞書 | 客先3件、案件0件、規格7件（SES含む）を同梱 |
 | クリーンC#導入 | ZIP内ソリューションだけでrestore・ビルド・41件のテストに合格 |
 | PowerShellスクリプト | ICAD変換・Agent起動の2ファイルとも構文エラー0件 |
 | Docker Compose構成確認 | 合格 |
 | Docker image build | 合格 |
 | Dockerコンテナ実行 | 同梱サンプル入力から`docker/data/output.json`を生成し、期待JSONと意味的に一致 |
 | PDF | 14ページの本文監査と全ページ目視確認に合格 |
-| 外部共有監査 | 社内パス、実顧客・実案件、実図面名、実測件数、顧客固有seedの検出0件 |
+| 外部共有監査 | 配布承認済み初期辞書を許可し、それ以外の社内パス、実図面名、実測件数、配布対象外情報の検出0件 |
 | manifest | 77ファイルの集合、サイズ、SHA-256が一致 |
 | 配布対象外生成物 | `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、Django `apps`、顧客資料の混入0件 |
 

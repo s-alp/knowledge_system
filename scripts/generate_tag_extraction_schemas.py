@@ -5,7 +5,7 @@
 - Pythonのcanonical全キーとderived tagの型を機械可読Schemaとして固定する。
 
 前提:
-- Python 3.12
+- Python 3.11以上
 - `backend`配下の`icad_tag_extraction`をimportできること
 
 失敗時:

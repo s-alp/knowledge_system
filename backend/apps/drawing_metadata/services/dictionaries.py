@@ -1,6 +1,6 @@
-"""Django DB辞書と社内seedを、外部共有可能な独立Pythonコアへ接続する。
+"""Django DB辞書と初期辞書を、Django非依存の独立Pythonコアへ接続する。
 
-DBに有効行がある場合はその値を正とし、未登録の種別だけ社内seedを使用する。
+DBに有効行がある場合はその値を正とし、未登録の種別だけ共通seedを使用する。
 接続失敗や未対応設定は握り潰さず、呼び出し元へ明示的に送出する。
 """
 
@@ -9,10 +9,6 @@ from __future__ import annotations
 from django.conf import settings
 
 from apps.drawing_metadata.models import TagDictionaryEntry
-from apps.drawing_metadata.services.internal_seed_dictionaries import (
-    INTERNAL_CUSTOMER_KEYWORDS,
-    INTERNAL_SPEC_KEYWORDS,
-)
 from icad_tag_extraction.dictionary_provider import (
     DictionaryProvider,
     KIND_CUSTOMER,
@@ -22,23 +18,13 @@ from icad_tag_extraction.dictionary_provider import (
     KIND_PART_NAME,
     KIND_PROJECT,
     KIND_SPEC,
-    MappingDictionaryProvider,
     SEED_DICTIONARIES,
+    SeedDictionaryProvider,
     normalize_dictionary_mapping,
 )
 
-# 独立コアは外部共有可能な一般辞書だけを持つ。当社内の客先seedはDjango adapterで合成し、
-# 管理コマンド・DB未投入時の双方で既存の社内挙動を維持する。
-KIND_TO_SEED = {
-    kind: (
-        {canonical: list(aliases) for canonical, aliases in INTERNAL_CUSTOMER_KEYWORDS.items()}
-        if kind == KIND_CUSTOMER
-        else {canonical: list(aliases) for canonical, aliases in INTERNAL_SPEC_KEYWORDS.items()}
-        if kind == KIND_SPEC
-        else {canonical: list(aliases) for canonical, aliases in mapping.items()}
-    )
-    for kind, mapping in SEED_DICTIONARIES.items()
-}
+# 既存のseed登録管理コマンドが参照する公開名。値の正本は独立コアに置く。
+KIND_TO_SEED = SEED_DICTIONARIES
 
 
 _MODEL_KIND_BY_CORE_KIND = {
@@ -60,7 +46,7 @@ class DjangoDictionaryProvider:
     """
 
     def __init__(self) -> None:
-        self._seed_provider = MappingDictionaryProvider(KIND_TO_SEED)
+        self._seed_provider = SeedDictionaryProvider()
 
     def get_mapping(self, kind: str) -> dict[str, list[str]]:
         model_kind = _MODEL_KIND_BY_CORE_KIND.get(kind)
@@ -91,7 +77,7 @@ def get_dictionary_provider() -> DictionaryProvider:
     if source == "database":
         return DjangoDictionaryProvider()
     if source == "seed":
-        return MappingDictionaryProvider(KIND_TO_SEED)
+        return SeedDictionaryProvider()
     raise ValueError(f"未対応のDRAWING_METADATA_DICTIONARY_SOURCEです: {source}")
 
 

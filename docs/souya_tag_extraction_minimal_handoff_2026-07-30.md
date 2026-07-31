@@ -2,6 +2,7 @@
 
 - 文書状態: **現行最小パッケージ仕様**
 - 基準日: 2026-07-30
+- 最終更新日: 2026-07-31
 - 対象:
   - `src/IcadExtraction.*`
   - `backend/icad_tag_extraction`
@@ -26,9 +27,10 @@ Django adapterは本リポジトリ内で現行挙動の同等性を確認する
 
 - 創屋様へ渡す対象は、生成後に外部共有監査を通した最小パッケージと、そのZIPだけである。説明資料はPPTXではなく、監査・目視確認済みPDFをパッケージ内へ同梱する。
 - 本リポジトリ全体、Git履歴、`backend/apps`、`output`配下の内部監査結果、顧客原本は渡さない。
-- 配布版の客先辞書・案件辞書は空であり、実顧客名、実案件名、個人名、社内ドライブ、実図面名、実測値を含めない。
+- 配布承認済みの客先辞書3件と顧客固有規格`SES`を`initial-dictionaries.json`へ同梱する。案件辞書は現行seedに初期値がないため空である。
+- 辞書以外の文書・PDF・サンプルには、個人名、社内ドライブ、実図面名、実測値を含めない。
 - 例示値は`顧客A`、`SAMPLE-*`、`C:\sample`等の架空値に限定する。
-- 創屋様で使用する運用辞書は、共有範囲の承認後に創屋様のDBまたは辞書JSONから注入する。
+- 同梱値以外の運用辞書は、共有範囲の承認後に創屋様のDBまたは辞書JSONから注入する。
 
 ## 2. 責務境界
 
@@ -60,7 +62,7 @@ canonical_attributes + derived_tags
 ## 3. 最小パッケージ構成
 
 ```text
-souya_tag_extraction_minimal_2026-07-30/
+souya_tag_extraction_minimal_YYYY-MM-DD/
 ├─ README.md
 ├─ manifest.json
 ├─ csharp/
@@ -102,7 +104,7 @@ PDFは本文監査に加え、全ページを画像化して文字切れ・重�
 
 ### 4.1 前提
 
-- Python 3.12
+- Python 3.11以上
 - Django不要
 - STEP/DXF解析、正規化、タグ生成のruntime外部依存なし
 
@@ -190,7 +192,7 @@ result = process_extraction(
 }
 ```
 
-上記は辞書形式を示す架空例であり、同梱`initial-dictionaries.json`の`customer`と`project`は空である。
+上記は辞書形式を示す架空例である。同梱`initial-dictionaries.json`には配布承認済みの`customer`3件と顧客固有規格`SES`を含み、`project`は現行seedに初期値がないため空である。
 不明な辞書種別、空の正規名、文字列配列でない別名はエラーにする。
 辞書ファイルの不存在・不正をseedへ自動フォールバックしない。
 
@@ -261,11 +263,15 @@ python -m pytest ".\tests\python"
 
 このテストはDjangoを読み込まないこと、JSON Schema自体の妥当性、C# 2D/3D入力例の妥当性、同梱済み期待結果との完全一致を確認する。
 
-生成コマンド:
+当社リポジトリで再生成する場合のコマンド:
 
 ```powershell
-python ".\scripts\build_souya_tag_extraction_package.py"
+<pypdfを利用できる生成用Python> ".\scripts\build_souya_tag_extraction_package.py" `
+  --output ".\output\souya_tag_extraction_minimal_YYYY-MM-DD" `
+  --guide-pdf ".\output\pdf\<外部共有安全版PDF>"
 ```
+
+受領済みパッケージ内には生成スクリプトを含めない。創屋様は`manifest.json`を検証し、同梱ソースを組み込む。
 
 ## 11. 既知の境界
 
@@ -274,4 +280,4 @@ python ".\scripts\build_souya_tag_extraction_package.py"
 - 別PC Windows agentは実装上対応するが、創屋ネットワークでの実機疎通は受入確認が必要である。
 - DockerはPython側だけを対象とする。
 - 手動補正、2D/3D合成、レビュー画面、RAG payloadは最小パッケージの対象外である。
-- 客先・案件の運用値は創屋側で追加・管理し、同梱seedには実顧客・実案件を含めない。
+- 配布承認済みの客先辞書3件と顧客固有規格`SES`は同梱seedに含む。案件辞書と追加の運用値は創屋側で管理する。

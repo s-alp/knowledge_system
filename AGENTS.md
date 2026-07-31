@@ -127,6 +127,7 @@
 - 実装は「後で創屋側本体へ移植しやすい独立モジュール」を前提に維持する。
 - ICAD ネイティブ抽出コアは `C# + SXNET` で実装済みである。
 - 正規化、辞書照合、タグ生成、STEP/DXF汎用抽出は `backend\icad_tag_extraction` のDjango非依存Pythonコアを正本とする。
+- 創屋向け独立Pythonコアの正式対応範囲はPython 3.11以上とし、配布Docker例も`python:3.11-slim`を基準にする。
 - Djangoのservice / task層は、DB辞書、保存、非同期ジョブ、手動補正、RAG previewを独立Pythonコアへ接続するadapterである。
 - C# raw抽出、canonical属性、derived tags、Python処理結果の境界は `schemas\tag_extraction` のJSON Schemaを正本とする。
 - ICAD抽出は `1図面 = 1回呼び出し` の一括実行を原則とし、Docker/Linux WebとWindows agentをHTTPで分離できる。
@@ -181,7 +182,7 @@ backend\.venv\Scripts\python.exe scripts\generate_tag_extraction_schemas.py --ch
 リポジトリルートで次を順に実行し、すべて成功させる。
 
 ```powershell
-backend\.venv\Scripts\python.exe -m pytest
+backend\.venv\Scripts\python.exe -m pytest -c backend\pytest.ini --basetemp=backend\tmp\pytest_run backend
 backend\.venv\Scripts\python.exe backend\manage.py check
 dotnet test tests\IcadExtraction.Contracts.Tests\IcadExtraction.Contracts.Tests.csproj -c Release --no-restore
 dotnet test tests\IcadExtraction.Runner.Tests\IcadExtraction.Runner.Tests.csproj -c Release --no-restore
@@ -212,7 +213,7 @@ git diff --check
 
 生成対象は、C#抽出器とテスト、Django非依存Pythonコア、JSON Schema、初期辞書、2D/3D例、ICAD→DXF/STEP変換スクリプト、Docker例、引き渡し文書、外部共有安全版PDFである。Djangoモデル、DB、API、UI、RAG、顧客原本は含めない。
 
-生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行し、社内パス、実顧客・実案件、実図面名、実測件数、顧客固有規格seed、配布対象外ディレクトリの混入を拒否する。客先辞書と案件辞書は配布版で空でなければならない。
+生成スクリプトはmanifestとZIPを作る前に`scripts\audit_souya_handoff_content.py`を実行する。配布承認済みの客先・案件・規格値は`dictionaries\initial-dictionaries.json`内だけ許可し、それ以外の文書・PDF・サンプルに混入した社内パス、実図面名、実測件数、配布対象外ディレクトリは拒否する。辞書JSONは全7種別がobjectであることを必須とし、案件辞書は現行seedに値がないため0件である。
 
 ### 6. 生成後の受入確認
 1. `manifest.json`と実ファイルの集合、サイズ、SHA-256が一致することを確認する。

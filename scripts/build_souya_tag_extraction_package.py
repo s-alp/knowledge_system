@@ -81,7 +81,7 @@ build-backend = "setuptools.build_meta"
 name = "icad-tag-extraction"
 version = "1.1.0"
 description = "ICAD/STEP/DXF raw metadata normalization and evidence-backed tag generation"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]
@@ -94,7 +94,7 @@ include = ["icad_tag_extraction*"]
 
 
 def _dockerfile() -> str:
-    return """FROM python:3.12-slim
+    return """FROM python:3.11-slim
 
 WORKDIR /app
 COPY python /app/python
@@ -303,7 +303,7 @@ def build_package(
         ROOT / "examples" / "tag_extraction_contract" / "csharp_raw_2d.v1.json",
         output_dir / "docker" / "data" / "input.json",
     )
-    # manifestとZIPを作る前に、PDFを含めて社内パス・実顧客値・運用辞書の混入を拒否する。
+    # 承認済み初期辞書は許可する一方、文書・PDF・サンプルへの社内情報混入は生成前に拒否する。
     assert_external_handoff_safe(output_dir, pdfs=copied_guide_pdf)
     _write_json(output_dir / "manifest.json", _manifest(output_dir))
     validate_package(output_dir)

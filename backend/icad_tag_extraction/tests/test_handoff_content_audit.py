@@ -58,10 +58,10 @@ def test_external_handoff_audit_accepts_synthetic_package(tmp_path: Path) -> Non
     assert audit_external_handoff(tmp_path) == []
 
 
-def test_external_handoff_audit_rejects_internal_path_and_customer_seed(
+def test_external_handoff_audit_accepts_distributed_dictionary_but_rejects_internal_path(
     tmp_path: Path,
 ) -> None:
-    _write_dictionary(tmp_path, {"実顧客A": ["customer-a"]})
+    _write_dictionary(tmp_path, {"配布承認済み顧客": ["customer-a"]})
     (tmp_path / "README.md").write_text(
         "社内パス J:\\project\\drawing.icd",
         encoding="utf-8",
@@ -70,5 +70,4 @@ def test_external_handoff_audit_rejects_internal_path_and_customer_seed(
     findings = audit_external_handoff(tmp_path)
 
     reasons = {finding.reason for finding in findings}
-    assert "社内ネットワークドライブ" in reasons
-    assert "運用辞書の実値を配布版へ同梱" in reasons
+    assert reasons == {"社内ネットワークドライブ"}

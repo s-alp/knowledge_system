@@ -60,9 +60,22 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
             encoding="utf-8"
         )
     )
-    assert dictionaries["customer"] == {}
+    assert dictionaries["customer"] == {
+        "コマツ小山": ["コマツ小山", "komatsu koyama"],
+        "広島アルミ": ["広島アルミ", "hiroshima alumi"],
+        "澁谷工業": ["澁谷工業", "shibuya"],
+    }
     assert dictionaries["project"] == {}
+    assert dictionaries["spec"]["SES"] == ["SES", "ses"]
     assert not any(path.startswith("python/apps/") for path in manifest_paths)
+    pyproject = (output_dir / "python" / "pyproject.toml").read_text(
+        encoding="utf-8"
+    )
+    dockerfile = (output_dir / "docker" / "Dockerfile").read_text(
+        encoding="utf-8"
+    )
+    assert 'requires-python = ">=3.11"' in pyproject
+    assert dockerfile.startswith("FROM python:3.11-slim\n")
 
     result_path = output_dir / "examples" / "cli_result.json"
     env = os.environ.copy()

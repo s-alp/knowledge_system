@@ -32,6 +32,16 @@ TEXT_SUFFIXES = {
     ".yaml",
     ".yml",
 }
+DICTIONARY_RELATIVE_PATH = "dictionaries/initial-dictionaries.json"
+REQUIRED_DICTIONARY_KINDS = {
+    "customer",
+    "equipment_category",
+    "project",
+    "maker",
+    "spec",
+    "heat_treatment",
+    "part_name",
+}
 
 # 既知の社内検証データを外部向け成果物へ戻さないための拒否語。
 # 本監査スクリプト自体は配布パッケージへ同梱しない。
@@ -113,12 +123,42 @@ def _read_pdf_text(path: Path) -> str:
         raise ValueError(f"PDFを検査できません: {path}") from exc
 
 
-def _scan_text(label: str, text: str) -> list[Finding]:
+def _collect_distributable_dictionary_literals(payload: object) -> set[str]:
+    """配布承認済みの客先・案件・規格辞書から、監査で許可する文字列を集める。"""
+
+    if not isinstance(payload, dict):
+        return set()
+    allowed: set[str] = set()
+    for kind in ("customer", "project", "spec"):
+        mapping = payload.get(kind)
+        if not isinstance(mapping, dict):
+            continue
+        for canonical, aliases in mapping.items():
+            if isinstance(canonical, str):
+                allowed.add(canonical)
+            if isinstance(aliases, list):
+                allowed.update(alias for alias in aliases if isinstance(alias, str))
+    return allowed
+
+
+def _scan_text(
+    label: str,
+    text: str,
+    *,
+    allowed_literals: set[str] | None = None,
+    allowed_pattern_reasons: set[str] | None = None,
+) -> list[Finding]:
+    """本文を検査し、指定された配布辞書値だけを例外として許可する。"""
+
+    allowed_literals = allowed_literals or set()
+    allowed_pattern_reasons = allowed_pattern_reasons or set()
     findings: list[Finding] = []
     for literal in FORBIDDEN_LITERALS:
-        if literal in text:
+        if literal not in allowed_literals and literal in text:
             findings.append(Finding(label, "外部共有禁止語", literal))
     for reason, pattern in FORBIDDEN_PATTERNS:
+        if reason in allowed_pattern_reasons:
+            continue
         match = pattern.search(text)
         if match:
             findings.append(Finding(label, reason, match.group(0)))
@@ -137,11 +177,32 @@ def audit_external_handoff(
     if not root.is_dir():
         raise FileNotFoundError(f"パッケージフォルダがありません: {root}")
 
+    dictionary_path = root / DICTIONARY_RELATIVE_PATH
+    dictionary_payload: object = {}
+    if dictionary_path.is_file():
+        dictionary_payload = json.loads(_read_text(dictionary_path))
+    allowed_dictionary_literals = _collect_distributable_dictionary_literals(
+        dictionary_payload
+    )
+    allowed_dictionary_pattern_reasons = (
+        {"顧客固有規格seed"}
+        if "SES" in allowed_dictionary_literals
+        else set()
+    )
+
     findings: list[Finding] = []
     for path in sorted(root.rglob("*")):
         if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES:
             relative = path.relative_to(root).as_posix()
-            findings.extend(_scan_text(relative, _read_text(path)))
+            text = _read_text(path)
+            findings.extend(
+                _scan_text(
+                    relative,
+                    text,
+                    allowed_literals=allowed_dictionary_literals,
+                    allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+                )
+            )
 
     forbidden_components = {
         "apps",
@@ -161,37 +222,58 @@ def audit_external_handoff(
                 )
             )
 
-    dictionary_path = root / "dictionaries" / "initial-dictionaries.json"
     if not dictionary_path.is_file():
         findings.append(
             Finding(
-                "dictionaries/initial-dictionaries.json",
+                DICTIONARY_RELATIVE_PATH,
                 "必須ファイル欠落",
-                "客先・案件辞書が空であることを確認できません",
+                "初期辞書を監査できません",
             )
         )
     else:
-        payload = json.loads(_read_text(dictionary_path))
-        for kind in ("customer", "project"):
-            if payload.get(kind) != {}:
-                findings.append(
-                    Finding(
-                        "dictionaries/initial-dictionaries.json",
-                        "運用辞書の実値を配布版へ同梱",
-                        kind,
-                    )
+        if not isinstance(dictionary_payload, dict):
+            findings.append(
+                Finding(
+                    DICTIONARY_RELATIVE_PATH,
+                    "辞書形式不正",
+                    "最上位がJSON objectではありません",
                 )
+            )
+        else:
+            for kind in sorted(REQUIRED_DICTIONARY_KINDS):
+                if not isinstance(dictionary_payload.get(kind), dict):
+                    findings.append(
+                        Finding(
+                            DICTIONARY_RELATIVE_PATH,
+                            "辞書形式不正",
+                            f"{kind}がJSON objectではありません",
+                        )
+                    )
 
     for presentation in presentations:
         resolved = presentation.resolve()
         if not resolved.is_file():
             raise FileNotFoundError(f"PPTXがありません: {resolved}")
-        findings.extend(_scan_text(resolved.name, _read_pptx_text(resolved)))
+        findings.extend(
+            _scan_text(
+                resolved.name,
+                _read_pptx_text(resolved),
+                allowed_literals=allowed_dictionary_literals,
+                allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+            )
+        )
     for pdf in pdfs:
         resolved = pdf.resolve()
         if not resolved.is_file():
             raise FileNotFoundError(f"PDFがありません: {resolved}")
-        findings.extend(_scan_text(resolved.name, _read_pdf_text(resolved)))
+        findings.extend(
+            _scan_text(
+                resolved.name,
+                _read_pdf_text(resolved),
+                allowed_literals=allowed_dictionary_literals,
+                allowed_pattern_reasons=allowed_dictionary_pattern_reasons,
+            )
+        )
     return findings
 
 

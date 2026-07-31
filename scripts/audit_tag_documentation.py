@@ -117,7 +117,7 @@ CODE_ASSERTIONS = {
         '".stp": "step"',
         '".dxf": "dxf"',
     ),
-    # 「案件辞書は初期エントリ0件」と各文書に書いているため、seed側の空定義を固定する。
+    # 案件辞書は現行seedに初期値がないため、文書と実装の0件表記を固定する。
     ROOT / "backend/icad_tag_extraction/dictionary_provider.py": (
         "KIND_PROJECT: {}",
     ),
