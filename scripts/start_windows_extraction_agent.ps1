@@ -1,6 +1,30 @@
-# このファイルは、`start_windows_extraction_agent`として必要な環境変数を確認して常駐プロセスを起動する補助スクリプトである。
-# 初めて読むときは、公開されている入口から呼び出し先を順に追う。
-# 外部I/Oや状態変更は境界に寄せ、失敗時は既定値で続行せず呼び出し元へ伝える。
+<#
+.SYNOPSIS
+ICAD抽出ジョブを処理するWindows agentを起動します。
+
+.DESCRIPTION
+接続先、token、Runner、SXNETの設定を検証し、C# Runnerのagentコマンドへ渡します。
+RunnerPathを省略すると、配布パッケージまたはソース一式のpublish先を探します。
+設定不足やファイル不在では起動せず、原因をエラーとして返します。
+
+.PARAMETER ApiBaseUrl
+ジョブAPIのベースURLです。環境変数DRAWING_METADATA_AGENT_API_BASE_URLでも指定できます。
+
+.PARAMETER ApiToken
+Bearer tokenです。環境変数DRAWING_METADATA_AGENT_TOKENでも指定できます。
+
+.PARAMETER Once
+ジョブ取得を1回だけ試して終了します。初回疎通確認に使用します。
+
+.PARAMETER ValidateOnly
+agentを起動せず、必須設定とパスの確認結果だけを表示します。
+
+.EXAMPLE
+pwsh -File .\scripts\start_windows_extraction_agent.ps1 -Once
+
+.EXAMPLE
+pwsh -File .\scripts\start_windows_extraction_agent.ps1 -ValidateOnly
+#>
 [CmdletBinding()]
 param(
     [string]$ApiBaseUrl = $env:DRAWING_METADATA_AGENT_API_BASE_URL,
@@ -16,19 +40,33 @@ param(
     [string]$WorkRoot = $env:DRAWING_METADATA_AGENT_WORK_ROOT,
     [bool]$ShutdownIcadIfAutostarted = $true,
     [switch]$Once,
-    [switch]$KeepWorkFiles
+    [switch]$KeepWorkFiles,
+    [switch]$ValidateOnly
 )
 
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $PSDefaultParameterValues["*:Encoding"] = "utf8"
 
-$repositoryRoot = Split-Path -Parent $PSScriptRoot
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    throw "このスクリプトはPowerShell 7以降で実行してください。"
+}
+
+$packageRoot = Split-Path -Parent $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($RunnerPath)) {
-    $RunnerPath = Join-Path $repositoryRoot "src\IcadExtraction.Runner\bin\Release\net48\IcadExtraction.Runner.exe"
+    $runnerCandidates = @(
+        (Join-Path $packageRoot "csharp\src\IcadExtraction.Runner\bin\Release\net48\publish\IcadExtraction.Runner.exe"),
+        (Join-Path $packageRoot "src\IcadExtraction.Runner\bin\Release\net48\publish\IcadExtraction.Runner.exe")
+    )
+    $RunnerPath = $runnerCandidates |
+        Where-Object { Test-Path -LiteralPath $PSItem -PathType Leaf } |
+        Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($RunnerPath)) {
+        $RunnerPath = $runnerCandidates[0]
+    }
 }
 if ([string]::IsNullOrWhiteSpace($SxNetDllPath)) {
-    $SxNetDllPath = Join-Path $repositoryRoot "sxnet.dll"
+    $SxNetDllPath = Join-Path $packageRoot "sxnet.dll"
 }
 if ([string]::IsNullOrWhiteSpace($WorkerName)) {
     $WorkerName = $env:COMPUTERNAME
@@ -52,6 +90,21 @@ if (-not (Test-Path -LiteralPath $SxNetDllPath -PathType Leaf)) {
 if (-not [string]::IsNullOrWhiteSpace($IcadExecutablePath) -and
     -not (Test-Path -LiteralPath $IcadExecutablePath -PathType Leaf)) {
     throw "icad.exeが見つかりません: $IcadExecutablePath"
+}
+
+if ($ValidateOnly) {
+    Write-Output ([pscustomobject]@{
+        ApiBaseUrl = $ApiBaseUrl
+        WorkerName = $WorkerName
+        Mode = $Mode
+        RunnerPath = [System.IO.Path]::GetFullPath($RunnerPath)
+        SxNetDllPath = [System.IO.Path]::GetFullPath($SxNetDllPath)
+        IcadExecutablePath = $IcadExecutablePath
+        WorkRoot = [System.IO.Path]::GetFullPath($WorkRoot)
+        TokenConfigured = $true
+        ValidationOnly = $true
+    })
+    return
 }
 
 $agentArguments = @(

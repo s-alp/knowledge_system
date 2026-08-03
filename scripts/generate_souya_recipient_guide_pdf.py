@@ -6,7 +6,7 @@
 
 前提:
 - ReportLabを利用できるPythonで実行する。
-- 入力は`handoff/souya_tag_extraction/recipient_docs`配下の固定4文書とする。
+- 入力は`handoff/souya_tag_extraction/recipient_docs`配下の固定5文書とする。
 
 副作用:
 - 指定した新規PDFを1ファイル作成する。
@@ -40,6 +40,7 @@ from reportlab.platypus import (
     TableStyle,
     XPreformatted,
 )
+from pypdf import PdfReader, PdfWriter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,11 +50,56 @@ SOURCE_DOCUMENTS = (
     Path("docs/extraction_reference.md"),
     Path("docs/integration_contract.md"),
     Path("docs/icad_windows_operations.md"),
+    Path("docs/source_code_guide.md"),
 )
 DEFAULT_OUTPUT = ROOT / "output" / "pdf" / "CADタグ属性抽出_創屋様向け利用ガイド.pdf"
 FONT_NAME = "SouyaGuideJapanese"
 PAGE_WIDTH, PAGE_HEIGHT = A4
 CONTENT_WIDTH = PAGE_WIDTH - 36 * mm
+
+
+class _BookmarkedDocTemplate(SimpleDocTemplate):
+    """見出しParagraphをPDFのしおりへ登録する文書テンプレート。"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._bookmark_index = 0
+
+    def afterFlowable(self, flowable) -> None:
+        if not isinstance(flowable, Paragraph):
+            return
+        level_by_style = {
+            "Heading1Japanese": 0,
+            "Heading2Japanese": 1,
+            "Heading3Japanese": 2,
+        }
+        level = level_by_style.get(flowable.style.name)
+        if level is None:
+            return
+        title = flowable.getPlainText().strip()
+        if not title:
+            return
+        self._bookmark_index += 1
+        bookmark_key = f"heading-{self._bookmark_index}"
+        self.canv.bookmarkPage(bookmark_key)
+        self.canv.addOutlineEntry(title, bookmark_key, level=level, closed=False)
+
+
+def _write_unicode_metadata(rendered_path: Path, output_path: Path) -> None:
+    """日本語メタデータとReportLabのしおりを保持して最終PDFを書き出す。"""
+
+    reader = PdfReader(str(rendered_path))
+    writer = PdfWriter()
+    writer.clone_document_from_reader(reader)
+    writer.add_metadata(
+        {
+            "/Title": "CADタグ・属性抽出 利用・組み込みガイド",
+            "/Author": "株式会社アルパイン設計事務所",
+            "/Subject": "ICAD・STEP・DXFの属性抽出とタグ生成",
+        }
+    )
+    with output_path.open("xb") as output:
+        writer.write(output)
 
 
 def _format_inline(text: str) -> str:
@@ -375,7 +421,7 @@ def generate_pdf(
     *,
     document_date: date | None = None,
 ) -> Path:
-    """専用Markdown4文書を読み、既存ファイルを上書きせず配布用PDFを生成する。"""
+    """専用Markdown5文書を読み、既存ファイルを上書きせず配布用PDFを生成する。"""
 
     output_path = output_path.resolve()
     if output_path.exists():
@@ -416,8 +462,12 @@ def generate_pdf(
         if position != len(SOURCE_DOCUMENTS) - 1:
             story.append(PageBreak())
 
-    document = SimpleDocTemplate(
-        str(output_path),
+    rendered_path = output_path.with_name(f"{output_path.stem}.reportlab.tmp.pdf")
+    if rendered_path.exists():
+        raise FileExistsError(f"PDF一時出力先が既に存在します: {rendered_path}")
+
+    document = _BookmarkedDocTemplate(
+        str(rendered_path),
         pagesize=A4,
         rightMargin=18 * mm,
         leftMargin=18 * mm,
@@ -427,11 +477,15 @@ def generate_pdf(
         author="株式会社アルパイン設計事務所",
         subject="ICAD・STEP・DXFの属性抽出とタグ生成",
     )
-    document.build(
-        story,
-        onFirstPage=lambda canvas, doc: None,
-        onLaterPages=_draw_later_page,
-    )
+    try:
+        document.build(
+            story,
+            onFirstPage=lambda canvas, doc: None,
+            onLaterPages=_draw_later_page,
+        )
+        _write_unicode_metadata(rendered_path, output_path)
+    finally:
+        rendered_path.unlink(missing_ok=True)
     if output_path.stat().st_size <= 0:
         raise ValueError(f"PDFが空です: {output_path}")
     return output_path

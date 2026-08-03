@@ -127,7 +127,7 @@ Windows agentのHTTP契約とC#入出力の詳細は [`windows_extraction_agent_
 
 ## 7. canonical属性
 
-全形式で同じ空枠を作り、取得できた値だけを埋める。完全なキー一覧は`backend/icad_tag_extraction/normalization.py`の`normalize_raw_extract()`冒頭の`canonical`辞書と`schemas/tag_extraction/icad-canonical-attributes.v1.schema.json`を正とする。
+全形式で同じ空枠を作り、取得できた値だけを埋める。完全なキー一覧は`backend/icad_tag_extraction/normalization_pipeline.py`の`normalize_raw_extract()`冒頭の`canonical`辞書と`schemas/tag_extraction/icad-canonical-attributes.v1.schema.json`を正とする。`normalization.py`は既存呼び出しを維持する公開入口であり、2D、3D、材質、文字列、規則は責務別モジュールへ分離する。
 
 ### 7.1 識別・業務分類
 

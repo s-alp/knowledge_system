@@ -5,16 +5,20 @@
 from __future__ import annotations
 
 from pathlib import Path
+from datetime import date
 import importlib.util
 import json
 import os
 import subprocess
 import sys
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[3]
 BUILDER_PATH = ROOT / "scripts" / "build_souya_tag_extraction_package.py"
 VERIFIER_PATH = ROOT / "scripts" / "verify_souya_tag_extraction_handoff.py"
+PDF_GENERATOR_PATH = ROOT / "scripts" / "generate_souya_recipient_guide_pdf.py"
 
 
 def _load_builder_module():
@@ -40,6 +44,20 @@ def _load_verifier_module():
     return module
 
 
+def _load_pdf_generator_module():
+    """配布用PDF生成処理を読み込み、メタデータとしおりを直接検証できるようにする。"""
+
+    spec = importlib.util.spec_from_file_location(
+        "generate_souya_recipient_guide_pdf",
+        PDF_GENERATOR_PATH,
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"PDF生成スクリプトを読み込めません: {PDF_GENERATOR_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Path) -> None:
     builder = _load_builder_module()
     output_dir, archive_path = builder.build_package(tmp_path / "handoff")
@@ -52,12 +70,15 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     assert "schemas/icad-csharp-raw-extraction.v1.schema.json" in manifest_paths
     assert "dictionaries/initial-dictionaries.json" in manifest_paths
     assert "tests/python/test_distribution.py" in manifest_paths
+    assert "scripts/extract_icad_standalone.ps1" in manifest_paths
+    assert "scripts/verify_handoff_manifest.ps1" in manifest_paths
     assert "scripts/start_windows_extraction_agent.ps1" in manifest_paths
     assert "docker/data/input.json" in manifest_paths
     assert "README.md" in manifest_paths
     assert "docs/extraction_reference.md" in manifest_paths
     assert "docs/integration_contract.md" in manifest_paths
     assert "docs/icad_windows_operations.md" in manifest_paths
+    assert "docs/source_code_guide.md" in manifest_paths
     assert {
         path
         for path in manifest_paths
@@ -83,6 +104,16 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     assert dictionaries["project"] == {}
     assert dictionaries["spec"]["SES"] == ["SES", "ses"]
     assert not any(path.startswith("python/apps/") for path in manifest_paths)
+    # 1,000行超を機械的な不合格にはしないが、配布コードは責務過多の再発を
+    # レビュー対象にできるよう、現行の分割上限をテストで固定する。
+    distributed_source_paths = sorted(
+        path
+        for path in manifest_paths
+        if Path(path).suffix.lower() in {".py", ".cs", ".ps1"}
+    )
+    for relative_path in distributed_source_paths:
+        line_count = len((output_dir / relative_path).read_text(encoding="utf-8-sig").splitlines())
+        assert line_count < 1000, f"責務分割を確認してください: {relative_path} ({line_count}行)"
     pyproject = (output_dir / "python" / "pyproject.toml").read_text(
         encoding="utf-8"
     )
@@ -105,6 +136,9 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
         "`examples`",
         "`dictionaries`",
         "`manifest.json`",
+        "python -m venv .venv",
+        "python -m icad_tag_extraction",
+        "verify_handoff_manifest.ps1",
     ):
         assert required_navigation in recipient_readme
     extraction_reference = (
@@ -117,6 +151,35 @@ def test_minimal_package_contains_contracts_and_runs_without_django(tmp_path: Pa
     ).read_text(encoding="utf-8")
     assert "結果Schemaは`1.1.0`" in integration_contract
     assert "正規化規則は`1.2.0`" in integration_contract
+    windows_operations = (
+        output_dir / "docs" / "icad_windows_operations.md"
+    ).read_text(encoding="utf-8")
+    assert "extract_icad_standalone.ps1" in windows_operations
+    assert '"workerName"' in windows_operations
+    assert '"extractionMode"' in windows_operations
+    source_code_guide = (
+        output_dir / "docs" / "source_code_guide.md"
+    ).read_text(encoding="utf-8")
+    for module_name in (
+        "normalization.py",
+        "normalization_pipeline.py",
+        "normalization_2d.py",
+        "normalization_2d_sections.py",
+        "normalization_2d_identity.py",
+        "normalization_2d_geometry.py",
+        "normalization_3d.py",
+        "normalization_material.py",
+    ):
+        assert module_name in source_code_guide
+    for script_name in (
+        "convert_icad_standalone.ps1",
+        "extract_icad_standalone.ps1",
+        "start_windows_extraction_agent.ps1",
+        "verify_handoff_manifest.ps1",
+    ):
+        script_text = (output_dir / "scripts" / script_name).read_text(encoding="utf-8-sig")
+        assert ".SYNOPSIS" in script_text
+        assert "csharp\\src\\IcadExtraction.Runner" in script_text or script_name == "verify_handoff_manifest.ps1"
     recipient_markdown = "\n".join(
         (output_dir / path).read_text(encoding="utf-8")
         for path in sorted(manifest_paths)
@@ -185,3 +248,21 @@ def test_final_verifier_compares_exact_zip_without_modifying_package(
         if path.is_file()
     }
     assert after == before
+
+
+def test_recipient_pdf_has_unicode_metadata_and_bookmarks(tmp_path: Path) -> None:
+    """PDF一覧で文字化けせず、章へ移動できるしおりが作られる。"""
+
+    PdfReader = pytest.importorskip("pypdf").PdfReader
+    pytest.importorskip("reportlab")
+
+    generator = _load_pdf_generator_module()
+    pdf_path = generator.generate_pdf(
+        tmp_path / "guide.pdf",
+        document_date=date(2026, 8, 3),
+    )
+    reader = PdfReader(str(pdf_path))
+
+    assert reader.metadata.title == "CADタグ・属性抽出 利用・組み込みガイド"
+    assert reader.metadata.author == "株式会社アルパイン設計事務所"
+    assert len(reader.outline) >= len(generator.SOURCE_DOCUMENTS)

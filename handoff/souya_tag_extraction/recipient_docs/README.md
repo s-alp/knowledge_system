@@ -25,6 +25,7 @@
 | ICADから属性を直接抽出したい | [`docs/icad_windows_operations.md`](docs/icad_windows_operations.md)「必要な環境」「C# Runnerのビルド」「ICADの直接抽出」 | `csharp`、`schemas/icad-csharp-raw-extraction.v1.schema.json` |
 | ICADからDXF／STEPへ変換したい | [`docs/icad_windows_operations.md`](docs/icad_windows_operations.md)「ICADからDXF／STEPへの変換」 | `scripts/convert_icad_standalone.ps1` |
 | Windows agentを接続したい | [`docs/icad_windows_operations.md`](docs/icad_windows_operations.md)「Windows agent」 | `scripts/start_windows_extraction_agent.ps1` |
+| ソースを変更・保守したい | [`docs/source_code_guide.md`](docs/source_code_guide.md) | 対象機能のソース、`tests/python`または`csharp/tests` |
 | 出力JSONをDBやAPIへ保存したい | [`docs/integration_contract.md`](docs/integration_contract.md)「処理結果」「保存時の推奨項目」 | `schemas/icad-tag-extraction-result.v1.schema.json` |
 | ファイルが正しいか確認したい | `manifest.json` | 本README「文書以外の重要なファイル」 |
 | エラーや想定外の結果を調べたい | 本README「問題が起きたときの確認先」 | 症状に対応する技術文書、`examples`、`schemas` |
@@ -37,7 +38,8 @@
 | [`docs/extraction_reference.md`](docs/extraction_reference.md) | 入力形式ごとの抽出元、抽出項目、正規化、タグ付け、取得できない値の扱い | インストール手順、C#のビルド手順、DBやAPIへの保存方法 |
 | [`docs/integration_contract.md`](docs/integration_contract.md) | Python CLI／API、処理結果、JSON Schema、辞書、保存時の推奨項目 | ICADやSXNETの設定、C# Runnerのビルド、Windows agentの運用 |
 | [`docs/icad_windows_operations.md`](docs/icad_windows_operations.md) | C# Runnerのビルド、ICAD抽出、DXF／STEP変換、Windows agent | Python結果のDB保存、タグ辞書の設計、画面やRAGへの接続 |
-| 利用ガイドPDF（同梱PDF） | 本READMEと3つの技術文書を続けて読めるPDF版 | 機械処理用のJSON Schema、実行可能なソース、サンプルJSONの実データ |
+| [`docs/source_code_guide.md`](docs/source_code_guide.md) | 機能別の変更箇所、Python正規化の分担、C#の読み進め方 | 各関数の全仕様、ICAD環境の設定値、DBやAPIの実装 |
+| 利用ガイドPDF（同梱PDF） | 本READMEと4つの技術文書を続けて読めるPDF版 | 機械処理用のJSON Schema、実行可能なソース、サンプルJSONの実データ |
 
 JSONの正確なキー、型、必須条件はPDFや説明文ではなく、`schemas`内のJSON Schemaで確認してください。
 
@@ -65,7 +67,7 @@ JSONの正確なキー、型、必須条件はPDFや説明文ではなく、`sch
 | `dictionaries` | タグ語彙や別名を確認・変更するとき | 7種別、正規名、別名、JSON形式 |
 | `tests/python` | 環境構築後、Python処理を変更した後 | Djangoなしで2D／3Dの期待結果と一致するか |
 | `csharp` | ICAD抽出器をビルド・変更するとき | Runner、SXNET連携、C#単体テスト |
-| `scripts` | ICAD変換またはWindows agentを実行するとき | PowerShellスクリプトの必須引数と実行結果 |
+| `scripts` | manifest確認、ICAD抽出・変換、Windows agentを実行するとき | `Get-Help`で必須引数と例、`-ValidateOnly`で設定結果 |
 | `docker` | Python処理をコンテナで確認するとき | 入力ファイル、辞書、出力先、Python 3.11環境 |
 
 ### 1.6 問題が起きたときの確認先
@@ -78,7 +80,7 @@ JSONの正確なキー、型、必須条件はPDFや説明文ではなく、`sch
 | タグが付かない、別のタグになる | `docs/extraction_reference.md`「タグ付け」、`docs/integration_contract.md`「辞書」、`dictionaries` | 辞書種別、正規名、別名、`evidence`、`confidence`、`reason` |
 | ICAD抽出やDXF／STEP変換に失敗する | `docs/icad_windows_operations.md`「必要な環境」から「ICADの直接抽出」 | ICAD版と`sxnet.dll`、Runnerのパス、`-ValidateOnly`、標準エラー |
 | Windows agentが接続できない | `docs/icad_windows_operations.md`「Windows agent」「Windows agentのHTTP契約」 | URL、token、worker名、heartbeat、接続先API |
-| ファイルが不足している、変更された可能性がある | `manifest.json` | 相対パス、サイズ、SHA-256 |
+| ファイルが不足している、変更された可能性がある | `scripts/verify_handoff_manifest.ps1`、`manifest.json` | 不足、追加、サイズ、SHA-256 |
 
 エラーを確認するときは、処理を成功扱いにして続行せず、終了コード、標準エラー、出力JSONの`warnings`を保存してください。
 
@@ -133,11 +135,25 @@ ICADから取得できる項目と、STEP／DXFへ変換した場合の差は、
 │  ├─ raw/
 │  └─ results/
 ├─ scripts/
+│  ├─ verify_handoff_manifest.ps1
+│  ├─ extract_icad_standalone.ps1
+│  ├─ convert_icad_standalone.ps1
+│  └─ start_windows_extraction_agent.ps1
 ├─ docker/
 └─ docs/
 ```
 
 `manifest.json`には、同梱ファイルの相対パス、サイズ、SHA-256が記録されています。
+
+### 4.1 コピー後のファイル確認
+
+パッケージのルートで次を実行します。`Verified`が`True`なら、manifestに記録されたファイル一覧、サイズ、SHA-256が一致しています。
+
+```powershell
+pwsh -NoLogo -NoProfile -File ".\scripts\verify_handoff_manifest.ps1"
+```
+
+不一致が表示された場合は、欠落・追加・破損の可能性があるため、そのまま実行せず配布元のパッケージと照合してください。
 
 ## 5. Pythonを使った最短の動作確認
 
@@ -150,8 +166,13 @@ ICADから取得できる項目と、STEP／DXFへ変換した場合の差は、
 パッケージのルートで次を実行します。
 
 ```powershell
+python --version
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install ".\python"
 ```
+
+`python --version`が3.11未満の場合は、Python 3.11または3.12へ切り替えてから仮想環境を作成してください。PowerShellの実行ポリシーにより有効化できない場合は、有効化せず`.\.venv\Scripts\python.exe -m pip install ".\python"`のように仮想環境のPythonを直接指定できます。
 
 C# 2Dサンプルを処理します。
 
@@ -163,6 +184,15 @@ icad-tag-extraction `
 ```
 
 正常終了すると、`tagged_result.json`へ`canonical_attributes`と`derived_tags`が出力されます。
+
+`icad-tag-extraction`が見つからない場合は、同じ処理をPythonモジュールとして実行できます。
+
+```powershell
+python -m icad_tag_extraction `
+  --input ".\examples\raw\csharp_raw_2d.v1.json" `
+  --dictionary ".\dictionaries\initial-dictionaries.json" `
+  --output ".\tagged_result.json"
+```
 
 ### 5.2 同梱テスト
 

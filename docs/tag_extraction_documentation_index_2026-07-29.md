@@ -36,6 +36,7 @@
 | `handoff/souya_tag_extraction/recipient_docs/docs/extraction_reference.md` | 入力形式別の抽出項目、正規化、タグ付け、取得制約 |
 | `handoff/souya_tag_extraction/recipient_docs/docs/integration_contract.md` | Python CLI/API、JSON Schema、辞書、保存境界 |
 | `handoff/souya_tag_extraction/recipient_docs/docs/icad_windows_operations.md` | ICAD抽出、DXF/STEP変換、Windows agentの利用手順 |
+| `handoff/souya_tag_extraction/recipient_docs/docs/source_code_guide.md` | 機能別の変更箇所、Python正規化の責務分担、C#の読み進め方 |
 
 ### 2.2 現行の補足資料
 

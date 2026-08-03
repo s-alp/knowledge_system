@@ -252,7 +252,7 @@ def verify_python_runtime(
 
 
 def verify_pdf(pdf_path: Path) -> int:
-    """PDFのページ数、空白ページ、読み手向け禁止表現を機械確認する。"""
+    """PDFの本文、空白、メタデータ、章しおりを機械確認する。"""
 
     try:
         from pypdf import PdfReader
@@ -264,6 +264,13 @@ def verify_pdf(pdf_path: Path) -> int:
     reader = PdfReader(pdf_path)
     if not reader.pages:
         raise ValueError(f"PDFにページがありません: {pdf_path}")
+    metadata = reader.metadata
+    if metadata is None or metadata.title != "CADタグ・属性抽出 利用・組み込みガイド":
+        raise ValueError(f"PDFのタイトルメタデータが不正です: {getattr(metadata, 'title', None)!r}")
+    if metadata.author != "株式会社アルパイン設計事務所":
+        raise ValueError(f"PDFの作成者メタデータが不正です: {metadata.author!r}")
+    if not reader.outline:
+        raise ValueError("PDFに章しおりがありません。見出しから移動できる状態にしてください。")
     blank_pages: list[int] = []
     for page_number, page in enumerate(reader.pages, start=1):
         text = (page.extract_text() or "").strip()

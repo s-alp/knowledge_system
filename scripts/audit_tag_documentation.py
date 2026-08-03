@@ -54,6 +54,7 @@ REQUIRED_FILES = (
     SOUYA_RECIPIENT_DOCS / "docs/extraction_reference.md",
     SOUYA_RECIPIENT_DOCS / "docs/integration_contract.md",
     SOUYA_RECIPIENT_DOCS / "docs/icad_windows_operations.md",
+    SOUYA_RECIPIENT_DOCS / "docs/source_code_guide.md",
     HANDOFF_DOCS / "README.md",
     HANDOFF_DOCS / "VALIDATION_CHECKLIST.md",
     HANDOFF_DOCS / "PROMPT_FOR_CLAUDE.md",

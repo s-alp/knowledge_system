@@ -84,6 +84,8 @@ souya_tag_extraction_minimal_YYYY-MM-DD/
 │  ├─ raw/
 │  └─ results/
 ├─ scripts/
+│  ├─ verify_handoff_manifest.ps1
+│  ├─ extract_icad_standalone.ps1
 │  ├─ convert_icad_standalone.ps1
 │  └─ start_windows_extraction_agent.ps1
 ├─ docker/
@@ -95,7 +97,8 @@ souya_tag_extraction_minimal_YYYY-MM-DD/
    ├─ CADタグ属性抽出_創屋様向け利用ガイド.pdf
    ├─ extraction_reference.md
    ├─ integration_contract.md
-   └─ icad_windows_operations.md
+   ├─ icad_windows_operations.md
+   └─ source_code_guide.md
 ```
 
 `manifest.json`には全ファイルの相対パス、サイズ、SHA-256を記録する。
@@ -225,12 +228,18 @@ C#のビルド・SXNET配置・ICAD実行条件は
 Agent PCへはC#ソースやVisual Studioではなく、publish済みRunner一式と
 `scripts/start_windows_extraction_agent.ps1`を配置できる。
 
+ICAD正本からの単発抽出は`scripts/extract_icad_standalone.ps1`を使用する。
+2D／3Dの指定、入力、出力、Runner、SXNETをPowerShell側で検証し、既存JSONを既定で保護する。
+
 ICAD→DXF/STEP変換は`IcadExtraction.Runner convert-cad`または
 `scripts/convert_icad_standalone.ps1`を使用する。詳細は
 `docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md`を参照する。
 
 変換後STEP/DXFはICAD正本と同等ではない。材質、質量、内部・外部パーツ区分、
 正式な部品名が必要な場合はICAD正本からSXNETで直接抽出する。
+
+配布パッケージの受領時やコピー後は`scripts/verify_handoff_manifest.ps1`を実行し、
+manifestのファイル集合、サイズ、SHA-256と一致することを確認する。
 
 ## 9. Docker
 

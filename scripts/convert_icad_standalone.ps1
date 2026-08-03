@@ -1,6 +1,30 @@
-# このスクリプトは、Djangoやデータベースを起動せず、ICADファイルをDXFまたはSTEPへ1件変換する。
-# 創屋側のバッチや手動運用から同じ入口を使えるよう、C# Runnerの低水準な引数をPowerShell側で検証・組み立てする。
-# 変換先の既存ファイルは既定で保護し、明示的に -Overwrite を付けた場合だけ上書きを許可する。
+<#
+.SYNOPSIS
+ICADファイルをDXFまたはSTEPへ1件変換します。
+
+.DESCRIPTION
+Djangoやデータベースを使わず、C# Runnerの引数を検証して変換します。
+既存成果物は保護し、-Overwriteを指定した場合だけ置き換えます。
+RunnerPathを省略すると、配布パッケージまたはソース一式のpublish先を探します。
+
+.PARAMETER InputPath
+変換する.icdファイルです。
+
+.PARAMETER OutputFormat
+dxf、step、stpのいずれかです。
+
+.PARAMETER OutputDirectory
+変換ファイルと既定の結果JSONを保存するフォルダーです。
+
+.PARAMETER SxNetDllPath
+使用するICAD版に対応したsxnet.dllです。環境変数でも指定できます。
+
+.PARAMETER ValidateOnly
+ICADを起動せず、入力・Runner・SXNET・出力先の解決結果だけを表示します。
+
+.EXAMPLE
+pwsh -File .\scripts\convert_icad_standalone.ps1 -InputPath C:\CAD\sample.icd -OutputFormat dxf -OutputDirectory C:\CAD\converted -SxNetDllPath C:\ICAD\sxnet.dll -ValidateOnly
+#>
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
     [Parameter(Mandatory = $true)]
@@ -90,6 +114,22 @@ function Resolve-OptionalFilePath {
     }
 
     return Resolve-RequiredFilePath -Path $Path -DisplayName $DisplayName
+}
+
+function Resolve-DefaultRunnerPath {
+    # scriptsの親が配布ルートならcsharp配下、開発用ルートならsrc配下にある。
+    # publish成果物だけを候補にし、Debugビルドを誤って配布運用へ使わない。
+    $packageRoot = Split-Path -Parent $PSScriptRoot
+    $candidates = @(
+        (Join-Path $packageRoot "csharp\src\IcadExtraction.Runner\bin\Release\net48\publish\IcadExtraction.Runner.exe"),
+        (Join-Path $packageRoot "src\IcadExtraction.Runner\bin\Release\net48\publish\IcadExtraction.Runner.exe")
+    )
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            return $candidate
+        }
+    }
+    return $candidates[0]
 }
 
 function Get-CompletedConversionResult {
@@ -190,8 +230,7 @@ if ([System.IO.Path]::GetExtension($resolvedInputPath).ToLowerInvariant() -ne ".
 }
 
 if ([string]::IsNullOrWhiteSpace($RunnerPath)) {
-    # publish成果物を正本にすることで、Djangoの仮想環境や開発用Debugビルドへ依存させない。
-    $RunnerPath = Join-Path $PSScriptRoot "..\src\IcadExtraction.Runner\bin\Release\net48\publish\IcadExtraction.Runner.exe"
+    $RunnerPath = Resolve-DefaultRunnerPath
 }
 $resolvedRunnerPath = Resolve-RequiredFilePath -Path $RunnerPath -DisplayName "ICAD変換Runner"
 

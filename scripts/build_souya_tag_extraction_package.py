@@ -29,6 +29,7 @@ RECIPIENT_DOCUMENT_PATHS = (
     "docs/extraction_reference.md",
     "docs/integration_contract.md",
     "docs/icad_windows_operations.md",
+    "docs/source_code_guide.md",
 )
 DEFAULT_OUTPUT = ROOT / "output" / "souya_tag_extraction_minimal_2026-07-30"
 
@@ -282,14 +283,16 @@ def build_package(
             process_extraction(payload),
         )
 
-    _copy_file(
-        ROOT / "scripts" / "convert_icad_standalone.ps1",
-        output_dir / "scripts" / "convert_icad_standalone.ps1",
-    )
-    _copy_file(
-        ROOT / "scripts" / "start_windows_extraction_agent.ps1",
-        output_dir / "scripts" / "start_windows_extraction_agent.ps1",
-    )
+    for script_name in (
+        "convert_icad_standalone.ps1",
+        "extract_icad_standalone.ps1",
+        "start_windows_extraction_agent.ps1",
+        "verify_handoff_manifest.ps1",
+    ):
+        _copy_file(
+            ROOT / "scripts" / script_name,
+            output_dir / "scripts" / script_name,
+        )
     _copy_recipient_documents(output_dir)
 
     copied_guide_pdf: tuple[Path, ...] = ()
