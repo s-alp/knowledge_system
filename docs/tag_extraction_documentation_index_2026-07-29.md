@@ -8,7 +8,7 @@
 
 1. 現行全体仕様: `tag_extraction_and_assignment_current_spec_2026-07-29.md`
 2. 創屋へ切り出す最小パッケージ: `souya_tag_extraction_minimal_handoff_2026-07-30.md`
-3. 実際にパッケージへ同梱する受領者向け文書: `../handoff/souya_tag_extraction/recipient_docs/README.md`と同フォルダーの`docs/`
+3. 実際にパッケージへ同梱する受領者向け文書: `../handoff/souya_tag_extraction/recipient_docs/README.md`と同フォルダーの`docs/`。非技術者への説明用は`docs/overview_for_users.md`
 4. 創屋の実装順序と当社確認事項: `souya_tag_extraction_delivery_readiness_2026-07-30.md`
 5. 独立Python処理結果・canonical・タグpayload: `extraction_result_schema_2026-05-28.md`
 6. Windows agentとC#入出力: `windows_extraction_agent_api_design_2026-07-29.md`
@@ -33,6 +33,7 @@
 | `docs/cad_tag_extraction_sources_for_souya_2026-07-28.md` | 創屋向けに渡す抽出元・具体例・供給範囲 |
 | `docs/icad_dxf_step_standalone_conversion_guide_2026-07-29.md` | Django非依存のICAD→DXF/STEP変換 |
 | `handoff/souya_tag_extraction/recipient_docs/README.md` | 配布パッケージ直下へ同梱する利用ガイド |
+| `handoff/souya_tag_extraction/recipient_docs/docs/overview_for_users.md` | 非技術者向けの概要説明。目的、導入前後の違い、取り出せる情報、対象外範囲、想定質問 |
 | `handoff/souya_tag_extraction/recipient_docs/docs/extraction_reference.md` | 入力形式別の抽出項目、正規化、タグ付け、取得制約 |
 | `handoff/souya_tag_extraction/recipient_docs/docs/integration_contract.md` | Python CLI/API、JSON Schema、辞書、保存境界 |
 | `handoff/souya_tag_extraction/recipient_docs/docs/icad_windows_operations.md` | ICAD抽出、DXF/STEP変換、Windows agentの利用手順 |

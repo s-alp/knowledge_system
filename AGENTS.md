@@ -208,9 +208,13 @@ git diff --check
   --output output\souya_tag_extraction_minimal_YYYY-MM-DD
 ```
 
-`prepare_souya_tag_extraction_handoff.py`は、受領者向け専用MarkdownからPDFを生成し、同じMarkdown、
-PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへまとめる。PDF生成と収集を自動化するだけであり、
-変更妥当性、テスト結果、PDF全ページの見た目はCodexが前後に確認する。
+`prepare_souya_tag_extraction_handoff.py`は、受領者向け専用Markdownから概要ガイドPDFと利用ガイドPDFを
+生成し、同じMarkdown、両PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへまとめる。PDF生成と収集を
+自動化するだけであり、変更妥当性、テスト結果、PDF全ページの見た目はCodexが前後に確認する。
+
+概要ガイドは`handoff\souya_tag_extraction\recipient_docs\docs\overview_for_users.md`だけを収録した
+非技術者向け説明資料であり、利用ガイドは同じ内容を先頭に置いてREADMEと4技術文書を続けたものである。
+読み手が違うので1冊へ統合せず、概要ガイドを単独で渡せる状態を維持する。
 
 生成用Pythonは、Codex Desktopの`load_workspace_dependencies`で確認した文書用Python、または`reportlab`と`pypdf`を導入した専用環境を使う。PPTXは生成も配布もしない。
 
@@ -234,6 +238,7 @@ PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへ�
   --package output\souya_tag_extraction_minimal_YYYY-MM-DD `
   --archive output\souya_tag_extraction_minimal_YYYY-MM-DD.zip `
   --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_利用ガイド.pdf `
+  --overview-pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_概要ガイド.pdf `
   --python <Python 3.11の実行ファイル> `
   --python <Python 3.12の実行ファイル>
 ```
@@ -243,7 +248,7 @@ PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへ�
    - 展開済みフォルダーとZIPの全ファイル内容
    - `__pycache__`、`.pyc`、`.pytest_cache`、`bin`、`obj`、`build`、
      `*.egg-info`、PPTX等の混入
-   - 単体PDFとパッケージ内PDFの一致、空白ページ、本文禁止表現
+   - 概要ガイド・利用ガイド各PDFの単体とパッケージ内の一致、タイトルメタデータ、空白ページ、本文禁止表現
    - 外部共有監査
    - Python 3.11/3.12への一時インストール、配布専用テスト
    - Docker Compose構成
@@ -260,7 +265,8 @@ PDF、ソース、Schema、辞書、テストを最小パッケージとZIPへ�
 ```powershell
 <pypdfを利用できる生成用Python> scripts\audit_souya_handoff_content.py `
   output\souya_tag_extraction_minimal_YYYY-MM-DD `
-  --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_利用ガイド.pdf
+  --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_利用ガイド.pdf `
+  --pdf output\pdf\souya_tag_extraction_minimal_YYYY-MM-DD_概要ガイド.pdf
 ```
 
 PDF本文監査では画像内文字を判定できないため、実データを含むスクリーンショットは使わず、架空データだけの図に差し替える。PDF内のページ数、文字切れ、重なり、空白ページ、社内情報、顧客固有情報を全ページ目視する。

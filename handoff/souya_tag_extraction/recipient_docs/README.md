@@ -2,6 +2,8 @@
 
 このパッケージには、ICAD・STEP・DXFから属性を抽出し、共通形式へ正規化してタグを生成するためのソースコードと実行例が含まれています。
 
+本READMEと`docs`配下の技術文書は、導入・組み込み・保守を担当する方向けです。プログラムやCADの内部処理を扱わない方への説明には、専門用語とコードを使わない[`docs/overview_for_users.md`](docs/overview_for_users.md)（同梱PDF「概要ガイド」と同じ内容）をお使いください。
+
 ## 1. 目的別・資料の見方
 
 すべての資料を順番に読む必要はありません。最初に本章で目的に合う資料を確認し、担当する処理に関係する資料だけを参照してください。
@@ -18,6 +20,7 @@
 
 | 目的 | 最初に見る場所 | 次に確認する場所 |
 |---|---|---|
+| 仕組みの概要を非技術者へ説明したい | [`docs/overview_for_users.md`](docs/overview_for_users.md) | 同梱PDF「概要ガイド」 |
 | まず動作確認したい | 本README「Pythonを使った最短の動作確認」 | `examples/raw`、`examples/results`、`tests/python` |
 | ICAD・STEP・DXFから何を抽出できるか知りたい | [`docs/extraction_reference.md`](docs/extraction_reference.md) | `schemas`、`examples/results` |
 | Pythonへ組み込みたい | [`docs/integration_contract.md`](docs/integration_contract.md) | `python`、`schemas`、`examples` |
@@ -34,12 +37,14 @@
 
 | 資料 | 書かれていること | 書かれていないこと |
 |---|---|---|
+| [`docs/overview_for_users.md`](docs/overview_for_users.md) | 仕組みの目的、導入前後の違い、取り出せる情報、できないこと、想定質問への回答 | インストール手順、コマンド、JSONのキー、ソースの構成 |
 | `README.md` | 全体像、資料の選び方、最短の動作確認、Docker、初期辞書 | 全抽出項目の詳細、JSONの全キー、ICAD環境の詳細設定 |
 | [`docs/extraction_reference.md`](docs/extraction_reference.md) | 入力形式ごとの抽出元、抽出項目、正規化、タグ付け、取得できない値の扱い | インストール手順、C#のビルド手順、DBやAPIへの保存方法 |
 | [`docs/integration_contract.md`](docs/integration_contract.md) | Python CLI／API、処理結果、JSON Schema、辞書、保存時の推奨項目 | ICADやSXNETの設定、C# Runnerのビルド、Windows agentの運用 |
 | [`docs/icad_windows_operations.md`](docs/icad_windows_operations.md) | C# Runnerのビルド、ICAD抽出、DXF／STEP変換、Windows agent | Python結果のDB保存、タグ辞書の設計、画面やRAGへの接続 |
 | [`docs/source_code_guide.md`](docs/source_code_guide.md) | 機能別の変更箇所、Python正規化の分担、C#の読み進め方 | 各関数の全仕様、ICAD環境の設定値、DBやAPIの実装 |
-| 利用ガイドPDF（同梱PDF） | 本READMEと4つの技術文書を続けて読めるPDF版 | 機械処理用のJSON Schema、実行可能なソース、サンプルJSONの実データ |
+| 概要ガイドPDF（同梱PDF） | [`docs/overview_for_users.md`](docs/overview_for_users.md)のPDF版。非技術者への説明用として単独で配れる | コマンド、JSONのキー、ソースの構成 |
+| 利用ガイドPDF（同梱PDF） | 概要ガイド、本README、4つの技術文書を続けて読めるPDF版 | 機械処理用のJSON Schema、実行可能なソース、サンプルJSONの実データ |
 
 JSONの正確なキー、型、必須条件はPDFや説明文ではなく、`schemas`内のJSON Schemaで確認してください。
 
@@ -47,6 +52,7 @@ JSONの正確なキー、型、必須条件はPDFや説明文ではなく、`sch
 
 | 担当または目的 | 主に読むもの | 最初は読み飛ばしてよいもの |
 |---|---|---|
+| 社内やお客様へ仕組みを説明する | [`docs/overview_for_users.md`](docs/overview_for_users.md)、同梱PDF「概要ガイド」 | 本READMEと`docs`配下の技術文書、`schemas`、`examples` |
 | 同梱サンプルを動かして概要を確認する | 本README、`examples`、`tests/python` | C#の詳細、Windows agent、DB保存設計 |
 | C# raw JSONを受け取ってPythonへ組み込む | 本README、`docs/integration_contract.md`、`schemas`、`examples`、`dictionaries` | `docs/icad_windows_operations.md`、C#の実装詳細 |
 | STEP／DXFだけをPythonで処理する | 本README、`docs/extraction_reference.md`、`docs/integration_contract.md` | ICAD、SXNET、Windows agent、C#の実装詳細 |
