@@ -27,7 +27,7 @@ Django adapterは本リポジトリ内で現行挙動の同等性を確認する
 
 ### 1.1 外部共有区分
 
-- 創屋様へ渡す対象は、生成後に外部共有監査を通した最小パッケージと、そのZIPだけである。説明資料はPPTXではなく、監査・目視確認済みPDFをパッケージ内へ同梱する。非技術者への説明用の概要ガイドPDFは、パッケージから切り離して単独で渡してもよい。
+- 創屋様へ渡す対象は、生成後に外部共有監査を通した最小パッケージと、そのZIPだけである。説明資料はPPTXではなく、監査・目視確認済みPDFをパッケージ内へ同梱する。
 - 本リポジトリ全体、Git履歴、`backend/apps`、`output`配下の内部監査結果、顧客原本は渡さない。
 - 配布承認済みの客先辞書3件と顧客固有規格`SES`を`initial-dictionaries.json`へ同梱する。案件辞書は現行seedに初期値がないため空である。
 - 辞書以外の文書・PDF・サンプルには、個人名、社内ドライブ、実図面名、実測値を含めない。
@@ -94,18 +94,12 @@ souya_tag_extraction_minimal_YYYY-MM-DD/
 │  └─ data/
 │     └─ input.json
 └─ docs/
-   ├─ CADタグ属性抽出_創屋様向け概要ガイド.pdf
    ├─ CADタグ属性抽出_創屋様向け利用ガイド.pdf
-   ├─ overview_for_users.md
    ├─ extraction_reference.md
    ├─ integration_contract.md
    ├─ icad_windows_operations.md
    └─ source_code_guide.md
 ```
-
-同梱PDFは読み手ごとに2種類とする。`概要ガイド`は`overview_for_users.md`だけを収録し、
-プログラムを扱わない方へ単独で配れる説明資料とする。`利用ガイド`は概要ガイドの内容を先頭に置き、
-READMEと4つの技術文書を続けて収録する。どちらも受領者向けMarkdownを原稿とし、内容を二重管理しない。
 
 `manifest.json`には全ファイルの相対パス、サイズ、SHA-256を記録する。
 同名出力先が既に存在する場合、生成スクリプトは上書きせず停止する。

@@ -251,12 +251,8 @@ def verify_python_runtime(
     return minor
 
 
-def verify_pdf(pdf_path: Path, expected_title: str) -> int:
-    """PDFの本文、空白、メタデータ、章しおりを機械確認する。
-
-    メタデータのタイトルは、概要ガイドと利用ガイドを取り違えて同梱していないかの
-    判定にも使うため、収録範囲ごとの期待値を呼び出し側から渡す。
-    """
+def verify_pdf(pdf_path: Path) -> int:
+    """PDFの本文、空白、メタデータ、章しおりを機械確認する。"""
 
     try:
         from pypdf import PdfReader
@@ -269,7 +265,7 @@ def verify_pdf(pdf_path: Path, expected_title: str) -> int:
     if not reader.pages:
         raise ValueError(f"PDFにページがありません: {pdf_path}")
     metadata = reader.metadata
-    if metadata is None or metadata.title != expected_title:
+    if metadata is None or metadata.title != "CADタグ・属性抽出 利用・組み込みガイド":
         raise ValueError(f"PDFのタイトルメタデータが不正です: {getattr(metadata, 'title', None)!r}")
     if metadata.author != "株式会社アルパイン設計事務所":
         raise ValueError(f"PDFの作成者メタデータが不正です: {metadata.author!r}")
@@ -291,7 +287,6 @@ def verify_handoff(
     package_dir: Path,
     archive_path: Path,
     pdf_path: Path,
-    overview_pdf_path: Path,
     python_interpreters: tuple[Path, ...],
     *,
     docker_command: str = "docker",
@@ -301,14 +296,12 @@ def verify_handoff(
     package_dir = package_dir.resolve()
     archive_path = archive_path.resolve()
     pdf_path = pdf_path.resolve()
-    overview_pdf_path = overview_pdf_path.resolve()
     if not package_dir.is_dir():
         raise FileNotFoundError(f"パッケージがありません: {package_dir}")
     if not archive_path.is_file():
         raise FileNotFoundError(f"ZIPがありません: {archive_path}")
-    for candidate in (pdf_path, overview_pdf_path):
-        if not candidate.is_file():
-            raise FileNotFoundError(f"PDFがありません: {candidate}")
+    if not pdf_path.is_file():
+        raise FileNotFoundError(f"PDFがありません: {pdf_path}")
     for interpreter in python_interpreters:
         if not interpreter.is_file():
             raise FileNotFoundError(f"Pythonがありません: {interpreter}")
@@ -316,18 +309,15 @@ def verify_handoff(
     manifest = validate_package(package_dir)
     verify_no_generated_artifacts(package_dir)
     file_count = verify_archive_matches_directory(package_dir, archive_path)
-    for packaged_name, single_pdf in (
-        ("CADタグ属性抽出_創屋様向け概要ガイド.pdf", overview_pdf_path),
-        ("CADタグ属性抽出_創屋様向け利用ガイド.pdf", pdf_path),
-    ):
-        packaged_pdf = package_dir / "docs" / packaged_name
-        if not packaged_pdf.is_file():
-            raise FileNotFoundError(f"パッケージ内PDFがありません: {packaged_pdf}")
-        if _file_sha256(packaged_pdf) != _file_sha256(single_pdf):
-            raise ValueError(f"単体PDFとパッケージ内PDFが一致しません: {packaged_name}")
-    assert_external_handoff_safe(package_dir, pdfs=(overview_pdf_path, pdf_path))
-    overview_pdf_pages = verify_pdf(overview_pdf_path, "CADタグ・属性抽出 概要ガイド")
-    pdf_pages = verify_pdf(pdf_path, "CADタグ・属性抽出 利用・組み込みガイド")
+    packaged_pdf = (
+        package_dir / "docs" / "CADタグ属性抽出_創屋様向け利用ガイド.pdf"
+    )
+    if not packaged_pdf.is_file():
+        raise FileNotFoundError(f"パッケージ内PDFがありません: {packaged_pdf}")
+    if _file_sha256(packaged_pdf) != _file_sha256(pdf_path):
+        raise ValueError("単体PDFとパッケージ内PDFが一致しません")
+    assert_external_handoff_safe(package_dir, pdfs=(pdf_path,))
+    pdf_pages = verify_pdf(pdf_path)
     expected_version = _declared_package_version(package_dir)
 
     temp_parent = ROOT / "tmp"
@@ -375,19 +365,15 @@ def verify_handoff(
         "package": str(package_dir),
         "archive": str(archive_path),
         "pdf": str(pdf_path),
-        "overviewPdf": str(overview_pdf_path),
         "packageVersion": expected_version,
         "manifestFileCount": manifest["fileCount"],
         "zipFileCount": file_count,
         "pdfPages": pdf_pages,
-        "overviewPdfPages": overview_pdf_pages,
         "pythonMinors": sorted(runtime_minors),
         "archiveSizeBytes": archive_path.stat().st_size,
         "archiveSha256": _file_sha256(archive_path),
         "pdfSizeBytes": pdf_path.stat().st_size,
         "pdfSha256": _file_sha256(pdf_path),
-        "overviewPdfSizeBytes": overview_pdf_path.stat().st_size,
-        "overviewPdfSha256": _file_sha256(overview_pdf_path),
     }
 
 
@@ -400,13 +386,7 @@ def main() -> int:
     parser = ArgumentParser()
     parser.add_argument("--package", type=Path, required=True)
     parser.add_argument("--archive", type=Path, required=True)
-    parser.add_argument("--pdf", type=Path, required=True, help="利用ガイドPDF。")
-    parser.add_argument(
-        "--overview-pdf",
-        type=Path,
-        required=True,
-        help="非技術者向けの概要ガイドPDF。",
-    )
+    parser.add_argument("--pdf", type=Path, required=True)
     parser.add_argument(
         "--python",
         action="append",
@@ -420,7 +400,6 @@ def main() -> int:
         args.package,
         args.archive,
         args.pdf,
-        args.overview_pdf,
         tuple(args.python),
         docker_command=args.docker_command,
     )

@@ -51,7 +51,6 @@ REQUIRED_FILES = (
     DOCS / "cad_tag_extraction_sources_for_souya_2026-07-28.md",
     DOCS / "souya_tag_extraction_minimal_handoff_2026-07-30.md",
     SOUYA_RECIPIENT_DOCS / "README.md",
-    SOUYA_RECIPIENT_DOCS / "docs/overview_for_users.md",
     SOUYA_RECIPIENT_DOCS / "docs/extraction_reference.md",
     SOUYA_RECIPIENT_DOCS / "docs/integration_contract.md",
     SOUYA_RECIPIENT_DOCS / "docs/icad_windows_operations.md",

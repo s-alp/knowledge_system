@@ -1,18 +1,12 @@
-"""創屋向け専用Markdownから、配布用のPDFを生成する。
+"""創屋向け専用Markdownから、配布用の利用ガイドPDFを生成する。
 
 実行目的:
 - READMEと技術文書をPDFでも同じ内容へ揃え、二重編集を避ける。
 - 社内用の生成・監査資料をPDFへ混入させない。
 
-生成するPDFは次の2種類で、いずれも同じMarkdownを原稿とする。
-- 概要ガイド: 非技術者への説明用。`docs/overview_for_users.md`だけを収録し、
-  技術文書を読まなくても単独で配れる分量にする。
-- 利用ガイド: 導入担当者向け。概要ガイドの内容を先頭に置き、READMEと
-  4つの技術文書を続けて収録する。
-
 前提:
 - ReportLabを利用できるPythonで実行する。
-- 入力は`handoff/souya_tag_extraction/recipient_docs`配下の管理対象Markdownとする。
+- 入力は`handoff/souya_tag_extraction/recipient_docs`配下の固定5文書とする。
 
 副作用:
 - 指定した新規PDFを1ファイル作成する。
@@ -22,7 +16,6 @@
 from __future__ import annotations
 
 from argparse import ArgumentParser
-from dataclasses import dataclass
 from datetime import date
 from html import escape
 import os
@@ -52,63 +45,17 @@ from pypdf import PdfReader, PdfWriter
 
 ROOT = Path(__file__).resolve().parents[1]
 RECIPIENT_DOCS_ROOT = ROOT / "handoff" / "souya_tag_extraction" / "recipient_docs"
-OVERVIEW_DOCUMENT = Path("docs/overview_for_users.md")
 SOURCE_DOCUMENTS = (
-    OVERVIEW_DOCUMENT,
     Path("README.md"),
     Path("docs/extraction_reference.md"),
     Path("docs/integration_contract.md"),
     Path("docs/icad_windows_operations.md"),
     Path("docs/source_code_guide.md"),
 )
-OVERVIEW_DOCUMENTS = (OVERVIEW_DOCUMENT,)
 DEFAULT_OUTPUT = ROOT / "output" / "pdf" / "CADタグ属性抽出_創屋様向け利用ガイド.pdf"
-DEFAULT_OVERVIEW_OUTPUT = (
-    ROOT / "output" / "pdf" / "CADタグ属性抽出_創屋様向け概要ガイド.pdf"
-)
 FONT_NAME = "SouyaGuideJapanese"
 PAGE_WIDTH, PAGE_HEIGHT = A4
 CONTENT_WIDTH = PAGE_WIDTH - 36 * mm
-
-
-@dataclass(frozen=True)
-class PdfLayout:
-    """1種類のPDFに固有な、収録文書と表紙・ヘッダー・メタデータの設定。
-
-    表紙文言とメタデータをPDFごとに変えるため、共通の組版処理から切り出している。
-    メタデータのタイトルは受領側の確認でも照合するので、文言を変える場合は
-    配布文書と検証側の期待値を同時に見直す。
-    """
-
-    documents: tuple[Path, ...]
-    cover_title: str
-    cover_subtitle: str
-    running_header: str
-    metadata_title: str
-
-
-OVERVIEW_LAYOUT = PdfLayout(
-    documents=OVERVIEW_DOCUMENTS,
-    cover_title="CADタグ・属性抽出<br/>概要ガイド",
-    cover_subtitle=(
-        "プログラムやCADの内部処理を扱わない方向けに、この仕組みが何をするものか、"
-        "導入すると何が変わるか、何ができて何ができないかをまとめた説明資料です。"
-    ),
-    running_header="CADタグ・属性抽出 概要ガイド",
-    metadata_title="CADタグ・属性抽出 概要ガイド",
-)
-GUIDE_LAYOUT = PdfLayout(
-    documents=SOURCE_DOCUMENTS,
-    cover_title="CADタグ・属性抽出<br/>利用・組み込みガイド",
-    cover_subtitle=(
-        "仕組みの概要に続けて、ICAD・STEP・DXFからの属性抽出、共通属性への正規化、"
-        "辞書照合、根拠付きタグ生成、Windows実行方法をまとめた資料です。"
-    ),
-    running_header="CADタグ・属性抽出パッケージ 利用ガイド",
-    metadata_title="CADタグ・属性抽出 利用・組み込みガイド",
-)
-PDF_LAYOUTS = {"overview": OVERVIEW_LAYOUT, "guide": GUIDE_LAYOUT}
-DEFAULT_OUTPUTS = {"overview": DEFAULT_OVERVIEW_OUTPUT, "guide": DEFAULT_OUTPUT}
 
 
 class _BookmarkedDocTemplate(SimpleDocTemplate):
@@ -138,11 +85,7 @@ class _BookmarkedDocTemplate(SimpleDocTemplate):
         self.canv.addOutlineEntry(title, bookmark_key, level=level, closed=False)
 
 
-def _write_unicode_metadata(
-    rendered_path: Path,
-    output_path: Path,
-    layout: PdfLayout,
-) -> None:
+def _write_unicode_metadata(rendered_path: Path, output_path: Path) -> None:
     """日本語メタデータとReportLabのしおりを保持して最終PDFを書き出す。"""
 
     reader = PdfReader(str(rendered_path))
@@ -150,7 +93,7 @@ def _write_unicode_metadata(
     writer.clone_document_from_reader(reader)
     writer.add_metadata(
         {
-            "/Title": layout.metadata_title,
+            "/Title": "CADタグ・属性抽出 利用・組み込みガイド",
             "/Author": "株式会社アルパイン設計事務所",
             "/Subject": "ICAD・STEP・DXFの属性抽出とタグ生成",
         }
@@ -459,32 +402,26 @@ def _markdown_story(path: Path, styles: dict[str, ParagraphStyle]) -> list[objec
     return story
 
 
-def _later_page_drawer(running_header: str):
-    """本文ページへ資料名とページ番号を描画する関数を返す。"""
+def _draw_later_page(canvas, document) -> None:
+    """本文ページへ資料名とページ番号を描画する。"""
 
-    def _draw_later_page(canvas, document) -> None:
-        canvas.saveState()
-        canvas.setStrokeColor(colors.HexColor("#B8CDD6"))
-        canvas.setLineWidth(0.5)
-        canvas.line(
-            18 * mm, PAGE_HEIGHT - 13 * mm, PAGE_WIDTH - 18 * mm, PAGE_HEIGHT - 13 * mm
-        )
-        canvas.setFillColor(colors.HexColor("#607D8B"))
-        canvas.setFont(FONT_NAME, 7.5)
-        canvas.drawString(18 * mm, PAGE_HEIGHT - 10 * mm, running_header)
-        canvas.drawRightString(PAGE_WIDTH - 18 * mm, 10 * mm, str(document.page))
-        canvas.restoreState()
-
-    return _draw_later_page
+    canvas.saveState()
+    canvas.setStrokeColor(colors.HexColor("#B8CDD6"))
+    canvas.setLineWidth(0.5)
+    canvas.line(18 * mm, PAGE_HEIGHT - 13 * mm, PAGE_WIDTH - 18 * mm, PAGE_HEIGHT - 13 * mm)
+    canvas.setFillColor(colors.HexColor("#607D8B"))
+    canvas.setFont(FONT_NAME, 7.5)
+    canvas.drawString(18 * mm, PAGE_HEIGHT - 10 * mm, "CADタグ・属性抽出パッケージ 利用ガイド")
+    canvas.drawRightString(PAGE_WIDTH - 18 * mm, 10 * mm, str(document.page))
+    canvas.restoreState()
 
 
-def generate_layout_pdf(
+def generate_pdf(
     output_path: Path,
-    layout: PdfLayout,
     *,
     document_date: date | None = None,
 ) -> Path:
-    """指定した収録範囲の専用Markdownを読み、既存ファイルを上書きせず生成する。"""
+    """専用Markdown5文書を読み、既存ファイルを上書きせず配布用PDFを生成する。"""
 
     output_path = output_path.resolve()
     if output_path.exists():
@@ -498,7 +435,7 @@ def generate_layout_pdf(
         Spacer(1, 32 * mm),
         Paragraph("創屋様向け", styles["cover_label"]),
         Spacer(1, 8 * mm),
-        Paragraph(layout.cover_title, styles["cover_title"]),
+        Paragraph("CADタグ・属性抽出<br/>利用・組み込みガイド", styles["cover_title"]),
         HRFlowable(
             width="100%",
             thickness=2,
@@ -506,7 +443,11 @@ def generate_layout_pdf(
             spaceBefore=2 * mm,
             spaceAfter=8 * mm,
         ),
-        Paragraph(layout.cover_subtitle, styles["cover_subtitle"]),
+        Paragraph(
+            "ICAD・STEP・DXFからの属性抽出、共通属性への正規化、"
+            "辞書照合、根拠付きタグ生成、Windows実行方法をまとめた資料です。",
+            styles["cover_subtitle"],
+        ),
         Spacer(1, 16 * mm),
         Paragraph(
             f"更新日: {document_date.isoformat()}<br/>"
@@ -516,9 +457,9 @@ def generate_layout_pdf(
         PageBreak(),
     ]
 
-    for position, relative_path in enumerate(layout.documents):
+    for position, relative_path in enumerate(SOURCE_DOCUMENTS):
         story.extend(_markdown_story(RECIPIENT_DOCS_ROOT / relative_path, styles))
-        if position != len(layout.documents) - 1:
+        if position != len(SOURCE_DOCUMENTS) - 1:
             story.append(PageBreak())
 
     rendered_path = output_path.with_name(f"{output_path.stem}.reportlab.tmp.pdf")
@@ -532,7 +473,7 @@ def generate_layout_pdf(
         leftMargin=18 * mm,
         topMargin=20 * mm,
         bottomMargin=17 * mm,
-        title=layout.metadata_title,
+        title="CADタグ・属性抽出 利用・組み込みガイド",
         author="株式会社アルパイン設計事務所",
         subject="ICAD・STEP・DXFの属性抽出とタグ生成",
     )
@@ -540,9 +481,9 @@ def generate_layout_pdf(
         document.build(
             story,
             onFirstPage=lambda canvas, doc: None,
-            onLaterPages=_later_page_drawer(layout.running_header),
+            onLaterPages=_draw_later_page,
         )
-        _write_unicode_metadata(rendered_path, output_path, layout)
+        _write_unicode_metadata(rendered_path, output_path)
     finally:
         rendered_path.unlink(missing_ok=True)
     if output_path.stat().st_size <= 0:
@@ -550,52 +491,16 @@ def generate_layout_pdf(
     return output_path
 
 
-def generate_pdf(
-    output_path: Path,
-    *,
-    document_date: date | None = None,
-) -> Path:
-    """導入担当者向けの利用ガイドPDFを生成する。"""
-
-    return generate_layout_pdf(
-        output_path,
-        GUIDE_LAYOUT,
-        document_date=document_date,
-    )
-
-
-def generate_overview_pdf(
-    output_path: Path,
-    *,
-    document_date: date | None = None,
-) -> Path:
-    """非技術者への説明用に単独で配れる概要ガイドPDFを生成する。"""
-
-    return generate_layout_pdf(
-        output_path,
-        OVERVIEW_LAYOUT,
-        document_date=document_date,
-    )
-
-
 def main() -> int:
     parser = ArgumentParser()
     parser.add_argument(
-        "--document-set",
-        choices=sorted(PDF_LAYOUTS),
-        default="guide",
-        help="生成するPDFの収録範囲。overviewは概要ガイド、guideは利用ガイド。",
-    )
-    parser.add_argument(
         "--output",
         type=Path,
-        help="新規作成するPDF。既存ファイルは上書きしない。省略時は収録範囲ごとの既定パス。",
+        default=DEFAULT_OUTPUT,
+        help="新規作成するPDF。既存ファイルは上書きしない。",
     )
     args = parser.parse_args()
-    output_path = generate_layout_pdf(
-        args.output or DEFAULT_OUTPUTS[args.document_set],
-        PDF_LAYOUTS[args.document_set],
-    )
+    output_path = generate_pdf(args.output)
     print(output_path)
     return 0
 

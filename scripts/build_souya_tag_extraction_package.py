@@ -26,7 +26,6 @@ SCRIPTS_ROOT = ROOT / "scripts"
 RECIPIENT_DOCS_ROOT = ROOT / "handoff" / "souya_tag_extraction" / "recipient_docs"
 RECIPIENT_DOCUMENT_PATHS = (
     "README.md",
-    "docs/overview_for_users.md",
     "docs/extraction_reference.md",
     "docs/integration_contract.md",
     "docs/icad_windows_operations.md",
@@ -220,26 +219,10 @@ def _validate_output_target(output_dir: Path) -> None:
         raise FileExistsError(f"ZIPが既に存在します。上書きしません: {archive_path}")
 
 
-def _copy_guide_pdf(
-    source_pdf: Path,
-    destination: Path,
-) -> Path:
-    """外部共有監査済みPDFを、拡張子と実在を確認したうえで同梱する。"""
-
-    resolved = source_pdf.resolve()
-    if not resolved.is_file():
-        raise FileNotFoundError(f"説明PDFがありません: {resolved}")
-    if resolved.suffix.lower() != ".pdf":
-        raise ValueError(f"説明資料はPDFを指定してください: {resolved}")
-    _copy_file(resolved, destination)
-    return destination
-
-
 def build_package(
     output_dir: Path,
     *,
     guide_pdf: Path | None = None,
-    overview_pdf: Path | None = None,
 ) -> tuple[Path, Path]:
     """正本ソースと確認済みPDFから最小フォルダとZIPを新規生成する。"""
 
@@ -312,23 +295,20 @@ def build_package(
         )
     _copy_recipient_documents(output_dir)
 
-    # 概要ガイドは非技術者への説明用、利用ガイドは導入担当者向けで読み手が異なるため、
-    # 1冊にまとめず両方を同梱し、概要ガイドだけを単独で配れる状態にする。
     copied_guide_pdf: tuple[Path, ...] = ()
-    if overview_pdf is not None:
-        copied_guide_pdf += (
-            _copy_guide_pdf(
-                overview_pdf,
-                output_dir / "docs" / "CADタグ属性抽出_創屋様向け概要ガイド.pdf",
-            ),
-        )
     if guide_pdf is not None:
-        copied_guide_pdf += (
-            _copy_guide_pdf(
-                guide_pdf,
-                output_dir / "docs" / "CADタグ属性抽出_創屋様向け利用ガイド.pdf",
-            ),
+        resolved_guide_pdf = guide_pdf.resolve()
+        if not resolved_guide_pdf.is_file():
+            raise FileNotFoundError(f"説明PDFがありません: {resolved_guide_pdf}")
+        if resolved_guide_pdf.suffix.lower() != ".pdf":
+            raise ValueError(f"説明資料はPDFを指定してください: {resolved_guide_pdf}")
+        package_guide_pdf = (
+            output_dir
+            / "docs"
+            / "CADタグ属性抽出_創屋様向け利用ガイド.pdf"
         )
+        _copy_file(resolved_guide_pdf, package_guide_pdf)
+        copied_guide_pdf = (package_guide_pdf,)
 
     _write_text(output_dir / "docker" / "Dockerfile", _dockerfile())
     _write_text(output_dir / "docker" / "docker-compose.yml", _docker_compose())
@@ -365,19 +345,12 @@ def main() -> int:
         "--guide-pdf",
         type=Path,
         required=True,
-        help="外部共有監査済みの利用ガイドPDF。docs配下へ同梱する。",
-    )
-    parser.add_argument(
-        "--overview-pdf",
-        type=Path,
-        required=True,
-        help="外部共有監査済みの概要ガイドPDF。docs配下へ同梱する。",
+        help="外部共有監査済みの説明PDF。docs配下へ同梱する。",
     )
     args = parser.parse_args()
     output_dir, archive_path = build_package(
         args.output,
         guide_pdf=args.guide_pdf,
-        overview_pdf=args.overview_pdf,
     )
     print(json.dumps(
         {
