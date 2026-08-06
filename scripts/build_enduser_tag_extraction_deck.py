@@ -8,7 +8,8 @@
 - API名、内部キー名、実装言語、ソース規模などの開発用語は載せない。
 - 客先名、実ファイル名、社内パスなどの実データは載せない。例示は架空値に限定する。
 - ライセンス費用交渉、知財、外販条件などの社内・対創屋の論点は載せない。
-- 計測していない効果（削減時間・金額）は書かない。未計測であることを明示する。
+- 計測していない効果（削減時間・金額）は書かない。
+- 画面の説明は実画面のスクリーンショットを使わず、架空データの模擬画面を図形で組む。
 
 前提:
 - 公式テンプレート`Template_アルパイン設計事務所公式_2026_16x9.pptx`をレイアウト継承元にする。
@@ -36,7 +37,7 @@ DEFAULT_OUTPUT = (
     ROOT
     / "output"
     / "pptx"
-    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r3.pptx"
+    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r4.pptx"
 )
 
 # 創屋様向けご説明資料と同じ配色を使い、後から並べても同じ資料群に見えるようにする。
@@ -255,6 +256,122 @@ def _table(slide, x, y, w, headers, rows, *, col_widths, header_size=10.5, body_
     return table
 
 
+def _mock_search_screen(slide) -> None:
+    """タグで絞り込んだ検索画面を、図形だけで組んだ模擬画面として置く。
+
+    実画面のスクリーンショットは客先名・実図番・社内パスが写り込むため使わない。
+    値はすべて架空のデモデータとし、後から文言を差し替えられるよう図形で構成する。
+    """
+
+    frame_x, frame_y, frame_w, frame_h = 0.6, 1.72, 12.13, 4.8
+    _card(slide, frame_x, frame_y, frame_w, frame_h, fill=WHITE)
+
+    # 画面上端のタイトルバー。実画面の細部は再現せず、何の画面かだけが分かればよい。
+    header = _card(slide, frame_x, frame_y, frame_w, 0.46, fill=BLUE, line=BLUE)
+    header.text_frame.margin_left = Inches(0.22)
+    header.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+    _set_lines(
+        header.text_frame,
+        [("図面検索", {"size": 12, "bold": True, "color": WHITE, "space_after": 0})],
+    )
+
+    # 左：絞り込み条件。チェック済みを■、未選択を□で表し、図形数を増やさない。
+    panel_x, panel_y = frame_x, frame_y + 0.46
+    panel_w, panel_h = 3.05, frame_h - 0.46
+    _card(slide, panel_x, panel_y, panel_w, panel_h, fill=CARD_BG)
+    _textbox(
+        slide,
+        panel_x + 0.25,
+        panel_y + 0.22,
+        2.6,
+        0.28,
+        [("絞り込み", {"size": 11.5, "bold": True, "color": BLUE})],
+    )
+    facets = [
+        ("客先", ["■ A社", "□ B社", "□ C社"]),
+        ("装置", ["■ ガントリー", "□ 治具", "□ コンベア"]),
+        ("材質", ["■ SUS304", "■ SS400", "□ A5052"]),
+    ]
+    # 見出しと選択肢の実寸から次の位置を決める。固定間隔にすると項目数が増えたときに
+    # パネルの下端をはみ出す。
+    facet_y = panel_y + 0.62
+    for label, options in facets:
+        _textbox(
+            slide,
+            panel_x + 0.25,
+            facet_y,
+            2.6,
+            0.22,
+            [(label, {"size": 10, "bold": True, "color": MUTED})],
+        )
+        _textbox(
+            slide,
+            panel_x + 0.25,
+            facet_y + 0.26,
+            2.6,
+            0.235 * len(options),
+            [
+                (option, {"size": 10.5, "color": INK if option.startswith("■") else MUTED, "space_after": 3})
+                for option in options
+            ],
+        )
+        facet_y += 0.26 + 0.235 * len(options) + 0.20
+
+    # 右：絞り込み結果。図番・図面名・付いたタグ・数値が1行で読めることを見せる。
+    result_x = frame_x + panel_w + 0.28
+    result_w = frame_w - panel_w - 0.56
+    _textbox(
+        slide,
+        result_x,
+        panel_y + 0.22,
+        result_w,
+        0.28,
+        [("検索結果　4件", {"size": 11.5, "bold": True, "color": INK})],
+    )
+    results = [
+        ("SAMPLE-0001", "ガイドレール", "客先:A社　装置:ガントリー　材質:SUS304", "4.8 kg　/　108 点"),
+        ("SAMPLE-0014", "走行ベース", "客先:A社　装置:ガントリー　材質:SS400", "12.3 kg　/　64 点"),
+        ("SAMPLE-0027", "ケーブルダクト", "客先:A社　装置:ガントリー　材質:SUS304", "1.2 kg　/　9 点"),
+        ("SAMPLE-0033", "昇降フレーム", "客先:A社　装置:ガントリー　材質:SS400　熱処理:焼入れ", "23.6 kg　/　87 点"),
+    ]
+    row_y = panel_y + 0.62
+    for number, name, tags, metrics in results:
+        _card(slide, result_x, row_y, result_w, 0.8, fill=WHITE)
+        _textbox(
+            slide,
+            result_x + 0.2,
+            row_y + 0.14,
+            2.0,
+            0.24,
+            [(number, {"size": 10.5, "bold": True, "color": INK})],
+        )
+        _textbox(
+            slide,
+            result_x + 2.3,
+            row_y + 0.14,
+            3.0,
+            0.24,
+            [(name, {"size": 10.5, "color": INK})],
+        )
+        _textbox(
+            slide,
+            result_x + 0.2,
+            row_y + 0.46,
+            6.2,
+            0.24,
+            [(tags, {"size": 9.5, "bold": True, "color": BLUE})],
+        )
+        _textbox(
+            slide,
+            result_x + 6.6,
+            row_y + 0.28,
+            1.9,
+            0.24,
+            [(metrics, {"size": 9.5, "color": MUTED, "align": PP_ALIGN.RIGHT})],
+        )
+        row_y += 0.93
+
+
 def _note(slide, y: float, text: str) -> None:
     """スライド下部の補足。断定できない点や前提条件をここに残す。
 
@@ -424,7 +541,7 @@ def build_deck(output_path: Path) -> Path:
             size=12.5,
         )
         + [("", {"size": 10, "space_after": 10})]
-        + [("フォルダの整備は、引き続き効きます", {"size": 13, "bold": True, "color": BLUE, "space_after": 9})]
+        + [("フォルダの整備は、引き続き効果があります", {"size": 13, "bold": True, "color": BLUE, "space_after": 9})]
         + [
             (
                 "階層と名称の規則がそろっていると、客先名や案件名をフォルダから読み取れます。"
@@ -553,7 +670,20 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 9. 根拠 -----------------------------------------------------------
+    # --- 9. 画面イメージ ----------------------------------------------------
+    slide = _content_slide(
+        prs,
+        "タグが付くと、探し方はこう変わります",
+        "画面イメージです。表示している値はすべて架空のデモデータです",
+    )
+    _mock_search_screen(slide)
+    _note(
+        slide,
+        6.65,
+        "客先・装置・材質などを組み合わせて絞り込めます。フォルダをたどらず、図面を1枚ずつ開かずに候補までたどり着けます。",
+    )
+
+    # --- 10. 根拠 ----------------------------------------------------------
     slide = _two_column_slide(
         prs,
         "自動で付いた情報を、どう信用してよいか",
@@ -614,7 +744,7 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 10. 実データ検証 ---------------------------------------------------
+    # --- 11. 実データ検証 ---------------------------------------------------
     slide = _content_slide(
         prs,
         "動作確認の結果",
@@ -657,7 +787,7 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 11. CHAPTER 03 ----------------------------------------------------
+    # --- 12. CHAPTER 03 ----------------------------------------------------
     _chapter_slide(
         prs,
         "CHAPTER　03",
@@ -670,7 +800,7 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 12. 必要な環境 ----------------------------------------------------
+    # --- 13. 必要な環境 ----------------------------------------------------
     slide = _content_slide(
         prs,
         "必要な環境",
@@ -724,7 +854,7 @@ def build_deck(output_path: Path) -> Path:
         "構成Aと構成Bは併用できます。ふだんは構成Bで取り込み、詳しい情報が必要な図面だけ構成Aで読み取ることもできます。",
     )
 
-    # --- 13. 必要な準備 ----------------------------------------------------
+    # --- 14. 必要な準備 ----------------------------------------------------
     slide = _content_slide(
         prs,
         "効果を出すために、決めておくこと",
@@ -756,7 +886,7 @@ def build_deck(output_path: Path) -> Path:
         "どれも一度に完璧にする必要はありません。対象を絞って始め、運用しながら言葉と規則を足していきます。",
     )
 
-    # --- 14. できること・できないこと --------------------------------------
+    # --- 15. できること・できないこと --------------------------------------
     slide = _two_column_slide(
         prs,
         "できること／できないこと",
@@ -799,7 +929,7 @@ def build_deck(output_path: Path) -> Path:
         ),
     )
 
-    # --- 15. 進め方 --------------------------------------------------------
+    # --- 16. 進め方 --------------------------------------------------------
     slide = _content_slide(
         prs,
         "導入の進め方",
@@ -847,7 +977,7 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 16. 最終スライド ---------------------------------------------------
+    # --- 17. 最終スライド ---------------------------------------------------
     # テンプレートの最終スライドは謝辞と連絡先が固定文言で入っており、スライド側から
     # 差し替えられない。本文レイアウトはタイトル枠の装飾が空のまま残るため、白紙から組み、
     # 他ページと同じ下端の帯だけを引いて END を置く。
