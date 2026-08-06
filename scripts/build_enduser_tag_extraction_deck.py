@@ -37,7 +37,7 @@ DEFAULT_OUTPUT = (
     ROOT
     / "output"
     / "pptx"
-    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r4.pptx"
+    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r5.pptx"
 )
 
 # 創屋様向けご説明資料と同じ配色を使い、後から並べても同じ資料群に見えるようにする。
@@ -370,6 +370,33 @@ def _mock_search_screen(slide) -> None:
             [(metrics, {"size": 9.5, "color": MUTED, "align": PP_ALIGN.RIGHT})],
         )
         row_y += 0.93
+
+
+def _add_page_numbers(prs) -> None:
+    """表紙を除く全ページの右下へ「現在ページ / 総ページ」を入れる。
+
+    レイアウトにはスライド番号枠があるが、python-pptxはスライド追加時にこの枠を
+    引き継がないため番号が出ない。また番号枠は総ページ数を持てないので、
+    既存の進捗報告資料と同じ「n / N」表記のテキストとして自前で置く。
+    """
+
+    total = len(prs.slides._sldIdLst)
+    for position, slide in enumerate(prs.slides, start=1):
+        if position == 1:
+            continue
+        _textbox(
+            slide,
+            11.3,
+            7.0,
+            1.53,
+            0.28,
+            [
+                (
+                    f"{position} / {total}",
+                    {"size": 10, "color": MUTED, "align": PP_ALIGN.RIGHT, "space_after": 0},
+                )
+            ],
+        )
 
 
 def _note(slide, y: float, text: str) -> None:
@@ -994,6 +1021,7 @@ def build_deck(output_path: Path) -> Path:
         anchor=MSO_ANCHOR.MIDDLE,
     )
 
+    _add_page_numbers(prs)
     prs.save(str(output_path))
     return output_path
 
