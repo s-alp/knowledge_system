@@ -37,6 +37,7 @@ SCRIPTS_ROOT = Path(__file__).resolve().parent
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from alpine_flowchart import draw_swimlane  # noqa: E402
 from alpine_pptx_kit import (  # noqa: E402
     BLUE,
     CARD_BG,
@@ -60,10 +61,11 @@ from alpine_pptx_kit import (  # noqa: E402
     textbox,
     two_column_slide,
 )
+from build_tag_extraction_flowcharts import FLOWS, slide_geometry  # noqa: E402
 
 
 DEFAULT_OUTPUT = (
-    ROOT / "output" / "pptx" / "20260805_ナレッジシステム_タグ属性抽出_機能概要_r4.pptx"
+    ROOT / "output" / "pptx" / "20260805_ナレッジシステム_タグ属性抽出_機能概要_r5.pptx"
 )
 
 
@@ -884,7 +886,35 @@ def build_deck(output_path: Path) -> Path:
         ],
     )
 
-    # --- 21. 最終スライド ---------------------------------------------------
+    # --- 21. CHAPTER 05 ----------------------------------------------------
+    chapter_slide(
+        prs,
+        "CHAPTER　05",
+        "フロー図",
+        "Flowcharts",
+        [
+            "業務フロー　誰が何をするか",
+            "処理フロー　1図面が属性とタグになるまで",
+            "導入の進め方　小さく試して広げるまで",
+        ],
+    )
+
+    # --- 22〜24. フロー図 ----------------------------------------------------
+    # A3横1枚の図と同じ定義から描く。2つの資料で流れが食い違わないようにするため、
+    # 文言はフロー定義側だけで管理する。
+    for flow in FLOWS:
+        slide = content_slide(prs, flow.title, flow.subtitle)
+        draw_swimlane(
+            slide,
+            slide_geometry(flow),
+            flow.lanes,
+            flow.steps,
+            flow.links,
+            highlight_lane=flow.highlight_lane,
+        )
+        note(slide, 6.6, flow.footnote)
+
+    # --- 25. 最終スライド ---------------------------------------------------
     closing_slide(prs)
 
     add_page_numbers(prs)

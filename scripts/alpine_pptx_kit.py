@@ -37,6 +37,8 @@ BLUE = RGBColor(0x00, 0x5B, 0xAC)
 ACCENT = RGBColor(0x00, 0xA8, 0xE6)
 MUTED = RGBColor(0x5A, 0x5A, 0x5A)
 CARD_BG = RGBColor(0xF5, 0xF7, 0xFA)
+# フロー図で、1つのレーンだけを塗り分けるときの淡い青。
+HIGHLIGHT = RGBColor(0xE8, 0xF2, 0xF9)
 CARD_LINE = RGBColor(0xC9, 0xD3, 0xDD)
 WHITE = RGBColor(0xFF, 0xFF, 0xFF)
 
@@ -90,9 +92,14 @@ def set_lines(text_frame, lines: list[tuple[str, dict]], *, space_after: float =
         if "align" in style:
             paragraph.alignment = style.pop("align")
         paragraph.line_spacing = style.pop("line_spacing", 1.25)
-        run = paragraph.add_run()
-        run.text = text
-        apply_font(run, **style)
+        # 文中の改行は、生の改行文字ではなく改行要素として書き出す。
+        # 生の改行文字はPowerPointで改行として扱われる保証がなく、詰まって表示されうる。
+        for position, segment in enumerate(text.split("\n")):
+            if position:
+                paragraph._p.append(paragraph._p.makeelement(qn("a:br"), {}))
+            run = paragraph.add_run()
+            run.text = segment
+            apply_font(run, **style)
 
 
 def textbox(slide, x, y, w, h, lines, *, anchor=MSO_ANCHOR.TOP):
