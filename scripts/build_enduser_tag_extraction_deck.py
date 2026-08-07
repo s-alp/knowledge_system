@@ -62,7 +62,7 @@ DEFAULT_OUTPUT = (
     ROOT
     / "output"
     / "pptx"
-    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r7.pptx"
+    / "20260805_ナレッジシステム_タグ属性抽出_エンドユーザー様向けご説明_r9.pptx"
 )
 
 
@@ -389,63 +389,103 @@ def build_deck(output_path: Path) -> Path:
     )
 
     # --- 8. 図面1枚から出るもの --------------------------------------------
+    # 読み取った内容と属性を1つにまとめると、属性がどこから来たのかが見えなくなる。
+    # 読み取り → 取捨選択して属性 → 属性から タグ の3段で、作られる順序を示す。
     slide = content_slide(
         prs,
-        "図面1枚から、このような情報が付与されます",
-        "下記は仕組みを説明するための架空の例示です",
+        "図面1枚から、このような情報ができあがります",
+        "読み取った内容を整理して属性にし、その中から探すためのタグを作ります（架空の例示です）",
     )
-    card(slide, 0.5, 1.75, 6.08, 4.15, fill=WHITE)
-    textbox(slide, 0.8, 2.05, 5.5, 0.3, [("付与されるタグ（探すための見出し）", {"size": 14, "bold": True, "color": BLUE})])
+    columns = [
+        (
+            "① 図面から読み取った内容",
+            "書かれているものを、そのまま",
+            [
+                "図枠の文字「材質」「SUS304」",
+                "注記「焼入れ HRC50」",
+                "寸法と公差の記号",
+                "部品ツリー 108件",
+                "質量 4.8 kg",
+                "保存先のフォルダ名",
+            ],
+        ),
+        (
+            "② 整理して確定した値（属性）",
+            "どれがどの項目かを判断して選ぶ",
+            [
+                "図面番号　SAMPLE-0001",
+                "図面名　　ガイドレール",
+                "材質　　　SUS304、SS400 ほか8種類",
+                "熱処理　　焼入れ",
+                "質量　　　4.8 kg",
+                "構成部品　108 点",
+            ],
+        ),
+    ]
+    for index, (head, sub, items) in enumerate(columns):
+        x = 0.5 + index * 4.24
+        card(slide, x, 1.75, 3.85, 4.35, fill=WHITE)
+        textbox(
+            slide,
+            x + 0.28,
+            2.02,
+            3.3,
+            0.6,
+            [
+                (head, {"size": 13, "bold": True, "color": BLUE, "space_after": 2}),
+                (sub, {"size": 10, "color": MUTED}),
+            ],
+        )
+        textbox(
+            slide,
+            x + 0.28,
+            2.82,
+            3.3,
+            3.0,
+            [(f"・{item}", {"size": 10.5, "color": INK, "space_after": 8}) for item in items],
+        )
+        arrow(slide, x + 3.95, 3.7, size=18)
+    card(slide, 8.98, 1.75, 3.85, 4.35, fill=WHITE)
+    textbox(
+        slide,
+        9.26,
+        2.02,
+        3.3,
+        0.6,
+        [
+            ("③ 絞り込み用のタグ", {"size": 13, "bold": True, "color": BLUE, "space_after": 2}),
+            ("探すのに使えるものを見出しに", {"size": 10, "color": MUTED}),
+        ],
+    )
     tags = [
         "客先：A社",
         "装置：ガントリー",
         "材質：SUS304",
         "材質：SS400",
-        "メーカー：空圧機器メーカーB",
         "熱処理：焼入れ",
+        "メーカー：空圧機器メーカーB",
         "規格：社内規格C",
     ]
     for index, tag in enumerate(tags):
-        column, row = index % 2, index // 2
-        x = 0.8 + column * 2.78
-        y = 2.62 + row * 0.62
-        chip = card(slide, x, y, 2.62, 0.44, fill=CARD_BG, line=BLUE)
+        chip = card(slide, 9.26, 2.82 + index * 0.46, 3.29, 0.36, fill=CARD_BG, line=BLUE)
         frame = chip.text_frame
-        frame.margin_left = Inches(0.11)
+        frame.margin_left = Inches(0.1)
         frame.vertical_anchor = MSO_ANCHOR.MIDDLE
-        set_lines(frame, [(tag, {"size": 11, "bold": True, "color": BLUE, "space_after": 0})])
-    card(slide, 6.75, 1.75, 6.08, 4.15, fill=WHITE)
-    textbox(slide, 7.05, 2.05, 5.5, 0.3, [("記録される属性（図面から取り出した値）", {"size": 14, "bold": True, "color": BLUE})])
-    table(
-        slide,
-        7.05,
-        2.62,
-        5.5,
-        ["項目", "値"],
-        [
-            ["図面番号", "SAMPLE-0001"],
-            ["図面名", "ガイドレール"],
-            ["質量", "4.8 kg"],
-            ["構成部品", "108 点"],
-            ["使われている材質", "8 種類"],
-        ],
-        col_widths=[2.0, 3.5],
-        header_size=10.5,
-        body_size=10.5,
-    )
+        set_lines(frame, [(tag, {"size": 10, "bold": True, "color": BLUE, "space_after": 0})])
     textbox(
         slide,
         0.5,
-        6.2,
+        6.3,
         12.33,
-        0.8,
+        0.7,
         [
             (
-                "「A社向けで、SUS304を使ったガントリー」といった条件で、図面を開かずに絞り込めます。",
-                {"size": 13, "bold": True, "color": INK, "space_after": 6},
+                "①②③はいずれも図面の情報として記録され、画面で確認できます。違いは使い道です。",
+                {"size": 12, "bold": True, "color": INK, "space_after": 6},
             ),
             (
-                "質量や部品点数は数値として残るため、複数の図面をまたいだ集計にも使えます。",
+                "①はなぜその値になったかを後から確かめるための記録、②は図面の中身を見るための値、"
+                "③は条件を指定して図面を探すための見出しです。",
                 {"size": 11.5, "color": INK, "space_after": 0},
             ),
         ],
