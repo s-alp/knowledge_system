@@ -66,11 +66,13 @@ DEFAULT_OUTPUT = (
 )
 
 
-def _mock_search_screen(slide) -> None:
+def mock_search_screen(slide) -> None:
     """タグで絞り込んだ検索画面を、図形だけで組んだ模擬画面として置く。
 
     実画面のスクリーンショットは客先名・実図番・社内パスが写り込むため使わない。
     値はすべて架空のデモデータとし、後から文言を差し替えられるよう図形で構成する。
+
+    統合版の資料からも呼ぶため、模擬画面の定義はこの関数だけに置く。
     """
 
     frame_x, frame_y, frame_w, frame_h = 0.6, 1.72, 12.13, 4.8
@@ -497,7 +499,7 @@ def build_deck(output_path: Path) -> Path:
         "タグが付くと、探し方はこう変わります",
         "画面イメージです。表示している値はすべて架空のデモデータです",
     )
-    _mock_search_screen(slide)
+    mock_search_screen(slide)
     note(
         slide,
         6.65,
